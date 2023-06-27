@@ -19,6 +19,10 @@ package io.element.android.features.messages.impl.actionlist
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
@@ -29,15 +33,27 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
             anActionListState().copy(
                 target = ActionListState.Target.Success(
                     event = aTimelineItemEvent(),
-                    actions = persistentListOf(
-                        TimelineItemAction.Reply,
-                        TimelineItemAction.Forward,
-                        TimelineItemAction.Copy,
-                        TimelineItemAction.Edit,
-                        TimelineItemAction.Redact,
-                    )
+                    actions = aTimelineItemActionList(),
                 )
-            )
+            ),
+            anActionListState().copy(
+                target = ActionListState.Target.Success(
+                    event = aTimelineItemEvent(content = aTimelineItemImageContent()),
+                    actions = aTimelineItemActionList(),
+                )
+            ),
+            anActionListState().copy(
+                target = ActionListState.Target.Success(
+                    event = aTimelineItemEvent(content = aTimelineItemVideoContent()),
+                    actions = aTimelineItemActionList(),
+                )
+            ),
+            anActionListState().copy(
+                target = ActionListState.Target.Success(
+                    event = aTimelineItemEvent(content = aTimelineItemFileContent()),
+                    actions = aTimelineItemActionList(),
+                )
+            ),
         )
 }
 
@@ -45,3 +61,15 @@ fun anActionListState() = ActionListState(
     target = ActionListState.Target.None,
     eventSink = {}
 )
+
+fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {
+    return persistentListOf(
+        TimelineItemAction.Reply,
+        TimelineItemAction.Forward,
+        TimelineItemAction.Copy,
+        TimelineItemAction.Edit,
+        TimelineItemAction.Redact,
+        TimelineItemAction.ReportContent,
+        TimelineItemAction.Developer,
+    )
+}

@@ -218,7 +218,7 @@ private fun EditableAvatarView(
             when (state.roomAvatarUrl?.scheme) {
                 null, "mxc" -> {
                     Avatar(
-                        avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl?.toString(), size = AvatarSize.HUGE),
+                        avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl?.toString(), size = AvatarSize.RoomHeader),
                         modifier = Modifier.fillMaxSize(),
                     )
                 }

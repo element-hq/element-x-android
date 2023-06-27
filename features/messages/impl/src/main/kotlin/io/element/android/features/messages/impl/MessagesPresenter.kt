@@ -118,7 +118,7 @@ class MessagesPresenter @AssistedInject constructor(
                     id = room.roomId.value,
                     name = room.name,
                     url = room.avatarUrl,
-                    size = AvatarSize.SMALL
+                    size = AvatarSize.TimelineRoom
                 )
             roomName.value = room.name
         }

@@ -39,11 +39,11 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
 class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineItemTextBasedContent> {
     override val values = sequenceOf(
         aTimelineItemEmoteContent(),
-        aTimelineItemEmoteContent().copy(htmlDocument = Jsoup.parse("Emote")),
+        aTimelineItemEmoteContent().copy(htmlDocument = Jsoup.parse("Emote Document")),
         aTimelineItemNoticeContent(),
-        aTimelineItemNoticeContent().copy(htmlDocument = Jsoup.parse("Notice")),
+        aTimelineItemNoticeContent().copy(htmlDocument = Jsoup.parse("Notice Document")),
         aTimelineItemTextContent(),
-        aTimelineItemTextContent().copy(htmlDocument = Jsoup.parse("Text")),
+        aTimelineItemTextContent().copy(htmlDocument = Jsoup.parse("Text Document")),
     )
 }
 

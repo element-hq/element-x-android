@@ -37,6 +37,7 @@ interface RoomListEntryPoint : FeatureEntryPoint {
         fun onSessionVerificationClicked()
         fun onInvitesClicked()
         fun onRoomSettingsClicked(roomId: RoomId)
+        fun onReportBugClicked()
     }
 }
 

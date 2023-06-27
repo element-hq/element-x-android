@@ -21,23 +21,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
@@ -50,12 +44,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
@@ -63,23 +55,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
+import io.element.android.features.roomlist.impl.components.RequestVerificationHeader
+import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.search.RoomListSearchResultContent
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
-import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.noFontPadding
-import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -95,6 +84,7 @@ fun RoomListView(
     onCreateRoomClicked: () -> Unit,
     onInvitesClicked: () -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
+    onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -118,12 +108,13 @@ fun RoomListView(
 
             RoomListContent(
                 state = state,
+                onVerifyClicked = onVerifyClicked,
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
                 onOpenSettings = onSettingsClicked,
-                onVerifyClicked = onVerifyClicked,
                 onCreateRoomClicked = onCreateRoomClicked,
                 onInvitesClicked = onInvitesClicked,
+                onMenuActionClicked = onMenuActionClicked,
             )
             // This overlaid view will only be visible when state.displaySearchResults is true
             RoomListSearchResultView(
@@ -142,13 +133,14 @@ fun RoomListView(
 @Composable
 fun RoomListContent(
     state: RoomListState,
+    onVerifyClicked: () -> Unit,
+    onRoomClicked: (RoomId) -> Unit,
+    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
+    onOpenSettings: () -> Unit,
+    onCreateRoomClicked: () -> Unit,
+    onInvitesClicked: () -> Unit,
+    onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
-    onVerifyClicked: () -> Unit = {},
-    onRoomClicked: (RoomId) -> Unit = {},
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit = {},
-    onOpenSettings: () -> Unit = {},
-    onCreateRoomClicked: () -> Unit = {},
-    onInvitesClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
@@ -190,77 +182,45 @@ fun RoomListContent(
                 areSearchResultsDisplayed = state.displaySearchResults,
                 onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
                 onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
+                onMenuActionClicked = onMenuActionClicked,
                 onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior,
             )
         },
         content = { padding ->
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
+                    .nestedScroll(nestedScrollConnection),
+                state = lazyListState,
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .weight(1f)
-                        .nestedScroll(nestedScrollConnection),
-                    state = lazyListState,
-                ) {
-                    if (state.displayVerificationPrompt) {
-                        item {
-                            RequestVerificationHeader(
-                                onVerifyClicked = onVerifyClicked,
-                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                            )
-                        }
-                    }
-
-                    if (state.invitesState != InvitesState.NoInvites) {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .clickable(role = Role.Button, onClick = onInvitesClicked)
-                                        .padding(horizontal = 16.dp)
-                                        .align(Alignment.CenterEnd)
-                                        .heightIn(min = 48.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Text(
-                                        text = stringResource(CommonStrings.action_invites_list),
-                                        fontSize = 14.sp,
-                                        style = noFontPadding,
-                                    )
-
-                                    if (state.invitesState == InvitesState.NewInvites) {
-                                        Spacer(Modifier.width(8.dp))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(12.dp)
-                                                .clip(CircleShape)
-                                                .background(MaterialTheme.roomListUnreadIndicator())
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    itemsIndexed(
-                        items = state.roomList,
-                        contentType = { _, room -> room.contentType() },
-                    ) { index, room ->
-                        RoomSummaryRow(
-                            room = room,
-                            onClick = ::onRoomClicked,
-                            onLongClick = onRoomLongClicked,
+                if (state.displayVerificationPrompt) {
+                    item {
+                        RequestVerificationHeader(
+                            onVerifyClicked = onVerifyClicked,
+                            onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
                         )
-                        if (index != state.roomList.lastIndex) {
-                            Divider()
-                        }
+                    }
+                }
+
+                if (state.invitesState != InvitesState.NoInvites) {
+                    item {
+                        InvitesEntryPointView(onInvitesClicked, state)
+                    }
+                }
+
+                itemsIndexed(
+                    items = state.roomList,
+                    contentType = { _, room -> room.contentType() },
+                ) { index, room ->
+                    RoomSummaryRow(
+                        room = room,
+                        onClick = ::onRoomClicked,
+                        onLongClick = onRoomLongClicked,
+                    )
+                    if (index != state.roomList.lastIndex) {
+                        Divider()
                     }
                 }
             }
@@ -271,7 +231,12 @@ fun RoomListContent(
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = onCreateRoomClicked
             ) {
-                Icon(resourceId = DrawableR.drawable.ic_edit_square, contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message))
+                Icon(
+                    // Correct icon alignment for better rendering.
+                    modifier = Modifier.padding(start = 1.dp, bottom = 1.dp),
+                    resourceId = DrawableR.drawable.ic_edit_square,
+                    contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
+                )
             }
         },
         snackbarHost = {
@@ -287,64 +252,34 @@ fun RoomListContent(
 }
 
 @Composable
-internal fun RequestVerificationHeader(
-    onVerifyClicked: () -> Unit,
-    onDismissClicked: () -> Unit,
+private fun InvitesEntryPointView(
+    onInvitesClicked: () -> Unit,
+    state: RoomListState,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Surface(
-            modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
-            color = MaterialTheme.colorScheme.surfaceVariant
+    Box(
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier
+                .clickable(role = Role.Button, onClick = onInvitesClicked)
+                .padding(horizontal = 16.dp)
+                .align(Alignment.CenterEnd)
+                .heightIn(min = 48.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                Row {
-                    Text(
-                        stringResource(R.string.session_verification_banner_title),
-                        modifier = Modifier.weight(1f),
-                        style = ElementTextStyles.Bold.body,
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Start,
-                    )
-                    Icon(
-                        modifier = Modifier.clickable(onClick = onDismissClicked),
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(CommonStrings.action_close)
-                    )
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(stringResource(R.string.session_verification_banner_message), style = ElementTextStyles.Regular.bodyMD)
-                Spacer(modifier = Modifier.height(12.dp))
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 7.dp),
-                    onClick = onVerifyClicked,
-                ) {
-                    Text(stringResource(CommonStrings.action_continue), style = ElementTextStyles.Button)
-                }
+            Text(
+                text = stringResource(CommonStrings.action_invites_list),
+                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+
+            if (state.invitesState == InvitesState.NewInvites) {
+                Spacer(Modifier.width(8.dp))
+
+                UnreadIndicatorAtom()
             }
         }
-    }
-}
-
-@Preview
-@Composable
-internal fun PreviewRequestVerificationHeaderLight() {
-    ElementPreviewLight {
-        RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
-    }
-}
-
-@Preview
-@Composable
-internal fun PreviewRequestVerificationHeaderDark() {
-    ElementPreviewDark {
-        RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
     }
 }
 
@@ -369,18 +304,7 @@ private fun ContentToPreview(state: RoomListState) {
         onVerifyClicked = {},
         onCreateRoomClicked = {},
         onInvitesClicked = {},
-        onRoomSettingsClicked = {}
+        onRoomSettingsClicked = {},
+        onMenuActionClicked = {},
     )
-}
-
-@Preview
-@Composable
-internal fun RoomListSearchResultContentPreview() {
-    ElementPreviewLight {
-        RoomListSearchResultContent(
-            state = aRoomListState(),
-            onRoomClicked = {},
-            onRoomLongClicked = {}
-        )
-    }
 }

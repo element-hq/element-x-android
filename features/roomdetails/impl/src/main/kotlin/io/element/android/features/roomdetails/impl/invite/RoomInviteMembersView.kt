@@ -186,7 +186,7 @@ private fun RoomInviteMembersSearchBar(
                     if (invitableUser.isUnresolved && !invitableUser.isAlreadyInvited && !invitableUser.isAlreadyJoined) {
                         CheckableUnresolvedUserRow(
                             checked = invitableUser.isSelected,
-                            avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.MEDIUM),
+                            avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.UserListItem),
                             id = invitableUser.matrixUser.userId.value,
                             onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
                             modifier = Modifier.fillMaxWidth()
@@ -195,7 +195,7 @@ private fun RoomInviteMembersSearchBar(
                         CheckableUserRow(
                             checked = invitableUser.isSelected,
                             enabled = !invitableUser.isAlreadyInvited && !invitableUser.isAlreadyJoined,
-                            avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.MEDIUM),
+                            avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.UserListItem),
                             name = invitableUser.matrixUser.getBestName(),
                             subtext = when {
                                 // If they're already invited or joined we show that information

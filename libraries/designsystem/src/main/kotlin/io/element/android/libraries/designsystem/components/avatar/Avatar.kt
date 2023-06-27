@@ -17,7 +17,9 @@
 package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -30,11 +32,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
+import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.AvatarGradientEnd
 import io.element.android.libraries.theme.AvatarGradientStart
@@ -100,7 +103,7 @@ private fun InitialsAvatar(
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = avatarData.initial,
-            fontSize = (avatarData.size.dp / 2).value.sp,
+            fontSize = avatarData.size.dp.toSp() / 2,
             color = Color.White,
         )
     }
@@ -109,4 +112,12 @@ private fun InitialsAvatar(
 @Preview(group = PreviewGroup.Avatars)
 @Composable
 fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
-    ElementThemedPreview { Avatar(avatarData) }
+    ElementThemedPreview {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Avatar(avatarData)
+            Text(text = avatarData.size.name + " " + avatarData.size.dp)
+        }
+    }

@@ -36,11 +36,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -76,8 +76,8 @@ fun SelectedUsersList(
     // users, the last visible user will be precisely half visible. This gives an obvious affordance that there are more entries and the list can be scrolled.
     // For efficiency, we assume that all the children are the same width. If they needed to be different sizes we'd have to do this calculation each time
     // they needed to be measured.
-    val minimumSpacing = with(LocalDensity.current) { 24.dp.toPx() }
-    val userWidth = with(LocalDensity.current) { 56.dp.toPx() }
+    val minimumSpacing = 24.dp.toPx()
+    val userWidth = 56.dp.toPx()
     val userSpacing by remember {
         derivedStateOf {
             if (rowWidth == 0) {

@@ -47,6 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun TimelineItemFileView(
     content: TimelineItemFileContent,
+    extraPadding: ExtraPadding,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -76,7 +77,7 @@ fun TimelineItemFileView(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = content.fileExtensionAndSize,
+                text = content.fileExtensionAndSize + extraPadding.str,
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 12.sp,
                 maxLines = 1,
@@ -98,5 +99,8 @@ internal fun TimelineItemFileViewDarkPreview(@PreviewParameter(TimelineItemFileC
 
 @Composable
 private fun ContentToPreview(content: TimelineItemFileContent) {
-    TimelineItemFileView(content)
+    TimelineItemFileView(
+        content,
+        extraPadding = noExtraPadding,
+    )
 }

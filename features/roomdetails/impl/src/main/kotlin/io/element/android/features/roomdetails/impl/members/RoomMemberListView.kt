@@ -191,7 +191,7 @@ private fun RoomMemberListItem(
             displayName = roomMember.displayName,
             avatarUrl = roomMember.avatarUrl
         ),
-        avatarSize = AvatarSize.Custom(36.dp),
+        avatarSize = AvatarSize.UserListItem,
     )
 }
 

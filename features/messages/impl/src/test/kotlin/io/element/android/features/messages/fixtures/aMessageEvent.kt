@@ -16,11 +16,12 @@
 
 package io.element.android.features.messages.fixtures
 
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
@@ -30,7 +31,6 @@ import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.room.aTimelineItemDebugInfo
-import kotlinx.collections.immutable.persistentListOf
 
 internal fun aMessageEvent(
     eventId: EventId? = AN_EVENT_ID,
@@ -43,11 +43,11 @@ internal fun aMessageEvent(
     eventId = eventId,
     senderId = A_USER_ID,
     senderDisplayName = A_USER_NAME,
-    senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME),
+    senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME, size = AvatarSize.TimelineSender),
     content = content,
     sentTime = "",
     isMine = isMine,
-    reactionsState = TimelineItemReactions(persistentListOf()),
+    reactionsState = aTimelineItemReactions(count = 0),
     sendState = EventSendState.Sent(AN_EVENT_ID),
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,
