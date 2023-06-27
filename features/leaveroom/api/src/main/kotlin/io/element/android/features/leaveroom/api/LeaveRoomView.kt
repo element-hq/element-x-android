@@ -31,7 +31,6 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.ui.strings.R
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -77,7 +76,7 @@ private fun LeaveRoomConfirmationDialog(
 ) {
     ConfirmationDialog(
         content = stringResource(text),
-        submitText = stringResource(R.string.action_leave),
+        submitText = stringResource(CommonStrings.action_leave),
         onSubmitClicked = { eventSink(LeaveRoomEvent.LeaveRoom(roomId)) },
         onDismiss = { eventSink(LeaveRoomEvent.HideConfirmation) },
     )

@@ -32,7 +32,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun DeveloperSettingsView(
@@ -44,7 +44,7 @@ fun DeveloperSettingsView(
     PreferenceView(
         modifier = modifier,
         onBackPressed = onBackPressed,
-        title = stringResource(id = R.string.common_developer_options)
+        title = stringResource(id = CommonStrings.common_developer_options)
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
         PreferenceCategory(title = "Feature flags") {

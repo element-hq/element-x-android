@@ -48,7 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun UnresolvedUserRow(
@@ -94,7 +94,7 @@ fun UnresolvedUserRow(
                 )
 
                 Text(
-                    text = stringResource(R.string.common_invite_unknown_profile),
+                    text = stringResource(CommonStrings.common_invite_unknown_profile),
                     color = MaterialTheme.colorScheme.secondary,
                     fontSize = 12.sp,
                     lineHeight = 16.sp,
