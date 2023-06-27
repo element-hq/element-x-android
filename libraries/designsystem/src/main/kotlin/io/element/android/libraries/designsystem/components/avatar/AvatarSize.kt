@@ -25,6 +25,8 @@ enum class AvatarSize(val dp: Dp) {
     RoomHeader(96.dp),
     RoomListItem(52.dp),
 
+    ForwardRoomListItem(36.dp),
+
     UserHeader(96.dp),
     UserListItem(36.dp),
 
