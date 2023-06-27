@@ -134,6 +134,7 @@ suspend inline fun <T> MutableState<Async<T>>.runUpdatingState(
  * encapsulating its progress and return value into an [Async] while
  * posting its updates to the MutableState [state].
  *
+ * @param T the type of data returned by the operation.
  * @param state the [MutableState] to post updates to.
  * @param errorTransform a function to transform the error before posting it.
  * @param resultBlock a suspending function that returns a [Result].
