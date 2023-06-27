@@ -116,4 +116,13 @@ interface MatrixRoom : Closeable {
     suspend fun setTopic(topic: String): Result<Unit>
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
+
+    /**
+     * Share a location message in the room.
+     *
+     * @param body A human readable textual representation of the location.
+     * @param geoUri A geo URI (RFC 5870) representing the location e.g. `geo:51.5008,0.1247;u=35`.
+     *  Respectively: latitude, longitude, and (optional) uncertainty.
+     */
+    suspend fun sendLocation(body: String, geoUri: String): Result<Unit>
 }

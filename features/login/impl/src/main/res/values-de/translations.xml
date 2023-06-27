@@ -13,7 +13,7 @@
   <string name="screen_change_account_provider_other">"Andere"</string>
   <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Arbeitskonto."</string>
   <string name="screen_change_account_provider_title">"Kontoanbieter ändern"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Wir konnten diesen Homeserver nicht erreichen. Bitte überprüfen Sie, ob Sie die Homeserver-URL korrekt eingegeben haben. Wenn die URL korrekt ist, wenden Sie sich an Ihren Homeserver-Administrator, um weitere Hilfe zu erhalten."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Wir konnten diesen Homeserver nicht erreichen. Bitte überprüfe, dass du die Homeserver-URL korrekt eingegeben hast. Wenn die URL korrekt ist, wende dich an deinen Homeserver-Administrator für weitere Hilfe."</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Dieser Server unterstützt derzeit keine Sliding Sync."</string>
   <string name="screen_change_server_form_header">"Homeserver-URL"</string>
   <string name="screen_change_server_form_notice">"Du kannst dich nur mit einem existierenden Server verbinden, der Sliding Sync unterstützt. Dein Homeserver-Administrator muss es konfigurieren. %1$s"</string>

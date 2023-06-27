@@ -52,6 +52,7 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Provider
 
 /**
  * BugReporter creates and sends the bug reports.
@@ -62,7 +63,7 @@ class DefaultBugReporter @Inject constructor(
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val okHttpClient: OkHttpClient,
+    private val okHttpClient: Provider<OkHttpClient>,
     /*
     private val activeSessionHolder: ActiveSessionHolder,
     private val versionProvider: VersionProvider,
@@ -339,7 +340,7 @@ class DefaultBugReporter @Inject constructor(
 
                 // trigger the request
                 try {
-                    mBugReportCall = okHttpClient.newCall(request)
+                    mBugReportCall = okHttpClient.get().newCall(request)
                     response = mBugReportCall!!.execute()
                     responseCode = response.code
                 } catch (e: Exception) {

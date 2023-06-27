@@ -35,7 +35,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
-import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
+import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import kotlinx.coroutines.CoroutineScope
@@ -66,7 +66,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         val localMedia: MutableState<Async<LocalMedia>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
-        val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
         DisposableEffect(loadMediaTrigger) {
             coroutineScope.downloadMedia(mediaFile, localMedia)

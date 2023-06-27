@@ -58,7 +58,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
-import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
+import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -110,7 +110,7 @@ class MessagesPresenter @AssistedInject constructor(
 
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
 
-        val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         LaunchedEffect(syncUpdateFlow) {
             roomAvatar.value =

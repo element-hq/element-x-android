@@ -28,6 +28,7 @@
   <string name="action_invite">"Pozvat"</string>
   <string name="action_invite_friends">"Pozvat přátele"</string>
   <string name="action_invite_friends_to_app">"Pozvat přátele do %1$s"</string>
+  <string name="action_invite_people_to_app">"Pozvat lidi na %1$s"</string>
   <string name="action_invites_list">"Pozvánky"</string>
   <string name="action_learn_more">"Zjistit více"</string>
   <string name="action_leave">"Odejít"</string>
@@ -108,6 +109,7 @@
   <string name="common_server_not_supported">"Server není podporován"</string>
   <string name="common_server_url">"URL serveru"</string>
   <string name="common_settings">"Nastavení"</string>
+  <string name="common_shared_location">"Sdílená poloha"</string>
   <string name="common_starting_chat">"Zahajování chatu…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspěch"</string>
@@ -163,6 +165,8 @@
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
+  <string name="screen_share_location_title">"Sdílet polohu"</string>
+  <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Práh detekce"</string>
   <string name="settings_title_general">"Obecné"</string>

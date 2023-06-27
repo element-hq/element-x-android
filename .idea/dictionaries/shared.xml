@@ -2,8 +2,10 @@
     <dictionary name="shared">
         <words>
             <w>backstack</w>
+            <w>homeserver</w>
             <w>kover</w>
             <w>onboarding</w>
+            <w>showkase</w>
             <w>textfields</w>
         </words>
     </dictionary>

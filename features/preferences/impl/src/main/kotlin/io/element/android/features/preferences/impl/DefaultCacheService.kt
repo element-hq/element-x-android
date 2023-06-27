@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.util
+package io.element.android.features.preferences.impl
 
-import android.content.Context
-import android.text.format.Formatter
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.preferences.api.CacheService
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
-interface FileSizeFormatter {
-    /**
-     * Formats a content size to be in the form of bytes, kilobytes, megabytes, etc.
-     */
-    fun format(fileSize: Long): String
-}
-
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class AndroidFileSizeFormatter @Inject constructor(@ApplicationContext private val context: Context) : FileSizeFormatter {
-    override fun format(fileSize: Long): String {
-        return Formatter.formatShortFileSize(context, fileSize)
+class DefaultCacheService @Inject constructor() : CacheService {
+    private val cacheIndexState = MutableStateFlow(0)
+
+    override fun cacheIndex(): Flow<Int> {
+        return cacheIndexState
+    }
+
+    fun incrementCacheIndex() {
+        cacheIndexState.value++
     }
 }

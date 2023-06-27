@@ -49,6 +49,12 @@ interface MatrixClient : Closeable {
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
     fun notificationService(): NotificationService
+    suspend fun getCacheSize(): Long
+
+    /**
+     * Will close the client and delete the cache data.
+     */
+    suspend fun clearCache()
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String?>

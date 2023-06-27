@@ -32,10 +32,11 @@ class RustNotificationService(
     override fun getNotification(
         userId: SessionId,
         roomId: RoomId,
-        eventId: EventId
+        eventId: EventId,
+        filterByPushRules: Boolean,
     ): Result<NotificationData?> {
         return runCatching {
-            client.getNotificationItem(roomId.value, eventId.value)?.use(notificationMapper::map)
+            client.getNotificationItem(roomId.value, eventId.value, filterByPushRules)?.use(notificationMapper::map)
         }
     }
 }

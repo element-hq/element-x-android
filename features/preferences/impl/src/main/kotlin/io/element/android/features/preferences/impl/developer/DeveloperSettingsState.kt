@@ -16,10 +16,13 @@
 
 package io.element.android.features.preferences.impl.developer
 
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import kotlinx.collections.immutable.ImmutableList
 
-data class DeveloperSettingsState(
+data class DeveloperSettingsState constructor(
     val features: ImmutableList<FeatureUiModel>,
+    val cacheSize: Async<String>,
+    val clearCacheAction: Async<Unit>,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 )
