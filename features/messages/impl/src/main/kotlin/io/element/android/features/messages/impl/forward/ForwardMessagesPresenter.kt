@@ -114,7 +114,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
             isSearchActive = isSearchActive,
             selectedRooms = selectedRooms,
             isForwarding = forwardingActionState.value.isLoading(),
-            error = (forwardingActionState.value as? Async.Failure)?.exception,
+            error = (forwardingActionState.value as? Async.Failure)?.error,
             forwardingSucceeded = forwardingSucceeded,
             eventSink = { handleEvents(it) }
         )

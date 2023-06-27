@@ -110,7 +110,7 @@ fun ConfirmAccountProviderView(
     ) {
         when (state.loginFlow) {
             is Async.Failure -> {
-                when (val error = state.loginFlow.exception) {
+                when (val error = state.loginFlow.error) {
                     is ChangeServerError.Error -> {
                         ErrorDialog(
                             content = error.message(),

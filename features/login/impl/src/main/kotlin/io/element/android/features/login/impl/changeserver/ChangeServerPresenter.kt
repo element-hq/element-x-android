@@ -71,6 +71,6 @@ class ChangeServerPresenter @Inject constructor(
                 // Valid, remember user choice
                 accountProviderDataSource.userSelection(data)
             }.getOrThrow()
-        }.runCatchingUpdatingState(changeServerAction, exceptionTransform = ChangeServerError::from)
+        }.runCatchingUpdatingState(changeServerAction, errorTransform = ChangeServerError::from)
     }
 }

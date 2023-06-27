@@ -152,7 +152,7 @@ fun LoginPasswordView(
             }
 
             if (state.loginAction is Async.Failure) {
-                LoginErrorDialog(error = state.loginAction.exception, onDismiss = {
+                LoginErrorDialog(error = state.loginAction.error, onDismiss = {
                     state.eventSink(LoginPasswordEvents.ClearError)
                 })
             }

@@ -84,7 +84,7 @@ fun OidcView(
             Async.Uninitialized -> Unit
             is Async.Failure -> {
                 ErrorDialog(
-                    content = state.requestState.exception.toString(),
+                    content = state.requestState.error.toString(),
                     onDismiss = { state.eventSink(OidcEvents.ClearError) }
                 )
             }

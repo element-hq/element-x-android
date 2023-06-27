@@ -97,7 +97,7 @@ private fun AttachmentSendStateView(
 
         is Async.Failure -> {
             RetryDialog(
-                content = stringResource(sendAttachmentError(sendActionState.exception)),
+                content = stringResource(sendAttachmentError(sendActionState.error)),
                 onDismiss = onRetryDismissed,
                 onRetry = onRetryClicked
             )

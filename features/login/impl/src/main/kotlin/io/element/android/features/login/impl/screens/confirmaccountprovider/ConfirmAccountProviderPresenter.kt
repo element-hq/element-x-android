@@ -95,6 +95,6 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                     throw IllegalStateException("Unsupported login flow")
                 }
             }.getOrThrow()
-        }.runCatchingUpdatingState(loginFlowAction, exceptionTransform = ChangeServerError::from)
+        }.runCatchingUpdatingState(loginFlowAction, errorTransform = ChangeServerError::from)
     }
 }

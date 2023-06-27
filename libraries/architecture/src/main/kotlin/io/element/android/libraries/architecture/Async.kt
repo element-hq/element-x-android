@@ -32,11 +32,11 @@ sealed interface Async<out T> {
      * Represents a failed operation.
      *
      * @param T the type of data returned by the operation.
-     * @property exception the exception that caused the operation to fail.
+     * @property error the error that caused the operation to fail.
      * @property prevData the data returned by a previous successful run of the operation if any.
      */
     data class Failure<out T>(
-        val exception: Throwable,
+        val error: Throwable,
         val prevData: T? = null,
     ) : Async<T>
 
@@ -78,10 +78,10 @@ sealed interface Async<out T> {
     }
 
     /**
-     * Returns the exception that caused the operation to fail, or null otherwise.
+     * Returns the error that caused the operation to fail, or null otherwise.
      */
-    fun exceptionOrNull(): Throwable? = when (this) {
-        is Failure -> exception
+    fun errorOrNull(): Throwable? = when (this) {
+        is Failure -> error
         else -> null
     }
 
@@ -95,11 +95,11 @@ sealed interface Async<out T> {
 }
 
 suspend inline fun <T> MutableState<Async<T>>.runCatchingUpdatingState(
-    exceptionTransform: (Throwable) -> Throwable = { it },
+    errorTransform: (Throwable) -> Throwable = { it },
     block: () -> T,
 ): Result<T> = runUpdatingState(
     state = this,
-    exceptionTransform = exceptionTransform,
+    errorTransform = errorTransform,
     resultBlock = {
         runCatching {
             block()
@@ -109,10 +109,10 @@ suspend inline fun <T> MutableState<Async<T>>.runCatchingUpdatingState(
 
 suspend inline fun <T> (suspend () -> T).runCatchingUpdatingState(
     state: MutableState<Async<T>>,
-    exceptionTransform: (Throwable) -> Throwable = { it },
+    errorTransform: (Throwable) -> Throwable = { it },
 ): Result<T> = runUpdatingState(
     state = state,
-    exceptionTransform = exceptionTransform,
+    errorTransform = errorTransform,
     resultBlock = {
         runCatching {
             this()
@@ -121,11 +121,11 @@ suspend inline fun <T> (suspend () -> T).runCatchingUpdatingState(
 )
 
 suspend inline fun <T> MutableState<Async<T>>.runUpdatingState(
-    exceptionTransform: (Throwable) -> Throwable = { it },
+    errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: () -> Result<T>,
 ): Result<T> = runUpdatingState(
     state = this,
-    exceptionTransform = exceptionTransform,
+    errorTransform = errorTransform,
     resultBlock = resultBlock,
 )
 
@@ -134,16 +134,16 @@ suspend inline fun <T> MutableState<Async<T>>.runUpdatingState(
  * encapsulating its progress and return value into an [Async] while
  * posting its updates to the MutableState [state].
  *
- * @state the [MutableState] to post updates to.
- * @exceptionTransform a function to transform the exception before posting it.
- * @resultBlock a suspending function that returns a [Result].
+ * @param state the [MutableState] to post updates to.
+ * @param errorTransform a function to transform the error before posting it.
+ * @param resultBlock a suspending function that returns a [Result].
  * @return the [Result] returned by [resultBlock].
  */
 @OptIn(ExperimentalContracts::class)
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
 suspend inline fun <T> runUpdatingState(
     state: MutableState<Async<T>>,
-    exceptionTransform: (Throwable) -> Throwable = { it },
+    errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: suspend () -> Result<T>,
 ): Result<T> {
     contract {
@@ -157,12 +157,12 @@ suspend inline fun <T> runUpdatingState(
             Result.success(it)
         },
         onFailure = {
-            val exception = exceptionTransform(it)
+            val error = errorTransform(it)
             state.value = Async.Failure(
-                exception = exception,
+                error = error,
                 prevData = prevData,
             )
-            Result.failure(exception)
+            Result.failure(error)
         }
     )
 }
