@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
@@ -35,6 +36,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.extensions.toAnalyticsJoinedRoom
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -44,6 +47,7 @@ import javax.inject.Inject
 class InviteListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val store: SeenInvitesStore,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<InviteListState> {
 
     @Composable
@@ -133,6 +137,7 @@ class InviteListPresenter @Inject constructor(
         suspend {
             client.getRoom(roomId)?.use {
                 it.acceptInvitation().getOrThrow()
+                analyticsService.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
             }
             roomId
         }.runCatchingUpdatingState(acceptedAction)
