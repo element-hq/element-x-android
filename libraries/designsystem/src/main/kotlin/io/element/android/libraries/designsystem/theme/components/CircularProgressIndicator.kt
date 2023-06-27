@@ -22,6 +22,7 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -49,11 +50,21 @@ fun CircularProgressIndicator(
     color: Color = ProgressIndicatorDefaults.circularColor,
     strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
 ) {
-    androidx.compose.material3.CircularProgressIndicator(
-        modifier = modifier,
-        color = color,
-        strokeWidth = strokeWidth,
-    )
+    if (LocalInspectionMode.current) {
+        // Use a determinate progress indicator to improve the preview rendering
+        androidx.compose.material3.CircularProgressIndicator(
+            modifier = modifier,
+            progress = 0.75F,
+            color = color,
+            strokeWidth = strokeWidth,
+        )
+    } else {
+        androidx.compose.material3.CircularProgressIndicator(
+            modifier = modifier,
+            color = color,
+            strokeWidth = strokeWidth,
+        )
+    }
 }
 
 @Preview(group = PreviewGroup.Progress)
@@ -68,7 +79,7 @@ private fun ContentToPreview() {
         )
         // Fixed progress
         CircularProgressIndicator(
-            progress = 0.75F
+            progress = 0.90F
         )
     }
 }
