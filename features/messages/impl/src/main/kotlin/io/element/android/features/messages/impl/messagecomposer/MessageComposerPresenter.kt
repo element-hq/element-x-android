@@ -89,6 +89,9 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
+        val hasFocus = remember {
+            mutableStateOf(false)
+        }
         val text: MutableState<StableCharSequence> = remember {
             mutableStateOf(StableCharSequence(""))
         }
@@ -115,6 +118,9 @@ class MessageComposerPresenter @Inject constructor(
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
+
+                is MessageComposerEvents.FocusChanged -> hasFocus.value = event.hasFocus
+
                 is MessageComposerEvents.UpdateText -> text.value = event.text.toStableCharSequence()
                 MessageComposerEvents.CloseSpecialMode -> {
                     text.value = "".toStableCharSequence()
@@ -158,6 +164,7 @@ class MessageComposerPresenter @Inject constructor(
         return MessageComposerState(
             text = text.value,
             isFullScreen = isFullScreen.value,
+            hasFocus = hasFocus.value,
             mode = composerMode.value,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             attachmentsState = attachmentsState.value,

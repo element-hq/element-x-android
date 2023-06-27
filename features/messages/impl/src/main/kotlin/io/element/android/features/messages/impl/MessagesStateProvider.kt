@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -37,6 +38,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState().copy(hasNetworkConnection = false),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
             aMessagesState().copy(userHasPermissionToSendMessage = false),
+            aMessagesState().copy(showReinvitePrompt = true),
         )
 }
 
@@ -64,5 +66,7 @@ fun aMessagesState() = MessagesState(
     ),
     hasNetworkConnection = true,
     snackbarMessage = null,
+    inviteProgress = Async.Uninitialized,
+    showReinvitePrompt = false,
     eventSink = {}
 )

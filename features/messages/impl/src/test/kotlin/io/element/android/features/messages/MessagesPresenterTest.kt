@@ -24,11 +24,13 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.InviteDialogAction
 import io.element.android.features.messages.impl.MessagesEvents
 import io.element.android.features.messages.impl.MessagesPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
@@ -49,11 +51,16 @@ import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -346,6 +353,170 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
             assertThat(navigator.onShowEventDebugInfoClickedCount).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `present - shows prompt to reinvite users in DM`() = runTest {
+        val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 1L)
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(3)
+            val initialState = awaitItem()
+
+            // Initially the composer doesn't have focus, so we don't show the alert
+            assertThat(initialState.showReinvitePrompt).isFalse()
+
+            // When the input field is focused we show the alert
+            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            val focusedState = awaitItem()
+            assertThat(focusedState.showReinvitePrompt).isTrue()
+
+            // If it's dismissed then we stop showing the alert
+            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
+            val dismissedState = awaitItem()
+            assertThat(dismissedState.showReinvitePrompt).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - doesn't show reinvite prompt in non-direct room`() = runTest {
+        val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = false, activeMemberCount = 1L)
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(3)
+            val initialState = awaitItem()
+            assertThat(initialState.showReinvitePrompt).isFalse()
+
+            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            val focusedState = awaitItem()
+            assertThat(focusedState.showReinvitePrompt).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - doesn't show reinvite prompt if other party is present`() = runTest {
+        val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 2L)
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(3)
+            val initialState = awaitItem()
+            assertThat(initialState.showReinvitePrompt).isFalse()
+
+            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            val focusedState = awaitItem()
+            assertThat(focusedState.showReinvitePrompt).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - handle reinviting other user when memberlist is ready`() = runTest {
+        val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
+        room.givenRoomMembersState(
+            MatrixRoomMembersState.Ready(
+                listOf(
+                    aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
+                    aRoomMember(userId = A_SESSION_ID_2, membership = RoomMembershipState.LEAVE),
+                )
+            )
+        )
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+            skipItems(3)
+
+            val loadingState = awaitItem()
+            assertThat(loadingState.inviteProgress.isLoading()).isTrue()
+
+            val newState = awaitItem()
+            assertThat(newState.inviteProgress.isSuccess()).isTrue()
+            assertThat(room.invitedUserId).isEqualTo(A_SESSION_ID_2)
+        }
+    }
+
+    @Test
+    fun `present - handle reinviting other user when memberlist is error`() = runTest {
+        val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
+        room.givenRoomMembersState(
+            MatrixRoomMembersState.Error(
+                failure = Throwable(),
+                prevRoomMembers = listOf(
+                    aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
+                    aRoomMember(userId = A_SESSION_ID_2, membership = RoomMembershipState.LEAVE),
+                )
+            )
+        )
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+            skipItems(3)
+
+            val loadingState = awaitItem()
+            assertThat(loadingState.inviteProgress.isLoading()).isTrue()
+
+            val newState = awaitItem()
+            assertThat(newState.inviteProgress.isSuccess()).isTrue()
+            assertThat(room.invitedUserId).isEqualTo(A_SESSION_ID_2)
+        }
+    }
+
+    @Test
+    fun `present - handle reinviting other user when memberlist is not ready`() = runTest {
+        val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
+        room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+            skipItems(3)
+
+            val loadingState = awaitItem()
+            assertThat(loadingState.inviteProgress.isLoading()).isTrue()
+
+            val newState = awaitItem()
+            assertThat(newState.inviteProgress.isFailure()).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - handle reinviting other user when inviting fails`() = runTest {
+        val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
+        room.givenRoomMembersState(
+            MatrixRoomMembersState.Ready(
+                listOf(
+                    aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
+                    aRoomMember(userId = A_SESSION_ID_2, membership = RoomMembershipState.LEAVE),
+                )
+            )
+        )
+        room.givenInviteUserResult(Result.failure(Throwable("Oops!")))
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+            skipItems(3)
+
+            val loadingState = awaitItem()
+            assertThat(loadingState.inviteProgress.isLoading()).isTrue()
+
+            val newState = awaitItem()
+            assertThat(newState.inviteProgress.isFailure()).isTrue()
         }
     }
 

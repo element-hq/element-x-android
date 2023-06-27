@@ -68,6 +68,7 @@ import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -184,6 +185,25 @@ fun MessagesView(
     RetrySendMessageMenu(
         state = state.retrySendMenuState
     )
+
+    ReinviteDialog(
+        state = state
+    )
+}
+
+@Composable
+fun ReinviteDialog(state: MessagesState) {
+    if (state.showReinvitePrompt) {
+        ConfirmationDialog(
+            title = stringResource(id = R.string.screen_room_invite_again_alert_title),
+            content = stringResource(id = R.string.screen_room_invite_again_alert_message),
+            cancelText = stringResource(id = CommonStrings.action_cancel),
+            submitText = stringResource(id = CommonStrings.action_invite),
+            emphasizeSubmitButton = true,
+            onSubmitClicked = { state.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite)) },
+            onDismiss = { state.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel)) }
+        )
+    }
 }
 
 @Composable

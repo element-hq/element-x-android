@@ -21,11 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -52,7 +54,9 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -61,6 +65,7 @@ import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -108,6 +113,22 @@ class MessagesPresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
 
+        var hasDismissedInviteDialog by rememberSaveable {
+            mutableStateOf(false)
+        }
+
+        val inviteProgress = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
+
+        val showReinvitePrompt by remember(
+            hasDismissedInviteDialog,
+            composerState.hasFocus,
+            syncUpdateFlow,
+        ) {
+            derivedStateOf {
+                !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
+            }
+        }
+
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
@@ -125,6 +146,7 @@ class MessagesPresenter @AssistedInject constructor(
         LaunchedEffect(composerState.mode.relatedEventId) {
             timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
         }
+
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> {
@@ -133,9 +155,17 @@ class MessagesPresenter @AssistedInject constructor(
                 is MessagesEvents.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventId)
                 }
+                is MessagesEvents.InviteDialogDismissed -> {
+                    hasDismissedInviteDialog = true
+
+                    if (event.action == InviteDialogAction.Invite) {
+                        localCoroutineScope.reinviteOtherUser(inviteProgress)
+                    }
+                }
                 is MessagesEvents.Dismiss -> actionListState.eventSink(ActionListEvents.Clear)
             }
         }
+
         return MessagesState(
             roomId = room.roomId,
             roomName = roomName.value,
@@ -148,6 +178,8 @@ class MessagesPresenter @AssistedInject constructor(
             retrySendMenuState = retryState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,
+            showReinvitePrompt = showReinvitePrompt,
+            inviteProgress = inviteProgress.value,
             eventSink = ::handleEvents
         )
     }
@@ -176,8 +208,21 @@ class MessagesPresenter @AssistedInject constructor(
             .onFailure { Timber.e(it) }
     }
 
-    private fun notImplementedYet() {
-        Timber.v("NotImplementedYet")
+    private fun CoroutineScope.reinviteOtherUser(inviteProgress: MutableState<Async<Unit>>) = launch(dispatchers.io) {
+        suspend {
+            room.updateMembers()
+
+            val memberList = when (val memberState = room.membersStateFlow.value) {
+                is MatrixRoomMembersState.Ready -> memberState.roomMembers
+                is MatrixRoomMembersState.Error -> memberState.prevRoomMembers.orEmpty()
+                else -> emptyList()
+            }
+
+            val member = memberList.first { it.userId != room.sessionId }
+            room.inviteUserById(member.userId).onFailure { t ->
+                Timber.e(t, "Failed to reinvite DM partner")
+            }.getOrThrow()
+        }.runCatchingUpdatingState(inviteProgress)
     }
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {

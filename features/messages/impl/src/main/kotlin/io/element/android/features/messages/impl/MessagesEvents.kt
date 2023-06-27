@@ -23,5 +23,11 @@ import io.element.android.libraries.matrix.api.core.EventId
 sealed interface MessagesEvents {
     data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
     data class ToggleReaction(val emoji: String, val eventId: EventId) : MessagesEvents
+    data class InviteDialogDismissed(val action: InviteDialogAction) : MessagesEvents
     object Dismiss : MessagesEvents
+}
+
+enum class InviteDialogAction {
+    Cancel,
+    Invite,
 }
