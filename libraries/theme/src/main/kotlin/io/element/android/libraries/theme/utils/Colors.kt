@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.utils
+package io.element.android.libraries.theme.utils
 
 import androidx.compose.ui.graphics.Color
 
 /**
  * Convert color to Human Readable Format.
  */
-internal fun Color.toHrf(): String {
+fun Color.toHrf(): String {
     return "0x" + value.toString(16).take(8).uppercase()
 }

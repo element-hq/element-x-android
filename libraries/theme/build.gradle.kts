@@ -25,5 +25,7 @@ android {
     dependencies {
         ksp(libs.showkase.processor)
         kspTest(libs.showkase.processor)
+
+        implementation(libs.accompanist.systemui)
     }
 }

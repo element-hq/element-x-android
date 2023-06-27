@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.theme
+package io.element.android.libraries.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -34,15 +34,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import io.element.android.libraries.theme.ElementColors
 import io.element.android.libraries.theme.compound.compoundColorsDark
 import io.element.android.libraries.theme.compound.compoundColorsLight
 import io.element.android.libraries.theme.compound.compoundTypography
 import io.element.android.libraries.theme.compound.generated.SemanticColors
-import io.element.android.libraries.theme.elementColorsDark
-import io.element.android.libraries.theme.elementColorsLight
-import io.element.android.libraries.theme.materialColorSchemeDark
-import io.element.android.libraries.theme.materialColorSchemeLight
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace

@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.theme.LocalColors
 import io.element.android.libraries.ui.strings.R
 
 @OptIn(ExperimentalMaterial3Api::class)

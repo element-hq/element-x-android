@@ -79,7 +79,7 @@ internal val compoundBodySmMedium = TypographyTokens.fontBodySmMedium
 @ShowkaseTypography(name = "M3 Label Small", group = "Compound")
 internal val compoundBodyXsMedium = TypographyTokens.fontBodyXsMedium
 
-val compoundTypography = Typography(
+internal val compoundTypography = Typography(
     // displayLarge = , 57px (Material) size. We have no equivalent
     // displayMedium = , 45px (Material) size. We have no equivalent
     // displaySmall = , 36px (Material) size. We have no equivalent

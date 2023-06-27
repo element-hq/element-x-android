@@ -18,10 +18,14 @@ package io.element.android.libraries.theme
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.theme.compound.generated.internal.DarkDesignTokens
 import io.element.android.libraries.theme.compound.generated.internal.LightDesignTokens
+import io.element.android.libraries.theme.previews.ColorsSchemePreview
 
-val materialColorSchemeLight = lightColorScheme(
+internal val materialColorSchemeLight = lightColorScheme(
     primary = LightDesignTokens.colorGray1400,
     onPrimary = LightDesignTokens.colorThemeBg,
     primaryContainer = LightDesignTokens.colorThemeBg,
@@ -53,7 +57,7 @@ val materialColorSchemeLight = lightColorScheme(
     scrim = LightDesignTokens.colorGray1400,
 )
 
-val materialColorSchemeDark = darkColorScheme(
+internal val materialColorSchemeDark = darkColorScheme(
     primary = DarkDesignTokens.colorGray1400,
     onPrimary = DarkDesignTokens.colorThemeBg,
     primaryContainer = DarkDesignTokens.colorThemeBg,
@@ -83,4 +87,20 @@ val materialColorSchemeDark = darkColorScheme(
     outline = DarkDesignTokens.colorGray800,
     outlineVariant = DarkDesignTokens.colorAlphaGray400,
     scrim = DarkDesignTokens.colorGray300,
+)
+
+@Preview
+@Composable
+fun ColorsSchemePreviewLight() = ColorsSchemePreview(
+    Color.Black,
+    Color.White,
+    materialColorSchemeLight,
+)
+
+@Preview
+@Composable
+fun ColorsSchemePreviewDark() = ColorsSchemePreview(
+    Color.White,
+    Color.Black,
+    materialColorSchemeDark,
 )

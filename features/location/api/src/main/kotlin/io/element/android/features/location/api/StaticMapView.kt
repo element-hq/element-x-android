@@ -36,10 +36,10 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.buildStaticMapsApiUrl
+import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
 
 /**

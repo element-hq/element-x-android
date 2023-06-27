@@ -28,7 +28,6 @@ import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.theme.LocalColors
 
 @Composable
 internal fun BlockUserSection(state: RoomMemberDetailsState, modifier: Modifier = Modifier) {

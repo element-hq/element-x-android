@@ -20,7 +20,7 @@ import io.element.android.libraries.theme.compound.generated.internal.DarkDesign
 import io.element.android.libraries.theme.compound.generated.internal.LightDesignTokens
 import io.element.android.libraries.theme.compound.generated.SemanticColors
 
-val compoundColorsLight = SemanticColors(
+internal val compoundColorsLight = SemanticColors(
     textPrimary = LightDesignTokens.colorGray1400,
     textSecondary = LightDesignTokens.colorGray900,
     textPlaceholder = LightDesignTokens.colorGray800,
@@ -76,7 +76,7 @@ val compoundColorsLight = SemanticColors(
     isLight = true,
 )
 
-val compoundColorsDark = SemanticColors(
+internal val compoundColorsDark = SemanticColors(
     textPrimary = DarkDesignTokens.colorGray1400,
     textSecondary = DarkDesignTokens.colorGray900,
     textPlaceholder = DarkDesignTokens.colorGray800,

@@ -107,7 +107,7 @@ class ElementColors(
     }
 }
 
-fun elementColorsLight() = ElementColors(
+internal fun elementColorsLight() = ElementColors(
     messageFromMeBackground = SystemGrey5Light,
     messageFromOtherBackground = SystemGrey6Light,
     messageHighlightedBackground = Azure,
@@ -119,7 +119,7 @@ fun elementColorsLight() = ElementColors(
     isLight = true,
 )
 
-fun elementColorsDark() = ElementColors(
+internal fun elementColorsDark() = ElementColors(
     messageFromMeBackground = SystemGrey5Dark,
     messageFromOtherBackground = SystemGrey6Dark,
     messageHighlightedBackground = Azure,
