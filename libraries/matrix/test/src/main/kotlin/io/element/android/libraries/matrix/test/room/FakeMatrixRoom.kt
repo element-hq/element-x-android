@@ -77,6 +77,7 @@ class FakeMatrixRoom(
     private var cancelSendResult = Result.success(Unit)
     private var forwardEventResult = Result.success(Unit)
     private var reportContentResult = Result.success(Unit)
+    private var sendLocationResult = Result.success(Unit)
 
     var sendMediaCount = 0
         private set
@@ -91,6 +92,9 @@ class FakeMatrixRoom(
         private set
 
     var reportedContentCount: Int = 0
+        private set
+
+    var sendLocationCount: Int = 0
         private set
 
     var isInviteAccepted: Boolean = false
@@ -262,6 +266,14 @@ class FakeMatrixRoom(
         return reportContentResult
     }
 
+    override suspend fun sendLocation(
+        body: String,
+        geoUri: String
+    ): Result<Unit> = simulateLongTask {
+        sendLocationCount++
+        return sendLocationResult
+    }
+
     override fun close() = Unit
 
     fun givenLeaveRoomError(throwable: Throwable?) {
@@ -354,5 +366,9 @@ class FakeMatrixRoom(
 
     fun givenReportContentResult(result: Result<Unit>) {
         reportContentResult = result
+    }
+
+    fun givenSendLocationResult(result: Result<Unit>) {
+        sendLocationResult = result
     }
 }
