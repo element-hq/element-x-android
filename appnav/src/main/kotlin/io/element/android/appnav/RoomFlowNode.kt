@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.extensions.toAnalyticsViewRoom
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -92,7 +93,7 @@ class RoomFlowNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 Timber.v("OnCreate")
-                analyticsService.capture(ViewRoom(isDM = inputs.room.isDirect))
+                analyticsService.capture(inputs.room.toAnalyticsViewRoom())
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.room) }
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()

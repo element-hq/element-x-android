@@ -26,6 +26,7 @@ import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.google.common.truth.Truth
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.childNode
@@ -82,7 +83,8 @@ class RoomFlowNodeTest {
         messagesEntryPoint = messagesEntryPoint,
         roomDetailsEntryPoint = roomDetailsEntryPoint,
         appNavigationStateService = NoopAppNavigationStateService(),
-        roomMembershipObserver = RoomMembershipObserver()
+        roomMembershipObserver = RoomMembershipObserver(),
+        analyticsService = FakeAnalyticsService()
     )
 
     @Test

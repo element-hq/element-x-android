@@ -64,6 +64,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.features.analytics.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
     testImplementation(projects.services.appnavstate.test)
