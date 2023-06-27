@@ -20,6 +20,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -47,6 +48,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 private val BUBBLE_RADIUS = 12.dp
 private val BUBBLE_INCOMING_OFFSET = 16.dp
+
+// Design says: The maximum width of a bubble is still 3/4 of the screen width
+private const val BUBBLE_WIDTH_RATIO = 0.75f
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -103,21 +107,30 @@ fun MessageEventBubble(
         }
     }
     val bubbleShape = bubbleShape()
-    Surface(
+    Box(
         modifier = modifier
-            .widthIn(min = 80.dp)
-            .offsetForItem()
-            .clip(bubbleShape)
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick,
-                indication = rememberRipple(),
-                interactionSource = interactionSource
-            ),
-        color = backgroundBubbleColor,
-        shape = bubbleShape,
-        content = content
-    )
+            .fillMaxWidth(BUBBLE_WIDTH_RATIO)
+            .padding(horizontal = 16.dp)
+            .offsetForItem(),
+        // Need to set the contentAlignment again (it's already set in TimelineItemEventRow), for the case
+        // when content width is low.
+        contentAlignment = if (state.isMine) Alignment.CenterEnd else Alignment.CenterStart
+    ) {
+        Surface(
+            modifier = Modifier
+                .widthIn(min = 80.dp)
+                .clip(bubbleShape)
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                    indication = rememberRipple(),
+                    interactionSource = interactionSource
+                ),
+            color = backgroundBubbleColor,
+            shape = bubbleShape,
+            content = content
+        )
+    }
 }
 
 @Preview

@@ -22,10 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.theme.ElementColors
-import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.SystemGrey4Dark
-import io.element.android.libraries.theme.SystemGrey6Light
 import io.element.android.libraries.theme.previews.ColorListPreview
 import kotlinx.collections.immutable.persistentMapOf
 
@@ -43,9 +39,6 @@ fun MaterialTheme.roomListRoomMessageDate() = colorScheme.secondary
 
 @Composable
 fun MaterialTheme.roomListUnreadIndicator() = colorScheme.primary
-
-@Composable
-fun ElementColors.roomListPlaceHolder() = if (isLight) SystemGrey6Light else SystemGrey4Dark
 
 @Preview
 @Composable
@@ -65,7 +58,6 @@ private fun ContentToPreview() {
             "roomListRoomMessage" to MaterialTheme.roomListRoomMessage(),
             "roomListRoomMessageDate" to MaterialTheme.roomListRoomMessageDate(),
             "roomListUnreadIndicator" to MaterialTheme.roomListUnreadIndicator(),
-            "roomListPlaceHolder" to ElementTheme.colors.roomListPlaceHolder(),
         )
     )
 }

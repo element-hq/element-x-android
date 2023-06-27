@@ -29,7 +29,7 @@ open class TimelineItemFileContentProvider : PreviewParameterProvider<TimelineIt
         )
 }
 
-fun aTimelineItemFileContent(fileName: String) = TimelineItemFileContent(
+fun aTimelineItemFileContent(fileName: String = "A file.pdf") = TimelineItemFileContent(
     body = fileName,
     thumbnailSource = MediaSource(url = ""),
     fileSource = MediaSource(url = ""),
