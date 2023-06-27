@@ -212,12 +212,12 @@ private fun EditingModeView(
             .padding(horizontal = 12.dp, vertical = 8.dp)) {
         Icon(
             resourceId = VectorIcons.Edit,
-            contentDescription = stringResource(StringR.string.common_editing),
+            contentDescription = stringResource(CommonStrings.common_editing),
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.size(16.dp),
         )
         Text(
-            stringResource(StringR.string.common_editing),
+            stringResource(CommonStrings.common_editing),
             style = ElementTextStyles.Regular.caption2,
             textAlign = TextAlign.Start,
             color = MaterialTheme.colorScheme.secondary,
