@@ -43,7 +43,7 @@ internal fun TimelineItemDaySeparatorView(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(8.dp),
+            .padding(16.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
