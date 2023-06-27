@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,13 +85,13 @@ private fun RoomListModalBottomSheetContent(
         )
         ListItem(
             headlineContent = {
-                Text(text = stringResource(id = StringR.string.common_settings))
+                Text(text = stringResource(id = CommonStrings.common_settings))
             },
             modifier = Modifier.clickable { onRoomSettingsClicked(contextMenu.roomId) },
             leadingContent = {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
-                    contentDescription = stringResource(id = StringR.string.common_settings),
+                    contentDescription = stringResource(id = CommonStrings.common_settings),
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
@@ -100,7 +100,7 @@ private fun RoomListModalBottomSheetContent(
         ListItem(
             headlineContent = {
                 Text(
-                    text = stringResource(id = StringR.string.action_leave_room),
+                    text = stringResource(id = CommonStrings.action_leave_room),
                     color = MaterialTheme.colorScheme.error,
                 )
             },
@@ -108,7 +108,7 @@ private fun RoomListModalBottomSheetContent(
             leadingContent = {
                 Icon(
                     resourceId = VectorIcons.DoorOpen,
-                    contentDescription = stringResource(id = StringR.string.action_leave_room),
+                    contentDescription = stringResource(id = CommonStrings.action_leave_room),
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.error,
                 )

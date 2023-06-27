@@ -25,16 +25,16 @@ import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import io.element.android.libraries.ui.strings.R as StringR
 
 open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
         get() = sequenceOf(
             aRoomListState(),
             aRoomListState().copy(displayVerificationPrompt = true),
-            aRoomListState().copy(snackbarMessage = SnackbarMessage(StringR.string.common_verification_complete)),
+            aRoomListState().copy(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState().copy(hasNetworkConnection = false),
             aRoomListState().copy(invitesState = InvitesState.SeenInvites),
             aRoomListState().copy(invitesState = InvitesState.NewInvites),

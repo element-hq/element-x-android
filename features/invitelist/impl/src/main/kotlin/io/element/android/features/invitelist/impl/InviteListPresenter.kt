@@ -30,7 +30,7 @@ import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -135,7 +135,7 @@ class InviteListPresenter @Inject constructor(
                 it.acceptInvitation().getOrThrow()
             }
             roomId
-        }.execute(acceptedAction)
+        }.runCatchingUpdatingState(acceptedAction)
     }
 
     private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<Async<Unit>>) = launch {
@@ -143,7 +143,7 @@ class InviteListPresenter @Inject constructor(
             client.getRoom(roomId)?.use {
                 it.rejectInvitation().getOrThrow()
             } ?: Unit
-        }.execute(declinedAction)
+        }.runCatchingUpdatingState(declinedAction)
     }
 
     private fun RoomSummary.Filled.toInviteSummary(seen: Boolean) = details.run {

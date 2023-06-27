@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun ConnectivityIndicatorView(
@@ -97,7 +97,7 @@ private fun Indicator(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = stringResource(StringR.string.common_offline),
+            text = stringResource(CommonStrings.common_offline),
             style = ElementTextStyles.Regular.bodyMD.copy(fontWeight = FontWeight.Medium),
             color = tint,
         )

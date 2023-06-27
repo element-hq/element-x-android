@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineEventTimestampView(
@@ -69,7 +69,7 @@ fun TimelineEventTimestampView(
     ) {
         if (isMessageEdited) {
             Text(
-                stringResource(R.string.common_edited_suffix),
+                stringResource(CommonStrings.common_edited_suffix),
                 style = ElementTextStyles.Regular.caption2,
                 color = tint ?: MaterialTheme.colorScheme.secondary,
             )

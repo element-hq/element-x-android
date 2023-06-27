@@ -19,10 +19,10 @@ package io.element.android.libraries.eventformatter.impl
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
-import io.element.android.libraries.ui.strings.R as StringR
 
 class StateContentFormatter @Inject constructor(
     private val sp: StringProvider,
@@ -50,7 +50,7 @@ class StateContentFormatter @Inject constructor(
                     sp.getString(R.string.state_event_room_created, senderDisplayName)
                 }
             }
-            is OtherState.RoomEncryption -> sp.getString(StringR.string.common_encryption_enabled)
+            is OtherState.RoomEncryption -> sp.getString(CommonStrings.common_encryption_enabled)
             is OtherState.RoomName -> {
                 val hasRoomName = content.name != null
                 when {

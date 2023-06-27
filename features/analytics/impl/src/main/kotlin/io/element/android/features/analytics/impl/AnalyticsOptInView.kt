@@ -61,7 +61,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun AnalyticsOptInView(
@@ -199,13 +199,13 @@ private fun AnalyticsOptInFooter(
             onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(text = stringResource(id = StringR.string.action_ok))
+            Text(text = stringResource(id = CommonStrings.action_ok))
         }
         TextButton(
             onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(text = stringResource(id = StringR.string.action_not_now))
+            Text(text = stringResource(id = CommonStrings.action_not_now))
         }
     }
 }
