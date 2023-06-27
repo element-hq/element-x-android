@@ -338,4 +338,13 @@ class RustMatrixRoom(
             }
         }
     }
+
+    override suspend fun sendLocation(
+        body: String,
+        geoUri: String
+    ): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.sendLocation(body, geoUri, genTransactionId())
+        }
+    }
 }
