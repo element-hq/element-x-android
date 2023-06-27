@@ -31,8 +31,9 @@ sealed interface Async<out T> {
     /**
      * Represents a failed operation.
      *
-     * @param exception the exception that caused the operation to fail.
-     * @param prevData the data returned by a previous successful run of the operation if any.
+     * @param T the type of data returned by the operation.
+     * @property exception the exception that caused the operation to fail.
+     * @property prevData the data returned by a previous successful run of the operation if any.
      */
     data class Failure<out T>(
         val exception: Throwable,
@@ -42,7 +43,8 @@ sealed interface Async<out T> {
     /**
      * Represents an operation that is currently ongoing.
      *
-     * @param prevData the data returned by a previous successful run of the operation if any.
+     * @param T the type of data returned by the operation.
+     * @property prevData the data returned by a previous successful run of the operation if any.
      */
     data class Loading<out T>(
         val prevData: T? = null,
@@ -51,7 +53,8 @@ sealed interface Async<out T> {
     /**
      * Represents a successful operation.
      *
-     * @param data the data returned by the operation.
+     * @param T the type of data returned by the operation.
+     * @property data the data returned by the operation.
      */
     data class Success<out T>(
         val data: T,
