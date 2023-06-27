@@ -23,6 +23,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
+import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
@@ -88,7 +90,19 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
         ),
         // A grouped event on top of it
         aGroupedEvents(),
+        // A day separator
+        aTimelineItemDaySeparator(),
+        // Loading
+        aTimelineItemLoading(),
     )
+}
+
+fun aTimelineItemLoading(): TimelineItem.Virtual {
+    return TimelineItem.Virtual("virtual_loading", TimelineItemLoadingModel)
+}
+
+fun aTimelineItemDaySeparator(): TimelineItem.Virtual {
+    return TimelineItem.Virtual("virtual_day", aTimelineItemDaySeparatorModel("Today"))
 }
 
 internal fun aTimelineItemEvent(
