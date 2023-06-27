@@ -15,7 +15,8 @@
  */
 
 
-package io.element.android.libraries.theme.compound.generated.internal;
+@file:Suppress("all")
+package io.element.android.libraries.theme.compound.generated.internal
 
 import androidx.compose.ui.graphics.Color
 

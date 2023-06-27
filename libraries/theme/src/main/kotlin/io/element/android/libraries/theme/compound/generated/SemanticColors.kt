@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("all")
 package io.element.android.libraries.theme.compound.generated
 
 import androidx.compose.runtime.Stable
@@ -25,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 
 
 // Do not edit directly
-// Generated on Tue, 27 Jun 2023 05:38:44 GMT
+// Generated on Tue, 27 Jun 2023 11:49:05 GMT
 
 
 
