@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -33,6 +34,7 @@ class RoomSummaryListProcessor(
 ) {
 
     private val roomSummariesByIdentifier = HashMap<String, RoomSummary>()
+    private val initLatch = CompletableDeferred<Unit>()
     private val mutex = Mutex()
 
     suspend fun postEntries(entries: List<RoomListEntry>) {
@@ -40,9 +42,12 @@ class RoomSummaryListProcessor(
             Timber.v("Update rooms from postEntries (with ${entries.size} items) on ${Thread.currentThread()}")
             addAll(entries.map(::buildSummaryForRoomListEntry))
         }
+        initLatch.complete(Unit)
     }
 
     suspend fun postUpdate(update: RoomListEntriesUpdate) {
+        // Makes sure to process first entries before update.
+        initLatch.await()
         updateRoomSummaries {
             Timber.v("Update rooms from postUpdate ($update) on ${Thread.currentThread()}")
             applyUpdate(update)
