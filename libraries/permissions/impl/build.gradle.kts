@@ -47,7 +47,6 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
     api(projects.libraries.permissions.api)
 

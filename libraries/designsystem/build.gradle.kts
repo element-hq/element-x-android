@@ -32,7 +32,6 @@ android {
         implementation(libs.coil.compose)
         implementation(libs.accompanist.systemui)
         implementation(libs.vanniktech.blurhash)
-        implementation(projects.libraries.elementresources)
         implementation(projects.libraries.uiStrings)
 
         ksp(libs.showkase.processor)
