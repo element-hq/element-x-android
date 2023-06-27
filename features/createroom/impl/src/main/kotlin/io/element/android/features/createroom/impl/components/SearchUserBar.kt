@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.ImmutableList
 
@@ -54,7 +54,7 @@ fun SearchUserBar(
     isMultiSelectionEnabled: Boolean,
     modifier: Modifier = Modifier,
     showBackButton: Boolean = true,
-    placeHolderTitle: String = stringResource(R.string.common_search_for_someone),
+    placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
     onActiveChanged: (Boolean) -> Unit = {},
     onTextChanged: (String) -> Unit = {},
     onUserSelected: (MatrixUser) -> Unit = {},

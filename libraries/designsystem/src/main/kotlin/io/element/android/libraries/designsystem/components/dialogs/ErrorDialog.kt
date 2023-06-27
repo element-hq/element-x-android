@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,8 +91,8 @@ private fun ErrorDialogContent(
 }
 
 object ErrorDialogDefaults {
-    val title: String @Composable get() = stringResource(id = StringR.string.dialog_title_error)
-    val submitText: String @Composable get() = stringResource(id = StringR.string.action_ok)
+    val title: String @Composable get() = stringResource(id = CommonStrings.dialog_title_error)
+    val submitText: String @Composable get() = stringResource(id = CommonStrings.action_ok)
 }
 
 @Preview(group = PreviewGroup.Dialogs)

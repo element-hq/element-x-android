@@ -68,8 +68,8 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
-import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun MediaViewerView(
@@ -130,7 +130,7 @@ fun MediaViewerView(
             ) {
                 if (state.downloadedMedia is Async.Failure) {
                     ErrorView(
-                        errorMessage = stringResource(id = StringR.string.error_unknown),
+                        errorMessage = stringResource(id = CommonStrings.error_unknown),
                         onRetry = ::onRetry,
                         onDismiss = ::onDismissError
                     )
@@ -187,7 +187,7 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.OpenWith)
                 },
             ) {
-                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = stringResource(id = StringR.string.action_open_with))
+                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = stringResource(id = CommonStrings.action_open_with))
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -195,7 +195,7 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.SaveOnDisk)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Download, contentDescription = stringResource(id = StringR.string.action_save))
+                Icon(imageVector = Icons.Default.Download, contentDescription = stringResource(id = CommonStrings.action_save))
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -203,7 +203,7 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.Share)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = StringR.string.action_share))
+                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = CommonStrings.action_share))
             }
         }
     )

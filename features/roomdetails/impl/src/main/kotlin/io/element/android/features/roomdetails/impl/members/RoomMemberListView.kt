@@ -60,8 +60,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -99,7 +99,7 @@ fun RoomMemberListView(
                 query = state.searchQuery,
                 state = state.searchResults,
                 active = state.isSearchActive,
-                placeHolderTitle = stringResource(StringR.string.common_search_for_someone),
+                placeHolderTitle = stringResource(CommonStrings.common_search_for_someone),
                 onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
                 onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
                 onUserSelected = ::onUserSelected,
@@ -220,7 +220,7 @@ private fun RoomMemberListTopBar(
                     onClick = onInvitePressed,
                 ) {
                     Text(
-                        text = stringResource(StringR.string.action_invite),
+                        text = stringResource(CommonStrings.action_invite),
                         fontSize = 16.sp,
                     )
                 }

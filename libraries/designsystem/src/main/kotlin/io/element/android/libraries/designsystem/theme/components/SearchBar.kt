@@ -47,7 +47,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.LocalColors
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,7 +100,7 @@ fun <T> SearchBar(
                     IconButton(onClick = { onQueryChange("") }) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(R.string.action_clear),
+                            contentDescription = stringResource(CommonStrings.action_clear),
                         )
                     }
                 }
@@ -110,7 +110,7 @@ fun <T> SearchBar(
                 {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(R.string.action_search),
+                        contentDescription = stringResource(CommonStrings.action_search),
                         tint = MaterialTheme.colorScheme.tertiary,
                     )
                 }
@@ -135,7 +135,7 @@ fun <T> SearchBar(
                     Spacer(Modifier.size(80.dp))
 
                     Text(
-                        text = stringResource(R.string.common_no_results),
+                        text = stringResource(CommonStrings.common_no_results),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.fillMaxWidth()

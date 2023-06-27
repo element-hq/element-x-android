@@ -34,7 +34,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
@@ -71,7 +71,7 @@ class DefaultTimelineEventFormatter @Inject constructor(
                 if (buildMeta.isDebuggable) {
                     error("You should not use this formatter for this event: $event")
                 }
-                sp.getString(R.string.common_unsupported_event)
+                sp.getString(CommonStrings.common_unsupported_event)
             }
         }
     }
