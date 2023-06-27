@@ -22,7 +22,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 // Allow to not overlap the timestamp with the text, in the message bubble.
 // Compute the size of the worst case.
@@ -42,7 +42,7 @@ fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
 
     var strLen = 2
     if (isMessageEdited) {
-        strLen += stringResource(id = R.string.common_edited_suffix).length + 2
+        strLen += stringResource(id = CommonStrings.common_edited_suffix).length + 2
     }
     strLen += formattedTime.length
     if (hasMessageSendingFailed) {
