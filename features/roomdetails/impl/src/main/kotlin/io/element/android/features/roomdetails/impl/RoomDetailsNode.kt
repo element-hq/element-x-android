@@ -20,18 +20,21 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.services.analytics.api.AnalyticsService
 import timber.log.Timber
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
@@ -41,6 +44,7 @@ class RoomDetailsNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDetailsPresenter,
     private val room: MatrixRoom,
+    private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
@@ -50,6 +54,14 @@ class RoomDetailsNode @AssistedInject constructor(
     }
 
     private val callbacks = plugins<Callback>()
+
+    init {
+        lifecycle.subscribe(
+            onResume = {
+                analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.RoomDetails))
+            }
+        )
+    }
 
     private fun openRoomMemberList() {
         callbacks.forEach { it.openRoomMemberList() }
