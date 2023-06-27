@@ -32,7 +32,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Helper to forward event contents from a room to a set of other rooms.
- * @param slidingSync the [SlidingSync] to fetch room instances to forward the event to
+ * @param roomListService the [RoomListService] to fetch room instances to forward the event to
  */
 class RoomContentForwarder(
     private val roomListService: RoomListService,
