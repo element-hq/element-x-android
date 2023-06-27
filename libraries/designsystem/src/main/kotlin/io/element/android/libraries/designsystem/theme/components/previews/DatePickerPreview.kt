@@ -28,47 +28,35 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun DatePickerPreviewLight() {
-    val state = rememberDatePickerState(
-        initialSelectedDateMillis = 1672578000000L,
-    )
-    ElementPreviewLight {
-        AlertDialogContent(
-            buttons = { /*TODO*/ },
-            icon = { /*TODO*/ },
-            title = { /*TODO*/ },
-            text = { DatePicker(state = state, showModeToggle = true) },
-            shape = AlertDialogDefaults.shape,
-            containerColor = AlertDialogDefaults.containerColor,
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-            buttonContentColor = MaterialTheme.colorScheme.primary,
-            iconContentColor = AlertDialogDefaults.iconContentColor,
-            titleContentColor = AlertDialogDefaults.titleContentColor,
-            textContentColor = AlertDialogDefaults.textContentColor,
-        )
-    }
+    ElementPreviewLight { ContentToPreview() }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun DatePickerPreviewDark() {
-    ElementPreviewDark {
-        AlertDialogContent(
-            buttons = { /*TODO*/ },
-            icon = { /*TODO*/ },
-            title = { /*TODO*/ },
-            text = { DatePicker(state = rememberDatePickerState(), showModeToggle = true) },
-            shape = AlertDialogDefaults.shape,
-            containerColor = AlertDialogDefaults.containerColor,
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-            buttonContentColor = MaterialTheme.colorScheme.primary,
-            iconContentColor = AlertDialogDefaults.iconContentColor,
-            titleContentColor = AlertDialogDefaults.titleContentColor,
-            textContentColor = AlertDialogDefaults.textContentColor,
-        )
-    }
+    ElementPreviewDark { ContentToPreview() }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ContentToPreview() {
+    val state = rememberDatePickerState(
+        initialSelectedDateMillis = 1672578000000L,
+    )
+    AlertDialogContent(
+        buttons = { /*TODO*/ },
+        icon = { /*TODO*/ },
+        title = { /*TODO*/ },
+        text = { DatePicker(state = state, showModeToggle = true) },
+        shape = AlertDialogDefaults.shape,
+        containerColor = AlertDialogDefaults.containerColor,
+        tonalElevation = AlertDialogDefaults.TonalElevation,
+        buttonContentColor = MaterialTheme.colorScheme.primary,
+        iconContentColor = AlertDialogDefaults.iconContentColor,
+        titleContentColor = AlertDialogDefaults.titleContentColor,
+        textContentColor = AlertDialogDefaults.textContentColor,
+    )
 }
