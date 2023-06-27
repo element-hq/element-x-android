@@ -31,6 +31,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.ViewRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
@@ -43,6 +44,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -58,6 +60,7 @@ class RoomFlowNode @AssistedInject constructor(
     private val messagesEntryPoint: MessagesEntryPoint,
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
+    private val analyticsService: AnalyticsService,
     roomMembershipObserver: RoomMembershipObserver,
 ) : BackstackNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
@@ -89,6 +92,7 @@ class RoomFlowNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 Timber.v("OnCreate")
+                analyticsService.capture(ViewRoom(isDM = inputs.room.isDirect))
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.room) }
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()

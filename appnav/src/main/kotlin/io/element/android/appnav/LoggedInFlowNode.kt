@@ -38,7 +38,6 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import im.vector.app.features.analytics.plan.ViewRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
@@ -239,7 +238,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                         }
                     }
                 } else {
-                    analyticsService.capture(ViewRoom(isDM = room.isDirect))
                     val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
                     val callback = object : RoomFlowNode.Callback {
                         override fun onForwardedToSingleRoom(roomId: RoomId) {
