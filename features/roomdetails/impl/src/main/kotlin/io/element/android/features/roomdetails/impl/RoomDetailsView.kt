@@ -192,7 +192,6 @@ internal fun RoomDetailsTopBar(
                     Icon(Icons.Default.MoreVert, "")
                 }
                 DropdownMenu(
-                    modifier = Modifier.widthIn(200.dp),
                     expanded = showMenu,
                     onDismissRequest = { showMenu = false },
                 ) {
