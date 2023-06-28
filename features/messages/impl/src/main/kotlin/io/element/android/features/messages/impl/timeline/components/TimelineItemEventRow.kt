@@ -227,6 +227,10 @@ private fun MessageEventBubbleContent(
     val isMediaItem = event.content is TimelineItemImageContent || event.content is TimelineItemVideoContent
     val replyToDetails = event.inReplyTo as? InReplyTo.Ready
 
+    // Long clicks are not not automatically propagated from a `clickable`
+    // to its `combinedClickable` parent so we do it manually
+    fun onTimestampLongClick() = onMessageLongClick()
+
     @Composable
     fun ContentView(
         modifier: Modifier = Modifier
@@ -254,6 +258,7 @@ private fun MessageEventBubbleContent(
                 TimelineEventTimestampView(
                     event = event,
                     onClick = onTimestampClicked,
+                    onLongClick = ::onTimestampLongClick,
                     modifier = timestampModifier
                         .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
                         .background(ElementTheme.legacyColors.gray300, RoundedCornerShape(10.0.dp))
@@ -267,6 +272,7 @@ private fun MessageEventBubbleContent(
                 TimelineEventTimestampView(
                     event = event,
                     onClick = onTimestampClicked,
+                    onLongClick = ::onTimestampLongClick,
                     modifier = timestampModifier
                         .align(Alignment.BottomEnd)
                         .padding(horizontal = 8.dp, vertical = 4.dp)
