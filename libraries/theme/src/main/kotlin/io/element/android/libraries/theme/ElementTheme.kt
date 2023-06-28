@@ -38,6 +38,7 @@ import io.element.android.libraries.theme.compound.compoundColorsDark
 import io.element.android.libraries.theme.compound.compoundColorsLight
 import io.element.android.libraries.theme.compound.compoundTypography
 import io.element.android.libraries.theme.compound.generated.SemanticColors
+import io.element.android.libraries.theme.compound.generated.TypographyTokens
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
@@ -45,6 +46,7 @@ import io.element.android.libraries.theme.compound.generated.SemanticColors
 object ElementTheme {
     /**
      * The current [ElementColors] provided by [ElementTheme]. Usage of these colors is discouraged.
+     * In Figma, they usually have the `Zzz` prefix or have no name at all.
      */
     val colors: ElementColors
         @Composable
@@ -54,6 +56,7 @@ object ElementTheme {
     /**
      * The current [SemanticColors] provided by [ElementTheme].
      * These come from Compound and are the recommended colors to use for custom components.
+     * In Figma, these colors usually have the `Light/` or `Dark/` prefix.
      */
     val compoundColors: SemanticColors
         @Composable
@@ -62,6 +65,7 @@ object ElementTheme {
 
     /**
      * The current Material 3 [ColorScheme] provided by [ElementTheme], coming from [MaterialTheme].
+     * In Figma, these colors usually have the `M3/` prefix.
      */
     val materialColors: ColorScheme
         @Composable
@@ -69,12 +73,17 @@ object ElementTheme {
         get() = MaterialTheme.colorScheme
 
     /**
-     * Material 3 [Typography] tokens.
+     * Material 3 [Typography] tokens. In Figma, these have the `M3/` prefix.
      */
-    val typography: Typography
+    val materialTypography: Typography
         @Composable
         @ReadOnlyComposable
         get() = MaterialTheme.typography
+
+    /**
+     * Compound [Typography] tokens. In Figma, these have the `Android/font/` prefix.
+     */
+    val typography: TypographyTokens = TypographyTokens
 }
 
 /* Global variables (application level) */
