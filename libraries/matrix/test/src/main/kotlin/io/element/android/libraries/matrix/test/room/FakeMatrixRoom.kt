@@ -72,7 +72,7 @@ class FakeMatrixRoom(
     private var setTopicResult = Result.success(Unit)
     private var updateAvatarResult = Result.success(Unit)
     private var removeAvatarResult = Result.success(Unit)
-    private var sendReactionResult = Result.success(Unit)
+    private var toggleReactionResult = Result.success(Unit)
     private var retrySendMessageResult = Result.success(Unit)
     private var cancelSendResult = Result.success(Unit)
     private var forwardEventResult = Result.success(Unit)
@@ -82,8 +82,8 @@ class FakeMatrixRoom(
     var sendMediaCount = 0
         private set
 
-    var sendReactionCount = 0
-        private set
+    private val _myReactions = mutableSetOf<String>()
+    val myReactions: Set<String> = _myReactions
 
     var retrySendMessageCount: Int = 0
         private set
@@ -146,9 +146,19 @@ class FakeMatrixRoom(
         Result.success(Unit)
     }
 
-    override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> {
-        sendReactionCount++
-        return sendReactionResult
+    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> {
+        if (toggleReactionResult.isFailure) {
+            // Don't do the toggle if we failed
+            return toggleReactionResult
+        }
+
+        if(_myReactions.contains(emoji)) {
+            _myReactions.remove(emoji)
+        } else {
+            _myReactions.add(emoji)
+        }
+
+        return toggleReactionResult
     }
 
     override suspend fun retrySendMessage(transactionId: String): Result<Unit> {
@@ -348,8 +358,8 @@ class FakeMatrixRoom(
         setTopicResult = result
     }
 
-    fun givenSendReactionResult(result: Result<Unit>) {
-        sendReactionResult = result
+    fun givenToggleReactionResult(result: Result<Unit>) {
+        toggleReactionResult = result
     }
 
     fun givenRetrySendMessageResult(result: Result<Unit>) {
