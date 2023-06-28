@@ -59,9 +59,7 @@ class SnackbarDispatcher {
 }
 
 /** Used to provide a [SnackbarDispatcher] to composable functions, it's needed for [rememberSnackbarHostState]. */
-val LocalSnackbarDispatcher = compositionLocalOf<SnackbarDispatcher> {
-    error("No SnackbarDispatcher provided")
-}
+val LocalSnackbarDispatcher = compositionLocalOf<SnackbarDispatcher> { SnackbarDispatcher() }
 
 @Composable
 fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> {
