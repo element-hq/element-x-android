@@ -50,9 +50,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import io.element.android.features.location.api.internal.buildTileServerUrl
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
@@ -67,7 +67,7 @@ import kotlin.coroutines.suspendCoroutine
 fun MapView(
     modifier: Modifier = Modifier,
     mapState: MapState = rememberMapState(),
-    darkMode: Boolean = !ElementTheme.colors.isLight,
+    darkMode: Boolean = !ElementTheme.isLightTheme,
     onLocationClick: () -> Unit,
 ) {
     // When in preview, early return a Box with the received modifier preserving layout

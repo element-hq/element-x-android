@@ -20,15 +20,28 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 open class AvatarDataProvider : PreviewParameterProvider<AvatarData> {
     override val values: Sequence<AvatarData>
-        get() = sequenceOf(
-            anAvatarData(),
-            anAvatarData().copy(name = null),
-            anAvatarData().copy(url = "aUrl"),
-        )
+        get() {
+            AvatarSize.values()
+                .also { it.sortBy { item -> item.name } }
+                .asSequence()
+            return AvatarSize.values().asSequence().map {
+                sequenceOf(
+                    anAvatarData(size = it),
+                    anAvatarData(size = it).copy(name = null),
+                    anAvatarData(size = it).copy(url = "aUrl"),
+                )
+            }
+                .flatten()
+        }
 }
 
-fun anAvatarData(id: String = "@id_of_alice:server.org", name: String = "Alice") = AvatarData(
+fun anAvatarData(
     // Let's the id not start with a 'a'.
+    id: String = "@id_of_alice:server.org",
+    name: String = "Alice",
+    size: AvatarSize = AvatarSize.RoomListItem,
+) = AvatarData(
     id = id,
     name = name,
+    size = size,
 )

@@ -242,6 +242,19 @@ fun startImportTextFromFileIntent(
     }
 }
 
+@Suppress("SwallowedException")
+fun Context.openUrlInExternalApp(
+    url: String,
+    errorMessage: String = getString(R.string.error_no_compatible_app_found),
+) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    try {
+        startActivity(intent)
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        toast(errorMessage)
+    }
+}
+
 // Not in KTX anymore
 fun Context.toast(resId: Int) {
     Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()

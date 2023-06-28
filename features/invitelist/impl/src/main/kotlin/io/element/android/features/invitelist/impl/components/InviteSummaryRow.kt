@@ -16,7 +16,6 @@
 
 package io.element.android.features.invitelist.impl.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,14 +27,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -52,6 +48,7 @@ import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummaryProvider
 import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -61,7 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 private val minHeight = 72.dp
 
@@ -74,8 +71,8 @@ internal fun InviteSummaryRow(
 ) {
     Box(
         modifier = modifier
-                .fillMaxWidth()
-                .heightIn(min = minHeight)
+            .fillMaxWidth()
+            .heightIn(min = minHeight)
     ) {
         DefaultInviteSummaryRow(
             invite = invite,
@@ -93,20 +90,20 @@ internal fun DefaultInviteSummaryRow(
 ) {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .height(IntrinsicSize.Min),
+            .fillMaxWidth()
+            .padding(16.dp)
+            .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.Top
     ) {
         Avatar(
-            invite.roomAvatarData.copy(size = AvatarSize.Custom(52.dp)),
+            invite.roomAvatarData,
         )
 
         Column(
             modifier = Modifier
-                    .padding(start = 16.dp, end = 4.dp)
-                    .alignByBaseline()
-                    .weight(1f)
+                .padding(start = 16.dp, end = 4.dp)
+                .alignByBaseline()
+                .weight(1f)
         ) {
             val bonusPadding = if (invite.isNew) 12.dp else 0.dp
 
@@ -143,31 +140,29 @@ internal fun DefaultInviteSummaryRow(
             // CTAs
             Row(Modifier.padding(top = 12.dp)) {
                 OutlinedButton(
-                    content = { Text(stringResource(StringR.string.action_decline), style = ElementTextStyles.Button) },
+                    content = { Text(stringResource(CommonStrings.action_decline), style = ElementTextStyles.Button) },
                     onClick = onDeclineClicked,
-                    modifier = Modifier.weight(1f).heightIn(max = 36.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(max = 36.dp),
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(
-                    content = { Text(stringResource(StringR.string.action_accept), style = ElementTextStyles.Button) },
+                    content = { Text(stringResource(CommonStrings.action_accept), style = ElementTextStyles.Button) },
                     onClick = onAcceptClicked,
-                    modifier = Modifier.weight(1f).heightIn(max = 36.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(max = 36.dp),
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
                 )
             }
         }
 
         val unreadIndicatorColor = if (invite.isNew) MaterialTheme.roomListUnreadIndicator() else Color.Transparent
-
-        Box(
-            modifier = Modifier
-                    .size(12.dp)
-                    .clip(CircleShape)
-                    .background(unreadIndicatorColor)
-        )
+        UnreadIndicatorAtom(color = unreadIndicatorColor)
     }
 }
 
@@ -178,7 +173,7 @@ private fun SenderRow(sender: InviteSender) {
         modifier = Modifier.padding(top = 6.dp),
     ) {
         Avatar(
-            avatarData = sender.avatarData.copy(size = AvatarSize.Custom(16.dp)),
+            avatarData = sender.avatarData,
         )
         Text(
             text = stringResource(R.string.screen_invites_invited_you, sender.displayName, sender.userId.value).let { text ->

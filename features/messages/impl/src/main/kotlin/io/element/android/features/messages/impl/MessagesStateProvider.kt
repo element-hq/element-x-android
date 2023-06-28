@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.components.retrysendme
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.textcomposer.MessageComposerMode
 
@@ -42,7 +43,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
 fun aMessagesState() = MessagesState(
     roomId = RoomId("!id:domain"),
     roomName = "Room name",
-    roomAvatar = AvatarData("!id:domain", "Room name"),
+    roomAvatar = AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom),
     userHasPermissionToSendMessage = true,
     composerState = aMessageComposerState().copy(
         text = StableCharSequence("Hello"),

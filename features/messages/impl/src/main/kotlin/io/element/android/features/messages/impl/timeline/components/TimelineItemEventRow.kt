@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,11 +28,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -40,22 +39,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
+import androidx.compose.ui.unit.sp
+import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -66,6 +75,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.theme.ElementTheme
+import org.jsoup.Jsoup
 
 @Composable
 fun TimelineItemEventRow(
@@ -76,6 +87,7 @@ fun TimelineItemEventRow(
     onUserDataClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -84,71 +96,81 @@ fun TimelineItemEventRow(
         onUserDataClick(event.senderId)
     }
 
+    fun onReactionClicked(emoji: String) =
+        onReactionClick(emoji, event)
+
     fun inReplyToClicked() {
         val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
         inReplyToClick(inReplyToEventId)
     }
 
-    val (parentAlignment, contentAlignment) = if (event.isMine) {
-        Pair(Alignment.CenterEnd, Alignment.End)
-    } else {
-        Pair(Alignment.CenterStart, Alignment.Start)
-    }
-
+    // To avoid using negative offset, we display in this Box a column with:
+    // - Spacer to give room to the Sender information if they must be displayed;
+    // - The message bubble;
+    // - Spacer for the reactions if there are some.
+    // Then the Sender information and the reactions are displayed on top of it.
+    // This fixes some clickable issue and some unexpected margin on top and bottom of each message row
     Box(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        contentAlignment = parentAlignment
+        contentAlignment = if (event.isMine) Alignment.CenterEnd else Alignment.CenterStart
     ) {
-        Row {
-            Column(horizontalAlignment = contentAlignment) {
-                if (event.showSenderInformation) {
-                    MessageSenderInformation(
-                        event.safeSenderName,
-                        event.senderAvatar,
-                        Modifier
-                            .zIndex(1f)
-                            .offset(y = 12.dp)
-                            .clickable(onClick = ::onUserDataClicked)
-                    )
-                }
-                val bubbleState = BubbleState(
-                    groupPosition = event.groupPosition,
-                    isMine = event.isMine,
-                    isHighlighted = isHighlighted,
-                )
-                MessageEventBubble(
-                    state = bubbleState,
+        Column {
+            if (event.showSenderInformation) {
+                Spacer(modifier = Modifier.height(event.senderAvatar.size.dp - 8.dp))
+            }
+            val bubbleState = BubbleState(
+                groupPosition = event.groupPosition,
+                isMine = event.isMine,
+                isHighlighted = isHighlighted,
+            )
+            MessageEventBubble(
+                state = bubbleState,
+                interactionSource = interactionSource,
+                onClick = onClick,
+                onLongClick = onLongClick,
+            ) {
+                MessageEventBubbleContent(
+                    event = event,
                     interactionSource = interactionSource,
-                    onClick = onClick,
-                    onLongClick = onLongClick,
-                    modifier = Modifier
-                        .zIndex(-1f)
-                        .widthIn(max = 320.dp)
-                ) {
-                    MessageEventBubbleContent(
-                        event = event,
-                        interactionSource = interactionSource,
-                        onMessageClick = onClick,
-                        onMessageLongClick = onLongClick,
-                        inReplyToClick = ::inReplyToClicked,
-                        onTimestampClicked = {
-                            onTimestampClicked(event)
-                        }
-                    )
-                }
-                TimelineItemReactionsView(
-                    reactionsState = event.reactionsState,
-                    modifier = Modifier
-                        .zIndex(1f)
-                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(4.dp))
+                    onMessageClick = onClick,
+                    onMessageLongClick = onLongClick,
+                    inReplyToClick = ::inReplyToClicked,
+                    onTimestampClicked = {
+                        onTimestampClicked(event)
+                    }
                 )
             }
+            if (event.reactionsState.reactions.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(28.dp))
+            }
+        }
+        // Align to the top of the box
+        if (event.showSenderInformation) {
+            MessageSenderInformation(
+                event.safeSenderName,
+                event.senderAvatar,
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.TopStart)
+                    .clickable(onClick = ::onUserDataClicked)
+            )
+        }
+        // Align to the bottom of the box
+        if (event.reactionsState.reactions.isNotEmpty()) {
+            TimelineItemReactionsView(
+                reactionsState = event.reactionsState,
+                onReactionClicked = ::onReactionClicked,
+                modifier = Modifier
+                    .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
+                    .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
+            )
         }
     }
+    // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
     if (event.groupPosition.isNew()) {
-        Spacer(modifier = modifier.height(8.dp))
+        Spacer(modifier = modifier.height(16.dp))
     } else {
         Spacer(modifier = modifier.height(2.dp))
     }
@@ -157,20 +179,38 @@ fun TimelineItemEventRow(
 @Composable
 private fun MessageSenderInformation(
     sender: String,
-    senderAvatar: AvatarData?,
+    senderAvatar: AvatarData,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
-        if (senderAvatar != null) {
+    val avatarStrokeSize = 3.dp
+    val avatarStrokeColor = MaterialTheme.colorScheme.background
+    val avatarSize = senderAvatar.size.dp
+    Box(
+        modifier = modifier
+    ) {
+        // Background of Avatar, to erase the corner of the message content
+        Canvas(
+            modifier = Modifier
+                .size(size = avatarSize + avatarStrokeSize)
+                .clipToBounds()
+        ) {
+            drawCircle(
+                color = avatarStrokeColor,
+                center = Offset(x = (avatarSize / 2).toPx(), y = (avatarSize / 2).toPx()),
+                radius = (avatarSize / 2 + avatarStrokeSize).toPx()
+            )
+        }
+        // Content
+        Row {
             Avatar(senderAvatar)
             Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = sender,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleMedium,
+            )
         }
-        Text(
-            text = sender,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .alignBy(LastBaseline)
-        )
     }
 }
 
@@ -196,6 +236,7 @@ private fun MessageEventBubbleContent(
             interactionSource = interactionSource,
             onClick = onMessageClick,
             onLongClick = onMessageLongClick,
+            extraPadding = event.toExtraPadding(),
             modifier = modifier,
         )
     }
@@ -215,20 +256,20 @@ private fun MessageEventBubbleContent(
                     onClick = onTimestampClicked,
                     modifier = timestampModifier
                         .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
-                        .background(LocalColors.current.gray300, RoundedCornerShape(10.0.dp))
+                        .background(ElementTheme.legacyColors.gray300, RoundedCornerShape(10.0.dp))
                         .align(Alignment.BottomEnd)
                         .padding(horizontal = 4.dp, vertical = 2.dp) // Inner padding
                 )
             }
         } else {
-            Column(modifier) {
-                ContentView(modifier = contentModifier.padding(start = 12.dp, end = 12.dp, top = 8.dp))
+            Box(modifier) {
+                ContentView(modifier = contentModifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp))
                 TimelineEventTimestampView(
                     event = event,
                     onClick = onTimestampClicked,
                     modifier = timestampModifier
-                        .align(Alignment.End)
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                        .align(Alignment.BottomEnd)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
         }
@@ -328,7 +369,7 @@ private fun ReplyToContent(
                 text = text.orEmpty(),
                 style = ElementTextStyles.Regular.caption1,
                 textAlign = TextAlign.Start,
-                color = LocalColors.current.placeholder,
+                color = ElementTheme.legacyColors.placeholder,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -358,3 +399,94 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready) =
         )
         else -> null
     }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    Column {
+        sequenceOf(false, true).forEach {
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = it,
+                    content = aTimelineItemTextContent().copy(
+                        body = "A long text which will be displayed on several lines and" +
+                            " hopefully can be manually adjusted to test different behaviors."
+                    )
+                ),
+                isHighlighted = false,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onReactionClick = { _, _ -> },
+                onTimestampClicked = {},
+            )
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = it,
+                    content = aTimelineItemImageContent().copy(
+                        aspectRatio = 5f
+                    )
+                ),
+                isHighlighted = false,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onReactionClick = { _, _ -> },
+                onTimestampClicked = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
+    ElementPreviewLight { ContentTimestampToPreview(event) }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowTimestampDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
+    ElementPreviewDark { ContentTimestampToPreview(event) }
+
+@Composable
+private fun ContentTimestampToPreview(event: TimelineItem.Event) {
+    Column {
+        val oldContent = event.content as TimelineItemTextContent
+        listOf(
+            "Text",
+            "Text longer, displayed on 1 line",
+            "Text which should be rendered on several lines",
+        ).forEach { str ->
+            listOf(false, true).forEach { useDocument ->
+                TimelineItemEventRow(
+                    event = event.copy(
+                        content = oldContent.copy(
+                            body = str,
+                            htmlDocument = if (useDocument) Jsoup.parse(str) else null,
+                        ),
+                        reactionsState = aTimelineItemReactions(count = 0),
+                        senderDisplayName = if (useDocument) "Document case" else "Text case",
+                    ),
+                    isHighlighted = false,
+                    onClick = {},
+                    onLongClick = {},
+                    onUserDataClick = {},
+                    inReplyToClick = {},
+                    onReactionClick = { _, _ -> },
+                    onTimestampClicked = {},
+                )
+            }
+        }
+    }
+}

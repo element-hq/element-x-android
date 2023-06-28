@@ -31,7 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
@@ -154,7 +154,7 @@ class RoomDetailsEditPresenter @Inject constructor(
                 })
             }
             if (results.all { it.isSuccess }) Unit else results.first { it.isFailure }.getOrThrow()
-        }.execute(action)
+        }.runCatchingUpdatingState(action)
     }
 
     private suspend fun updateAvatar(avatarUri: Uri?): Result<Unit> {

@@ -23,6 +23,12 @@
         "org.jetbrains.kotlinx.kover"
       ],
       "enabled" : false
+    },
+    {
+      "matchPackagePatterns" : [
+        "^org.maplibre"
+      ],
+      "versioning" : "semver"
     }
   ]
 }

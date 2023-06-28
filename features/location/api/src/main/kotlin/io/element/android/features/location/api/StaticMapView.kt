@@ -34,12 +34,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.buildStaticMapsApiUrl
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
 
 /**
@@ -52,7 +52,7 @@ fun StaticMapView(
     zoom: Double,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    darkMode: Boolean = !ElementTheme.colors.isLight,
+    darkMode: Boolean = !ElementTheme.isLightTheme,
 ) {
     // Using BoxWithConstraints to:
     // 1) Size the inner Image to the same Dp size of the outer BoxWithConstraints.

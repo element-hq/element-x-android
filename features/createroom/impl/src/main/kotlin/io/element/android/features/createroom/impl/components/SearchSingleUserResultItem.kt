@@ -21,9 +21,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.UnresolvedUserRow
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -39,26 +39,27 @@ fun SearchSingleUserResultItem(
     if (searchResult.isUnresolved) {
         UnresolvedUserRow(
             modifier = modifier.clickable(onClick = onClick),
-            avatarData = searchResult.matrixUser.getAvatarData(AvatarSize.Custom(36.dp)),
+            avatarData = searchResult.matrixUser.getAvatarData(AvatarSize.UserListItem),
             id = searchResult.matrixUser.userId.value,
         )
     } else {
         MatrixUserRow(
             modifier = modifier.clickable(onClick = onClick),
             matrixUser = searchResult.matrixUser,
-            avatarSize = AvatarSize.Custom(36.dp),
+            avatarSize = AvatarSize.UserListItem,
         )
     }
 }
 
 @Preview
 @Composable
-internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview{ ContentToPreview() }
+internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
     Column {
         SearchSingleUserResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false))
+        Divider()
         SearchSingleUserResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true))
     }
 }

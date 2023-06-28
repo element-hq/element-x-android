@@ -155,14 +155,6 @@ if (buildFilesWithMissingProcessor.length > 0) {
     warn("You have made changes to a file containing a `@Preview` annotated function but its module doesn't include the showkase processor. Missing processor in: " + buildFilesWithMissingProcessor.join(", "))
 }
 
-// Check for screenshots on view changes
-const hasChangedViews = filesWithPreviews.length > 0
-if (hasChangedViews) {
-    if (!pr.body.includes("user-images")) {
-        warn("You seem to have made changes to views. Please consider adding screenshots.")
-    }
-}
-
 // Check for pngs on resources
 const hasPngs = editedFiles.filter(file => {
     file.toLowerCase().endsWith(".png") && !file.includes("snapshots/images/") // Exclude screenshots

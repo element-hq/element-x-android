@@ -26,18 +26,19 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
-
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemEncryptedView(
     content: TimelineItemEncryptedContent,
+    extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = stringResource(id = StringR.string.common_decryption_error),
-        iconDescription = stringResource(id = StringR.string.dialog_title_warning),
+        text = stringResource(id = CommonStrings.common_decryption_error),
+        iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
         icon = Icons.Default.Warning,
+        extraPadding = extraPadding,
         modifier = modifier
     )
 }
@@ -57,6 +58,7 @@ private fun ContentToPreview() {
     TimelineItemEncryptedView(
         content = TimelineItemEncryptedContent(
             data = UnableToDecryptContent.Data.Unknown
-        )
+        ),
+        extraPadding = noExtraPadding
     )
 }

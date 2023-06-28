@@ -30,8 +30,12 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(libs.dagger)
     implementation(libs.androidx.corektx)
+    implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.uiStrings)
+    implementation(projects.services.toolbox.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)

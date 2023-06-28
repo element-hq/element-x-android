@@ -22,6 +22,9 @@ import android.text.util.Linkify.PHONE_NUMBERS
 import android.text.util.Linkify.WEB_URLS
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -29,38 +32,46 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.features.messages.impl.timeline.components.html.HtmlDocument
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
-import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.theme.LinkColor
+import io.element.android.libraries.designsystem.text.toAnnotatedString
 
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
     interactionSource: MutableInteractionSource,
+    extraPadding: ExtraPadding,
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
     val htmlDocument = content.htmlDocument
     if (htmlDocument != null) {
-        HtmlDocument(
-            document = htmlDocument,
-            modifier = modifier,
-            onTextClicked = onTextClicked,
-            onTextLongClicked = onTextLongClicked,
-            interactionSource = interactionSource
-        )
+        // For now we ignore the extra padding for html content, so add some spacing
+        // below the content (as previous behavior)
+        Column(modifier = modifier) {
+            HtmlDocument(
+                document = htmlDocument,
+                modifier = Modifier,
+                onTextClicked = onTextClicked,
+                onTextLongClicked = onTextLongClicked,
+                interactionSource = interactionSource
+            )
+            Spacer(Modifier.height(16.dp))
+        }
     } else {
         Box(modifier) {
             val linkStyle = SpanStyle(
                 color = LinkColor,
             )
-            val styledText = remember(content.body) { content.body.linkify(linkStyle) }
+            val styledText = remember(content.body) { content.body.linkify(linkStyle) + extraPadding.str.toAnnotatedString() }
             ClickableLinkText(
                 text = styledText,
                 linkAnnotationTag = "URL",
@@ -109,6 +120,10 @@ internal fun TimelineItemTextViewDarkPreview(@PreviewParameter(TimelineItemTextB
 
 @Composable
 fun ContentToPreview(content: TimelineItemTextBasedContent) {
-    TimelineItemTextView(content, MutableInteractionSource())
+    TimelineItemTextView(
+        content = content,
+        interactionSource = MutableInteractionSource(),
+        extraPadding = ExtraPadding(" (padding)"),
+    )
 }
 

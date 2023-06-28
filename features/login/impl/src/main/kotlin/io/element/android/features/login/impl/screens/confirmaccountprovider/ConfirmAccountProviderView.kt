@@ -131,7 +131,7 @@ fun ConfirmAccountProviderView(
             }
             is Async.Loading -> Unit // The Continue button shows the loading state
             is Async.Success -> {
-                when (val loginFlowState = state.loginFlow.state) {
+                when (val loginFlowState = state.loginFlow.data) {
                     is LoginFlow.OidcFlow -> onOidcDetails(loginFlowState.oidcDetails)
                     LoginFlow.PasswordLogin -> onLoginPasswordNeeded()
                 }

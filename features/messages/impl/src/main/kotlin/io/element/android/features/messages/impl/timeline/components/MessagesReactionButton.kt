@@ -17,6 +17,9 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -27,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -37,23 +41,40 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier) {
+fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    // First Surface is to render a border with the same background color as the background
     Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = modifier.clickable(onClick = onClick::invoke),
+        // TODO Should use compound.bgSubtlePrimary
+        color = ElementTheme.legacyColors.gray300,
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.background),
-        shape = RoundedCornerShape(corner = CornerSize(12.dp)),
+        shape = RoundedCornerShape(corner = CornerSize(14.dp)),
     ) {
-        Row(
-            modifier = Modifier.padding(vertical = 5.dp, horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // TODO `reaction.isHighlighted` is not used.
-            Text(text = reaction.key, fontSize = 12.sp)
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(text = reaction.count, color = MaterialTheme.colorScheme.secondary, fontSize = 12.sp)
+        Box(modifier = Modifier.padding(2.dp)) {
+            val reactionModifier = if (reaction.isHighlighted) {
+                Modifier
+                    // TODO Check the color, should use compound.borderInteractivePrimary
+                    .border(BorderStroke(1.dp, Color(0xFF808994)), RoundedCornerShape(corner = CornerSize(12.dp)))
+            } else {
+                Modifier
+            }
+            Row(
+                modifier = reactionModifier.padding(vertical = 4.dp, horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = reaction.key, fontSize = 15.sp)
+                if (reaction.count > 1) {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = reaction.count.toString(),
+                        color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                        fontSize = 14.sp
+                    )
+                }
+            }
         }
     }
 }
@@ -70,5 +91,5 @@ internal fun MessagesReactionButtonDarkPreview(@PreviewParameter(AggregatedReact
 
 @Composable
 private fun ContentToPreview(reaction: AggregatedReaction) {
-    MessagesReactionButton(reaction)
+    MessagesReactionButton(reaction, onClick = { })
 }

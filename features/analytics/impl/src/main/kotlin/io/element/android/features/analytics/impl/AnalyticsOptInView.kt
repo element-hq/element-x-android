@@ -55,13 +55,13 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
-import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun AnalyticsOptInView(
@@ -162,7 +162,7 @@ private fun AnalyticsOptInContentRow(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = LocalColors.current.quinary,
+                color = ElementTheme.legacyColors.quinary,
                 shape = bgShape,
             )
             .padding(vertical = 12.dp, horizontal = 20.dp),
@@ -174,8 +174,7 @@ private fun AnalyticsOptInContentRow(
                 .padding(2.dp),
             imageVector = Icons.Rounded.Check,
             contentDescription = null,
-            // TODO Compound, this color is not yet in the theme
-            tint = Color(0xFF007A61)
+            tint = ElementTheme.colors.iconSuccessPrimary,
         )
         Text(
             modifier = Modifier.padding(start = 16.dp),
@@ -199,13 +198,13 @@ private fun AnalyticsOptInFooter(
             onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(text = stringResource(id = StringR.string.action_ok))
+            Text(text = stringResource(id = CommonStrings.action_ok))
         }
         TextButton(
             onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(text = stringResource(id = StringR.string.action_not_now))
+            Text(text = stringResource(id = CommonStrings.action_not_now))
         }
     }
 }

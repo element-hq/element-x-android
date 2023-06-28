@@ -21,13 +21,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
@@ -66,8 +67,8 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -111,7 +112,7 @@ fun ForwardMessagesView(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(StringR.string.common_forward_message), style = ElementTextStyles.Bold.callout) },
+                title = { Text(stringResource(CommonStrings.common_forward_message), style = ElementTextStyles.Bold.callout) },
                 navigationIcon = {
                     BackButton(onClick = { onBackButton(state) })
                 },
@@ -120,7 +121,7 @@ fun ForwardMessagesView(
                         enabled = state.selectedRooms.isNotEmpty(),
                         onClick = { state.eventSink(ForwardMessagesEvents.ForwardEvent) }
                     ) {
-                        Text(text = stringResource(StringR.string.action_send))
+                        Text(text = stringResource(CommonStrings.action_send))
                     }
                 }
             )
@@ -132,7 +133,7 @@ fun ForwardMessagesView(
                 .consumeWindowInsets(paddingValues)
         ) {
             SearchBar<ImmutableList<RoomSummaryDetails>>(
-                placeHolderTitle = stringResource(StringR.string.action_search),
+                placeHolderTitle = stringResource(CommonStrings.action_search),
                 query = state.query,
                 onQueryChange = { state.eventSink(ForwardMessagesEvents.UpdateQuery(it)) },
                 active = state.isSearchActive,
@@ -227,18 +228,22 @@ internal fun RoomSummaryView(
         modifier = modifier
             .clickable { onSelection(summary) }
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .height(IntrinsicSize.Min),
+            .padding(start = 16.dp, end = 4.dp)
+            .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         val roomAlias = summary.canonicalAlias ?: summary.roomId.value
         Avatar(
-            avatarData = AvatarData(id = roomAlias, name = summary.name, url = summary.avatarURLString),
+            avatarData = AvatarData(
+                id = roomAlias,
+                name = summary.name,
+                url = summary.avatarURLString,
+                size = AvatarSize.ForwardRoomListItem,
+            ),
         )
         Column(
             modifier = Modifier
-                .padding(start = 12.dp, end = 4.dp, top = 8.dp, bottom = 8.dp)
-                .alignByBaseline()
+                .padding(start = 12.dp, end = 4.dp, top = 4.dp, bottom = 4.dp)
                 .weight(1f)
         ) {
             // Name

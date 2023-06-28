@@ -21,20 +21,21 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import io.element.android.libraries.ui.strings.R as StringR
 
 open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
         get() = sequenceOf(
             aRoomListState(),
             aRoomListState().copy(displayVerificationPrompt = true),
-            aRoomListState().copy(snackbarMessage = SnackbarMessage(StringR.string.common_verification_complete)),
+            aRoomListState().copy(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState().copy(hasNetworkConnection = false),
             aRoomListState().copy(invitesState = InvitesState.SeenInvites),
             aRoomListState().copy(invitesState = InvitesState.NewInvites),
@@ -68,7 +69,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             hasUnread = true,
             timestamp = "14:18",
             lastMessage = "A very very very very long message which suites on two lines",
-            avatarData = AvatarData("!id", "R"),
+            avatarData = AvatarData("!id", "R", size = AvatarSize.RoomListItem),
             id = "!roomId:domain",
             roomId = RoomId("!roomId:domain")
         ),
@@ -77,10 +78,11 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             hasUnread = false,
             timestamp = "14:16",
             lastMessage = "A short message",
-            avatarData = AvatarData("!id", "Z"),
+            avatarData = AvatarData("!id", "Z", size = AvatarSize.RoomListItem),
             id = "!roomId2:domain",
             roomId = RoomId("!roomId2:domain")
         ),
-        RoomListRoomSummaryPlaceholders.create("!roomId2:domain")
+        RoomListRoomSummaryPlaceholders.create("!roomId2:domain"),
+        RoomListRoomSummaryPlaceholders.create("!roomId3:domain"),
     )
 }

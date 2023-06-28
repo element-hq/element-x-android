@@ -118,7 +118,7 @@ class MessagesPresenter @AssistedInject constructor(
                     id = room.roomId.value,
                     name = room.name,
                     url = room.avatarUrl,
-                    size = AvatarSize.SMALL
+                    size = AvatarSize.TimelineRoom
                 )
             roomName.value = room.name
         }
@@ -130,8 +130,8 @@ class MessagesPresenter @AssistedInject constructor(
                 is MessagesEvents.HandleAction -> {
                     localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
                 }
-                is MessagesEvents.SendReaction -> {
-                    localCoroutineScope.sendReaction(event.emoji, event.eventId)
+                is MessagesEvents.ToggleReaction -> {
+                    localCoroutineScope.toggleReaction(event.emoji, event.eventId)
                 }
                 is MessagesEvents.Dismiss -> actionListState.eventSink(ActionListEvents.Clear)
             }
@@ -168,11 +168,11 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.sendReaction(
+    private fun CoroutineScope.toggleReaction(
         emoji: String,
         eventId: EventId,
     ) = launch(dispatchers.io) {
-        room.sendReaction(emoji, eventId)
+        room.toggleReaction(emoji, eventId)
             .onFailure { Timber.e(it) }
     }
 

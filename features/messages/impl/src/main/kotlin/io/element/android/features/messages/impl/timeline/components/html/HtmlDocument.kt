@@ -47,7 +47,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
-import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -55,6 +54,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.theme.LinkColor
 import kotlinx.collections.immutable.persistentMapOf
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -535,7 +535,7 @@ private fun AnnotatedString.Builder.appendLink(link: Element) {
     val permalinkData = PermalinkParser.parse(uriString)
     when (permalinkData) {
         is PermalinkData.FallbackLink -> {
-            pushStringAnnotation(tag = "URL", annotation = link.ownText())
+            pushStringAnnotation(tag = "URL", annotation = permalinkData.uri.toString())
             withStyle(
                 style = SpanStyle(color = LinkColor)
             ) {

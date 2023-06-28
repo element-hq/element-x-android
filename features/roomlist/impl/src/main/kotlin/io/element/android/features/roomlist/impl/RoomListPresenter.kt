@@ -37,6 +37,7 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
@@ -190,7 +191,8 @@ class RoomListPresenter @Inject constructor(
                     val avatarData = AvatarData(
                         id = roomSummary.identifier(),
                         name = roomSummary.details.name,
-                        url = roomSummary.details.avatarURLString
+                        url = roomSummary.details.avatarURLString,
+                        size = AvatarSize.RoomListItem,
                     )
                     val roomIdentifier = roomSummary.identifier()
                     RoomListRoomSummary(

@@ -28,6 +28,7 @@ import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -400,6 +401,6 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     hasUnread = true,
     timestamp = A_FORMATTED_DATE,
     lastMessage = "",
-    avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME),
+    avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
     isPlaceholder = false,
 )
