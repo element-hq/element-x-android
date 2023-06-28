@@ -118,9 +118,7 @@ fun ActionListView(
     }
 
     fun onDismiss() {
-        sheetState.hide(coroutineScope) {
-            state.eventSink(ActionListEvents.Clear)
-        }
+        state.eventSink(ActionListEvents.Clear)
     }
 
     if (targetItem != null) {
