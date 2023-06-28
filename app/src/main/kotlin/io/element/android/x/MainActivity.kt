@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
@@ -36,6 +37,7 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.designsystem.utils.LocalSnackbarDispatcher
 import io.element.android.x.di.AppBindings
+import io.element.android.x.intent.SafeUriHandler
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("MainActivity")
@@ -63,6 +65,7 @@ class MainActivity : NodeComponentActivity() {
         ElementTheme {
             CompositionLocalProvider(
                 LocalSnackbarDispatcher provides appBindings.snackbarDispatcher(),
+                LocalUriHandler provides SafeUriHandler(this),
             ) {
                 Box(
                     modifier = Modifier

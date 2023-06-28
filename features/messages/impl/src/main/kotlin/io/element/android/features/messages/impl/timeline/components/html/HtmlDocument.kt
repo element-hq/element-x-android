@@ -535,7 +535,7 @@ private fun AnnotatedString.Builder.appendLink(link: Element) {
     val permalinkData = PermalinkParser.parse(uriString)
     when (permalinkData) {
         is PermalinkData.FallbackLink -> {
-            pushStringAnnotation(tag = "URL", annotation = link.ownText())
+            pushStringAnnotation(tag = "URL", annotation = permalinkData.uri.toString())
             withStyle(
                 style = SpanStyle(color = LinkColor)
             ) {
