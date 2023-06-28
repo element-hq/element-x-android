@@ -60,6 +60,7 @@ fun DropdownMenuItem(
 fun DropdownMenuItemText(text: String) {
     Text(
         text = text,
+        color = ElementTheme.materialColors.primary,
         style = ElementTheme.typography.fontBodyLgRegular
     )
 }
