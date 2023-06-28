@@ -17,10 +17,21 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.architecture.Async
 
 data class AttachmentsPreviewState(
     val attachment: Attachment,
-    val sendActionState: Async<Unit>,
+    val sendActionState: SendActionState,
     val eventSink: (AttachmentsPreviewEvents) -> Unit
 )
+
+sealed interface SendActionState {
+    object Idle : SendActionState
+    sealed interface Sending : SendActionState {
+        object Processing : Sending
+        data class Uploading(val progress: Float) : Sending
+    }
+
+    data class Failure(val error: Throwable) : SendActionState
+    object Done : SendActionState
+}
+
