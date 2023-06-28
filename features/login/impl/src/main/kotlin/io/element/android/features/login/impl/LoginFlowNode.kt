@@ -48,6 +48,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.theme.ElementTheme
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -155,7 +156,7 @@ class LoginFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         activity = LocalContext.current as? Activity
-        darkTheme = isSystemInDarkTheme()
+        darkTheme = !ElementTheme.isLightTheme
         DisposableEffect(Unit) {
             onDispose {
                 activity = null

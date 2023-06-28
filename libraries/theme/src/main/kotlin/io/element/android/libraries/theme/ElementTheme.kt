@@ -84,6 +84,14 @@ object ElementTheme {
      * Compound [Typography] tokens. In Figma, these have the `Android/font/` prefix.
      */
     val typography: TypographyTokens = TypographyTokens
+
+    /**
+     * Returns whether the theme version used is the light or the dark one.
+     */
+    val isLightTheme: Boolean
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalCompoundColors.current.isLight
 }
 
 /* Global variables (application level) */
