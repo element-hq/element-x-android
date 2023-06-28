@@ -147,7 +147,7 @@ class RoomListPresenterTests {
             // Room list is loaded with 16 placeholders
             Truth.assertThat(withUserState.roomList.size).isEqualTo(16)
             Truth.assertThat(withUserState.roomList.all { it.isPlaceholder }).isTrue()
-            roomSummaryDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
+            roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
             skipItems(1)
             val withRoomState = awaitItem()
             Truth.assertThat(withRoomState.roomList.size).isEqualTo(1)
@@ -174,7 +174,7 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            roomSummaryDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
+            roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
             skipItems(3)
             val loadedState = awaitItem()
             // Test filtering with result
@@ -212,7 +212,7 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            roomSummaryDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
+            roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
             skipItems(3)
             val loadedState = awaitItem()
             // check initial value

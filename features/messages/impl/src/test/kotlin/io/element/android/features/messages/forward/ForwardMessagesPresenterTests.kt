@@ -78,7 +78,7 @@ class ForwardMessagesPresenterTests {
     @Test
     fun `present - update query`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().apply {
-            postRoomSummary(listOf(RoomSummary.Filled(aRoomSummaryDetail())))
+            postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetail())))
         }
         val client = FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         val presenter = aPresenter(client = client)

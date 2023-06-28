@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.timeline
+package io.element.android.libraries.matrix.api.sync
 
-import io.element.android.libraries.matrix.api.core.EventId
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
-interface MatrixTimeline {
+interface SyncService {
+    /**
+     * Tries to start the sync. If already syncing it has no effect.
+     */
+    fun startSync(): Result<Unit>
 
-    data class PaginationState(
-        val isBackPaginating: Boolean,
-        val canBackPaginate: Boolean
-    )
+    /**
+     * Tries to stop the sync. If service is not syncing it has no effect.
+     */
+    fun stopSync(): Result<Unit>
 
-    fun paginationState(): StateFlow<PaginationState>
-    fun timelineItems(): Flow<List<MatrixTimelineItem>>
-
-    suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
-    suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit>
+    /**
+     * Flow of [SyncState]. Will be updated as soon as the current [SyncState] changes.
+     */
+    val syncState: StateFlow<SyncState>
 }
