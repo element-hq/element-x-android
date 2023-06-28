@@ -37,10 +37,16 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 
+sealed interface ProgressDialogType {
+    data class Determinate(val progress: Float) : ProgressDialogType
+    object Indeterminate : ProgressDialogType
+}
+
 @Composable
 fun ProgressDialog(
     modifier: Modifier = Modifier,
     text: String? = null,
+    type: ProgressDialogType = ProgressDialogType.Indeterminate,
     onDismiss: () -> Unit = {},
 ) {
     Dialog(
@@ -50,6 +56,21 @@ fun ProgressDialog(
         ProgressDialogContent(
             modifier = modifier,
             text = text,
+            progressIndicator = {
+                when (type) {
+                    is ProgressDialogType.Indeterminate -> {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    is ProgressDialogType.Determinate -> {
+                        CircularProgressIndicator(
+                            progress = type.progress,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
         )
     }
 }
@@ -58,6 +79,11 @@ fun ProgressDialog(
 private fun ProgressDialogContent(
     modifier: Modifier = Modifier,
     text: String? = null,
+    progressIndicator: @Composable () -> Unit = {
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -71,9 +97,7 @@ private fun ProgressDialogContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(top = 38.dp, bottom = 32.dp, start = 40.dp, end = 40.dp)
         ) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.primary
-            )
+            progressIndicator()
             if (!text.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(22.dp))
                 Text(

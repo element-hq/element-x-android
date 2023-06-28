@@ -25,9 +25,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.mediaupload.api.MediaSender
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -48,13 +47,13 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
 
         val sendActionState = remember {
-            mutableStateOf<Async<Unit>>(Async.Uninitialized)
+            mutableStateOf<SendActionState>(SendActionState.Idle)
         }
 
         fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
             when (attachmentsPreviewEvents) {
                 AttachmentsPreviewEvents.SendAttachment -> coroutineScope.sendAttachment(attachment, sendActionState)
-                AttachmentsPreviewEvents.ClearSendState -> sendActionState.value = Async.Uninitialized
+                AttachmentsPreviewEvents.ClearSendState -> sendActionState.value = SendActionState.Idle
             }
         }
 
@@ -67,7 +66,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
-        sendActionState: MutableState<Async<Unit>>,
+        sendActionState: MutableState<SendActionState>,
     ) = launch {
         when (attachment) {
             is Attachment.Media -> {
@@ -81,10 +80,26 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
     private suspend fun sendMedia(
         mediaAttachment: Attachment.Media,
-        sendActionState: MutableState<Async<Unit>>,
+        sendActionState: MutableState<SendActionState>,
     ) {
-        sendActionState.runUpdatingState {
-            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.info.mimeType, mediaAttachment.compressIfPossible)
+        val progressCallback = object : ProgressCallback {
+            override fun onProgress(current: Long, total: Long) {
+                sendActionState.value = SendActionState.Sending.Uploading(current.toFloat() / total)
+            }
         }
+        sendActionState.value = SendActionState.Sending.Processing
+        mediaSender.sendMedia(
+            uri = mediaAttachment.localMedia.uri,
+            mimeType = mediaAttachment.localMedia.info.mimeType,
+            compressIfPossible = mediaAttachment.compressIfPossible,
+            progressCallback = progressCallback
+        ).fold(
+            onSuccess = {
+                sendActionState.value = SendActionState.Done
+            },
+            onFailure = {
+                sendActionState.value = SendActionState.Failure(it)
+            }
+        )
     }
 }

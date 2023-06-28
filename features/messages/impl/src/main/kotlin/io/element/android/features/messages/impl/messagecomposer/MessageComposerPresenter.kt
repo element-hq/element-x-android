@@ -42,6 +42,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -107,7 +108,7 @@ class MessageComposerPresenter @Inject constructor(
 
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
-                is AttachmentsState.Sending -> localCoroutineScope.sendAttachment(attachmentStateValue.attachments.first(), attachmentsState)
+                is AttachmentsState.Sending.Processing -> localCoroutineScope.sendAttachment(attachmentStateValue.attachments.first(), attachmentsState)
                 else -> Unit
             }
         }
@@ -238,7 +239,7 @@ class MessageComposerPresenter @Inject constructor(
         attachmentsState.value = if (isPreviewable) {
             AttachmentsState.Previewing(persistentListOf(mediaAttachment))
         } else {
-            AttachmentsState.Sending(persistentListOf(mediaAttachment))
+            AttachmentsState.Sending.Processing(persistentListOf(mediaAttachment))
         }
     }
 
@@ -247,7 +248,12 @@ class MessageComposerPresenter @Inject constructor(
         mimeType: String,
         attachmentState: MutableState<AttachmentsState>,
     ) {
-        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false)
+        val progressCallback = object : ProgressCallback {
+            override fun onProgress(current: Long, total: Long) {
+                attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total)
+            }
+        }
+        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback)
             .onSuccess {
                 attachmentState.value = AttachmentsState.None
             }.onFailure {

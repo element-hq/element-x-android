@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaView
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -58,7 +58,7 @@ fun AttachmentsPreviewView(
         state.eventSink(AttachmentsPreviewEvents.ClearSendState)
     }
 
-    if (state.sendActionState is Async.Success) {
+    if (state.sendActionState is SendActionState.Done) {
         LaunchedEffect(state.sendActionState) {
             onDismiss()
         }
@@ -78,26 +78,32 @@ fun AttachmentsPreviewView(
     }
     AttachmentSendStateView(
         sendActionState = state.sendActionState,
-        onRetryClicked = ::postSendAttachment,
-        onRetryDismissed = ::postClearSendState
+        onDismissClicked = ::postClearSendState,
+        onRetryClicked = ::postSendAttachment
     )
 }
 
 @Composable
 private fun AttachmentSendStateView(
-    sendActionState: Async<Unit>,
-    onRetryDismissed: () -> Unit,
+    sendActionState: SendActionState,
+    onDismissClicked: () -> Unit,
     onRetryClicked: () -> Unit
 ) {
-    when (sendActionState) {
-        is Async.Loading -> {
-            ProgressDialog(text = stringResource(id = CommonStrings.common_loading))
-        }
 
-        is Async.Failure -> {
+    when (sendActionState) {
+        is SendActionState.Sending -> {
+            ProgressDialog(
+                type = when (sendActionState) {
+                    is SendActionState.Sending.Uploading -> ProgressDialogType.Determinate(sendActionState.progress)
+                    SendActionState.Sending.Processing -> ProgressDialogType.Indeterminate
+                },
+                text = stringResource(id = CommonStrings.common_sending)
+            )
+        }
+        is SendActionState.Failure -> {
             RetryDialog(
                 content = stringResource(sendAttachmentError(sendActionState.error)),
-                onDismiss = onRetryDismissed,
+                onDismiss = onDismissClicked,
                 onRetry = onRetryClicked
             )
         }

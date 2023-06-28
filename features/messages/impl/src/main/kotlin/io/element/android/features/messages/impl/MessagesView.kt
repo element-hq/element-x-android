@@ -65,6 +65,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -196,7 +197,15 @@ private fun AttachmentStateView(
         is AttachmentsState.Previewing -> LaunchedEffect(state) {
             onPreviewAttachments(state.attachments)
         }
-        is AttachmentsState.Sending -> ProgressDialog(text = stringResource(id = CommonStrings.common_loading))
+        is AttachmentsState.Sending -> {
+            ProgressDialog(
+                type = when (state) {
+                    is AttachmentsState.Sending.Uploading -> ProgressDialogType.Determinate(state.progress)
+                    is AttachmentsState.Sending.Processing -> ProgressDialogType.Indeterminate
+                },
+                text = stringResource(id = CommonStrings.common_sending)
+            )
+        }
     }
 }
 
