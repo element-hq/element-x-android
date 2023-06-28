@@ -27,10 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * @param modifier Classical modifier.
@@ -87,7 +87,7 @@ private fun ContentToPreview() {
             ) {
                 Text(
                     text = "Content",
-                    fontSize = 40.sp
+                    style = ElementTheme.typography.fontHeadingXlBold
                 )
             }
         },
@@ -99,7 +99,7 @@ private fun ContentToPreview() {
             ) {
                 Text(
                     text = "Header",
-                    fontSize = 40.sp
+                    style = ElementTheme.typography.fontHeadingXlBold
                 )
             }
         },
@@ -111,7 +111,7 @@ private fun ContentToPreview() {
             ) {
                 Text(
                     text = "Footer",
-                    fontSize = 40.sp
+                    style = ElementTheme.typography.fontHeadingXlBold
                 )
             }
         }
