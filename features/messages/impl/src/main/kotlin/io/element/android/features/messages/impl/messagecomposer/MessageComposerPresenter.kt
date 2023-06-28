@@ -29,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
+import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
@@ -45,6 +46,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -60,6 +62,7 @@ class MessageComposerPresenter @Inject constructor(
     private val localMediaFactory: LocalMediaFactory,
     private val mediaSender: MediaSender,
     private val snackbarDispatcher: SnackbarDispatcher,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<MessageComposerState> {
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -119,7 +122,16 @@ class MessageComposerPresenter @Inject constructor(
                 }
 
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode, text)
-                is MessageComposerEvents.SetMode -> composerMode.value = event.composerMode
+                is MessageComposerEvents.SetMode -> {
+                    composerMode.value = event.composerMode
+                    analyticsService.capture(
+                        Composer(
+                            inThread = false,
+                            isEditing = composerMode.value is MessageComposerMode.Edit,
+                            isReply = composerMode.value is MessageComposerMode.Reply
+                        )
+                    )
+                }
                 MessageComposerEvents.AddAttachment -> localCoroutineScope.launchIfMediaPickerEnabled {
                     showAttachmentSourcePicker = true
                 }

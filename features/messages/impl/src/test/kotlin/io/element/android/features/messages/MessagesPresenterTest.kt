@@ -21,6 +21,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.MessagesEvents
@@ -388,6 +389,7 @@ class MessagesPresenterTest {
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
             mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
             snackbarDispatcher = SnackbarDispatcher(),
+            analyticsService = FakeAnalyticsService(),
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
