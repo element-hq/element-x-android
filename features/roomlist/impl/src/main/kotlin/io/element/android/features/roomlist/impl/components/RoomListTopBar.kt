@@ -19,10 +19,10 @@ package io.element.android.features.roomlist.impl.components
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
@@ -155,7 +155,7 @@ private fun DefaultRoomListTopBar(
                         onMenuActionClicked(RoomListMenuAction.InviteFriends)
                     },
                     text = { DropdownMenuItemText(stringResource(id = CommonStrings.action_invite)) },
-                    leadingIcon = { Icon(Icons.Default.Share, contentDescription = null) }
+                    leadingIcon = { Icon(Icons.Outlined.Share, contentDescription = null) }
                 )
                 DropdownMenuItem(
                     onClick = {
@@ -163,7 +163,7 @@ private fun DefaultRoomListTopBar(
                         onMenuActionClicked(RoomListMenuAction.ReportBug)
                     },
                     text = { DropdownMenuItemText(stringResource(id = CommonStrings.common_report_a_bug)) },
-                    leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) }
+                    leadingIcon = { Icon(Icons.Outlined.BugReport, contentDescription = null) }
                 )
             }
         },
