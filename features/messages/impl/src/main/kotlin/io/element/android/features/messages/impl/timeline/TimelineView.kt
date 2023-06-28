@@ -91,13 +91,16 @@ fun TimelineView(
 
     // Send a read receipt when the user has finished scrolling to an item in an index <= the last one
     // and the event ids are different.
-    LaunchedEffect(lazyListState.firstVisibleItemIndex, lazyListState.isScrollInProgress) {
-        val firstVisibleIndex = lazyListState.firstVisibleItemIndex
-        val event = state.timelineItems.getOrNull(lazyListState.firstVisibleItemIndex) as? TimelineItem.Event
-        if (!lazyListState.isScrollInProgress && firstVisibleIndex <= lastReadMarkerIndex && event?.eventId != null && event.eventId != lastReadMarkerId) {
+    val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
+    val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
+    LaunchedEffect(firstVisibleIndex, isScrollFinished) {
+        if (!isScrollFinished) return@LaunchedEffect
+        val eventId = (state.timelineItems.getOrNull(firstVisibleIndex) as? TimelineItem.Event)?.eventId
+            ?: return@LaunchedEffect
+        if (firstVisibleIndex <= lastReadMarkerIndex && eventId != lastReadMarkerId) {
             lastReadMarkerIndex = firstVisibleIndex
-            lastReadMarkerId = event.eventId
-            state.eventSink(TimelineEvents.SendReadReceipt(event.eventId))
+            lastReadMarkerId = eventId
+            state.eventSink(TimelineEvents.SendReadReceipt(eventId))
         }
     }
 
