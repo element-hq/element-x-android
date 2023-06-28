@@ -41,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,7 +58,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -363,19 +361,18 @@ private fun ReplyToContent(
         }
         Column(verticalArrangement = Arrangement.SpaceBetween) {
             Text(
-                senderName,
-                style = ElementTextStyles.Regular.caption2.copy(fontWeight = FontWeight.Medium),
+                text = senderName,
+                style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.primary,
+                color = ElementTheme.materialColors.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-
             Text(
                 text = text.orEmpty(),
-                style = ElementTextStyles.Regular.caption1,
+                style = ElementTheme.typography.fontBodyMdRegular,
                 textAlign = TextAlign.Start,
-                color = ElementTheme.legacyColors.placeholder,
+                color = ElementTheme.materialColors.secondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

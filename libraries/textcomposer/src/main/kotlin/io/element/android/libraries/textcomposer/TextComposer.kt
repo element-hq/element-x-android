@@ -279,17 +279,16 @@ private fun ReplyToModeView(
             Text(
                 text = senderName,
                 modifier = Modifier.fillMaxWidth(),
-                style = ElementTextStyles.Regular.caption2.copy(fontWeight = FontWeight.Medium),
+                style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.primary,
+                color = ElementTheme.materialColors.primary,
             )
-
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = text.orEmpty(),
-                style = ElementTextStyles.Regular.caption1,
+                style = ElementTheme.typography.fontBodyMdRegular,
                 textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.materialColors.secondary,
                 maxLines = if (attachmentThumbnailInfo != null) 1 else 2,
                 overflow = TextOverflow.Ellipsis,
             )
