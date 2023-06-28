@@ -59,6 +59,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,12 +139,20 @@ private fun DefaultRoomListTopBar(
             IconButton(
                 onClick = onSearchClicked,
             ) {
-                Icon(Icons.Default.Search, contentDescription = stringResource(CommonStrings.action_search))
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    tint = ElementTheme.materialColors.secondary,
+                    contentDescription = stringResource(CommonStrings.action_search),
+                )
             }
             IconButton(
                 onClick = { showMenu = !showMenu }
             ) {
-                Icon(Icons.Default.MoreVert, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    tint = ElementTheme.materialColors.secondary,
+                    contentDescription = null,
+                )
             }
             DropdownMenu(
                 expanded = showMenu,
@@ -155,7 +164,13 @@ private fun DefaultRoomListTopBar(
                         onMenuActionClicked(RoomListMenuAction.InviteFriends)
                     },
                     text = { DropdownMenuItemText(stringResource(id = CommonStrings.action_invite)) },
-                    leadingIcon = { Icon(Icons.Outlined.Share, contentDescription = null) }
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Share,
+                            tint = ElementTheme.materialColors.secondary,
+                            contentDescription = null,
+                        )
+                    }
                 )
                 DropdownMenuItem(
                     onClick = {
@@ -163,7 +178,13 @@ private fun DefaultRoomListTopBar(
                         onMenuActionClicked(RoomListMenuAction.ReportBug)
                     },
                     text = { DropdownMenuItemText(stringResource(id = CommonStrings.common_report_a_bug)) },
-                    leadingIcon = { Icon(Icons.Outlined.BugReport, contentDescription = null) }
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.BugReport,
+                            tint = ElementTheme.materialColors.secondary,
+                            contentDescription = null,
+                        )
+                    }
                 )
             }
         },

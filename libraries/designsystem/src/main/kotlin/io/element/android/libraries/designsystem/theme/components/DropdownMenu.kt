@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import io.element.android.libraries.theme.ElementTheme
 
 private val minMenuWidth = 200.dp
 
@@ -39,7 +41,9 @@ fun DropdownMenu(
     androidx.compose.material3.DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
-        modifier = modifier.widthIn(min = minMenuWidth),
+        modifier = modifier
+            .background(color = ElementTheme.materialColors.background)
+            .widthIn(min = minMenuWidth),
         offset = offset,
         properties = properties,
         content = content
