@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,10 +44,10 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier) {
+fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier, onClick: () -> Unit) {
     // First Surface is to render a border with the same background color as the background
     Surface(
-        modifier = modifier,
+        modifier = modifier.clickable(onClick = onClick::invoke),
         // TODO Should use compound.bgSubtlePrimary
         color = ElementTheme.legacyColors.gray300,
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.background),
@@ -90,5 +91,5 @@ internal fun MessagesReactionButtonDarkPreview(@PreviewParameter(AggregatedReact
 
 @Composable
 private fun ContentToPreview(reaction: AggregatedReaction) {
-    MessagesReactionButton(reaction)
+    MessagesReactionButton(reaction, onClick = { })
 }

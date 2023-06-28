@@ -87,6 +87,7 @@ fun TimelineItemEventRow(
     onUserDataClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -94,6 +95,9 @@ fun TimelineItemEventRow(
     fun onUserDataClicked() {
         onUserDataClick(event.senderId)
     }
+
+    fun onReactionClicked(emoji: String) =
+        onReactionClick(emoji, event)
 
     fun inReplyToClicked() {
         val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
@@ -157,6 +161,7 @@ fun TimelineItemEventRow(
         if (event.reactionsState.reactions.isNotEmpty()) {
             TimelineItemReactionsView(
                 reactionsState = event.reactionsState,
+                onReactionClicked = ::onReactionClicked,
                 modifier = Modifier
                     .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
@@ -422,6 +427,7 @@ private fun ContentToPreview() {
                 onLongClick = {},
                 onUserDataClick = {},
                 inReplyToClick = {},
+                onReactionClick = { _, _ -> },
                 onTimestampClicked = {},
             )
             TimelineItemEventRow(
@@ -436,6 +442,7 @@ private fun ContentToPreview() {
                 onLongClick = {},
                 onUserDataClick = {},
                 inReplyToClick = {},
+                onReactionClick = { _, _ -> },
                 onTimestampClicked = {},
             )
         }
@@ -476,6 +483,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                     onLongClick = {},
                     onUserDataClick = {},
                     inReplyToClick = {},
+                    onReactionClick = { _, _ -> },
                     onTimestampClicked = {},
                 )
             }

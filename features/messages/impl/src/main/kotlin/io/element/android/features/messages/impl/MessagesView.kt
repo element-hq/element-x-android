@@ -120,7 +120,7 @@ fun MessagesView(
 
     fun onEmojiReactionClicked(emoji: String, event: TimelineItem.Event) {
         if (event.eventId == null) return
-        state.eventSink(MessagesEvents.SendReaction(emoji, event.eventId))
+        state.eventSink(MessagesEvents.ToggleReaction(emoji, event.eventId))
     }
 
     Scaffold(
@@ -150,7 +150,8 @@ fun MessagesView(
                     if (event.sendState is EventSendState.SendingFailed) {
                         state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
                     }
-                }
+                },
+                onReactionClicked = ::onEmojiReactionClicked
             )
         },
         snackbarHost = {
@@ -174,7 +175,7 @@ fun MessagesView(
         state = state.customReactionState,
         onEmojiSelected = { emoji ->
             state.customReactionState.selectedEventId?.let { eventId ->
-                state.eventSink(MessagesEvents.SendReaction(emoji.unicode, eventId))
+                state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
                 state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
             }
         }
@@ -204,6 +205,7 @@ fun MessagesViewContent(
     state: MessagesState,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
+    onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
@@ -223,6 +225,7 @@ fun MessagesViewContent(
                 onMessageLongClicked = onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = onTimestampClicked,
+                onReactionClicked = onReactionClicked,
             )
         }
         if (state.userHasPermissionToSendMessage) {

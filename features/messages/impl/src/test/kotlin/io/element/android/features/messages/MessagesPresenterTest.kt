@@ -80,7 +80,7 @@ class MessagesPresenterTest {
     }
 
     @Test
-    fun `present - handle sending a reaction`() = runTest {
+    fun `present - handle toggling a reaction`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
@@ -89,14 +89,32 @@ class MessagesPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink.invoke(MessagesEvents.SendReaction("👍", AN_EVENT_ID))
-            assertThat(room.sendReactionCount).isEqualTo(1)
+            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
+            assertThat(room.myReactions.count()).isEqualTo(1)
 
             // No crashes when sending a reaction failed
-            room.givenSendReactionResult(Result.failure(IllegalStateException("Failed to send reaction")))
-            initialState.eventSink.invoke(MessagesEvents.SendReaction("👍", AN_EVENT_ID))
-            assertThat(room.sendReactionCount).isEqualTo(2)
+            room.givenToggleReactionResult(Result.failure(IllegalStateException("Failed to send reaction")))
+            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
+            assertThat(room.myReactions.count()).isEqualTo(1)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - handle toggling a reaction twice`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val room = FakeMatrixRoom()
+        val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
+            assertThat(room.myReactions.count()).isEqualTo(1)
+
+            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
+            assertThat(room.myReactions.count()).isEqualTo(0)
         }
     }
 
