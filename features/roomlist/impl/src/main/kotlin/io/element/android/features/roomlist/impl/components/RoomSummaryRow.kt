@@ -40,14 +40,12 @@ import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
 import io.element.android.libraries.core.extensions.orEmpty
@@ -60,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
+import io.element.android.libraries.theme.ElementTheme
 
 internal val minHeight = 84.dp
 
@@ -136,9 +135,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
         modifier = Modifier
             .weight(1f)
             .padding(end = 16.dp),
-        fontSize = 16.sp,
-        fontWeight = FontWeight.SemiBold,
-        style = MaterialTheme.typography.bodyMedium,
+        style = ElementTheme.typography.fontBodyLgMedium,
         text = room.name,
         color = MaterialTheme.roomListRoomName(),
         maxLines = 1,
@@ -146,8 +143,8 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
     )
     // Timestamp
     Text(
-        fontSize = 12.sp,
         text = room.timestamp ?: "",
+        style = ElementTheme.typography.fontBodySmRegular,
         color = MaterialTheme.roomListRoomMessageDate(),
     )
 }
@@ -163,8 +160,8 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
             .padding(end = 28.dp),
         text = attributedLastMessage,
         color = MaterialTheme.roomListRoomMessage(),
-        fontSize = 14.sp,
-        style = MaterialTheme.typography.bodySmall,
+        style = ElementTheme.typography.fontBodyMdRegular,
+        minLines = 2,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis
     )
