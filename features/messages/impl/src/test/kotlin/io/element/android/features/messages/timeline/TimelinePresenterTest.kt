@@ -25,6 +25,7 @@ import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -85,6 +86,26 @@ class TimelinePresenterTest {
             initialState.eventSink.invoke(TimelineEvents.SetHighlightedEvent(null))
             val withoutHighlightedState = awaitItem()
             assertThat(withoutHighlightedState.highlightedEventId).isNull()
+        }
+    }
+
+    @Test
+    fun `present - send read receipt`() = runTest {
+        val timeline = FakeMatrixTimeline()
+        val room = FakeMatrixRoom(matrixTimeline = timeline)
+        val presenter = TimelinePresenter(
+            timelineItemsFactory = aTimelineItemsFactory(),
+            room = room,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+
+            initialState.eventSink.invoke(TimelineEvents.SendReadReceipt(AN_EVENT_ID))
+
+            assertThat(timeline.sendReadReceiptCount).isEqualTo(1)
         }
     }
 }
