@@ -39,7 +39,6 @@ import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -86,8 +85,8 @@ fun ActionListView(
     onEmojiReactionClicked: (String, TimelineItem.Event) -> Unit,
     onCustomReactionClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
-    sheetState: SheetState = rememberModalBottomSheetState()
 ) {
+    val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
     val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
@@ -125,13 +124,14 @@ fun ActionListView(
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = ::onDismiss,
+            modifier = modifier,
         ) {
             SheetContent(
                 state = state,
                 onActionClicked = ::onItemActionClicked,
                 onEmojiReactionClicked = ::onEmojiReactionClicked,
                 onCustomReactionClicked = ::onCustomReactionClicked,
-                modifier = modifier
+                modifier = Modifier
                     .padding(bottom = 32.dp)
 //                    .navigationBarsPadding() - FIXME after https://issuetracker.google.com/issues/275849044
 //                    .imePadding()
