@@ -48,7 +48,7 @@ fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Mo
     Surface(
         modifier = modifier,
         // TODO Should use compound.bgSubtlePrimary
-        color = ElementTheme.colors.gray300,
+        color = ElementTheme.legacyColors.gray300,
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.background),
         shape = RoundedCornerShape(corner = CornerSize(14.dp)),
     ) {

@@ -67,7 +67,7 @@ import kotlin.coroutines.suspendCoroutine
 fun MapView(
     modifier: Modifier = Modifier,
     mapState: MapState = rememberMapState(),
-    darkMode: Boolean = !ElementTheme.colors.isLight,
+    darkMode: Boolean = !ElementTheme.isLightTheme,
     onLocationClick: () -> Unit,
 ) {
     // When in preview, early return a Box with the received modifier preserving layout

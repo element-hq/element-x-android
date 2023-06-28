@@ -55,7 +55,7 @@ internal fun RoomSummaryPlaceholderRow(
             modifier = Modifier
                 .size(AvatarSize.RoomListItem.dp)
                 .align(Alignment.CenterVertically)
-                .background(color = ElementTheme.compoundColors.textPlaceholder, shape = CircleShape)
+                .background(color = ElementTheme.colors.textPlaceholder, shape = CircleShape)
         )
         Column(
             modifier = Modifier

@@ -78,7 +78,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.libraries.theme.LocalColors
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,7 +136,7 @@ fun TextComposer(
                         lineCount = it.lineCount
                     },
                     textStyle = defaultTypography.copy(color = MaterialTheme.colorScheme.primary),
-                    cursorBrush = SolidColor(LocalColors.current.accentColor),
+                    cursorBrush = SolidColor(ElementTheme.legacyColors.accentColor),
                     decorationBox = { innerTextField ->
                         TextFieldDefaults.DecorationBox(
                             value = text,
@@ -346,7 +346,7 @@ private fun BoxScope.SendButton(
     Box(
         modifier = modifier
             .clip(CircleShape)
-            .background(if (canSendMessage) LocalColors.current.accentColor else Color.Transparent)
+            .background(if (canSendMessage) ElementTheme.legacyColors.accentColor else Color.Transparent)
             .size(30.dp)
             .align(Alignment.BottomEnd)
             .applyIf(composerMode !is MessageComposerMode.Edit, ifTrue = {
@@ -373,7 +373,7 @@ private fun BoxScope.SendButton(
             modifier = Modifier.size(16.dp),
             resourceId = iconId,
             contentDescription = contentDescription,
-            tint = if (canSendMessage) Color.White else LocalColors.current.quaternary
+            tint = if (canSendMessage) Color.White else ElementTheme.legacyColors.quaternary
         )
     }
 }
