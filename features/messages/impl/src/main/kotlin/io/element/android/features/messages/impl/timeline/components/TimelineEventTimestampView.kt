@@ -16,7 +16,8 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,11 +46,13 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.ui.strings.CommonStrings
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimelineEventTimestampView(
     event: TimelineItem.Event,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val formattedTime = event.sentTime
     val hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed
@@ -57,8 +60,9 @@ fun TimelineEventTimestampView(
     val tint = if (hasMessageSendingFailed) MaterialTheme.colorScheme.error else null
     Row(
         modifier = Modifier
-            .clickable(
+            .combinedClickable(
                 onClick = onClick,
+                onLongClick = onLongClick,
                 enabled = true,
                 indication = rememberRipple(bounded = false),
                 interactionSource = MutableInteractionSource()
@@ -101,6 +105,7 @@ internal fun TimelineEventTimestampViewDarkPreview(@PreviewParameter(TimelineIte
 private fun ContentToPreview(event: TimelineItem.Event) {
     TimelineEventTimestampView(
         event = event,
-        onClick = {}
+        onClick = {},
+        onLongClick = {},
     )
 }
