@@ -24,6 +24,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
@@ -458,7 +459,8 @@ class MessageComposerPresenterTest {
         featureFlagService,
         localMediaFactory,
         MediaSender(mediaPreProcessor, room),
-        snackbarDispatcher
+        snackbarDispatcher,
+        FakeAnalyticsService()
     )
 }
 
