@@ -30,6 +30,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -59,7 +60,7 @@ internal fun MenuPreview() {
                     null
                 }
                 DropdownMenuItem(
-                    text = { Text(text = "Item $i") },
+                    text = { DropdownMenuItemText(text = "Item $i") },
                     onClick = { isExpanded = false },
                     leadingIcon = leadingIcon,
                     trailingIcon = trailingIcon,
