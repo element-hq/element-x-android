@@ -81,8 +81,7 @@ class RustMatrixClient constructor(
 ) : MatrixClient {
 
     override val sessionId: UserId = UserId(client.userId())
-
-    private val roomListService = client.roomListService()
+    private val roomListService = client.roomListServiceWithEncryption()
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
     private val syncService = RustSyncService(roomListService, sessionCoroutineScope)
@@ -91,6 +90,7 @@ class RustMatrixClient constructor(
         dispatchers = dispatchers,
     )
     private val notificationService = RustNotificationService(client)
+
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
