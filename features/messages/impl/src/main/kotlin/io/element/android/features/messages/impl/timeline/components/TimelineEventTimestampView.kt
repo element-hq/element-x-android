@@ -58,15 +58,19 @@ fun TimelineEventTimestampView(
     val hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed
     val isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
     val tint = if (hasMessageSendingFailed) MaterialTheme.colorScheme.error else null
+    val clickModifier = if (hasMessageSendingFailed) {
+        Modifier.combinedClickable(
+            onClick = onClick,
+            onLongClick = onLongClick,
+            indication = rememberRipple(bounded = false),
+            interactionSource = MutableInteractionSource()
+        )
+    } else {
+        Modifier
+    }
     Row(
         modifier = Modifier
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick,
-                enabled = true,
-                indication = rememberRipple(bounded = false),
-                interactionSource = MutableInteractionSource()
-            )
+            .then(clickModifier)
             .padding(start = 16.dp) // Add extra padding for touch target size
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
