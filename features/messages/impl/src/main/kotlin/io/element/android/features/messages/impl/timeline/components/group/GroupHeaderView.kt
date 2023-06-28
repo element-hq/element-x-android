@@ -54,7 +54,7 @@ fun GroupHeaderView(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = if (isHighlighted) {
-        ElementTheme.colors.messageHighlightedBackground
+        ElementTheme.legacyColors.messageHighlightedBackground
     } else {
         Color.Companion.Transparent
     }

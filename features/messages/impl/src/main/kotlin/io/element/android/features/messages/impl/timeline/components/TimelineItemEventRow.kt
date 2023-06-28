@@ -63,7 +63,6 @@ import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.theme.LocalColors
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -76,6 +75,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.theme.ElementTheme
 import org.jsoup.Jsoup
 
 @Composable
@@ -251,7 +251,7 @@ private fun MessageEventBubbleContent(
                     onClick = onTimestampClicked,
                     modifier = timestampModifier
                         .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
-                        .background(LocalColors.current.gray300, RoundedCornerShape(10.0.dp))
+                        .background(ElementTheme.legacyColors.gray300, RoundedCornerShape(10.0.dp))
                         .align(Alignment.BottomEnd)
                         .padding(horizontal = 4.dp, vertical = 2.dp) // Inner padding
                 )
@@ -364,7 +364,7 @@ private fun ReplyToContent(
                 text = text.orEmpty(),
                 style = ElementTextStyles.Regular.caption1,
                 textAlign = TextAlign.Start,
-                color = LocalColors.current.placeholder,
+                color = ElementTheme.legacyColors.placeholder,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

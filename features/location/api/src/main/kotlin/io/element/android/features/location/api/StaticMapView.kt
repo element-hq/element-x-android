@@ -17,6 +17,7 @@
 package io.element.android.features.location.api
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -52,7 +53,7 @@ fun StaticMapView(
     zoom: Double,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    darkMode: Boolean = !ElementTheme.colors.isLight,
+    darkMode: Boolean = isSystemInDarkTheme(),
 ) {
     // Using BoxWithConstraints to:
     // 1) Size the inner Image to the same Dp size of the outer BoxWithConstraints.

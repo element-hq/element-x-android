@@ -18,6 +18,7 @@ package io.element.android.features.location.api.internal
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
@@ -47,7 +48,7 @@ internal fun StaticMapPlaceholder(
     showProgress: Boolean,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    darkMode: Boolean = !ElementTheme.colors.isLight,
+    darkMode: Boolean = isSystemInDarkTheme(),
     onLoadMapClick: () -> Unit,
 ) {
     Box(

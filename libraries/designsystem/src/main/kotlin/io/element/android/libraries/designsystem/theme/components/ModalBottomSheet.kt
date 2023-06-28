@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -51,7 +52,7 @@ fun ModalBottomSheet(
     shape: Shape = BottomSheetDefaults.ExpandedShape,
     containerColor: Color = BottomSheetDefaults.ContainerColor,
     contentColor: Color = contentColorFor(containerColor),
-    tonalElevation: Dp = if (ElementTheme.colors.isLight) 0.dp else BottomSheetDefaults.Elevation,
+    tonalElevation: Dp = if (isSystemInDarkTheme()) BottomSheetDefaults.Elevation else 0.dp,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
     dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
     windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,

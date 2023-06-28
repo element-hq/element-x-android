@@ -98,12 +98,12 @@ fun MessageEventBubble(
     }
 
     val backgroundBubbleColor = if (state.isHighlighted) {
-        ElementTheme.colors.messageHighlightedBackground
+        ElementTheme.legacyColors.messageHighlightedBackground
     } else {
         if (state.isMine) {
-            ElementTheme.colors.messageFromMeBackground
+            ElementTheme.legacyColors.messageFromMeBackground
         } else {
-            ElementTheme.colors.messageFromOtherBackground
+            ElementTheme.legacyColors.messageFromOtherBackground
         }
     }
     val bubbleShape = bubbleShape()

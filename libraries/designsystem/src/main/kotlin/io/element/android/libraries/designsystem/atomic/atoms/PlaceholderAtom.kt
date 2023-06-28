@@ -36,7 +36,7 @@ fun PlaceholderAtom(
     width: Dp,
     height: Dp,
     modifier: Modifier = Modifier,
-    color: Color = ElementTheme.compoundColors.textPlaceholder,
+    color: Color = ElementTheme.colors.textPlaceholder,
 ) {
     Box(
         modifier = modifier

@@ -35,8 +35,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * RoundedIconAtom is an atom which displays an icon inside a rounded container.
@@ -59,7 +59,7 @@ fun RoundedIconAtom(
         modifier = modifier
             .size(size.toContainerSize())
             .background(
-                color = LocalColors.current.quinary,
+                color = ElementTheme.legacyColors.quinary,
                 shape = RoundedCornerShape(size.toCornerSize())
             )
     ) {

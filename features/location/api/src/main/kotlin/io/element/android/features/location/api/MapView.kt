@@ -18,6 +18,7 @@ package io.element.android.features.location.api
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -52,7 +53,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
@@ -67,7 +67,7 @@ import kotlin.coroutines.suspendCoroutine
 fun MapView(
     modifier: Modifier = Modifier,
     mapState: MapState = rememberMapState(),
-    darkMode: Boolean = !ElementTheme.colors.isLight,
+    darkMode: Boolean = isSystemInDarkTheme(),
     onLocationClick: () -> Unit,
 ) {
     // When in preview, early return a Box with the received modifier preserving layout
