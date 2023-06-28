@@ -17,7 +17,7 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.coroutine.childScopeOf
+import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -70,7 +70,7 @@ class RustMatrixRoom(
 
     override val roomId = RoomId(innerRoom.id())
 
-    private val roomCoroutineScope = childScopeOf(sessionCoroutineScope, coroutineDispatchers.main, "RoomScope-$roomId")
+    private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState>
         get() = _membersStateFlow

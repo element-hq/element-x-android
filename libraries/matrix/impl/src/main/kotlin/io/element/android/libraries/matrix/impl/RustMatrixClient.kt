@@ -19,7 +19,7 @@ package io.element.android.libraries.matrix.impl
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.coroutine.childScopeOf
+import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -83,7 +83,7 @@ class RustMatrixClient constructor(
     override val sessionId: UserId = UserId(client.userId())
 
     private val roomListService = client.roomListService()
-    private val sessionCoroutineScope = childScopeOf(appCoroutineScope, dispatchers.main, "Session-${sessionId}")
+    private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
     private val syncService = RustSyncService(roomListService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
