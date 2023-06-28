@@ -16,12 +16,12 @@
 
 package io.element.android.x.intent
 
-import android.content.Context
+import android.app.Activity
 import androidx.compose.ui.platform.UriHandler
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 
-class SafeUriHandler(private val context: Context) : UriHandler {
+class SafeUriHandler(private val activity: Activity) : UriHandler {
     override fun openUri(uri: String) {
-        context.openUrlInExternalApp(uri)
+        activity.openUrlInExternalApp(uri)
     }
 }
