@@ -30,15 +30,18 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
     modifier: Modifier = Modifier,
+    onReactionClicked: (emoji: String) -> Unit
 ) {
-    if (reactionsState.reactions.isEmpty()) return
     FlowRow(
         modifier = modifier,
         mainAxisSpacing = 2.dp,
         crossAxisSpacing = 8.dp,
     ) {
         reactionsState.reactions.forEach { reaction ->
-            MessagesReactionButton(reaction = reaction)
+            MessagesReactionButton(
+                reaction = reaction,
+                onClick = { onReactionClicked(reaction.key) }
+            )
         }
     }
 }
@@ -56,6 +59,7 @@ internal fun TimelineItemReactionsViewDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     TimelineItemReactionsView(
-        reactionsState = aTimelineItemReactions()
+        reactionsState = aTimelineItemReactions(),
+        onReactionClicked = { }
     )
 }

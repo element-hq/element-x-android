@@ -25,16 +25,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.extensions.toAnalyticsJoinedRoom
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -44,6 +48,7 @@ import javax.inject.Inject
 class InviteListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val store: SeenInvitesStore,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<InviteListState> {
 
     @Composable
@@ -133,9 +138,10 @@ class InviteListPresenter @Inject constructor(
         suspend {
             client.getRoom(roomId)?.use {
                 it.acceptInvitation().getOrThrow()
+                analyticsService.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
             }
             roomId
-        }.execute(acceptedAction)
+        }.runCatchingUpdatingState(acceptedAction)
     }
 
     private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<Async<Unit>>) = launch {
@@ -143,7 +149,7 @@ class InviteListPresenter @Inject constructor(
             client.getRoom(roomId)?.use {
                 it.rejectInvitation().getOrThrow()
             } ?: Unit
-        }.execute(declinedAction)
+        }.runCatchingUpdatingState(declinedAction)
     }
 
     private fun RoomSummary.Filled.toInviteSummary(seen: Boolean) = details.run {
@@ -153,12 +159,14 @@ class InviteListPresenter @Inject constructor(
                 id = i.userId.value,
                 name = i.displayName,
                 url = i.avatarUrl,
+                size = AvatarSize.RoomInviteItem,
             )
         else
             AvatarData(
                 id = roomId.value,
                 name = name,
-                url = avatarURLString
+                url = avatarURLString,
+                size = AvatarSize.RoomInviteItem,
             )
 
         val alias = if (isDirect)
@@ -181,6 +189,7 @@ class InviteListPresenter @Inject constructor(
                         id = userId.value,
                         name = displayName,
                         url = avatarUrl,
+                        size = AvatarSize.InviteSender,
                     ),
                 )
             },

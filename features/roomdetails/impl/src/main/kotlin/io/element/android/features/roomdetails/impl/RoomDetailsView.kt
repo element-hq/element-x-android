@@ -70,14 +70,13 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
-import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -198,7 +197,7 @@ internal fun RoomDetailsTopBar(
                     onDismissRequest = { showMenu = false },
                 ) {
                     DropdownMenuItem(
-                        text = { Text(stringResource(id = StringR.string.action_edit)) },
+                        text = { Text(stringResource(id = CommonStrings.action_edit)) },
                         onClick = {
                             // Explicitly close the menu before handling the action, as otherwise it stays open during the
                             // transition and renders really badly.
@@ -230,7 +229,7 @@ internal fun RoomHeaderSection(
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier.size(70.dp)) {
             Avatar(
-                avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.HUGE),
+                avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -250,7 +249,7 @@ internal fun TopicSection(
     onActionClicked: (RoomDetailsAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PreferenceCategory(title = stringResource(StringR.string.common_topic), modifier = modifier) {
+    PreferenceCategory(title = stringResource(CommonStrings.common_topic), modifier = modifier) {
         if (roomTopic is RoomTopicState.CanAddTopic) {
             PreferenceText(
                 title = stringResource(R.string.screen_room_details_add_topic_title),
@@ -315,7 +314,7 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
         PreferenceText(
             title = stringResource(R.string.screen_room_details_leave_room_title),
             icon = ImageVector.vectorResource(R.drawable.ic_door_open),
-            tintColor = LocalColors.current.textActionCritical,
+            tintColor = MaterialTheme.colorScheme.error,
             onClick = onLeaveRoom,
         )
     }

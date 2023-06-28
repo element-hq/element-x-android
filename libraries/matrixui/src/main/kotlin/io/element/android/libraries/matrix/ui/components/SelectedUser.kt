@@ -47,7 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun SelectedUser(
@@ -55,13 +55,14 @@ fun SelectedUser(
     modifier: Modifier = Modifier,
     onUserRemoved: (MatrixUser) -> Unit = {},
 ) {
-    Box(modifier = modifier
-        .width(56.dp)
+    Box(
+        modifier = modifier
+            .width(AvatarSize.SelectedUser.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(matrixUser.getAvatarData(size = AvatarSize.Custom(56.dp)))
+            Avatar(matrixUser.getAvatarData(size = AvatarSize.SelectedUser))
             Text(
                 text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,
@@ -83,7 +84,7 @@ fun SelectedUser(
         ) {
             Icon(
                 imageVector = Icons.Default.Close,
-                contentDescription = stringResource(id = StringR.string.action_remove),
+                contentDescription = stringResource(id = CommonStrings.action_remove),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(2.dp)
             )

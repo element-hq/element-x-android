@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -61,8 +60,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -100,7 +99,7 @@ fun RoomMemberListView(
                 query = state.searchQuery,
                 state = state.searchResults,
                 active = state.isSearchActive,
-                placeHolderTitle = stringResource(StringR.string.common_search_for_someone),
+                placeHolderTitle = stringResource(CommonStrings.common_search_for_someone),
                 onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
                 onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
                 onUserSelected = ::onUserSelected,
@@ -110,7 +109,7 @@ fun RoomMemberListView(
             if (!state.isSearchActive) {
                 if (state.roomMembers is Async.Success) {
                     RoomMemberList(
-                        roomMembers = state.roomMembers.state,
+                        roomMembers = state.roomMembers.data,
                         showMembersCount = true,
                         onUserSelected = ::onUserSelected
                     )
@@ -192,7 +191,7 @@ private fun RoomMemberListItem(
             displayName = roomMember.displayName,
             avatarUrl = roomMember.avatarUrl
         ),
-        avatarSize = AvatarSize.Custom(36.dp),
+        avatarSize = AvatarSize.UserListItem,
     )
 }
 
@@ -221,7 +220,7 @@ private fun RoomMemberListTopBar(
                     onClick = onInvitePressed,
                 ) {
                     Text(
-                        text = stringResource(StringR.string.action_invite),
+                        text = stringResource(CommonStrings.action_invite),
                         fontSize = 16.sp,
                     )
                 }

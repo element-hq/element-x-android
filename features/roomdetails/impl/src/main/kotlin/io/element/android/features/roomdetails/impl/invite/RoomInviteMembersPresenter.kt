@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -147,7 +147,7 @@ class RoomInviteMembersPresenter @Inject constructor(
             withContext(coroutineDispatchers.io) {
                 roomMemberListDataSource.search("").toImmutableList()
             }
-        }.execute(roomMembers)
+        }.runCatchingUpdatingState(roomMembers)
     }
 }
 

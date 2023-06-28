@@ -23,7 +23,7 @@ data class AvatarData(
     val id: String,
     val name: String?,
     val url: String? = null,
-    val size: AvatarSize = AvatarSize.MEDIUM
+    val size: AvatarSize,
 ) {
 
     val initial by lazy {

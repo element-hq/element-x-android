@@ -303,9 +303,9 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
-            innerRoom.sendReaction(key = emoji, eventId = eventId.value)
+            innerRoom.toggleReaction(key = emoji, eventId = eventId.value)
         }
     }
 

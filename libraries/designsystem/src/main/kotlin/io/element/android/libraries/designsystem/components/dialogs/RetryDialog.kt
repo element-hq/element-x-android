@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RetryDialog(
@@ -109,9 +109,9 @@ private fun RetryDialogContent(
 }
 
 object RetryDialogDefaults {
-    val title: String @Composable get() = stringResource(id = StringR.string.dialog_title_error)
-    val retryText: String @Composable get() = stringResource(id = StringR.string.action_retry)
-    val dismissText: String @Composable get() = stringResource(id = StringR.string.action_cancel)
+    val title: String @Composable get() = stringResource(id = CommonStrings.dialog_title_error)
+    val retryText: String @Composable get() = stringResource(id = CommonStrings.action_retry)
+    val dismissText: String @Composable get() = stringResource(id = CommonStrings.action_cancel)
 }
 
 @Preview(group = PreviewGroup.Dialogs)

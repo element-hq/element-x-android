@@ -30,7 +30,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 import javax.inject.Inject
 
 @ContributesBinding(RoomScope::class)
@@ -42,12 +42,12 @@ class MessageSummaryFormatterImpl @Inject constructor(
             is TimelineItemTextBasedContent -> event.content.body
             is TimelineItemStateContent -> event.content.body
             is TimelineItemProfileChangeContent -> event.content.body
-            is TimelineItemEncryptedContent -> context.getString(R.string.common_unable_to_decrypt)
-            is TimelineItemRedactedContent -> context.getString(R.string.common_message_removed)
-            is TimelineItemUnknownContent -> context.getString(R.string.common_unsupported_event)
-            is TimelineItemImageContent -> context.getString(R.string.common_image)
-            is TimelineItemVideoContent -> context.getString(R.string.common_video)
-            is TimelineItemFileContent -> context.getString(R.string.common_file)
+            is TimelineItemEncryptedContent -> context.getString(CommonStrings.common_unable_to_decrypt)
+            is TimelineItemRedactedContent -> context.getString(CommonStrings.common_message_removed)
+            is TimelineItemUnknownContent -> context.getString(CommonStrings.common_unsupported_event)
+            is TimelineItemImageContent -> context.getString(CommonStrings.common_image)
+            is TimelineItemVideoContent -> context.getString(CommonStrings.common_video)
+            is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
         }
     }
 }

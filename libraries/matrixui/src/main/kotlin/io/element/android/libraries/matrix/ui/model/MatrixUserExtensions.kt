@@ -20,7 +20,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
-fun MatrixUser.getAvatarData(size: AvatarSize = AvatarSize.MEDIUM) = AvatarData(
+fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
     id = userId.value,
     name = displayName,
     url = avatarUrl,

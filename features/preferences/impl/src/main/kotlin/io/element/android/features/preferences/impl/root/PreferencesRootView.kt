@@ -35,7 +35,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun PreferencesRootView(
@@ -50,7 +50,7 @@ fun PreferencesRootView(
     PreferenceView(
         modifier = modifier,
         onBackPressed = onBackPressed,
-        title = stringResource(id = StringR.string.common_settings)
+        title = stringResource(id = CommonStrings.common_settings)
     ) {
         UserPreferences(state.myUser)
         AnalyticsPreferencesView(
@@ -71,9 +71,9 @@ fun PreferencesRootView(
 
 @Composable
 fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
-    PreferenceCategory(title = stringResource(id = StringR.string.common_developer_options)) {
+    PreferenceCategory(title = stringResource(id = CommonStrings.common_developer_options)) {
         PreferenceText(
-            title = stringResource(id = StringR.string.common_developer_options),
+            title = stringResource(id = CommonStrings.common_developer_options),
             icon = Icons.Default.DeveloperMode,
             onClick = onOpenDeveloperSettings
         )

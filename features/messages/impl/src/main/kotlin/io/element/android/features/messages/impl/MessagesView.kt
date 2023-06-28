@@ -77,9 +77,9 @@ import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
-import io.element.android.libraries.ui.strings.R as StringsR
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -120,7 +120,7 @@ fun MessagesView(
 
     fun onEmojiReactionClicked(emoji: String, event: TimelineItem.Event) {
         if (event.eventId == null) return
-        state.eventSink(MessagesEvents.SendReaction(emoji, event.eventId))
+        state.eventSink(MessagesEvents.ToggleReaction(emoji, event.eventId))
     }
 
     Scaffold(
@@ -150,7 +150,8 @@ fun MessagesView(
                     if (event.sendState is EventSendState.SendingFailed) {
                         state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
                     }
-                }
+                },
+                onReactionClicked = ::onEmojiReactionClicked
             )
         },
         snackbarHost = {
@@ -174,7 +175,7 @@ fun MessagesView(
         state = state.customReactionState,
         onEmojiSelected = { emoji ->
             state.customReactionState.selectedEventId?.let { eventId ->
-                state.eventSink(MessagesEvents.SendReaction(emoji.unicode, eventId))
+                state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
                 state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
             }
         }
@@ -195,7 +196,7 @@ private fun AttachmentStateView(
         is AttachmentsState.Previewing -> LaunchedEffect(state) {
             onPreviewAttachments(state.attachments)
         }
-        is AttachmentsState.Sending -> ProgressDialog(text = stringResource(id = StringsR.string.common_loading))
+        is AttachmentsState.Sending -> ProgressDialog(text = stringResource(id = CommonStrings.common_loading))
     }
 }
 
@@ -204,6 +205,7 @@ fun MessagesViewContent(
     state: MessagesState,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
+    onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
@@ -223,6 +225,7 @@ fun MessagesViewContent(
                 onMessageLongClicked = onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = onTimestampClicked,
+                onReactionClicked = onReactionClicked,
             )
         }
         if (state.userHasPermissionToSendMessage) {

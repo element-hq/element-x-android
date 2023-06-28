@@ -114,7 +114,7 @@ Compose:
     active: true
     # You can optionally define a list of CompositionLocals that are allowed here
 
-    allowedCompositionLocals: LocalColors, LocalCompoundColors, LocalSnackbarDispatcher
+    allowedCompositionLocals: LocalLegacyColors, LocalCompoundColors, LocalSnackbarDispatcher
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

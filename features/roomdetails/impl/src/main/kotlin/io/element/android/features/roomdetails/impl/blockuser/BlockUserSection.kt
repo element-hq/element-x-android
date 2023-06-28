@@ -18,6 +18,7 @@ package io.element.android.features.roomdetails.impl.blockuser
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,7 +28,6 @@ import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.theme.LocalColors
 
 @Composable
 internal fun BlockUserSection(state: RoomMemberDetailsState, modifier: Modifier = Modifier) {
@@ -42,7 +42,7 @@ internal fun BlockUserSection(state: RoomMemberDetailsState, modifier: Modifier 
             PreferenceText(
                 title = stringResource(R.string.screen_dm_details_block_user),
                 icon = Icons.Outlined.Block,
-                tintColor = LocalColors.current.textActionCritical,
+                tintColor = MaterialTheme.colorScheme.error,
                 onClick = { state.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = true)) },
             )
         }

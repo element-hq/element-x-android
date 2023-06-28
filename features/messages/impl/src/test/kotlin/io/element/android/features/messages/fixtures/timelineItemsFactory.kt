@@ -36,6 +36,7 @@ import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 
@@ -44,7 +45,7 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
     return TimelineItemsFactory(
         dispatchers = testCoroutineDispatchers(),
         eventItemFactory = TimelineItemEventFactory(
-            TimelineItemContentFactory(
+            contentFactory = TimelineItemContentFactory(
                 messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter(), FileExtensionExtractorWithoutValidation()),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
@@ -54,7 +55,8 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
                 failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
                 failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory()
-            )
+            ),
+            matrixClient = FakeMatrixClient(),
         ),
         virtualItemFactory = TimelineItemVirtualFactory(
             daySeparatorFactory = TimelineItemDaySeparatorFactory(

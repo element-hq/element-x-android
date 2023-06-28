@@ -57,7 +57,7 @@ import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -112,7 +112,7 @@ internal fun RoomMemberHeaderSection(
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier.size(70.dp)) {
             Avatar(
-                avatarData = AvatarData(userId, userName, avatarUrl, AvatarSize.HUGE),
+                avatarData = AvatarData(userId, userName, avatarUrl, AvatarSize.UserHeader),
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -129,7 +129,7 @@ internal fun RoomMemberHeaderSection(
 @Composable
 internal fun RoomMemberMainActionsSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        MainActionButton(title = stringResource(StringR.string.action_share), icon = Icons.Outlined.Share, onClick = onShareUser)
+        MainActionButton(title = stringResource(CommonStrings.action_share), icon = Icons.Outlined.Share, onClick = onShareUser)
     }
 }
 
@@ -137,7 +137,7 @@ internal fun RoomMemberMainActionsSection(onShareUser: () -> Unit, modifier: Mod
 internal fun SendMessageSection(onSendMessage: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
-            title = stringResource(StringR.string.action_send_message),
+            title = stringResource(CommonStrings.action_send_message),
             icon = Icons.Outlined.ChatBubbleOutline,
             onClick = onSendMessage,
         )

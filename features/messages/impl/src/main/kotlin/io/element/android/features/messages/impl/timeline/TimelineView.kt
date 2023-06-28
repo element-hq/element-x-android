@@ -72,6 +72,7 @@ fun TimelineView(
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onReactionClicked: (emoji: String, TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onReachedLoadMore() {
@@ -89,7 +90,7 @@ fun TimelineView(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
             reverseLayout = true,
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(vertical = 8.dp),
         ) {
             itemsIndexed(
                 items = state.timelineItems,
@@ -103,6 +104,7 @@ fun TimelineView(
                     onLongClick = onMessageLongClicked,
                     onUserDataClick = onUserDataClicked,
                     inReplyToClick = ::inReplyToClicked,
+                    onReactionClick = onReactionClicked,
                     onTimestampClicked = onTimestampClicked,
                 )
                 if (index == state.timelineItems.lastIndex) {
@@ -127,6 +129,7 @@ fun TimelineItemRow(
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
+    onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -162,6 +165,7 @@ fun TimelineItemRow(
                     onLongClick = ::onLongClick,
                     onUserDataClick = onUserDataClick,
                     inReplyToClick = inReplyToClick,
+                    onReactionClick = onReactionClick,
                     onTimestampClicked = onTimestampClicked,
                     modifier = modifier,
                 )
@@ -196,6 +200,7 @@ fun TimelineItemRow(
                                 inReplyToClick = inReplyToClick,
                                 onUserDataClick = onUserDataClick,
                                 onTimestampClicked = onTimestampClicked,
+                                onReactionClick = onReactionClick,
                             )
                         }
                     }
@@ -286,5 +291,6 @@ private fun ContentToPreview(content: TimelineItemEventContent) {
         onTimestampClicked = {},
         onUserDataClicked = {},
         onMessageLongClicked = {},
+        onReactionClicked = { _, _ -> },
     )
 }

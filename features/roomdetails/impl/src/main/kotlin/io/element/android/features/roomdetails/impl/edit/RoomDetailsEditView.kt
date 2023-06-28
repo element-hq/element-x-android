@@ -68,7 +68,6 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -76,8 +75,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -121,7 +120,7 @@ fun RoomDetailsEditView(
                         },
                     ) {
                         Text(
-                            text = stringResource(StringR.string.action_save),
+                            text = stringResource(CommonStrings.action_save),
                             fontSize = 16.sp,
                         )
                     }
@@ -145,7 +144,7 @@ fun RoomDetailsEditView(
                 LabelledTextField(
                     label = stringResource(id = R.string.screen_room_details_room_name_label),
                     value = state.roomName,
-                    placeholder = stringResource(StringR.string.common_room_name_placeholder),
+                    placeholder = stringResource(CommonStrings.common_room_name_placeholder),
                     singleLine = true,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomName(it)) },
                 )
@@ -160,9 +159,9 @@ fun RoomDetailsEditView(
 
             if (state.canChangeTopic) {
                 LabelledTextField(
-                    label = stringResource(StringR.string.common_topic),
+                    label = stringResource(CommonStrings.common_topic),
                     value = state.roomTopic,
-                    placeholder = stringResource(StringR.string.common_topic_placeholder),
+                    placeholder = stringResource(CommonStrings.common_topic_placeholder),
                     maxLines = 10,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomTopic(it)) },
                 )
@@ -219,7 +218,7 @@ private fun EditableAvatarView(
             when (state.roomAvatarUrl?.scheme) {
                 null, "mxc" -> {
                     Avatar(
-                        avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl?.toString(), size = AvatarSize.HUGE),
+                        avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl?.toString(), size = AvatarSize.RoomHeader),
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -237,7 +236,7 @@ private fun EditableAvatarView(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .clip(CircleShape)
-                        .background(LocalColors.current.gray1400)
+                        .background(MaterialTheme.colorScheme.primary)
                         .size(24.dp),
                     contentAlignment = Alignment.Center,
                 ) {

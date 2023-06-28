@@ -23,8 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
@@ -32,7 +30,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun DeveloperSettingsView(
@@ -44,7 +42,7 @@ fun DeveloperSettingsView(
     PreferenceView(
         modifier = modifier,
         onBackPressed = onBackPressed,
-        title = stringResource(id = R.string.common_developer_options)
+        title = stringResource(id = CommonStrings.common_developer_options)
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
         PreferenceCategory(title = "Feature flags") {

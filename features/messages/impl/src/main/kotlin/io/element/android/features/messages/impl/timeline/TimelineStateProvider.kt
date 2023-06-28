@@ -23,7 +23,10 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
+import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -32,6 +35,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventSendStat
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.random.Random
 
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
@@ -83,13 +88,21 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             content = content,
             groupPosition = TimelineItemGroupPosition.First
         ),
-        // A state event on top of it
-        aTimelineItemEvent(
-            isMine = true,
-            content = aTimelineItemStateEventContent(),
-            groupPosition = TimelineItemGroupPosition.None
-        ),
+        // A grouped event on top of it
+        aGroupedEvents(),
+        // A day separator
+        aTimelineItemDaySeparator(),
+        // Loading
+        aTimelineItemLoading(),
     )
+}
+
+fun aTimelineItemLoading(): TimelineItem.Virtual {
+    return TimelineItem.Virtual("virtual_loading", TimelineItemLoadingModel)
+}
+
+fun aTimelineItemDaySeparator(): TimelineItem.Virtual {
+    return TimelineItem.Virtual("virtual_day", aTimelineItemDaySeparatorModel("Today"))
 }
 
 internal fun aTimelineItemEvent(
@@ -101,26 +114,36 @@ internal fun aTimelineItemEvent(
     sendState: EventSendState = EventSendState.Sent(eventId),
     inReplyTo: InReplyTo? = null,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
+    timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = eventId.value,
         eventId = eventId,
         transactionId = transactionId,
         senderId = UserId("@senderId:domain"),
-        senderAvatar = AvatarData("@senderId:domain", "sender"),
+        senderAvatar = AvatarData("@senderId:domain", "sender", size = AvatarSize.TimelineSender),
         content = content,
-        reactionsState = TimelineItemReactions(
-            persistentListOf(
-                AggregatedReaction("👍", "1")
-            )
-        ),
+        reactionsState = timelineItemReactions,
         sentTime = "12:34",
         isMine = isMine,
-        senderDisplayName = "sender",
+        senderDisplayName = "Sender",
         groupPosition = groupPosition,
         sendState = sendState,
         inReplyTo = inReplyTo,
         debugInfo = debugInfo,
+    )
+}
+
+fun aTimelineItemReactions(
+    count: Int = 1,
+    isHighlighted: Boolean = false,
+): TimelineItemReactions {
+    return TimelineItemReactions(
+        reactions = buildList {
+            repeat(count) {
+                add(AggregatedReaction(key = "👍", count = 1 + it, isHighlighted = isHighlighted))
+            }
+        }.toPersistentList()
     )
 }
 
@@ -131,3 +154,17 @@ internal fun aTimelineItemDebugInfo(
 ) = TimelineItemDebugInfo(
     model, originalJson, latestEditedJson
 )
+
+fun aGroupedEvents(): TimelineItem.GroupedEvents {
+    val event = aTimelineItemEvent(
+        isMine = true,
+        content = aTimelineItemStateEventContent(),
+        groupPosition = TimelineItemGroupPosition.None
+    )
+    return TimelineItem.GroupedEvents(
+        events = listOf(
+            event,
+            event,
+        ).toImmutableList()
+    )
+}

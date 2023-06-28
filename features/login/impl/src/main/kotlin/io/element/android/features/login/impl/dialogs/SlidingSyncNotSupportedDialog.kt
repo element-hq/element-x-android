@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.login.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun SlidingSyncNotSupportedDialog(
@@ -32,11 +32,11 @@ internal fun SlidingSyncNotSupportedDialog(
     ConfirmationDialog(
         modifier = modifier,
         onDismiss = onDismiss,
-        submitText = stringResource(StringR.string.action_learn_more),
+        submitText = stringResource(CommonStrings.action_learn_more),
         onSubmitClicked = onLearnMoreClicked,
         onCancelClicked = onDismiss,
         emphasizeSubmitButton = true,
-        title = stringResource(StringR.string.dialog_title_error),
+        title = stringResource(CommonStrings.dialog_title_error),
         content = stringResource(R.string.screen_change_server_error_no_sliding_sync_message),
     )
 }

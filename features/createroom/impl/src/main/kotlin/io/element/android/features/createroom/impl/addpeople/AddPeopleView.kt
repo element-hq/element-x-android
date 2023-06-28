@@ -42,7 +42,7 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -107,7 +107,7 @@ fun AddPeopleViewTopBar(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 onClick = onNextPressed,
             ) {
-                val textActionResId = if (hasSelectedUsers) StringR.string.action_next else StringR.string.action_skip
+                val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip
                 Text(
                     text = stringResource(id = textActionResId),
                     fontSize = 16.sp,

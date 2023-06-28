@@ -78,7 +78,8 @@ private fun List<Reaction>?.map(): List<EventReaction> {
     return this?.map {
         EventReaction(
             key = it.key,
-            count = it.count.toLong()
+            count = it.count.toLong(),
+            senderIds = it.senders.map { sender -> UserId(sender) }
         )
     } ?: emptyList()
 }

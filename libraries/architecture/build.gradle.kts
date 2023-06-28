@@ -26,4 +26,8 @@ dependencies {
     api(libs.dagger)
     api(libs.appyx.core)
     api(libs.androidx.lifecycle.runtime)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.test.truth)
 }

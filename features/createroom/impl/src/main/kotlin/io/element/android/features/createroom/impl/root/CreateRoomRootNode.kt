@@ -16,7 +16,7 @@
 
 package io.element.android.features.createroom.impl.root
 
-import android.content.Context
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,24 +29,18 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
-import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.ui.strings.R
 import io.element.android.services.analytics.api.AnalyticsService
-import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class CreateRoomRootNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: CreateRoomRootPresenter,
-    private val matrixClient: MatrixClient,
-    private val buildMeta: BuildMeta,
     private val analyticsService: AnalyticsService,
+    private val inviteFriendsUseCase: InviteFriendsUseCase,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
@@ -73,31 +67,18 @@ class CreateRoomRootNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val context = LocalContext.current
+        val activity = LocalContext.current as Activity
         CreateRoomRootView(
             state = state,
             modifier = modifier,
             onClosePressed = this::navigateUp,
             onNewRoomClicked = callback::onCreateNewRoom,
             onOpenDM = callback::onStartChatSuccess,
-            onInviteFriendsClicked = { invitePeople(context) },
+            onInviteFriendsClicked = { invitePeople(activity) }
         )
     }
 
-    private fun invitePeople(context: Context) {
-        val permalinkResult = PermalinkBuilder.permalinkForUser(matrixClient.sessionId)
-        permalinkResult.onSuccess { permalink ->
-            val appName = buildMeta.applicationName
-            startSharePlainTextIntent(
-                context = context,
-                activityResultLauncher = null,
-                chooserTitle = context.getString(R.string.action_invite_friends),
-                text = context.getString(R.string.invite_friends_text, appName, permalink),
-                extraTitle = context.getString(R.string.invite_friends_rich_title, appName),
-                noActivityFoundMessage = context.getString(io.element.android.libraries.androidutils.R.string.error_no_compatible_app_found)
-            )
-        }.onFailure {
-            Timber.e(it)
-        }
+    private fun invitePeople(activity: Activity) {
+        inviteFriendsUseCase.execute(activity)
     }
 }
