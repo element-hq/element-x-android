@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun DropdownMenuItem(
@@ -55,6 +56,14 @@ fun DropdownMenuItem(
     )
 }
 
+@Composable
+fun DropdownMenuItemText(text: String) {
+    Text(
+        text = text,
+        style = ElementTheme.typography.fontBodyLgRegular
+    )
+}
+
 @Preview(group = PreviewGroup.Menus)
 @Composable
 internal fun DropdownMenuItemPreview() = ElementThemedPreview { ContentToPreview() }
@@ -62,7 +71,7 @@ internal fun DropdownMenuItemPreview() = ElementThemedPreview { ContentToPreview
 @Composable
 private fun ContentToPreview() {
     DropdownMenuItem(
-        text = { Text(text = "Item") },
+        text = { DropdownMenuItemText(text = "Item") },
         onClick = {},
         leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
         trailingIcon = { Icon(Icons.Default.Share, contentDescription = null) },

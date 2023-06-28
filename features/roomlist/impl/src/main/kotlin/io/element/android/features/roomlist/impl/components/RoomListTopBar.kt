@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
@@ -153,7 +154,7 @@ private fun DefaultRoomListTopBar(
                         showMenu = false
                         onMenuActionClicked(RoomListMenuAction.InviteFriends)
                     },
-                    text = { Text(stringResource(id = CommonStrings.action_invite)) },
+                    text = { DropdownMenuItemText(stringResource(id = CommonStrings.action_invite)) },
                     leadingIcon = { Icon(Icons.Default.Share, contentDescription = null) }
                 )
                 DropdownMenuItem(
@@ -161,7 +162,7 @@ private fun DefaultRoomListTopBar(
                         showMenu = false
                         onMenuActionClicked(RoomListMenuAction.ReportBug)
                     },
-                    text = { Text(stringResource(id = CommonStrings.common_report_a_bug)) },
+                    text = { DropdownMenuItemText(stringResource(id = CommonStrings.common_report_a_bug)) },
                     leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) }
                 )
             }
