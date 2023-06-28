@@ -39,8 +39,8 @@ import coil.request.ImageRequest
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
-import io.element.android.libraries.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * An avatar that the user has selected, but which has not yet been uploaded to Matrix.
@@ -69,7 +69,7 @@ fun UnsavedAvatar(
             contentDescription = null,
         )
     } else {
-        Box(modifier = commonModifier.background(LocalColors.current.quinary)) {
+        Box(modifier = commonModifier.background(ElementTheme.legacyColors.quinary)) {
             Icon(
                 imageVector = Icons.Outlined.AddAPhoto,
                 contentDescription = "",

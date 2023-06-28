@@ -26,7 +26,7 @@ import io.element.android.libraries.theme.compound.generated.internal.LightDesig
 import io.element.android.libraries.theme.compound.generated.SemanticColors
 
 /**
- * Element color palette.
+ * Element Android legacy color palette.
  *
  * ## IMPORTANT!
  * **We should not add any new colors here, all new colors should come from [SemanticColors] instead.**

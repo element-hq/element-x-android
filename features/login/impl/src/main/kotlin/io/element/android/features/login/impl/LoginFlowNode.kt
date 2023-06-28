@@ -18,6 +18,7 @@ package io.element.android.features.login.impl
 
 import android.app.Activity
 import android.os.Parcelable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -45,9 +46,9 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.theme.ElementTheme
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -155,7 +156,7 @@ class LoginFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         activity = LocalContext.current as? Activity
-        darkTheme = !ElementTheme.colors.isLight
+        darkTheme = !ElementTheme.isLightTheme
         DisposableEffect(Unit) {
             onDispose {
                 activity = null

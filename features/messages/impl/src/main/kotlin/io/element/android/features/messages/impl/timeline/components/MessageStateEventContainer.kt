@@ -49,7 +49,7 @@ fun MessageStateEventContainer(
     content: @Composable () -> Unit = {},
 ) {
     val backgroundColor = if (isHighlighted) {
-        ElementTheme.colors.messageHighlightedBackground
+        ElementTheme.legacyColors.messageHighlightedBackground
     } else {
         Color.Companion.Transparent
     }
