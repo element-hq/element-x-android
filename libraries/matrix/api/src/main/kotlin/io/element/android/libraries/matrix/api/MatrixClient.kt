@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -35,7 +36,6 @@ import java.io.Closeable
 interface MatrixClient : Closeable {
     val sessionId: SessionId
     val roomSummaryDataSource: RoomSummaryDataSource
-    val invitesDataSource: RoomSummaryDataSource
     val mediaLoader: MatrixMediaLoader
     fun getRoom(roomId: RoomId): MatrixRoom?
     fun findDM(userId: UserId): MatrixRoom?
@@ -45,8 +45,7 @@ interface MatrixClient : Closeable {
     suspend fun createDM(userId: UserId): Result<RoomId>
     suspend fun getProfile(userId: UserId): Result<MatrixUser>
     suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
-    fun startSync()
-    fun stopSync()
+    fun syncService(): SyncService
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
     fun notificationService(): NotificationService
@@ -60,6 +59,5 @@ interface MatrixClient : Closeable {
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String?>
     suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>
-    fun onSlidingSyncUpdate()
     fun roomMembershipObserver(): RoomMembershipObserver
 }

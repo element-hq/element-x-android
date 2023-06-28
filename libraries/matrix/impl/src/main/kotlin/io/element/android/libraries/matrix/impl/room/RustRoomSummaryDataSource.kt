@@ -19,186 +19,104 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
-import io.element.android.libraries.matrix.impl.sync.roomListDiff
-import io.element.android.libraries.matrix.impl.sync.state
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.RoomListEntry
-import org.matrix.rustcomponents.sdk.SlidingSync
-import org.matrix.rustcomponents.sdk.SlidingSyncList
-import org.matrix.rustcomponents.sdk.SlidingSyncListRoomsListDiff
-import org.matrix.rustcomponents.sdk.SlidingSyncSelectiveModeBuilder
-import org.matrix.rustcomponents.sdk.SlidingSyncListLoadingState
-import org.matrix.rustcomponents.sdk.UpdateSummary
+import org.matrix.rustcomponents.sdk.RoomList
+import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
+import org.matrix.rustcomponents.sdk.RoomListException
+import org.matrix.rustcomponents.sdk.RoomListInput
+import org.matrix.rustcomponents.sdk.RoomListLoadingState
+import org.matrix.rustcomponents.sdk.RoomListRange
+import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceState
 import timber.log.Timber
-import java.io.Closeable
-import java.util.UUID
 
 internal class RustRoomSummaryDataSource(
-    private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
-    private val slidingSync: SlidingSync,
-    private val slidingSyncListFlow: Flow<SlidingSyncList>,
-    private val coroutineDispatchers: CoroutineDispatchers,
-    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
-) : RoomSummaryDataSource, Closeable {
+    private val roomListService: RoomListService,
+    private val sessionCoroutineScope: CoroutineScope,
+    coroutineDispatchers: CoroutineDispatchers,
+    roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
+) : RoomSummaryDataSource {
 
-    private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
+    private val allRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
+    private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
 
-    private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
-    private val state = MutableStateFlow(SlidingSyncListLoadingState.NOT_LOADED)
+    private val allRoomsLoadingState: MutableStateFlow<RoomSummaryDataSource.LoadingState> = MutableStateFlow(RoomSummaryDataSource.LoadingState.NotLoaded)
+    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, roomListService, roomSummaryDetailsFactory)
+    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, roomListService, roomSummaryDetailsFactory)
 
-    fun init() {
-        coroutineScope.launch {
-            val slidingSyncList = slidingSyncListFlow.first()
-            val summaries = slidingSyncList.currentRoomList().map(::buildSummaryForRoomListEntry)
-            updateRoomSummaries {
-                addAll(summaries)
-            }
-
-            slidingSyncList.roomListDiff(this)
-                .onEach { diffs ->
-                    updateRoomSummaries {
-                        applyDiff(diffs)
-                    }
-                }
+    init {
+        sessionCoroutineScope.launch(coroutineDispatchers.computation) {
+            val allRooms = roomListService.allRooms()
+            allRooms
+                .observeEntriesWithProcessor(allRoomsListProcessor)
                 .launchIn(this)
 
-            slidingSyncList.state(this)
-                .onEach { SlidingSyncListLoadingState ->
-                    Timber.v("New sliding sync state: $SlidingSyncListLoadingState")
-                    state.value = SlidingSyncListLoadingState
+            allRooms
+                .loadingStateFlow()
+                .map { it.toRoomSummaryDataSourceLoadingState() }
+                .onEach {
+                    allRoomsLoadingState.value = it
                 }.launchIn(this)
+
+            launch {
+                // Wait until running, as invites is only available after that
+                roomListService.stateFlow().first {
+                    it == RoomListServiceState.RUNNING
+                }
+                roomListService.invites()
+                    .observeEntriesWithProcessor(inviteRoomsListProcessor)
+                    .launchIn(this)
+            }
         }
-
-        slidingSyncUpdateFlow
-            .onEach {
-                didReceiveSyncUpdate(it)
-            }.launchIn(coroutineScope)
     }
 
-    override fun close() {
-        runBlocking { slidingSyncListFlow.firstOrNull() }?.close()
-        coroutineScope.cancel()
+    override fun allRooms(): StateFlow<List<RoomSummary>> {
+        return allRooms
     }
 
-    override fun roomSummaries(): StateFlow<List<RoomSummary>> {
-        return roomSummaries
+    override fun inviteRooms(): StateFlow<List<RoomSummary>> {
+        return inviteRooms
     }
 
-    override fun setSlidingSyncRange(range: IntRange) {
+    override fun allRoomsLoadingState(): StateFlow<RoomSummaryDataSource.LoadingState> {
+        return allRoomsLoadingState
+    }
+
+    override fun updateRoomListVisibleRange(range: IntRange) {
         Timber.v("setVisibleRange=$range")
-        coroutineScope.launch {
-            val slidingSyncMode = SlidingSyncSelectiveModeBuilder()
-                .addRange(range.first.toUInt(), range.last.toUInt())
-            slidingSyncListFlow.first().setSyncMode(slidingSyncMode)
-        }
-    }
-
-    private suspend fun didReceiveSyncUpdate(summary: UpdateSummary) {
-        Timber.v("UpdateRooms with identifiers: ${summary.rooms}")
-        if (state.value != SlidingSyncListLoadingState.FULLY_LOADED) {
-            return
-        }
-        updateRoomSummaries {
-            for (identifier in summary.rooms) {
-                val index = indexOfFirst { it.identifier() == identifier }
-                if (index == -1) {
-                    continue
-                }
-                val updatedRoomSummary = buildRoomSummaryForIdentifier(identifier)
-                set(index, updatedRoomSummary)
+        sessionCoroutineScope.launch {
+            try {
+                val ranges = listOf(RoomListRange(range.first.toUInt(), range.last.toUInt()))
+                roomListService.applyInput(
+                    RoomListInput.Viewport(ranges)
+                )
+            } catch (exception: RoomListException) {
+                Timber.e(exception, "Failed updating visible range")
             }
         }
     }
-
-    private fun MutableList<RoomSummary>.applyDiff(diff: SlidingSyncListRoomsListDiff) {
-        fun MutableList<RoomSummary>.fillUntil(untilIndex: Int) {
-            repeat((size - 1 until untilIndex).count()) {
-                add(buildEmptyRoomSummary())
-            }
-        }
-        Timber.v("ApplyDiff: $diff for list with size: $size")
-        when (diff) {
-            is SlidingSyncListRoomsListDiff.Append -> {
-                val roomSummaries = diff.values.map {
-                    buildSummaryForRoomListEntry(it)
-                }
-                addAll(roomSummaries)
-            }
-            is SlidingSyncListRoomsListDiff.PushBack -> {
-                val roomSummary = buildSummaryForRoomListEntry(diff.value)
-                add(roomSummary)
-            }
-            is SlidingSyncListRoomsListDiff.PushFront -> {
-                val roomSummary = buildSummaryForRoomListEntry(diff.value)
-                add(0, roomSummary)
-            }
-            is SlidingSyncListRoomsListDiff.Set -> {
-                fillUntil(diff.index.toInt())
-                val roomSummary = buildSummaryForRoomListEntry(diff.value)
-                set(diff.index.toInt(), roomSummary)
-            }
-            is SlidingSyncListRoomsListDiff.Insert -> {
-                val roomSummary = buildSummaryForRoomListEntry(diff.value)
-                add(diff.index.toInt(), roomSummary)
-            }
-            is SlidingSyncListRoomsListDiff.Remove -> {
-                removeAt(diff.index.toInt())
-            }
-            is SlidingSyncListRoomsListDiff.Reset -> {
-                clear()
-                addAll(diff.values.map { buildSummaryForRoomListEntry(it) })
-            }
-            SlidingSyncListRoomsListDiff.PopBack -> {
-                removeFirstOrNull()
-            }
-            SlidingSyncListRoomsListDiff.PopFront -> {
-                removeLastOrNull()
-            }
-            SlidingSyncListRoomsListDiff.Clear -> {
-                clear()
-            }
-        }
-    }
-
-    private fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
-        return when (entry) {
-            RoomListEntry.Empty -> buildEmptyRoomSummary()
-            is RoomListEntry.Invalidated -> buildRoomSummaryForIdentifier(entry.roomId)
-            is RoomListEntry.Filled -> buildRoomSummaryForIdentifier(entry.roomId)
-        }
-    }
-
-    private fun buildEmptyRoomSummary(): RoomSummary {
-        return RoomSummary.Empty(UUID.randomUUID().toString())
-    }
-
-    private fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary {
-        val slidingSyncRoom = slidingSync.getRoom(identifier) ?: return RoomSummary.Empty(identifier)
-        val fullRoom = slidingSyncRoom.fullRoom()
-        val roomSummary = RoomSummary.Filled(
-            details = roomSummaryDetailsFactory.create(slidingSyncRoom, fullRoom)
-        )
-        fullRoom?.destroy()
-        slidingSyncRoom.destroy()
-        return roomSummary
-    }
-
-    private suspend fun updateRoomSummaries(block: MutableList<RoomSummary>.() -> Unit) =
-        withContext(coroutineDispatchers.diffUpdateDispatcher) {
-            val mutableRoomSummaries = roomSummaries.value.toMutableList()
-            block(mutableRoomSummaries)
-            roomSummaries.value = mutableRoomSummaries
-        }
 }
+
+private fun RoomListLoadingState.toRoomSummaryDataSourceLoadingState(): RoomSummaryDataSource.LoadingState {
+    return when (this) {
+        is RoomListLoadingState.Loaded -> RoomSummaryDataSource.LoadingState.Loaded(maximumNumberOfRooms?.toInt() ?: 0)
+        is RoomListLoadingState.NotLoaded -> RoomSummaryDataSource.LoadingState.NotLoaded
+    }
+}
+
+private fun RoomList.observeEntriesWithProcessor(processor: RoomSummaryListProcessor): Flow<RoomListEntriesUpdate> {
+    return entriesFlow { roomListEntries ->
+        processor.postEntries(roomListEntries)
+    }.onEach { update ->
+        processor.postUpdate(update)
+    }
+}
+

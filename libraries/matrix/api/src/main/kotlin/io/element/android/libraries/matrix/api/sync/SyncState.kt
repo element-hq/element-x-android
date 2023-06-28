@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.networkmonitor.test
+package io.element.android.libraries.matrix.api.sync
 
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
-import kotlinx.coroutines.flow.MutableStateFlow
-
-class FakeNetworkMonitor(initialStatus: NetworkStatus = NetworkStatus.Online) : NetworkMonitor {
-    override val connectivity = MutableStateFlow(initialStatus)
+enum class SyncState {
+    Idle,
+    Syncing,
+    InError,
+    Terminated,
 }

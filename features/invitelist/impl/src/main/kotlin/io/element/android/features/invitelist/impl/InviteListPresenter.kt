@@ -54,8 +54,8 @@ class InviteListPresenter @Inject constructor(
     @Composable
     override fun present(): InviteListState {
         val invites by client
-            .invitesDataSource
-            .roomSummaries()
+            .roomSummaryDataSource
+            .inviteRooms()
             .collectAsState()
 
         var seenInvites by remember { mutableStateOf<Set<RoomId>>(emptySet()) }

@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.networkmonitor.test
+package io.element.android.libraries.matrix.impl.sync
 
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
-import kotlinx.coroutines.flow.MutableStateFlow
+import io.element.android.libraries.matrix.api.sync.SyncState
+import org.matrix.rustcomponents.sdk.RoomListServiceState
 
-class FakeNetworkMonitor(initialStatus: NetworkStatus = NetworkStatus.Online) : NetworkMonitor {
-    override val connectivity = MutableStateFlow(initialStatus)
+internal fun RoomListServiceState.toSyncState(): SyncState {
+    return when (this) {
+        RoomListServiceState.INIT,
+        RoomListServiceState.SETTING_UP -> SyncState.Idle
+        RoomListServiceState.RUNNING -> SyncState.Syncing
+        RoomListServiceState.ERROR -> SyncState.InError
+        RoomListServiceState.TERMINATED -> SyncState.Terminated
+    }
 }

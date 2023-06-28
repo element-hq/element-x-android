@@ -46,10 +46,10 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - starts empty, adds invites when received`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = InviteListPresenter(
             FakeMatrixClient(
-                invitesDataSource = invitesDataSource,
+                roomSummaryDataSource = roomSummaryDataSource,
             ),
             FakeSeenInvitesStore(),
             FakeAnalyticsService(),
@@ -60,7 +60,7 @@ class InviteListPresenterTests {
             val initialState = awaitItem()
             Truth.assertThat(initialState.inviteList).isEmpty()
 
-            invitesDataSource.postRoomSummary(listOf(aRoomSummary()))
+            roomSummaryDataSource.postInviteRooms(listOf(aRoomSummary()))
 
             val withInviteState = awaitItem()
             Truth.assertThat(withInviteState.inviteList.size).isEqualTo(1)
@@ -71,10 +71,10 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - uses user ID and avatar for direct invites`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withDirectChatInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withDirectChatInvitation()
         val presenter = InviteListPresenter(
             FakeMatrixClient(
-                invitesDataSource = invitesDataSource,
+                roomSummaryDataSource = roomSummaryDataSource,
             ),
             FakeSeenInvitesStore(),
             FakeAnalyticsService(),
@@ -101,10 +101,10 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - includes sender details for room invites`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val presenter = InviteListPresenter(
             FakeMatrixClient(
-                invitesDataSource = invitesDataSource,
+                roomSummaryDataSource = roomSummaryDataSource,
             ),
             FakeSeenInvitesStore(),
             FakeAnalyticsService(),
@@ -129,10 +129,10 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - shows confirm dialog for declining direct chat invites`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withDirectChatInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withDirectChatInvitation()
         val presenter = InviteListPresenter(
             FakeMatrixClient(
-                invitesDataSource = invitesDataSource,
+                roomSummaryDataSource = roomSummaryDataSource,
             ),
             FakeSeenInvitesStore(),
             FakeAnalyticsService(),
@@ -154,10 +154,10 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - shows confirm dialog for declining room invites`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val presenter = InviteListPresenter(
             FakeMatrixClient(
-                invitesDataSource = invitesDataSource,
+                roomSummaryDataSource = roomSummaryDataSource,
             ),
             FakeSeenInvitesStore(),
             FakeAnalyticsService(),
@@ -179,10 +179,10 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - hides confirm dialog when cancelling`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val presenter = InviteListPresenter(
             FakeMatrixClient(
-                invitesDataSource = invitesDataSource,
+                roomSummaryDataSource = roomSummaryDataSource,
             ),
             FakeSeenInvitesStore(),
             FakeAnalyticsService(),
@@ -204,9 +204,9 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - declines invite after confirming`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = FakeMatrixClient(
-            invitesDataSource = invitesDataSource,
+            roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
@@ -230,9 +230,9 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - declines invite after confirming and sets state on error`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = FakeMatrixClient(
-            invitesDataSource = invitesDataSource,
+            roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
@@ -261,9 +261,9 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - dismisses declining error state`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = FakeMatrixClient(
-            invitesDataSource = invitesDataSource,
+            roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
@@ -293,9 +293,9 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - accepts invites and sets state on success`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = FakeMatrixClient(
-            invitesDataSource = invitesDataSource,
+            roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
@@ -316,9 +316,9 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - accepts invites and sets state on error`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = FakeMatrixClient(
-            invitesDataSource = invitesDataSource,
+            roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
@@ -341,9 +341,9 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - dismisses accepting error state`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = FakeMatrixClient(
-            invitesDataSource = invitesDataSource,
+            roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
@@ -368,11 +368,11 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - stores seen invites when received`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val store = FakeSeenInvitesStore()
         val presenter = InviteListPresenter(
             FakeMatrixClient(
-                invitesDataSource = invitesDataSource,
+                roomSummaryDataSource = roomSummaryDataSource,
             ),
             store,
             FakeAnalyticsService(),
@@ -383,19 +383,19 @@ class InviteListPresenterTests {
             awaitItem()
 
             // When one invite is received, that ID is saved
-            invitesDataSource.postRoomSummary(listOf(aRoomSummary()))
+            roomSummaryDataSource.postInviteRooms(listOf(aRoomSummary()))
 
             awaitItem()
             Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID))
 
             // When a second is added, both are saved
-            invitesDataSource.postRoomSummary(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
+            roomSummaryDataSource.postInviteRooms(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
 
             awaitItem()
             Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID, A_ROOM_ID_2))
 
             // When they're both dismissed, an empty set is saved
-            invitesDataSource.postRoomSummary(listOf())
+            roomSummaryDataSource.postInviteRooms(listOf())
 
             awaitItem()
             Truth.assertThat(store.getProvidedRoomIds()).isEmpty()
@@ -404,12 +404,12 @@ class InviteListPresenterTests {
 
     @Test
     fun `present - marks invite as new if they're unseen`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val store = FakeSeenInvitesStore()
         store.publishRoomIds(setOf(A_ROOM_ID))
         val presenter = InviteListPresenter(
             FakeMatrixClient(
-                invitesDataSource = invitesDataSource,
+                roomSummaryDataSource = roomSummaryDataSource,
             ),
             store,
             FakeAnalyticsService(),
@@ -419,7 +419,7 @@ class InviteListPresenterTests {
         }.test {
             awaitItem()
 
-            invitesDataSource.postRoomSummary(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
+            roomSummaryDataSource.postInviteRooms(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
             skipItems(1)
 
             val withInviteState = awaitItem()
@@ -432,7 +432,7 @@ class InviteListPresenterTests {
     }
 
     private suspend fun FakeRoomSummaryDataSource.withRoomInvitation(): FakeRoomSummaryDataSource {
-        postRoomSummary(
+        postInviteRooms(
             listOf(
                 RoomSummary.Filled(
                     RoomSummaryDetails(
@@ -461,7 +461,7 @@ class InviteListPresenterTests {
     }
 
     private suspend fun FakeRoomSummaryDataSource.withDirectChatInvitation(): FakeRoomSummaryDataSource {
-        postRoomSummary(
+        postInviteRooms(
             listOf(
                 RoomSummary.Filled(
                     RoomSummaryDetails(

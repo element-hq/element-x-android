@@ -23,20 +23,38 @@ import kotlinx.coroutines.flow.StateFlow
 
 class FakeRoomSummaryDataSource : RoomSummaryDataSource {
 
-    private val roomSummariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
+    private val allRoomSummariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
+    private val inviteRoomSummariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
+    private val allRoomsLoadingStateFlow = MutableStateFlow<RoomSummaryDataSource.LoadingState>(RoomSummaryDataSource.LoadingState.NotLoaded)
 
-    suspend fun postRoomSummary(roomSummaries: List<RoomSummary>) {
-        roomSummariesFlow.emit(roomSummaries)
+    suspend fun postAllRooms(roomSummaries: List<RoomSummary>) {
+        allRoomSummariesFlow.emit(roomSummaries)
     }
 
-    override fun roomSummaries(): StateFlow<List<RoomSummary>> {
-        return roomSummariesFlow
+    suspend fun postInviteRooms(roomSummaries: List<RoomSummary>) {
+        inviteRoomSummariesFlow.emit(roomSummaries)
+    }
+
+    suspend fun postLoadingState(loadingState: RoomSummaryDataSource.LoadingState) {
+        allRoomsLoadingStateFlow.emit(loadingState)
+    }
+
+    override fun allRoomsLoadingState(): StateFlow<RoomSummaryDataSource.LoadingState> {
+        return allRoomsLoadingStateFlow
+    }
+
+    override fun allRooms(): StateFlow<List<RoomSummary>> {
+        return allRoomSummariesFlow
+    }
+
+    override fun inviteRooms(): StateFlow<List<RoomSummary>> {
+        return inviteRoomSummariesFlow
     }
 
     var latestSlidingSyncRange: IntRange? = null
         private set
 
-    override fun setSlidingSyncRange(range: IntRange) {
+    override fun updateRoomListVisibleRange(range: IntRange) {
         latestSlidingSyncRange = range
     }
 }

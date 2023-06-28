@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -32,22 +33,26 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
+import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
-import org.matrix.rustcomponents.sdk.SlidingSyncRoom
-import org.matrix.rustcomponents.sdk.UpdateSummary
+import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
@@ -55,55 +60,80 @@ import java.io.File
 
 class RustMatrixRoom(
     override val sessionId: SessionId,
-    private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
-    private val slidingSyncRoom: SlidingSyncRoom,
+    private val roomListItem: RoomListItem,
     private val innerRoom: Room,
-    private val coroutineScope: CoroutineScope,
+    sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val clock: SystemClock,
+    private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
 ) : MatrixRoom {
+
+    override val roomId = RoomId(innerRoom.id())
+
+    private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState>
         get() = _membersStateFlow
 
     private var _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
+    private val isInit = MutableStateFlow(false)
+    private val syncUpdateFlow = MutableStateFlow(systemClock.epochMillis())
 
     private val timeline by lazy {
         RustMatrixTimeline(
             matrixRoom = this,
             innerRoom = innerRoom,
-            slidingSyncRoom = slidingSyncRoom,
-            coroutineScope = coroutineScope,
+            roomCoroutineScope = roomCoroutineScope,
             coroutineDispatchers = coroutineDispatchers
         )
     }
 
     override fun syncUpdateFlow(): Flow<Long> {
-        return slidingSyncUpdateFlow
-            .filter {
-                it.rooms.contains(roomId.value)
-            }
-            .map {
-                clock.epochMillis()
-            }
-            .onStart { emit(clock.epochMillis()) }
+        return syncUpdateFlow
     }
 
     override fun timeline(): MatrixTimeline {
         return timeline
     }
 
-    override fun close() {
-        innerRoom.destroy()
-        slidingSyncRoom.destroy()
+    override fun open(): Result<Unit> {
+        if (isInit.value) return Result.failure(IllegalStateException("Listener already registered"))
+        val settings = RoomSubscription(
+            requiredState = listOf(
+                RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
+                RequiredState(key = EventType.STATE_ROOM_TOPIC, value = ""),
+                RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
+                RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
+            ),
+            timelineLimit = null
+        )
+        roomListItem.subscribe(settings)
+        roomCoroutineScope.launch(coroutineDispatchers.computation) {
+            innerRoom.timelineDiffFlow { initialList ->
+                timeline.postItems(initialList)
+            }.onEach {
+                syncUpdateFlow.value = systemClock.epochMillis()
+                timeline.postDiff(it)
+            }.launchIn(this)
+            fetchMembers()
+        }
+        isInit.value = true
+        return Result.success(Unit)
     }
 
-    override val roomId = RoomId(innerRoom.id())
+    override fun close() {
+        if (isInit.value) {
+            isInit.value = false
+            roomCoroutineScope.cancel()
+            roomListItem.unsubscribe()
+            innerRoom.destroy()
+            roomListItem.destroy()
+        }
+    }
 
     override val name: String?
         get() {
-            return slidingSyncRoom.name()
+            return roomListItem.name()
         }
 
     override val bestName: String
@@ -329,6 +359,12 @@ class RustMatrixRoom(
                 innerRoom.setTopic(topic)
             }
         }
+
+    private suspend fun fetchMembers() = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.fetchMembers()
+        }
+    }
 
     override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {

@@ -65,7 +65,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
         var results: SearchBarResultState<ImmutableList<RoomSummaryDetails>> by remember { mutableStateOf(SearchBarResultState.NotSearching()) }
         val forwardingActionState: MutableState<Async<ImmutableList<RoomId>>> = remember { mutableStateOf(Async.Uninitialized) }
 
-        val summaries by client.roomSummaryDataSource.roomSummaries().collectAsState()
+        val summaries by client.roomSummaryDataSource.allRooms().collectAsState()
 
         LaunchedEffect(query, summaries) {
             val filteredSummaries = summaries.filterIsInstance<RoomSummary.Filled>()

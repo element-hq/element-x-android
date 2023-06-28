@@ -20,27 +20,24 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
 import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.SlidingSyncRoom
+import org.matrix.rustcomponents.sdk.RoomListItem
 
 class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
 
-    fun create(slidingSyncRoom: SlidingSyncRoom, room: Room?): RoomSummaryDetails {
-        val latestRoomMessage = slidingSyncRoom.latestRoomMessage()?.use {
+    fun create(roomListItem: RoomListItem, room: Room?): RoomSummaryDetails {
+        val latestRoomMessage = roomListItem.latestEvent()?.use {
             roomMessageFactory.create(it)
         }
-
         return RoomSummaryDetails(
-            roomId = RoomId(slidingSyncRoom.roomId()),
-            name = slidingSyncRoom.name() ?: slidingSyncRoom.roomId(),
+            roomId = RoomId(roomListItem.id()),
+            name = roomListItem.name() ?: roomListItem.id(),
             canonicalAlias = room?.canonicalAlias(),
             isDirect = room?.isDirect() ?: false,
             avatarURLString = room?.avatarUrl(),
-            unreadNotificationCount = slidingSyncRoom.unreadNotifications().use { it.notificationCount().toInt() },
+            unreadNotificationCount = roomListItem.unreadNotifications().use { it.notificationCount().toInt() },
             lastMessage = latestRoomMessage,
             lastMessageTimestamp = latestRoomMessage?.originServerTs,
             inviter = room?.inviter()?.let(RoomMemberMapper::map),
         )
     }
-
-
 }

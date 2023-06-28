@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.room.ForwardEventException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.SlidingSync
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
@@ -31,10 +32,10 @@ import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Helper to forward event contents from a room to a set of other rooms.
- * @param slidingSync the [SlidingSync] to fetch room instances to forward the event to
+ * @param roomListService the [RoomListService] to fetch room instances to forward the event to
  */
 class RoomContentForwarder(
-    private val slidingSync: SlidingSync,
+    private val roomListService: RoomListService,
 ) {
 
     /**
@@ -51,7 +52,7 @@ class RoomContentForwarder(
         timeoutMs: Long = 5000L
     ) {
         val content = fromRoom.getTimelineEventContentByEventId(eventId.value)
-        val targetSlidingSyncRooms = toRoomIds.mapNotNull { roomId -> slidingSync.getRoom(roomId.value) }
+        val targetSlidingSyncRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
         val targetRooms = targetSlidingSyncRooms.mapNotNull { slidingSyncRoom -> slidingSyncRoom.use { it.fullRoom() } }
         val failedForwardingTo = mutableSetOf<RoomId>()
         targetRooms.parallelMap { room ->
@@ -79,7 +80,7 @@ class RoomContentForwarder(
         }
     }
 
-    private object NoOpTimelineListener: TimelineListener {
+    private object NoOpTimelineListener : TimelineListener {
         override fun onUpdate(diff: TimelineDiff) = Unit
     }
 }
