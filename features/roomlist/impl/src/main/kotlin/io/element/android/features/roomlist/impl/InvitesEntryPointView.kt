@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,11 +34,11 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -55,15 +54,14 @@ fun InvitesEntryPointView(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
                 .clickable(role = Role.Button, onClick = onInvitesClicked)
-                .padding(start = 24.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
+                .padding(start = 24.dp, end = 16.dp)
                 .align(Alignment.CenterEnd)
                 .heightIn(min = 40.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(CommonStrings.action_invites_list),
-                fontSize = 14.sp,
-                style = MaterialTheme.typography.bodyMedium,
+                style = ElementTheme.typography.fontBodyMdMedium,
             )
 
             if (state == InvitesState.NewInvites) {
