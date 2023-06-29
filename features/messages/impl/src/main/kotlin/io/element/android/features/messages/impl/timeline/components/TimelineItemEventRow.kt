@@ -268,7 +268,7 @@ private fun MessageEventBubbleContent(
             }
         } else {
             Box(modifier) {
-                ContentView(modifier = contentModifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp))
+                ContentView(modifier = contentModifier)
                 TimelineEventTimestampView(
                     event = event,
                     onClick = onTimestampClicked,
@@ -316,7 +316,11 @@ private fun MessageEventBubbleContent(
             val contentModifier = if (isMediaItem) {
                 Modifier.clip(RoundedCornerShape(12.dp))
             } else {
-                Modifier
+                if (inReplyToDetails != null) {
+                    Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
+                } else {
+                    Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
+                }
             }
 
             ContentAndTimestampView(
