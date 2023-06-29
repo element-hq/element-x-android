@@ -368,6 +368,13 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Pick file from storage`() = runTest {
         val room = FakeMatrixRoom()
+        room.givenProgressCallbackValues(
+            listOf(
+                Pair(0, 10),
+                Pair(5, 10),
+                Pair(10, 10)
+            )
+        )
         val presenter = createPresenter(this, room = room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -376,7 +383,10 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
             val sendingState = awaitItem()
             assertThat(sendingState.showAttachmentSourcePicker).isFalse()
-            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending::class.java)
+            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending.Processing::class.java)
+            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(0f))
+            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(0.5f))
+            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(1f))
             val sentState = awaitItem()
             assertThat(sentState.attachmentsState).isEqualTo(AttachmentsState.None)
             assertThat(room.sendMediaCount).isEqualTo(1)

@@ -250,7 +250,7 @@ class MessageComposerPresenter @Inject constructor(
     ) {
         val progressCallback = object : ProgressCallback {
             override fun onProgress(current: Long, total: Long) {
-                attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total)
+                attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total.toFloat())
             }
         }
         mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback)
