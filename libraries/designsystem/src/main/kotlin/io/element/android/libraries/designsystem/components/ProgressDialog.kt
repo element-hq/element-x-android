@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,11 +37,6 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
-
-sealed interface ProgressDialogType {
-    data class Determinate(val progress: Float) : ProgressDialogType
-    object Indeterminate : ProgressDialogType
-}
 
 @Composable
 fun ProgressDialog(
@@ -73,6 +69,12 @@ fun ProgressDialog(
             }
         )
     }
+}
+
+@Immutable
+sealed interface ProgressDialogType {
+    data class Determinate(val progress: Float) : ProgressDialogType
+    object Indeterminate : ProgressDialogType
 }
 
 @Composable
