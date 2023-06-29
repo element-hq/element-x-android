@@ -85,6 +85,14 @@ fun TimelineView(
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
+    // Send an event to the presenter when the scrolling is finished, with the first visible index at the bottom.
+    val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
+    val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
+    LaunchedEffect(firstVisibleIndex, isScrollFinished) {
+        if (!isScrollFinished) return@LaunchedEffect
+        state.eventSink(TimelineEvents.OnScrollFinished(firstVisibleIndex))
+    }
+
     Box(modifier = modifier) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),

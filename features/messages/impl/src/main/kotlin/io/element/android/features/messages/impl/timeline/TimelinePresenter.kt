@@ -20,14 +20,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -52,6 +56,9 @@ class TimelinePresenter @Inject constructor(
             mutableStateOf(null)
         }
 
+        var lastReadMarkerIndex by rememberSaveable { mutableStateOf(Int.MAX_VALUE) }
+        var lastReadMarkerId by rememberSaveable { mutableStateOf<EventId?>(null) }
+
         val timelineItems = timelineItemsFactory
             .flow()
             .collectAsState()
@@ -64,6 +71,15 @@ class TimelinePresenter @Inject constructor(
             when (event) {
                 TimelineEvents.LoadMore -> localCoroutineScope.loadMore(paginationState.value)
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
+                is TimelineEvents.OnScrollFinished -> {
+                    // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
+                    val eventId = getLastEventIdBeforeOrAt(event.firstIndex, timelineItems.value) ?: return
+                    if (event.firstIndex <= lastReadMarkerIndex && eventId != lastReadMarkerId) {
+                        lastReadMarkerIndex = event.firstIndex
+                        lastReadMarkerId = eventId
+                        localCoroutineScope.sendReadReceipt(eventId)
+                    }
+                }
             }
         }
 
@@ -87,11 +103,24 @@ class TimelinePresenter @Inject constructor(
         )
     }
 
+    private fun getLastEventIdBeforeOrAt(index: Int, items: ImmutableList<TimelineItem>): EventId? {
+        for (item in items.subList(index, items.count())) {
+            if (item is TimelineItem.Event) {
+                return item.eventId
+            }
+        }
+        return null
+    }
+
     private fun CoroutineScope.loadMore(paginationState: MatrixTimeline.PaginationState) = launch {
         if (paginationState.canBackPaginate && !paginationState.isBackPaginating) {
             timeline.paginateBackwards(backPaginationEventLimit, backPaginationPageSize)
         } else {
             Timber.v("Can't back paginate as paginationState = $paginationState")
         }
+    }
+
+    private fun CoroutineScope.sendReadReceipt(eventId: EventId) = launch {
+        timeline.sendReadReceipt(eventId)
     }
 }

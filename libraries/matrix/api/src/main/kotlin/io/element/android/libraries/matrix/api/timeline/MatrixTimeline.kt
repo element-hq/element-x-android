@@ -32,4 +32,6 @@ interface MatrixTimeline {
 
     suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
     suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit>
+
+    suspend fun sendReadReceipt(eventId: EventId): Result<Unit>
 }

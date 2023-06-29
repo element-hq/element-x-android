@@ -107,4 +107,10 @@ class RustMatrixTimeline(
             Timber.v("Success back paginating for room ${matrixRoom.roomId}")
         }
     }
+
+    override suspend fun sendReadReceipt(eventId: EventId) = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.sendReadReceipt(eventId = eventId.value)
+        }
+    }
 }
