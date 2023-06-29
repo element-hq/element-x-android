@@ -213,29 +213,35 @@ private fun EditingModeView(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .padding(start = 12.dp)
     ) {
         Icon(
             resourceId = VectorIcons.Edit,
             contentDescription = stringResource(CommonStrings.common_editing),
-            tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(16.dp),
+            tint = ElementTheme.materialColors.secondary,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .size(16.dp),
         )
         Text(
             stringResource(CommonStrings.common_editing),
-            style = ElementTextStyles.Regular.caption2,
+            style = ElementTheme.typography.fontBodySmRegular,
             textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.weight(1f)
+            color = ElementTheme.materialColors.secondary,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .weight(1f)
         )
         Icon(
             imageVector = Icons.Default.Close,
             contentDescription = stringResource(CommonStrings.action_close),
-            tint = MaterialTheme.colorScheme.secondary,
+            tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
+                .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 12.dp)
                 .size(16.dp)
                 .clickable(
                     enabled = true,
@@ -243,8 +249,7 @@ private fun EditingModeView(
                     interactionSource = MutableInteractionSource(),
                     indication = rememberRipple(bounded = false)
                 ),
-
-            )
+        )
     }
 }
 
