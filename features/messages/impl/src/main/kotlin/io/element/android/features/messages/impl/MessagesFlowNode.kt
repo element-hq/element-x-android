@@ -29,6 +29,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
@@ -57,6 +58,7 @@ import kotlinx.parcelize.Parcelize
 class MessagesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val sendLocationEntryPoint: SendLocationEntryPoint,
 ) : BackstackNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -88,6 +90,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
+
+        @Parcelize
+        object SendLocation : NavTarget
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
@@ -123,6 +128,10 @@ class MessagesFlowNode @AssistedInject constructor(
                     override fun onReportMessage(eventId: EventId, senderId: UserId) {
                         backstack.push(NavTarget.ReportMessage(eventId, senderId))
                     }
+
+                    override fun onSendLocationClicked() {
+                        backstack.push(NavTarget.SendLocation)
+                    }
                 }
                 createNode<MessagesNode>(buildContext, listOf(callback))
             }
@@ -154,6 +163,9 @@ class MessagesFlowNode @AssistedInject constructor(
             is NavTarget.ReportMessage -> {
                 val inputs = ReportMessageNode.Inputs(navTarget.eventId, navTarget.senderId)
                 createNode<ReportMessageNode>(buildContext, listOf(inputs))
+            }
+            NavTarget.SendLocation -> {
+                sendLocationEntryPoint.createNode(this, buildContext)
             }
         }
     }

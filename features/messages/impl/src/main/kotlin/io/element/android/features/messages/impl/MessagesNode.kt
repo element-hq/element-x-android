@@ -57,6 +57,7 @@ class MessagesNode @AssistedInject constructor(
         fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo)
         fun onForwardEventClicked(eventId: EventId)
         fun onReportMessage(eventId: EventId, senderId: UserId)
+        fun onSendLocationClicked()
     }
 
     init {
@@ -93,6 +94,10 @@ class MessagesNode @AssistedInject constructor(
     override fun onReportContentClicked(eventId: EventId, senderId: UserId) {
         callback?.onReportMessage(eventId, senderId)
     }
+    
+    private fun onSendLocationClicked() {
+        callback?.onSendLocationClicked()
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -104,6 +109,7 @@ class MessagesNode @AssistedInject constructor(
             onEventClicked = this::onEventClicked,
             onPreviewAttachments = this::onPreviewAttachments,
             onUserDataClicked = this::onUserDataClicked,
+            onSendLocationClicked = this::onSendLocationClicked,
             modifier = modifier,
         )
     }

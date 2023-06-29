@@ -92,6 +92,7 @@ fun MessagesView(
     onEventClicked: (event: TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
+    onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
@@ -153,7 +154,8 @@ fun MessagesView(
                         state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
                     }
                 },
-                onReactionClicked = ::onEmojiReactionClicked
+                onReactionClicked = ::onEmojiReactionClicked,
+                onSendLocationClicked = onSendLocationClicked,
             )
         },
         snackbarHost = {
@@ -237,6 +239,7 @@ fun MessagesViewContent(
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -260,6 +263,7 @@ fun MessagesViewContent(
         if (state.userHasPermissionToSendMessage) {
             MessageComposerView(
                 state = state.composerState,
+                onSendLocationClicked = onSendLocationClicked,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(Alignment.Bottom)
@@ -347,5 +351,6 @@ private fun ContentToPreview(state: MessagesState) {
         onEventClicked = {},
         onPreviewAttachments = {},
         onUserDataClicked = {},
+        onSendLocationClicked = {},
     )
 }
