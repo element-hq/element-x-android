@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
 
@@ -30,18 +29,18 @@ anvil {
 }
 
 dependencies {
-    implementation(libs.dagger)
     api(projects.features.location.api)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.di)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.network)
     implementation(projects.libraries.core)
     implementation(libs.maplibre)
-    implementation(libs.network.retrofit)
     implementation(libs.maplibre.annotation)
-    implementation(libs.coil.compose)
-    implementation(libs.serialization.json)
-    implementation(libs.accompanist.permission)
+    implementation(projects.libraries.uiStrings)
+    implementation(libs.dagger)
+    implementation(projects.anvilannotations)
+    anvil(projects.anvilcodegen)
     ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)

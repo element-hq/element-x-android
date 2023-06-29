@@ -25,6 +25,7 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Collections
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 internal fun AttachmentsBottomSheet(
     state: MessageComposerState,
+    onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val localView = LocalView.current
@@ -78,7 +80,10 @@ internal fun AttachmentsBottomSheet(
             modifier = modifier,
             onDismissRequest = { isVisible = false }
         ) {
-            AttachmentSourcePickerMenu(eventSink = state.eventSink)
+            AttachmentSourcePickerMenu(
+                eventSink = state.eventSink,
+                onSendLocationClicked = onSendLocationClicked,
+            )
         }
     }
 }
@@ -87,6 +92,7 @@ internal fun AttachmentsBottomSheet(
 @Composable
 internal fun AttachmentSourcePickerMenu(
     eventSink: (MessageComposerEvents) -> Unit,
+    onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -112,6 +118,14 @@ internal fun AttachmentSourcePickerMenu(
             modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
             icon = { Icon(Icons.Default.Videocam, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
+        )
+        ListItem(
+            modifier = Modifier.clickable {
+                eventSink(MessageComposerEvents.PickAttachmentSource.Location)
+                onSendLocationClicked()
+            },
+            icon = { Icon(Icons.Default.LocationOn, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
         )
     }
 }

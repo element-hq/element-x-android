@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.api
+package io.element.android.features.location.impl.map
 
 import android.annotation.SuppressLint
+import android.view.Gravity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -47,11 +44,11 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
+import io.element.android.features.location.api.R
 import io.element.android.features.location.api.internal.buildTileServerUrl
+import io.element.android.features.location.impl.location.Location
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -68,7 +65,6 @@ fun MapView(
     modifier: Modifier = Modifier,
     mapState: MapState = rememberMapState(),
     darkMode: Boolean = !ElementTheme.isLightTheme,
-    onLocationClick: () -> Unit,
 ) {
     // When in preview, early return a Box with the received modifier preserving layout
     if (LocalInspectionMode.current) {
@@ -88,7 +84,10 @@ fun MapView(
     LaunchedEffect(darkMode) {
         mapView.awaitMap().let { map ->
             map.uiSettings.apply {
+                attributionGravity = Gravity.TOP
+                logoGravity = Gravity.TOP
                 isCompassEnabled = false
+                isRotateGesturesEnabled = false
             }
             map.setStyle(buildTileServerUrl(darkMode = darkMode)) { style ->
                 mapRefs = MapRefs(
@@ -180,20 +179,10 @@ fun MapView(
     }
 
     @Suppress("ModifierReused")
-    Box(modifier = modifier) {
-        AndroidView(factory = { mapView })
-        FloatingActionButton(
-            onClick = onLocationClick,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp),
-        ) {
-            Icon(
-                imageVector = Icons.Filled.LocationOn,
-                contentDescription = null,  // TODO
-            )
-        }
-    }
+    AndroidView(
+        factory = { mapView },
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -292,6 +281,5 @@ private fun ContentToPreview() {
                 )
             ).toImmutableList()
         ),
-        onLocationClick = {},
     )
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.api
+package io.element.android.features.location.impl
 
-/**
- * Represents a location sample emitted by the device's location subsystem.
- */
-data class Location(
-    val lat: Double,
-    val lon: Double,
-    val accuracy: Float,
-)
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+class SendLocationStateProvider : PreviewParameterProvider<SendLocationState> {
+    override val values: Sequence<SendLocationState>
+        get() = sequenceOf(
+            SendLocationState(),
+        )
+}

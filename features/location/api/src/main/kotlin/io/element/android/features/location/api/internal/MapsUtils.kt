@@ -27,7 +27,7 @@ private const val STATIC_MAP_SCALE = "" // Either "" (empty string) for normal i
 private const val STATIC_MAP_MAX_WIDTH_HEIGHT = 2048
 private const val STATIC_MAP_MAX_ZOOM = 22.0
 
-internal fun buildTileServerUrl(
+fun buildTileServerUrl(
     darkMode: Boolean
 ): String = if (!darkMode) {
     "$BASE_URL/maps/$LIGHT_MAP_ID/style.json?key=$API_KEY"
