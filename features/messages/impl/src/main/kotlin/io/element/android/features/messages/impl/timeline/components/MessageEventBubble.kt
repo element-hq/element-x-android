@@ -97,14 +97,11 @@ fun MessageEventBubble(
         }
     }
 
-    val backgroundBubbleColor = if (state.isHighlighted) {
-        ElementTheme.legacyColors.messageHighlightedBackground
+    // Ignore state.isHighlighted for now, we need a design decision on it.
+    val backgroundBubbleColor = if (state.isMine) {
+        ElementTheme.legacyColors.messageFromMeBackground
     } else {
-        if (state.isMine) {
-            ElementTheme.legacyColors.messageFromMeBackground
-        } else {
-            ElementTheme.legacyColors.messageFromOtherBackground
-        }
+        ElementTheme.legacyColors.messageFromOtherBackground
     }
     val bubbleShape = bubbleShape()
     Box(
