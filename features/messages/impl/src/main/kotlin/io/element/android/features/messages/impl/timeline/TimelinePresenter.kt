@@ -59,16 +59,16 @@ class TimelinePresenter @Inject constructor(
         var lastReadMarkerIndex by rememberSaveable { mutableStateOf(Int.MAX_VALUE) }
         var lastReadMarkerId by rememberSaveable { mutableStateOf<EventId?>(null) }
 
-        val timelineItems = timelineItemsFactory.collectItemsAsState()
-        val paginationState = timeline.paginationState.collectAsState()
+        val timelineItems by timelineItemsFactory.collectItemsAsState()
+        val paginationState by timeline.paginationState.collectAsState()
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
-                TimelineEvents.LoadMore -> localCoroutineScope.loadMore(paginationState.value)
+                TimelineEvents.LoadMore -> localCoroutineScope.loadMore(paginationState)
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
                 is TimelineEvents.OnScrollFinished -> {
                     // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
-                    val eventId = getLastEventIdBeforeOrAt(event.firstIndex, timelineItems.value) ?: return
+                    val eventId = getLastEventIdBeforeOrAt(event.firstIndex, timelineItems) ?: return
                     if (event.firstIndex <= lastReadMarkerIndex && eventId != lastReadMarkerId) {
                         lastReadMarkerIndex = event.firstIndex
                         lastReadMarkerId = eventId
@@ -82,13 +82,18 @@ class TimelinePresenter @Inject constructor(
             timeline
                 .timelineItems
                 .onEach(timelineItemsFactory::replaceWith)
+                .onEach { timelineItems ->
+                    if (timelineItems.isEmpty()) {
+                        loadMore(paginationState)
+                    }
+                }
                 .launchIn(this)
         }
 
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
-            paginationState = paginationState.value,
-            timelineItems = timelineItems.value,
+            paginationState = paginationState,
+            timelineItems = timelineItems,
             eventSink = ::handleEvents
         )
     }
