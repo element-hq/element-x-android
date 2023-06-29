@@ -34,9 +34,8 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.tests.testutils.simulateLongTask
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
 class FakeMatrixRoom(
@@ -126,13 +125,9 @@ class FakeMatrixRoom(
         updateMembersResult
     }
 
-    override fun syncUpdateFlow(): Flow<Long> {
-        return emptyFlow()
-    }
+    override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
 
-    override fun timeline(): MatrixTimeline {
-        return matrixTimeline
-    }
+    override val timeline: MatrixTimeline = matrixTimeline
 
     override fun open(): Result<Unit> {
         return Result.success(Unit)

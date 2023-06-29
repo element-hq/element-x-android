@@ -44,6 +44,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -71,15 +72,10 @@ class RustMatrixRoom(
     override val roomId = RoomId(innerRoom.id())
 
     private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
-
-    override val membersStateFlow: StateFlow<MatrixRoomMembersState>
-        get() = _membersStateFlow
-
-    private var _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
+    private val _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
     private val isInit = MutableStateFlow(false)
-    private val syncUpdateFlow = MutableStateFlow(systemClock.epochMillis())
-
-    private val timeline by lazy {
+    private val _syncUpdateFlow = MutableStateFlow(0L)
+    private val _timeline by lazy {
         RustMatrixTimeline(
             matrixRoom = this,
             innerRoom = innerRoom,
@@ -88,13 +84,11 @@ class RustMatrixRoom(
         )
     }
 
-    override fun syncUpdateFlow(): Flow<Long> {
-        return syncUpdateFlow
-    }
+    override val membersStateFlow: StateFlow<MatrixRoomMembersState> = _membersStateFlow.asStateFlow()
 
-    override fun timeline(): MatrixTimeline {
-        return timeline
-    }
+    override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
+
+    override val timeline: MatrixTimeline = _timeline
 
     override fun open(): Result<Unit> {
         if (isInit.value) return Result.failure(IllegalStateException("Listener already registered"))
@@ -110,10 +104,10 @@ class RustMatrixRoom(
         roomListItem.subscribe(settings)
         roomCoroutineScope.launch(coroutineDispatchers.computation) {
             innerRoom.timelineDiffFlow { initialList ->
-                timeline.postItems(initialList)
+                _timeline.postItems(initialList)
             }.onEach {
-                syncUpdateFlow.value = systemClock.epochMillis()
-                timeline.postDiff(it)
+                _syncUpdateFlow.value = systemClock.epochMillis()
+                _timeline.postDiff(it)
             }.launchIn(this)
             fetchMembers()
         }

@@ -43,7 +43,7 @@ class TimelinePresenter @Inject constructor(
     room: MatrixRoom,
 ) : Presenter<TimelineState> {
 
-    private val timeline = room.timeline()
+    private val timeline = room.timeline
 
     @Composable
     override fun present(): TimelineState {
