@@ -79,7 +79,7 @@ fun TimelineItemFileView(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = content.fileExtensionAndSize + extraPadding.str,
+                text = content.fileExtensionAndSize + extraPadding.getStr(12.sp),
                 color = ElementTheme.materialColors.secondary,
                 fontSize = 12.sp,
                 maxLines = 1,
