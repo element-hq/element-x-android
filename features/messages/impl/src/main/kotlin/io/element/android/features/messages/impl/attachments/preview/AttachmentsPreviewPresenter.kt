@@ -84,7 +84,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     ) {
         val progressCallback = object : ProgressCallback {
             override fun onProgress(current: Long, total: Long) {
-                sendActionState.value = SendActionState.Sending.Uploading(current.toFloat() / total)
+                sendActionState.value = SendActionState.Sending.Uploading(current.toFloat() / total.toFloat())
             }
         }
         sendActionState.value = SendActionState.Sending.Processing

@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
@@ -77,6 +78,7 @@ class FakeMatrixRoom(
     private var forwardEventResult = Result.success(Unit)
     private var reportContentResult = Result.success(Unit)
     private var sendLocationResult = Result.success(Unit)
+    private var progressCallbackValues = emptyList<Pair<Long, Long>>()
 
     var sendMediaCount = 0
         private set
@@ -151,7 +153,7 @@ class FakeMatrixRoom(
             return toggleReactionResult
         }
 
-        if(_myReactions.contains(emoji)) {
+        if (_myReactions.contains(emoji)) {
             _myReactions.remove(emoji)
         } else {
             _myReactions.add(emoji)
@@ -228,20 +230,26 @@ class FakeMatrixRoom(
         thumbnailFile: File,
         imageInfo: ImageInfo,
         progressCallback: ProgressCallback?
-    ): Result<Unit> = fakeSendMedia()
+    ): Result<Unit> = fakeSendMedia(progressCallback)
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia()
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia(
+        progressCallback
+    )
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia()
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia(progressCallback)
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia()
+    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia(progressCallback)
 
     override suspend fun forwardEvent(eventId: EventId, rooms: List<RoomId>): Result<Unit> = simulateLongTask {
         forwardEventResult
     }
 
-    private suspend fun fakeSendMedia(): Result<Unit> = simulateLongTask {
+    private suspend fun fakeSendMedia(progressCallback: ProgressCallback?): Result<Unit> = simulateLongTask {
         sendMediaResult.onSuccess {
+            progressCallbackValues.forEach { (current, total) ->
+                progressCallback?.onProgress(current, total)
+                delay(1)
+            }
             sendMediaCount++
         }
     }
@@ -379,5 +387,9 @@ class FakeMatrixRoom(
 
     fun givenSendLocationResult(result: Result<Unit>) {
         sendLocationResult = result
+    }
+
+    fun givenProgressCallbackValues(values: List<Pair<Long, Long>>) {
+        progressCallbackValues = values
     }
 }
