@@ -32,9 +32,6 @@ val LightGrey = Color(0x993C3C43)
 @ShowkaseColor(name = "DarkGrey", group = "Material Design")
 val DarkGrey = Color(0x99EBEBF5)
 
-val AvatarGradientStart = Color(0xFF4CA1AF)
-val AvatarGradientEnd = Color(0xFFC4E0E5)
-
 val SystemGreyLight = Color(0xFF8E8E93)
 val SystemGreyDark = Color(0xFF8E8E93)
 val SystemGrey2Light = Color(0xFFAEAEB2)
