@@ -59,13 +59,8 @@ class TimelinePresenter @Inject constructor(
         var lastReadMarkerIndex by rememberSaveable { mutableStateOf(Int.MAX_VALUE) }
         var lastReadMarkerId by rememberSaveable { mutableStateOf<EventId?>(null) }
 
-        val timelineItems = timelineItemsFactory
-            .flow()
-            .collectAsState()
-
-        val paginationState = timeline
-            .paginationState()
-            .collectAsState()
+        val timelineItems = timelineItemsFactory.collectItemsAsState()
+        val paginationState = timeline.paginationState.collectAsState()
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
@@ -85,13 +80,8 @@ class TimelinePresenter @Inject constructor(
 
         LaunchedEffect(Unit) {
             timeline
-                .timelineItems()
+                .timelineItems
                 .onEach(timelineItemsFactory::replaceWith)
-                .onEach { timelineItems ->
-                    if (timelineItems.isEmpty()) {
-                        loadMore(paginationState.value)
-                    }
-                }
                 .launchIn(this)
         }
 
