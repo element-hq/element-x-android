@@ -379,7 +379,7 @@ private fun ReplyToContent(
                 style = ElementTheme.typography.fontBodyMdRegular,
                 textAlign = TextAlign.Start,
                 color = ElementTheme.materialColors.secondary,
-                maxLines = 1,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
         }
@@ -472,6 +472,13 @@ internal fun TimelineItemEventRowWithReplyDarkPreview() =
 private fun ContentToPreviewWithReply() {
     Column {
         sequenceOf(false, true).forEach {
+            val replyContent = if(it) {
+                // Short
+                "Message which are being replied."
+            } else {
+                // Long, to test 2 lines and ellipsis)
+                "Message which are being replied, and which was long enough to be displayed on two lines (only!)."
+            }
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
@@ -479,7 +486,7 @@ private fun ContentToPreviewWithReply() {
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
-                    inReplyTo = aInReplyToReady()
+                    inReplyTo = aInReplyToReady(replyContent)
                 ),
                 isHighlighted = false,
                 onClick = {},
@@ -495,7 +502,7 @@ private fun ContentToPreviewWithReply() {
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
-                    inReplyTo = aInReplyToReady()
+                    inReplyTo = aInReplyToReady(replyContent)
                 ),
                 isHighlighted = false,
                 onClick = {},
@@ -509,10 +516,12 @@ private fun ContentToPreviewWithReply() {
     }
 }
 
-private fun aInReplyToReady(): InReplyTo.Ready {
+private fun aInReplyToReady(
+    replyContent: String
+): InReplyTo.Ready {
     return InReplyTo.Ready(
         eventId = EventId("\$event"),
-        content = MessageContent("Message which are being replied.", null, false, TextMessageType("Message", null)),
+        content = MessageContent(replyContent, null, false, TextMessageType(replyContent, null)),
         senderId = UserId("@Sender:domain"),
         senderDisplayName = "Sender",
         senderAvatarUrl = null,
