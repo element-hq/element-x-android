@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.roomListPlaceholder
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -36,7 +37,7 @@ fun PlaceholderAtom(
     width: Dp,
     height: Dp,
     modifier: Modifier = Modifier,
-    color: Color = ElementTheme.colors.textPlaceholder,
+    color: Color = ElementTheme.colors.roomListPlaceholder,
 ) {
     Box(
         modifier = modifier

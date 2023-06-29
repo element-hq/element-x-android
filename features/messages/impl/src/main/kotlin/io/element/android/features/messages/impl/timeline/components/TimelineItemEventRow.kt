@@ -41,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,7 +58,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -71,6 +69,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
@@ -268,7 +268,7 @@ private fun MessageEventBubbleContent(
             }
         } else {
             Box(modifier) {
-                ContentView(modifier = contentModifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp))
+                ContentView(modifier = contentModifier)
                 TimelineEventTimestampView(
                     event = event,
                     onClick = onTimestampClicked,
@@ -316,7 +316,11 @@ private fun MessageEventBubbleContent(
             val contentModifier = if (isMediaItem) {
                 Modifier.clip(RoundedCornerShape(12.dp))
             } else {
-                Modifier
+                if (inReplyToDetails != null) {
+                    Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
+                } else {
+                    Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
+                }
             }
 
             ContentAndTimestampView(
@@ -363,20 +367,19 @@ private fun ReplyToContent(
         }
         Column(verticalArrangement = Arrangement.SpaceBetween) {
             Text(
-                senderName,
-                style = ElementTextStyles.Regular.caption2.copy(fontWeight = FontWeight.Medium),
+                text = senderName,
+                style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.primary,
+                color = ElementTheme.materialColors.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-
             Text(
                 text = text.orEmpty(),
-                style = ElementTextStyles.Regular.caption1,
+                style = ElementTheme.typography.fontBodyMdRegular,
                 textAlign = TextAlign.Start,
-                color = ElementTheme.legacyColors.placeholder,
-                maxLines = 1,
+                color = ElementTheme.materialColors.secondary,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
         }
@@ -453,6 +456,76 @@ private fun ContentToPreview() {
             )
         }
     }
+}
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowWithReplyLightPreview() =
+    ElementPreviewLight { ContentToPreviewWithReply() }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowWithReplyDarkPreview() =
+    ElementPreviewDark { ContentToPreviewWithReply() }
+
+@Composable
+private fun ContentToPreviewWithReply() {
+    Column {
+        sequenceOf(false, true).forEach {
+            val replyContent = if(it) {
+                // Short
+                "Message which are being replied."
+            } else {
+                // Long, to test 2 lines and ellipsis)
+                "Message which are being replied, and which was long enough to be displayed on two lines (only!)."
+            }
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = it,
+                    content = aTimelineItemTextContent().copy(
+                        body = "A long text which will be displayed on several lines and" +
+                            " hopefully can be manually adjusted to test different behaviors."
+                    ),
+                    inReplyTo = aInReplyToReady(replyContent)
+                ),
+                isHighlighted = false,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onReactionClick = { _, _ -> },
+                onTimestampClicked = {},
+            )
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = it,
+                    content = aTimelineItemImageContent().copy(
+                        aspectRatio = 5f
+                    ),
+                    inReplyTo = aInReplyToReady(replyContent)
+                ),
+                isHighlighted = false,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onReactionClick = { _, _ -> },
+                onTimestampClicked = {},
+            )
+        }
+    }
+}
+
+private fun aInReplyToReady(
+    replyContent: String
+): InReplyTo.Ready {
+    return InReplyTo.Ready(
+        eventId = EventId("\$event"),
+        content = MessageContent(replyContent, null, false, TextMessageType(replyContent, null)),
+        senderId = UserId("@Sender:domain"),
+        senderDisplayName = "Sender",
+        senderAvatarUrl = null,
+    )
 }
 
 @Preview

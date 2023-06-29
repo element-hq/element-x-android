@@ -19,8 +19,6 @@ package io.element.android.libraries.designsystem.theme.components.previews
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +28,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.DropdownMenu
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -59,7 +60,7 @@ internal fun MenuPreview() {
                     null
                 }
                 DropdownMenuItem(
-                    text = { Text(text = "Item $i") },
+                    text = { DropdownMenuItemText(text = "Item $i") },
                     onClick = { isExpanded = false },
                     leadingIcon = leadingIcon,
                     trailingIcon = trailingIcon,

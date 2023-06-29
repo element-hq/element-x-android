@@ -37,9 +37,6 @@ import io.element.android.libraries.theme.compound.generated.SemanticColors
 @Deprecated("Use SemanticColors instead")
 @Stable
 class ElementColors(
-    messageFromMeBackground: Color,
-    messageFromOtherBackground: Color,
-    messageHighlightedBackground: Color,
     quaternary: Color,
     quinary: Color,
     gray300: Color,
@@ -47,13 +44,6 @@ class ElementColors(
     placeholder: Color,
     isLight: Boolean
 ) {
-    var messageFromMeBackground by mutableStateOf(messageFromMeBackground)
-        private set
-    var messageFromOtherBackground by mutableStateOf(messageFromOtherBackground)
-        private set
-    var messageHighlightedBackground by mutableStateOf(messageHighlightedBackground)
-        private set
-
     var quaternary by mutableStateOf(quaternary)
         private set
 
@@ -73,9 +63,6 @@ class ElementColors(
         private set
 
     fun copy(
-        messageFromMeBackground: Color = this.messageFromMeBackground,
-        messageFromOtherBackground: Color = this.messageFromOtherBackground,
-        messageHighlightedBackground: Color = this.messageHighlightedBackground,
         quaternary: Color = this.quaternary,
         quinary: Color = this.quinary,
         gray300: Color = this.gray300,
@@ -83,9 +70,6 @@ class ElementColors(
         placeholder: Color = this.placeholder,
         isLight: Boolean = this.isLight,
     ) = ElementColors(
-        messageFromMeBackground = messageFromMeBackground,
-        messageFromOtherBackground = messageFromOtherBackground,
-        messageHighlightedBackground = messageHighlightedBackground,
         quaternary = quaternary,
         quinary = quinary,
         gray300 = gray300,
@@ -95,9 +79,6 @@ class ElementColors(
     )
 
     fun updateColorsFrom(other: ElementColors) {
-        messageFromMeBackground = other.messageFromMeBackground
-        messageFromOtherBackground = other.messageFromOtherBackground
-        messageHighlightedBackground = other.messageHighlightedBackground
         quaternary = other.quaternary
         quinary = other.quinary
         gray300 = other.gray300
@@ -108,9 +89,6 @@ class ElementColors(
 }
 
 internal fun elementColorsLight() = ElementColors(
-    messageFromMeBackground = SystemGrey5Light,
-    messageFromOtherBackground = SystemGrey6Light,
-    messageHighlightedBackground = Azure,
     quaternary = Gray_100,
     quinary = Gray_50,
     gray300 = LightDesignTokens.colorGray300,
@@ -120,9 +98,6 @@ internal fun elementColorsLight() = ElementColors(
 )
 
 internal fun elementColorsDark() = ElementColors(
-    messageFromMeBackground = SystemGrey5Dark,
-    messageFromOtherBackground = SystemGrey6Dark,
-    messageHighlightedBackground = Azure,
     quaternary = Gray_400,
     quinary = Gray_450,
     gray300 = DarkDesignTokens.colorGray300,

@@ -44,6 +44,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.messageFromMeBackground
+import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
 import io.element.android.libraries.theme.ElementTheme
 
 private val BUBBLE_RADIUS = 12.dp
@@ -97,14 +99,11 @@ fun MessageEventBubble(
         }
     }
 
-    val backgroundBubbleColor = if (state.isHighlighted) {
-        ElementTheme.legacyColors.messageHighlightedBackground
+    // Ignore state.isHighlighted for now, we need a design decision on it.
+    val backgroundBubbleColor = if (state.isMine) {
+        ElementTheme.colors.messageFromMeBackground
     } else {
-        if (state.isMine) {
-            ElementTheme.legacyColors.messageFromMeBackground
-        } else {
-            ElementTheme.legacyColors.messageFromOtherBackground
-        }
+        ElementTheme.colors.messageFromOtherBackground
     }
     val bubbleShape = bubbleShape()
     Box(

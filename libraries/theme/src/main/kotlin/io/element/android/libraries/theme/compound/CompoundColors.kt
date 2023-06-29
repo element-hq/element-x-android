@@ -89,7 +89,8 @@ internal val compoundColorsDark = SemanticColors(
     textInfoPrimary = DarkDesignTokens.colorBlue900,
     textOnSolidPrimary = DarkDesignTokens.colorThemeBg,
     bgSubtlePrimary = DarkDesignTokens.colorGray400,
-    bgSubtleSecondary = DarkDesignTokens.colorBgSubtleSecondaryLevel0,
+    // The value DarkDesignTokens.colorBgSubtleSecondaryLevel0 is defined to colorThemeBg, this is not correct, so override the value here until this is fixed,
+    bgSubtleSecondary =  DarkDesignTokens.colorGray300, // DarkDesignTokens.colorBgSubtleSecondaryLevel0
     bgCanvasDefault = DarkDesignTokens.colorBgCanvasDefaultLevel1,
     bgCanvasDisabled = DarkDesignTokens.colorGray200,
     bgActionPrimaryRest = DarkDesignTokens.colorGray1400,

@@ -26,8 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,8 +37,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.AvatarGradientEnd
-import io.element.android.libraries.theme.AvatarGradientStart
+import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
 
 @Composable
@@ -89,16 +86,10 @@ private fun InitialsAvatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
 ) {
-    val initialsGradient = Brush.linearGradient(
-        listOf(
-            AvatarGradientStart,
-            AvatarGradientEnd,
-        ),
-        start = Offset(0.0f, 100f),
-        end = Offset(100f, 0f)
-    )
+    // Use temporary color for default avatar background
+    val avatarColor = ElementTheme.colors.bgActionPrimaryDisabled
     Box(
-        modifier.background(brush = initialsGradient),
+        modifier.background(color = avatarColor),
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
