@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
@@ -170,11 +169,9 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         overflow = TextOverflow.Ellipsis
     )
     // Unread
-    val unreadIndicatorColor =
-        if (room.hasUnread) ElementTheme.colors.unreadIndicator else Color.Transparent
     UnreadIndicatorAtom(
         modifier = Modifier.padding(top = 3.dp),
-        color = unreadIndicatorColor,
+        isVisible = room.hasUnread,
     )
 }
 

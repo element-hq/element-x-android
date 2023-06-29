@@ -37,12 +37,13 @@ fun UnreadIndicatorAtom(
     modifier: Modifier = Modifier,
     size: Dp = 12.dp,
     color: Color = ElementTheme.colors.unreadIndicator,
+    isVisible: Boolean = true,
 ) {
     Box(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(color)
+            .background(if (isVisible) color else Color.Transparent)
     )
 }
 
