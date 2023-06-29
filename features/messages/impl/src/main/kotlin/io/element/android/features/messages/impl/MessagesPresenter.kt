@@ -99,7 +99,7 @@ class MessagesPresenter @AssistedInject constructor(
         val customReactionState = customReactionPresenter.present()
         val retryState = retrySendMenuPresenter.present()
 
-        val syncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
+        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendEventAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val roomName: MutableState<String?> = rememberSaveable {
             mutableStateOf(null)
@@ -112,7 +112,7 @@ class MessagesPresenter @AssistedInject constructor(
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
-        LaunchedEffect(syncUpdateFlow) {
+        LaunchedEffect(syncUpdateFlow.value) {
             roomAvatar.value =
                 AvatarData(
                     id = room.roomId.value,

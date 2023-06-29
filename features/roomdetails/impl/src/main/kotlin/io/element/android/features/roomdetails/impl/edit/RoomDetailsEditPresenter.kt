@@ -52,7 +52,7 @@ class RoomDetailsEditPresenter @Inject constructor(
 
     @Composable
     override fun present(): RoomDetailsEditState {
-        val roomSyncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
+        val roomSyncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
         // Since there is no way to obtain the new avatar uri after uploading a new avatar,
         // just erase the local value when the room field has changed
