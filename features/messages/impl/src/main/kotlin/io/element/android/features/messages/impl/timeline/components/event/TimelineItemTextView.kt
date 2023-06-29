@@ -33,6 +33,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.features.messages.impl.timeline.components.html.HtmlDocument
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -71,7 +72,9 @@ fun TimelineItemTextView(
             val linkStyle = SpanStyle(
                 color = LinkColor,
             )
-            val styledText = remember(content.body) { content.body.linkify(linkStyle) + extraPadding.str.toAnnotatedString() }
+            val styledText = remember(content.body) {
+                content.body.linkify(linkStyle) + extraPadding.getStr(16.sp).toAnnotatedString()
+            }
             ClickableLinkText(
                 text = styledText,
                 linkAnnotationTag = "URL",
@@ -123,7 +126,7 @@ fun ContentToPreview(content: TimelineItemTextBasedContent) {
     TimelineItemTextView(
         content = content,
         interactionSource = MutableInteractionSource(),
-        extraPadding = ExtraPadding(" (padding)"),
+        extraPadding = ExtraPadding(nbChars = 8),
     )
 }
 
