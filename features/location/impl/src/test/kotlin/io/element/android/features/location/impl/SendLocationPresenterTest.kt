@@ -50,4 +50,15 @@ class SendLocationPresenterTest {
             Truth.assertThat(room.sendLocationCount).isEqualTo(1)
         }
     }
+
+    @Test
+    fun `switches mode`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(SendLocationEvents.SwitchMode(SendLocationState.Mode.MyLocation))
+            Truth.assertThat(awaitItem().mode).isEqualTo(SendLocationState.Mode.MyLocation)
+        }
+    }
 }

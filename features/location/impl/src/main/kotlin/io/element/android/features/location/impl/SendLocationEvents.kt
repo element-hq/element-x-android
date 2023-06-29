@@ -18,4 +18,5 @@ package io.element.android.features.location.impl
 
 sealed interface SendLocationEvents {
     data class ShareLocation(val lat: Double, val lng: Double) : SendLocationEvents
+    data class SwitchMode(val mode: SendLocationState.Mode) : SendLocationEvents
 }

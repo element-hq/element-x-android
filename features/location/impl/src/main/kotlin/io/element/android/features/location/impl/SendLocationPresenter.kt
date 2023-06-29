@@ -35,12 +35,17 @@ class SendLocationPresenter @Inject constructor(
 
         val scope = rememberCoroutineScope()
 
-        var mode by remember { mutableStateOf(SendLocationState.Mode.ALocation) }
+        var mode by remember {
+            mutableStateOf<SendLocationState.Mode>(SendLocationState.Mode.ALocation)
+        }
 
         fun handleEvents(event: SendLocationEvents) {
             when (event) {
                 is SendLocationEvents.ShareLocation -> scope.launch {
                     shareLocation(event)
+                }
+                is SendLocationEvents.SwitchMode -> {
+                    mode = event.mode
                 }
             }
         }
