@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -39,5 +40,7 @@ data class MessagesState(
     val retrySendMenuState: RetrySendMenuState,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
+    val inviteProgress: Async<Unit>,
+    val showReinvitePrompt: Boolean,
     val eventSink: (MessagesEvents) -> Unit
 )
