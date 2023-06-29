@@ -145,7 +145,11 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
     Text(
         text = room.timestamp ?: "",
         style = ElementTheme.typography.fontBodySmRegular,
-        color = MaterialTheme.roomListRoomMessageDate(),
+        color = if (room.hasUnread) {
+            ElementTheme.colors.roomListUnreadIndicator
+        } else {
+            MaterialTheme.roomListRoomMessageDate()
+        },
     )
 }
 
@@ -167,7 +171,7 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
     )
     // Unread
     val unreadIndicatorColor =
-        if (room.hasUnread) MaterialTheme.roomListUnreadIndicator() else Color.Transparent
+        if (room.hasUnread) ElementTheme.colors.roomListUnreadIndicator else Color.Transparent
     UnreadIndicatorAtom(
         modifier = Modifier.padding(top = 3.dp),
         color = unreadIndicatorColor,

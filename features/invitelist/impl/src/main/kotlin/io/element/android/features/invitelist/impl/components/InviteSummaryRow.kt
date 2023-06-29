@@ -50,7 +50,6 @@ import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -58,6 +57,7 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private val minHeight = 72.dp
@@ -161,7 +161,7 @@ internal fun DefaultInviteSummaryRow(
             }
         }
 
-        val unreadIndicatorColor = if (invite.isNew) MaterialTheme.roomListUnreadIndicator() else Color.Transparent
+        val unreadIndicatorColor = if (invite.isNew) ElementTheme.colors.roomListUnreadIndicator else Color.Transparent
         UnreadIndicatorAtom(color = unreadIndicatorColor)
     }
 }
