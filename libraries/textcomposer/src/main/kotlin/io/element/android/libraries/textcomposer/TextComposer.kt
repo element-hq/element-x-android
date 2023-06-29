@@ -165,8 +165,8 @@ fun TextComposer(
                             colors = TextFieldDefaults.colors(
                                 unfocusedTextColor = MaterialTheme.colorScheme.secondary,
                                 focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedPlaceholderColor = MaterialTheme.colorScheme.secondary,
-                                focusedPlaceholderColor = MaterialTheme.colorScheme.secondary,
+                                unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
+                                focusedPlaceholderColor = ElementTheme.colors.textDisabled,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent,
