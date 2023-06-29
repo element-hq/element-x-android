@@ -164,8 +164,8 @@ class RoomDetailsPresenter @Inject constructor(
                 when (roomNotificationSettingsState) {
                     MatrixRoomNotificationSettingsState.Unknown -> Async.Uninitialized
                     MatrixRoomNotificationSettingsState.ChangedNotificationSettings -> TODO()
-                    is MatrixRoomNotificationSettingsState.Pending -> Async.Loading(prevState = roomNotificationSettingsState.prevRoomNotificationSettings)
-                    is MatrixRoomNotificationSettingsState.Error -> Async.Failure(roomNotificationSettingsState.failure, prevState = roomNotificationSettingsState.prevRoomNotificationSettings)
+                    is MatrixRoomNotificationSettingsState.Pending -> Async.Loading(prevData = roomNotificationSettingsState.prevRoomNotificationSettings)
+                    is MatrixRoomNotificationSettingsState.Error -> Async.Failure(roomNotificationSettingsState.failure, prevData = roomNotificationSettingsState.prevRoomNotificationSettings)
                     is MatrixRoomNotificationSettingsState.Ready -> Async.Success(roomNotificationSettingsState.roomNotificationSettings)
                 }
             }

@@ -41,7 +41,7 @@ class FakeNotificationSettingsService : NotificationSettingsService {
         return muteRoomResult
     }
 
-    override suspend fun unmuteRoom(roomId: RoomId): Result<Unit> {
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong): Result<Unit> {
         return unmuteRoomResult
     }
 }

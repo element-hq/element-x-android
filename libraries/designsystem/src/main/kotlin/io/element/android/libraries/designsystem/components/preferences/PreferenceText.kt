@@ -72,6 +72,25 @@ fun PreferenceText(
             .padding(horizontal = preferencePaddingHorizontal, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+//            val lineCount = if (!subtitle.isNullOrEmpty()) {
+//                val textMeasurer = rememberTextMeasurer()
+//                val style = MaterialTheme.typography.bodyMedium
+//                val textLayoutResult = remember(subtitle) {
+//                    textMeasurer.measure(subtitle, style, constraints = Constraints(maxWidth = remainingSpace))
+//                }
+//
+//                textLayoutResult.lineCount
+//            } else 0
+//
+//            if (lineCount == 1) {
+//                PreferenceIcon(icon = icon, modifier = Modifier.align(Alignment.CenterVertically),tintColor = tintColor)
+//            } else {
+//                PreferenceIcon(icon = icon, tintColor = tintColor)
+//            }
+//
+//
+//            modifier.align(Alignment.CenterVertically)
+
         PreferenceIcon(
             icon = icon,
             isVisible = showIconAreaIfNoIcon,

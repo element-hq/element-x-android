@@ -45,7 +45,6 @@ import io.element.android.libraries.matrix.impl.notification.RustNotificationSer
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
-import io.element.android.libraries.matrix.impl.room.RoomNotificationSettingsMapper
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.room.roomOrNull

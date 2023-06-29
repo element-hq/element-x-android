@@ -43,9 +43,9 @@ class RustNotificationSettingsService(
             client.getNotificationSettings().setRoomNotificationMode(roomId.value, RoomNotificationMode.MUTE)
         }
 
-    override suspend fun unmuteRoom(roomId: RoomId) =
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong) =
         runCatching {
-            client.getNotificationSettings().unmuteRoom(roomId.value)
+            client.getNotificationSettings().unmuteRoom(roomId.value, isEncrypted, membersCount)
         }
 
     override fun notificationSettingsDidChange() {
