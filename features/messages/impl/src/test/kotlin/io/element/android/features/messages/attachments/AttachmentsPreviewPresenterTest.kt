@@ -27,6 +27,7 @@ import io.element.android.features.messages.fixtures.aLocalMedia
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvents
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
+import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -52,12 +53,12 @@ class AttachmentsPreviewPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.sendActionState).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             val loadingState = awaitItem()
-            assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState.sendActionState).isInstanceOf(SendActionState.Sending::class.java)
             val successState = awaitItem()
-            assertThat(successState.sendActionState).isEqualTo(Async.Success(Unit))
+            assertThat(successState.sendActionState).isEqualTo(SendActionState.Done)
             assertThat(room.sendMediaCount).isEqualTo(1)
         }
     }
@@ -72,16 +73,16 @@ class AttachmentsPreviewPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.sendActionState).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             val loadingState = awaitItem()
-            assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState.sendActionState).isInstanceOf(SendActionState.Sending::class.java)
             val failureState = awaitItem()
-            assertThat(failureState.sendActionState).isEqualTo(Async.Failure<Unit>(failure))
+            assertThat(failureState.sendActionState).isEqualTo((SendActionState.Failure(failure)))
             assertThat(room.sendMediaCount).isEqualTo(0)
             failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
             val clearedState = awaitItem()
-            assertThat(clearedState.sendActionState).isEqualTo(Async.Uninitialized)
+            assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Idle)
         }
     }
 
