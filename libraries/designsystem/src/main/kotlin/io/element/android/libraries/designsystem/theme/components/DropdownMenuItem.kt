@@ -57,11 +57,15 @@ fun DropdownMenuItem(
 }
 
 @Composable
-fun DropdownMenuItemText(text: String) {
+fun DropdownMenuItemText(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = text,
         color = ElementTheme.materialColors.primary,
-        style = ElementTheme.typography.fontBodyLgRegular
+        style = ElementTheme.typography.fontBodyLgRegular,
+        modifier = modifier,
     )
 }
 

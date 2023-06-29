@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.ruler
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -31,11 +32,13 @@ import io.element.android.libraries.designsystem.theme.components.Text
  */
 @Composable
 fun WithRulers(
+    modifier: Modifier = Modifier,
     xRulersOffset: Dp = 0.dp,
     yRulersOffset: Dp = 0.dp,
     content: @Composable () -> Unit
 ) {
     Layout(
+        modifier = modifier,
         content = {
             content()
             VerticalRuler()
