@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.ui.components
 import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Attachment
 import androidx.compose.material.icons.outlined.VideoCameraBack
@@ -73,6 +74,11 @@ fun AttachmentThumbnail(
                         modifier = Modifier.rotate(-45f)
                     )
                 }
+                AttachmentThumbnailType.Location -> {
+                    PinIcon(
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
                 else -> Unit
             }
         }
@@ -81,7 +87,7 @@ fun AttachmentThumbnail(
 
 @Parcelize
 enum class AttachmentThumbnailType: Parcelable {
-    Image, Video, File
+    Image, Video, File, Location
 }
 
 @Parcelize

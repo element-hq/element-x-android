@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -43,6 +44,7 @@ import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
+import io.element.android.libraries.matrix.ui.R as MatrixUIR
 
 /**
  * Shows a static map image downloaded via a third party service's static maps API.
@@ -103,9 +105,15 @@ fun StaticMapView(
                 contentScale = ContentScale.Fit,
             )
             Icon(
-                resourceId = R.drawable.pin,
+                resourceId = MatrixUIR.drawable.pin,
                 contentDescription = null,
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
+                modifier = Modifier.align { size, space, _ ->
+                    IntOffset(
+                        x = (space.width - size.width) / 2,
+                        y = (space.height / 2) - size.height,
+                    )
+                }
             )
         } else {
             StaticMapPlaceholder(

@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -51,6 +52,12 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
             anActionListState().copy(
                 target = ActionListState.Target.Success(
                     event = aTimelineItemEvent(content = aTimelineItemFileContent()),
+                    actions = aTimelineItemActionList(),
+                )
+            ),
+            anActionListState().copy(
+                target = ActionListState.Target.Success(
+                    event = aTimelineItemEvent(content = aTimelineItemLocationContent()),
                     actions = aTimelineItemActionList(),
                 )
             ),
