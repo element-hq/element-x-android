@@ -32,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -56,8 +55,6 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.noFontPadding
-import io.element.android.libraries.designsystem.theme.unreadIndicator
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private val minHeight = 72.dp
@@ -161,8 +158,7 @@ internal fun DefaultInviteSummaryRow(
             }
         }
 
-        val unreadIndicatorColor = if (invite.isNew) ElementTheme.colors.unreadIndicator else Color.Transparent
-        UnreadIndicatorAtom(color = unreadIndicatorColor)
+        UnreadIndicatorAtom(isVisible = invite.isNew)
     }
 }
 

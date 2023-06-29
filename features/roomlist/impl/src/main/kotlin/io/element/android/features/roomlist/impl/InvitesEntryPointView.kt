@@ -66,7 +66,6 @@ fun InvitesEntryPointView(
 
             if (state == InvitesState.NewInvites) {
                 Spacer(Modifier.width(8.dp))
-
                 UnreadIndicatorAtom()
             }
         }
