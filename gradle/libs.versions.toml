@@ -4,8 +4,8 @@
 [versions]
 # Project
 android_gradle_plugin = "8.0.2"
-kotlin = "1.8.21"
-ksp = "1.8.21-1.0.11"
+kotlin = "1.8.22"
+ksp = "1.8.22-1.0.11"
 molecule = "0.10.0"
 
 # AndroidX
@@ -22,7 +22,7 @@ browser = "1.5.0"
 
 # Compose
 compose_bom = "2023.06.01"
-composecompiler = "1.4.7"
+composecompiler = "1.4.8"
 
 # Coroutines
 coroutines = "1.7.1"
