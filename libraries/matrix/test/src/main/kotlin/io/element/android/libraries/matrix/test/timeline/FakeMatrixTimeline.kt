@@ -23,33 +23,30 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 
 class FakeMatrixTimeline(
     initialTimelineItems: List<MatrixTimelineItem> = emptyList(),
     initialPaginationState: MatrixTimeline.PaginationState = MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
 ) : MatrixTimeline {
 
-    private val paginationState: MutableStateFlow<MatrixTimeline.PaginationState> = MutableStateFlow(initialPaginationState)
-    private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> = MutableStateFlow(initialTimelineItems)
+    private val _paginationState: MutableStateFlow<MatrixTimeline.PaginationState> = MutableStateFlow(initialPaginationState)
+    private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> = MutableStateFlow(initialTimelineItems)
 
     var sendReadReceiptCount = 0
         private set
 
     fun updatePaginationState(update: (MatrixTimeline.PaginationState.() -> MatrixTimeline.PaginationState)) {
-        paginationState.value = update(paginationState.value)
+        _paginationState.getAndUpdate(update)
     }
 
     fun updateTimelineItems(update: (items: List<MatrixTimelineItem>) -> List<MatrixTimelineItem>) {
-        timelineItems.value = update(timelineItems.value)
+        _timelineItems.getAndUpdate(update)
     }
 
-    override fun paginationState(): StateFlow<MatrixTimeline.PaginationState> {
-        return paginationState
-    }
+    override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState
 
-    override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
-        return timelineItems
-    }
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
 
     override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> {
         updatePaginationState {

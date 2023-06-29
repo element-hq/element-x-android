@@ -16,6 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline.factories
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.recyclerview.widget.DiffUtil
 import io.element.android.features.messages.impl.timeline.diff.CacheInvalidator
 import io.element.android.features.messages.impl.timeline.diff.MatrixTimelineItemsDiffCallback
@@ -27,11 +30,8 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -55,7 +55,10 @@ class TimelineItemsFactory @Inject constructor(
     private val lock = Mutex()
     private val cacheInvalidator = CacheInvalidator(timelineItemsCache)
 
-    fun flow(): StateFlow<ImmutableList<TimelineItem>> = timelineItems.asStateFlow()
+    @Composable
+    fun collectItemsAsState(): State<ImmutableList<TimelineItem>> {
+        return timelineItems.collectAsState()
+    }
 
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
