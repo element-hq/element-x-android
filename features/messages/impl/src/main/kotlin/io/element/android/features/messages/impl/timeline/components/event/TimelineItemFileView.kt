@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Attachment
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +42,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TimelineItemFileView(
@@ -57,12 +57,13 @@ fun TimelineItemFileView(
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.background),
+                .background(ElementTheme.materialColors.background),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = Icons.Outlined.Attachment,
                 contentDescription = "OpenFile",
+                tint = ElementTheme.materialColors.primary,
                 modifier = Modifier
                     .size(16.dp)
                     .rotate(-45f),
@@ -72,13 +73,14 @@ fun TimelineItemFileView(
         Column {
             Text(
                 text = content.body,
+                color = ElementTheme.materialColors.primary,
                 maxLines = 2,
                 fontSize = 16.sp,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = content.fileExtensionAndSize + extraPadding.str,
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.materialColors.secondary,
                 fontSize = 12.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
