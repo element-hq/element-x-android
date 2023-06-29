@@ -35,6 +35,7 @@ import io.element.android.libraries.core.extensions.toOnOff
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.network.useragent.UserAgentProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import okhttp3.Call
@@ -64,6 +65,7 @@ class DefaultBugReporter @Inject constructor(
     private val crashDataStore: CrashDataStore,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val okHttpClient: Provider<OkHttpClient>,
+    private val userAgentProvider: UserAgentProvider,
     /*
     private val activeSessionHolder: ActiveSessionHolder,
     private val versionProvider: VersionProvider,
@@ -222,7 +224,7 @@ class DefaultBugReporter @Inject constructor(
                 val builder = BugReporterMultipartBody.Builder()
                     .addFormDataPart("text", text)
                     .addFormDataPart("app", rageShakeAppNameForReport(reportType))
-                    // .addFormDataPart("user_agent", matrix.getUserAgent())
+                    .addFormDataPart("user_agent", userAgentProvider.provide())
                     .addFormDataPart("user_id", userId)
                     .addFormDataPart("can_contact", canContact.toString())
                     .addFormDataPart("device_id", deviceId)
