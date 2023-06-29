@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.matrix.sdk)
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.network)
     implementation(projects.services.toolbox.api)
     api(projects.libraries.matrix.api)
     implementation(libs.dagger)
