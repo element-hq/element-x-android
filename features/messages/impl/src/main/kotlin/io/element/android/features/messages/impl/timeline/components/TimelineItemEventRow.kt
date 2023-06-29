@@ -69,6 +69,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
@@ -450,6 +452,67 @@ private fun ContentToPreview() {
             )
         }
     }
+}
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowWithReplyLightPreview() =
+    ElementPreviewLight { ContentToPreviewWithReply() }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowWithReplyDarkPreview() =
+    ElementPreviewDark { ContentToPreviewWithReply() }
+
+@Composable
+private fun ContentToPreviewWithReply() {
+    Column {
+        sequenceOf(false, true).forEach {
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = it,
+                    content = aTimelineItemTextContent().copy(
+                        body = "A long text which will be displayed on several lines and" +
+                            " hopefully can be manually adjusted to test different behaviors."
+                    ),
+                    inReplyTo = aInReplyToReady()
+                ),
+                isHighlighted = false,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onReactionClick = { _, _ -> },
+                onTimestampClicked = {},
+            )
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = it,
+                    content = aTimelineItemImageContent().copy(
+                        aspectRatio = 5f
+                    ),
+                    inReplyTo = aInReplyToReady()
+                ),
+                isHighlighted = false,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onReactionClick = { _, _ -> },
+                onTimestampClicked = {},
+            )
+        }
+    }
+}
+
+private fun aInReplyToReady(): InReplyTo.Ready {
+    return InReplyTo.Ready(
+        eventId = EventId("\$event"),
+        content = MessageContent("Message which are being replied.", null, false, TextMessageType("Message", null)),
+        senderId = UserId("@Sender:domain"),
+        senderDisplayName = "Sender",
+        senderAvatarUrl = null,
+    )
 }
 
 @Preview
