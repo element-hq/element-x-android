@@ -56,7 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.noFontPadding
-import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
+import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -161,7 +161,7 @@ internal fun DefaultInviteSummaryRow(
             }
         }
 
-        val unreadIndicatorColor = if (invite.isNew) ElementTheme.colors.roomListUnreadIndicator else Color.Transparent
+        val unreadIndicatorColor = if (invite.isNew) ElementTheme.colors.unreadIndicator else Color.Transparent
         UnreadIndicatorAtom(color = unreadIndicatorColor)
     }
 }

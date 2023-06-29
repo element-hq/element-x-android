@@ -57,7 +57,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
-import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
+import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.theme.ElementTheme
 
 internal val minHeight = 84.dp
@@ -146,7 +146,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
         text = room.timestamp ?: "",
         style = ElementTheme.typography.fontBodySmRegular,
         color = if (room.hasUnread) {
-            ElementTheme.colors.roomListUnreadIndicator
+            ElementTheme.colors.unreadIndicator
         } else {
             MaterialTheme.roomListRoomMessageDate()
         },
@@ -171,7 +171,7 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
     )
     // Unread
     val unreadIndicatorColor =
-        if (room.hasUnread) ElementTheme.colors.roomListUnreadIndicator else Color.Transparent
+        if (room.hasUnread) ElementTheme.colors.unreadIndicator else Color.Transparent
     UnreadIndicatorAtom(
         modifier = Modifier.padding(top = 3.dp),
         color = unreadIndicatorColor,
