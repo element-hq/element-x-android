@@ -349,7 +349,7 @@ private fun BoxScope.SendButton(
     Box(
         modifier = modifier
             .clip(CircleShape)
-            .background(if (canSendMessage) ElementTheme.legacyColors.accentColor else Color.Transparent)
+            .background(if (canSendMessage) ElementTheme.colors.iconAccentTertiary else Color.Transparent)
             .size(30.dp)
             .align(Alignment.BottomEnd)
             .applyIf(composerMode !is MessageComposerMode.Edit, ifTrue = {
@@ -376,7 +376,8 @@ private fun BoxScope.SendButton(
             modifier = Modifier.size(16.dp),
             resourceId = iconId,
             contentDescription = contentDescription,
-            tint = if (canSendMessage) Color.White else ElementTheme.legacyColors.quaternary
+            // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
+            tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled
         )
     }
 }
