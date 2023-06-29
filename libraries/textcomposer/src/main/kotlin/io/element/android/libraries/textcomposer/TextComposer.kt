@@ -316,24 +316,22 @@ private fun AttachmentButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier) {
-        Surface(
-            Modifier
-                .size(30.dp)
-                .clickable(true, onClick = onClick),
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.primary
-        ) {
-            Image(
-                modifier = Modifier.size(12.5f.dp),
-                painter = painterResource(R.drawable.ic_add_attachment),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-                colorFilter = ColorFilter.tint(
-                    LocalContentColor.current
-                )
+    Surface(
+        modifier
+            .size(30.dp)
+            .clickable(onClick = onClick),
+        shape = CircleShape,
+        color = ElementTheme.colors.iconPrimary
+    ) {
+        Image(
+            modifier = Modifier.size(12.5f.dp),
+            painter = painterResource(R.drawable.ic_add_attachment),
+            contentDescription = null,
+            contentScale = ContentScale.Inside,
+            colorFilter = ColorFilter.tint(
+                LocalContentColor.current
             )
-        }
+        )
     }
 }
 
