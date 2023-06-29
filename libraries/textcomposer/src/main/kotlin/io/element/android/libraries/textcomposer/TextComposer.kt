@@ -60,7 +60,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -115,12 +114,14 @@ fun TextComposer(
         }
 
         val minHeight = 42.dp
+        val bgColor = ElementTheme.colors.bgSubtleSecondary
+        val borderColor = ElementTheme.colors.borderDisabled
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(roundedCorners)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, roundedCorners)
+                .background(color = bgColor)
+                .border(1.dp, borderColor, roundedCorners)
         ) {
             if (composerMode is MessageComposerMode.Special) {
                 ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
@@ -162,10 +163,10 @@ fun TextComposer(
                                 focusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent,
                                 errorIndicatorColor = Color.Transparent,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                errorContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                unfocusedContainerColor = bgColor,
+                                focusedContainerColor = bgColor,
+                                errorContainerColor = bgColor,
+                                disabledContainerColor = bgColor,
                             )
                         )
                     }
