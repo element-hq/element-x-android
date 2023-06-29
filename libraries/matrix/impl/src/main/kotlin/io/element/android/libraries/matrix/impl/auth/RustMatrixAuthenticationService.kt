@@ -60,15 +60,13 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val userAgentProvider: UserAgentProvider,
 ) : MatrixAuthenticationService {
 
-    // TODO Provide user agent to RustAuthenticationService
-    // https://github.com/matrix-org/matrix-rust-sdk/issues/2156
     private val authService: RustAuthenticationService = RustAuthenticationService(
         basePath = baseDirectory.absolutePath,
         passphrase = null,
         // TODO Oidc
         // oidcClientMetadata = oidcClientMetadata,
+        userAgent = userAgentProvider.provide(),
         customSlidingSyncProxy = null,
-        userAgent = null, // TODO
     )
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
