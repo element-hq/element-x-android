@@ -45,6 +45,26 @@ val SemanticColors.unreadIndicator
 val SemanticColors.roomListPlaceholder
     get() = bgSubtleSecondary
 
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.messageFromMeBackground
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray400
+        Color(0xFFE1E6EC)
+    } else {
+        // We want DarkDesignTokens.colorGray500
+        Color(0xFF323539)
+    }
+
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.messageFromOtherBackground
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray300
+        Color(0xFFF0F2F5)
+    } else {
+        // We want DarkDesignTokens.colorGray400
+        Color(0xFF26282D)
+    }
+
 @Preview
 @Composable
 internal fun ColorAliasesLightPreview() = ElementPreviewLight { ContentToPreview() }
@@ -64,6 +84,8 @@ private fun ContentToPreview() {
             "roomListRoomMessageDate" to MaterialTheme.roomListRoomMessageDate(),
             "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "roomListPlaceholder" to ElementTheme.colors.roomListPlaceholder,
+            "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
+            "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
         )
     )
 }
