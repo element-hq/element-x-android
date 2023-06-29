@@ -23,8 +23,11 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -90,22 +93,71 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - send read receipt`() = runTest {
+    fun `present - on scroll finished send read receipt if an event is before the index`() = runTest {
         val timeline = FakeMatrixTimeline()
+        val timelineItemsFactory = aTimelineItemsFactory().apply {
+            replaceWith(listOf(MatrixTimelineItem.Event(anEventTimelineItem())))
+        }
         val room = FakeMatrixRoom(matrixTimeline = timeline)
         val presenter = TimelinePresenter(
-            timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemsFactory = timelineItemsFactory,
             room = room,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            val initialState = awaitItem()
 
-            initialState.eventSink.invoke(TimelineEvents.SendReadReceipt(AN_EVENT_ID))
+            initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
 
             assertThat(timeline.sendReadReceiptCount).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `present - on scroll finished will not send read receipt no event is before the index`() = runTest {
+        val timeline = FakeMatrixTimeline()
+        val timelineItemsFactory = aTimelineItemsFactory().apply {
+            replaceWith(listOf(MatrixTimelineItem.Event(anEventTimelineItem())))
+        }
+        val room = FakeMatrixRoom(matrixTimeline = timeline)
+        val presenter = TimelinePresenter(
+            timelineItemsFactory = timelineItemsFactory,
+            room = room,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            val initialState = awaitItem()
+
+            initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
+
+            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun `present - on scroll finished will not send read receipt only virtual events exist before the index`() = runTest {
+        val timeline = FakeMatrixTimeline()
+        val timelineItemsFactory = aTimelineItemsFactory().apply {
+            replaceWith(listOf(MatrixTimelineItem.Virtual(VirtualTimelineItem.ReadMarker)))
+        }
+        val room = FakeMatrixRoom(matrixTimeline = timeline)
+        val presenter = TimelinePresenter(
+            timelineItemsFactory = timelineItemsFactory,
+            room = room,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            val initialState = awaitItem()
+
+            initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
+
+            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
         }
     }
 }

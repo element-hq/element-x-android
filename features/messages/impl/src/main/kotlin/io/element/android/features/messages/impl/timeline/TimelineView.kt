@@ -39,7 +39,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -86,22 +85,12 @@ fun TimelineView(
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
-    var lastReadMarkerIndex by rememberSaveable { mutableStateOf(Int.MAX_VALUE) }
-    var lastReadMarkerId by rememberSaveable { mutableStateOf<EventId?>(null) }
-
-    // Send a read receipt when the user has finished scrolling to an item in an index <= the last one
-    // and the event ids are different.
+    // Send an event to the presenter when the scrolling is finished, with the first visible index at the bottom.
     val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
     LaunchedEffect(firstVisibleIndex, isScrollFinished) {
         if (!isScrollFinished) return@LaunchedEffect
-        val eventId = (state.timelineItems.getOrNull(firstVisibleIndex) as? TimelineItem.Event)?.eventId
-            ?: return@LaunchedEffect
-        if (firstVisibleIndex <= lastReadMarkerIndex && eventId != lastReadMarkerId) {
-            lastReadMarkerIndex = firstVisibleIndex
-            lastReadMarkerId = eventId
-            state.eventSink(TimelineEvents.SendReadReceipt(eventId))
-        }
+        state.eventSink(TimelineEvents.OnScrollFinished(firstVisibleIndex))
     }
 
     Box(modifier = modifier) {
