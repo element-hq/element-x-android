@@ -73,10 +73,10 @@ import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 class RustMatrixClient constructor(
     private val client: Client,
     private val sessionStore: SessionStore,
-    private val appCoroutineScope: CoroutineScope,
+    appCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val baseDirectory: File,
-    private val baseCacheDirectory: File,
+    baseCacheDirectory: File,
     private val clock: SystemClock,
 ) : MatrixClient {
 
