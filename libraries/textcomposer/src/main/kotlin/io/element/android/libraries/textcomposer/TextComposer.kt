@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.textcomposer
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -105,14 +107,20 @@ fun TextComposer(
         AttachmentButton(onClick = onAddAttachment, modifier = Modifier.padding(vertical = 6.dp))
         Spacer(modifier = Modifier.width(12.dp))
         var lineCount by remember { mutableStateOf(0) }
-        val roundedCorners = remember(lineCount, composerMode) {
+        val roundedCornerSize = remember(lineCount, composerMode) {
             if (lineCount > 1 || composerMode is MessageComposerMode.Special) {
-                RoundedCornerShape(20.dp)
+                20.dp
             } else {
-                RoundedCornerShape(28.dp)
+                28.dp
             }
         }
-
+        val roundedCornerSizeState = animateDpAsState(
+            targetValue = roundedCornerSize,
+            animationSpec = tween(
+                durationMillis = 100,
+            )
+        )
+        val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
         val minHeight = 42.dp
         val bgColor = ElementTheme.colors.bgSubtleSecondary
         val borderColor = ElementTheme.colors.borderDisabled
