@@ -123,7 +123,9 @@ fun TextComposer(
         val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
         val minHeight = 42.dp
         val bgColor = ElementTheme.colors.bgSubtleSecondary
-        val borderColor = ElementTheme.colors.borderDisabled
+        // Change border color depending on focus
+        var hasFocus by remember { mutableStateOf(false) }
+        val borderColor = if (hasFocus) ElementTheme.colors.borderDisabled else bgColor
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -141,7 +143,10 @@ fun TextComposer(
                         .fillMaxWidth()
                         .heightIn(min = minHeight)
                         .focusRequester(focusRequester)
-                        .onFocusEvent { onFocusChanged(it.hasFocus) },
+                        .onFocusEvent {
+                            hasFocus = it.hasFocus
+                            onFocusChanged(it.hasFocus)
+                        },
                     value = text,
                     onValueChange = { onComposerTextChange(it) },
                     onTextLayout = {
