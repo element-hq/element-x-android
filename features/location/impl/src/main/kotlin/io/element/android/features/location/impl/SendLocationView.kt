@@ -39,9 +39,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.features.location.api.R
 import io.element.android.features.location.impl.map.MapView
 import io.element.android.features.location.impl.map.rememberMapState
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -52,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.matrix.ui.R as MatrixUIR
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -115,9 +116,15 @@ fun SendLocationView(
                 mapState = mapState,
             )
             Icon(
-                resourceId = R.drawable.pin,
+                resourceId = MatrixUIR.drawable.pin,
                 contentDescription = null,
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
+                modifier = Modifier.align { size, space, _ ->
+                    IntOffset(
+                        x = (space.width - size.width) / 2,
+                        y = (space.height / 2) - size.height,
+                    )
+                }
             )
         }
     }

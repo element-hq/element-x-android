@@ -264,11 +264,16 @@ class MessagesPresenter @AssistedInject constructor(
                 type = AttachmentThumbnailType.File,
                 blurHash = null,
             )
+            is TimelineItemLocationContent -> AttachmentThumbnailInfo(
+                mediaSource = null,
+                textContent = null,
+                type = AttachmentThumbnailType.Location,
+                blurHash = null,
+            )
             is TimelineItemTextBasedContent,
             is TimelineItemRedactedContent,
             is TimelineItemStateContent,
             is TimelineItemEncryptedContent,
-            is TimelineItemLocationContent,
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(
