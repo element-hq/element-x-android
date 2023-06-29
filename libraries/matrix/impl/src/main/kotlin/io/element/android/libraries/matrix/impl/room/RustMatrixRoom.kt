@@ -168,6 +168,9 @@ class RustMatrixRoom(
     override val joinedMemberCount: Long
         get() = innerRoom.joinedMembersCount().toLong()
 
+    override val activeMemberCount: Long
+        get() = innerRoom.activeMembersCount().toLong()
+
     override suspend fun updateMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
         val currentState = _membersStateFlow.value
         val currentMembers = currentState.roomMembers()

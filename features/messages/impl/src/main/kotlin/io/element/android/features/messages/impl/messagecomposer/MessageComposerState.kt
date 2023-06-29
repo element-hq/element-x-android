@@ -26,6 +26,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class MessageComposerState(
     val text: StableCharSequence?,
     val isFullScreen: Boolean,
+    val hasFocus: Boolean,
     val mode: MessageComposerMode,
     val showAttachmentSourcePicker: Boolean,
     val attachmentsState: AttachmentsState,
