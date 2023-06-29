@@ -38,11 +38,16 @@ fun DropdownMenu(
     properties: PopupProperties = PopupProperties(focusable = true),
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val bgColor = if (ElementTheme.isLightTheme) {
+        ElementTheme.materialColors.background
+    } else {
+        ElementTheme.colors.bgSubtlePrimary
+    }
     androidx.compose.material3.DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
         modifier = modifier
-            .background(color = ElementTheme.materialColors.background)
+            .background(color = bgColor)
             .widthIn(min = minMenuWidth),
         offset = offset,
         properties = properties,
