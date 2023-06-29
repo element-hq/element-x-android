@@ -32,6 +32,9 @@ class FakeMatrixTimeline(
     private val paginationState: MutableStateFlow<MatrixTimeline.PaginationState> = MutableStateFlow(initialPaginationState)
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> = MutableStateFlow(initialTimelineItems)
 
+    var sendReadReceiptCount = 0
+        private set
+
     fun updatePaginationState(update: (MatrixTimeline.PaginationState.() -> MatrixTimeline.PaginationState)) {
         paginationState.value = update(paginationState.value)
     }
@@ -64,6 +67,11 @@ class FakeMatrixTimeline(
 
 
     override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun sendReadReceipt(eventId: EventId): Result<Unit> {
+        sendReadReceiptCount++
         return Result.success(Unit)
     }
 }
