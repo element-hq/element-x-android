@@ -59,7 +59,6 @@ fun TimelineItemInformativeView(
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 14.sp,
-            // Since the font size is smaller, add more space to extra padding, to not overlap with the timestamp
             text = text + extraPadding.getStr(14.sp)
         )
     }
