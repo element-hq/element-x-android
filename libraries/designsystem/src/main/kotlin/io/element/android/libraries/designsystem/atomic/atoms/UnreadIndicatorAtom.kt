@@ -29,14 +29,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
+import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun UnreadIndicatorAtom(
     modifier: Modifier = Modifier,
     size: Dp = 12.dp,
-    color: Color = ElementTheme.colors.roomListUnreadIndicator,
+    color: Color = ElementTheme.colors.unreadIndicator,
 ) {
     Box(
         modifier = modifier

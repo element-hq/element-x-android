@@ -39,7 +39,7 @@ fun MaterialTheme.roomListRoomMessage() = colorScheme.secondary
 @Composable
 fun MaterialTheme.roomListRoomMessageDate() = colorScheme.secondary
 
-val SemanticColors.roomListUnreadIndicator
+val SemanticColors.unreadIndicator
     get() = iconAccentTertiary
 
 val SemanticColors.roomListPlaceholder
@@ -62,7 +62,7 @@ private fun ContentToPreview() {
             "roomListRoomName" to MaterialTheme.roomListRoomName(),
             "roomListRoomMessage" to MaterialTheme.roomListRoomMessage(),
             "roomListRoomMessageDate" to MaterialTheme.roomListRoomMessageDate(),
-            "roomListUnreadIndicator" to ElementTheme.colors.roomListUnreadIndicator,
+            "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "roomListPlaceholder" to ElementTheme.colors.roomListPlaceholder,
         )
     )
