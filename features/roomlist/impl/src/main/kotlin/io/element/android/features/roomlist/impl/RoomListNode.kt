@@ -20,18 +20,21 @@ import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(SessionScope::class)
 class RoomListNode @AssistedInject constructor(
@@ -39,7 +42,16 @@ class RoomListNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomListPresenter,
     private val inviteFriendsUseCase: InviteFriendsUseCase,
+    private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
+
+    init {
+        lifecycle.subscribe(
+            onResume = {
+                analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.Home))
+            }
+        )
+    }
 
     private fun onRoomClicked(roomId: RoomId) {
         plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomClicked(roomId) }
