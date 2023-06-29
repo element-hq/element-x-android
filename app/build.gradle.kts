@@ -92,13 +92,13 @@ android {
 
     buildTypes {
         named("debug") {
-            resValue("string", "app_name", "ElementX dbg")
+            resValue("string", "app_name", "Element X dbg")
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
 
         named("release") {
-            resValue("string", "app_name", "ElementX")
+            resValue("string", "app_name", "Element X")
             signingConfig = signingConfigs.getByName("debug")
 
             postprocessing {
@@ -115,7 +115,7 @@ android {
             initWith(release)
             applicationIdSuffix = ".nightly"
             versionNameSuffix = "-nightly"
-            resValue("string", "app_name", "ElementX nightly")
+            resValue("string", "app_name", "Element X nightly")
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
 
@@ -229,4 +229,6 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+
+    ksp(libs.showkase.processor)
 }
