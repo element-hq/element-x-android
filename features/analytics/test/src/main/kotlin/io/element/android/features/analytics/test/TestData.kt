@@ -26,6 +26,7 @@ val A_BUILD_META = BuildMeta(
     applicationId = "",
     lowPrivacyLoggingEnabled = false,
     versionName = "",
+    versionCode = 0,
     gitRevision = "",
     gitRevisionDate = "",
     gitBranchName = "",

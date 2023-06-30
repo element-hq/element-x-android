@@ -41,13 +41,14 @@ class PreferencesRootPresenterTest {
             logoutPresenter,
             CurrentUserProvider(matrixClient),
             FakeSessionVerificationService(),
-            A_BUILD_META.buildType
+            A_BUILD_META
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.myUser).isNull()
+            assertThat(initialState.version).isEqualTo("Version " + A_BUILD_META.versionName + " (" + A_BUILD_META.versionCode + ")")
             val loadedState = awaitItem()
             assertThat(loadedState.logoutState.logoutAction).isEqualTo(Async.Uninitialized)
             assertThat(loadedState.myUser).isEqualTo(
