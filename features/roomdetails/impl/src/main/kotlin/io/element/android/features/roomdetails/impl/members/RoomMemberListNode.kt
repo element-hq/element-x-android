@@ -18,21 +18,25 @@ package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
 class RoomMemberListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomMemberListPresenter,
+    private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
@@ -41,6 +45,14 @@ class RoomMemberListNode @AssistedInject constructor(
     }
 
     private val callbacks = plugins<Callback>()
+
+    init {
+        lifecycle.subscribe(
+            onResume = {
+                analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.RoomMembers))
+            }
+        )
+    }
 
     private fun openRoomMemberDetails(roomMemberId: UserId) {
         callbacks.forEach {

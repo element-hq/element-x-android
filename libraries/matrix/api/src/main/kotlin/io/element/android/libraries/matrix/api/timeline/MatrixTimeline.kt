@@ -27,8 +27,8 @@ interface MatrixTimeline {
         val canBackPaginate: Boolean
     )
 
-    fun paginationState(): StateFlow<PaginationState>
-    fun timelineItems(): Flow<List<MatrixTimelineItem>>
+    val paginationState: StateFlow<PaginationState>
+    val timelineItems: Flow<List<MatrixTimelineItem>>
 
     suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
     suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit>

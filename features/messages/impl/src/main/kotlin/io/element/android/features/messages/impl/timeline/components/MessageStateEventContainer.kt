@@ -41,18 +41,15 @@ private val CORNER_RADIUS = 8.dp
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MessageStateEventContainer(
-    isHighlighted: Boolean,
+    @Suppress("UNUSED_PARAMETER") isHighlighted: Boolean,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
-    val backgroundColor = if (isHighlighted) {
-        ElementTheme.legacyColors.messageHighlightedBackground
-    } else {
-        Color.Companion.Transparent
-    }
+    // Ignore isHighlighted for now, we need a design decision on it.
+    val backgroundColor = Color.Transparent
     val shape = RoundedCornerShape(CORNER_RADIUS)
     Surface(
         modifier = modifier

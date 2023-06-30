@@ -16,8 +16,6 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
 
@@ -25,29 +23,14 @@ android {
     namespace = "io.element.android.features.location.api"
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
-
 dependencies {
-    implementation(libs.dagger)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.network)
     implementation(projects.libraries.core)
     implementation(projects.libraries.uiStrings)
-    implementation(libs.maplibre)
-    implementation(libs.network.retrofit)
-    implementation(libs.maplibre.annotation)
     implementation(libs.coil.compose)
-    implementation(libs.serialization.json)
-    implementation(libs.accompanist.permission)
     ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.test.truth)
-    testImplementation(projects.libraries.matrix.test)
 }

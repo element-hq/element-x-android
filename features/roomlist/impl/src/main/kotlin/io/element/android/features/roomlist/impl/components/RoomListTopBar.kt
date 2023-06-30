@@ -19,12 +19,10 @@ package io.element.android.features.roomlist.impl.components
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
@@ -48,6 +46,9 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.DropdownMenu
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
@@ -58,6 +59,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -137,12 +139,20 @@ private fun DefaultRoomListTopBar(
             IconButton(
                 onClick = onSearchClicked,
             ) {
-                Icon(Icons.Default.Search, contentDescription = stringResource(CommonStrings.action_search))
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    tint = ElementTheme.materialColors.secondary,
+                    contentDescription = stringResource(CommonStrings.action_search),
+                )
             }
             IconButton(
                 onClick = { showMenu = !showMenu }
             ) {
-                Icon(Icons.Default.MoreVert, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    tint = ElementTheme.materialColors.secondary,
+                    contentDescription = null,
+                )
             }
             DropdownMenu(
                 expanded = showMenu,
@@ -153,16 +163,28 @@ private fun DefaultRoomListTopBar(
                         showMenu = false
                         onMenuActionClicked(RoomListMenuAction.InviteFriends)
                     },
-                    text = { Text(stringResource(id = CommonStrings.action_invite)) },
-                    leadingIcon = { Icon(Icons.Default.Share, contentDescription = null) }
+                    text = { DropdownMenuItemText(stringResource(id = CommonStrings.action_invite)) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Share,
+                            tint = ElementTheme.materialColors.secondary,
+                            contentDescription = null,
+                        )
+                    }
                 )
                 DropdownMenuItem(
                     onClick = {
                         showMenu = false
                         onMenuActionClicked(RoomListMenuAction.ReportBug)
                     },
-                    text = { Text(stringResource(id = CommonStrings.common_report_a_bug)) },
-                    leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) }
+                    text = { DropdownMenuItemText(stringResource(id = CommonStrings.common_report_a_bug)) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.BugReport,
+                            tint = ElementTheme.materialColors.secondary,
+                            contentDescription = null,
+                        )
+                    }
                 )
             }
         },
