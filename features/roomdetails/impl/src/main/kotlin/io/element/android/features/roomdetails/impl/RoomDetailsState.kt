@@ -35,7 +35,7 @@ data class RoomDetailsState(
     val canEdit: Boolean,
     val canInvite: Boolean,
     val leaveRoomState: LeaveRoomState,
-    val roomNotificationSettings: Async<RoomNotificationSettings>,
+    val roomNotificationSettings: RoomNotificationSettings?,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 

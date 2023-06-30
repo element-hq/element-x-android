@@ -224,11 +224,11 @@ internal fun RoomDetailsTopBar(
 @Composable
 internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        val roomNotificationSettings = state.roomNotificationSettings.dataOrNull()
+        val roomNotificationSettings = state.roomNotificationSettings
         if (roomNotificationSettings != null) {
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
                 MainActionButton(title = stringResource(StringR.string.common_unmute), icon = Icons.Outlined.NotificationsOff, onClick = {
-                    state.eventSink(RoomDetailsEvent.MuteNotification)
+                    state.eventSink(RoomDetailsEvent.UnmuteNotification)
                 })
             } else {
                 MainActionButton(title = stringResource(StringR.string.common_mute), icon = Icons.Outlined.Notifications, onClick = {

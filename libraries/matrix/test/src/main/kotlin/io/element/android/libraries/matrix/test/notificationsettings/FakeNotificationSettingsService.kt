@@ -30,10 +30,10 @@ class FakeNotificationSettingsService : NotificationSettingsService {
     private val unmuteRoomResult: Result<Unit> = Result.success(Unit)
     private val getRoomNotificationSettingsResult: Result<RoomNotificationSettings> = Result.success(A_ROOM_NOTIFICATION_SETTINGS)
 
-    override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState>
+    override val notificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState>
         get() = _roomNotificationSettingsStateFlow
 
-    override suspend fun getRoomNotificationMode(roomId: RoomId): Result<RoomNotificationSettings> {
+    override suspend fun getRoomNotificationSettings(roomId: RoomId): Result<RoomNotificationSettings> {
         return getRoomNotificationSettingsResult
     }
 

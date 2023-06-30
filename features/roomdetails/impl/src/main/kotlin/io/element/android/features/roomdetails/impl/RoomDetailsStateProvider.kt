@@ -81,7 +81,7 @@ fun aRoomDetailsState() = RoomDetailsState(
     roomType = RoomDetailsType.Room,
     roomMemberDetailsState = null,
     leaveRoomState = LeaveRoomState(),
-    roomNotificationSettings = Async.Success(RoomNotificationSettings(mode = RoomNotificationMode.MUTE, isDefault = false)),
+    roomNotificationSettings = RoomNotificationSettings(mode = RoomNotificationMode.MUTE, isDefault = false),
     eventSink = {}
 )
 

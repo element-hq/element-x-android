@@ -20,35 +20,44 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
-import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
 import org.matrix.rustcomponents.sdk.RoomNotificationMode
 
 class RustNotificationSettingsService(
     private val client: Client,
+    private val coroutineScope: CoroutineScope,
 ) : NotificationSettingsService, NotificationSettingsDelegate {
 
-    private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
-    override val roomNotificationSettingsStateFlow = _roomNotificationSettingsStateFlow.asStateFlow()
-    override suspend fun getRoomNotificationMode(roomId: RoomId): Result<RoomNotificationSettings> =
+    private val notificationSettings: NotificationSettings = client.getNotificationSettings()
+    private val _notificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
+    override val notificationSettingsStateFlow = _notificationSettingsStateFlow.asStateFlow()
+
+    init {
+        coroutineScope.launch { notificationSettings.setDelegate(this@RustNotificationSettingsService) }
+    }
+
+    override suspend fun getRoomNotificationSettings(roomId: RoomId): Result<RoomNotificationSettings> =
         runCatching {
-            client.getNotificationSettings().getRoomNotificationMode(roomId.value).let(RoomNotificationSettingsMapper::map)
+            notificationSettings.getRoomNotificationMode(roomId.value).let(RoomNotificationSettingsMapper::map)
         }
 
     override suspend fun muteRoom(roomId: RoomId): Result<Unit> =
         runCatching {
-            client.getNotificationSettings().setRoomNotificationMode(roomId.value, RoomNotificationMode.MUTE)
+            notificationSettings.setRoomNotificationMode(roomId.value, RoomNotificationMode.MUTE)
         }
 
     override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong) =
         runCatching {
-            client.getNotificationSettings().unmuteRoom(roomId.value, isEncrypted, membersCount)
+            notificationSettings.unmuteRoom(roomId.value, isEncrypted, membersCount)
         }
 
     override fun notificationSettingsDidChange() {
-        _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.ChangedNotificationSettings
+        _notificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.ChangedNotificationSettings
     }
 }

@@ -63,6 +63,7 @@ class FakeMatrixRoom(
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
+    private var updateRoomNotificationSettingsResult: Result<Unit> = Result.success(Unit)
     private var acceptInviteResult = Result.success(Unit)
     private var rejectInviteResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
@@ -130,6 +131,10 @@ class FakeMatrixRoom(
 
     override suspend fun updateMembers(): Result<Unit> = simulateLongTask {
         updateMembersResult
+    }
+
+    override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
+        updateRoomNotificationSettingsResult
     }
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)

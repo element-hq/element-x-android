@@ -25,9 +25,8 @@ interface NotificationSettingsService {
     /**
      * State of the current room notification settings flow ([MatrixRoomNotificationSettingsState.Unknown] if not started).
      */
-    val roomNotificationSettingsStateFlow : StateFlow<MatrixRoomNotificationSettingsState>
-
-    suspend fun getRoomNotificationMode(roomId: RoomId): Result<RoomNotificationSettings>
+    val notificationSettingsStateFlow : StateFlow<MatrixRoomNotificationSettingsState>
+    suspend fun getRoomNotificationSettings(roomId: RoomId): Result<RoomNotificationSettings>
     suspend fun muteRoom(roomId: RoomId): Result<Unit>
     suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong): Result<Unit>
 }

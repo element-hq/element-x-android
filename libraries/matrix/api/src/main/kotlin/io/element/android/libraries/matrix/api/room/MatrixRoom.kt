@@ -61,7 +61,7 @@ interface MatrixRoom : Closeable {
      */
     suspend fun updateMembers(): Result<Unit>
 
-//    suspend fun updateRoomNotificationSettings(): Result<Unit>
+    suspend fun updateRoomNotificationSettings(): Result<Unit>
 
     val syncUpdateFlow: StateFlow<Long>
 

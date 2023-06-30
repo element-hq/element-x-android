@@ -38,6 +38,8 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
+import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -50,10 +52,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
+import org.matrix.rustcomponents.sdk.RoomNotificationSettings
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
@@ -65,6 +69,7 @@ class RustMatrixRoom(
     override val sessionId: SessionId,
     private val roomListItem: RoomListItem,
     private val innerRoom: Room,
+    private val roomNotificationSettingsService: RustNotificationSettingsService,
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
@@ -83,7 +88,7 @@ class RustMatrixRoom(
 
     private var _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
 
-    private val timeline by lazy {
+    private val _timeline by lazy {
         RustMatrixTimeline(
             matrixRoom = this,
             innerRoom = innerRoom,
@@ -192,18 +197,18 @@ class RustMatrixRoom(
         }
     }
 
-//    override suspend fun updateRoomNotificationSettings(): Result<Unit> = withContext(coroutineDispatchers.io) {
-//        val currentState = _roomNotificationSettingsStateFlow.value
-//        val currentRoomNotificationSettings = currentState.roomNotificationSettings()
-//        _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
-//        runCatching {
-//            innerRoom.members().map(RoomMemberMapper::map)
-//        }.map {
-//            _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
-//        }.onFailure {
-//            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = it)
-//        }
-//    }
+    override suspend fun updateRoomNotificationSettings(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        val currentState = _roomNotificationSettingsStateFlow.value
+        val currentRoomNotificationSettings = currentState.roomNotificationSettings()
+        _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
+        runCatching {
+            roomNotificationSettingsService.getRoomNotificationSettings(roomId).getOrThrow()
+        }.map {
+            _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(it)
+        }.onFailure {
+            _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Error(prevRoomNotificationSettings = currentRoomNotificationSettings, failure = it)
+        }
+    }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> =
         withContext(coroutineDispatchers.io) {
