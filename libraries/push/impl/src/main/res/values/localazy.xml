@@ -4,6 +4,7 @@
   <string name="notification_channel_listening_for_events">"Listening for events"</string>
   <string name="notification_channel_noisy">"Noisy notifications"</string>
   <string name="notification_channel_silent">"Silent notifications"</string>
+  <string name="notification_fallback_content">"Notification"</string>
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
   <string name="notification_invitation_action_join">"Join"</string>
   <string name="notification_invitation_action_reject">"Reject"</string>

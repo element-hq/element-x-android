@@ -22,10 +22,9 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
-import io.element.android.libraries.matrix.api.notification.NotificationEvent
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
@@ -41,7 +40,6 @@ import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -68,57 +66,44 @@ class NotifiableEventResolver @Inject constructor(
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
         val session = matrixAuthenticationService.restoreSession(sessionId).getOrNull() ?: return null
-        // TODO EAx, no need for a session?
         val notificationService = session.notificationService()
         val notificationData = notificationService.getNotification(
                 userId = sessionId,
                 roomId = roomId,
                 eventId = eventId,
-                filterByPushRules = true,
-            ).recover {
-                Timber.tag(loggerTag.value).e(it, "Unable to resolve event.")
-                null
+            // FIXME should be true in the future, but right now it's broken
+            //  (https://github.com/vector-im/element-x-android/issues/640#issuecomment-1612913658)
+                filterByPushRules = false,
+            ).onFailure {
+                Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
             }.getOrNull()
 
-        val notifiableEvent = notificationData?.asNotifiableEvent(sessionId)
-
-        return if (notifiableEvent?.description != null) {
-            notifiableEvent
-        } else {
-            fallbackNotifiableEvent(sessionId, roomId, eventId)
-        }
+        return notificationData?.asNotifiableEvent(sessionId)
+            ?: fallbackNotifiableEvent(sessionId, roomId, eventId)
     }
 
     private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent? {
         return when (val content = this.event.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
-                return NotifiableMessageEvent(
+                buildNotifiableMessageEvent(
                     sessionId = userId,
                     roomId = roomId,
                     eventId = eventId,
-                    editedEventId = null,
-                    canBeReplaced = true,
                     noisy = isNoisy,
                     timestamp = event.timestamp,
                     senderName = senderDisplayName,
                     senderId = senderId.value,
-                    body = messageFromNotificationContent(content, isDirect),
+                    body = descriptionFromMessageContent(content),
                     imageUriString = event.contentUrl,
-                    threadId = null,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
-                    soundName = null,
-                    outGoingMessage = false,
-                    outGoingMessageFailed = false,
-                    isRedacted = false,
-                    isUpdated = false
                 )
             }
             is NotificationContent.StateEvent.RoomMemberContent -> {
                 if (content.membershipState == RoomMembershipState.INVITE) {
-                    return InviteNotifiableEvent(
+                    InviteNotifiableEvent(
                         sessionId = userId,
                         roomId = roomId,
                         eventId = eventId,
@@ -130,9 +115,9 @@ class NotifiableEventResolver @Inject constructor(
                         soundName = null,
                         isRedacted = false,
                         isUpdated = false,
-                        description = messageFromRoomMembershipContent(content, isDirect) ?: return null,
-                        type = null, // TODO: find proper value
-                        title = "Invitation", // TODO: find proper value
+                        description = descriptionFromRoomMembershipContent(content, isDirect) ?: return null,
+                        type = null, // TODO check if type is needed anymore
+                        title = null, // TODO check if title is needed anymore
                     )
                 } else {
                     null
@@ -142,40 +127,37 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    private fun fallbackNotifiableEvent(userId: SessionId, roomId: RoomId, eventId: EventId) = NotifiableMessageEvent(
+    private fun fallbackNotifiableEvent(
+        userId: SessionId,
+        roomId: RoomId,
+        eventId: EventId
+    ) = buildNotifiableMessageEvent(
         sessionId = userId,
         roomId = roomId,
         eventId = eventId,
-        editedEventId = null,
-        canBeReplaced = true,
         noisy = false,
         timestamp = clock.epochMillis(),
-        soundName = null,
-        isRedacted = false,
-        isUpdated = false,
-        body = "Notification", // TODO: find proper value
-        imageUriString = null,
-        threadId = null,
-        roomName = null,
-        roomIsDirect = false,
-        roomAvatarPath = null,
+        body = stringProvider.getString(R.string.notification_fallback_content),
         senderName = null,
-        senderAvatarPath = null,
         senderId = null,
     )
 
-    private fun messageFromNotificationContent(
-        notificationContent: NotificationContent,
-        isDirectRoom: Boolean
-    ): String? {
-        return when (notificationContent) {
-            is NotificationContent.MessageLike.RoomMessage -> notificationContent.messageType.toNotificationMessage()
-            is NotificationContent.StateEvent.RoomMemberContent -> messageFromRoomMembershipContent(notificationContent, isDirectRoom)
-            else -> null
+    private fun descriptionFromMessageContent(
+        content: NotificationContent.MessageLike.RoomMessage,
+    ): String {
+        return when (val messageType = content.messageType) {
+            is AudioMessageType -> messageType.body
+            is EmoteMessageType -> messageType.body
+            is FileMessageType -> messageType.body
+            is ImageMessageType -> messageType.body
+            is NoticeMessageType -> messageType.body
+            is TextMessageType -> messageType.body
+            is VideoMessageType -> messageType.body
+            is UnknownMessageType -> stringProvider.getString(CommonStrings.common_unsupported_event)
         }
     }
 
-    private fun messageFromRoomMembershipContent(
+    private fun descriptionFromRoomMembershipContent(
         content: NotificationContent.StateEvent.RoomMemberContent,
         isDirectRoom: Boolean
     ): String? {
@@ -190,17 +172,54 @@ class NotifiableEventResolver @Inject constructor(
             else -> null
         }
     }
-
-    private fun MessageType.toNotificationMessage(): String {
-        return when (this) {
-            is AudioMessageType -> body
-            is EmoteMessageType -> body
-            is FileMessageType -> body
-            is ImageMessageType -> body
-            is NoticeMessageType -> body
-            is TextMessageType -> body
-            is VideoMessageType -> body
-            is UnknownMessageType -> stringProvider.getString(CommonStrings.common_unsupported_event)
-        }
-    }
 }
+
+@Suppress("LongParameterList")
+private fun buildNotifiableMessageEvent(
+    sessionId: SessionId,
+    roomId: RoomId,
+    eventId: EventId,
+    editedEventId: EventId? = null,
+    canBeReplaced: Boolean = false,
+    noisy: Boolean,
+    timestamp: Long,
+    senderName: String?,
+    senderId: String?,
+    body: String?,
+    // We cannot use Uri? type here, as that could trigger a
+    // NotSerializableException when persisting this to storage
+    imageUriString: String? = null,
+    threadId: ThreadId? = null,
+    roomName: String? = null,
+    roomIsDirect: Boolean = false,
+    roomAvatarPath: String? = null,
+    senderAvatarPath: String? = null,
+    soundName: String? = null,
+    // This is used for >N notification, as the result of a smart reply
+    outGoingMessage: Boolean = false,
+    outGoingMessageFailed: Boolean = false,
+    isRedacted: Boolean = false,
+    isUpdated: Boolean = false
+) = NotifiableMessageEvent(
+    sessionId = sessionId,
+    roomId = roomId,
+    eventId = eventId,
+    editedEventId = editedEventId,
+    canBeReplaced = canBeReplaced,
+    noisy = noisy,
+    timestamp = timestamp,
+    senderName = senderName,
+    senderId = senderId,
+    body = body,
+    imageUriString = imageUriString,
+    threadId = threadId,
+    roomName = roomName,
+    roomIsDirect = roomIsDirect,
+    roomAvatarPath = roomAvatarPath,
+    senderAvatarPath = senderAvatarPath,
+    soundName = soundName,
+    outGoingMessage = outGoingMessage,
+    outGoingMessageFailed = outGoingMessageFailed,
+    isRedacted = isRedacted,
+    isUpdated = isUpdated
+)

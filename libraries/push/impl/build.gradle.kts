@@ -53,10 +53,6 @@ dependencies {
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
 
-    api(libs.gujun.span) {
-        exclude(group = "com.android.support", module = "support-annotations")
-    }
-
     // TODO Temporary use the deprecated LocalBroadcastManager, to be changed later.
     implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 

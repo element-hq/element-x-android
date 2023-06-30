@@ -17,8 +17,12 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.graphics.Bitmap
+import android.graphics.Typeface
+import android.text.style.StyleSpan
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
@@ -26,8 +30,6 @@ import io.element.android.libraries.push.impl.notifications.debug.annotateForDeb
 import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import me.gujun.android.span.Span
-import me.gujun.android.span.span
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -151,22 +153,24 @@ class RoomGroupMessageCreator @Inject constructor(
         }
     }
 
-    private fun createFirstMessageSummaryLine(event: NotifiableMessageEvent, roomName: String, roomIsDirect: Boolean): Span {
+    private fun createFirstMessageSummaryLine(event: NotifiableMessageEvent, roomName: String, roomIsDirect: Boolean): CharSequence {
         return if (roomIsDirect) {
-            span {
-                span {
-                    textStyle = "bold"
-                    +String.format("%s: ", event.senderName)
+            buildSpannedString {
+                inSpans(StyleSpan(Typeface.BOLD)) {
+                    append(event.senderName)
+                    append(": ")
                 }
-                +(event.description)
+                append(event.description)
             }
         } else {
-            span {
-                span {
-                    textStyle = "bold"
-                    +String.format("%s: %s ", roomName, event.senderName)
+            buildSpannedString {
+                inSpans(StyleSpan(Typeface.BOLD)) {
+                    append(roomName)
+                    append(": ")
+                    event.senderName
+                    append(" ")
                 }
-                +(event.description)
+                append(event.description)
             }
         }
     }

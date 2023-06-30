@@ -37,7 +37,6 @@ dependencyResolutionManagement {
             }
         }
         //noinspection JcenterRepositoryObsolete
-        jcenter()
         flatDir {
             dirs("libraries/matrix/libs")
         }
