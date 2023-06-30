@@ -18,7 +18,6 @@ package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.ui.unit.dp
 
-internal val preferenceMinHeightOnlyTitle = 48.dp
-internal val preferenceMinHeight = 64.dp
+internal val preferenceMinHeightOnlyTitle = 56.dp
+internal val preferenceMinHeight = 56.dp
 internal val preferencePaddingHorizontal = 16.dp
-internal val preferencePaddingVertical = 16.dp
