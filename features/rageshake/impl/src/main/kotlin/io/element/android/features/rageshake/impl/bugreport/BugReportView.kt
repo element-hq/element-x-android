@@ -111,14 +111,6 @@ fun BugReportView(
                 enabled = isFormEnabled,
                 title = stringResource(id = R.string.screen_bug_report_include_logs),
             )
-            if (state.hasCrashLogs) {
-                PreferenceSwitch(
-                    isChecked = state.formState.sendCrashLogs,
-                    onCheckedChange = { eventSink(BugReportEvents.SetSendCrashLog(it)) },
-                    enabled = isFormEnabled,
-                    title = stringResource(id = R.string.screen_bug_report_include_crash_logs),
-                )
-            }
             PreferenceSwitch(
                 isChecked = state.formState.canContact,
                 onCheckedChange = { eventSink(BugReportEvents.SetCanContact(it)) },
