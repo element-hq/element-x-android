@@ -20,19 +20,15 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.analytics.impl.preferences.DefaultAnalyticsPreferencesPresenter
 import io.element.android.features.analytics.test.A_BUILD_META
-import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
-import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
-import io.element.android.features.rageshake.test.rageshake.FakeRageShake
-import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.user.CurrentUserProvider
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -44,6 +40,7 @@ class PreferencesRootPresenterTest {
         val presenter = PreferencesRootPresenter(
             logoutPresenter,
             CurrentUserProvider(matrixClient),
+            FakeSessionVerificationService(),
             A_BUILD_META.buildType
         )
         moleculeFlow(RecompositionClock.Immediate) {

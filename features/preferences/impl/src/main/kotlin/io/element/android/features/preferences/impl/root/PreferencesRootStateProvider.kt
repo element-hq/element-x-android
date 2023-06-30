@@ -21,5 +21,6 @@ import io.element.android.features.logout.api.aLogoutPreferenceState
 fun aPreferencesRootState() = PreferencesRootState(
     logoutState = aLogoutPreferenceState(),
     myUser = null,
+    showCompleteVerification = true,
     showDeveloperSettings = true
 )
