@@ -26,10 +26,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.architecture.Presenter
@@ -43,8 +43,8 @@ import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsS
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.user.CurrentUserProvider
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -60,6 +60,7 @@ private const val extendedRangeSize = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
+    private val currentUserProvider: CurrentUserProvider,
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val sessionVerificationService: SessionVerificationService,
@@ -162,13 +163,7 @@ class RoomListPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
-        val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
-        val userDisplayName = client.loadUserDisplayName().getOrNull()
-        matrixUser.value = MatrixUser(
-            userId = UserId(client.sessionId.value),
-            displayName = userDisplayName,
-            avatarUrl = userAvatarUrl,
-        )
+        matrixUser.value = currentUserProvider.provide()
     }
 
     private fun updateVisibleRange(range: IntRange) {

@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.libraries.matrix.api.user
 
-import io.element.android.features.analytics.api.preferences.aAnalyticsPreferencesState
-import io.element.android.features.logout.api.aLogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
+import io.element.android.libraries.matrix.api.MatrixClient
+import javax.inject.Inject
 
-fun aPreferencesRootState() = PreferencesRootState(
-    logoutState = aLogoutPreferenceState(),
-    rageshakeState = aRageshakePreferencesState(),
-    analyticsState = aAnalyticsPreferencesState(),
-    myUser = null,
-    showDeveloperSettings = true
-)
+class CurrentUserProvider @Inject constructor(
+    private val matrixClient: MatrixClient,
+) {
+    suspend fun provide(): MatrixUser {
+        val userAvatarUrl = matrixClient.loadUserAvatarURLString().getOrNull()
+        val userDisplayName = matrixClient.loadUserDisplayName().getOrNull()
+        return MatrixUser(
+            userId = matrixClient.sessionId,
+            displayName = userDisplayName,
+            avatarUrl = userAvatarUrl,
+        )
+    }
+}

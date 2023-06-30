@@ -92,5 +92,5 @@ fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) 
 
 @Composable
 private fun ContentToPreview(matrixUser: MatrixUser) {
-    PreferencesRootView(aPreferencesRootState().copy(myUser = Async.Success(matrixUser)))
+    PreferencesRootView(aPreferencesRootState().copy(myUser = matrixUser))
 }
