@@ -16,6 +16,8 @@
 package io.element.android.libraries.push.impl.notifications.model
 
 import android.net.Uri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -70,6 +72,12 @@ fun NotifiableMessageEvent.shouldIgnoreMessageEventInRoom(
     val currentSessionId = appNavigationState?.currentSessionId() ?: return false
     return when (val currentRoomId = appNavigationState.currentRoomId()) {
         null -> false
-        else -> sessionId == currentSessionId && roomId == currentRoomId && threadId == appNavigationState.currentThreadId()
+        else -> isAppInForeground
+            && sessionId == currentSessionId
+            && roomId == currentRoomId
+            && threadId == appNavigationState.currentThreadId()
     }
 }
+
+private val isAppInForeground: Boolean
+    get() = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
