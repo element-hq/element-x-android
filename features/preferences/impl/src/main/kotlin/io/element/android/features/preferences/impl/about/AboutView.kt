@@ -30,6 +30,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun AboutView(
     state: AboutState,
+    onElementLegalClicked: (ElementLegal) -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -38,9 +39,12 @@ fun AboutView(
         onBackPressed = onBackPressed,
         title = stringResource(id = CommonStrings.common_about)
     ) {
-        PreferenceText(title = stringResource(id = CommonStrings.common_copyright))
-        PreferenceText(title = stringResource(id = CommonStrings.common_acceptable_use_policy))
-        PreferenceText(title = stringResource(id = CommonStrings.common_privacy_policy))
+        state.elementLegals.forEach { elementLegal ->
+            PreferenceText(
+                title = stringResource(id = elementLegal.titleRes),
+                onClick = { onElementLegalClicked(elementLegal) }
+            )
+        }
     }
 }
 
@@ -58,6 +62,7 @@ fun AboutViewDarkPreview(@PreviewParameter(AboutStateProvider::class) state: Abo
 private fun ContentToPreview(state: AboutState) {
     AboutView(
         state = state,
+        onElementLegalClicked = {},
         onBackPressed = {},
     )
 }

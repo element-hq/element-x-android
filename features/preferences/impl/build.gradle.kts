@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.browser)
     api(projects.features.preferences.api)
     ksp(libs.showkase.processor)
 

@@ -16,15 +16,19 @@
 
 package io.element.android.features.preferences.impl.about
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.theme.ElementTheme
 
 @ContributesNode(SessionScope::class)
 class AboutNode @AssistedInject constructor(
@@ -33,12 +37,25 @@ class AboutNode @AssistedInject constructor(
     private val presenter: AboutPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    private fun onElementLegalClicked(
+        activity: Activity,
+        darkTheme: Boolean,
+        elementLegal: ElementLegal,
+    ) {
+        activity.openUrlInChromeCustomTab(null, darkTheme, elementLegal.url)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
+        val activity = LocalContext.current as Activity
+        val isDark = ElementTheme.isLightTheme.not()
         val state = presenter.present()
         AboutView(
             state = state,
             onBackPressed = ::navigateUp,
+            onElementLegalClicked = { elementLegal ->
+                onElementLegalClicked(activity, isDark, elementLegal)
+            },
             modifier = modifier
         )
     }

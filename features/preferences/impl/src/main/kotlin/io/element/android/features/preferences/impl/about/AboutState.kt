@@ -19,5 +19,6 @@ package io.element.android.features.preferences.impl.about
 // TODO add your ui models. Remove the eventSink if you don't have events.
 // Do not use default value, so no member get forgotten in the presenters.
 data class AboutState(
+    val elementLegals: List<ElementLegal>,
     val eventSink: (AboutEvents) -> Unit
 )
