@@ -68,6 +68,7 @@ fun OutlinedTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = OutlinedTextFieldDefaults.shape,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
@@ -90,6 +91,7 @@ fun OutlinedTextField(
         keyboardActions = keyboardActions,
         singleLine = singleLine,
         maxLines = maxLines,
+        minLines = minLines,
         interactionSource = interactionSource,
         shape = shape,
         colors = colors,

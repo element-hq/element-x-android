@@ -26,7 +26,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
-import io.element.android.features.rageshake.impl.bugreport.BugReportPresenter
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
@@ -42,7 +41,8 @@ class BugReportNode @AssistedInject constructor(
         BugReportView(
             state = state,
             modifier = modifier,
-            onDone = this::onDone
+            onBackPressed = { navigateUp() },
+            onDone = this::onDone,
         )
     }
 
