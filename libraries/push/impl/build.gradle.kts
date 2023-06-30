@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.uiStrings)
     api(projects.libraries.pushproviders.api)
     api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)

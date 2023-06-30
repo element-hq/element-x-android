@@ -121,9 +121,9 @@ class DefaultPushHandler @Inject constructor(
                 return
             }
 
-            val notificationData = notifiableEventResolver.resolveEvent(userId, pushData.roomId, pushData.eventId)
+            val notifiableEvent = notifiableEventResolver.resolveEvent(userId, pushData.roomId, pushData.eventId)
 
-            if (notificationData == null) {
+            if (notifiableEvent == null) {
                 Timber.w("Unable to get a notification data")
                 return
             }
@@ -135,7 +135,7 @@ class DefaultPushHandler @Inject constructor(
                 return
             }
 
-            notificationDrawerManager.onNotifiableEventReceived(notificationData)
+            notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
         }

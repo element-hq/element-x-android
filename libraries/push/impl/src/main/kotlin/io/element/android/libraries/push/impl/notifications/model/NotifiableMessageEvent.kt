@@ -54,7 +54,7 @@ data class NotifiableMessageEvent(
 ) : NotifiableEvent {
 
     val type: String = EventType.MESSAGE
-    val description: String = body ?: ""
+    override val description: String = body ?: ""
     val title: String = senderName ?: ""
 
     // TODO EAx The image has to be downloaded and expose using the file provider.

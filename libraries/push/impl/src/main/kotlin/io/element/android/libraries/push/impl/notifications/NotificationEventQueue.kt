@@ -57,7 +57,7 @@ data class NotificationEventQueue constructor(
                 when (it) {
                     is NotifiableMessageEvent -> roomsLeft.contains(it.roomId)
                     is InviteNotifiableEvent -> roomsLeft.contains(it.roomId) || roomsJoined.contains(it.roomId)
-                    else -> false
+                    is SimpleNotifiableEvent -> false
                 }
             }
         }
