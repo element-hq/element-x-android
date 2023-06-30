@@ -16,6 +16,8 @@
 
 package io.element.android.features.preferences.impl.root
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.outlined.BugReport
@@ -25,7 +27,9 @@ import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
@@ -34,8 +38,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -85,6 +91,15 @@ fun PreferencesRootView(
         Divider()
         LogoutPreferenceView(
             state = state.logoutState,
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 40.dp, bottom = 24.dp),
+            textAlign = TextAlign.Center,
+            text = state.version,
+            style = ElementTheme.typography.fontBodySmRegular,
+            color = ElementTheme.materialColors.secondary,
         )
     }
 }

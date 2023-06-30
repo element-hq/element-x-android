@@ -192,6 +192,7 @@ private fun aBuildMeta() =
         applicationName = "An Application",
         lowPrivacyLoggingEnabled = true,
         versionName = "",
+        versionCode = 0,
         gitRevision = "",
         gitBranchName = "",
         gitRevisionDate = "",

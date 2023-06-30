@@ -25,13 +25,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.res.stringResource
 import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.user.CurrentUserProvider
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,7 +43,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val logoutPresenter: LogoutPreferencePresenter,
     private val currentUserProvider: CurrentUserProvider,
     private val sessionVerificationService: SessionVerificationService,
-    private val buildType: BuildType,
+    private val buildMeta: BuildMeta,
 ) : Presenter<PreferencesRootState> {
 
     @Composable
@@ -58,11 +61,17 @@ class PreferencesRootPresenter @Inject constructor(
             derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified }
         }
 
+        val version = stringResource(
+            id = CommonStrings.settings_version_number,
+            buildMeta.versionName,
+            buildMeta.versionCode.toString()
+        )
         val logoutState = logoutPresenter.present()
-        val showDeveloperSettings = buildType != BuildType.RELEASE
+        val showDeveloperSettings = buildMeta.buildType != BuildType.RELEASE
         return PreferencesRootState(
             logoutState = logoutState,
             myUser = matrixUser.value,
+            version = version,
             showCompleteVerification = sessionIsNotVerified,
             showDeveloperSettings = showDeveloperSettings
         )
