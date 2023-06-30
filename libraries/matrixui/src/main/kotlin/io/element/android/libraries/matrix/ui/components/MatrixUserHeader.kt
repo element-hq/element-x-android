@@ -46,8 +46,22 @@ fun MatrixUserHeader(
     // onClick: () -> Unit = {},
 ) {
     if (matrixUser == null) {
-        return MatrixUserHeaderPlaceholder(modifier = modifier)
+        MatrixUserHeaderPlaceholder(modifier = modifier)
+    } else {
+        MatrixUserHeaderContent(
+            matrixUser = matrixUser,
+            modifier = modifier,
+            // onClick = onClick
+        )
     }
+}
+
+@Composable
+private fun MatrixUserHeaderContent(
+    matrixUser: MatrixUser,
+    modifier: Modifier = Modifier,
+    // onClick: () -> Unit = {},
+) {
     Row(
         modifier = modifier
             // .clickable(onClick = onClick)

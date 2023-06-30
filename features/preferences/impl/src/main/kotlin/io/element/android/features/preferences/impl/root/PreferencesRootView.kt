@@ -47,13 +47,13 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun PreferencesRootView(
     state: PreferencesRootState,
-    modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
     onVerifyClicked: () -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     // Include pref from other modules
     PreferenceView(
