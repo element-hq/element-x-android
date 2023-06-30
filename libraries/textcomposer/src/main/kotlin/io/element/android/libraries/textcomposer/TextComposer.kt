@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.textcomposer
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,11 +46,13 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -58,9 +62,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -81,8 +85,9 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.android.awaitFrame
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun TextComposer(
     composerText: String?,
@@ -106,21 +111,31 @@ fun TextComposer(
         AttachmentButton(onClick = onAddAttachment, modifier = Modifier.padding(vertical = 6.dp))
         Spacer(modifier = Modifier.width(12.dp))
         var lineCount by remember { mutableStateOf(0) }
-        val roundedCorners = remember(lineCount, composerMode) {
+        val roundedCornerSize = remember(lineCount, composerMode) {
             if (lineCount > 1 || composerMode is MessageComposerMode.Special) {
-                RoundedCornerShape(20.dp)
+                20.dp
             } else {
-                RoundedCornerShape(28.dp)
+                28.dp
             }
         }
-
+        val roundedCornerSizeState = animateDpAsState(
+            targetValue = roundedCornerSize,
+            animationSpec = tween(
+                durationMillis = 100,
+            )
+        )
+        val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
         val minHeight = 42.dp
+        val bgColor = ElementTheme.colors.bgSubtleSecondary
+        // Change border color depending on focus
+        var hasFocus by remember { mutableStateOf(false) }
+        val borderColor = if (hasFocus) ElementTheme.colors.borderDisabled else bgColor
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(roundedCorners)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, roundedCorners)
+                .background(color = bgColor)
+                .border(1.dp, borderColor, roundedCorners)
         ) {
             if (composerMode is MessageComposerMode.Special) {
                 ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
@@ -132,7 +147,10 @@ fun TextComposer(
                         .fillMaxWidth()
                         .heightIn(min = minHeight)
                         .focusRequester(focusRequester)
-                        .onFocusEvent { onFocusChanged(it.hasFocus) },
+                        .onFocusEvent {
+                            hasFocus = it.hasFocus
+                            onFocusChanged(it.hasFocus)
+                        },
                     value = text,
                     onValueChange = { onComposerTextChange(it) },
                     onTextLayout = {
@@ -156,16 +174,16 @@ fun TextComposer(
                             colors = TextFieldDefaults.colors(
                                 unfocusedTextColor = MaterialTheme.colorScheme.secondary,
                                 focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedPlaceholderColor = MaterialTheme.colorScheme.secondary,
-                                focusedPlaceholderColor = MaterialTheme.colorScheme.secondary,
+                                unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
+                                focusedPlaceholderColor = ElementTheme.colors.textDisabled,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent,
                                 errorIndicatorColor = Color.Transparent,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                errorContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                unfocusedContainerColor = bgColor,
+                                focusedContainerColor = bgColor,
+                                errorContainerColor = bgColor,
+                                disabledContainerColor = bgColor,
                             )
                         )
                     }
@@ -178,6 +196,18 @@ fun TextComposer(
                     composerMode = composerMode,
                     modifier = Modifier.padding(end = 6.dp, bottom = 6.dp)
                 )
+            }
+        }
+    }
+
+    // Request focus when changing mode, and show keyboard.
+    val keyboard = LocalSoftwareKeyboardController.current
+    LaunchedEffect(composerMode) {
+        if (composerMode is MessageComposerMode.Special) {
+            focusRequester.requestFocus()
+            keyboard?.let {
+                awaitFrame()
+                it.show()
             }
         }
     }
@@ -212,29 +242,35 @@ private fun EditingModeView(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .padding(start = 12.dp)
     ) {
         Icon(
             resourceId = VectorIcons.Edit,
             contentDescription = stringResource(CommonStrings.common_editing),
-            tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(16.dp),
+            tint = ElementTheme.materialColors.secondary,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .size(16.dp),
         )
         Text(
             stringResource(CommonStrings.common_editing),
-            style = ElementTextStyles.Regular.caption2,
+            style = ElementTheme.typography.fontBodySmRegular,
             textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.weight(1f)
+            color = ElementTheme.materialColors.secondary,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .weight(1f)
         )
         Icon(
             imageVector = Icons.Default.Close,
             contentDescription = stringResource(CommonStrings.action_close),
-            tint = MaterialTheme.colorScheme.secondary,
+            tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
+                .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 12.dp)
                 .size(16.dp)
                 .clickable(
                     enabled = true,
@@ -242,8 +278,7 @@ private fun EditingModeView(
                     interactionSource = MutableInteractionSource(),
                     indication = rememberRipple(bounded = false)
                 ),
-
-            )
+        )
     }
 }
 
@@ -279,17 +314,16 @@ private fun ReplyToModeView(
             Text(
                 text = senderName,
                 modifier = Modifier.fillMaxWidth(),
-                style = ElementTextStyles.Regular.caption2.copy(fontWeight = FontWeight.Medium),
+                style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.primary,
+                color = ElementTheme.materialColors.primary,
             )
-
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = text.orEmpty(),
-                style = ElementTextStyles.Regular.caption1,
+                style = ElementTheme.typography.fontBodyMdRegular,
                 textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.materialColors.secondary,
                 maxLines = if (attachmentThumbnailInfo != null) 1 else 2,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -316,24 +350,22 @@ private fun AttachmentButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier) {
-        Surface(
-            Modifier
-                .size(30.dp)
-                .clickable(true, onClick = onClick),
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.primary
-        ) {
-            Image(
-                modifier = Modifier.size(12.5f.dp),
-                painter = painterResource(R.drawable.ic_add_attachment),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-                colorFilter = ColorFilter.tint(
-                    LocalContentColor.current
-                )
+    Surface(
+        modifier
+            .size(30.dp)
+            .clickable(onClick = onClick),
+        shape = CircleShape,
+        color = ElementTheme.colors.iconPrimary
+    ) {
+        Image(
+            modifier = Modifier.size(12.5f.dp),
+            painter = painterResource(R.drawable.ic_add_attachment),
+            contentDescription = null,
+            contentScale = ContentScale.Inside,
+            colorFilter = ColorFilter.tint(
+                LocalContentColor.current
             )
-        }
+        )
     }
 }
 
@@ -349,7 +381,7 @@ private fun BoxScope.SendButton(
     Box(
         modifier = modifier
             .clip(CircleShape)
-            .background(if (canSendMessage) ElementTheme.legacyColors.accentColor else Color.Transparent)
+            .background(if (canSendMessage) ElementTheme.colors.iconAccentTertiary else Color.Transparent)
             .size(30.dp)
             .align(Alignment.BottomEnd)
             .applyIf(composerMode !is MessageComposerMode.Edit, ifTrue = {
@@ -376,7 +408,8 @@ private fun BoxScope.SendButton(
             modifier = Modifier.size(16.dp),
             resourceId = iconId,
             contentDescription = contentDescription,
-            tint = if (canSendMessage) Color.White else ElementTheme.legacyColors.quaternary
+            // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
+            tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled
         )
     }
 }

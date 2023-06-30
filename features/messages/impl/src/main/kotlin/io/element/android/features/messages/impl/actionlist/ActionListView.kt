@@ -39,7 +39,6 @@ import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -48,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,8 +87,8 @@ fun ActionListView(
     onEmojiReactionClicked: (String, TimelineItem.Event) -> Unit,
     onCustomReactionClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
-    sheetState: SheetState = rememberModalBottomSheetState()
 ) {
+    val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
     val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
@@ -119,22 +119,21 @@ fun ActionListView(
     }
 
     fun onDismiss() {
-        sheetState.hide(coroutineScope) {
-            state.eventSink(ActionListEvents.Clear)
-        }
+        state.eventSink(ActionListEvents.Clear)
     }
 
     if (targetItem != null) {
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = ::onDismiss,
+            modifier = modifier,
         ) {
             SheetContent(
                 state = state,
                 onActionClicked = ::onItemActionClicked,
                 onEmojiReactionClicked = ::onEmojiReactionClicked,
                 onCustomReactionClicked = ::onCustomReactionClicked,
-                modifier = modifier
+                modifier = Modifier
                     .padding(bottom = 32.dp)
 //                    .navigationBarsPadding() - FIXME after https://issuetracker.google.com/issues/275849044
 //                    .imePadding()
@@ -192,7 +191,7 @@ private fun SheetContent(
                         },
                         text = {
                             Text(
-                                text = action.title,
+                                text = stringResource(id = action.titleRes),
                                 color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                             )
                         },

@@ -82,11 +82,7 @@ class RoomListScreen(
                 withContext(coroutineDispatchers.io) {
                     matrixClient.getRoom(roomId)!!.use { room ->
                         room.open()
-                        val timeline = room.timeline
-                        timeline.apply {
-                            // TODO This doesn't work reliably as initialize is asynchronous, and the timeline can't be used until it's finished
-                            paginateBackwards(20, 50)
-                        }
+                        room.timeline.paginateBackwards(20, 50)
                     }
                 }
             }

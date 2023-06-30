@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.compound.generated.SemanticColors
 import io.element.android.libraries.theme.previews.ColorListPreview
 import kotlinx.collections.immutable.persistentMapOf
 
@@ -37,8 +39,31 @@ fun MaterialTheme.roomListRoomMessage() = colorScheme.secondary
 @Composable
 fun MaterialTheme.roomListRoomMessageDate() = colorScheme.secondary
 
-@Composable
-fun MaterialTheme.roomListUnreadIndicator() = colorScheme.primary
+val SemanticColors.unreadIndicator
+    get() = iconAccentTertiary
+
+val SemanticColors.roomListPlaceholder
+    get() = bgSubtleSecondary
+
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.messageFromMeBackground
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray400
+        Color(0xFFE1E6EC)
+    } else {
+        // We want DarkDesignTokens.colorGray500
+        Color(0xFF323539)
+    }
+
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.messageFromOtherBackground
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray300
+        Color(0xFFF0F2F5)
+    } else {
+        // We want DarkDesignTokens.colorGray400
+        Color(0xFF26282D)
+    }
 
 @Preview
 @Composable
@@ -57,7 +82,10 @@ private fun ContentToPreview() {
             "roomListRoomName" to MaterialTheme.roomListRoomName(),
             "roomListRoomMessage" to MaterialTheme.roomListRoomMessage(),
             "roomListRoomMessageDate" to MaterialTheme.roomListRoomMessageDate(),
-            "roomListUnreadIndicator" to MaterialTheme.roomListUnreadIndicator(),
+            "unreadIndicator" to ElementTheme.colors.unreadIndicator,
+            "roomListPlaceholder" to ElementTheme.colors.roomListPlaceholder,
+            "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
+            "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
         )
     )
 }

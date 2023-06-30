@@ -52,6 +52,7 @@ dependencies {
     implementation(projects.features.invitelist.api)
     implementation(projects.features.networkmonitor.api)
     implementation(projects.features.leaveroom.api)
+    implementation(projects.services.analytics.api)
     implementation(libs.accompanist.placeholder)
     api(projects.features.roomlist.api)
     ksp(libs.showkase.processor)

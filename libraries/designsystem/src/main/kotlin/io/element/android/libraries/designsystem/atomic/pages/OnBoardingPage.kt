@@ -30,11 +30,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * Page for onboarding screens, with content and optional footer.
@@ -106,7 +106,7 @@ private fun ContentToPreview() {
             ) {
                 Text(
                     text = "Content",
-                    fontSize = 40.sp
+                    style = ElementTheme.typography.fontHeadingXlBold
                 )
             }
         },
@@ -118,7 +118,7 @@ private fun ContentToPreview() {
             ) {
                 Text(
                     text = "Footer",
-                    fontSize = 40.sp
+                    style = ElementTheme.typography.fontHeadingXlBold
                 )
             }
         }

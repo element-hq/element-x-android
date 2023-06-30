@@ -47,6 +47,7 @@ dependencies {
     api(projects.services.apperror.api)
     implementation(libs.coil.compose)
     implementation(projects.features.leaveroom.api)
+    implementation(projects.services.analytics.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

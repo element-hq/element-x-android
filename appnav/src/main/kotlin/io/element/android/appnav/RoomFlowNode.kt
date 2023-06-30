@@ -18,6 +18,7 @@ package io.element.android.appnav
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
@@ -88,14 +89,12 @@ class RoomFlowNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 Timber.v("OnCreate")
-                inputs.room.open()
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.room) }
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()
             },
             onDestroy = {
                 Timber.v("OnDestroy")
-                inputs.room.close()
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.room) }
                 appNavigationStateService.onLeavingRoom(id)
             }
@@ -161,6 +160,15 @@ class RoomFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
+        // Rely on the View Lifecycle instead of the Node Lifecycle,
+        // because this node enters 'onDestroy' before his children, so it can leads to
+        // using the room in a child node where it's already closed.
+        DisposableEffect(Unit) {
+            inputs.room.open()
+            onDispose {
+                inputs.room.close()
+            }
+        }
         Children(
             navModel = backstack,
             modifier = modifier,

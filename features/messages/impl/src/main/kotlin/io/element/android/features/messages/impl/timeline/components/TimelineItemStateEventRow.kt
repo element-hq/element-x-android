@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ fun TimelineItemStateEventRow(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .padding(vertical = 8.dp)
             .wrapContentHeight(),
         contentAlignment = Alignment.Center
     ) {

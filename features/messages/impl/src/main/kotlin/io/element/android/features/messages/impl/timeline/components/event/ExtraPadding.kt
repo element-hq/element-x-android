@@ -51,3 +51,11 @@ fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
     // A space and a few unbreakable spaces
     return ExtraPadding(" " + "\u00A0".repeat(strLen))
 }
+
+fun ExtraPadding.strBigger(): String {
+    return if (str.isEmpty()) {
+        str
+    } else {
+        str + "\u00A0\u00A0\u00A0"
+    }
+}

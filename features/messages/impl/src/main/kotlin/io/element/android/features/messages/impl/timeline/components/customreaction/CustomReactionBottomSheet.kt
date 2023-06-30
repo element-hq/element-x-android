@@ -38,9 +38,7 @@ fun CustomReactionBottomSheet(
     val coroutineScope = rememberCoroutineScope()
 
     fun onDismiss() {
-        sheetState.hide(coroutineScope) {
-            state.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
-        }
+        state.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
     }
 
     fun onEmojiSelectedDismiss(emoji: Emoji) {

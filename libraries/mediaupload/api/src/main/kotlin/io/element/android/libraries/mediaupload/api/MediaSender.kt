@@ -18,6 +18,7 @@ package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
 import io.element.android.libraries.core.extensions.flatMap
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import javax.inject.Inject
 
@@ -26,7 +27,12 @@ class MediaSender @Inject constructor(
     private val room: MatrixRoom,
 ) {
 
-    suspend fun sendMedia(uri: Uri, mimeType: String, compressIfPossible: Boolean): Result<Unit> {
+    suspend fun sendMedia(
+        uri: Uri,
+        mimeType: String,
+        compressIfPossible: Boolean,
+        progressCallback: ProgressCallback? = null
+    ): Result<Unit> {
         return preProcessor
             .process(
                 uri = uri,
@@ -35,12 +41,13 @@ class MediaSender @Inject constructor(
                 compressIfPossible = compressIfPossible
             )
             .flatMap { info ->
-                room.sendMedia(info)
+                room.sendMedia(info, progressCallback)
             }
     }
 
     private suspend fun MatrixRoom.sendMedia(
         info: MediaUploadInfo,
+        progressCallback: ProgressCallback?
     ): Result<Unit> {
         return when (info) {
             is MediaUploadInfo.Image -> {
@@ -48,7 +55,7 @@ class MediaSender @Inject constructor(
                     file = info.file,
                     thumbnailFile = info.thumbnailFile,
                     imageInfo = info.info,
-                    progressCallback = null
+                    progressCallback = progressCallback
                 )
             }
 
@@ -57,7 +64,7 @@ class MediaSender @Inject constructor(
                     file = info.file,
                     thumbnailFile = info.thumbnailFile,
                     videoInfo = info.info,
-                    progressCallback = null
+                    progressCallback = progressCallback
                 )
             }
 
@@ -65,7 +72,7 @@ class MediaSender @Inject constructor(
                 sendFile(
                     file = info.file,
                     fileInfo = info.info,
-                    progressCallback = null
+                    progressCallback = progressCallback
                 )
             }
             else -> Result.failure(IllegalStateException("Unexpected MediaUploadInfo format: $info"))

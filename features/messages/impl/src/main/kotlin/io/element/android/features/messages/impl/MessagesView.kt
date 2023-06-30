@@ -65,6 +65,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -91,6 +92,7 @@ fun MessagesView(
     onEventClicked: (event: TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
+    onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
@@ -152,7 +154,8 @@ fun MessagesView(
                         state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
                     }
                 },
-                onReactionClicked = ::onEmojiReactionClicked
+                onReactionClicked = ::onEmojiReactionClicked,
+                onSendLocationClicked = onSendLocationClicked,
             )
         },
         snackbarHost = {
@@ -216,7 +219,15 @@ private fun AttachmentStateView(
         is AttachmentsState.Previewing -> LaunchedEffect(state) {
             onPreviewAttachments(state.attachments)
         }
-        is AttachmentsState.Sending -> ProgressDialog(text = stringResource(id = CommonStrings.common_loading))
+        is AttachmentsState.Sending -> {
+            ProgressDialog(
+                type = when (state) {
+                    is AttachmentsState.Sending.Uploading -> ProgressDialogType.Determinate(state.progress)
+                    is AttachmentsState.Sending.Processing -> ProgressDialogType.Indeterminate
+                },
+                text = stringResource(id = CommonStrings.common_sending)
+            )
+        }
     }
 }
 
@@ -228,6 +239,7 @@ fun MessagesViewContent(
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -251,6 +263,7 @@ fun MessagesViewContent(
         if (state.userHasPermissionToSendMessage) {
             MessageComposerView(
                 state = state.composerState,
+                onSendLocationClicked = onSendLocationClicked,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(Alignment.Bottom)
@@ -338,5 +351,6 @@ private fun ContentToPreview(state: MessagesState) {
         onEventClicked = {},
         onPreviewAttachments = {},
         onUserDataClicked = {},
+        onSendLocationClicked = {},
     )
 }

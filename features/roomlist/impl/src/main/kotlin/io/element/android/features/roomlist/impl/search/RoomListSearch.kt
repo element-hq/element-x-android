@@ -138,6 +138,7 @@ internal fun RoomListSearchResultContent(
                             .fillMaxWidth()
                             .focusRequester(focusRequester),
                         value = filter,
+                        singleLine = true,
                         onValueChange = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,

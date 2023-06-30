@@ -17,20 +17,22 @@
 package io.element.android.features.messages.impl.actionlist.model
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.VectorIcons
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
 sealed class TimelineItemAction(
-    val title: String,
+    @StringRes val titleRes: Int,
     @DrawableRes val icon: Int,
     val destructive: Boolean = false
 ) {
-    object Forward : TimelineItemAction("Forward", VectorIcons.Forward)
-    object Copy : TimelineItemAction("Copy", VectorIcons.Copy)
-    object Redact : TimelineItemAction("Redact", VectorIcons.Delete, destructive = true)
-    object Reply : TimelineItemAction("Reply", VectorIcons.Reply)
-    object Edit : TimelineItemAction("Edit", VectorIcons.Edit)
-    object Developer : TimelineItemAction("Developer", VectorIcons.DeveloperMode)
-    object ReportContent : TimelineItemAction("Report content", VectorIcons.ReportContent, destructive = true)
+    object Forward : TimelineItemAction(CommonStrings.action_forward, VectorIcons.Forward)
+    object Copy : TimelineItemAction(CommonStrings.action_copy, VectorIcons.Copy)
+    object Redact : TimelineItemAction(CommonStrings.action_remove, VectorIcons.Delete, destructive = true)
+    object Reply : TimelineItemAction(CommonStrings.action_reply, VectorIcons.Reply)
+    object Edit : TimelineItemAction(CommonStrings.action_edit, VectorIcons.Edit)
+    object Developer : TimelineItemAction(CommonStrings.action_view_source, VectorIcons.DeveloperMode)
+    object ReportContent : TimelineItemAction(CommonStrings.action_report_content, VectorIcons.ReportContent, destructive = true)
 }

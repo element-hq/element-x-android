@@ -26,7 +26,7 @@ open class AnalyticsPreferencesStateProvider : PreviewParameterProvider<Analytic
 }
 
 fun aAnalyticsPreferencesState() = AnalyticsPreferencesState(
-    applicationName = "ElementX",
+    applicationName = "Element X",
     isEnabled = false,
     eventSink = {}
 )

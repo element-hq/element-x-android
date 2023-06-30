@@ -19,11 +19,13 @@ package io.element.android.features.roomdetails.impl.members.details
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
@@ -32,6 +34,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.services.analytics.api.AnalyticsService
 import timber.log.Timber
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
@@ -39,6 +42,7 @@ import io.element.android.libraries.androidutils.R as AndroidUtilsR
 class RoomMemberDetailsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val analyticsService: AnalyticsService,
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
@@ -48,6 +52,14 @@ class RoomMemberDetailsNode @AssistedInject constructor(
 
     private val inputs = inputs<RoomMemberDetailsInput>()
     private val presenter = presenterFactory.create(inputs.roomMemberId)
+
+    init {
+        lifecycle.subscribe(
+            onResume = {
+                analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.User))
+            }
+        )
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
