@@ -41,12 +41,8 @@ class PreferencesRootPresenterTest {
     fun `present - initial state`() = runTest {
         val matrixClient = FakeMatrixClient()
         val logoutPresenter = DefaultLogoutPreferencePresenter(matrixClient)
-        val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
-        val analyticsPresenter = DefaultAnalyticsPreferencesPresenter(FakeAnalyticsService(), A_BUILD_META)
         val presenter = PreferencesRootPresenter(
             logoutPresenter,
-            rageshakePresenter,
-            analyticsPresenter,
             CurrentUserProvider(matrixClient),
             A_BUILD_META.buildType
         )
@@ -57,10 +53,6 @@ class PreferencesRootPresenterTest {
             assertThat(initialState.myUser).isNull()
             val loadedState = awaitItem()
             assertThat(loadedState.logoutState.logoutAction).isEqualTo(Async.Uninitialized)
-            assertThat(loadedState.analyticsState.isEnabled).isFalse()
-            assertThat(loadedState.rageshakeState.isEnabled).isTrue()
-            assertThat(loadedState.rageshakeState.isSupported).isTrue()
-            assertThat(loadedState.rageshakeState.sensitivity).isEqualTo(1.0f)
             assertThat(loadedState.myUser).isEqualTo(
                 MatrixUser(
                     userId = matrixClient.sessionId,

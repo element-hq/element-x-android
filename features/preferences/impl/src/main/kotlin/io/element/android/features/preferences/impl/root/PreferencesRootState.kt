@@ -16,15 +16,11 @@
 
 package io.element.android.features.preferences.impl.root
 
-import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 import io.element.android.features.logout.api.LogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class PreferencesRootState(
     val logoutState: LogoutPreferenceState,
-    val rageshakeState: RageshakePreferencesState,
-    val analyticsState: AnalyticsPreferencesState,
     val myUser: MatrixUser?,
     val showDeveloperSettings: Boolean
 )

@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.developer
+package io.element.android.features.preferences.impl.analytics
 
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import kotlinx.collections.immutable.ImmutableList
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.analytics.api.preferences.aAnalyticsPreferencesState
 
-data class DeveloperSettingsState constructor(
-    val features: ImmutableList<FeatureUiModel>,
-    val cacheSize: Async<String>,
-    val rageshakeState: RageshakePreferencesState,
-    val clearCacheAction: Async<Unit>,
-    val eventSink: (DeveloperSettingsEvents) -> Unit
+open class AnalyticsSettingsStateProvider : PreviewParameterProvider<AnalyticsSettingsState> {
+    override val values: Sequence<AnalyticsSettingsState>
+        get() = sequenceOf(
+            aAnalyticsSettingsState(),
+        )
+}
+
+fun aAnalyticsSettingsState() = AnalyticsSettingsState(
+    analyticsState = aAnalyticsPreferencesState(),
+    eventSink = {}
 )

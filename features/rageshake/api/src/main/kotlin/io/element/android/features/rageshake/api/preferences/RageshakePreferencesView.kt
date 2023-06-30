@@ -17,8 +17,6 @@
 package io.element.android.features.rageshake.api.preferences
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,7 +34,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun RageshakePreferencesView(
     state: RageshakePreferencesState,
     modifier: Modifier = Modifier,
-    onOpenRageshake: () -> Unit = {},
 ) {
     fun onSensitivityChanged(sensitivity: Float) {
         state.eventSink(RageshakePreferencesEvents.SetSensitivity(sensitivity = sensitivity))
@@ -47,13 +44,6 @@ fun RageshakePreferencesView(
     }
 
     Column(modifier = modifier) {
-        PreferenceCategory(title = stringResource(id = CommonStrings.action_report_bug)) {
-            PreferenceText(
-                title = stringResource(id = CommonStrings.action_report_bug),
-                icon = Icons.Default.BugReport,
-                onClick = onOpenRageshake
-            )
-        }
         PreferenceCategory(title = stringResource(id = CommonStrings.settings_rageshake)) {
             if (state.isSupported) {
                 PreferenceSwitch(

@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.features.preferences.impl.about
 
-import io.element.android.features.logout.api.aLogoutPreferenceState
-
-fun aPreferencesRootState() = PreferencesRootState(
-    logoutState = aLogoutPreferenceState(),
-    myUser = null,
-    showDeveloperSettings = true
-)
+sealed interface AboutEvents {
+    object MyEvent : AboutEvents
+}

@@ -21,9 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesPresenter
 import io.element.android.features.logout.api.LogoutPreferencePresenter
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.user.CurrentUserProvider
@@ -34,8 +32,6 @@ import javax.inject.Inject
 
 class PreferencesRootPresenter @Inject constructor(
     private val logoutPresenter: LogoutPreferencePresenter,
-    private val rageshakePresenter: RageshakePreferencesPresenter,
-    private val analyticsPresenter: AnalyticsPreferencesPresenter,
     private val currentUserProvider: CurrentUserProvider,
     private val buildType: BuildType,
 ) : Presenter<PreferencesRootState> {
@@ -50,13 +46,9 @@ class PreferencesRootPresenter @Inject constructor(
         }
 
         val logoutState = logoutPresenter.present()
-        val rageshakeState = rageshakePresenter.present()
-        val analyticsState = analyticsPresenter.present()
         val showDeveloperSettings = buildType != BuildType.RELEASE
         return PreferencesRootState(
             logoutState = logoutState,
-            rageshakeState = rageshakeState,
-            analyticsState = analyticsState,
             myUser = matrixUser.value,
             showDeveloperSettings = showDeveloperSettings
         )
