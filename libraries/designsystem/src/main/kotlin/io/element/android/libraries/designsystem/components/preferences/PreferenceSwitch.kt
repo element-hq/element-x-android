@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.material3.Switch
@@ -51,6 +52,7 @@ fun PreferenceSwitch(
     icon: ImageVector? = null,
     showIconAreaIfNoIcon: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
+    switchAlignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
     Row(
         modifier = modifier
@@ -84,10 +86,11 @@ fun PreferenceSwitch(
                 )
             }
         }
+        Spacer(modifier = Modifier.width(16.dp))
         // TODO Create a wrapper for Switch
         Switch(
             modifier = Modifier
-                .align(Alignment.CenterVertically),
+                .align(switchAlignment),
             checked = isChecked,
             enabled = enabled,
             onCheckedChange = onCheckedChange
