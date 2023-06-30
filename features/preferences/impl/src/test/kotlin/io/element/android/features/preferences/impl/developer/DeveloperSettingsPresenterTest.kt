@@ -49,7 +49,7 @@ class DeveloperSettingsPresenterTest {
             assertThat(initialState.clearCacheAction).isEqualTo(Async.Uninitialized)
             assertThat(initialState.cacheSize).isEqualTo(Async.Uninitialized)
             val loadedState = awaitItem()
-            assertThat(loadedState.rageshakeState.isEnabled).isTrue()
+            assertThat(loadedState.rageshakeState.isEnabled).isFalse()
             assertThat(loadedState.rageshakeState.isSupported).isTrue()
             assertThat(loadedState.rageshakeState.sensitivity).isEqualTo(1.0f)
             cancelAndIgnoreRemainingEvents()
