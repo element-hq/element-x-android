@@ -17,9 +17,12 @@
 package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Announcement
@@ -35,6 +38,7 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
+import io.element.android.libraries.designsystem.toSecondaryEnabledColor
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -42,6 +46,7 @@ fun PreferenceSwitch(
     title: String,
     isChecked: Boolean,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
     enabled: Boolean = true,
     icon: ImageVector? = null,
     showIconAreaIfNoIcon: Boolean = false,
@@ -60,13 +65,25 @@ fun PreferenceSwitch(
             enabled = enabled,
             isVisible = showIconAreaIfNoIcon
         )
-        Text(
+        Column(
             modifier = Modifier
-                .weight(1f),
-            style = ElementTheme.typography.fontBodyLgRegular,
-            text = title,
-            color = enabled.toEnabledColor(),
-        )
+                .weight(1f)
+                .align(Alignment.CenterVertically)
+        ) {
+            Text(
+                style = ElementTheme.typography.fontBodyLgRegular,
+                text = title,
+                color = enabled.toEnabledColor(),
+            )
+            if (subtitle != null) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    text = subtitle,
+                    color = enabled.toSecondaryEnabledColor(),
+                )
+            }
+        }
         // TODO Create a wrapper for Switch
         Switch(
             modifier = Modifier
@@ -86,6 +103,7 @@ internal fun PreferenceSwitchPreview() = ElementThemedPreview { ContentToPreview
 private fun ContentToPreview() {
     PreferenceSwitch(
         title = "Switch",
+        subtitle = "Subtitle Switch",
         icon = Icons.Default.Announcement,
         enabled = true,
         isChecked = true
