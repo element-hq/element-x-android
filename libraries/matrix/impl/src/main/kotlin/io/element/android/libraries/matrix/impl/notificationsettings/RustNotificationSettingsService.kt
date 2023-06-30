@@ -17,8 +17,8 @@
 package io.element.android.libraries.matrix.impl.notificationsettings
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsFlowState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,8 +35,8 @@ class RustNotificationSettingsService(
 ) : NotificationSettingsService, NotificationSettingsDelegate {
 
     private val notificationSettings: NotificationSettings = client.getNotificationSettings()
-    private val _notificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
-    override val notificationSettingsStateFlow = _notificationSettingsStateFlow.asStateFlow()
+    private val _notificationSettingsStateFlow = MutableStateFlow<NotificationSettingsFlowState>(NotificationSettingsFlowState.Initial)
+    override val notificationSettingsFlowState = _notificationSettingsStateFlow.asStateFlow()
 
     init {
         coroutineScope.launch { notificationSettings.setDelegate(this@RustNotificationSettingsService) }
@@ -58,6 +58,6 @@ class RustNotificationSettingsService(
         }
 
     override fun notificationSettingsDidChange() {
-        _notificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.ChangedNotificationSettings
+        _notificationSettingsStateFlow.value = NotificationSettingsFlowState.ChangedNotificationSettings
     }
 }

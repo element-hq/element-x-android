@@ -31,6 +31,7 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsFlowState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -61,19 +62,7 @@ class RoomDetailsPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             room.updateMembers()
             observeNotificationSettings()
-//            room.roomNotificationSettingsStateFlow.onEach { roomNotificationSettingsState ->
-//                when (roomNotificationSettingsState) {
-//                    MatrixRoomNotificationSettingsState.ChangedNotificationSettings -> {
-//                        client.notificationSettingsService().getRoomNotificationSettings(room.roomId)
-//                    }
-//                    is MatrixRoomNotificationSettingsState.Error -> Unit
-//                    is MatrixRoomNotificationSettingsState.Pending -> Unit
-//                    is MatrixRoomNotificationSettingsState.Ready -> Unit
-//                    MatrixRoomNotificationSettingsState.Unknown -> Unit
-//                }
-//            }.launchIn(scope)
         }
-
 
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by getCanInvite(membersState)
@@ -186,13 +175,10 @@ class RoomDetailsPresenter @Inject constructor(
 //    }
 
     private fun CoroutineScope.observeNotificationSettings() {
-        notificationSettingsService.notificationSettingsStateFlow.onEach { roomNotificationSettingsState ->
-            when (roomNotificationSettingsState) {
-                MatrixRoomNotificationSettingsState.ChangedNotificationSettings -> room.updateRoomNotificationSettings()
-                is MatrixRoomNotificationSettingsState.Error -> Unit
-                is MatrixRoomNotificationSettingsState.Pending -> Unit
-                is MatrixRoomNotificationSettingsState.Ready -> Unit
-                MatrixRoomNotificationSettingsState.Unknown -> room.updateRoomNotificationSettings()
+        notificationSettingsService.notificationSettingsFlowState.onEach { notificationSettingsState ->
+            when (notificationSettingsState) {
+                NotificationSettingsFlowState.ChangedNotificationSettings,
+                NotificationSettingsFlowState.Initial -> room.updateRoomNotificationSettings()
             }
         }.launchIn(this)
     }
