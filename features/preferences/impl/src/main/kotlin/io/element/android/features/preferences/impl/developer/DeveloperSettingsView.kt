@@ -16,8 +16,6 @@
 
 package io.element.android.features.preferences.impl.developer
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -55,10 +53,9 @@ fun DeveloperSettingsView(
             )
         }
         val cache = state.cacheSize
-        PreferenceCategory(title = "Cache") {
+        PreferenceCategory(title = "Cache", showDivider = false) {
             PreferenceText(
                 title = "Clear cache",
-                icon = Icons.Default.Delete,
                 currentValue = cache.dataOrNull(),
                 loadingCurrentValue = state.cacheSize.isLoading() || state.clearCacheAction.isLoading(),
                 onClick = {
