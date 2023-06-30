@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.auth
 
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidutils.network.SystemProxy
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.AppScope
@@ -38,12 +39,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.BuildConfig
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 // TODO Oidc
 // import org.matrix.rustcomponents.sdk.OidcAuthenticationUrl
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
@@ -56,6 +59,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
+    private val proxy: SystemProxy,
     private val clock: SystemClock,
     private val userAgentProvider: UserAgentProvider,
 ) : MatrixAuthenticationService {
@@ -87,6 +91,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     .homeserverUrl(sessionData.homeserverUrl)
                     .username(sessionData.userId)
                     .userAgent(userAgentProvider.provide())
+                    .configureProxy(proxy)
                     .use { it.build() }
                 client.restoreSession(sessionData.toSession())
                 createMatrixClient(client)
@@ -190,6 +195,24 @@ class RustMatrixAuthenticationService @Inject constructor(
             clock = clock,
         )
     }
+
+    private fun ClientBuilder.configureProxy(systemProxy: SystemProxy): ClientBuilder =
+        this.run {
+            val proxyUri = systemProxy.getUri()
+                // No proxy is configured
+                ?: return@run this
+
+            Timber.i("Setting HTTP proxy to $proxyUri")
+
+            var result = proxy(proxyUri.toString())
+
+            if (BuildConfig.DEBUG) {
+                Timber.w("Disabling SSL verification")
+                result = result.disableSslVerification()
+            }
+
+            result
+        }
 }
 
 private fun SessionData.toSession() = Session(
