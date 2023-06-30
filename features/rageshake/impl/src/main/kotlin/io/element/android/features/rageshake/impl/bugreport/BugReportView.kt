@@ -17,16 +17,11 @@
 package io.element.android.features.rageshake.impl.bugreport
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,21 +30,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.LabelledCheckbox
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
+import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
@@ -63,8 +57,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun BugReportView(
     state: BugReportState,
+    onDone: () -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onDone: () -> Unit = { },
 ) {
     LogCompositions(tag = "Rageshake", msg = "Root")
     val eventSink = state.eventSink
@@ -75,56 +70,27 @@ fun BugReportView(
         }
         return
     }
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .imePadding()
-    ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(state = rememberScrollState())
-                .padding(horizontal = 16.dp),
+
+    Box(modifier = modifier) {
+        PreferenceView(
+            title = stringResource(id = CommonStrings.common_report_a_bug),
+            onBackPressed = onBackPressed
         ) {
-            val isError = state.sending is Async.Failure
             val isFormEnabled = state.sending !is Async.Loading
-            // Title
-            Text(
-                text = stringResource(id = CommonStrings.action_report_bug),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            // Form
-            Text(
-                text = stringResource(id = R.string.screen_bug_report_editor_description),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.primary,
-            )
             var descriptionFieldState by textFieldState(
                 stateValue = state.formState.description
             )
-            Column(
-                // modifier = Modifier.weight(1f),
-            ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            PreferenceRow {
                 OutlinedTextField(
                     value = descriptionFieldState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     enabled = isFormEnabled,
                     label = {
                         Text(text = stringResource(id = R.string.screen_bug_report_editor_placeholder))
                     },
                     supportingText = {
-                        Text(text = stringResource(id = R.string.screen_bug_report_editor_supporting))
+                        Text(text = stringResource(id = R.string.screen_bug_report_editor_description))
                     },
                     onValueChange = {
                         descriptionFieldState = it
@@ -134,35 +100,37 @@ fun BugReportView(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
+                    minLines = 3,
                     // TODO Error text too short
                 )
             }
-            LabelledCheckbox(
-                checked = state.formState.sendLogs,
+            Spacer(modifier = Modifier.height(16.dp))
+            PreferenceSwitch(
+                isChecked = state.formState.sendLogs,
                 onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
                 enabled = isFormEnabled,
-                text = stringResource(id = R.string.screen_bug_report_include_logs)
+                title = stringResource(id = R.string.screen_bug_report_include_logs),
             )
             if (state.hasCrashLogs) {
-                LabelledCheckbox(
-                    checked = state.formState.sendCrashLogs,
+                PreferenceSwitch(
+                    isChecked = state.formState.sendCrashLogs,
                     onCheckedChange = { eventSink(BugReportEvents.SetSendCrashLog(it)) },
                     enabled = isFormEnabled,
-                    text = stringResource(id = R.string.screen_bug_report_include_crash_logs)
+                    title = stringResource(id = R.string.screen_bug_report_include_crash_logs),
                 )
             }
-            LabelledCheckbox(
-                checked = state.formState.canContact,
+            PreferenceSwitch(
+                isChecked = state.formState.canContact,
                 onCheckedChange = { eventSink(BugReportEvents.SetCanContact(it)) },
                 enabled = isFormEnabled,
-                text = stringResource(id = R.string.screen_bug_report_contact_me)
+                title = stringResource(id = R.string.screen_bug_report_contact_me)
             )
             if (state.screenshotUri != null) {
-                LabelledCheckbox(
-                    checked = state.formState.sendScreenshot,
+                PreferenceSwitch(
+                    isChecked = state.formState.sendScreenshot,
                     onCheckedChange = { eventSink(BugReportEvents.SetSendScreenshot(it)) },
                     enabled = isFormEnabled,
-                    text = stringResource(id = R.string.screen_bug_report_include_screenshot)
+                    title = stringResource(id = R.string.screen_bug_report_include_screenshot)
                 )
                 if (state.formState.sendScreenshot) {
                     Box(
@@ -183,16 +151,19 @@ fun BugReportView(
                 }
             }
             // Submit
-            Button(
-                onClick = { eventSink(BugReportEvents.SendBugReport) },
-                enabled = state.submitEnabled,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 32.dp)
-            ) {
-                Text(text = stringResource(id = CommonStrings.action_send))
+            PreferenceRow {
+                Button(
+                    onClick = { eventSink(BugReportEvents.SendBugReport) },
+                    enabled = state.submitEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp, bottom = 16.dp)
+                ) {
+                    Text(text = stringResource(id = CommonStrings.action_send))
+                }
             }
         }
+
         when (state.sending) {
             is Async.Loading -> {
                 // Indeterminate indicator, to avoid the freeze effect if the connection takes time to initialize.
@@ -219,5 +190,9 @@ fun BugReportViewDarkPreview(@PreviewParameter(BugReportStateProvider::class) st
 
 @Composable
 private fun ContentToPreview(state: BugReportState) {
-    BugReportView(state = state)
+    BugReportView(
+        state = state,
+        onDone = {},
+        onBackPressed = {},
+    )
 }
