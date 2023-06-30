@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
@@ -115,6 +116,9 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is ImageMessageType -> {
                 sp.getString(CommonStrings.common_image)
+            }
+            is LocationMessageType -> {
+                sp.getString(CommonStrings.common_shared_location)
             }
             is FileMessageType -> {
                 sp.getString(CommonStrings.common_file)

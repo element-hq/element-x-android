@@ -16,10 +16,12 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import io.element.android.features.location.api.parseGeoUri
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
@@ -31,6 +33,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -63,6 +66,21 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
                     fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
                 )
+            }
+            is LocationMessageType -> {
+                val location = parseGeoUri(messageType.geoUri)
+                if (location == null) {
+                    TimelineItemTextContent(
+                        body = messageType.body,
+                        htmlDocument = null,
+                        isEdited = content.isEdited,
+                    )
+                } else {
+                    TimelineItemLocationContent(
+                        body = messageType.body,
+                        location = location,
+                    )
+                }
             }
             is VideoMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
