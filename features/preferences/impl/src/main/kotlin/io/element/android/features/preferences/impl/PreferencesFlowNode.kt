@@ -30,6 +30,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.preferences.api.PreferencesEntryPoint
+import io.element.android.features.preferences.impl.about.AboutNode
+import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.libraries.architecture.BackstackNode
@@ -57,6 +59,12 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         object DeveloperSettings : NavTarget
+
+        @Parcelize
+        object AnalyticsSettings : NavTarget
+
+        @Parcelize
+        object About : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -67,6 +75,14 @@ class PreferencesFlowNode @AssistedInject constructor(
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
                     }
 
+                    override fun onOpenAnalytics() {
+                        backstack.push(NavTarget.AnalyticsSettings)
+                    }
+
+                    override fun onOpenAbout() {
+                        backstack.push(NavTarget.About)
+                    }
+
                     override fun onOpenDeveloperSettings() {
                         backstack.push(NavTarget.DeveloperSettings)
                     }
@@ -75,6 +91,12 @@ class PreferencesFlowNode @AssistedInject constructor(
             }
             NavTarget.DeveloperSettings -> {
                 createNode<DeveloperSettingsNode>(buildContext)
+            }
+            NavTarget.About -> {
+                createNode<AboutNode>(buildContext)
+            }
+            NavTarget.AnalyticsSettings -> {
+                createNode<AnalyticsSettingsNode>(buildContext)
             }
         }
     }

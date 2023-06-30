@@ -17,6 +17,7 @@
 package io.element.android.features.preferences.impl.developer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
 
@@ -30,6 +31,7 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
 
 fun aDeveloperSettingsState() = DeveloperSettingsState(
     features = aFeatureUiModelList(),
+    rageshakeState = aRageshakePreferencesState(),
     cacheSize = Async.Success("1.2 MB"),
     clearCacheAction = Async.Uninitialized,
     eventSink = {}

@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.features.preferences.impl.about
 
-import io.element.android.features.logout.api.aLogoutPreferenceState
+import androidx.compose.runtime.Composable
+import io.element.android.libraries.architecture.Presenter
+import javax.inject.Inject
 
-fun aPreferencesRootState() = PreferencesRootState(
-    logoutState = aLogoutPreferenceState(),
-    myUser = null,
-    showDeveloperSettings = true
-)
+class AboutPresenter @Inject constructor() : Presenter<AboutState> {
+
+    @Composable
+    override fun present(): AboutState {
+
+        fun handleEvents(event: AboutEvents) {
+            when (event) {
+                AboutEvents.MyEvent -> Unit
+            }
+        }
+
+        return AboutState(
+            eventSink = ::handleEvents
+        )
+    }
+}

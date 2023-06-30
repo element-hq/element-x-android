@@ -81,7 +81,7 @@ fun LogoutPreferenceContent(
 ) {
     PreferenceText(
         title = stringResource(id = R.string.screen_signout_preference_item),
-        icon = Icons.Default.Logout,
+        icon = Icons.Filled.Logout,
         onClick = onClick
     )
 }

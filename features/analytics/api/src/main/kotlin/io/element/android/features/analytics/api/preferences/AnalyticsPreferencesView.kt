@@ -43,13 +43,16 @@ fun AnalyticsPreferencesView(
         state.eventSink(AnalyticsOptInEvents.EnableAnalytics(isEnabled = isEnabled))
     }
 
-    PreferenceCategory(title = stringResource(id = CommonStrings.screen_analytics_settings_share_data)) {
+    PreferenceCategory(
+        modifier = modifier,
+        title = stringResource(id = CommonStrings.screen_analytics_settings_share_data)
+    ) {
         val firstPart = stringResource(id = CommonStrings.screen_analytics_settings_help_us_improve, state.applicationName)
         val secondPart = buildAnnotatedStringWithColoredPart(
             CommonStrings.screen_analytics_settings_read_terms,
             CommonStrings.screen_analytics_settings_read_terms_content_link
         )
-        val title =  "$firstPart\n\n$secondPart"
+        val title = "$firstPart\n\n$secondPart"
 
         PreferenceSwitch(
             title = title,

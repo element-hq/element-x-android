@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.developer
+package io.element.android.features.preferences.impl.analytics
 
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 
-data class DeveloperSettingsState constructor(
-    val features: ImmutableList<FeatureUiModel>,
-    val cacheSize: Async<String>,
-    val rageshakeState: RageshakePreferencesState,
-    val clearCacheAction: Async<Unit>,
-    val eventSink: (DeveloperSettingsEvents) -> Unit
+// Do not use default value, so no member get forgotten in the presenters.
+data class AnalyticsSettingsState(
+    val analyticsState: AnalyticsPreferencesState,
+    val eventSink: (AnalyticsSettingsEvents) -> Unit
 )
