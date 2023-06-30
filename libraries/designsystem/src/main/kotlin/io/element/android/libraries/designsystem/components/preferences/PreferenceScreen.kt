@@ -136,10 +136,17 @@ private fun ContentToPreview() {
                 isChecked = true,
             )
             Divider()
+            PreferenceCheckbox(
+                title = "Checkbox",
+                icon = Icons.Default.Announcement,
+                isChecked = true,
+            )
+            Divider()
             PreferenceSlide(
                 title = "Slide",
                 summary = "Summary",
-                value = 0.75F
+                value = 0.75F,
+                showIconAreaIfNoIcon = true,
             )
         }
     }
