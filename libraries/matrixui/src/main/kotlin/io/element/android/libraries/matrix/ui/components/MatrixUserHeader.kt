@@ -18,21 +18,18 @@ package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -41,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun MatrixUserHeader(
@@ -48,37 +46,40 @@ fun MatrixUserHeader(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
-    Column(
+    Row(
         modifier = modifier
             .clickable(onClick = onClick)
             .fillMaxWidth()
-            .padding(all = 16.dp)
-            .height(IntrinsicSize.Min),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Avatar(
-            matrixUser.getAvatarData(size = AvatarSize.UserHeader),
+            modifier = Modifier
+                .padding(vertical = 12.dp),
+            avatarData = matrixUser.getAvatarData(size = AvatarSize.UserPreference),
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        // Name
-        Text(
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            text = matrixUser.getBestName(),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.primary,
-        )
-        // Id
-        if (matrixUser.displayName.isNullOrEmpty().not()) {
-            Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            // Name
             Text(
-                text = matrixUser.userId.value,
-                color = MaterialTheme.colorScheme.secondary,
-                fontSize = 14.sp,
+                text = matrixUser.getBestName(),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                style = ElementTheme.typography.fontHeadingSmMedium,
+                overflow = TextOverflow.Ellipsis,
+                color = ElementTheme.materialColors.primary,
             )
+            // Id
+            if (matrixUser.displayName.isNullOrEmpty().not()) {
+                Text(
+                    text = matrixUser.userId.value,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    color = ElementTheme.materialColors.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
