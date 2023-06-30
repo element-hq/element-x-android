@@ -77,6 +77,10 @@ fun TimelineView(
         state.eventSink(TimelineEvents.LoadMore)
     }
 
+    fun onScrollFinishedAt(firstVisibleIndex: Int) {
+        state.eventSink(TimelineEvents.OnScrollFinished(firstVisibleIndex))
+    }
+
     val lazyListState = rememberLazyListState()
 
     fun inReplyToClicked(eventId: EventId) {
@@ -121,7 +125,8 @@ fun TimelineView(
 
         TimelineScrollHelper(
             lazyListState = lazyListState,
-            timelineItems = state.timelineItems
+            timelineItems = state.timelineItems,
+            onScrollFinishedAt = ::onScrollFinishedAt,
         )
     }
 }
@@ -219,21 +224,29 @@ fun TimelineItemRow(
 internal fun BoxScope.TimelineScrollHelper(
     lazyListState: LazyListState,
     timelineItems: ImmutableList<TimelineItem>,
+    onScrollFinishedAt: (Int) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
+    val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
+    val shouldAutoScrollToBottom by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 2 } }
 
-    // Auto-scroll when new timeline items appear
-    LaunchedEffect(timelineItems, firstVisibleItemIndex) {
-        if (!lazyListState.isScrollInProgress &&
-            firstVisibleItemIndex < 2
-        ) coroutineScope.launch {
-            lazyListState.animateScrollToItem(0)
+    LaunchedEffect(timelineItems, firstVisibleItemIndex, isScrollFinished) {
+        if (!isScrollFinished) return@LaunchedEffect
+
+        // Notify the parent composable about the first visible item index when scrolling finishes
+        onScrollFinishedAt(firstVisibleItemIndex)
+
+        // Auto-scroll when new timeline items appear
+        if (shouldAutoScrollToBottom) {
+            coroutineScope.launch {
+                lazyListState.animateScrollToItem(0)
+            }
         }
     }
 
     // Jump to bottom button
-    if (firstVisibleItemIndex > 2) {
+    if (!shouldAutoScrollToBottom) {
         FloatingActionButton(
             onClick = {
                 coroutineScope.launch {
