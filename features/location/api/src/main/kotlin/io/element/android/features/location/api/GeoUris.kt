@@ -18,6 +18,12 @@ package io.element.android.features.location.api
 
 private const val GEO_URI_REGEX = """geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitude>-?\d+(?:\.\d+)?)(?:;u=(?<uncertainty>\d+(?:\.\d+)?))?"""
 
+data class Location(
+    val lat: Double,
+    val lon: Double,
+    val accuracy: Float,
+)
+
 fun parseGeoUri(geoUri: String): Location? {
     val result = Regex(GEO_URI_REGEX).matchEntire(geoUri) ?: return null
     return Location (
