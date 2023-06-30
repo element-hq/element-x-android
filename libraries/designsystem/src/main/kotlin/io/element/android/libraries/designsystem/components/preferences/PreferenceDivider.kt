@@ -16,11 +16,9 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Divider
@@ -31,7 +29,7 @@ fun PreferenceDivider(
     modifier: Modifier = Modifier,
 ) {
     Divider(
-        modifier = modifier.padding(bottom = 8.dp),
+        modifier = modifier,
         color = ElementTheme.colors.borderDisabled,
     )
 }
