@@ -21,8 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.features.analytics.test.A_BUILD_META
 import io.element.android.features.analytics.test.FakeAnalyticsService
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -31,7 +31,7 @@ class AnalyticsPreferencesPresenterTest {
     fun `present - initial state available`() = runTest {
         val presenter = DefaultAnalyticsPreferencesPresenter(
             FakeAnalyticsService(isEnabled = true, didAskUserConsent = true),
-            A_BUILD_META
+            aBuildMeta()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -46,7 +46,7 @@ class AnalyticsPreferencesPresenterTest {
     fun `present - initial state not available`() = runTest {
         val presenter = DefaultAnalyticsPreferencesPresenter(
             FakeAnalyticsService(isEnabled = false, didAskUserConsent = false),
-            A_BUILD_META
+            aBuildMeta()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -60,7 +60,7 @@ class AnalyticsPreferencesPresenterTest {
     fun `present - enable and disable`() = runTest {
         val presenter = DefaultAnalyticsPreferencesPresenter(
             FakeAnalyticsService(isEnabled = true, didAskUserConsent = true),
-            A_BUILD_META
+            aBuildMeta()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
