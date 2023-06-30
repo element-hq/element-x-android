@@ -39,7 +39,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -62,7 +61,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @Composable
@@ -123,8 +121,7 @@ fun TimelineView(
 
         TimelineScrollHelper(
             lazyListState = lazyListState,
-            timelineItems = state.timelineItems,
-            onLoadMore = ::onReachedLoadMore
+            timelineItems = state.timelineItems
         )
     }
 }
@@ -222,7 +219,6 @@ fun TimelineItemRow(
 internal fun BoxScope.TimelineScrollHelper(
     lazyListState: LazyListState,
     timelineItems: ImmutableList<TimelineItem>,
-    onLoadMore: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
@@ -234,24 +230,6 @@ internal fun BoxScope.TimelineScrollHelper(
         ) coroutineScope.launch {
             lazyListState.animateScrollToItem(0)
         }
-    }
-
-    // Handle load more preloading
-    val loadMore by remember {
-        derivedStateOf {
-            val layoutInfo = lazyListState.layoutInfo
-            val totalItemsNumber = layoutInfo.totalItemsCount
-            val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
-            lastVisibleItemIndex > (totalItemsNumber - 30)
-        }
-    }
-
-    LaunchedEffect(loadMore) {
-        snapshotFlow { loadMore }
-            .distinctUntilChanged()
-            .collect {
-                onLoadMore()
-            }
     }
 
     // Jump to bottom button

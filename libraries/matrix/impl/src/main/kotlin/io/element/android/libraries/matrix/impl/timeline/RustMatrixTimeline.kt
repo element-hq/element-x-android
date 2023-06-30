@@ -30,6 +30,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.PaginationOptions
@@ -45,10 +46,10 @@ class RustMatrixTimeline(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixTimeline {
 
-    private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
+    private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 
-    private val paginationState = MutableStateFlow(
+    private val _paginationState = MutableStateFlow(
         MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
     )
 
@@ -64,19 +65,15 @@ class RustMatrixTimeline(
     )
 
     private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
-        paginationState = paginationState,
-        timelineItems = timelineItems,
+        paginationState = _paginationState,
+        timelineItems = _timelineItems,
         timelineItemFactory = timelineItemFactory,
     )
 
-    override fun paginationState(): StateFlow<MatrixTimeline.PaginationState> {
-        return paginationState
-    }
+    override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState.asStateFlow()
 
     @OptIn(FlowPreview::class)
-    override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
-        return timelineItems.sample(50)
-    }
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.sample(50)
 
     internal suspend fun postItems(items: List<TimelineItem>) {
         timelineDiffProcessor.postItems(items)
