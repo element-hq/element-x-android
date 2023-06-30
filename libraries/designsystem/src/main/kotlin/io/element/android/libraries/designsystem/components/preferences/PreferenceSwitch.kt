@@ -51,8 +51,8 @@ fun PreferenceSwitch(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = preferenceMinHeight)
-            .padding(vertical = 4.dp, horizontal = preferencePaddingHorizontal)
-            .clickable { onCheckedChange(!isChecked) },
+            .clickable { onCheckedChange(!isChecked) }
+            .padding(vertical = 4.dp, horizontal = preferencePaddingHorizontal),
         verticalAlignment = Alignment.CenterVertically
     ) {
         PreferenceIcon(
