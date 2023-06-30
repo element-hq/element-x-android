@@ -21,10 +21,12 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.analytics.test.FakeAnalyticsService
+import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -34,11 +36,15 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
+import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -47,12 +53,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - starts empty, adds invites when received`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
-        val presenter = InviteListPresenter(
-            FakeMatrixClient(
-                roomSummaryDataSource = roomSummaryDataSource,
-            ),
-            FakeSeenInvitesStore(),
-            FakeAnalyticsService(),
+        val presenter = aPresenter(
+            FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -72,12 +74,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - uses user ID and avatar for direct invites`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withDirectChatInvitation()
-        val presenter = InviteListPresenter(
-            FakeMatrixClient(
-                roomSummaryDataSource = roomSummaryDataSource,
-            ),
-            FakeSeenInvitesStore(),
-            FakeAnalyticsService(),
+        val presenter = aPresenter(
+            FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -102,12 +100,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - includes sender details for room invites`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-        val presenter = InviteListPresenter(
-            FakeMatrixClient(
-                roomSummaryDataSource = roomSummaryDataSource,
-            ),
-            FakeSeenInvitesStore(),
-            FakeAnalyticsService(),
+        val presenter = aPresenter(
+            FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -136,6 +130,7 @@ class InviteListPresenterTests {
             ),
             FakeSeenInvitesStore(),
             FakeAnalyticsService(),
+            FakeNotificationDrawerManager()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -155,12 +150,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - shows confirm dialog for declining room invites`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-        val presenter = InviteListPresenter(
-            FakeMatrixClient(
-                roomSummaryDataSource = roomSummaryDataSource,
-            ),
-            FakeSeenInvitesStore(),
-            FakeAnalyticsService(),
+        val presenter = aPresenter(
+            FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -180,12 +171,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - hides confirm dialog when cancelling`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-        val presenter = InviteListPresenter(
-            FakeMatrixClient(
-                roomSummaryDataSource = roomSummaryDataSource,
-            ),
-            FakeSeenInvitesStore(),
-            FakeAnalyticsService(),
+        val presenter = aPresenter(
+            FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -205,11 +192,12 @@ class InviteListPresenterTests {
     @Test
     fun `present - declines invite after confirming`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val fakeNotificationDrawerManager = FakeNotificationDrawerManager()
         val client = FakeMatrixClient(
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
+        val presenter = aPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -225,6 +213,7 @@ class InviteListPresenterTests {
             skipItems(2)
 
             Truth.assertThat(room.isInviteRejected).isTrue()
+            Truth.assertThat(fakeNotificationDrawerManager.getClearMemberShipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
     }
 
@@ -235,7 +224,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
+        val presenter = aPresenter(client)
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -266,7 +255,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
+        val presenter = aPresenter(client)
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -294,11 +283,12 @@ class InviteListPresenterTests {
     @Test
     fun `present - accepts invites and sets state on success`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
+        val fakeNotificationDrawerManager = FakeNotificationDrawerManager()
         val client = FakeMatrixClient(
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
+        val presenter = aPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -311,6 +301,7 @@ class InviteListPresenterTests {
 
             Truth.assertThat(room.isInviteAccepted).isTrue()
             Truth.assertThat(newState.acceptedAction).isEqualTo(Async.Success(A_ROOM_ID))
+            Truth.assertThat(fakeNotificationDrawerManager.getClearMemberShipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
     }
 
@@ -321,7 +312,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
+        val presenter = aPresenter(client)
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -346,7 +337,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
+        val presenter = aPresenter(client)
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -376,6 +367,7 @@ class InviteListPresenterTests {
             ),
             store,
             FakeAnalyticsService(),
+            FakeNotificationDrawerManager()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -413,6 +405,7 @@ class InviteListPresenterTests {
             ),
             store,
             FakeAnalyticsService(),
+            FakeNotificationDrawerManager()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -499,5 +492,17 @@ class InviteListPresenterTests {
             lastMessageTimestamp = null,
             unreadNotificationCount = 0,
         )
+    )
+
+    private fun aPresenter(
+        client: MatrixClient,
+        seenInvitesStore: SeenInvitesStore = FakeSeenInvitesStore(),
+        fakeAnalyticsService: AnalyticsService = FakeAnalyticsService(),
+        notificationDrawerManager: NotificationDrawerManager = FakeNotificationDrawerManager()
+    ) = InviteListPresenter(
+        client,
+        seenInvitesStore,
+        fakeAnalyticsService,
+        notificationDrawerManager
     )
 }

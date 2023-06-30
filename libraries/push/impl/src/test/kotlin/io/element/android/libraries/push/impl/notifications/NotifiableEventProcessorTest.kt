@@ -120,6 +120,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given viewing the same room main timeline when processing main timeline message event then removes message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, threadId = null))
+        events.forEach { outdatedDetector.givenEventIsOutOfDate(it) }
 
         val result = eventProcessor.process(events, VIEWING_A_ROOM, renderedEvents = emptyList())
 
@@ -133,6 +134,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given viewing the same thread timeline when processing thread message event then removes message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, threadId = A_THREAD_ID))
+        events.forEach { outdatedDetector.givenEventIsOutOfDate(it) }
 
         val result = eventProcessor.process(events, VIEWING_A_THREAD, renderedEvents = emptyList())
 
