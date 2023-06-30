@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
@@ -78,7 +77,7 @@ class NotifiableEventResolver @Inject constructor(
                 Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
             }.getOrNull()
 
-        // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can fetch the matching event
+        // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
         return notificationData?.asNotifiableEvent(sessionId)
             ?: fallbackNotifiableEvent(sessionId, roomId, eventId)
     }
