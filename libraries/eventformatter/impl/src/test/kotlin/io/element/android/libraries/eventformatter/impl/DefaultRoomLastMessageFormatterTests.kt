@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
@@ -161,6 +162,7 @@ class DefaultRoomLastMessageFormatterTests {
             AudioMessageType(body, MediaSource("url"), null),
             ImageMessageType(body, MediaSource("url"), null),
             FileMessageType(body, MediaSource("url"), null),
+            LocationMessageType(body, "geo:1,2"),
             NoticeMessageType(body, null),
             EmoteMessageType(body, null),
         )
@@ -196,6 +198,7 @@ class DefaultRoomLastMessageFormatterTests {
                 is AudioMessageType -> "Audio"
                 is ImageMessageType -> "Image"
                 is FileMessageType -> "File"
+                is LocationMessageType -> "Shared location"
                 is EmoteMessageType -> "- $senderName ${type.body}"
                 is TextMessageType, is NoticeMessageType -> body
                 UnknownMessageType -> "Unsupported event"
@@ -211,6 +214,7 @@ class DefaultRoomLastMessageFormatterTests {
                 is AudioMessageType -> "$senderName: Audio"
                 is ImageMessageType -> "$senderName: Image"
                 is FileMessageType -> "$senderName: File"
+                is LocationMessageType -> "$senderName: Shared location"
                 is EmoteMessageType -> "- $senderName ${type.body}"
                 is TextMessageType, is NoticeMessageType -> "$senderName: $body"
                 UnknownMessageType -> "$senderName: Unsupported event"
@@ -220,6 +224,7 @@ class DefaultRoomLastMessageFormatterTests {
                 is AudioMessageType -> true
                 is ImageMessageType -> true
                 is FileMessageType -> true
+                is LocationMessageType -> false
                 is EmoteMessageType -> false
                 is TextMessageType, is NoticeMessageType -> true
                 UnknownMessageType -> true

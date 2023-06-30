@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
@@ -53,6 +54,9 @@ class EventMessageMapper {
                 is MessageType.Image -> {
                     ImageMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
                 }
+                is MessageType.Location -> {
+                    LocationMessageType(type.content.body, type.content.geoUri)
+                }
                 is MessageType.Notice -> {
                     NoticeMessageType(type.content.body, type.content.formatted?.map())
                 }
@@ -65,7 +69,6 @@ class EventMessageMapper {
                 is MessageType.Video -> {
                     VideoMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
                 }
-                is MessageType.Location,
                 null -> {
                     UnknownMessageType
                 }

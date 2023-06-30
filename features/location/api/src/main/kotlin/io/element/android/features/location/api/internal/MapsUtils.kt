@@ -23,7 +23,7 @@ private const val BASE_URL = "https://api.maptiler.com"
 private const val LIGHT_MAP_ID = "9bc819c8-e627-474a-a348-ec144fe3d810"
 private const val DARK_MAP_ID = "dea61faf-292b-4774-9660-58fcef89a7f3"
 private const val STATIC_MAP_FORMAT = "webp"
-private const val STATIC_MAP_SCALE = "" // Either "" (empty string) for normal image or "@2x" for retina images.
+private const val STATIC_MAP_SCALE_2X = "@2x"
 private const val STATIC_MAP_MAX_WIDTH_HEIGHT = 2048
 private const val STATIC_MAP_MAX_ZOOM = 22.0
 
@@ -33,6 +33,14 @@ fun buildTileServerUrl(
     "$BASE_URL/maps/$LIGHT_MAP_ID/style.json?key=$API_KEY"
 } else {
     "$BASE_URL/maps/$DARK_MAP_ID/style.json?key=$API_KEY"
+}
+
+internal enum class AttributionPlacement(val value: String) {
+    BottomRight("bottomright"),
+    BottomLeft("bottomleft"),
+    TopLeft("topleft"),
+    TopRight("topright"),
+    Hidden("false"),
 }
 
 /**
@@ -50,7 +58,9 @@ internal fun buildStaticMapsApiUrl(
     desiredZoom: Double,
     desiredWidth: Int,
     desiredHeight: Int,
-    darkMode: Boolean
+    darkMode: Boolean,
+    doubleScale: Boolean,
+    attributionPlacement: AttributionPlacement,
 ): String {
     require(desiredWidth > 0 && desiredHeight > 0) {
         "Width ($desiredHeight) and height ($desiredHeight) must be > 0"
@@ -72,9 +82,10 @@ internal fun buildStaticMapsApiUrl(
             width = (height * aspectRatio).roundToInt()
         }
     }
-    return if (!darkMode) {
-        "$BASE_URL/maps/$LIGHT_MAP_ID/static/${lon},${lat},${zoom}/${width}x${height}$STATIC_MAP_SCALE.$STATIC_MAP_FORMAT?key=$API_KEY"
-    } else {
-        "$BASE_URL/maps/$DARK_MAP_ID/static/${lon},${lat},${zoom}/${width}x${height}$STATIC_MAP_SCALE.$STATIC_MAP_FORMAT?key=$API_KEY"
-    }
+
+    val mapId = if (darkMode) DARK_MAP_ID else LIGHT_MAP_ID
+    val scaleSuffix = if (doubleScale) STATIC_MAP_SCALE_2X else ""
+
+    return "$BASE_URL/maps/$mapId/static/${lon},${lat},${zoom}/${width}x${height}${scaleSuffix}.$STATIC_MAP_FORMAT" +
+        "?key=$API_KEY&attribution=${attributionPlacement.value}"
 }
