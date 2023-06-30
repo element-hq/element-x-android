@@ -32,6 +32,7 @@ class AboutPresenter @Inject constructor() : Presenter<AboutState> {
         }
 
         return AboutState(
+            elementLegals = getAllLegals(),
             eventSink = ::handleEvents
         )
     }
