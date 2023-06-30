@@ -18,17 +18,19 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.TextUnit
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 // Allow to not overlap the timestamp with the text, in the message bubble.
 // Compute the size of the worst case.
-data class ExtraPadding(val str: String)
+data class ExtraPadding(val nbChars: Int)
 
-val noExtraPadding = ExtraPadding("")
+val noExtraPadding = ExtraPadding(0)
 
 /**
  * See [io.element.android.features.messages.impl.timeline.components.TimelineEventTimestampView] for the related View.
@@ -40,22 +42,30 @@ fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
     val hasMessageSendingFailed = sendState is EventSendState.SendingFailed
     val isMessageEdited = (content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
 
-    var strLen = 2
+    var strLen = 6
     if (isMessageEdited) {
-        strLen += stringResource(id = CommonStrings.common_edited_suffix).length + 2
+        strLen += stringResource(id = CommonStrings.common_edited_suffix).length + 3
     }
     strLen += formattedTime.length
     if (hasMessageSendingFailed) {
         strLen += 5
+        if (isMessageEdited) {
+            // I do not know why, but adding 2 more chars avoid overlapping when the
+            // message is edited and in error.
+            strLen += 2
+        }
     }
-    // A space and a few unbreakable spaces
-    return ExtraPadding(" " + "\u00A0".repeat(strLen))
+    return ExtraPadding(strLen)
 }
 
-fun ExtraPadding.strBigger(): String {
-    return if (str.isEmpty()) {
-        str
-    } else {
-        str + "\u00A0\u00A0\u00A0"
-    }
+/**
+ * Get a string to add to the content of the message to avoid overlapping the timestamp.
+ * @param fontSize the font size of the message content, to be able to add more space char if the font is small.
+ */
+fun ExtraPadding.getStr(fontSize: TextUnit): String {
+    if (nbChars == 0) return ""
+    val timestampFontSize = ElementTheme.typography.fontBodyXsRegular.fontSize // 11.sp
+    val nbOfSpaces = ((timestampFontSize.value / fontSize.value) * nbChars).toInt() + 1
+    // A space and some unbreakable spaces
+    return " " + "\u00A0".repeat(nbOfSpaces)
 }
