@@ -93,7 +93,7 @@ fun PreferenceText(
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(horizontal = 16.dp),
+                    .padding(start = 16.dp, end = 8.dp),
                 text = currentValue,
                 style = ElementTheme.typography.fontBodyXsMedium,
                 color = ElementTheme.materialColors.secondary,
@@ -102,7 +102,7 @@ fun PreferenceText(
             CircularProgressIndicator(
                 modifier = Modifier
                     .progressSemantics()
-                    .padding(horizontal = 16.dp)
+                    .padding(start = 16.dp, end = 8.dp)
                     .size(20.dp)
                     .align(Alignment.CenterVertically),
                 strokeWidth = 2.dp
