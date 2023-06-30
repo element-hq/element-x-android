@@ -78,6 +78,7 @@ class NotifiableEventResolver @Inject constructor(
                 Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
             }.getOrNull()
 
+        // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can fetch the matching event
         return notificationData?.asNotifiableEvent(sessionId)
             ?: fallbackNotifiableEvent(sessionId, roomId, eventId)
     }
