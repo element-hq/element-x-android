@@ -28,6 +28,10 @@ import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePr
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.user.CurrentUserProvider
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -35,27 +39,36 @@ import org.junit.Test
 class PreferencesRootPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
-        val logoutPresenter = DefaultLogoutPreferencePresenter(FakeMatrixClient())
+        val matrixClient = FakeMatrixClient()
+        val logoutPresenter = DefaultLogoutPreferencePresenter(matrixClient)
         val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
         val analyticsPresenter = DefaultAnalyticsPreferencesPresenter(FakeAnalyticsService(), A_BUILD_META)
         val presenter = PreferencesRootPresenter(
             logoutPresenter,
             rageshakePresenter,
             analyticsPresenter,
+            CurrentUserProvider(matrixClient),
             A_BUILD_META.buildType
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.logoutState.logoutAction).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.analyticsState.isEnabled).isFalse()
-            assertThat(initialState.rageshakeState.isEnabled).isTrue()
-            assertThat(initialState.rageshakeState.isSupported).isTrue()
-            assertThat(initialState.rageshakeState.sensitivity).isEqualTo(1.0f)
-            assertThat(initialState.myUser).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.showDeveloperSettings).isEqualTo(true)
+            assertThat(initialState.myUser).isNull()
+            val loadedState = awaitItem()
+            assertThat(loadedState.logoutState.logoutAction).isEqualTo(Async.Uninitialized)
+            assertThat(loadedState.analyticsState.isEnabled).isFalse()
+            assertThat(loadedState.rageshakeState.isEnabled).isTrue()
+            assertThat(loadedState.rageshakeState.isSupported).isTrue()
+            assertThat(loadedState.rageshakeState.sensitivity).isEqualTo(1.0f)
+            assertThat(loadedState.myUser).isEqualTo(
+                MatrixUser(
+                    userId = matrixClient.sessionId,
+                    displayName = A_USER_NAME,
+                    avatarUrl = AN_AVATAR_URL
+                )
+            )
+            assertThat(loadedState.showDeveloperSettings).isEqualTo(true)
         }
     }
 }

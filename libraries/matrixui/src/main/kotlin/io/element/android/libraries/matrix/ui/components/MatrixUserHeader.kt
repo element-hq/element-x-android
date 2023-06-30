@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,13 +41,16 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun MatrixUserHeader(
-    matrixUser: MatrixUser,
+    matrixUser: MatrixUser?,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    // onClick: () -> Unit = {},
 ) {
+    if (matrixUser == null) {
+        return MatrixUserHeaderPlaceholder(modifier = modifier)
+    }
     Row(
         modifier = modifier
-            .clickable(onClick = onClick)
+            // .clickable(onClick = onClick)
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically

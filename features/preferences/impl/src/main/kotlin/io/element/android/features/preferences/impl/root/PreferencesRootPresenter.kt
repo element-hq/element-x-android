@@ -17,23 +17,38 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesPresenter
 import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.matrix.api.user.CurrentUserProvider
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PreferencesRootPresenter @Inject constructor(
     private val logoutPresenter: LogoutPreferencePresenter,
     private val rageshakePresenter: RageshakePreferencesPresenter,
     private val analyticsPresenter: AnalyticsPreferencesPresenter,
+    private val currentUserProvider: CurrentUserProvider,
     private val buildType: BuildType,
 ) : Presenter<PreferencesRootState> {
 
     @Composable
     override fun present(): PreferencesRootState {
+        val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
+            mutableStateOf(null)
+        }
+        LaunchedEffect(Unit) {
+            initialLoad(matrixUser)
+        }
+
         val logoutState = logoutPresenter.present()
         val rageshakeState = rageshakePresenter.present()
         val analyticsState = analyticsPresenter.present()
@@ -42,8 +57,12 @@ class PreferencesRootPresenter @Inject constructor(
             logoutState = logoutState,
             rageshakeState = rageshakeState,
             analyticsState = analyticsState,
-            myUser = Async.Uninitialized,
+            myUser = matrixUser.value,
             showDeveloperSettings = showDeveloperSettings
         )
+    }
+
+    private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
+        matrixUser.value = currentUserProvider.provide()
     }
 }

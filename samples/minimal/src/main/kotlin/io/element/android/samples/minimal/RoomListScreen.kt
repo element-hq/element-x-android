@@ -38,6 +38,7 @@ import io.element.android.libraries.eventformatter.impl.StateContentFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.user.CurrentUserProvider
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -60,6 +61,7 @@ class RoomListScreen(
     private val stringProvider = AndroidStringProvider(context.resources)
     private val presenter = RoomListPresenter(
         client = matrixClient,
+        currentUserProvider = CurrentUserProvider(matrixClient),
         lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
         roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
             sp = stringProvider,
