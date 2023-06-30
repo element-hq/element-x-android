@@ -57,7 +57,7 @@ fun PreferenceCategory(
 fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
     Text(
         modifier = modifier.padding(
-            top = 12.dp,
+            top = 20.dp,
             bottom = 8.dp,
             start = preferencePaddingHorizontal,
             end = preferencePaddingHorizontal,
