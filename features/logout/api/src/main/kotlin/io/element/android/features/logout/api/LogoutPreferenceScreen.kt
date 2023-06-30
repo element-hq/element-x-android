@@ -27,11 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LogoutPreferenceView(
@@ -81,13 +79,11 @@ fun LogoutPreferenceView(
 fun LogoutPreferenceContent(
     onClick: () -> Unit = {},
 ) {
-    PreferenceCategory(title = stringResource(id = CommonStrings.settings_title_general)) {
-        PreferenceText(
-            title = stringResource(id = R.string.screen_signout_preference_item),
-            icon = Icons.Default.Logout,
-            onClick = onClick
-        )
-    }
+    PreferenceText(
+        title = stringResource(id = R.string.screen_signout_preference_item),
+        icon = Icons.Default.Logout,
+        onClick = onClick
+    )
 }
 
 @Preview

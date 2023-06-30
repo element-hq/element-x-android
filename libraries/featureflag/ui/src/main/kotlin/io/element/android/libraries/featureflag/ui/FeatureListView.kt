@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.components.preferences.PreferenceCheckbox
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
@@ -52,8 +52,7 @@ fun FeaturePreferenceView(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    PreferenceSwitch(
+    PreferenceCheckbox(
         title = feature.title,
         isChecked = feature.isEnabled,
         modifier = modifier,
