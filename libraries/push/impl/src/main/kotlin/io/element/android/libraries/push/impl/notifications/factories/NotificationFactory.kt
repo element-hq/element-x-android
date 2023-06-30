@@ -154,8 +154,9 @@ class NotificationFactory @Inject constructor(
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
-            .addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
-            .addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
+            // TODO removed for now, will be added back later
+//            .addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
+//            .addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
             .apply {
                 /*
                 // Build the pending intent for when the notification is clicked
