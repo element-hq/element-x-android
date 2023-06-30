@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import kotlinx.collections.immutable.persistentListOf
@@ -183,19 +184,3 @@ class CreateRoomRootPresenterTests {
         }
     }
 }
-
-private fun aBuildMeta() =
-    BuildMeta(
-        buildType = BuildType.DEBUG,
-        isDebuggable = true,
-        applicationId = "",
-        applicationName = "An Application",
-        lowPrivacyLoggingEnabled = true,
-        versionName = "",
-        versionCode = 0,
-        gitRevision = "",
-        gitBranchName = "",
-        gitRevisionDate = "",
-        flavorDescription = "",
-        flavorShortDescription = "",
-    )

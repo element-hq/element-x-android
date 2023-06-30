@@ -25,13 +25,11 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -73,7 +71,6 @@ class ActionListPresenterTest {
             assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
         }
     }
-
 
     @Test
     fun `present - compute for message from others redacted`() = runTest {
@@ -230,32 +227,6 @@ class ActionListPresenterTest {
         }
     }
 }
-
-private fun aBuildMeta(
-    buildType: BuildType = BuildType.DEBUG,
-    isDebuggable: Boolean = true,
-    applicationName: String = "",
-    applicationId: String = "",
-    lowPrivacyLoggingEnabled: Boolean = true,
-    versionName: String = "",
-    gitRevision: String = "",
-    gitRevisionDate: String = "",
-    gitBranchName: String = "",
-    flavorDescription: String = "",
-    flavorShortDescription: String = "",
-) = BuildMeta(
-    buildType,
-    isDebuggable,
-    applicationName,
-    applicationId,
-    lowPrivacyLoggingEnabled,
-    versionName,
-    gitRevision,
-    gitRevisionDate,
-    gitBranchName,
-    flavorDescription,
-    flavorShortDescription
-)
 
 private fun anActionListPresenter(isBuildDebuggable: Boolean) = ActionListPresenter(buildMeta = aBuildMeta(isDebuggable = isBuildDebuggable))
 

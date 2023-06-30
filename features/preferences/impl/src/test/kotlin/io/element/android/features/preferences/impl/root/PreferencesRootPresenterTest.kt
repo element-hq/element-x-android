@@ -20,7 +20,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.analytics.test.A_BUILD_META
 import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.user.CurrentUserProvider
@@ -28,6 +27,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -35,20 +35,21 @@ import org.junit.Test
 class PreferencesRootPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
+        val buildMeta = aBuildMeta()
         val matrixClient = FakeMatrixClient()
         val logoutPresenter = DefaultLogoutPreferencePresenter(matrixClient)
         val presenter = PreferencesRootPresenter(
             logoutPresenter,
             CurrentUserProvider(matrixClient),
             FakeSessionVerificationService(),
-            A_BUILD_META
+            buildMeta,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.myUser).isNull()
-            assertThat(initialState.version).isEqualTo("Version " + A_BUILD_META.versionName + " (" + A_BUILD_META.versionCode + ")")
+            assertThat(initialState.version).isEqualTo("Version " + buildMeta.versionName + " (" + buildMeta.versionCode + ")")
             val loadedState = awaitItem()
             assertThat(loadedState.logoutState.logoutAction).isEqualTo(Async.Uninitialized)
             assertThat(loadedState.myUser).isEqualTo(
