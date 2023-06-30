@@ -31,7 +31,7 @@ import io.element.android.libraries.push.impl.PushersManager
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
-import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -48,7 +48,7 @@ private val loggerTag = LoggerTag("PushHandler", pushLoggerTag)
 
 @ContributesBinding(AppScope::class)
 class DefaultPushHandler @Inject constructor(
-    private val notificationDrawerManager: NotificationDrawerManager,
+    private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     private val notifiableEventResolver: NotifiableEventResolver,
     private val defaultPushDataStore: DefaultPushDataStore,
     private val userPushStoreFactory: UserPushStoreFactory,
@@ -135,7 +135,7 @@ class DefaultPushHandler @Inject constructor(
                 return
             }
 
-            notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
+            defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
         }

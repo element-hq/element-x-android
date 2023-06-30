@@ -39,8 +39,8 @@ class NotificationState(
 ) {
 
     fun <T> updateQueuedEvents(
-        drawerManager: NotificationDrawerManager,
-        action: NotificationDrawerManager.(NotificationEventQueue, List<ProcessedEvent<NotifiableEvent>>) -> T
+        drawerManager: DefaultNotificationDrawerManager,
+        action: DefaultNotificationDrawerManager.(NotificationEventQueue, List<ProcessedEvent<NotifiableEvent>>) -> T
     ): T {
         return synchronized(queuedEvents) {
             action(drawerManager, queuedEvents, renderedEvents)

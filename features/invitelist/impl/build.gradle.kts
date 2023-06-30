@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
     implementation(projects.services.analytics.api)
+    implementation(projects.libraries.push.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

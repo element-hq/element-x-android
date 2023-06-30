@@ -37,7 +37,7 @@ private val loggerTag = LoggerTag("NotificationBroadcastReceiver", notificationL
  */
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var defaultNotificationDrawerManager: DefaultNotificationDrawerManager
 
     //@Inject lateinit var activeSessionHolder: ActiveSessionHolder
     //@Inject lateinit var analyticsTracker: AnalyticsTracker
@@ -54,20 +54,20 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
             actionIds.dismissRoom -> if (roomId != null) {
-                notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
             }
             actionIds.dismissSummary ->
-                notificationDrawerManager.clearAllEvents(sessionId)
+                defaultNotificationDrawerManager.clearAllEvents(sessionId)
             actionIds.markRoomRead -> if (roomId != null) {
-                notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
                 handleMarkAsRead(sessionId, roomId)
             }
             actionIds.join -> if (roomId != null) {
-                notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
                 handleJoinRoom(sessionId, roomId)
             }
             actionIds.reject -> if (roomId != null) {
-                notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
                 handleRejectRoom(sessionId, roomId)
             }
         }
