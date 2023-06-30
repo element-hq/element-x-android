@@ -177,8 +177,7 @@ class RoomGroupMessageCreator @Inject constructor(
 
     private suspend fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
         // Use the last event (most recent?)
-        return events.lastOrNull()
-            ?.roomAvatarPath
+        return events.reversed().firstNotNullOfOrNull { it.roomAvatarPath }
             ?.let { bitmapLoader.getRoomBitmap(it) }
     }
 }
