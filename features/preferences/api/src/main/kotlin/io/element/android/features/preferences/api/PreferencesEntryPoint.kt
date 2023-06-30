@@ -32,5 +32,6 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onOpenBugReport()
+        fun onVerifyClicked()
     }
 }

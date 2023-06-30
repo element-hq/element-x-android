@@ -19,13 +19,19 @@ package io.element.android.features.preferences.impl.root
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.user.CurrentUserProvider
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,6 +39,7 @@ import javax.inject.Inject
 class PreferencesRootPresenter @Inject constructor(
     private val logoutPresenter: LogoutPreferencePresenter,
     private val currentUserProvider: CurrentUserProvider,
+    private val sessionVerificationService: SessionVerificationService,
     private val buildType: BuildType,
 ) : Presenter<PreferencesRootState> {
 
@@ -45,11 +52,18 @@ class PreferencesRootPresenter @Inject constructor(
             initialLoad(matrixUser)
         }
 
+        // Session verification status (unknown, not verified, verified)
+        val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
+        val sessionIsNotVerified by remember {
+            derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified }
+        }
+
         val logoutState = logoutPresenter.present()
         val showDeveloperSettings = buildType != BuildType.RELEASE
         return PreferencesRootState(
             logoutState = logoutState,
             myUser = matrixUser.value,
+            showCompleteVerification = sessionIsNotVerified,
             showDeveloperSettings = showDeveloperSettings
         )
     }

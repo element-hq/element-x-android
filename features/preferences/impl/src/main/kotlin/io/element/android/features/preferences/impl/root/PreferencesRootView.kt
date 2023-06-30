@@ -18,9 +18,10 @@ package io.element.android.features.preferences.impl.root
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeveloperMode
-import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -42,6 +43,7 @@ fun PreferencesRootView(
     state: PreferencesRootState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
+    onVerifyClicked: () -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
@@ -54,7 +56,14 @@ fun PreferencesRootView(
         title = stringResource(id = CommonStrings.common_settings)
     ) {
         UserPreferences(state.myUser)
-        // TODO Verification and eventually divider
+        if (state.showCompleteVerification) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.action_complete_verification),
+                icon = Icons.Outlined.VerifiedUser,
+                onClick = onVerifyClicked,
+            )
+            Divider()
+        }
         PreferenceText(
             title = stringResource(id = CommonStrings.common_analytics),
             icon = Icons.Outlined.InsertChart,
@@ -67,7 +76,7 @@ fun PreferencesRootView(
         )
         PreferenceText(
             title = stringResource(id = CommonStrings.common_about),
-            icon = Icons.Filled.Help,
+            icon = Icons.Outlined.Help,
             onClick = onOpenAbout,
         )
         if (state.showDeveloperSettings) {
@@ -108,5 +117,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenRageShake = {},
         onOpenDeveloperSettings = {},
         onOpenAbout = {},
+        onVerifyClicked = {},
     )
 }

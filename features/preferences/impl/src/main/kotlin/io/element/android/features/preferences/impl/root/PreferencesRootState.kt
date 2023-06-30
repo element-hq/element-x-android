@@ -22,5 +22,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 data class PreferencesRootState(
     val logoutState: LogoutPreferenceState,
     val myUser: MatrixUser?,
+    val showCompleteVerification: Boolean,
     val showDeveloperSettings: Boolean
 )

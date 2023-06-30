@@ -75,6 +75,10 @@ class PreferencesFlowNode @AssistedInject constructor(
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
                     }
 
+                    override fun onVerifyClicked() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onVerifyClicked() }
+                    }
+
                     override fun onOpenAnalytics() {
                         backstack.push(NavTarget.AnalyticsSettings)
                     }
