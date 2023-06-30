@@ -19,7 +19,6 @@ package io.element.android.libraries.designsystem.components.preferences
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,18 +33,16 @@ import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.theme.ElementTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -93,15 +90,12 @@ fun PreferenceTopAppBar(
             BackButton(onClick = onBackPressed)
         },
         title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    text = title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
+            Text(
+                text = title,
+                style = ElementTheme.typography.fontHeadingSmMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
 
     )
