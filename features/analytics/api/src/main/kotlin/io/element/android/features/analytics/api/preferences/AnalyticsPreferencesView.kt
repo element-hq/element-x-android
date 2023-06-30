@@ -18,6 +18,7 @@ package io.element.android.features.analytics.api.preferences
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -27,7 +28,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -43,23 +43,21 @@ fun AnalyticsPreferencesView(
         state.eventSink(AnalyticsOptInEvents.EnableAnalytics(isEnabled = isEnabled))
     }
 
-    PreferenceCategory(
-        modifier = modifier,
-        title = stringResource(id = CommonStrings.screen_analytics_settings_share_data)
-    ) {
-        val firstPart = stringResource(id = CommonStrings.screen_analytics_settings_help_us_improve, state.applicationName)
-        val secondPart = buildAnnotatedStringWithColoredPart(
-            CommonStrings.screen_analytics_settings_read_terms,
-            CommonStrings.screen_analytics_settings_read_terms_content_link
-        )
-        val title = "$firstPart\n\n$secondPart"
+    val firstPart = stringResource(id = CommonStrings.screen_analytics_settings_help_us_improve, state.applicationName)
+    val secondPart = buildAnnotatedStringWithColoredPart(
+        CommonStrings.screen_analytics_settings_read_terms,
+        CommonStrings.screen_analytics_settings_read_terms_content_link
+    )
+    val subtitle = "$firstPart\n\n$secondPart"
 
-        PreferenceSwitch(
-            title = title,
-            isChecked = state.isEnabled,
-            onCheckedChange = ::onEnabledChanged
-        )
-    }
+    PreferenceSwitch(
+        modifier = modifier,
+        title = stringResource(id = CommonStrings.screen_analytics_settings_share_data),
+        subtitle = subtitle,
+        isChecked = state.isEnabled,
+        onCheckedChange = ::onEnabledChanged,
+        switchAlignment = Alignment.Top,
+    )
 }
 
 @Composable
