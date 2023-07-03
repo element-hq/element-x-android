@@ -28,8 +28,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
-import io.element.android.libraries.matrix.api.user.CurrentUserProvider
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +39,7 @@ import javax.inject.Inject
 
 class PreferencesRootPresenter @Inject constructor(
     private val logoutPresenter: LogoutPreferencePresenter,
-    private val currentUserProvider: CurrentUserProvider,
+    private val matrixClient: MatrixClient,
     private val sessionVerificationService: SessionVerificationService,
     private val buildType: BuildType,
     private val versionFormatter: VersionFormatter,
@@ -71,6 +72,6 @@ class PreferencesRootPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
-        matrixUser.value = currentUserProvider.provide()
+        matrixUser.value = matrixClient.getCurrentUser()
     }
 }

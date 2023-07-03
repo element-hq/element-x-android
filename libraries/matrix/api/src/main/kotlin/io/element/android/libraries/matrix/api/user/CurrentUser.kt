@@ -17,18 +17,17 @@
 package io.element.android.libraries.matrix.api.user
 
 import io.element.android.libraries.matrix.api.MatrixClient
-import javax.inject.Inject
 
-class CurrentUserProvider @Inject constructor(
-    private val matrixClient: MatrixClient,
-) {
-    suspend fun provide(): MatrixUser {
-        val userAvatarUrl = matrixClient.loadUserAvatarURLString().getOrNull()
-        val userDisplayName = matrixClient.loadUserDisplayName().getOrNull()
-        return MatrixUser(
-            userId = matrixClient.sessionId,
-            displayName = userDisplayName,
-            avatarUrl = userAvatarUrl,
-        )
-    }
+/**
+ * Get the current user, as [MatrixUser], using  [MatrixClient.loadUserAvatarURLString]
+ * and [MatrixClient.loadUserDisplayName].
+ */
+suspend fun MatrixClient.getCurrentUser(): MatrixUser {
+    val userAvatarUrl = loadUserAvatarURLString().getOrNull()
+    val userDisplayName = loadUserDisplayName().getOrNull()
+    return MatrixUser(
+        userId = sessionId,
+        displayName = userDisplayName,
+        avatarUrl = userAvatarUrl,
+    )
 }
