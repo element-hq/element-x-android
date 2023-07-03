@@ -22,9 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
-import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
@@ -71,6 +71,7 @@ internal fun BlockUserDialogs(state: RoomMemberDetailsState) {
 @Composable
 internal fun BlockConfirmationDialog(onBlockAction: () -> Unit, onDismiss: () -> Unit) {
     ConfirmationDialog(
+        title = stringResource(R.string.screen_dm_details_block_user),
         content = stringResource(R.string.screen_dm_details_block_alert_description),
         submitText = stringResource(R.string.screen_dm_details_block_alert_action),
         onSubmitClicked = onBlockAction,
@@ -81,6 +82,7 @@ internal fun BlockConfirmationDialog(onBlockAction: () -> Unit, onDismiss: () ->
 @Composable
 internal fun UnblockConfirmationDialog(onUnblockAction: () -> Unit, onDismiss: () -> Unit) {
     ConfirmationDialog(
+        title = stringResource(R.string.screen_dm_details_unblock_user),
         content = stringResource(R.string.screen_dm_details_unblock_alert_description),
         submitText = stringResource(R.string.screen_dm_details_unblock_alert_action),
         onSubmitClicked = onUnblockAction,
