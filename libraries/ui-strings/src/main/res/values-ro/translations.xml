@@ -15,6 +15,7 @@
   <string name="action_continue">"Continuați"</string>
   <string name="action_copy">"Copiați"</string>
   <string name="action_copy_link">"Copiați linkul"</string>
+  <string name="action_copy_link_to_message">"Copiați linkul către mesaj"</string>
   <string name="action_create">"Creați"</string>
   <string name="action_create_a_room">"Creați o cameră"</string>
   <string name="action_decline">"Refuzați"</string>
@@ -27,6 +28,7 @@
   <string name="action_invite">"Invitați"</string>
   <string name="action_invite_friends">"Invitați prieteni"</string>
   <string name="action_invite_friends_to_app">"Invitați prieteni în %1$s"</string>
+  <string name="action_invite_people_to_app">"Invitați persoane la %1$s"</string>
   <string name="action_invites_list">"Invitații"</string>
   <string name="action_learn_more">"Aflați mai multe"</string>
   <string name="action_leave">"Părăsiți"</string>
@@ -54,6 +56,7 @@
   <string name="action_start">"Începeți"</string>
   <string name="action_start_chat">"Începeți discuția"</string>
   <string name="action_start_verification">"Începeți verificarea"</string>
+  <string name="action_static_map_load">"Atingeți pentru a încărca harta"</string>
   <string name="action_take_photo">"Faceți o fotografie"</string>
   <string name="action_view_source">"Vedeți sursă"</string>
   <string name="action_yes">"Da"</string>
@@ -74,6 +77,7 @@
   <string name="common_error">"Eroare"</string>
   <string name="common_file">"Fişier"</string>
   <string name="common_file_saved_on_disk_android">"Fișier salvat în Descărcări"</string>
+  <string name="common_forward_message">"Redirecționați mesajul"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Imagine"</string>
   <string name="common_invite_unknown_profile">"Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost trimisă."</string>
@@ -92,6 +96,7 @@
   <string name="common_permalink">"Permalink"</string>
   <string name="common_privacy_policy">"Politica de confidențialitate"</string>
   <string name="common_reactions">"Reacții"</string>
+  <string name="common_refreshing">"Se actualizează"</string>
   <string name="common_replying_to">"Răspuns pentru %1$s"</string>
   <string name="common_report_a_bug">"Raportați o eroare"</string>
   <string name="common_report_submitted">"Raport trimis"</string>
@@ -105,10 +110,12 @@
   <string name="common_server_not_supported">"Serverul nu este compatibil"</string>
   <string name="common_server_url">"Adresa URL a serverului"</string>
   <string name="common_settings">"Setări"</string>
+  <string name="common_shared_location">"Locație partajată"</string>
   <string name="common_starting_chat">"Se începe conversația…"</string>
   <string name="common_sticker">"Autocolant"</string>
   <string name="common_success">"Succes"</string>
   <string name="common_suggestions">"Sugestii"</string>
+  <string name="common_syncing">"Se sincronizează…"</string>
   <string name="common_third_party_notices">"Notificări despre software de la terți"</string>
   <string name="common_topic">"Subiect"</string>
   <string name="common_topic_placeholder">"Despre ce este vorba în această cameră?"</string>
@@ -159,6 +166,16 @@
   <string name="screen_media_upload_preview_error_failed_processing">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Încărcarea fișierelor media a eșuat, încercați din nou."</string>
   <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
+  <string name="screen_share_location_title">"Partajați locația"</string>
+  <string name="screen_share_my_location_action">"Distribuiți locația mea"</string>
+  <string name="screen_share_this_location_action">"Distribuiți această locație"</string>
+  <string name="screen_view_location_title">"Locație"</string>
+  <string name="screen_waitlist_message">"Există o cerere mare pentru %1$s pentru %2$s în acest moment. Reveniți la aplicație în câteva zile și încercați din nou.
+
+Vă mulțumim pentru răbdare!"</string>
+  <string name="screen_waitlist_message_success">"Bun venit la %1$s"</string>
+  <string name="screen_waitlist_title">"Sunteți pe lista de așteptare"</string>
+  <string name="screen_waitlist_title_success">"Sunteți conectat!"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Prag de detecție"</string>
   <string name="settings_title_general">"General"</string>
@@ -166,6 +183,7 @@
   <string name="test_language_identifier">"ro"</string>
   <string name="dialog_title_error">"Eroare"</string>
   <string name="dialog_title_success">"Succes"</string>
+  <string name="screen_analytics_settings_help_us_improve">"Distribuiți date anonime de utilizare pentru a ne ajuta să identificăm probleme."</string>
   <string name="screen_analytics_settings_read_terms">"Puteți citi toate condițiile noastre %1$s."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"aici"</string>
   <string name="screen_report_content_block_user">"Blocați utilizatorul"</string>
