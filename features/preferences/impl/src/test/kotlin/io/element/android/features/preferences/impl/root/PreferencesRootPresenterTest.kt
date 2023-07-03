@@ -23,7 +23,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.meta.BuildType
-import io.element.android.libraries.matrix.api.user.CurrentUserProvider
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_NAME
@@ -39,7 +38,7 @@ class PreferencesRootPresenterTest {
         val logoutPresenter = DefaultLogoutPreferencePresenter(matrixClient)
         val presenter = PreferencesRootPresenter(
             logoutPresenter,
-            CurrentUserProvider(matrixClient),
+            matrixClient,
             FakeSessionVerificationService(),
             BuildType.DEBUG,
             FakeVersionFormatter()

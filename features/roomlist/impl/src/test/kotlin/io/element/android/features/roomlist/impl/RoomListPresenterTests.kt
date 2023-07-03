@@ -31,7 +31,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
-import io.element.android.libraries.matrix.api.user.CurrentUserProvider
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -54,7 +53,6 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient()
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -84,7 +82,6 @@ class RoomListPresenterTests {
         )
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -108,7 +105,6 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient()
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -139,7 +135,6 @@ class RoomListPresenterTests {
         )
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -173,7 +168,6 @@ class RoomListPresenterTests {
         )
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -213,7 +207,6 @@ class RoomListPresenterTests {
         )
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -263,7 +256,6 @@ class RoomListPresenterTests {
         )
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService().apply {
@@ -292,7 +284,6 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient()
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -324,7 +315,6 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient()
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -353,7 +343,6 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient()
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -387,7 +376,6 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient()
         val presenter = RoomListPresenter(
             matrixClient,
-            CurrentUserProvider(matrixClient),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
