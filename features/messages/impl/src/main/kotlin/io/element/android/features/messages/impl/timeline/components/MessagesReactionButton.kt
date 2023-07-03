@@ -46,16 +46,13 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    val buttonColor = if(reaction.isHighlighted) {
-        // TODO Should use compound.bgSubtlePrimary
-        ElementTheme.legacyColors.gray400
+    val buttonColor = if (reaction.isHighlighted) {
+        ElementTheme.colors.bgSubtlePrimary
     } else {
-        // TODO Should use compound.bgSubtleSecondary
-        ElementTheme.legacyColors.gray300
+        ElementTheme.colors.bgSubtleSecondary
     }
     val borderColor = if (reaction.isHighlighted) {
-        // TODO Check the color, should use compound.borderInteractivePrimary
-        Color(0xFF808994)
+        ElementTheme.colors.borderInteractivePrimary
     } else {
         buttonColor
     }

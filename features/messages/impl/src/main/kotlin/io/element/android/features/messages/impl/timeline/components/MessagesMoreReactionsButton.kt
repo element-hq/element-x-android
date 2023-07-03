@@ -43,8 +43,7 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun MessagesMoreReactionsButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
-    // TODO Should use compound.bgSubtleSecondary
-    val buttonColor = ElementTheme.legacyColors.gray300
+    val buttonColor = ElementTheme.colors.bgSubtleSecondary
     Surface(
         modifier = modifier
             .background(Color.Transparent)
