@@ -16,6 +16,8 @@
 # limitations under the License.
 #
 
+set -e
+
 TOKEN=$GITHUB_TOKEN
 REPO=$GITHUB_REPOSITORY
 
