@@ -43,6 +43,7 @@ import io.element.android.libraries.theme.ElementTheme
 fun MatrixUserHeader(
     matrixUser: MatrixUser?,
     modifier: Modifier = Modifier,
+    // TODO handle click on this item, to let the user be able to update their profile.
     // onClick: () -> Unit = {},
 ) {
     if (matrixUser == null) {
