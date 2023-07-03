@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl
+package io.element.android.libraries.maplibre.compose
 
-sealed interface SendLocationEvents {
-    data class ShareLocation(val lat: Double, val lng: Double) : SendLocationEvents
-    data class SwitchMode(val mode: SendLocationState.Mode) : SendLocationEvents
-}
+internal val DefaultMapLocationSettings = MapLocationSettings()
+
+/**
+ * Data class for UI-related settings on the map.
+ *
+ * Note: Should not be a data class if in need of maintaining binary compatibility
+ * on future changes. See: https://jakewharton.com/public-api-challenges-in-kotlin/
+ */
+public data class MapLocationSettings(
+    public val pulseEnabled: Boolean = false,
+    public val locationEnabled: Boolean = false,
+)

@@ -37,4 +37,8 @@ data class Location(
             )
         }
     }
+
+    fun toGeoUri(): String {
+        return "geo:$lat,$lon;u=$accuracy"
+    }
 }

@@ -16,6 +16,9 @@
 
 package io.element.android.features.location.api.internal
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import io.element.android.libraries.theme.ElementTheme
 import kotlin.math.roundToInt
 
 private const val API_KEY = "fU3vlMsMn4Jb6dnEIFsx"
@@ -33,6 +36,17 @@ fun buildTileServerUrl(
     "$BASE_URL/maps/$LIGHT_MAP_ID/style.json?key=$API_KEY"
 } else {
     "$BASE_URL/maps/$DARK_MAP_ID/style.json?key=$API_KEY"
+}
+
+/**
+ * Utility function to remember the tile server URL based on the current theme.
+ */
+@Composable
+fun rememberTileServerUrl(): String {
+    val darkMode = !ElementTheme.isLightTheme
+    return remember(darkMode) {
+        buildTileServerUrl(darkMode = darkMode)
+    }
 }
 
 internal enum class AttributionPlacement(val value: String) {

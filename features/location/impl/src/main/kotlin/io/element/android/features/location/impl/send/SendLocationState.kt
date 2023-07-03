@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.features.location.impl.send
 
-android {
-    namespace = "io.element.android.features.messages.api"
-}
+data class SendLocationState(
+    val permissionDialog: Dialog = Dialog.None,
+    val mode: Mode = Mode.PinLocation,
+    val hasLocationPermission: Boolean = false,
+    val eventSink: (SendLocationEvents) -> Unit = {},
+) {
+    sealed interface Mode {
+        object SenderLocation : Mode
+        object PinLocation : Mode
+    }
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
-    api(projects.libraries.textcomposer)
+    sealed interface Dialog {
+        object None : Dialog
+        object PermissionRationale : Dialog
+        object PermissionDenied : Dialog
+    }
 }

@@ -15,15 +15,20 @@
  */
 
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
+    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.features.messages.api"
+    namespace = "io.element.android.libraries.maplibre.compose"
+
+    kotlinOptions {
+        freeCompilerArgs += "-Xexplicit-api=strict"
+    }
 }
 
 dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
-    api(projects.libraries.textcomposer)
+    api(libs.maplibre)
+    api(libs.maplibre.ktx)
+    api(libs.maplibre.annotation)
 }

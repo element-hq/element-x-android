@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.maplibre.compose
 
-android {
-    namespace = "io.element.android.features.messages.api"
-}
+internal val DefaultMapSymbolManagerSettings = MapSymbolManagerSettings()
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
-    api(projects.libraries.textcomposer)
-}
+/**
+ * Data class for UI-related settings on the map.
+ *
+ * Note: Should not be a data class if in need of maintaining binary compatibility
+ * on future changes. See: https://jakewharton.com/public-api-challenges-in-kotlin/
+ */
+public data class MapSymbolManagerSettings(
+    public val iconAllowOverlap: Boolean = false,
+)

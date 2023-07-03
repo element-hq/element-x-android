@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -30,6 +29,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -97,8 +97,8 @@ class FakeMatrixRoom(
     var reportedContentCount: Int = 0
         private set
 
-    var sendLocationCount: Int = 0
-        private set
+    private val _sentLocations = mutableListOf<SendLocationInvocation>()
+    val sentLocations: List<SendLocationInvocation> = _sentLocations
 
     var isInviteAccepted: Boolean = false
         private set
@@ -289,7 +289,7 @@ class FakeMatrixRoom(
         zoomLevel: Int?,
         assetType: AssetType?,
     ): Result<Unit> = simulateLongTask {
-        sendLocationCount++
+        _sentLocations.add(SendLocationInvocation(body, geoUri, description, zoomLevel, assetType))
         return sendLocationResult
     }
 
@@ -395,3 +395,11 @@ class FakeMatrixRoom(
         progressCallbackValues = values
     }
 }
+
+data class SendLocationInvocation(
+    val body: String,
+    val geoUri: String,
+    val description: String?,
+    val zoomLevel: Int?,
+    val assetType: AssetType?,
+)

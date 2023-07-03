@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl
+package io.element.android.features.messages.test
 
-data class SendLocationState(
-    val mode: Mode = Mode.ALocation,
-    val eventSink: (SendLocationEvents) -> Unit = {},
-) {
-    sealed interface Mode {
-        object MyLocation : Mode
-        object ALocation : Mode
-    }
-}
+import io.element.android.features.messages.api.MessageComposerContext
+import io.element.android.libraries.textcomposer.MessageComposerMode
+
+class MessageComposerContextFake(
+    override var composerMode: MessageComposerMode = MessageComposerMode.Normal(null)
+) : MessageComposerContext
