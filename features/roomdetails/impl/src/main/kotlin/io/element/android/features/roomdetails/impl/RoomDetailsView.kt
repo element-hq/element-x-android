@@ -134,7 +134,7 @@ fun RoomDetailsView(
                     RoomMemberMainActionsSection(onShareUser = ::onShareMember)
                 }
             }
-            Spacer(Modifier.height(26.dp))
+            Spacer(Modifier.height(18.dp))
 
             if (state.roomTopic !is RoomTopicState.Hidden) {
                 TopicSection(
