@@ -21,8 +21,6 @@ package io.element.android.features.messages.impl.timeline
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
@@ -266,8 +264,8 @@ internal fun BoxScope.TimelineScrollHelper(
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
         visible = showScrollToBottomButton || LocalInspectionMode.current,
-        enter = scaleIn() + fadeIn(),
-        exit = scaleOut() + fadeOut(),
+        enter = scaleIn(),
+        exit = scaleOut(),
     ) {
         FloatingActionButton(
             onClick = {
