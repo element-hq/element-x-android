@@ -75,6 +75,7 @@ private fun LeaveRoomConfirmationDialog(
     eventSink: (LeaveRoomEvent) -> Unit,
 ) {
     ConfirmationDialog(
+        title = stringResource(CommonStrings.action_leave_room),
         content = stringResource(text),
         submitText = stringResource(CommonStrings.action_leave),
         onSubmitClicked = { eventSink(LeaveRoomEvent.LeaveRoom(roomId)) },
