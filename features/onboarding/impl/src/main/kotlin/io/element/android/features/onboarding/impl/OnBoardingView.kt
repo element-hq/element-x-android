@@ -164,7 +164,10 @@ private fun OnBoardingButtons(
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
                 Spacer(Modifier.width(14.dp))
-                Text(text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code))
+                Text(
+                    text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                )
             }
         }
         Button(
@@ -174,7 +177,10 @@ private fun OnBoardingButtons(
                 .fillMaxWidth()
                 .testTag(TestTags.onBoardingSignIn)
         ) {
-            Text(text = stringResource(id = signInButtonStringRes))
+            Text(
+                text = stringResource(id = signInButtonStringRes),
+                style = ElementTheme.typography.fontBodyLgMedium,
+            )
         }
         if (state.canCreateAccount) {
             OutlinedButton(
@@ -183,7 +189,10 @@ private fun OnBoardingButtons(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Text(text = stringResource(id = R.string.screen_onboarding_sign_up))
+                Text(
+                    text = stringResource(id = R.string.screen_onboarding_sign_up),
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                )
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
