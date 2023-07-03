@@ -19,8 +19,8 @@ package io.element.android.features.preferences.impl.root
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.DeveloperMode
 import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.VerifiedUser
@@ -108,7 +108,7 @@ fun PreferencesRootView(
 fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
     PreferenceText(
         title = stringResource(id = CommonStrings.common_developer_options),
-        icon = Icons.Default.DeveloperMode,
+        icon = Icons.Outlined.DeveloperMode,
         onClick = onOpenDeveloperSettings
     )
 }
