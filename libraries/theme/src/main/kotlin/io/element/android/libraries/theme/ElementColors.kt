@@ -40,6 +40,7 @@ class ElementColors(
     quaternary: Color,
     quinary: Color,
     gray300: Color,
+    gray400: Color,
     accentColor: Color,
     placeholder: Color,
     isLight: Boolean
@@ -51,6 +52,9 @@ class ElementColors(
         private set
 
     var gray300 by mutableStateOf(gray300)
+        private set
+
+    var gray400 by mutableStateOf(gray400)
         private set
 
     var accentColor by mutableStateOf(accentColor)
@@ -66,6 +70,7 @@ class ElementColors(
         quaternary: Color = this.quaternary,
         quinary: Color = this.quinary,
         gray300: Color = this.gray300,
+        gray400: Color = this.gray400,
         accentColor: Color = this.accentColor,
         placeholder: Color = this.placeholder,
         isLight: Boolean = this.isLight,
@@ -73,6 +78,7 @@ class ElementColors(
         quaternary = quaternary,
         quinary = quinary,
         gray300 = gray300,
+        gray400 = gray400,
         accentColor = accentColor,
         placeholder = placeholder,
         isLight = isLight,
@@ -82,6 +88,7 @@ class ElementColors(
         quaternary = other.quaternary
         quinary = other.quinary
         gray300 = other.gray300
+        gray400 = other.gray400
         accentColor = other.accentColor
         placeholder = other.placeholder
         isLight = other.isLight
@@ -92,6 +99,7 @@ internal fun elementColorsLight() = ElementColors(
     quaternary = Gray_100,
     quinary = Gray_50,
     gray300 = LightDesignTokens.colorGray300,
+    gray400 = LightDesignTokens.colorGray400,
     accentColor = ElementGreen,
     placeholder = LightDesignTokens.colorGray800,
     isLight = true,
@@ -101,6 +109,7 @@ internal fun elementColorsDark() = ElementColors(
     quaternary = Gray_400,
     quinary = Gray_450,
     gray300 = DarkDesignTokens.colorGray300,
+    gray400 = DarkDesignTokens.colorGray400,
     accentColor = ElementGreen,
     placeholder = DarkDesignTokens.colorGray800,
     isLight = false,
