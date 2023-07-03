@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package io.element.android.features.messages.impl.timeline
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -251,7 +259,14 @@ internal fun BoxScope.TimelineScrollHelper(
     }
 
     // Jump to bottom button (display also in previews)
-    if (!shouldAutoScrollToBottom || LocalInspectionMode.current) {
+    AnimatedVisibility(
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(end = 16.dp, bottom = 12.dp),
+        visible = !shouldAutoScrollToBottom || LocalInspectionMode.current,
+        enter = scaleIn() + fadeIn(),
+        exit = scaleOut() + fadeOut(),
+    ) {
         FloatingActionButton(
             onClick = {
                 coroutineScope.launch {
@@ -264,8 +279,6 @@ internal fun BoxScope.TimelineScrollHelper(
             },
             shape = CircleShape,
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 12.dp)
                 .size(36.dp),
             containerColor = ElementTheme.colors.bgSubtleSecondary,
             contentColor = ElementTheme.colors.iconSecondary
