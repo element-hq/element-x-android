@@ -44,7 +44,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
-import io.element.android.features.location.api.R
 import io.element.android.features.location.api.internal.buildTileServerUrl
 import io.element.android.features.location.impl.location.Location
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -55,6 +54,7 @@ import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import io.element.android.libraries.designsystem.R as DesignSystemR
 
 /**
  * Composable wrapper around MapLibre's [MapView].
@@ -149,12 +149,13 @@ fun MapView(
     LaunchedEffect(mapRefs, mapState.location) {
         mapRefs?.let { mapRefs ->
             mapState.location?.let { location ->
-                context.getDrawable(R.drawable.pin)?.let { mapRefs.style.addImage("pin", it) }
+                context.getDrawable(DesignSystemR.drawable.pin)?.let { mapRefs.style.addImage("pin", it) }
                 mapRefs.symbolManager.create(
                     SymbolOptions()
                         .withLatLng(LatLng(location.lat, location.lon))
                         .withIconImage("pin")
                         .withIconSize(1.3f)
+                        .withIconOffset(arrayOf(0f, 0.5f))
                 )
                 Timber.d("Shown pin at location: $location")
             }
@@ -275,7 +276,7 @@ private fun ContentToPreview() {
             ),
             markers = listOf(
                 MapState.Marker(
-                    drawable = R.drawable.pin,
+                    drawable = DesignSystemR.drawable.pin,
                     lat = 0.0,
                     lon = 0.0,
                 )

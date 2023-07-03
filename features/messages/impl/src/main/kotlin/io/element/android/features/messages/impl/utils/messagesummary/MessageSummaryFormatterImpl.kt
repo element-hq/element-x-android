@@ -43,7 +43,7 @@ class MessageSummaryFormatterImpl @Inject constructor(
             is TimelineItemTextBasedContent -> event.content.body
             is TimelineItemProfileChangeContent -> event.content.body
             is TimelineItemStateContent -> event.content.body
-            is TimelineItemLocationContent -> event.content.body
+            is TimelineItemLocationContent -> context.getString(CommonStrings.common_shared_location)
             is TimelineItemEncryptedContent -> context.getString(CommonStrings.common_unable_to_decrypt)
             is TimelineItemRedactedContent -> context.getString(CommonStrings.common_message_removed)
             is TimelineItemUnknownContent -> context.getString(CommonStrings.common_unsupported_event)

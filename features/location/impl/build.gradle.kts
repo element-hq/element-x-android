@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.matrixui)
     implementation(libs.maplibre)
     implementation(libs.maplibre.annotation)
     implementation(projects.libraries.uiStrings)

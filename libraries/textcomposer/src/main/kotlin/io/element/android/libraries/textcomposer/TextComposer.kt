@@ -552,5 +552,23 @@ private fun ReplyContentToPreview() {
             composerCanSendMessage = true,
             composerText = "A message",
         )
+        TextComposer(
+            onSendMessage = {},
+            onComposerTextChange = {},
+            composerMode = MessageComposerMode.Reply(
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                    mediaSource = null,
+                    textContent = null,
+                    type = AttachmentThumbnailType.Location,
+                    blurHash = null,
+                ),
+                defaultContent = "Shared location"
+            ),
+            onResetComposerMode = {},
+            composerCanSendMessage = true,
+            composerText = "A message",
+        )
     }
 }
