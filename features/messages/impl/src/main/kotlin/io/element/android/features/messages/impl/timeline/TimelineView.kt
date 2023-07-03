@@ -263,7 +263,7 @@ internal fun BoxScope.TimelineScrollHelper(
     AnimatedVisibility(
         modifier = Modifier
             .align(Alignment.BottomEnd)
-            .padding(end = 16.dp, bottom = 12.dp),
+            .padding(end = 24.dp, bottom = 12.dp),
         visible = showScrollToBottomButton || LocalInspectionMode.current,
         enter = scaleIn() + fadeIn(),
         exit = scaleOut() + fadeOut(),
