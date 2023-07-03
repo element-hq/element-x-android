@@ -29,9 +29,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 @Composable
 fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
-    modifier: Modifier = Modifier,
     onReactionClicked: (emoji: String) -> Unit,
-    onMoreReactionsClicked: () -> Unit
+    onMoreReactionsClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     FlowRow(
         modifier = modifier,
