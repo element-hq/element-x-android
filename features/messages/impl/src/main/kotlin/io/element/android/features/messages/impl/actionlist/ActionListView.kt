@@ -78,6 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -232,8 +233,21 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         is TimelineItemStateContent,
         is TimelineItemEncryptedContent,
         is TimelineItemRedactedContent,
-        is TimelineItemLocationContent,
         is TimelineItemUnknownContent -> content = { ContentForBody(textContent) }
+        is TimelineItemLocationContent -> {
+            icon = {
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        type = AttachmentThumbnailType.Location,
+                        textContent = stringResource(CommonStrings.common_shared_location),
+                        mediaSource = null,
+                        blurHash = null,
+                    )
+                )
+            }
+            content = { ContentForBody(stringResource(CommonStrings.common_shared_location)) }
+        }
         is TimelineItemImageContent -> {
             icon = {
                 AttachmentThumbnail(

@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.ui.components
 import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Attachment
 import androidx.compose.material.icons.outlined.VideoCameraBack
@@ -30,6 +31,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
+import io.element.android.libraries.designsystem.components.PinIcon
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
@@ -73,6 +75,11 @@ fun AttachmentThumbnail(
                         modifier = Modifier.rotate(-45f)
                     )
                 }
+                AttachmentThumbnailType.Location -> {
+                    PinIcon(
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
                 else -> Unit
             }
         }
@@ -81,7 +88,7 @@ fun AttachmentThumbnail(
 
 @Parcelize
 enum class AttachmentThumbnailType: Parcelable {
-    Image, Video, File
+    Image, Video, File, Location
 }
 
 @Parcelize

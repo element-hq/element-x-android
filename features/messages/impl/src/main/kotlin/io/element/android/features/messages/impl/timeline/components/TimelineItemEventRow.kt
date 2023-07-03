@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,8 +55,8 @@ import io.element.android.features.messages.impl.timeline.components.event.toExt
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
@@ -70,6 +71,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
@@ -77,6 +79,7 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 import org.jsoup.Jsoup
 
 @Composable
@@ -300,9 +303,10 @@ private fun MessageEventBubbleContent(
             if (inReplyToDetails != null) {
                 val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
                 val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
+                val text = textForInReplyTo(inReplyToDetails)
                 ReplyToContent(
                     senderName = senderName,
-                    text = inReplyToDetails.content.body,
+                    text = text,
                     attachmentThumbnailInfo = attachmentThumbnailInfo,
                     modifier = Modifier
                         .padding(top = 8.dp, start = 8.dp, end = 8.dp)
@@ -409,7 +413,20 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready) =
             type = AttachmentThumbnailType.File,
             blurHash = null,
         )
+        is LocationMessageType -> AttachmentThumbnailInfo(
+            mediaSource = null,
+            textContent = inReplyTo.content.body,
+            type = AttachmentThumbnailType.Location,
+            blurHash = null,
+        )
         else -> null
+    }
+
+@Composable
+private fun textForInReplyTo(inReplyTo: InReplyTo.Ready) =
+    when (inReplyTo.content.type) {
+        is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
+        else -> inReplyTo.content.body
     }
 
 @Preview
