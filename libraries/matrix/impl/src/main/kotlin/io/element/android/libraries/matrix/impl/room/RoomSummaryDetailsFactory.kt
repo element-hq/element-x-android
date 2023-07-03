@@ -31,9 +31,9 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
         return RoomSummaryDetails(
             roomId = RoomId(roomListItem.id()),
             name = roomListItem.name() ?: roomListItem.id(),
-            canonicalAlias = room?.canonicalAlias(),
-            isDirect = room?.isDirect() ?: false,
-            avatarURLString = room?.avatarUrl(),
+            canonicalAlias = roomListItem.canonicalAlias(),
+            isDirect = roomListItem.isDirect(),
+            avatarURLString = roomListItem.avatarUrl(),
             unreadNotificationCount = roomListItem.unreadNotifications().use { it.notificationCount().toInt() },
             lastMessage = latestRoomMessage,
             lastMessageTimestamp = latestRoomMessage?.originServerTs,
