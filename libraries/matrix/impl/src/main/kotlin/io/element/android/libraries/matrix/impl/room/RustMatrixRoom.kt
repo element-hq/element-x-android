@@ -36,7 +36,6 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.map
-import io.element.android.libraries.matrix.impl.media.sendAttachment
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.services.toolbox.api.systemclock.SystemClock
