@@ -92,7 +92,7 @@ private fun OnBoardingContent(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize(),
     ) {
         Box(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = BiasAlignment(
                 horizontalBias = 0f,
                 verticalBias = -0.4f
@@ -101,7 +101,7 @@ private fun OnBoardingContent(modifier: Modifier = Modifier) {
             // Dark and light icon does not have the same size, add padding to the smaller one
             val imagePadding = if (isLight) 28.dp else 0.dp
             Image(
-                modifier = modifier
+                modifier = Modifier
                     .size(278.dp)
                     .padding(imagePadding),
                 painter = painterResource(id = iconDrawableRes),
@@ -109,7 +109,7 @@ private fun OnBoardingContent(modifier: Modifier = Modifier) {
             )
         }
         Box(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = BiasAlignment(
                 horizontalBias = 0f,
                 verticalBias = 0.6f
