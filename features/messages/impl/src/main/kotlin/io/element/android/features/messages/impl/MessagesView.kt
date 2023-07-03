@@ -126,6 +126,9 @@ fun MessagesView(
         state.eventSink(MessagesEvents.ToggleReaction(emoji, event.eventId))
     }
 
+    fun onMoreReactionsClicked(event: TimelineItem.Event): Unit =
+        state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event.eventId))
+
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
@@ -155,6 +158,7 @@ fun MessagesView(
                     }
                 },
                 onReactionClicked = ::onEmojiReactionClicked,
+                onMoreReactionsClicked = ::onMoreReactionsClicked,
                 onSendLocationClicked = onSendLocationClicked,
             )
         },
@@ -237,6 +241,7 @@ fun MessagesViewContent(
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
@@ -258,6 +263,7 @@ fun MessagesViewContent(
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = onTimestampClicked,
                 onReactionClicked = onReactionClicked,
+                onMoreReactionsClicked = onMoreReactionsClicked,
             )
         }
         if (state.userHasPermissionToSendMessage) {

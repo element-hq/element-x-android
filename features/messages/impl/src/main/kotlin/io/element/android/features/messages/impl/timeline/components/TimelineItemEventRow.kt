@@ -92,6 +92,7 @@ fun TimelineItemEventRow(
     inReplyToClick: (EventId) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
+    onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -102,6 +103,9 @@ fun TimelineItemEventRow(
 
     fun onReactionClicked(emoji: String) =
         onReactionClick(emoji, event)
+
+    fun onMoreReactionsClicked() =
+        onMoreReactionsClick(event)
 
     fun inReplyToClicked() {
         val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
@@ -166,6 +170,7 @@ fun TimelineItemEventRow(
             TimelineItemReactionsView(
                 reactionsState = event.reactionsState,
                 onReactionClicked = ::onReactionClicked,
+                onMoreReactionsClicked = ::onMoreReactionsClicked,
                 modifier = Modifier
                     .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
@@ -457,6 +462,7 @@ private fun ContentToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
             )
             TimelineItemEventRow(
@@ -472,6 +478,7 @@ private fun ContentToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
             )
         }
@@ -514,6 +521,7 @@ private fun ContentToPreviewWithReply() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
             )
             TimelineItemEventRow(
@@ -530,6 +538,7 @@ private fun ContentToPreviewWithReply() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
             )
         }
@@ -583,6 +592,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                     onUserDataClick = {},
                     inReplyToClick = {},
                     onReactionClick = { _, _ -> },
+                    onMoreReactionsClick = {},
                     onTimestampClicked = {},
                 )
             }
