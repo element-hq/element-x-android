@@ -22,7 +22,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
@@ -31,7 +33,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -49,8 +50,14 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 
-// Ref: https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=133-5427&t=5SHVppfYzjvkEywR-0
+// Refs:
+// FTUE:
+// - https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=133-5427&t=5SHVppfYzjvkEywR-0
+// ElementX:
+// - https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?type=design&node-id=1816-97419
 @Composable
 fun OnBoardingView(
     state: OnBoardingState,
@@ -61,6 +68,9 @@ fun OnBoardingView(
 ) {
     OnBoardingPage(
         modifier = modifier,
+        content = {
+            OnBoardingContent()
+        },
         footer = {
             OnBoardingButtons(
                 state = state,
@@ -69,42 +79,61 @@ fun OnBoardingView(
                 onCreateAccount = onCreateAccount,
             )
         }
-    ) {
-        OnBoardingContent()
-    }
+    )
 }
 
 @Composable
 private fun OnBoardingContent(modifier: Modifier = Modifier) {
+    // Note: having a night variant of R.drawable.onboarding_icon in the folder `drawable-night` is working
+    // at runtime, but is not in Android Studio Preview. So I prefer to handle this manually.
+    val isLight = ElementTheme.colors.isLight
+    val iconDrawableRes = if (isLight) R.drawable.onboarding_icon_light else R.drawable.onboarding_icon_dark
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = BiasAlignment(
-            horizontalBias = 0f,
-            verticalBias = -0.2f
-        )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = CenterHorizontally,
+        Box(
+            modifier = modifier.fillMaxSize(),
+            contentAlignment = BiasAlignment(
+                horizontalBias = 0f,
+                verticalBias = -0.4f
+            )
         ) {
+            // Dark and light icon does not have the same size, add padding to the smaller one
+            val imagePadding = if (isLight) 28.dp else 0.dp
             Image(
-                painter = painterResource(id = R.drawable.element_logo),
+                modifier = modifier
+                    .size(278.dp)
+                    .padding(imagePadding),
+                painter = painterResource(id = iconDrawableRes),
                 contentDescription = null,
             )
-            Image(
-                modifier = Modifier.padding(top = 14.dp),
-                painter = painterResource(id = R.drawable.element),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                contentDescription = null,
+        }
+        Box(
+            modifier = modifier.fillMaxSize(),
+            contentAlignment = BiasAlignment(
+                horizontalBias = 0f,
+                verticalBias = 0.6f
             )
-            Text(
-                modifier = Modifier.padding(top = 24.dp),
-                text = stringResource(id = R.string.screen_onboarding_subtitle),
-                color = MaterialTheme.colorScheme.secondary,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center
-            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = CenterHorizontally,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.screen_onboarding_welcome_title),
+                    color = ElementTheme.materialColors.primary,
+                    style = ElementTheme.typography.fontHeadingLgBold,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(id = R.string.screen_onboarding_welcome_message),
+                    color = ElementTheme.materialColors.secondary,
+                    style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
@@ -118,6 +147,11 @@ private fun OnBoardingButtons(
     modifier: Modifier = Modifier,
 ) {
     ButtonColumnMolecule(modifier = modifier) {
+        val signInButtonStringRes = if (state.canLoginWithQrCode || state.canCreateAccount) {
+            R.string.screen_onboarding_sign_in_manually
+        } else {
+            CommonStrings.action_continue
+        }
         if (state.canLoginWithQrCode) {
             Button(
                 onClick = onSignInWithQrCode,
@@ -140,7 +174,7 @@ private fun OnBoardingButtons(
                 .fillMaxWidth()
                 .testTag(TestTags.onBoardingSignIn)
         ) {
-            Text(text = stringResource(id = R.string.screen_onboarding_sign_in_manually))
+            Text(text = stringResource(id = signInButtonStringRes))
         }
         if (state.canCreateAccount) {
             OutlinedButton(
@@ -152,6 +186,7 @@ private fun OnBoardingButtons(
                 Text(text = stringResource(id = R.string.screen_onboarding_sign_up))
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
