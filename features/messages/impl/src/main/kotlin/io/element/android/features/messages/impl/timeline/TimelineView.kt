@@ -233,11 +233,8 @@ internal fun BoxScope.TimelineScrollHelper(
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
     val shouldAutoScrollToBottom by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 2 } }
 
-    LaunchedEffect(timelineItems, firstVisibleItemIndex, isScrollFinished) {
+    LaunchedEffect(timelineItems, firstVisibleItemIndex) {
         if (!isScrollFinished) return@LaunchedEffect
-
-        // Notify the parent composable about the first visible item index when scrolling finishes
-        onScrollFinishedAt(firstVisibleItemIndex)
 
         // Auto-scroll when new timeline items appear
         if (shouldAutoScrollToBottom) {
@@ -245,6 +242,12 @@ internal fun BoxScope.TimelineScrollHelper(
                 lazyListState.animateScrollToItem(0)
             }
         }
+    }
+    LaunchedEffect(isScrollFinished) {
+        if (!isScrollFinished) return@LaunchedEffect
+
+        // Notify the parent composable about the first visible item index when scrolling finishes
+        onScrollFinishedAt(firstVisibleItemIndex)
     }
 
     // Jump to bottom button (display also in previews)
