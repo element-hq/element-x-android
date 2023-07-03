@@ -36,12 +36,12 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.media.sendAttachment
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,6 +54,7 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomSubscription
+import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
@@ -272,30 +273,26 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(
-        coroutineDispatchers.io
-    ) {
-        runCatching {
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit> {
+        return sendAttachment {
             innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(
-        coroutineDispatchers.io
-    ) {
-        runCatching {
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> {
+        return sendAttachment {
             innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(coroutineDispatchers.io) {
-        runCatching {
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> {
+        return sendAttachment {
             innerRoom.sendAudio(file.path, audioInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(coroutineDispatchers.io) {
-        runCatching {
+    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> {
+        return sendAttachment {
             innerRoom.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
@@ -372,12 +369,23 @@ class RustMatrixRoom(
         }
     }
 
+    //TODO expose inner parameters
     override suspend fun sendLocation(
         body: String,
         geoUri: String
     ): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
-            innerRoom.sendLocation(body, geoUri, genTransactionId())
+            innerRoom.sendLocation(body, geoUri, null, null, null, genTransactionId())
         }
     }
 }
+
+//TODO handle cancellation, need refactoring of how we are catching errors
+private suspend fun sendAttachment(handle: () -> SendAttachmentJoinHandle): Result<Unit> {
+    return runCatching {
+        handle().use {
+            it.join()
+        }
+    }
+}
+
