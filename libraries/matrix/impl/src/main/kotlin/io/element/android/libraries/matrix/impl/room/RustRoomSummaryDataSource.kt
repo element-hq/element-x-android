@@ -49,8 +49,8 @@ internal class RustRoomSummaryDataSource(
     private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
 
     private val allRoomsLoadingState: MutableStateFlow<RoomSummaryDataSource.LoadingState> = MutableStateFlow(RoomSummaryDataSource.LoadingState.NotLoaded)
-    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, roomListService, roomSummaryDetailsFactory)
-    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, roomListService, roomSummaryDetailsFactory)
+    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, roomListService, roomSummaryDetailsFactory, shouldFetchFullRoom = false)
+    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, roomListService, roomSummaryDetailsFactory, shouldFetchFullRoom = true)
 
     init {
         sessionCoroutineScope.launch(coroutineDispatchers.computation) {
