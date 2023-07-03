@@ -240,6 +240,7 @@ internal fun BoxScope.TimelineScrollHelper(
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
     val shouldAutoScrollToBottom by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 2 } }
+    val showScrollToBottomButton by remember { derivedStateOf { lazyListState.firstVisibleItemIndex > 0 } }
 
     LaunchedEffect(timelineItems, firstVisibleItemIndex) {
         if (!isScrollFinished) return@LaunchedEffect
@@ -263,7 +264,7 @@ internal fun BoxScope.TimelineScrollHelper(
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 16.dp, bottom = 12.dp),
-        visible = !shouldAutoScrollToBottom || LocalInspectionMode.current,
+        visible = showScrollToBottomButton || LocalInspectionMode.current,
         enter = scaleIn() + fadeIn(),
         exit = scaleOut() + fadeOut(),
     ) {
