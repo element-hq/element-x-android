@@ -9,6 +9,7 @@
   <string name="notification_invitation_action_reject">"Reject"</string>
   <string name="notification_invite_body">"Invited you to chat"</string>
   <string name="notification_new_messages">"New Messages"</string>
+  <string name="notification_reaction_body">"Reacted with %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Mark as read"</string>
   <string name="notification_room_invite_body">"Invited you to join the room"</string>
   <string name="notification_sender_me">"Me"</string>
@@ -46,5 +47,6 @@
   <string name="push_distributor_background_sync_android">"Background synchronization"</string>
   <string name="push_distributor_firebase_android">"Google Services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"No valid Google Play Services found. Notifications may not work properly."</string>
+  <string name="notification_fallback_content">"Notification"</string>
   <string name="notification_room_action_quick_reply">"Quick reply"</string>
 </resources>

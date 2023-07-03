@@ -9,7 +9,12 @@
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>
   <string name="screen_room_attachment_source_files">"Anhang"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- &amp; Video-Bibliothek"</string>
+  <string name="screen_room_attachment_source_location">"Standort"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Benutzerdetails konnten nicht abgerufen werden"</string>
+  <string name="screen_room_invite_again_alert_message">"Möchtest du sie wieder einladen?"</string>
+  <string name="screen_room_invite_again_alert_title">"Du bist allein in diesem Chat"</string>
+  <string name="screen_room_message_copied">"Nachricht kopiert"</string>
+  <string name="screen_room_no_permission_to_post">"Du bist keine Berechtigung, um in diesem Raum zu posten"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Erneut senden"</string>
   <string name="screen_room_retry_send_menu_title">"Ihre Nachricht konnte nicht gesendet werden"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler bei der Verarbeitung von Medien zum Hochladen, bitte versuchen Sie es erneut."</string>
