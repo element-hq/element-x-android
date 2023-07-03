@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -30,7 +31,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -41,6 +41,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -60,6 +61,7 @@ import io.element.android.libraries.designsystem.theme.components.FloatingAction
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
@@ -245,8 +247,8 @@ internal fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    // Jump to bottom button
-    if (!shouldAutoScrollToBottom) {
+    // Jump to bottom button (display also in previews)
+    if (!shouldAutoScrollToBottom || LocalInspectionMode.current) {
         FloatingActionButton(
             onClick = {
                 coroutineScope.launch {
@@ -259,12 +261,17 @@ internal fun BoxScope.TimelineScrollHelper(
             },
             shape = CircleShape,
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .size(40.dp),
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                .align(Alignment.BottomEnd)
+                .padding(end = 16.dp, bottom = 12.dp)
+                .size(36.dp),
+            containerColor = ElementTheme.colors.bgSubtleSecondary,
+            contentColor = ElementTheme.colors.iconSecondary
         ) {
-            Icon(Icons.Default.ArrowDownward, "")
+            Icon(
+                modifier = Modifier.size(24.dp),
+                imageVector = Icons.Filled.ArrowDownward,
+                contentDescription = "",
+            )
         }
     }
 }
