@@ -29,15 +29,8 @@ class AnalyticsSettingsPresenter @Inject constructor(
     override fun present(): AnalyticsSettingsState {
         val analyticsState = analyticsPresenter.present()
 
-        fun handleEvents(event: AnalyticsSettingsEvents) {
-            when (event) {
-                AnalyticsSettingsEvents.MyEvent -> Unit
-            }
-        }
-
         return AnalyticsSettingsState(
             analyticsState = analyticsState,
-            eventSink = ::handleEvents
         )
     }
 }

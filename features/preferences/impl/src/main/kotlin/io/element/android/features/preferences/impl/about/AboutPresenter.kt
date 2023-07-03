@@ -25,15 +25,8 @@ class AboutPresenter @Inject constructor() : Presenter<AboutState> {
     @Composable
     override fun present(): AboutState {
 
-        fun handleEvents(event: AboutEvents) {
-            when (event) {
-                AboutEvents.MyEvent -> Unit
-            }
-        }
-
         return AboutState(
             elementLegals = getAllLegals(),
-            eventSink = ::handleEvents
         )
     }
 }
