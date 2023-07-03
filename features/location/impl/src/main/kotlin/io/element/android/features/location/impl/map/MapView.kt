@@ -54,7 +54,7 @@ import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import io.element.android.libraries.matrix.ui.R as MatrixUIR
+import io.element.android.libraries.designsystem.R as DesignSystemR
 
 /**
  * Composable wrapper around MapLibre's [MapView].
@@ -149,7 +149,7 @@ fun MapView(
     LaunchedEffect(mapRefs, mapState.location) {
         mapRefs?.let { mapRefs ->
             mapState.location?.let { location ->
-                context.getDrawable(MatrixUIR.drawable.pin)?.let { mapRefs.style.addImage("pin", it) }
+                context.getDrawable(DesignSystemR.drawable.pin)?.let { mapRefs.style.addImage("pin", it) }
                 mapRefs.symbolManager.create(
                     SymbolOptions()
                         .withLatLng(LatLng(location.lat, location.lon))
@@ -276,7 +276,7 @@ private fun ContentToPreview() {
             ),
             markers = listOf(
                 MapState.Marker(
-                    drawable = MatrixUIR.drawable.pin,
+                    drawable = DesignSystemR.drawable.pin,
                     lat = 0.0,
                     lon = 0.0,
                 )

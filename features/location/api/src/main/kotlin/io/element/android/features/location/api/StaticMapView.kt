@@ -44,7 +44,7 @@ import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
-import io.element.android.libraries.matrix.ui.R as MatrixUIR
+import io.element.android.libraries.designsystem.R as DesignSystemR
 
 /**
  * Shows a static map image downloaded via a third party service's static maps API.
@@ -105,7 +105,7 @@ fun StaticMapView(
                 contentScale = ContentScale.Fit,
             )
             Icon(
-                resourceId = MatrixUIR.drawable.pin,
+                resourceId = DesignSystemR.drawable.pin,
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.align { size, space, _ ->

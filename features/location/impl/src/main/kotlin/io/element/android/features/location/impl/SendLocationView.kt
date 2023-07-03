@@ -52,7 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.matrix.ui.R as MatrixUIR
+import io.element.android.libraries.designsystem.R as DesignSystemR
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -116,7 +116,7 @@ fun SendLocationView(
                 mapState = mapState,
             )
             Icon(
-                resourceId = MatrixUIR.drawable.pin,
+                resourceId = DesignSystemR.drawable.pin,
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.align { size, space, _ ->
