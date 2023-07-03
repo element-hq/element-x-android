@@ -27,5 +27,4 @@ open class AboutStateProvider : PreviewParameterProvider<AboutState> {
 
 fun aAboutState() = AboutState(
     elementLegals = getAllLegals(),
-    eventSink = {}
 )
