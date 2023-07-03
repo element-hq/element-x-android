@@ -24,6 +24,7 @@
   <string name="action_edit">"Upraviť"</string>
   <string name="action_enable">"Povoliť"</string>
   <string name="action_forgot_password">"Zabudnuté heslo?"</string>
+  <string name="action_forward">"Preposlať"</string>
   <string name="action_invite">"Pozvať"</string>
   <string name="action_invite_friends">"Pozvať priateľov"</string>
   <string name="action_invite_friends_to_app">"Pozvať priateľov do %1$s"</string>
@@ -60,6 +61,7 @@
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
   <string name="common_about">"O aplikácii"</string>
+  <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
   <string name="common_analytics">"Analytika"</string>
   <string name="common_audio">"Zvuk"</string>
   <string name="common_bubbles">"Bubliny"</string>
@@ -78,22 +80,29 @@
   <string name="common_forward_message">"Preposlať správu"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Obrázok"</string>
-  <string name="common_invite_unknown_profile">"Nedokážeme overiť Matrix ID tohto používateľa. Pozvánka nemusí byť prijatá."</string>
+  <string name="common_invite_unknown_profile">"Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá."</string>
+  <string name="common_leaving_room">"Opustenie miestnosti"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_loading">"Načítava sa…"</string>
   <string name="common_message">"Správa"</string>
   <string name="common_message_layout">"Rozloženie správy"</string>
   <string name="common_message_removed">"Správa odstránená"</string>
   <string name="common_modern">"Moderné"</string>
+  <string name="common_mute">"Stlmiť"</string>
   <string name="common_no_results">"Žiadne výsledky"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Ľudia"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
+  <string name="common_privacy_policy">"Zásady ochrany osobných údajov"</string>
   <string name="common_reactions">"Reakcie"</string>
+  <string name="common_refreshing">"Obnovuje sa…"</string>
+  <string name="common_replying_to">"Odpoveď na %1$s"</string>
   <string name="common_report_a_bug">"Nahlásiť chybu"</string>
   <string name="common_report_submitted">"Nahlásenie bolo odoslané"</string>
   <string name="common_room_name">"Názov miestnosti"</string>
+  <string name="common_room_name_placeholder">"napr. názov vášho projektu"</string>
+  <string name="common_search_for_someone">"Vyhľadať niekoho"</string>
   <string name="common_search_results">"Výsledky hľadania"</string>
   <string name="common_security">"Bezpečnosť"</string>
   <string name="common_select_your_server">"Vyberte svoj server"</string>
@@ -102,13 +111,18 @@
   <string name="common_server_url">"URL adresa servera"</string>
   <string name="common_settings">"Nastavenia"</string>
   <string name="common_shared_location">"Zdieľaná poloha"</string>
+  <string name="common_starting_chat">"Spustenie konverzácie…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspech"</string>
   <string name="common_suggestions">"Návrhy"</string>
   <string name="common_syncing">"Synchronizuje sa"</string>
+  <string name="common_third_party_notices">"Oznámenia tretích strán"</string>
   <string name="common_topic">"Téma"</string>
   <string name="common_topic_placeholder">"O čom je táto miestnosť?"</string>
   <string name="common_unable_to_decrypt">"Nie je možné dešifrovať"</string>
+  <string name="common_unable_to_invite_message">"Pozvánky nebolo možné odoslať jednému alebo viacerým používateľom."</string>
+  <string name="common_unable_to_invite_title">"Nie je možné odoslať pozvánku/ky"</string>
+  <string name="common_unmute">"Zrušiť stlmenie zvuku"</string>
   <string name="common_unsupported_event">"Nepodporovaná udalosť"</string>
   <string name="common_username">"Používateľské meno"</string>
   <string name="common_verification_cancelled">"Overovanie zrušené"</string>
@@ -125,6 +139,7 @@
   <string name="emoji_picker_category_people">"Smajlíky a ľudia"</string>
   <string name="emoji_picker_category_places">"Cestovanie a miesta"</string>
   <string name="emoji_picker_category_symbols">"Symboly"</string>
+  <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
@@ -141,12 +156,31 @@
   </plurals>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
   <string name="rageshake_dialog_content">"Zdá sa, že zúrivo trasiete telefónom. Chcete otvoriť obrazovku s nahlásením chýb?"</string>
+  <string name="report_content_explanation">"Táto správa bude nahlásená správcovi vášho domovského servera. Nebude môcť prečítať žiadne šifrované správy."</string>
+  <string name="report_content_hint">"Dôvod nahlásenia tohto obsahu"</string>
   <string name="room_timeline_beginning_of_room">"Toto je začiatok %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Toto je začiatok tejto konverzácie."</string>
   <string name="room_timeline_read_marker_title">"Nové"</string>
+  <string name="screen_analytics_settings_share_data">"Zdieľať analytické údaje"</string>
+  <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
+  <string name="screen_migration_message">"Ide o jednorazový proces, ďakujeme za trpezlivosť."</string>
+  <string name="screen_migration_title">"Nastavenie vášho účtu."</string>
+  <string name="screen_report_content_block_user_hint">"Označte, či chcete skryť všetky aktuálne a budúce správy od tohto používateľa"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>
   <string name="screen_share_my_location_action">"Zdieľať moju polohu"</string>
+  <string name="screen_share_open_apple_maps">"Otvoriť v Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Otvoriť v Mapách Google"</string>
+  <string name="screen_share_open_osm_maps">"Otvoriť v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Zdieľajte túto polohu"</string>
+  <string name="screen_view_location_title">"Poloha"</string>
+  <string name="screen_waitlist_message">"Momentálne je veľký dopyt po %1$s na %2$s. Vráťte sa do aplikácie za pár dní a skúste to znova.
+
+Ďakujeme za trpezlivosť!"</string>
+  <string name="screen_waitlist_message_success">"Vitajte v %1$s"</string>
+  <string name="screen_waitlist_title">"Ste na čakanej listine!"</string>
+  <string name="screen_waitlist_title_success">"Ste dnu!"</string>
   <string name="settings_rageshake">"Zúrivé potrasenie"</string>
   <string name="settings_rageshake_detection_threshold">"Prahová hodnota detekcie"</string>
   <string name="settings_title_general">"Všeobecné"</string>
@@ -154,5 +188,8 @@
   <string name="test_language_identifier">"sk"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
+  <string name="screen_analytics_settings_help_us_improve">"Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy."</string>
+  <string name="screen_analytics_settings_read_terms">"Môžete si prečítať všetky naše podmienky %1$s."</string>
+  <string name="screen_analytics_settings_read_terms_content_link">"tu"</string>
   <string name="screen_report_content_block_user">"Zablokovať používateľa"</string>
 </resources>
