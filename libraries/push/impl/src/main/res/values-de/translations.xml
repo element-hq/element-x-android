@@ -9,7 +9,9 @@
   <string name="notification_invitation_action_reject">"Ablehnen"</string>
   <string name="notification_invite_body">"Hat dich eingeladen"</string>
   <string name="notification_new_messages">"Neue Nachrichten"</string>
+  <string name="notification_reaction_body">"Reagierte mit %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Als gelesen markieren"</string>
+  <string name="notification_room_invite_body">"Hat dich eingeladen, dem Raum beizutreten"</string>
   <string name="notification_sender_me">"Ich"</string>
   <string name="notification_test_push_notification_content">"Du siehst die Benachrichtigung an! Klick mich an!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
@@ -45,5 +47,6 @@
   <string name="push_distributor_background_sync_android">"Hintergrundsynchronisation"</string>
   <string name="push_distributor_firebase_android">"Google-Dienste"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Keine gültigen Google Play-Dienste gefunden. Benachrichtigungen funktionieren möglicherweise nicht richtig."</string>
+  <string name="notification_fallback_content">"Mitteilung"</string>
   <string name="notification_room_action_quick_reply">"Schnellantwort"</string>
 </resources>

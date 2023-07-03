@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_call">"Zavolať"</string>
+  <string name="notification_channel_listening_for_events">"Počúvanie udalostí"</string>
+  <string name="notification_channel_noisy">"Hlasité oznámenia"</string>
   <string name="notification_channel_silent">"Tiché oznámenia"</string>
   <string name="notification_inline_reply_failed">"** Nepodarilo sa odoslať - prosím otvorte miestnosť"</string>
   <string name="notification_invitation_action_join">"Pripojiť sa"</string>
   <string name="notification_invitation_action_reject">"Zamietnuť"</string>
+  <string name="notification_invite_body">"Vás pozval/a na konverzáciu"</string>
   <string name="notification_new_messages">"Nové správy"</string>
+  <string name="notification_reaction_body">"Reagoval/a s %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Označiť ako prečítané"</string>
+  <string name="notification_room_invite_body">"Vás pozval do miestnosti"</string>
+  <string name="notification_sender_me">"Ja"</string>
   <string name="notification_test_push_notification_content">"Prezeráte si oznámenie! Kliknite na mňa!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -46,5 +52,7 @@
   <string name="push_choose_distributor_dialog_title_android">"Vyberte spôsob prijímania oznámení"</string>
   <string name="push_distributor_background_sync_android">"Synchronizácia na pozadí"</string>
   <string name="push_distributor_firebase_android">"Služby Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Nenašli sa žiadne platné služby Google Play. Oznámenia nemusia fungovať správne."</string>
+  <string name="notification_fallback_content">"Oznámenie"</string>
   <string name="notification_room_action_quick_reply">"Rýchla odpoveď"</string>
 </resources>

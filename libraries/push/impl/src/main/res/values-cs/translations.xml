@@ -9,6 +9,7 @@
   <string name="notification_invitation_action_reject">"Odmítnout"</string>
   <string name="notification_invite_body">"Vás pozval(a) do chatu"</string>
   <string name="notification_new_messages">"Nové zprávy"</string>
+  <string name="notification_reaction_body">"Reagoval(a) s %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Označit jako přečtené"</string>
   <string name="notification_room_invite_body">"Vás pozval(a) do místnosti"</string>
   <string name="notification_sender_me">"Já"</string>
@@ -52,5 +53,6 @@
   <string name="push_distributor_background_sync_android">"Synchronizace na pozadí"</string>
   <string name="push_distributor_firebase_android">"Služby Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nebyly nalezeny žádné funkční služby Google Play. Oznámení nemusí fungovat správně."</string>
+  <string name="notification_fallback_content">"Oznámení"</string>
   <string name="notification_room_action_quick_reply">"Rychlá odpověď"</string>
 </resources>

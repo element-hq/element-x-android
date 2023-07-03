@@ -10,7 +10,14 @@
   <string name="screen_room_attachment_source_camera_video">"Înregistrați un videoclip"</string>
   <string name="screen_room_attachment_source_files">"Atașament"</string>
   <string name="screen_room_attachment_source_gallery">"Bibliotecă foto și video"</string>
+  <string name="screen_room_attachment_source_location">"Locație"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nu am putut găsi detaliile utilizatorului"</string>
+  <string name="screen_room_invite_again_alert_message">"Doriți să îi invitați înapoi?"</string>
+  <string name="screen_room_invite_again_alert_title">"Sunteți singur în această cameră"</string>
+  <string name="screen_room_message_copied">"Mesaj copiat"</string>
+  <string name="screen_room_no_permission_to_post">"Nu aveți permisiunea de a posta în această cameră"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Trimiteți din nou"</string>
+  <string name="screen_room_retry_send_menu_title">"Mesajul dvs. nu a putut fi trimis"</string>
   <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
   <string name="screen_room_retry_send_menu_remove_action">"Ștergeți"</string>
 </resources>
