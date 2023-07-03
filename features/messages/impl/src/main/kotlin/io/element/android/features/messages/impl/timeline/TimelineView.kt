@@ -48,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -280,6 +281,12 @@ internal fun BoxScope.TimelineScrollHelper(
             elevation = FloatingActionButtonDefaults.elevation(4.dp, 4.dp, 4.dp, 4.dp),
             shape = CircleShape,
             modifier = Modifier
+                .shadow(
+                    elevation = 4.dp,
+                    shape = CircleShape,
+                    ambientColor = ElementTheme.materialColors.primary,
+                    spotColor = ElementTheme.materialColors.primary,
+                )
                 .size(36.dp),
             containerColor = ElementTheme.colors.bgSubtleSecondary,
             contentColor = ElementTheme.colors.iconSecondary
