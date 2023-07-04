@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
@@ -153,6 +154,7 @@ class NotifiableEventResolver @Inject constructor(
             is NoticeMessageType -> messageType.body
             is TextMessageType -> messageType.body
             is VideoMessageType -> messageType.body
+            is LocationMessageType -> messageType.body
             is UnknownMessageType -> stringProvider.getString(CommonStrings.common_unsupported_event)
         }
     }
