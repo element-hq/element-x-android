@@ -99,7 +99,7 @@ fun EventDebugInfoView(
             item {
                 Column(Modifier.padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(text = "Event ID:")
-                    CopyableText(text = eventId?.value ?: "-")
+                    CopyableText(text = eventId?.value ?: "-", modifier = Modifier.fillMaxWidth())
                 }
             }
             item {
@@ -142,7 +142,7 @@ private fun CollapsibleSection(
             )
         }
         AnimatedVisibility(visible = isExpanded, enter = expandVertically(), exit = shrinkVertically()) {
-            CopyableText(text = text)
+            CopyableText(text = text, modifier = Modifier.fillMaxWidth())
         }
     }
 }
