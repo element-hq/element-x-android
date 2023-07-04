@@ -92,7 +92,7 @@ class RustMatrixClient constructor(
         dispatchers = dispatchers,
     )
     private val notificationService = RustNotificationService(client)
-    private val notificationSettingsService = RustNotificationSettingsService(client, sessionCoroutineScope)
+    private val notificationSettingsService = RustNotificationSettingsService(client)
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
