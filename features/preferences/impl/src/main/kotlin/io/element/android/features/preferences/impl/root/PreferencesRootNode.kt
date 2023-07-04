@@ -36,6 +36,9 @@ class PreferencesRootNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onOpenBugReport()
+        fun onVerifyClicked()
+        fun onOpenAnalytics()
+        fun onOpenAbout()
         fun onOpenDeveloperSettings()
     }
 
@@ -43,8 +46,20 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenBugReport() }
     }
 
+    private fun onVerifyClicked() {
+        plugins<Callback>().forEach { it.onVerifyClicked() }
+    }
+
     private fun onOpenDeveloperSettings() {
         plugins<Callback>().forEach { it.onOpenDeveloperSettings() }
+    }
+
+    private fun onOpenAnalytics() {
+        plugins<Callback>().forEach { it.onOpenAnalytics() }
+    }
+
+    private fun onOpenAbout() {
+        plugins<Callback>().forEach { it.onOpenAbout() }
     }
 
     @Composable
@@ -55,8 +70,10 @@ class PreferencesRootNode @AssistedInject constructor(
             modifier = modifier,
             onBackPressed = this::navigateUp,
             onOpenRageShake = this::onOpenBugReport,
+            onOpenAnalytics = this::onOpenAnalytics,
+            onOpenAbout = this::onOpenAbout,
+            onVerifyClicked = this::onVerifyClicked,
             onOpenDeveloperSettings = this::onOpenDeveloperSettings
         )
     }
-
 }

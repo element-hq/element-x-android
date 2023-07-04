@@ -23,15 +23,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun PreferenceCategory(
@@ -49,7 +48,7 @@ fun PreferenceCategory(
         }
         content()
         if (showDivider) {
-            Divider()
+            PreferenceDivider()
         }
     }
 }
@@ -57,9 +56,14 @@ fun PreferenceCategory(
 @Composable
 fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
     Text(
-        modifier = modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.primary,
+        modifier = modifier.padding(
+            top = 20.dp,
+            bottom = 8.dp,
+            start = preferencePaddingHorizontal,
+            end = preferencePaddingHorizontal,
+        ),
+        style = ElementTheme.typography.fontBodyLgMedium,
+        color = ElementTheme.materialColors.primary,
         text = title,
     )
 }
@@ -85,7 +89,8 @@ private fun ContentToPreview() {
         PreferenceSlide(
             title = "Slide",
             summary = "Summary",
-            value = 0.75F
+            value = 0.75F,
+            showIconAreaIfNoIcon = true,
         )
     }
 }

@@ -50,6 +50,10 @@ fun OnBoardingPage(
     footer: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
+    // Note: having a night variant of R.drawable.onboarding_bg in the folder `drawable-night` is working
+    // at runtime, but is not in Android Studio Preview. So I prefer to handle this manually.
+    val isLight = ElementTheme.colors.isLight
+    val bgDrawableRes = if (isLight) R.drawable.onboarding_bg_light else R.drawable.onboarding_bg_dark
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -58,7 +62,7 @@ fun OnBoardingPage(
         Image(
             modifier = Modifier
                 .fillMaxSize(),
-            painter = painterResource(id = R.drawable.onboarding_bg),
+            painter = painterResource(id = bgDrawableRes),
             contentScale = ContentScale.Crop,
             contentDescription = null,
         )

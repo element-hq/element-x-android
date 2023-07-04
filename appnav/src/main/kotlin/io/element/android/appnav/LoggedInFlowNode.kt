@@ -69,7 +69,6 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -291,6 +290,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                 val callback = object : PreferencesEntryPoint.Callback {
                     override fun onOpenBugReport() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
+                    }
+
+                    override fun onVerifyClicked() {
+                        backstack.push(NavTarget.VerifySession)
                     }
                 }
                 preferencesEntryPoint.nodeBuilder(this, buildContext)

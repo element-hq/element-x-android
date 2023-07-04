@@ -27,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
+import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -44,10 +45,12 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,
+    private val rageshakePresenter: RageshakePreferencesPresenter,
 ) : Presenter<DeveloperSettingsState> {
 
     @Composable
     override fun present(): DeveloperSettingsState {
+        val rageshakeState = rageshakePresenter.present()
 
         val features = remember {
             mutableStateMapOf<String, Feature>()
@@ -90,6 +93,7 @@ class DeveloperSettingsPresenter @Inject constructor(
             features = featureUiModels.toImmutableList(),
             cacheSize = cacheSize.value,
             clearCacheAction = clearCacheAction.value,
+            rageshakeState = rageshakeState,
             eventSink = ::handleEvents
         )
     }

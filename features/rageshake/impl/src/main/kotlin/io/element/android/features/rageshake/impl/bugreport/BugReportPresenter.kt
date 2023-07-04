@@ -100,9 +100,6 @@ class BugReportPresenter @Inject constructor(
                 is BugReportEvents.SetCanContact -> updateFormState(formState) {
                     copy(canContact = event.canContact)
                 }
-                is BugReportEvents.SetSendCrashLog -> updateFormState(formState) {
-                    copy(sendCrashLogs = event.sendCrashlog)
-                }
                 is BugReportEvents.SetSendLog -> updateFormState(formState) {
                     copy(sendLogs = event.sendLog)
                 }
@@ -138,7 +135,7 @@ class BugReportPresenter @Inject constructor(
         bugReporter.sendBugReport(
             reportType = ReportType.BUG_REPORT,
             withDevicesLogs = formState.sendLogs,
-            withCrashLogs = hasCrashLogs && formState.sendCrashLogs,
+            withCrashLogs = hasCrashLogs && formState.sendLogs,
             withKeyRequestHistory = false,
             withScreenshot = formState.sendScreenshot,
             theBugDescription = formState.description,

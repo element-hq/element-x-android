@@ -174,7 +174,7 @@ private fun AnalyticsOptInContentRow(
                 .padding(2.dp),
             imageVector = Icons.Rounded.Check,
             contentDescription = null,
-            tint = ElementTheme.colors.iconSuccessPrimary,
+            tint = ElementTheme.colors.textActionAccent,
         )
         Text(
             modifier = Modifier.padding(start = 16.dp),
