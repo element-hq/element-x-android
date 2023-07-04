@@ -370,7 +370,6 @@ class RustMatrixRoom(
         }
     }
 
-    //TODO expose inner parameters
     override suspend fun sendLocation(
         body: String,
         geoUri: String,
