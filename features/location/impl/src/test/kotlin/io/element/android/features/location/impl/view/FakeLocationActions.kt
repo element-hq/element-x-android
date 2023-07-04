@@ -14,13 +14,29 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.location
+package io.element.android.features.location.impl.view
 
-/**
- * Represents a location sample emitted by the device's location subsystem.
- */
-data class Location(
-    val lat: Double,
-    val lon: Double,
-    val accuracy: Float,
-)
+import androidx.compose.runtime.Composable
+import io.element.android.features.location.api.Location
+
+class FakeLocationActions : LocationActions {
+
+    var configured = false
+        private set
+
+    var sharedLocation: Location? = null
+        private set
+
+    var sharedLabel: String? = null
+        private set
+
+    @Composable
+    override fun Configure() {
+        configured = true
+    }
+
+    override suspend fun share(location: Location, label: String?) {
+        sharedLocation = location
+        sharedLabel = label
+    }
+}
