@@ -77,6 +77,7 @@ object AppModule {
         applicationId = BuildConfig.APPLICATION_ID,
         lowPrivacyLoggingEnabled = false, // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
         versionName = BuildConfig.VERSION_NAME,
+        versionCode = BuildConfig.VERSION_CODE,
         gitRevision = "TODO", // BuildConfig.GIT_REVISION,
         gitRevisionDate = "TODO", //  BuildConfig.GIT_REVISION_DATE,
         gitBranchName = "TODO", //  BuildConfig.GIT_BRANCH_NAME,

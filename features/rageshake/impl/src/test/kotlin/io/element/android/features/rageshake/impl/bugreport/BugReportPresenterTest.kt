@@ -93,26 +93,6 @@ class BugReportPresenterTest {
     }
 
     @Test
-    fun `present - send crash logs`() = runTest {
-        val presenter = BugReportPresenter(
-            FakeBugReporter(),
-            FakeCrashDataStore(),
-            FakeScreenshotHolder(),
-            this,
-        )
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            // Since this is true by default, start by disabling
-            initialState.eventSink.invoke(BugReportEvents.SetSendCrashLog(false))
-            assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendCrashLogs = false))
-            initialState.eventSink.invoke(BugReportEvents.SetSendCrashLog(true))
-            assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendCrashLogs = true))
-        }
-    }
-
-    @Test
     fun `present - send logs`() = runTest {
         val presenter = BugReportPresenter(
             FakeBugReporter(),

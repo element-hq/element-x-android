@@ -157,7 +157,7 @@ fun TextComposer(
                         lineCount = it.lineCount
                     },
                     textStyle = defaultTypography.copy(color = MaterialTheme.colorScheme.primary),
-                    cursorBrush = SolidColor(ElementTheme.legacyColors.accentColor),
+                    cursorBrush = SolidColor(ElementTheme.colors.iconAccentTertiary),
                     decorationBox = { innerTextField ->
                         TextFieldDefaults.DecorationBox(
                             value = text,

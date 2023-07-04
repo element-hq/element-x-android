@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package io.element.android.features.messages.impl.timeline
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -30,7 +37,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -41,6 +48,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -60,6 +69,7 @@ import io.element.android.libraries.designsystem.theme.components.FloatingAction
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
@@ -235,12 +245,10 @@ internal fun BoxScope.TimelineScrollHelper(
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
     val shouldAutoScrollToBottom by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 2 } }
+    val showScrollToBottomButton by remember { derivedStateOf { lazyListState.firstVisibleItemIndex > 0 } }
 
-    LaunchedEffect(timelineItems, firstVisibleItemIndex, isScrollFinished) {
+    LaunchedEffect(timelineItems, firstVisibleItemIndex) {
         if (!isScrollFinished) return@LaunchedEffect
-
-        // Notify the parent composable about the first visible item index when scrolling finishes
-        onScrollFinishedAt(firstVisibleItemIndex)
 
         // Auto-scroll when new timeline items appear
         if (shouldAutoScrollToBottom) {
@@ -249,9 +257,22 @@ internal fun BoxScope.TimelineScrollHelper(
             }
         }
     }
+    LaunchedEffect(isScrollFinished) {
+        if (!isScrollFinished) return@LaunchedEffect
 
-    // Jump to bottom button
-    if (!shouldAutoScrollToBottom) {
+        // Notify the parent composable about the first visible item index when scrolling finishes
+        onScrollFinishedAt(firstVisibleItemIndex)
+    }
+
+    // Jump to bottom button (display also in previews)
+    AnimatedVisibility(
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(end = 24.dp, bottom = 12.dp),
+        visible = showScrollToBottomButton || LocalInspectionMode.current,
+        enter = scaleIn(),
+        exit = scaleOut(),
+    ) {
         FloatingActionButton(
             onClick = {
                 coroutineScope.launch {
@@ -262,14 +283,24 @@ internal fun BoxScope.TimelineScrollHelper(
                     }
                 }
             },
+            elevation = FloatingActionButtonDefaults.elevation(4.dp, 4.dp, 4.dp, 4.dp),
             shape = CircleShape,
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .size(40.dp),
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                .shadow(
+                    elevation = 4.dp,
+                    shape = CircleShape,
+                    ambientColor = ElementTheme.materialColors.primary,
+                    spotColor = ElementTheme.materialColors.primary,
+                )
+                .size(36.dp),
+            containerColor = ElementTheme.colors.bgSubtleSecondary,
+            contentColor = ElementTheme.colors.iconSecondary
         ) {
-            Icon(Icons.Default.ArrowDownward, "")
+            Icon(
+                modifier = Modifier.size(24.dp),
+                imageVector = Icons.Filled.ArrowDownward,
+                contentDescription = "",
+            )
         }
     }
 }

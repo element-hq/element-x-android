@@ -16,36 +16,45 @@
 
 package io.element.android.features.preferences.impl.root
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DeveloperMode
+import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.DeveloperMode
+import androidx.compose.material.icons.outlined.Help
+import androidx.compose.material.icons.outlined.InsertChart
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
-import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesView
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
+import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun PreferencesRootView(
     state: PreferencesRootState,
+    onBackPressed: () -> Unit,
+    onVerifyClicked: () -> Unit,
+    onOpenAnalytics: () -> Unit,
+    onOpenRageShake: () -> Unit,
+    onOpenAbout: () -> Unit,
+    onOpenDeveloperSettings: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onOpenRageShake: () -> Unit = {},
-    onOpenDeveloperSettings: () -> Unit = {},
 ) {
-    // TODO Hierarchy!
     // Include pref from other modules
     PreferenceView(
         modifier = modifier,
@@ -53,31 +62,55 @@ fun PreferencesRootView(
         title = stringResource(id = CommonStrings.common_settings)
     ) {
         UserPreferences(state.myUser)
-        AnalyticsPreferencesView(
-            state = state.analyticsState,
+        if (state.showCompleteVerification) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.action_complete_verification),
+                icon = Icons.Outlined.VerifiedUser,
+                onClick = onVerifyClicked,
+            )
+            Divider()
+        }
+        PreferenceText(
+            title = stringResource(id = CommonStrings.common_analytics),
+            icon = Icons.Outlined.InsertChart,
+            onClick = onOpenAnalytics,
         )
-        RageshakePreferencesView(
-            state = state.rageshakeState,
-            onOpenRageshake = onOpenRageShake,
+        PreferenceText(
+            title = stringResource(id = CommonStrings.action_report_bug),
+            icon = Icons.Outlined.BugReport,
+            onClick = onOpenRageShake
         )
-        LogoutPreferenceView(
-            state = state.logoutState,
+        PreferenceText(
+            title = stringResource(id = CommonStrings.common_about),
+            icon = Icons.Outlined.Help,
+            onClick = onOpenAbout,
         )
         if (state.showDeveloperSettings) {
             DeveloperPreferencesView(onOpenDeveloperSettings)
         }
+        Divider()
+        LogoutPreferenceView(
+            state = state.logoutState,
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 40.dp, bottom = 24.dp),
+            textAlign = TextAlign.Center,
+            text = state.version,
+            style = ElementTheme.typography.fontBodySmRegular,
+            color = ElementTheme.materialColors.secondary,
+        )
     }
 }
 
 @Composable
 fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
-    PreferenceCategory(title = stringResource(id = CommonStrings.common_developer_options)) {
-        PreferenceText(
-            title = stringResource(id = CommonStrings.common_developer_options),
-            icon = Icons.Default.DeveloperMode,
-            onClick = onOpenDeveloperSettings
-        )
-    }
+    PreferenceText(
+        title = stringResource(id = CommonStrings.common_developer_options),
+        icon = Icons.Outlined.DeveloperMode,
+        onClick = onOpenDeveloperSettings
+    )
 }
 
 @LargeHeightPreview
@@ -92,5 +125,13 @@ fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) 
 
 @Composable
 private fun ContentToPreview(matrixUser: MatrixUser) {
-    PreferencesRootView(aPreferencesRootState().copy(myUser = Async.Success(matrixUser)))
+    PreferencesRootView(
+        state = aPreferencesRootState().copy(myUser = matrixUser),
+        onBackPressed = {},
+        onOpenAnalytics = {},
+        onOpenRageShake = {},
+        onOpenDeveloperSettings = {},
+        onOpenAbout = {},
+        onVerifyClicked = {},
+    )
 }
