@@ -81,7 +81,6 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -231,11 +230,11 @@ internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit
         val roomNotificationSettings = state.roomNotificationSettings
         if (roomNotificationSettings != null) {
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
-                MainActionButton(title = stringResource(StringR.string.common_unmute), icon = Icons.Outlined.NotificationsOff, onClick = {
+                MainActionButton(title = stringResource(CommonStrings.common_unmute), icon = Icons.Outlined.NotificationsOff, onClick = {
                     state.eventSink(RoomDetailsEvent.UnmuteNotification)
                 })
             } else {
-                MainActionButton(title = stringResource(StringR.string.common_mute), icon = Icons.Outlined.Notifications, onClick = {
+                MainActionButton(title = stringResource(CommonStrings.common_mute), icon = Icons.Outlined.Notifications, onClick = {
                     state.eventSink(RoomDetailsEvent.MuteNotification)
                 })
             }
