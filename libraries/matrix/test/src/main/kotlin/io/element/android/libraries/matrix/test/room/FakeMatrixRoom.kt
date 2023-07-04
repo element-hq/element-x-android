@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -286,7 +287,10 @@ class FakeMatrixRoom(
 
     override suspend fun sendLocation(
         body: String,
-        geoUri: String
+        geoUri: String,
+        description: String?,
+        zoomLevel: Int?,
+        assetType: AssetType?,
     ): Result<Unit> = simulateLongTask {
         sendLocationCount++
         return sendLocationResult
