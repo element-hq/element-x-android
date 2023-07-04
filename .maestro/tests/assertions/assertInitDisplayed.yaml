@@ -1,5 +1,5 @@
 appId: ${APP_ID}
 ---
 - extendedWaitUntil:
-    visible: "Communicate and collaborate securely"
+    visible: "Be in your element"
     timeout: 10_000
