@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
@@ -368,13 +370,22 @@ class RustMatrixRoom(
         }
     }
 
-    //TODO expose inner parameters
     override suspend fun sendLocation(
         body: String,
-        geoUri: String
+        geoUri: String,
+        description: String?,
+        zoomLevel: Int?,
+        assetType: AssetType?,
     ): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
-            innerRoom.sendLocation(body, geoUri, null, null, null, genTransactionId())
+            innerRoom.sendLocation(
+                body = body,
+                geoUri = geoUri,
+                description = description,
+                zoomLevel = zoomLevel?.toUByte(),
+                assetType = assetType?.toInner(),
+                txnId = genTransactionId()
+            )
         }
     }
 }
