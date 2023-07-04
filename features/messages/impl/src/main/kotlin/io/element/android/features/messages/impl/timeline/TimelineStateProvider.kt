@@ -43,6 +43,7 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     timelineItems = timelineItems,
     paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, canBackPaginate = true),
     highlightedEventId = null,
+    canReply = true,
     eventSink = {}
 )
 
