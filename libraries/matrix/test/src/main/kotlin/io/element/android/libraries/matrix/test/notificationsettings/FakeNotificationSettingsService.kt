@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.test.notificationsettings
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsFlowState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
@@ -25,12 +26,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeNotificationSettingsService : NotificationSettingsService {
-    private var _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
+    private var _roomNotificationSettingsStateFlow = MutableStateFlow<NotificationSettingsFlowState>(NotificationSettingsFlowState.Initial)
     private val muteRoomResult: Result<Unit> = Result.success(Unit)
     private val unmuteRoomResult: Result<Unit> = Result.success(Unit)
     private val getRoomNotificationSettingsResult: Result<RoomNotificationSettings> = Result.success(A_ROOM_NOTIFICATION_SETTINGS)
 
-    override val notificationSettingsFlowState: StateFlow<MatrixRoomNotificationSettingsState>
+    override val notificationSettingsFlowState: StateFlow<NotificationSettingsFlowState>
         get() = _roomNotificationSettingsStateFlow
 
     override suspend fun getRoomNotificationSettings(roomId: RoomId): Result<RoomNotificationSettings> {

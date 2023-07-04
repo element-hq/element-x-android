@@ -67,6 +67,10 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.openRoomMemberList() }
     }
 
+    private fun openRoomNotificationSettings() {
+        TODO()
+    }
+
     private fun invitePeople() {
         callbacks.forEach { it.openInviteMembers() }
     }
@@ -135,6 +139,7 @@ class RoomDetailsNode @AssistedInject constructor(
             onShareRoom = ::onShareRoom,
             onShareMember = ::onShareMember,
             openRoomMemberList = ::openRoomMemberList,
+            openRoomNotificationSettings = ::openRoomNotificationSettings,
             invitePeople = ::invitePeople,
         )
     }

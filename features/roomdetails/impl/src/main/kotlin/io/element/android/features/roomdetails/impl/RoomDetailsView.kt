@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -80,8 +79,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -93,6 +92,7 @@ fun RoomDetailsView(
     onShareRoom: () -> Unit,
     onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
+    openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -151,7 +151,11 @@ fun RoomDetailsView(
                 )
             }
 
-            NotificationSection()
+            if (state.roomNotificationSettings != null) {
+                NotificationSection(
+                    state = state,
+                    openRoomNotificationSettings = openRoomNotificationSettings)
+            }
 
             if (state.roomType is RoomDetailsType.Room) {
                 MembersSection(
@@ -291,13 +295,17 @@ internal fun TopicSection(
 }
 
 @Composable
-internal fun NotificationSection(modifier: Modifier = Modifier) {
-    PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_notification_title),
-            subtitle = "Default",
-            icon = Icons.Outlined.Notifications,
-        )
+internal fun NotificationSection(state: RoomDetailsState, openRoomNotificationSettings: () -> Unit, modifier: Modifier = Modifier) {
+    state.roomNotificationSettings?.let {
+        val subtitle = if (it.isDefault) "Default" else "Custom"
+        PreferenceCategory(modifier = modifier) {
+            PreferenceText(
+                title = stringResource(R.string.screen_room_details_notification_title),
+                subtitle = subtitle,
+                icon = Icons.Outlined.Notifications,
+                onClick = openRoomNotificationSettings,
+            )
+        }
     }
 }
 
@@ -373,6 +381,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onShareRoom = {},
         onShareMember = {},
         openRoomMemberList = {},
+        openRoomNotificationSettings = {},
         invitePeople = {},
     )
 }
