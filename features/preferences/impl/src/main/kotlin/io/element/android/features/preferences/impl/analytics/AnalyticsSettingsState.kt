@@ -14,22 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.analytics.test
+package io.element.android.features.preferences.impl.analytics
 
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
+import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 
-val A_BUILD_META = BuildMeta(
-    isDebuggable = true,
-    buildType = BuildType.DEBUG,
-    applicationName = "Element X test",
-    applicationId = "",
-    lowPrivacyLoggingEnabled = false,
-    versionName = "",
-    gitRevision = "",
-    gitRevisionDate = "",
-    gitBranchName = "",
-    flavorDescription = "",
-    flavorShortDescription = "",
+// Do not use default value, so no member get forgotten in the presenters.
+data class AnalyticsSettingsState(
+    val analyticsState: AnalyticsPreferencesState,
 )
-

@@ -36,7 +36,6 @@ data class BugReportState(
 data class BugReportFormState(
     val description: String,
     val sendLogs: Boolean,
-    val sendCrashLogs: Boolean,
     val canContact: Boolean,
     val sendScreenshot: Boolean
 ) : Parcelable {
@@ -44,7 +43,6 @@ data class BugReportFormState(
         val Default = BugReportFormState(
             description = "",
             sendLogs = true,
-            sendCrashLogs = true,
             canContact = false,
             sendScreenshot = false
         )

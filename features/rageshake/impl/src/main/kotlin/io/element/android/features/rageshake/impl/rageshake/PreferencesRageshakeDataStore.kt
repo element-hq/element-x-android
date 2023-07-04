@@ -25,7 +25,7 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.rageshake.api.rageshake.RageshakeDataStore
-import io.element.android.libraries.core.bool.orTrue
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +45,7 @@ class PreferencesRageshakeDataStore @Inject constructor(
 
     override fun isEnabled(): Flow<Boolean> {
         return store.data.map { prefs ->
-            prefs[enabledKey].orTrue()
+            prefs[enabledKey].orFalse()
         }
     }
 

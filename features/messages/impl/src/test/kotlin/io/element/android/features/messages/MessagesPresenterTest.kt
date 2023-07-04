@@ -59,6 +59,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -566,19 +567,7 @@ class MessagesPresenterTest {
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
         )
-        val buildMeta = BuildMeta(
-            buildType = BuildType.DEBUG,
-            isDebuggable = true,
-            applicationId = "",
-            applicationName = "",
-            lowPrivacyLoggingEnabled = true,
-            versionName = "",
-            gitRevision = "",
-            gitBranchName = "",
-            gitRevisionDate = "",
-            flavorDescription = "",
-            flavorShortDescription = "",
-        )
+        val buildMeta = aBuildMeta()
         val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
         val customReactionPresenter = CustomReactionPresenter()
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)

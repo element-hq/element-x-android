@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 const val A_SENSITIVITY = 1f
 
 class FakeRageshakeDataStore(
-    isEnabled: Boolean = true,
+    isEnabled: Boolean = false,
     sensitivity: Float = A_SENSITIVITY,
 ) : RageshakeDataStore {
 
