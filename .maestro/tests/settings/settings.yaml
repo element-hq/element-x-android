@@ -2,12 +2,29 @@ appId: ${APP_ID}
 ---
 - tapOn:
     id: "home_screen-settings"
-- assertVisible: "Rageshake to report bug"
+- assertVisible: "Settings"
 - takeScreenshot: build/maestro/600-Settings
 - tapOn:
-    text: "Report bug"
-    index: 1
-- assertVisible: "Describe the bug…"
+    text: "Analytics"
+- assertVisible: "Share analytics data"
 - back
+
+- tapOn:
+    text: "Report bug"
+- assertVisible: "Report a bug"
+- back
+
+- tapOn:
+    text: "About"
+- assertVisible: "Copyright"
+- assertVisible: "Acceptable use policy"
+- assertVisible: "Privacy policy"
+- back
+
+- tapOn:
+    text: "Developer options"
+- assertVisible: "Feature flags"
+- back
+
 - back
 - runFlow: ../assertions/assertHomeDisplayed.yaml

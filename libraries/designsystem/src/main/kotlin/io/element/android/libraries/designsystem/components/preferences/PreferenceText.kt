@@ -18,19 +18,15 @@ package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,74 +39,74 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
+/**
+ * Tried to use ListItem, but it cannot really match the design. Keep custom Layout for now.
+ */
 @Composable
 fun PreferenceText(
-    title: String?,
+    title: String,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     currentValue: String? = null,
     loadingCurrentValue: Boolean = false,
     icon: ImageVector? = null,
+    showIconAreaIfNoIcon: Boolean = false,
     tintColor: Color? = null,
     onClick: () -> Unit = {},
 ) {
     val minHeight = if (subtitle == null) preferenceMinHeightOnlyTitle else preferenceMinHeight
-    Box(
+
+    Row(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = minHeight)
             .clickable { onClick() }
-            .padding(end = preferencePaddingHorizontal),
+            .padding(horizontal = preferencePaddingHorizontal, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
+        PreferenceIcon(
+            icon = icon,
+            isVisible = showIconAreaIfNoIcon,
+            tintColor = tintColor ?: ElementTheme.materialColors.secondary
+        )
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = preferencePaddingVertical)
+                .weight(1f)
+                .align(Alignment.CenterVertically)
         ) {
-            PreferenceIcon(icon = icon, tintColor = tintColor)
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically)
-            ) {
-                if (title != null) {
-                    Text(
-                        style = MaterialTheme.typography.bodyLarge,
-                        text = title,
-                        color = tintColor ?: MaterialTheme.colorScheme.primary,
-                    )
-                }
-                if (title != null && subtitle != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-                if (subtitle != null) {
-                    Text(
-                        style = MaterialTheme.typography.bodyMedium,
-                        text = subtitle,
-                        color = tintColor ?: MaterialTheme.colorScheme.tertiary,
-                    )
-                }
-            }
-            if (currentValue != null) {
+            Text(
+                style = ElementTheme.typography.fontBodyLgRegular,
+                text = title,
+                color = tintColor ?: ElementTheme.materialColors.primary,
+            )
+            if (subtitle != null) {
                 Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(horizontal = 16.dp),
-                    text = currentValue,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary,
-                )
-            } else if (loadingCurrentValue) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .progressSemantics()
-                        .padding(horizontal = 16.dp)
-                        .size(20.dp)
-                        .align(Alignment.CenterVertically),
-                    strokeWidth = 2.dp
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    text = subtitle,
+                    color = tintColor ?: ElementTheme.materialColors.secondary,
                 )
             }
+        }
+        if (currentValue != null) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 16.dp, end = 8.dp),
+                text = currentValue,
+                style = ElementTheme.typography.fontBodyXsMedium,
+                color = ElementTheme.materialColors.secondary,
+            )
+        } else if (loadingCurrentValue) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .progressSemantics()
+                    .padding(start = 16.dp, end = 8.dp)
+                    .size(20.dp)
+                    .align(Alignment.CenterVertically),
+                strokeWidth = 2.dp
+            )
         }
     }
 }
@@ -153,6 +149,15 @@ private fun ContentToPreview() {
         PreferenceText(
             title = "Title",
             icon = Icons.Default.BugReport,
+            loadingCurrentValue = true,
+        )
+        PreferenceText(
+            title = "Title no icon with icon area",
+            showIconAreaIfNoIcon = true,
+            loadingCurrentValue = true,
+        )
+        PreferenceText(
+            title = "Title no icon",
             loadingCurrentValue = true,
         )
     }
