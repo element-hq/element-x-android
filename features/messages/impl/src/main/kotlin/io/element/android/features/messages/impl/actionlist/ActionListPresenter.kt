@@ -18,6 +18,8 @@ package io.element.android.features.messages.impl.actionlist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,8 +48,8 @@ class ActionListPresenter @Inject constructor(
             mutableStateOf(ActionListState.Target.None)
         }
 
-        val displayEmojiReactions = remember(target) {
-            (target.value as? ActionListState.Target.Success)?.event?.sendState is EventSendState.Sent
+        val displayEmojiReactions by remember {
+            derivedStateOf { (target.value as? ActionListState.Target.Success)?.event?.sendState is EventSendState.Sent }
         }
 
         fun handleEvents(event: ActionListEvents) {
@@ -78,9 +80,7 @@ class ActionListPresenter @Inject constructor(
                 }
                 is TimelineItemStateContent -> {
                     buildList {
-                        if (timelineItem.content.canBeCopied()) {
-                            add(TimelineItemAction.Copy)
-                        }
+                        add(TimelineItemAction.Copy)
                         if (buildMeta.isDebuggable) {
                             add(TimelineItemAction.Developer)
                         }
