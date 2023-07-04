@@ -25,8 +25,8 @@ import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
 import java.io.File
@@ -123,6 +123,16 @@ interface MatrixRoom : Closeable {
      * @param body A human readable textual representation of the location.
      * @param geoUri A geo URI (RFC 5870) representing the location e.g. `geo:51.5008,0.1247;u=35`.
      *  Respectively: latitude, longitude, and (optional) uncertainty.
+     * @param description Optional description of the location to display to the user.
+     * @param zoomLevel Optional zoom level to display the map at.
+     * @param assetType Optional type of the location asset.
+     *  Set to SENDER if sharing own location. Set to PIN if sharing any location.
      */
-    suspend fun sendLocation(body: String, geoUri: String): Result<Unit>
+    suspend fun sendLocation(
+        body: String,
+        geoUri: String,
+        description: String? = null,
+        zoomLevel: Int? = null,
+        assetType: AssetType? = null,
+    ): Result<Unit>
 }
