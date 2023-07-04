@@ -38,7 +38,7 @@ class DefaultBugReportEntryPoint @Inject constructor() : BugReportEntryPoint {
             }
 
             override fun build(): Node {
-                return parentNode.createNode<BugReportNode>(buildContext)
+                return parentNode.createNode<BugReportNode>(buildContext, plugins)
             }
         }
     }

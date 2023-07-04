@@ -72,7 +72,7 @@ DO NOT COMMIT
 ^      /\*
 
 ### unnecessary parenthesis around numbers, example: " (0)"
- \(\d+\)
+ \(\d+\)[^"]
 
 ### import the package, do not use long class name with package
 android\.os\.Build\.

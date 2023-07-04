@@ -16,15 +16,12 @@
 
 package io.element.android.features.preferences.impl.root
 
-import io.element.android.features.analytics.api.preferences.aAnalyticsPreferencesState
 import io.element.android.features.logout.api.aLogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
-import io.element.android.libraries.architecture.Async
 
 fun aPreferencesRootState() = PreferencesRootState(
     logoutState = aLogoutPreferenceState(),
-    rageshakeState = aRageshakePreferencesState(),
-    analyticsState = aAnalyticsPreferencesState(),
-    myUser = Async.Uninitialized,
+    myUser = null,
+    version = "Version 1.1 (1)",
+    showCompleteVerification = true,
     showDeveloperSettings = true
 )

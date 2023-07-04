@@ -17,8 +17,8 @@
 package io.element.android.libraries.designsystem.components.preferences.components
 
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -46,14 +46,11 @@ fun PreferenceIcon(
             contentDescription = "",
             tint = tintColor ?: enabled.toSecondaryEnabledColor(),
             modifier = modifier
-                .padding(start = 8.dp)
-                .width(48.dp)
-                .heightIn(max = 48.dp),
+                .padding(end = 16.dp)
+                .size(24.dp),
         )
     } else if (isVisible) {
-        Spacer(modifier = modifier.width(56.dp))
-    } else {
-        Spacer(modifier = modifier.width(16.dp))
+        Spacer(modifier = modifier.width(40.dp))
     }
 }
 

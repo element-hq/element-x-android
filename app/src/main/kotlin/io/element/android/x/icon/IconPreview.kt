@@ -31,7 +31,7 @@ import io.element.android.x.R
 fun IconPreview(
     modifier: Modifier = Modifier,
 ) {
-    Box {
+    Box(modifier = modifier) {
         Image(painter = painterResource(id = R.mipmap.ic_launcher_background), contentDescription = null)
         Image(painter = painterResource(id = R.mipmap.ic_launcher_foreground), contentDescription = null)
     }
