@@ -135,7 +135,8 @@ class MessageComposerPresenter @Inject constructor(
                         Composer(
                             inThread = false,
                             isEditing = composerMode.value is MessageComposerMode.Edit,
-                            isReply = composerMode.value is MessageComposerMode.Reply
+                            isReply = composerMode.value is MessageComposerMode.Reply,
+                            isLocation = false,
                         )
                     )
                 }
