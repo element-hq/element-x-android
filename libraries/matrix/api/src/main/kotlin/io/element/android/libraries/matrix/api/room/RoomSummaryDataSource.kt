@@ -25,8 +25,8 @@ interface RoomSummaryDataSource {
         data class Loaded(val numberOfRooms: Int): LoadingState()
     }
 
+    fun updateAllRoomsVisibleRange(range: IntRange)
     fun allRoomsLoadingState(): StateFlow<LoadingState>
     fun allRooms(): StateFlow<List<RoomSummary>>
     fun inviteRooms(): StateFlow<List<RoomSummary>>
-    fun updateRoomListVisibleRange(range: IntRange)
 }

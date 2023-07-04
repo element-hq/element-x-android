@@ -68,7 +68,7 @@ class FakeMatrixClient(
         return getRoomResults[roomId]
     }
 
-    override fun findDM(userId: UserId): MatrixRoom? {
+    override suspend fun findDM(userId: UserId): MatrixRoom? {
         return findDmResult
     }
 

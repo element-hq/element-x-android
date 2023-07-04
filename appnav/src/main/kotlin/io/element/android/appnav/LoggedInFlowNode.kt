@@ -57,7 +57,6 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -147,6 +146,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         observeAnalyticsState()
         lifecycle.subscribe(
             onCreate = {
+                syncService.startSync()
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.matrixClient) }
                 val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
@@ -267,24 +267,14 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
             is NavTarget.Room -> {
-                val room = inputs.matrixClient.getRoom(roomId = navTarget.roomId)
-                if (room == null) {
-                    // TODO CREATE UNKNOWN ROOM NODE
-                    node(buildContext) {
-                        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(text = "Unknown room with id = ${navTarget.roomId}")
-                        }
-                    }
-                } else {
                     val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
                     val callback = object : RoomFlowNode.Callback {
                         override fun onForwardedToSingleRoom(roomId: RoomId) {
                             coroutineScope.launch { attachRoom(roomId) }
                         }
                     }
-                    val inputs = RoomFlowNode.Inputs(room, initialElement = navTarget.initialElement)
-                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
-                }
+                    val inputs = AwaitRoomNode.Inputs(roomId = navTarget.roomId, initialElement = navTarget.initialElement)
+                    createNode<AwaitRoomNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
             }
             NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
@@ -342,7 +332,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    suspend fun attachRoom(roomId: RoomId): RoomFlowNode {
+    suspend fun attachRoom(roomId: RoomId): AwaitRoomNode {
         return attachChild {
             backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId))

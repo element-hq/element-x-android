@@ -78,7 +78,7 @@ class LeaveRoomPresenterImpl @Inject constructor(
     }
 }
 
-private fun showLeaveRoomAlert(
+private suspend fun showLeaveRoomAlert(
     matrixClient: MatrixClient,
     roomId: RoomId,
     confirmation: MutableState<LeaveRoomState.Confirmation>,
