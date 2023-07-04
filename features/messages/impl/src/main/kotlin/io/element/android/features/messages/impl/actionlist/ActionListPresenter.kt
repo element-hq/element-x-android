@@ -108,6 +108,10 @@ class ActionListPresenter @Inject constructor(
                     }
                 }
             }
-        target.value = ActionListState.Target.Success(timelineItem, actions.toImmutableList())
+        if (actions.isNotEmpty()) {
+            target.value = ActionListState.Target.Success(timelineItem, actions.toImmutableList())
+        } else {
+            target.value = ActionListState.Target.None
+        }
     }
 }

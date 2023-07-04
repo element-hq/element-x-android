@@ -223,6 +223,30 @@ class ActionListPresenterTest {
             assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
         }
     }
+
+    @Test
+    fun `present - compute message with no actions`() = runTest {
+        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+            )
+            val redactedEvent = aMessageEvent(
+                isMine = true,
+                content = TimelineItemRedactedContent,
+            )
+
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
+            assertThat(awaitItem().target).isInstanceOf(ActionListState.Target.Success::class.java)
+
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(redactedEvent))
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
 }
 
 private fun anActionListPresenter(isBuildDebuggable: Boolean) = ActionListPresenter(buildMeta = aBuildMeta(isDebuggable = isBuildDebuggable))
