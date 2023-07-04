@@ -36,12 +36,21 @@ class DeeplinkParser @Inject constructor() {
         if (host != HOST) return null
         val pathBits = path.orEmpty().split("/").drop(1)
         val sessionId = pathBits.elementAtOrNull(0)?.let(::SessionId) ?: return null
-        val roomId = pathBits.elementAtOrNull(1)?.let(::RoomId)
-        val threadId = pathBits.elementAtOrNull(2)?.let(::ThreadId)
-        return DeeplinkData(
-            sessionId = sessionId,
-            roomId = roomId,
-            threadId = threadId,
-        )
+        val screenPathComponent = pathBits.elementAtOrNull(1)
+        val roomId = runCatching { screenPathComponent?.let(::RoomId) }.getOrNull()
+
+        return when {
+            roomId != null -> {
+                val threadId = pathBits.elementAtOrNull(2)?.let(::ThreadId)
+                DeeplinkData.Room(sessionId, roomId, threadId)
+            }
+            screenPathComponent == DeepLinkPaths.INVITE_LIST -> {
+                DeeplinkData.InviteList(sessionId)
+            }
+            screenPathComponent == null -> {
+                DeeplinkData.Root(sessionId)
+            }
+            else -> null
+        }
     }
 }

@@ -131,7 +131,12 @@ data class NotificationEventQueue constructor(
         )
     }
 
-    fun clearMemberShipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
+    fun clearMembershipNotificationForSession(sessionId: SessionId) {
+        Timber.d("clearMemberShipOfSession $sessionId")
+        queue.removeAll { it is InviteNotifiableEvent && it.sessionId == sessionId }
+    }
+
+    fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
         Timber.d("clearMemberShipOfRoom $sessionId, $roomId")
         queue.removeAll { it is InviteNotifiableEvent && it.sessionId == sessionId && it.roomId == roomId }
     }

@@ -21,14 +21,23 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 
 class FakeNotificationDrawerManager : NotificationDrawerManager {
+    private val clearMemberShipNotificationForSessionCallsCount = mutableMapOf<String, Int>()
     private val clearMemberShipNotificationForRoomCallsCount = mutableMapOf<String, Int>()
 
-    override fun clearMemberShipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
+    override fun clearMembershipNotificationForSession(sessionId: SessionId) {
+        clearMemberShipNotificationForSessionCallsCount.merge(sessionId.value, 1) { oldValue, value -> oldValue + value }
+    }
+
+    override fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
         val key = getMembershipNotificationKey(sessionId, roomId)
         clearMemberShipNotificationForRoomCallsCount.merge(key, 1) { oldValue, value -> oldValue + value }
     }
 
-    fun getClearMemberShipNotificationForRoomCount(sessionId: SessionId, roomId: RoomId): Int {
+    fun getClearMembershipNotificationForSessionCount(sessionId: SessionId): Int {
+        return clearMemberShipNotificationForRoomCallsCount[sessionId.value] ?: 0
+    }
+
+    fun getClearMembershipNotificationForRoomCount(sessionId: SessionId, roomId: RoomId): Int {
         val key = getMembershipNotificationKey(sessionId, roomId)
         return clearMemberShipNotificationForRoomCallsCount[key] ?: 0
     }

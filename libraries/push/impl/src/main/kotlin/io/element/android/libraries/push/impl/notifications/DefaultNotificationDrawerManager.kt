@@ -153,12 +153,18 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
     }
 
+    override fun clearMembershipNotificationForSession(sessionId: SessionId) {
+        updateEvents {
+            it.clearMembershipNotificationForSession(sessionId)
+        }
+    }
+
     /**
      * Clear invitation notification for the provided room.
      */
-    override fun clearMemberShipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
+    override fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
         updateEvents {
-            it.clearMemberShipNotificationForRoom(sessionId, roomId)
+            it.clearMembershipNotificationForRoom(sessionId, roomId)
         }
     }
 

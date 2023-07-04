@@ -43,11 +43,11 @@ class DeeplinkParserTest {
     @Test
     fun `nominal cases`() {
         assertThat(sut.getFromIntent(createIntent(A_URI)))
-            .isEqualTo(DeeplinkData(A_SESSION_ID, null, null))
+            .isEqualTo(DeeplinkData.Root(A_SESSION_ID))
         assertThat(sut.getFromIntent(createIntent(A_URI_WITH_ROOM)))
-            .isEqualTo(DeeplinkData(A_SESSION_ID, A_ROOM_ID, null))
+            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, null))
         assertThat(sut.getFromIntent(createIntent(A_URI_WITH_ROOM_WITH_THREAD)))
-            .isEqualTo(DeeplinkData(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID))
+            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID))
     }
 
     @Test

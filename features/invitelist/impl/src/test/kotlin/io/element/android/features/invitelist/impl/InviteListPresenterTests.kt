@@ -36,7 +36,6 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -213,7 +212,7 @@ class InviteListPresenterTests {
             skipItems(2)
 
             Truth.assertThat(room.isInviteRejected).isTrue()
-            Truth.assertThat(fakeNotificationDrawerManager.getClearMemberShipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
+            Truth.assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
     }
 
@@ -301,7 +300,7 @@ class InviteListPresenterTests {
 
             Truth.assertThat(room.isInviteAccepted).isTrue()
             Truth.assertThat(newState.acceptedAction).isEqualTo(Async.Success(A_ROOM_ID))
-            Truth.assertThat(fakeNotificationDrawerManager.getClearMemberShipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
+            Truth.assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
     }
 

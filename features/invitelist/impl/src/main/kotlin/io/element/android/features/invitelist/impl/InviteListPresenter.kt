@@ -140,7 +140,7 @@ class InviteListPresenter @Inject constructor(
         suspend {
             client.getRoom(roomId)?.use {
                 it.acceptInvitation().getOrThrow()
-                notificationDrawerManager.clearMemberShipNotificationForRoom(client.sessionId, roomId)
+                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
                 analyticsService.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
             }
             roomId
@@ -151,7 +151,7 @@ class InviteListPresenter @Inject constructor(
         suspend {
             client.getRoom(roomId)?.use {
                 it.rejectInvitation().getOrThrow()
-                notificationDrawerManager.clearMemberShipNotificationForRoom(client.sessionId, roomId)
+                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
             }
             Unit
         }.runCatchingUpdatingState(declinedAction)

@@ -63,11 +63,11 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 handleMarkAsRead(sessionId, roomId)
             }
             actionIds.join -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleJoinRoom(sessionId, roomId)
             }
             actionIds.reject -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleRejectRoom(sessionId, roomId)
             }
         }

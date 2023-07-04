@@ -23,11 +23,16 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 
 interface IntentProvider {
     /**
-     * Provide an intent to start the application.
+     * Provide an intent to start the application on a room or thread.
      */
-    fun getViewIntent(
+    fun getViewRoomIntent(
         sessionId: SessionId,
         roomId: RoomId?,
         threadId: ThreadId?,
     ): Intent
+
+    /**
+     * Provide an intent to start the application on the invite list.
+     */
+    fun getInviteListIntent(sessionId: SessionId): Intent
 }

@@ -32,10 +32,8 @@ import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
-import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
-import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -49,8 +47,6 @@ class NotificationFactory @Inject constructor(
     private val pendingIntentFactory: PendingIntentFactory,
     private val markAsReadActionFactory: MarkAsReadActionFactory,
     private val quickReplyActionFactory: QuickReplyActionFactory,
-    private val rejectInvitationActionFactory: RejectInvitationActionFactory,
-    private val acceptInvitationActionFactory: AcceptInvitationActionFactory,
 ) {
     /**
      * Create a notification for a Room.
@@ -158,19 +154,8 @@ class NotificationFactory @Inject constructor(
 //            .addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
 //            .addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
             .apply {
-                /*
                 // Build the pending intent for when the notification is clicked
-                val contentIntent = HomeActivity.newIntent(
-                    context,
-                    firstStartMainActivity = true,
-                    inviteNotificationRoomId = inviteNotifiableEvent.roomId
-                )
-                contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-                contentIntent.data = createIgnoredUri(inviteNotifiableEvent.eventId)
-                setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, PendingIntentCompat.FLAG_IMMUTABLE))
-
-                 */
+                setContentIntent(pendingIntentFactory.createInviteListPendingIntent(inviteNotifiableEvent.sessionId))
 
                 if (inviteNotifiableEvent.noisy) {
                     // Compat

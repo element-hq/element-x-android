@@ -20,8 +20,16 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 
-data class DeeplinkData(
-    val sessionId: SessionId,
-    val roomId: RoomId? = null,
-    val threadId: ThreadId? = null,
-)
+sealed interface DeeplinkData {
+    /** Session id is common for all deep links. */
+    val sessionId: SessionId
+
+    /** The target is the root of the app, with the given [sessionId]. */
+    data class Root(override val sessionId: SessionId) : DeeplinkData
+
+    /** The target is a room, with the given [sessionId], [roomId] and optionally a [threadId]. */
+    data class Room(override val sessionId: SessionId, val roomId: RoomId, val threadId: ThreadId?) : DeeplinkData
+
+    /** The target is the invites list, with the given [sessionId]. */
+    data class InviteList(override val sessionId: SessionId) : DeeplinkData
+}

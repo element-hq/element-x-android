@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import javax.inject.Inject
 
 class DeepLinkCreator @Inject constructor() {
-    fun create(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String {
+    fun room(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String {
         return buildString {
             append("$SCHEME://$HOST/")
             append(sessionId.value)
@@ -34,6 +34,15 @@ class DeepLinkCreator @Inject constructor() {
                     append(threadId.value)
                 }
             }
+        }
+    }
+
+    fun inviteList(sessionId: SessionId): String {
+        return buildString {
+            append("$SCHEME://$HOST/")
+            append(sessionId.value)
+            append("/")
+            append(DeepLinkPaths.INVITE_LIST)
         }
     }
 }

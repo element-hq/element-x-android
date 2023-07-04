@@ -56,6 +56,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -76,6 +77,7 @@ class RootFlowNode @AssistedInject constructor(
     private val bugReportEntryPoint: BugReportEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
+    private val notificationDrawerManager: NotificationDrawerManager,
     private val loginUserStory: LoginUserStory,
 ) :
     BackstackNode<RootFlowNode.NavTarget>(
@@ -243,15 +245,21 @@ class RootFlowNode @AssistedInject constructor(
         Timber.d("Navigating to $deeplinkData")
         attachSession(deeplinkData.sessionId)
             .apply {
-                val roomId = deeplinkData.roomId
-                if (roomId == null) {
-                    // In case room is not provided, ensure the app navigate back to the room list
-                    attachRoot()
-                } else {
-                    attachRoom(roomId)
-                    // TODO .attachThread(deeplinkData.threadId)
+                when (deeplinkData) {
+                    is DeeplinkData.Root -> attachRoot()
+                    is DeeplinkData.Room -> navigateToRoom(deeplinkData)
+                    is DeeplinkData.InviteList -> navigateToInviteList(deeplinkData)
                 }
             }
+    }
+
+    private suspend fun LoggedInFlowNode.navigateToRoom(deeplinkData: DeeplinkData.Room) {
+        backstack.push(LoggedInFlowNode.NavTarget.Room(deeplinkData.roomId))
+    }
+
+    private suspend fun LoggedInFlowNode.navigateToInviteList(deeplinkData: DeeplinkData.InviteList) {
+        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
+        backstack.push(LoggedInFlowNode.NavTarget.InviteList)
     }
 
     private fun onOidcAction(oidcAction: OidcAction) {
