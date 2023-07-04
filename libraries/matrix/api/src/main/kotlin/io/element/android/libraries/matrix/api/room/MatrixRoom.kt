@@ -71,7 +71,7 @@ interface MatrixRoom : Closeable {
 
     suspend fun sendMessage(message: String): Result<Unit>
 
-    suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit>
+    suspend fun editMessage(originalEventId: EventId?, transactionId: String?, message: String): Result<Unit>
 
     suspend fun replyMessage(eventId: EventId, message: String): Result<Unit>
 

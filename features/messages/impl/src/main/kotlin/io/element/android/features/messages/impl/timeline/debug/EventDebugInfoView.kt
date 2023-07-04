@@ -70,7 +70,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun EventDebugInfoView(
-    eventId: EventId,
+    eventId: EventId?,
     model: String,
     originalJson: String?,
     latestEditedJson: String?,
@@ -99,7 +99,7 @@ fun EventDebugInfoView(
             item {
                 Column(Modifier.padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(text = "Event ID:")
-                    CopyableText(text = eventId.value)
+                    CopyableText(text = eventId?.value ?: "-")
                 }
             }
             item {

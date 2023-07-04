@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.room.location.toInner
@@ -46,6 +47,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -209,11 +211,16 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
-        val transactionId = genTransactionId()
-        // val content = messageEventContentFromMarkdown(message)
-        runCatching {
-            innerRoom.edit(/* TODO use content */ message, originalEventId.value, transactionId)
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: String?, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+        if (originalEventId != null) {
+            runCatching {
+                innerRoom.edit(/* TODO use content */ message, originalEventId.value, transactionId)
+            }
+        } else {
+            runCatching {
+                transactionId?.let { cancelSend(it) }
+                innerRoom.send(messageEventContentFromMarkdown(message), genTransactionId())
+            }
         }
     }
 

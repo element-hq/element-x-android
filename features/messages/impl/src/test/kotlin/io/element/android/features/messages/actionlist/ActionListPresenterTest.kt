@@ -62,7 +62,6 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
-                        TimelineItemAction.Copy,
                         TimelineItemAction.Developer,
                     )
                 )
@@ -88,7 +87,6 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
-                        TimelineItemAction.Copy,
                         TimelineItemAction.Developer,
                     )
                 )
@@ -184,7 +182,6 @@ class ActionListPresenterTest {
                     persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Developer,
                         TimelineItemAction.Redact,
                     )
