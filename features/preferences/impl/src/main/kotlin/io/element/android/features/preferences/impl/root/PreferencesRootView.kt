@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.LargeHeightPreview
+import io.element.android.libraries.designsystem.preview.ElementTallPreviews
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -113,13 +113,13 @@ fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
     )
 }
 
-@LargeHeightPreview
+@ElementTallPreviews
 @Composable
 fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
     ElementPreview { ContentToPreview(matrixUser) }
 }
 
-@LargeHeightPreview
+@ElementTallPreviews
 @Composable
 fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }

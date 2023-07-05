@@ -53,7 +53,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.LargeHeightPreview
+import io.element.android.libraries.designsystem.preview.ElementTallPreviews
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -144,13 +144,13 @@ internal fun SendMessageSection(onSendMessage: () -> Unit, modifier: Modifier = 
     }
 }
 
-@LargeHeightPreview
+@ElementTallPreviews
 @Composable
 fun RoomMemberDetailsViewLightPreview(@PreviewParameter(RoomMemberDetailsStateProvider::class) state: RoomMemberDetailsState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@LargeHeightPreview
+@ElementTallPreviews
 @Composable
 fun RoomMemberDetailsViewDarkPreview(@PreviewParameter(RoomMemberDetailsStateProvider::class) state: RoomMemberDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }

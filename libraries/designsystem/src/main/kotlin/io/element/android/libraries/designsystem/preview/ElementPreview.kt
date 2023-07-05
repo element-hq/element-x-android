@@ -35,9 +35,21 @@ const val NIGHT_MODE_NAME = "N"
 @Preview(name = NIGHT_MODE_NAME, uiMode = Configuration.UI_MODE_NIGHT_YES)
 annotation class ElementPreviews(
     val group: String = "",
-    val widthDp: Int = -1,
-    val heightDp: Int = -1,
 )
+
+@Preview(widthDp = 600, name = DAY_MODE_NAME)
+@Preview(widthDp = 600, name = NIGHT_MODE_NAME, uiMode = Configuration.UI_MODE_NIGHT_YES)
+annotation class ElementWidePreviews(
+    val group: String = "",
+)
+
+/**
+ * Our Paparazzi tests will check components with non-null `heightDp` and use a custom rendering for them,
+ * adding extra vertical space so long scrolling components can be displayed. This is a helper for that functionality.
+ */
+@Preview(heightDp = 1000, name = DAY_MODE_NAME)
+@Preview(heightDp = 1000, name = NIGHT_MODE_NAME, uiMode = Configuration.UI_MODE_NIGHT_YES)
+annotation class ElementTallPreviews
 
 @Deprecated("Don't use anymore.")
 @Composable
