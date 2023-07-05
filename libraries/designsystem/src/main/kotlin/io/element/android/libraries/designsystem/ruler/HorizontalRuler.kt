@@ -67,7 +67,7 @@ private fun HorizontalRulerItem(height: Dp, color: Color) {
 
 @ElementPreviews
 @Composable
-internal fun HorizontalRulerLightPreview() {
+internal fun HorizontalRulerPreview() {
     ElementPreview { ContentToPreview() }
 }
 

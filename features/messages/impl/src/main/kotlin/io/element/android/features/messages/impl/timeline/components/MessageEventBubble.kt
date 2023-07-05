@@ -134,7 +134,7 @@ fun MessageEventBubble(
 
 @ElementPreviews
 @Composable
-internal fun MessageEventBubbleLightPreview(@PreviewParameter(BubbleStateProvider::class) state: BubbleState) {
+internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStateProvider::class) state: BubbleState) {
     ElementPreview { ContentToPreview(state) }
 }
 

@@ -39,7 +39,7 @@ fun UserPreferences(
 
 @ElementPreviews
 @Composable
-internal fun UserPreferencesLightPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) {
+internal fun UserPreferencesPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) {
     ElementPreview { ContentToPreview(matrixUser) }
 }
 

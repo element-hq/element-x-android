@@ -115,7 +115,7 @@ fun EmojiPicker(
 
 @ElementPreviews
 @Composable
-internal fun EmojiPickerLightPreview() {
+internal fun EmojiPickerPreview() {
     ElementPreview { ContentToPreview() }
 }
 

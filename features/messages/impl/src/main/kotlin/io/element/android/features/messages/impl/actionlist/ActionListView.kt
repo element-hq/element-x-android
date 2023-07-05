@@ -373,7 +373,7 @@ private fun EmojiButton(
 
 @ElementPreviews
 @Composable
-fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) {
+fun SheetContentPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) {
     ElementPreview { ContentToPreview(state) }
 }
 

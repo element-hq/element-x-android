@@ -302,7 +302,7 @@ internal fun BoxScope.TimelineScrollHelper(
 
 @ElementPreviews
 @Composable
-fun TimelineViewLightPreview(
+fun TimelineViewPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
 ) {
     ElementPreview { ContentToPreview(content) }

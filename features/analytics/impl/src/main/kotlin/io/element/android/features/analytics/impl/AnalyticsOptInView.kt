@@ -211,7 +211,7 @@ private fun AnalyticsOptInFooter(
 
 @ElementPreviews
 @Composable
-fun AnalyticsOptInViewLightPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) {
+fun AnalyticsOptInViewPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) {
     ElementPreview {
         ContentToPreview(state)
     }

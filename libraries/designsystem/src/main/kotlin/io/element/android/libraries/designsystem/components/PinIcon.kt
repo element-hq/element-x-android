@@ -52,7 +52,7 @@ fun PinIcon(
 
 @ElementPreviews
 @Composable
-fun PinIconLightPreview() {
+fun PinIconPreview() {
     ElementPreview { ContentToPreview() }
 }
 

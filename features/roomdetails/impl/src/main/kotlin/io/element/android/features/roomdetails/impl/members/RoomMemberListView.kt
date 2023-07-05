@@ -261,7 +261,7 @@ private fun RoomMemberSearchBar(
 
 @ElementPreviews
 @Composable
-fun RoomMemberListLightPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) {
+fun RoomMemberListPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) {
     ElementPreview { ContentToPreview(state) }
 }
 

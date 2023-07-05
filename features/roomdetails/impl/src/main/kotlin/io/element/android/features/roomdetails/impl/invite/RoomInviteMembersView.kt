@@ -221,7 +221,7 @@ private fun RoomInviteMembersSearchBar(
 
 @ElementPreviews
 @Composable
-fun RoomInviteMembersLightPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) {
+fun RoomInviteMembersPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) {
     ElementPreview { ContentToPreview(state) }
 }
 

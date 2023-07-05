@@ -44,7 +44,7 @@ fun TimelineItemStateView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemStateViewLightPreview() {
+internal fun TimelineItemStateViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

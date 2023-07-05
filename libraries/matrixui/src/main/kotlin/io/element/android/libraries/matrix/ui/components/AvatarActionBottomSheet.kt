@@ -111,7 +111,7 @@ private fun AvatarActionBottomSheetContent(
 
 @ElementPreviews
 @Composable
-fun AvatarActionBottomSheetLightPreview() {
+fun AvatarActionBottomSheetPreview() {
     ElementPreview { ContentToPreview() }
 }
 

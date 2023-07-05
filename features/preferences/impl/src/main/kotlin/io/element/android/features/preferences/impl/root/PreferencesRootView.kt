@@ -115,7 +115,7 @@ fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
 
 @LargeHeightPreview
 @Composable
-fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
+fun PreferencesRootViewPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
     ElementPreview { ContentToPreview(matrixUser) }
 }
 

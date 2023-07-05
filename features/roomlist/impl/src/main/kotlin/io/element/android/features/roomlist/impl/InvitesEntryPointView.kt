@@ -74,7 +74,7 @@ fun InvitesEntryPointView(
 
 @ElementPreviews
 @Composable
-internal fun InvitesEntryPointViewLightPreview(@PreviewParameter(InvitesStateProvider::class) state: InvitesState) {
+internal fun InvitesEntryPointViewPreview(@PreviewParameter(InvitesStateProvider::class) state: InvitesState) {
     ElementPreview { ContentToPreview(state) }
 }
 

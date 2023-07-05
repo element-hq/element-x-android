@@ -78,7 +78,7 @@ fun TimelineItemStateEventRow(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemStateEventRowLightPreview() {
+internal fun TimelineItemStateEventRowPreview() {
     ElementPreview { ContentToPreview() }
 }
 

@@ -77,7 +77,7 @@ fun MessageComposerView(
 
 @ElementPreviews
 @Composable
-internal fun MessageComposerViewLightPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) {
+internal fun MessageComposerViewPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) {
     ElementPreview { ContentToPreview(state) }
 }
 

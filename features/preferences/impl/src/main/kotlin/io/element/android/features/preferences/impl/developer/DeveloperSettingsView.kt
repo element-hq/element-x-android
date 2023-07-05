@@ -90,7 +90,7 @@ fun FeatureListContent(
 
 @ElementPreviews
 @Composable
-fun DeveloperSettingsViewLightPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) {
+fun DeveloperSettingsViewPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) {
     ElementPreview { ContentToPreview(state) }
 }
 

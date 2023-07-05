@@ -110,7 +110,7 @@ private fun LeaveRoomErrorDialog(
 
 @ElementPreviews
 @Composable
-internal fun LeaveRoomViewLightPreview(
+internal fun LeaveRoomViewPreview(
     @PreviewParameter(LeaveRoomStateProvider::class) state: LeaveRoomState
 ) {
     ElementPreview { ContentToPreview(state) }

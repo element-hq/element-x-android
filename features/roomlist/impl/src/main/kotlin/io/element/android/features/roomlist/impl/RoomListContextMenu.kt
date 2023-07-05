@@ -123,7 +123,7 @@ private fun RoomListModalBottomSheetContent(
 // Remove this preview when the issue is fixed.
 @ElementPreviews
 @Composable
-internal fun RoomListModalBottomSheetContentLightPreview() {
+internal fun RoomListModalBottomSheetContentPreview() {
     ElementPreview { ContentToPreview() }
 }
 

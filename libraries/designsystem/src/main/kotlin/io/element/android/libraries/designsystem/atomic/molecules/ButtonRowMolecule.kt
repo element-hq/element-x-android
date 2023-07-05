@@ -43,7 +43,7 @@ fun ButtonRowMolecule(
 
 @ElementPreviews
 @Composable
-internal fun ButtonRowMoleculeLightPreview() {
+internal fun ButtonRowMoleculePreview() {
     ElementPreview { ContentToPreview() }
 }
 

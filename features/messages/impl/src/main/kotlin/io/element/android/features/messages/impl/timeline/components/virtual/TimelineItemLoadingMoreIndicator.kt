@@ -46,7 +46,7 @@ internal fun TimelineLoadingMoreIndicator(modifier: Modifier = Modifier) {
 
 @ElementPreviews
 @Composable
-internal fun TimelineLoadingMoreIndicatorLightPreview() {
+internal fun TimelineLoadingMoreIndicatorPreview() {
     ElementPreview { ContentToPreview() }
 }
 

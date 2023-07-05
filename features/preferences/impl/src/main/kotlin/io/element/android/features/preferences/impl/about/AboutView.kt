@@ -50,7 +50,7 @@ fun AboutView(
 
 @ElementPreviews
 @Composable
-fun AboutViewLightPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) {
+fun AboutViewPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) {
     ElementPreview { ContentToPreview(state) }
 }
 

@@ -68,7 +68,7 @@ fun CrashDetectionContent(
 
 @ElementPreviews
 @Composable
-internal fun CrashDetectionViewLightPreview() {
+internal fun CrashDetectionViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

@@ -146,7 +146,7 @@ fun TextField(
 
 @ElementPreviews(group = PreviewGroup.TextFields)
 @Composable
-internal fun TextFieldLightPreview() {
+internal fun TextFieldPreview() {
     ElementPreview { ContentToPreview() }
 }
 

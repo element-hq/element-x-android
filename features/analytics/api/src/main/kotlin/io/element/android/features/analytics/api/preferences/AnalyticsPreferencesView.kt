@@ -81,7 +81,7 @@ fun buildAnnotatedStringWithColoredPart(
 
 @ElementPreviews
 @Composable
-fun AnalyticsPreferencesViewLightPreview(@PreviewParameter(AnalyticsPreferencesStateProvider::class) state: AnalyticsPreferencesState) {
+fun AnalyticsPreferencesViewPreview(@PreviewParameter(AnalyticsPreferencesStateProvider::class) state: AnalyticsPreferencesState) {
     ElementPreview { ContentToPreview(state) }
 }
 

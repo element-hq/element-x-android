@@ -85,7 +85,7 @@ internal fun StaticMapPlaceholder(
 
 @ElementPreviews
 @Composable
-fun StaticMapPlaceholderLightPreview(
+fun StaticMapPlaceholderPreview(
     @PreviewParameter(BooleanParameterProvider::class) values: Boolean
 ) {
     ElementPreview { ContentToPreview(values) }

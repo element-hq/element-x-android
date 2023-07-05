@@ -276,7 +276,7 @@ internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
 
 @ElementPreviews
 @Composable
-internal fun LoginPasswordViewLightPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) {
+internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) {
     ElementPreview { ContentToPreview(state) }
 }
 

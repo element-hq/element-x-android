@@ -91,7 +91,7 @@ fun OnBoardingPage(
 
 @ElementPreviews
 @Composable
-internal fun OnBoardingPageLightPreview() {
+internal fun OnBoardingPagePreview() {
     ElementPreview { ContentToPreview() }
 }
 

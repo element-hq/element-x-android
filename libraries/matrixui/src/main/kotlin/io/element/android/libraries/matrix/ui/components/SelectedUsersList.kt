@@ -131,7 +131,7 @@ fun SelectedUsersList(
 
 @ElementPreviews
 @Composable
-internal fun SelectedUsersListLightPreview() {
+internal fun SelectedUsersListPreview() {
     ElementPreview { ContentToPreview() }
 }
 

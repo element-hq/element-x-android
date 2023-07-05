@@ -56,7 +56,7 @@ internal fun TimelineItemDaySeparatorView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemDaySeparatorViewLightPreview(
+internal fun TimelineItemDaySeparatorViewPreview(
     @PreviewParameter(TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel
 ) {
     ElementPreview { ContentToPreview(model) }

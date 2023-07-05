@@ -334,7 +334,7 @@ fun CantSendMessageBanner(
 
 @ElementPreviews
 @Composable
-internal fun MessagesViewLightPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) {
+internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) {
     ElementPreview { ContentToPreview(state) }
 }
 

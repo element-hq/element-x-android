@@ -68,7 +68,7 @@ fun HeaderFooterPage(
 
 @ElementPreviews
 @Composable
-internal fun HeaderFooterPageLightPreview() {
+internal fun HeaderFooterPagePreview() {
     ElementPreview { ContentToPreview() }
 }
 

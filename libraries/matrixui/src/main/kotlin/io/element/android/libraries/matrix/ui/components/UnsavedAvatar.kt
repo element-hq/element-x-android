@@ -84,7 +84,7 @@ fun UnsavedAvatar(
 
 @ElementPreviews
 @Composable
-fun UnsavedAvatarLightPreview() {
+fun UnsavedAvatarPreview() {
     ElementPreview { ContentToPreview() }
 }
 

@@ -103,7 +103,7 @@ fun PreferenceTopAppBar(
 
 @ElementPreviews
 @Composable
-internal fun PreferenceViewLightPreview() {
+internal fun PreferenceViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

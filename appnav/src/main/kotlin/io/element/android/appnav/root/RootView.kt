@@ -69,7 +69,7 @@ fun RootView(
 
 @ElementPreviews
 @Composable
-internal fun RootLightPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) {
+internal fun RootPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) {
     ElementPreview { ContentToPreview(rootState) }
 }
 

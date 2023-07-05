@@ -66,7 +66,7 @@ fun LabelledTextField(
 
 @ElementPreviews
 @Composable
-fun LabelledTextFieldLightPreview() {
+fun LabelledTextFieldPreview() {
     ElementPreview { ContentToPreview() }
 }
 

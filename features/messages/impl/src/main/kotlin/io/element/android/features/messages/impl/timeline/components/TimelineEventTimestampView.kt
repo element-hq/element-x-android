@@ -97,7 +97,7 @@ fun TimelineEventTimestampView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineEventTimestampViewLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
+internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
     ElementPreview { ContentToPreview(event) }
 }
 

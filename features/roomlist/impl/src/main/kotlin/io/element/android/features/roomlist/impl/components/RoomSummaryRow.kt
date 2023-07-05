@@ -200,7 +200,7 @@ class PercentRectangleSizeShape(private val percent: Float) : Shape {
 
 @ElementPreviews
 @Composable
-internal fun RoomSummaryRowLightPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) {
+internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) {
     ElementPreview { ContentToPreview(data) }
 }
 

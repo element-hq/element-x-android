@@ -94,7 +94,7 @@ fun SelectedRoom(
 
 @ElementPreviews
 @Composable
-internal fun SelectedRoomLightPreview() {
+internal fun SelectedRoomPreview() {
     ElementPreview { ContentToPreview() }
 }
 
