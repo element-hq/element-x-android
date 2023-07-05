@@ -38,6 +38,7 @@ internal fun aMessageEvent(
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
     inReplyTo: InReplyTo? = null,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
+    sendState: EventSendState = EventSendState.Sent(AN_EVENT_ID),
 ) = TimelineItem.Event(
     id = eventId?.value.orEmpty(),
     eventId = eventId,
@@ -48,7 +49,7 @@ internal fun aMessageEvent(
     sentTime = "",
     isMine = isMine,
     reactionsState = aTimelineItemReactions(count = 0),
-    sendState = EventSendState.Sent(AN_EVENT_ID),
+    sendState = sendState,
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,
 )

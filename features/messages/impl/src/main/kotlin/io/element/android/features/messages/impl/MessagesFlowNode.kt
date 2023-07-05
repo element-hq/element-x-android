@@ -90,7 +90,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data class LocationViewer(val location: Location, val description: String?) : NavTarget
 
         @Parcelize
-        data class EventDebugInfo(val eventId: EventId, val debugInfo: TimelineItemDebugInfo) : NavTarget
+        data class EventDebugInfo(val eventId: EventId?, val debugInfo: TimelineItemDebugInfo) : NavTarget
 
         @Parcelize
         data class ForwardEvent(val eventId: EventId) : NavTarget
@@ -124,7 +124,7 @@ class MessagesFlowNode @AssistedInject constructor(
                         callback?.onUserDataClicked(userId)
                     }
 
-                    override fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo) {
+                    override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 

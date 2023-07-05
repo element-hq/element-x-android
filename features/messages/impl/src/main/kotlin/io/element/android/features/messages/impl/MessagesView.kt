@@ -156,6 +156,9 @@ fun MessagesView(
                 },
                 onReactionClicked = ::onEmojiReactionClicked,
                 onSendLocationClicked = onSendLocationClicked,
+                onSwipeToReply = { targetEvent ->
+                    state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
+                },
             )
         },
         snackbarHost = {
@@ -241,6 +244,7 @@ fun MessagesViewContent(
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    onSwipeToReply: (TimelineItem.Event) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -258,6 +262,7 @@ fun MessagesViewContent(
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = onTimestampClicked,
                 onReactionClicked = onReactionClicked,
+                onSwipeToReply = onSwipeToReply,
             )
         }
         if (state.userHasPermissionToSendMessage) {

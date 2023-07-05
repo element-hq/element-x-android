@@ -179,14 +179,16 @@ private fun SheetContent(
                         Divider()
                     }
                 }
-                item {
-                    EmojiReactionsRow(
-                        highlightedEmojis = target.event.reactionsState.highlightedKeys,
-                        onEmojiReactionClicked = onEmojiReactionClicked,
-                        onCustomReactionClicked = onCustomReactionClicked,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                    Divider()
+                if (state.displayEmojiReactions) {
+                    item {
+                        EmojiReactionsRow(
+                            highlightedEmojis = target.event.reactionsState.highlightedKeys,
+                            onEmojiReactionClicked = onEmojiReactionClicked,
+                            onCustomReactionClicked = onCustomReactionClicked,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Divider()
+                    }
                 }
                 items(
                     items = actions,
