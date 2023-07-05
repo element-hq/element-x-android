@@ -59,7 +59,7 @@ fun TimelineItemLocationView(
 
 @Preview
 @Composable
-internal fun TimelineItemLocationViewPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) =
+internal fun TimelineItemLocationViewLightPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) =
     ElementPreviewLight { ContentToPreview(content) }
 
 @Preview
