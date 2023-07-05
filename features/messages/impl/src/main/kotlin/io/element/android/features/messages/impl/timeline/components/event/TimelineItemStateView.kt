@@ -20,12 +20,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -42,13 +42,11 @@ fun TimelineItemStateView(
     )
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun TimelineItemStateViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun TimelineItemStateViewLightPreview() = ElementPreviewLight { ContentToPreview() }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun TimelineItemStateViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

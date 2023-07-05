@@ -44,7 +44,5 @@ class TypographyTestPreview(
         )
     }
 
-    override val name: String = showkaseBrowserTypography.typographyName
-
     override fun toString(): String = "Typo_${showkaseBrowserTypography.typographyGroup}_${showkaseBrowserTypography.typographyName}"
 }

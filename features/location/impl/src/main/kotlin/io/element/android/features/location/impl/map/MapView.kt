@@ -35,7 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.mapbox.mapboxsdk.Mapbox
@@ -50,9 +50,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_BOTTOM
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.buildTileServerUrl
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -258,13 +258,12 @@ private suspend inline fun MapView.awaitMap(): MapboxMap =
         }
     }
 
-@ElementPreviews
+@Preview
 @Composable
-fun MapViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
+fun MapViewLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
 
-@ElementPreviews
+@Preview
 @Composable
 fun MapViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

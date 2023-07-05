@@ -36,10 +36,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
@@ -129,13 +129,11 @@ fun SelectedUsersList(
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun SelectedUsersListLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun SelectedUsersListLightPreview() = ElementPreviewLight { ContentToPreview() }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun SelectedUsersListDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

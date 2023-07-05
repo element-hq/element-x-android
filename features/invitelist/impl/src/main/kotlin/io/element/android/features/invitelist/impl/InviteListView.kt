@@ -32,7 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.invitelist.impl.components.InviteSummaryRow
@@ -40,8 +40,8 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -167,13 +167,12 @@ fun InviteListContent(
     )
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun InviteListViewLightPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) {
-    ElementPreview { ContentToPreview(state) }
-}
+internal fun InviteListViewLightPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun InviteListViewDarkPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) =
     ElementPreviewDark { ContentToPreview(state) }

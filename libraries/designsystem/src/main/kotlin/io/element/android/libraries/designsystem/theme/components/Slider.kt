@@ -26,8 +26,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import io.element.android.libraries.designsystem.preview.ElementPreviews
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
@@ -56,11 +56,9 @@ fun Slider(
     )
 }
 
-@ElementPreviews(group = PreviewGroup.Sliders)
+@Preview(group = PreviewGroup.Sliders)
 @Composable
-internal fun SlidersPreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun SlidersPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
