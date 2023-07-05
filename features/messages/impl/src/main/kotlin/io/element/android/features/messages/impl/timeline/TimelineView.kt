@@ -170,10 +170,6 @@ fun TimelineItemRow(
                 onClick(timelineItem)
             }
 
-            fun onSwipeToReply() {
-                onSwipeToReply(timelineItem)
-            }
-
             fun onLongClick() {
                 onLongClick(timelineItem)
             }
@@ -197,7 +193,7 @@ fun TimelineItemRow(
                     inReplyToClick = inReplyToClick,
                     onReactionClick = onReactionClick,
                     onTimestampClicked = onTimestampClicked,
-                    onSwipeToReply = ::onSwipeToReply,
+                    onSwipeToReply = { onSwipeToReply(timelineItem) },
                     modifier = modifier,
                 )
             }
