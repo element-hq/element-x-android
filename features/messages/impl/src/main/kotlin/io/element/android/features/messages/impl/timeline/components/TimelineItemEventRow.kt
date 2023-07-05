@@ -131,7 +131,7 @@ fun TimelineItemEventRow(
         SwipeToDismiss(
             state = dismissState,
             background = {
-                ReplySwipeIndicator(dismissState.toSwipeProgress())
+                ReplySwipeIndicator({ dismissState.toSwipeProgress() })
             },
             directions = setOf(DismissDirection.StartToEnd),
             dismissContent = {
