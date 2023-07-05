@@ -35,8 +35,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.coroutines.CoroutineScope
@@ -83,8 +83,9 @@ fun SheetState.hide(coroutineScope: CoroutineScope, then: suspend () -> Unit) {
 // This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
 @Preview(group = PreviewGroup.BottomSheets)
 @Composable
-internal fun ModalBottomSheetLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun ModalBottomSheetLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 // This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
 @Preview(group = PreviewGroup.BottomSheets)

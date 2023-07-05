@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.sp
 import io.element.android.features.location.impl.map.MapView
 import io.element.android.features.location.impl.map.rememberMapState
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -132,8 +132,9 @@ fun SendLocationView(
 
 @Preview
 @Composable
-internal fun SendLocationViewLightPreview(@PreviewParameter(SendLocationStateProvider::class) state: SendLocationState) =
-    ElementPreviewLight { ContentToPreview(state) }
+internal fun SendLocationViewLightPreview(@PreviewParameter(SendLocationStateProvider::class) state: SendLocationState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
 @Preview
 @Composable

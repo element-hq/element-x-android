@@ -50,9 +50,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_BOTTOM
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.buildTileServerUrl
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -260,8 +260,9 @@ private suspend inline fun MapView.awaitMap(): MapboxMap =
 
 @Preview
 @Composable
-fun MapViewLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+fun MapViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

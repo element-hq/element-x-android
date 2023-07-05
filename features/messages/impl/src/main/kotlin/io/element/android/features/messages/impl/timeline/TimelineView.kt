@@ -63,8 +63,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
@@ -304,7 +304,9 @@ internal fun BoxScope.TimelineScrollHelper(
 @Composable
 fun TimelineViewLightPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
-) = ElementPreviewLight { ContentToPreview(content) }
+) {
+    ElementPreview { ContentToPreview(content) }
+}
 
 @Preview
 @Composable

@@ -25,8 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 
 @Composable
@@ -46,8 +46,9 @@ internal fun TimelineLoadingMoreIndicator(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-internal fun TimelineLoadingMoreIndicatorLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun TimelineLoadingMoreIndicatorLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

@@ -33,8 +33,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 
@@ -98,8 +98,9 @@ private fun RoundedIconAtomSize.toIconSize(): Dp {
 
 @Preview
 @Composable
-internal fun RoundedIconAtomLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun RoundedIconAtomLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

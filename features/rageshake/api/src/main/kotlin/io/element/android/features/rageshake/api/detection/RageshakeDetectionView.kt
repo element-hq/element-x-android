@@ -28,8 +28,8 @@ import io.element.android.features.rageshake.api.screenshot.ImageResult
 import io.element.android.features.rageshake.api.screenshot.screenshot
 import io.element.android.libraries.androidutils.hardware.vibrate
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -102,7 +102,9 @@ fun RageshakeDialogContent(
 
 @Preview
 @Composable
-internal fun RageshakeDialogContentLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RageshakeDialogContentLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

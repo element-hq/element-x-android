@@ -24,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -44,7 +44,9 @@ fun TimelineItemStateView(
 
 @Preview
 @Composable
-internal fun TimelineItemStateViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun TimelineItemStateViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

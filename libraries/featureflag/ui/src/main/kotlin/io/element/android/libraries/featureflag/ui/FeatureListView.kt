@@ -21,8 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCheckbox
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
 import kotlinx.collections.immutable.ImmutableList
@@ -62,8 +62,9 @@ fun FeaturePreferenceView(
 
 @Preview
 @Composable
-internal fun FeatureListViewLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun FeatureListViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

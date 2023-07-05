@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 /**
  * Vertical ruler is a debug composable that displays a vertical ruler.
@@ -67,8 +67,9 @@ private fun VerticalRulerItem(width: Dp, color: Color) {
 
 @Preview
 @Composable
-internal fun VerticalRulerLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun VerticalRulerLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

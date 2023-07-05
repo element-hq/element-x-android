@@ -46,8 +46,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -112,7 +112,7 @@ private fun StatusBarPaddingSpacer(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 internal fun PreviewLightConnectivityIndicatorView() {
-    ElementPreviewLight {
+    ElementPreview {
         ConnectivityIndicatorView(isOnline = false)
     }
 }

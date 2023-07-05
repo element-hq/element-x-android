@@ -38,8 +38,8 @@ import coil.request.ImageRequest
 import io.element.android.features.location.api.internal.AttributionPlacement
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.buildStaticMapsApiUrl
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
@@ -129,8 +129,9 @@ fun StaticMapView(
 
 @Preview
 @Composable
-fun StaticMapViewLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+fun StaticMapViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

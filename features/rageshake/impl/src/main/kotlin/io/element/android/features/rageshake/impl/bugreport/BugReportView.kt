@@ -44,8 +44,8 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -176,7 +176,9 @@ fun BugReportView(
 
 @Preview
 @Composable
-fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewLight { ContentToPreview(state) }
+fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
 @Preview
 @Composable

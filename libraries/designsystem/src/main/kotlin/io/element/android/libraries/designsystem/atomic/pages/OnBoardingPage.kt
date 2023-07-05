@@ -31,8 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
@@ -91,8 +91,9 @@ fun OnBoardingPage(
 
 @Preview
 @Composable
-internal fun OnBoardingPageLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun OnBoardingPageLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.location.api.StaticMapView
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContentProvider
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun TimelineItemLocationView(
@@ -47,8 +47,9 @@ fun TimelineItemLocationView(
 
 @Preview
 @Composable
-internal fun TimelineItemLocationViewLightPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) =
-    ElementPreviewLight { ContentToPreview(content) }
+internal fun TimelineItemLocationViewLightPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) {
+    ElementPreview { ContentToPreview(content) }
+}
 
 @Preview
 @Composable

@@ -34,8 +34,8 @@ import io.element.android.features.login.impl.oidc.OidcUrlParser
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 
 @Composable
@@ -100,8 +100,9 @@ fun OidcView(
 
 @Preview
 @Composable
-fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) =
-    ElementPreviewLight { ContentToPreview(state) }
+fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
 @Preview
 @Composable

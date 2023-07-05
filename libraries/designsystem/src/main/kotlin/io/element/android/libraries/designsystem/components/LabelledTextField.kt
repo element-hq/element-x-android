@@ -26,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 
@@ -66,7 +66,9 @@ fun LabelledTextField(
 
 @Preview
 @Composable
-fun LabelledTextFieldLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun LabelledTextFieldLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

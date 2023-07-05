@@ -68,8 +68,8 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -373,8 +373,9 @@ private fun EmojiButton(
 
 @Preview
 @Composable
-fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
-    ElementPreviewLight { ContentToPreview(state) }
+fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
 @Preview
 @Composable

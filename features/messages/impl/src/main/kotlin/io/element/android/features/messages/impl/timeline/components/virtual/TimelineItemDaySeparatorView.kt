@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModelProvider
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -58,8 +58,9 @@ internal fun TimelineItemDaySeparatorView(
 @Composable
 internal fun TimelineItemDaySeparatorViewLightPreview(
     @PreviewParameter(TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel
-) =
-    ElementPreviewLight { ContentToPreview(model) }
+) {
+    ElementPreview { ContentToPreview(model) }
+}
 
 @Preview
 @Composable

@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialogContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +59,7 @@ internal fun TimePickerHorizontalPreview() {
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun TimePickerVerticalPreviewLight() {
-    ElementPreviewLight {
+    ElementPreview {
         AlertDialogContent(
             buttons = { /*TODO*/ },
             icon = { /*TODO*/ },

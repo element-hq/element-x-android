@@ -34,8 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.roomListPlaceholder
 import io.element.android.libraries.theme.ElementTheme
 
@@ -90,8 +90,9 @@ internal fun RoomSummaryPlaceholderRow(
 
 @Preview
 @Composable
-internal fun RoomSummaryPlaceholderRowLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun RoomSummaryPlaceholderRowLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.theme.LinkColor
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -81,8 +81,9 @@ fun buildAnnotatedStringWithColoredPart(
 
 @Preview
 @Composable
-fun AnalyticsPreferencesViewLightPreview(@PreviewParameter(AnalyticsPreferencesStateProvider::class) state: AnalyticsPreferencesState) =
-    ElementPreviewLight { ContentToPreview(state) }
+fun AnalyticsPreferencesViewLightPreview(@PreviewParameter(AnalyticsPreferencesStateProvider::class) state: AnalyticsPreferencesState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
 @Preview
 @Composable

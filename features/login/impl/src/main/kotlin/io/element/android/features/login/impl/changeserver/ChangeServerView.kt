@@ -26,8 +26,8 @@ import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun ChangeServerView(
@@ -71,8 +71,9 @@ fun ChangeServerView(
 
 @Preview
 @Composable
-fun ChangeServerViewLightPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) =
-    ElementPreviewLight { ContentToPreview(state) }
+fun ChangeServerViewLightPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
 @Preview
 @Composable

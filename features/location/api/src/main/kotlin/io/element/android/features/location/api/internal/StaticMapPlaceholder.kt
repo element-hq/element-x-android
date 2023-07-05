@@ -34,8 +34,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.features.location.api.R
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -87,7 +87,9 @@ internal fun StaticMapPlaceholder(
 @Composable
 fun StaticMapPlaceholderLightPreview(
     @PreviewParameter(BooleanParameterProvider::class) values: Boolean
-) = ElementPreviewLight { ContentToPreview(values) }
+) {
+    ElementPreview { ContentToPreview(values) }
+}
 
 @Preview
 @Composable

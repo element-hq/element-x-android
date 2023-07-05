@@ -63,8 +63,8 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -431,8 +431,9 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready) =
 
 @Preview
 @Composable
-internal fun TimelineItemEventRowLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun TimelineItemEventRowLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable
@@ -480,8 +481,9 @@ private fun ContentToPreview() {
 
 @Preview
 @Composable
-internal fun TimelineItemEventRowWithReplyLightPreview() =
-    ElementPreviewLight { ContentToPreviewWithReply() }
+internal fun TimelineItemEventRowWithReplyLightPreview() {
+    ElementPreview { ContentToPreviewWithReply() }
+}
 
 @Preview
 @Composable
@@ -550,8 +552,9 @@ private fun aInReplyToReady(
 
 @Preview
 @Composable
-internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewLight { ContentTimestampToPreview(event) }
+internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
+    ElementPreview { ContentTimestampToPreview(event) }
+}
 
 @Preview
 @Composable

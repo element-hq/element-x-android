@@ -26,8 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 
@@ -52,8 +52,9 @@ fun PinIcon(
 
 @Preview
 @Composable
-fun PinIconLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+fun PinIconLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

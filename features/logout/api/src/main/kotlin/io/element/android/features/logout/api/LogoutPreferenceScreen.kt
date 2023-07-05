@@ -28,8 +28,8 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun LogoutPreferenceView(
@@ -88,7 +88,9 @@ fun LogoutPreferenceContent(
 
 @Preview
 @Composable
-internal fun LogoutPreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun LogoutPreferenceViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

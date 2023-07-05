@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.roomListPlaceholder
 import io.element.android.libraries.theme.ElementTheme
 
@@ -52,8 +52,9 @@ fun PlaceholderAtom(
 
 @Preview
 @Composable
-internal fun PlaceholderAtomLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun PlaceholderAtomLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

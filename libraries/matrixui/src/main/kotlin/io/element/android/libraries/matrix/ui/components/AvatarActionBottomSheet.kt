@@ -35,8 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -111,8 +111,9 @@ private fun AvatarActionBottomSheetContent(
 
 @Preview
 @Composable
-fun AvatarActionBottomSheetLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+fun AvatarActionBottomSheetLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

@@ -33,17 +33,6 @@ import io.element.android.libraries.theme.ElementTheme
 annotation class ElementPreviews
 
 @Composable
-fun ElementPreviewLight(
-    showBackground: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    ElementPreview(
-        showBackground = showBackground,
-        content = content,
-    )
-}
-
-@Composable
 fun ElementPreviewDark(
     showBackground: Boolean = true,
     content: @Composable () -> Unit

@@ -36,8 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -99,7 +99,7 @@ internal fun RequestVerificationHeader(
 @Preview
 @Composable
 internal fun PreviewRequestVerificationHeaderLight() {
-    ElementPreviewLight {
+    ElementPreview {
         RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
     }
 }

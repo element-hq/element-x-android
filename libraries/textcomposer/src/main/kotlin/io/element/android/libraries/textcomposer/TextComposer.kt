@@ -73,8 +73,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.modifiers.applyIf
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -416,7 +416,9 @@ private fun BoxScope.SendButton(
 
 @Preview
 @Composable
-internal fun TextComposerSimpleLightPreview() = ElementPreviewLight { SimpleContentToPreview() }
+internal fun TextComposerSimpleLightPreview() {
+    ElementPreview { SimpleContentToPreview() }
+}
 
 @Preview
 @Composable
@@ -424,7 +426,9 @@ internal fun TextComposerSimpleDarkPreview() = ElementPreviewDark { SimpleConten
 
 @Preview
 @Composable
-internal fun TextComposerEditLightPreview() = ElementPreviewLight { EditContentToPreview() }
+internal fun TextComposerEditLightPreview() {
+    ElementPreview { EditContentToPreview() }
+}
 
 @Preview
 @Composable
@@ -432,7 +436,9 @@ internal fun TextComposerEditDarkPreview() = ElementPreviewDark { EditContentToP
 
 @Preview
 @Composable
-internal fun TextComposerReplyLightPreview() = ElementPreviewLight { ReplyContentToPreview() }
+internal fun TextComposerReplyLightPreview() {
+    ElementPreview { ReplyContentToPreview() }
+}
 
 @Preview
 @Composable

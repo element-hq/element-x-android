@@ -36,8 +36,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.util.defaultTimelineContentPadding
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun TimelineItemStateEventRow(
@@ -78,8 +78,9 @@ fun TimelineItemStateEventRow(
 
 @Preview
 @Composable
-internal fun TimelineItemStateEventRowLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun TimelineItemStateEventRowLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable

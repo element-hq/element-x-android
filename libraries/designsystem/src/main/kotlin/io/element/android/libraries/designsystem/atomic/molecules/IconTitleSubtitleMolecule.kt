@@ -33,8 +33,8 @@ import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
@@ -87,8 +87,9 @@ fun IconTitleSubtitleMolecule(
 
 @Preview
 @Composable
-internal fun IconTitleSubtitleMoleculeLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun IconTitleSubtitleMoleculeLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Preview
 @Composable
