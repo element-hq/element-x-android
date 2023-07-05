@@ -48,7 +48,7 @@ fun Checkbox(
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun CheckboxesPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
+internal fun CheckboxesPreview() = ElementThemedPreview() { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

@@ -48,7 +48,7 @@ fun RadioButton(
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
+internal fun RadioButtonPreview() = ElementThemedPreview() { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

@@ -69,7 +69,7 @@ fun CircularProgressIndicator(
 
 @Preview(group = PreviewGroup.Progress)
 @Composable
-internal fun CircularProgressIndicatorPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
+internal fun CircularProgressIndicatorPreview() = ElementThemedPreview() { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

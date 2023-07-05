@@ -17,22 +17,11 @@
 package io.element.android.libraries.designsystem.preview
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * Generates 2 previews of the composable it is applied to: day and night mode.
@@ -49,9 +38,8 @@ fun ElementPreviewLight(
     content: @Composable () -> Unit
 ) {
     ElementPreview(
-        darkTheme = false,
         showBackground = showBackground,
-        content = content
+        content = content,
     )
 }
 
@@ -61,9 +49,8 @@ fun ElementPreviewDark(
     content: @Composable () -> Unit
 ) {
     ElementPreview(
-        darkTheme = true,
         showBackground = showBackground,
-        content = content
+        content = content,
     )
 }
 
@@ -71,42 +58,12 @@ fun ElementPreviewDark(
 @Suppress("ModifierMissing")
 fun ElementThemedPreview(
     showBackground: Boolean = true,
-    vertical: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    Box(modifier = Modifier
-        .background(Color.Gray)
-        .padding(4.dp)) {
-        if (vertical) {
-            Column {
-                ElementPreview(
-                    darkTheme = false,
-                    showBackground = showBackground,
-                    content = content,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                ElementPreview(
-                    darkTheme = true,
-                    showBackground = showBackground,
-                    content = content
-                )
-            }
-        } else {
-            Row {
-                ElementPreview(
-                    darkTheme = false,
-                    showBackground = showBackground,
-                    content = content,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                ElementPreview(
-                    darkTheme = true,
-                    showBackground = showBackground,
-                    content = content
-                )
-            }
-        }
-    }
+    ElementPreview(
+        showBackground = showBackground,
+        content = content,
+    )
 }
 
 @Composable
