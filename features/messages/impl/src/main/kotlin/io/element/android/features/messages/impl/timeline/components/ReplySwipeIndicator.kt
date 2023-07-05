@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
  * A swipe indicator that appears when swiping to reply to a message.
  *
  * @param swipeProgress the progress of the swipe, between 0 and X. When swipeProgress >= 1 the swipe will be detected.
+ * @param modifier the modifier to apply to this Composable root.
  */
 @Composable
 fun RowScope.ReplySwipeIndicator(
