@@ -19,49 +19,47 @@ package io.element.android.features.location.impl.show
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.ui.platform.LocalContext
+import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.location.api.Location
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
-import kotlinx.coroutines.withContext
+import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class AndroidLocationActions @Inject constructor(
-    private val coroutineDispatchers: CoroutineDispatchers
+    @ApplicationContext private val appContext: Context
 ) : LocationActions {
 
     private var activityContext: Context? = null
 
-    @Composable
-    override fun Configure() {
-        val context = LocalContext.current
-        return DisposableEffect(Unit) {
-            activityContext = context
-            onDispose {
-                activityContext = null
-            }
-        }
-    }
-
-    override suspend fun share(location: Location, label: String?) {
+    override fun share(location: Location, label: String?) {
         runCatching {
-            // Ref: https://developer.android.com/guide/components/intents-common#ViewMap
-            val suffix = if (label != null) "(${Uri.encode(label)})" else ""
-            val uri = Uri.parse("geo:0,0?q=${location.lat},${location.lon}$suffix")
+            val uri = Uri.parse(buildUrl(location, label))
             val showMapsIntent = Intent(Intent.ACTION_VIEW).setData(uri)
             val chooserIntent = Intent.createChooser(showMapsIntent, null)
-            withContext(coroutineDispatchers.main) {
-                activityContext!!.startActivity(chooserIntent)
-            }
+            chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            appContext.startActivity(chooserIntent)
         }.onSuccess {
             Timber.v("Open location succeed")
         }.onFailure {
             Timber.e(it, "Open location failed")
         }
+    }
+}
+
+@VisibleForTesting
+internal fun buildUrl(
+    location: Location,
+    label: String?,
+    urlEncoder: (String) -> String = Uri::encode
+): String {
+    // Ref: https://developer.android.com/guide/components/intents-common#ViewMap
+    val base = "geo:0,0?q=%.6f,%.6f".format(location.lat, location.lon)
+    return if (label == null) {
+        base
+    } else {
+        "%s (%s)".format(base, urlEncoder(label))
     }
 }

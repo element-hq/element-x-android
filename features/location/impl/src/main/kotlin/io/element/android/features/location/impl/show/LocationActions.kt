@@ -16,14 +16,8 @@
 
 package io.element.android.features.location.impl.show
 
-import androidx.compose.runtime.Composable
 import io.element.android.features.location.api.Location
 
 interface LocationActions {
-
-    @Composable
-    fun Configure()
-
-    suspend fun share(location: Location, label: String?)
-
+    fun share(location: Location, label: String?)
 }

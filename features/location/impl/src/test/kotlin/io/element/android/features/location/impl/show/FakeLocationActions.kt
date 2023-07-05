@@ -16,13 +16,9 @@
 
 package io.element.android.features.location.impl.show
 
-import androidx.compose.runtime.Composable
 import io.element.android.features.location.api.Location
 
 class FakeLocationActions : LocationActions {
-
-    var configured = false
-        private set
 
     var sharedLocation: Location? = null
         private set
@@ -30,12 +26,7 @@ class FakeLocationActions : LocationActions {
     var sharedLabel: String? = null
         private set
 
-    @Composable
-    override fun Configure() {
-        configured = true
-    }
-
-    override suspend fun share(location: Location, label: String?) {
+    override fun share(location: Location, label: String?) {
         sharedLocation = location
         sharedLabel = label
     }
