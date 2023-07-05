@@ -32,11 +32,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.coroutines.CoroutineScope
@@ -81,6 +80,7 @@ fun SheetState.hide(coroutineScope: CoroutineScope, then: suspend () -> Unit) {
 }
 
 // This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
+@OptIn(ExperimentalMaterial3Api::class)
 @ElementPreviews(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetLightPreview() {

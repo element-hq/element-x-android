@@ -24,8 +24,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +50,7 @@ fun CenterAlignedTopAppBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @ElementPreviews(group = PreviewGroup.AppBars)
 @Composable
 internal fun CenterAlignedTopAppBarPreview() {
