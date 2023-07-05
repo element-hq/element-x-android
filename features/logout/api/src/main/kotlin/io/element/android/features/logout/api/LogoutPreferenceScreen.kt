@@ -23,13 +23,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun LogoutPreferenceView(
@@ -86,11 +86,13 @@ fun LogoutPreferenceContent(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun LogoutPreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun LogoutPreferenceViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun LogoutPreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

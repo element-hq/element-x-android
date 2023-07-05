@@ -21,14 +21,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.userlist.UserListEvents
 import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.features.createroom.impl.userlist.UserListStateProvider
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 
@@ -77,12 +77,13 @@ fun UserListView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun UserListViewLightPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) =
-    ElementPreviewLight { ContentToPreview(state) }
+internal fun UserListViewLightPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun UserListViewDarkPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) =
     ElementPreviewDark { ContentToPreview(state) }

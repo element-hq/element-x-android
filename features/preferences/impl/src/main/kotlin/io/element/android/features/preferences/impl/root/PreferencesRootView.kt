@@ -34,8 +34,8 @@ import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -115,8 +115,9 @@ fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
 
 @LargeHeightPreview
 @Composable
-fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
-    ElementPreviewLight { ContentToPreview(matrixUser) }
+fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
+    ElementPreview { ContentToPreview(matrixUser) }
+}
 
 @LargeHeightPreview
 @Composable

@@ -30,10 +30,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -93,12 +93,14 @@ fun ButtonWithProgress(
     }
 }
 
-@Preview(group = PreviewGroup.Buttons)
+@ElementPreviews(group = PreviewGroup.Buttons)
 @Composable
-internal fun ButtonWithProgressPreview() = ElementThemedPreview {
-    ButtonWithProgress(
-        text = "Button with progress",
-        onClick = {},
-        showProgress = true,
-    )
+internal fun ButtonWithProgressPreview() {
+    ElementPreview {
+        ButtonWithProgress(
+            text = "Button with progress",
+            onClick = {},
+            showProgress = true,
+        )
+    }
 }

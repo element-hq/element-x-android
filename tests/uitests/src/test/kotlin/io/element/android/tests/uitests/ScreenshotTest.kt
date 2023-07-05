@@ -38,6 +38,7 @@ import com.airbnb.android.showkase.models.Showkase
 import com.android.ide.common.rendering.api.SessionParams
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.theme.ElementTheme
 import org.junit.Rule
 import org.junit.Test
@@ -59,7 +60,11 @@ class ScreenshotTest {
     object PreviewProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): List<TestPreview> {
             val metadata = Showkase.getMetadata()
-            val components = metadata.componentList.map(::ComponentTestPreview)
+            val components = metadata.componentList.filterNot {
+                // skip all previews that have "dark" in the name because
+                // all previews get a dark mode screenshot automatically now
+                it.componentKey.contains("dark", true)
+            }.map(::ComponentTestPreview)
             val colors = metadata.colorList.map(::ColorTestPreview)
             val typography = metadata.typographyList.map(::TypographyTestPreview)
 
@@ -95,6 +100,10 @@ class ScreenshotTest {
                 ),
                 LocalConfiguration provides Configuration().apply {
                     setLocales(LocaleList(localeStr.toLocale()))
+                    // Dark mode previews have name "N" so their component is subfixed with "- N"
+                    if (componentTestPreview.name.contains("- $NIGHT_MODE_NAME")){
+                        uiMode = Configuration.UI_MODE_NIGHT_YES
+                    }
                 },
                 // Needed so that UI that uses it don't crash during screenshot tests
                 LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {

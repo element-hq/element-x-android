@@ -34,13 +34,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -138,18 +138,19 @@ fun CheckableUnresolvedUserRow(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun UnresolvedUserRowPreview() =
-    ElementThemedPreview {
+internal fun UnresolvedUserRowPreview() {
+    ElementPreview {
         val matrixUser = aMatrixUser()
         UnresolvedUserRow(matrixUser.getAvatarData(size = AvatarSize.UserListItem), matrixUser.userId.value)
     }
+}
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun CheckableUnresolvedUserRowPreview() =
-    ElementThemedPreview {
+internal fun CheckableUnresolvedUserRowPreview() {
+    ElementPreview {
         val matrixUser = aMatrixUser()
         Column {
             CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
@@ -161,3 +162,4 @@ internal fun CheckableUnresolvedUserRowPreview() =
             CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
         }
     }
+}

@@ -51,7 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
@@ -63,8 +63,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
@@ -300,13 +300,15 @@ internal fun BoxScope.TimelineScrollHelper(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun TimelineViewLightPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
-) = ElementPreviewLight { ContentToPreview(content) }
+) {
+    ElementPreview { ContentToPreview(content) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 fun TimelineViewDarkPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent

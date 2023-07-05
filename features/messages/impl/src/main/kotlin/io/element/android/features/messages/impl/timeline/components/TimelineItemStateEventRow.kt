@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
@@ -36,8 +36,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.util.defaultTimelineContentPadding
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun TimelineItemStateEventRow(
@@ -76,12 +76,13 @@ fun TimelineItemStateEventRow(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun TimelineItemStateEventRowLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun TimelineItemStateEventRowLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemStateEventRowDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

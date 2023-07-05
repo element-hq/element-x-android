@@ -24,8 +24,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,10 +50,11 @@ fun TopAppBar(
     )
 }
 
-@Preview(group = PreviewGroup.AppBars)
+@ElementPreviews(group = PreviewGroup.AppBars)
 @Composable
-internal fun TopAppBarPreview() =
-    ElementThemedPreview { ContentToPreview() }
+internal fun TopAppBarPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
