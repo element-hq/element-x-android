@@ -41,7 +41,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -157,13 +157,13 @@ fun Modifier.onTabOrEnterKeyFocusNext(focusManager: FocusManager): Modifier = on
     }
 }
 
-@Preview(group = PreviewGroup.TextFields)
+@ElementPreviews(group = PreviewGroup.TextFields)
 @Composable
 internal fun OutlinedTextFieldsPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview(group = PreviewGroup.TextFields)
+@ElementPreviews(group = PreviewGroup.TextFields)
 @Composable
 internal fun OutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

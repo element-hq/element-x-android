@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -108,7 +108,7 @@ private fun LeaveRoomErrorDialog(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun LeaveRoomViewLightPreview(
     @PreviewParameter(LeaveRoomStateProvider::class) state: LeaveRoomState
@@ -116,7 +116,7 @@ internal fun LeaveRoomViewLightPreview(
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun LeaveRoomViewDarkPreview(
     @PreviewParameter(LeaveRoomStateProvider::class) state: LeaveRoomState

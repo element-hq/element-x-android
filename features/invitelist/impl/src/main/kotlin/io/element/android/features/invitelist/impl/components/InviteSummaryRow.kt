@@ -38,7 +38,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -196,13 +196,13 @@ private fun SenderRow(sender: InviteSender) {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun InviteSummaryRowLightPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) {
     ElementPreview { ContentToPreview(data) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun InviteSummaryRowDarkPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) =
     ElementPreviewDark { ContentToPreview(data) }

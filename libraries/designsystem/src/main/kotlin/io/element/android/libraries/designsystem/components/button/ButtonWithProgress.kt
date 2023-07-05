@@ -30,7 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -93,7 +93,7 @@ fun ButtonWithProgress(
     }
 }
 
-@Preview(group = PreviewGroup.Buttons)
+@ElementPreviews(group = PreviewGroup.Buttons)
 @Composable
 internal fun ButtonWithProgressPreview() {
     ElementPreview {

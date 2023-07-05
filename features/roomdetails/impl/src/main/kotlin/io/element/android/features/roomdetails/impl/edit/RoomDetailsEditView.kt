@@ -53,7 +53,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -286,13 +286,13 @@ private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
         })
     }
 
-@Preview
+@ElementPreviews
 @Composable
 fun RoomDetailsEditViewLightPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun RoomDetailsEditViewDarkPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) =
     ElementPreviewDark { ContentToPreview(state) }

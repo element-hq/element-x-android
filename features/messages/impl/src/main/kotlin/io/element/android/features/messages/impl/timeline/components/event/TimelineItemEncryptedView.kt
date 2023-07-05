@@ -21,7 +21,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -43,13 +43,13 @@ fun TimelineItemEncryptedView(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemEncryptedViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemEncryptedViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

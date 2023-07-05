@@ -26,7 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
@@ -141,13 +141,13 @@ fun ConfirmAccountProviderView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun ConfirmAccountProviderViewLightPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun ConfirmAccountProviderViewDarkPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) =
     ElementPreviewDark { ContentToPreview(state) }

@@ -31,7 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,13 +79,13 @@ fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Mo
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun MessagesReactionButtonLightPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) {
     ElementPreview { ContentToPreview(reaction) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun MessagesReactionButtonDarkPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) =
     ElementPreviewDark { ContentToPreview(reaction) }

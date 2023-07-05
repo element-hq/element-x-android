@@ -34,7 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -138,7 +138,7 @@ fun CheckableUnresolvedUserRow(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun UnresolvedUserRowPreview() {
     ElementPreview {
@@ -147,7 +147,7 @@ internal fun UnresolvedUserRowPreview() {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun CheckableUnresolvedUserRowPreview() {
     ElementPreview {

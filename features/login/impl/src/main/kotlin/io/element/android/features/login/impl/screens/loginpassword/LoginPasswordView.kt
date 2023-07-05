@@ -52,7 +52,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
@@ -274,13 +274,13 @@ internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun LoginPasswordViewLightPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun LoginPasswordViewDarkPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) =
     ElementPreviewDark { ContentToPreview(state) }

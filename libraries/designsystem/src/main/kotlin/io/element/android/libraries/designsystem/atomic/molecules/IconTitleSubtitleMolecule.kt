@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.R
@@ -85,13 +85,13 @@ fun IconTitleSubtitleMolecule(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun IconTitleSubtitleMoleculeLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun IconTitleSubtitleMoleculeDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

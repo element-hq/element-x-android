@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -101,13 +101,13 @@ private fun MatrixUserHeaderContent(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun MatrixUserHeaderLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
     ElementPreview { ContentToPreview(matrixUser) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun MatrixUserHeaderDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }

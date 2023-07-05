@@ -19,7 +19,7 @@ package io.element.android.features.preferences.impl.analytics
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesView
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
@@ -44,13 +44,13 @@ fun AnalyticsSettingsView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun AnalyticsSettingsViewLightPreview(@PreviewParameter(AnalyticsSettingsStateProvider::class) state: AnalyticsSettingsState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun AnalyticsSettingsViewDarkPreview(@PreviewParameter(AnalyticsSettingsStateProvider::class) state: AnalyticsSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }

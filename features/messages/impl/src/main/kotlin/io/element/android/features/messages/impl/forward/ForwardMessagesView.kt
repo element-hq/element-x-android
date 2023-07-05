@@ -40,7 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -277,13 +277,13 @@ private fun ForwardingErrorDialog(onDismiss: () -> Unit, modifier: Modifier = Mo
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun ForwardMessagesViewLightPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun ForwardMessagesViewDarkPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
     ElementPreviewDark { ContentToPreview(state) }

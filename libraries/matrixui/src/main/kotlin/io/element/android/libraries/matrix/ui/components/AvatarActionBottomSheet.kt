@@ -33,7 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -109,13 +109,13 @@ private fun AvatarActionBottomSheetContent(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun AvatarActionBottomSheetLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun AvatarActionBottomSheetDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

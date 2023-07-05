@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -89,13 +89,13 @@ fun TimelineItemFileView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemFileViewLightPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) {
     ElementPreview { ContentToPreview(content) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemFileViewDarkPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) =
     ElementPreviewDark { ContentToPreview(content) }

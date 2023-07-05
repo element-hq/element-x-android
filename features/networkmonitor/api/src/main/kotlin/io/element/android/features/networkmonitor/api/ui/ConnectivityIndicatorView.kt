@@ -43,7 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -109,7 +109,7 @@ private fun StatusBarPaddingSpacer(modifier: Modifier = Modifier) {
     Spacer(modifier = modifier.statusBarsPadding())
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun PreviewLightConnectivityIndicatorView() {
     ElementPreview {
@@ -117,7 +117,7 @@ internal fun PreviewLightConnectivityIndicatorView() {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun PreviewDarkConnectivityIndicatorView() {
     ElementPreviewDark {

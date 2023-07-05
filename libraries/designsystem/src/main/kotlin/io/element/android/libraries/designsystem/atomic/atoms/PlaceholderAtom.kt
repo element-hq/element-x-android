@@ -24,7 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -50,13 +50,13 @@ fun PlaceholderAtom(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun PlaceholderAtomLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun PlaceholderAtomDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

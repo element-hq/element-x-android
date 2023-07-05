@@ -23,7 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -67,7 +67,7 @@ fun CircularProgressIndicator(
     }
 }
 
-@Preview(group = PreviewGroup.Progress)
+@ElementPreviews(group = PreviewGroup.Progress)
 @Composable
 internal fun CircularProgressIndicatorPreview() {
     ElementPreview { ContentToPreview() }

@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -44,13 +44,13 @@ internal fun TimelineLoadingMoreIndicator(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineLoadingMoreIndicatorLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineLoadingMoreIndicatorDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

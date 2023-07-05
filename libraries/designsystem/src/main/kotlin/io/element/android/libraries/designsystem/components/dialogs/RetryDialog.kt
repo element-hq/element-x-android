@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -114,7 +114,7 @@ object RetryDialogDefaults {
     val dismissText: String @Composable get() = stringResource(id = CommonStrings.action_cancel)
 }
 
-@Preview(group = PreviewGroup.Dialogs)
+@ElementPreviews(group = PreviewGroup.Dialogs)
 @Composable
 internal fun RetryDialogPreview() {
     ElementPreview { ContentToPreview() }

@@ -40,7 +40,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.Async
@@ -167,13 +167,13 @@ fun ReportMessageView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun ReportMessageViewLightPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun ReportMessageViewDarkPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
     ElementPreviewDark { ContentToPreview(state) }

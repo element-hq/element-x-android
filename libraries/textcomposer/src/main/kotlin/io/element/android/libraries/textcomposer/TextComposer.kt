@@ -68,7 +68,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.VectorIcons
@@ -414,33 +414,33 @@ private fun BoxScope.SendButton(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerSimpleLightPreview() {
     ElementPreview { SimpleContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerSimpleDarkPreview() = ElementPreviewDark { SimpleContentToPreview() }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerEditLightPreview() {
     ElementPreview { EditContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerEditDarkPreview() = ElementPreviewDark { EditContentToPreview() }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerReplyLightPreview() {
     ElementPreview { ReplyContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerReplyDarkPreview() = ElementPreviewDark { ReplyContentToPreview() }
 

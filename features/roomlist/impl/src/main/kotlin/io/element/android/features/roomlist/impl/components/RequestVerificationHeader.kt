@@ -32,7 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -96,7 +96,7 @@ internal fun RequestVerificationHeader(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun PreviewRequestVerificationHeaderLight() {
     ElementPreview {
@@ -104,7 +104,7 @@ internal fun PreviewRequestVerificationHeaderLight() {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun PreviewRequestVerificationHeaderDark() {
     ElementPreviewDark {

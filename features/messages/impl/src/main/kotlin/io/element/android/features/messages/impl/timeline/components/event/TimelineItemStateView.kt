@@ -20,7 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
@@ -42,13 +42,13 @@ fun TimelineItemStateView(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemStateViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemStateViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

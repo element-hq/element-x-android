@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
@@ -127,13 +127,13 @@ fun StaticMapView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun StaticMapViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun StaticMapViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

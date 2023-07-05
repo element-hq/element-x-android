@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -83,7 +83,7 @@ internal fun StaticMapPlaceholder(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun StaticMapPlaceholderLightPreview(
     @PreviewParameter(BooleanParameterProvider::class) values: Boolean
@@ -91,7 +91,7 @@ fun StaticMapPlaceholderLightPreview(
     ElementPreview { ContentToPreview(values) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun StaticMapPlaceholderDarkPreview(
     @PreviewParameter(BooleanParameterProvider::class) values: Boolean

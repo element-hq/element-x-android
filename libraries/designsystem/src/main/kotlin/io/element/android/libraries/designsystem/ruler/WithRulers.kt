@@ -19,7 +19,7 @@ package io.element.android.libraries.designsystem.ruler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -63,13 +63,13 @@ fun WithRulers(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun WithRulerLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun WithRulerDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

@@ -23,14 +23,14 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerLayoutType
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialogContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(widthDp = 600, group = PreviewGroup.DateTimePickers)
+@ElementPreviews(widthDp = 600, group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun TimePickerHorizontalPreview() {
     ElementPreview {
@@ -56,7 +56,7 @@ internal fun TimePickerHorizontalPreview() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(group = PreviewGroup.DateTimePickers)
+@ElementPreviews(group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun TimePickerVerticalPreviewLight() {
     ElementPreview {
@@ -77,7 +77,7 @@ internal fun TimePickerVerticalPreviewLight() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(group = PreviewGroup.DateTimePickers)
+@ElementPreviews(group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun TimePickerVerticalPreviewDark() {
     val pickerState = rememberTimePickerState(

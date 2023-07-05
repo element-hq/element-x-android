@@ -28,7 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.configureroom.RoomPrivacyItem
@@ -92,13 +92,13 @@ fun RoomPrivacyOption(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun RoomPrivacyOptionLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun RoomPrivacyOptionDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

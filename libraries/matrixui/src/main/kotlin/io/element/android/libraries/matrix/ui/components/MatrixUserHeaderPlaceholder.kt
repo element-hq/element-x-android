@@ -30,7 +30,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -66,13 +66,13 @@ fun MatrixUserHeaderPlaceholder(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun MatrixUserHeaderPlaceholderLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun MatrixUserHeaderPlaceholderDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

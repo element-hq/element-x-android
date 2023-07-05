@@ -24,7 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -54,7 +54,7 @@ fun PreferenceIcon(
     }
 }
 
-@Preview(group = PreviewGroup.Preferences)
+@ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) {
     ElementPreview { ContentToPreview(content) }

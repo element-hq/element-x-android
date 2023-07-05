@@ -18,7 +18,6 @@ package io.element.android.features.messages.impl.timeline.debug
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -50,7 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.getSystemService
@@ -165,7 +164,7 @@ private fun CopyableText(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun EventDebugInfoViewPreviewLight() {
     ElementPreview {
@@ -173,7 +172,7 @@ internal fun EventDebugInfoViewPreviewLight() {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun EventDebugInfoViewPreviewDark() {
     ElementPreviewDark {

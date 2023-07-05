@@ -17,7 +17,7 @@
 package io.element.android.services.apperror.impl
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -50,13 +50,13 @@ fun AppErrorViewContent(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun AppErrorViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun AppErrorViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

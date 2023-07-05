@@ -44,7 +44,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -429,13 +429,13 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready) =
         else -> inReplyTo.content.body
     }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemEventRowLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemEventRowDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
@@ -479,13 +479,13 @@ private fun ContentToPreview() {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemEventRowWithReplyLightPreview() {
     ElementPreview { ContentToPreviewWithReply() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemEventRowWithReplyDarkPreview() =
     ElementPreviewDark { ContentToPreviewWithReply() }
@@ -550,13 +550,13 @@ private fun aInReplyToReady(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
     ElementPreview { ContentTimestampToPreview(event) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemEventRowTimestampDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
     ElementPreviewDark { ContentTimestampToPreview(event) }

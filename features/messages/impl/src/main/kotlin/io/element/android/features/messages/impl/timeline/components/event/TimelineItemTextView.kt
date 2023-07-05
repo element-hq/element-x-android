@@ -30,7 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -111,13 +111,13 @@ private fun String.linkify(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemTextViewLightPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) {
     ElementPreview { ContentToPreview(content) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemTextViewDarkPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) =
     ElementPreviewDark { ContentToPreview(content) }

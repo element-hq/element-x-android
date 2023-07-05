@@ -39,7 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanniktech.emoji.Emoji
@@ -113,13 +113,13 @@ fun EmojiPicker(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun EmojiPickerLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun EmojiPickerDarkPreview() {
     ElementPreviewDark { ContentToPreview() }

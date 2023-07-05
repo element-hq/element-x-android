@@ -32,7 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -174,13 +174,13 @@ fun BugReportView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun BugReportViewDarkPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewDark { ContentToPreview(state) }
 

@@ -19,7 +19,7 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
@@ -45,13 +45,13 @@ fun TimelineItemImageView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemImageViewLightPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) {
     ElementPreview { ContentToPreview(content) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemImageViewDarkPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) =
     ElementPreviewDark { ContentToPreview(content) }

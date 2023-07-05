@@ -40,7 +40,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -193,13 +193,13 @@ sealed interface SearchBarResultState<in T> {
     data class Results<T>(val results: T) : SearchBarResultState<T>
 }
 
-@Preview(group = PreviewGroup.Search)
+@ElementPreviews(group = PreviewGroup.Search)
 @Composable
 internal fun SearchBarPreviewInactive() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview(group = PreviewGroup.Search)
+@ElementPreviews(group = PreviewGroup.Search)
 @Composable
 internal fun SearchBarPreviewActiveEmptyQuery() {
     ElementPreview {
@@ -210,7 +210,7 @@ internal fun SearchBarPreviewActiveEmptyQuery() {
     }
 }
 
-@Preview(group = PreviewGroup.Search)
+@ElementPreviews(group = PreviewGroup.Search)
 @Composable
 internal fun SearchBarPreviewActiveWithQuery() {
     ElementPreview {
@@ -221,7 +221,7 @@ internal fun SearchBarPreviewActiveWithQuery() {
     }
 }
 
-@Preview(group = PreviewGroup.Search)
+@ElementPreviews(group = PreviewGroup.Search)
 @Composable
 internal fun SearchBarPreviewActiveWithQueryNoBackButton() {
     ElementPreview {
@@ -233,7 +233,7 @@ internal fun SearchBarPreviewActiveWithQueryNoBackButton() {
     }
 }
 
-@Preview(group = PreviewGroup.Search)
+@ElementPreviews(group = PreviewGroup.Search)
 @Composable
 internal fun SearchBarPreviewActiveWithNoResults() {
     ElementPreview {
@@ -245,7 +245,7 @@ internal fun SearchBarPreviewActiveWithNoResults() {
     }
 }
 
-@Preview(group = PreviewGroup.Search)
+@ElementPreviews(group = PreviewGroup.Search)
 @Composable
 internal fun SearchBarPreviewActiveWithContent() {
     ElementPreview {

@@ -40,7 +40,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
@@ -198,13 +198,13 @@ class PercentRectangleSizeShape(private val percent: Float) : Shape {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun RoomSummaryRowLightPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) {
     ElementPreview { ContentToPreview(data) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun RoomSummaryRowDarkPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) =
     ElementPreviewDark { ContentToPreview(data) }

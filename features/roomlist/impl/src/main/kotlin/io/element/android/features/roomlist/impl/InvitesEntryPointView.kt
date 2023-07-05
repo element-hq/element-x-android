@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
@@ -72,13 +72,13 @@ fun InvitesEntryPointView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun InvitesEntryPointViewLightPreview(@PreviewParameter(InvitesStateProvider::class) state: InvitesState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun InvitesEntryPointViewDarkPreview(@PreviewParameter(InvitesStateProvider::class) state: InvitesState) =
     ElementPreviewDark { ContentToPreview(state) }

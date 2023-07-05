@@ -28,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -64,13 +64,13 @@ fun TimelineItemInformativeView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemInformativeViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemInformativeViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.location.api.StaticMapView
@@ -45,13 +45,13 @@ fun TimelineItemLocationView(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemLocationViewLightPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) {
     ElementPreview { ContentToPreview(content) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemLocationViewDarkPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) =
     ElementPreviewDark { ContentToPreview(content) }

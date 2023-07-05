@@ -51,7 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
@@ -300,7 +300,7 @@ internal fun BoxScope.TimelineScrollHelper(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun TimelineViewLightPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
@@ -308,7 +308,7 @@ fun TimelineViewLightPreview(
     ElementPreview { ContentToPreview(content) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun TimelineViewDarkPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent

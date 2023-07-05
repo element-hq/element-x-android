@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -79,13 +79,13 @@ fun buildAnnotatedStringWithColoredPart(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun AnalyticsPreferencesViewLightPreview(@PreviewParameter(AnalyticsPreferencesStateProvider::class) state: AnalyticsPreferencesState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun AnalyticsPreferencesViewDarkPreview(@PreviewParameter(AnalyticsPreferencesStateProvider::class) state: AnalyticsPreferencesState) =
     ElementPreviewDark { ContentToPreview(state) }

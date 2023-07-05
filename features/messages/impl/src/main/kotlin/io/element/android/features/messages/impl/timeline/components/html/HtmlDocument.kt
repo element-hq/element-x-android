@@ -42,7 +42,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -577,13 +577,13 @@ private fun HtmlText(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class) document: Document) {
     ElementPreview { ContentToPreview(document) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun HtmlDocumentDarkPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
     ElementPreviewDark { ContentToPreview(document) }

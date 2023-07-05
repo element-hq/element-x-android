@@ -32,7 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -95,13 +95,13 @@ fun TimelineEventTimestampView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineEventTimestampViewLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
     ElementPreview { ContentToPreview(event) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineEventTimestampViewDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
     ElementPreviewDark { ContentToPreview(event) }

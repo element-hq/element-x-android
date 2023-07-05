@@ -19,7 +19,7 @@ package io.element.android.features.preferences.impl.developer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
@@ -88,13 +88,13 @@ fun FeatureListContent(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun DeveloperSettingsViewLightPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun DeveloperSettingsViewDarkPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }

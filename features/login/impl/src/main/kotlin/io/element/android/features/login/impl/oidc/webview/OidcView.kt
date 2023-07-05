@@ -27,7 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.features.login.impl.oidc.OidcUrlParser
@@ -98,13 +98,13 @@ fun OidcView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun OidcViewDarkPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) =
     ElementPreviewDark { ContentToPreview(state) }

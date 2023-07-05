@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -100,7 +100,7 @@ private fun InitialsAvatar(
     }
 }
 
-@Preview(group = PreviewGroup.Avatars)
+@ElementPreviews(group = PreviewGroup.Avatars)
 @Composable
 fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) {
     ElementPreview {

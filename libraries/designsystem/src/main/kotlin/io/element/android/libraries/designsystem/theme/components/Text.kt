@@ -41,7 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -145,13 +145,13 @@ fun Text(
     )
 }
 
-@Preview(group = PreviewGroup.Text)
+@ElementPreviews(group = PreviewGroup.Text)
 @Composable
 internal fun TextLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@Preview(group = PreviewGroup.Text)
+@ElementPreviews(group = PreviewGroup.Text)
 @Composable
 internal fun TextDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

@@ -32,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -132,13 +132,13 @@ fun MessageEventBubble(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun MessageEventBubbleLightPreview(@PreviewParameter(BubbleStateProvider::class) state: BubbleState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun MessageEventBubbleDarkPreview(@PreviewParameter(BubbleStateProvider::class) state: BubbleState) =
     ElementPreviewDark { ContentToPreview(state) }

@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -117,13 +117,13 @@ fun AddPeopleViewTopBar(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun AddPeopleViewLightPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun AddPeopleViewDarkPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) =
     ElementPreviewDark { ContentToPreview(state) }

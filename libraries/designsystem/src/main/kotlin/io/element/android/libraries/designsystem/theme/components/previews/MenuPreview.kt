@@ -24,7 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -34,7 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.DropdownMenuIt
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
-@Preview(group = PreviewGroup.Menus)
+@ElementPreviews(group = PreviewGroup.Menus)
 @Composable
 internal fun MenuPreview() {
     ElementPreview {

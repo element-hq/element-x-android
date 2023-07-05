@@ -49,7 +49,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
@@ -209,13 +209,13 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun SearchAccountProviderViewLightPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) {
     ElementPreview { ContentToPreview(state) }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun SearchAccountProviderViewDarkPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) =
     ElementPreviewDark { ContentToPreview(state) }

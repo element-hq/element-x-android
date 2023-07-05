@@ -28,7 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -111,7 +111,7 @@ private fun ProgressDialogContent(
     }
 }
 
-@Preview(group = PreviewGroup.Dialogs)
+@ElementPreviews(group = PreviewGroup.Dialogs)
 @Composable
 internal fun ProgressDialogPreview() {
     ElementPreview { ContentToPreview() }
