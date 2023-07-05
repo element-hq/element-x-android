@@ -17,12 +17,14 @@
 package io.element.android.features.messages.impl.timeline.model
 
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 data class TimelineItemReactions(
     val reactions: ImmutableList<AggregatedReaction>
 ) {
-    val highlightedKeys
+    val highlightedKeys: ImmutableList<String>
         get() = reactions
             .filter { it.isHighlighted }
             .map { it.key }
+            .toPersistentList()
 }

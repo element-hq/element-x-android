@@ -82,6 +82,7 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -324,7 +325,7 @@ private val emojiRippleRadius = 24.dp
 
 @Composable
 internal fun EmojiReactionsRow(
-    highlightedEmojis: List<String>,
+    highlightedEmojis: ImmutableList<String>,
     onEmojiReactionClicked: (String) -> Unit,
     onCustomReactionClicked: () -> Unit,
     modifier: Modifier = Modifier,
