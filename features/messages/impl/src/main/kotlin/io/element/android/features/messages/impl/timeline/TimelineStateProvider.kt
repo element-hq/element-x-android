@@ -139,10 +139,12 @@ fun aTimelineItemReactions(
     count: Int = 1,
     isHighlighted: Boolean = false,
 ): TimelineItemReactions {
+    val emojis = arrayOf("👍", "😀️", "😁️", "😆️", "😅️", "🤣️", "🥰️", "😇️", "😊️", "😉️", "🙃️", "🙂️", "😍️", "🤗️", "🤭️")
     return TimelineItemReactions(
         reactions = buildList {
-            repeat(count) {
-                add(AggregatedReaction(key = "👍", count = 1 + it, isHighlighted = isHighlighted))
+            repeat(count) { index ->
+                val key = emojis[index % emojis.size]
+                add(AggregatedReaction(key = key, count = 1 + index, isHighlighted = isHighlighted))
             }
         }.toPersistentList()
     )
