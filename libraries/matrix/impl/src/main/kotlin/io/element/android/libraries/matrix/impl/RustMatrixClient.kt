@@ -55,6 +55,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
@@ -150,12 +151,10 @@ class RustMatrixClient constructor(
         )
     }
 
-    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
-        Timber.v("Resume get pair of room for $roomId")
+    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? = withContext(dispatchers.io) {
         val cachedRoomListItem = roomListService.roomOrNull(roomId.value)
         val fullRoom = cachedRoomListItem?.fullRoom()
-        Timber.v("Finish get pair of room for $roomId")
-        return if (cachedRoomListItem == null || fullRoom == null) {
+        if (cachedRoomListItem == null || fullRoom == null) {
             null
         } else {
             Pair(cachedRoomListItem, fullRoom)
