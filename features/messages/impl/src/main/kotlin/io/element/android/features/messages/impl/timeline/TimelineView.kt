@@ -82,6 +82,7 @@ fun TimelineView(
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     onReactionClicked: (emoji: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onReachedLoadMore() {
@@ -127,6 +128,7 @@ fun TimelineView(
                     onUserDataClick = onUserDataClicked,
                     inReplyToClick = ::inReplyToClicked,
                     onReactionClick = onReactionClicked,
+                    onMoreReactionsClick = onMoreReactionsClicked,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = onSwipeToReply,
                 )
@@ -154,6 +156,7 @@ fun TimelineItemRow(
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
@@ -184,6 +187,7 @@ fun TimelineItemRow(
                     onUserDataClick = onUserDataClick,
                     inReplyToClick = inReplyToClick,
                     onReactionClick = onReactionClick,
+                    onMoreReactionsClick = onMoreReactionsClick,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = { onSwipeToReply(timelineItem) },
                     modifier = modifier,
@@ -221,6 +225,7 @@ fun TimelineItemRow(
                                 onUserDataClick = onUserDataClick,
                                 onTimestampClicked = onTimestampClicked,
                                 onReactionClick = onReactionClick,
+                                onMoreReactionsClick = onMoreReactionsClick,
                                 onSwipeToReply = {},
                             )
                         }
@@ -323,6 +328,7 @@ private fun ContentToPreview(content: TimelineItemEventContent) {
         onUserDataClicked = {},
         onMessageLongClicked = {},
         onReactionClicked = { _, _ -> },
+        onMoreReactionsClicked = {},
         onSwipeToReply = {},
     )
 }

@@ -101,6 +101,7 @@ fun TimelineItemEventRow(
     inReplyToClick: (EventId) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
+    onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -109,9 +110,6 @@ fun TimelineItemEventRow(
     fun onUserDataClicked() {
         onUserDataClick(event.senderId)
     }
-
-    fun onReactionClicked(emoji: String) =
-        onReactionClick(emoji, event)
 
     fun inReplyToClicked() {
         val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
@@ -144,7 +142,8 @@ fun TimelineItemEventRow(
                     onTimestampClicked = onTimestampClicked,
                     inReplyToClicked = ::inReplyToClicked,
                     onUserDataClicked = ::onUserDataClicked,
-                    onReactionClicked = ::onReactionClicked,
+                    onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                    onMoreReactionsClicked = { onMoreReactionsClick(event) },
                 )
             }
         )
@@ -158,7 +157,8 @@ fun TimelineItemEventRow(
             onTimestampClicked = onTimestampClicked,
             inReplyToClicked = ::inReplyToClicked,
             onUserDataClicked = ::onUserDataClicked,
-            onReactionClicked = ::onReactionClicked,
+            onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+            onMoreReactionsClicked = { onMoreReactionsClick(event) },
         )
     }
     // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
@@ -180,6 +180,7 @@ private fun TimelineItemEventRowContent(
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
     onReactionClicked: (emoji: String) -> Unit,
+    onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // To avoid using negative offset, we display in this Box a column with:
@@ -240,6 +241,7 @@ private fun TimelineItemEventRowContent(
             TimelineItemReactionsView(
                 reactionsState = event.reactionsState,
                 onReactionClicked = onReactionClicked,
+                onMoreReactionsClicked = { onMoreReactionsClicked(event) },
                 modifier = Modifier
                     .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
@@ -534,6 +536,7 @@ private fun ContentToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
             )
@@ -551,6 +554,7 @@ private fun ContentToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
             )
@@ -595,6 +599,7 @@ private fun ContentToPreviewWithReply() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
             )
@@ -613,6 +618,7 @@ private fun ContentToPreviewWithReply() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
             )
@@ -668,6 +674,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                     onUserDataClick = {},
                     inReplyToClick = {},
                     onReactionClick = { _, _ -> },
+                    onMoreReactionsClick = {},
                     onTimestampClicked = {},
                     onSwipeToReply = {},
                 )
