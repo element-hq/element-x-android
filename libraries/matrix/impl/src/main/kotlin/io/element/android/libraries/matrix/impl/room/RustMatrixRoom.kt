@@ -130,11 +130,6 @@ class RustMatrixRoom(
             return roomListItem.name()
         }
 
-    override val bestName: String
-        get() {
-            return name?.takeIf { it.isNotEmpty() } ?: innerRoom.id()
-        }
-
     override val displayName: String
         get() {
             return innerRoom.displayName()

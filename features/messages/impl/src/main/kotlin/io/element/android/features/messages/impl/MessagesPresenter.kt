@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -107,13 +108,12 @@ class MessagesPresenter @AssistedInject constructor(
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendEventAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val roomName: MutableState<String?> = rememberSaveable {
-            mutableStateOf(null)
+        val roomName by produceState(initialValue = room.displayName, key1 = syncUpdateFlow.value){
+            value = room.displayName
         }
-        val roomAvatar: MutableState<AvatarData?> = remember {
-            mutableStateOf(null)
+        val roomAvatar by produceState(initialValue = room.avatarData(), key1 = syncUpdateFlow.value){
+            value = room.avatarData()
         }
-
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
         }
@@ -134,16 +134,6 @@ class MessagesPresenter @AssistedInject constructor(
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
-        LaunchedEffect(syncUpdateFlow.value) {
-            roomAvatar.value =
-                AvatarData(
-                    id = room.roomId.value,
-                    name = room.name,
-                    url = room.avatarUrl,
-                    size = AvatarSize.TimelineRoom
-                )
-            roomName.value = room.name
-        }
         LaunchedEffect(composerState.mode.relatedEventId) {
             timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
         }
@@ -169,8 +159,8 @@ class MessagesPresenter @AssistedInject constructor(
 
         return MessagesState(
             roomId = room.roomId,
-            roomName = roomName.value,
-            roomAvatar = roomAvatar.value,
+            roomName = roomName,
+            roomAvatar = roomAvatar,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             composerState = composerState,
             timelineState = timelineState,
@@ -182,6 +172,15 @@ class MessagesPresenter @AssistedInject constructor(
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
             eventSink = ::handleEvents
+        )
+    }
+
+    private fun MatrixRoom.avatarData(): AvatarData {
+        return AvatarData(
+            id = room.roomId.value,
+            name = room.displayName,
+            url = room.avatarUrl,
+            size = AvatarSize.TimelineRoom
         )
     }
 

@@ -105,7 +105,7 @@ private suspend fun MatrixClient.leaveRoom(
         room.leave().onSuccess {
             roomMembershipObserver.notifyUserLeftRoom(room.roomId)
         }.onFailure {
-            Timber.e(it, "Error while leaving room ${room.name} - ${room.roomId}")
+            Timber.e(it, "Error while leaving room ${room.displayName} - ${room.roomId}")
             error.value = LeaveRoomState.Error.Shown
         }
     }
