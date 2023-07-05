@@ -196,10 +196,11 @@ class MessageComposerPresenter @Inject constructor(
             composerMode.setToNormal()
             when (capturedMode) {
                 is MessageComposerMode.Normal -> room.sendMessage(text)
-                is MessageComposerMode.Edit -> room.editMessage(
-                    capturedMode.eventId,
-                    text
-                )
+                is MessageComposerMode.Edit -> {
+                    val eventId = capturedMode.eventId
+                    val transactionId = capturedMode.transactionId
+                    room.editMessage(eventId, transactionId, text)
+                }
 
                 is MessageComposerMode.Quote -> TODO()
                 is MessageComposerMode.Reply -> room.replyMessage(

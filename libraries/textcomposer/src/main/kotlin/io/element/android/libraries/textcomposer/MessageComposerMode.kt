@@ -25,11 +25,11 @@ sealed interface MessageComposerMode : Parcelable {
     @Parcelize
     data class Normal(val content: CharSequence?) : MessageComposerMode
 
-    sealed class Special(open val eventId: EventId, open val defaultContent: CharSequence) :
+    sealed class Special(open val eventId: EventId?, open val defaultContent: CharSequence) :
         MessageComposerMode
 
     @Parcelize
-    data class Edit(override val eventId: EventId, override val defaultContent: CharSequence) :
+    data class Edit(override val eventId: EventId?, override val defaultContent: CharSequence, val transactionId: String?) :
         Special(eventId, defaultContent)
 
     @Parcelize
