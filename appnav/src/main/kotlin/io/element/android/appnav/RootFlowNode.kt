@@ -247,17 +247,17 @@ class RootFlowNode @AssistedInject constructor(
             .apply {
                 when (deeplinkData) {
                     is DeeplinkData.Root -> attachRoot()
-                    is DeeplinkData.Room -> navigateToRoom(deeplinkData)
-                    is DeeplinkData.InviteList -> navigateToInviteList(deeplinkData)
+                    is DeeplinkData.Room -> attachRoom(deeplinkData)
+                    is DeeplinkData.InviteList -> attachInviteList(deeplinkData)
                 }
             }
     }
 
-    private suspend fun LoggedInFlowNode.navigateToRoom(deeplinkData: DeeplinkData.Room) {
+    private suspend fun LoggedInFlowNode.attachRoom(deeplinkData: DeeplinkData.Room) {
         backstack.push(LoggedInFlowNode.NavTarget.Room(deeplinkData.roomId))
     }
 
-    private suspend fun LoggedInFlowNode.navigateToInviteList(deeplinkData: DeeplinkData.InviteList) {
+    private suspend fun LoggedInFlowNode.attachInviteList(deeplinkData: DeeplinkData.InviteList) {
         notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
         backstack.push(LoggedInFlowNode.NavTarget.InviteList)
     }
