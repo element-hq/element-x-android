@@ -16,18 +16,19 @@
 
 package io.element.android.features.location.impl.location
 
+import io.element.android.features.location.api.Location
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-fun fakeLocationUpdatesFlow(): Flow<io.element.android.features.location.impl.location.Location> = flow {
+fun fakeLocationUpdatesFlow(): Flow<Location> = flow {
     while (true) {
         delay(1_000)
         emit(aLocation())
     }
 }
 
-private fun aLocation() = io.element.android.features.location.impl.location.Location(
+private fun aLocation() = Location(
     lat = 51.49404,
     lon = -0.25484,
     accuracy = 5f

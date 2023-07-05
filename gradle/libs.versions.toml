@@ -17,7 +17,7 @@ recyclerview = "1.3.0"
 lifecycle = "2.6.1"
 activity = "1.7.2"
 startup = "1.1.1"
-media3 = "1.0.2"
+media3 = "1.1.0"
 browser = "1.5.0"
 
 # Compose
@@ -160,7 +160,7 @@ maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.0"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
-sentry_android = "io.sentry:sentry-android:6.24.0"
+sentry_android = "io.sentry:sentry-android:6.25.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:42b2faa417c1e95f430bf8f6e379adba25ad5ef8"
 
 # Di

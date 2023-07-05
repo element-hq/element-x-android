@@ -24,6 +24,7 @@ import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
+import io.element.android.features.location.api.Location
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.channels.awaitClose

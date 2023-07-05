@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.location
+package io.element.android.libraries.matrix.api.room.location
 
-/**
- * Represents a location sample emitted by the device's location subsystem.
- */
-data class Location(
-    val lat: Double,
-    val lon: Double,
-    val accuracy: Float,
-)
+enum class AssetType {
+    SENDER,
+    PIN
+}

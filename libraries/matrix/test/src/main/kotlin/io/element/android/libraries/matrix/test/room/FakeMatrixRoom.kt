@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -80,6 +81,7 @@ class FakeMatrixRoom(
     private var reportContentResult = Result.success(Unit)
     private var sendLocationResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
+    val editMessageCalls = mutableListOf<String>()
 
     var sendMediaCount = 0
         private set
@@ -173,11 +175,8 @@ class FakeMatrixRoom(
         return cancelSendResult
     }
 
-    var editMessageParameter: String? = null
-        private set
-
-    override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
-        editMessageParameter = message
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: String?, message: String): Result<Unit> {
+        editMessageCalls += message
         return Result.success(Unit)
     }
 
@@ -286,7 +285,10 @@ class FakeMatrixRoom(
 
     override suspend fun sendLocation(
         body: String,
-        geoUri: String
+        geoUri: String,
+        description: String?,
+        zoomLevel: Int?,
+        assetType: AssetType?,
     ): Result<Unit> = simulateLongTask {
         sendLocationCount++
         return sendLocationResult

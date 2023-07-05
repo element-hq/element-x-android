@@ -24,6 +24,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 data class ActionListState(
     val target: Target,
+    val displayEmojiReactions: Boolean,
     val eventSink: (ActionListEvents) -> Unit,
 ) {
     sealed interface Target {

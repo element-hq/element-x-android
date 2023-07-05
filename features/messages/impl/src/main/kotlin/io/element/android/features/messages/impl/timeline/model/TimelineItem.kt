@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
@@ -69,6 +70,10 @@ sealed interface TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
         val safeSenderName: String = senderDisplayName ?: senderId.value
+
+        val failedToSend: Boolean = sendState is EventSendState.SendingFailed
+
+        val isTextMessage: Boolean = content is TimelineItemTextBasedContent
     }
 
     @Immutable
