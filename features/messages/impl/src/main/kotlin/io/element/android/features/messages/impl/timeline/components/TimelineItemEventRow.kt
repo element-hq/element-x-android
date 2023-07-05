@@ -101,12 +101,6 @@ fun TimelineItemEventRow(
         onUserDataClick(event.senderId)
     }
 
-    fun onReactionClicked(emoji: String) =
-        onReactionClick(emoji, event)
-
-    fun onMoreReactionsClicked() =
-        onMoreReactionsClick(event)
-
     fun inReplyToClicked() {
         val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
         inReplyToClick(inReplyToEventId)
@@ -169,8 +163,8 @@ fun TimelineItemEventRow(
         if (event.reactionsState.reactions.isNotEmpty()) {
             TimelineItemReactionsView(
                 reactionsState = event.reactionsState,
-                onReactionClicked = ::onReactionClicked,
-                onMoreReactionsClicked = ::onMoreReactionsClicked,
+                onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                onMoreReactionsClicked = { onMoreReactionsClick(event) },
                 modifier = Modifier
                     .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
