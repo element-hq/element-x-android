@@ -98,12 +98,7 @@ fun ModalBottomSheetLayout(
 @ElementPreviews(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetLayoutLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     ModalBottomSheetLayout(
         modifier = Modifier.height(140.dp),
         displayHandle = true,
@@ -116,4 +111,6 @@ private fun ContentToPreview() {
     ) {
         Text(text = "Content", modifier = Modifier.background(color = Color.Red))
     }
+    }
 }
+

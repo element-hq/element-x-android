@@ -98,14 +98,12 @@ fun TimelineEventTimestampView(
 @ElementPreviews
 @Composable
 internal fun TimelineEventTimestampViewLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
-    ElementPreview { ContentToPreview(event) }
-}
-
-@Composable
-private fun ContentToPreview(event: TimelineItem.Event) {
+    ElementPreview {
     TimelineEventTimestampView(
         event = event,
         onClick = {},
         onLongClick = {},
     )
+    }
 }
+

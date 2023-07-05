@@ -84,13 +84,7 @@ fun SheetState.hide(coroutineScope: CoroutineScope, then: suspend () -> Unit) {
 @ElementPreviews(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-// This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -109,4 +103,6 @@ private fun ContentToPreview() {
             )
         }
     }
+    }
 }
+

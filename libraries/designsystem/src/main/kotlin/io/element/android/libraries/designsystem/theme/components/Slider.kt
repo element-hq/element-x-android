@@ -59,15 +59,13 @@ fun Slider(
 @ElementPreviews(group = PreviewGroup.Sliders)
 @Composable
 internal fun SlidersPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     var value by remember { mutableStateOf(0.33f) }
     Column {
         Slider(onValueChange = { value = it }, value = value, enabled = true)
         Slider(steps = 10, onValueChange = { value = it }, value = value, enabled = true)
         Slider(onValueChange = { value = it }, value = value, enabled = false)
     }
+    }
 }
+

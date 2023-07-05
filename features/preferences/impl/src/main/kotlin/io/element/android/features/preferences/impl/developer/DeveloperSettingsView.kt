@@ -91,14 +91,12 @@ fun FeatureListContent(
 @ElementPreviews
 @Composable
 fun DeveloperSettingsViewLightPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: DeveloperSettingsState) {
+    ElementPreview {
     DeveloperSettingsView(
         state = state,
         onOpenShowkase = {},
         onBackPressed = {}
     )
+    }
 }
+

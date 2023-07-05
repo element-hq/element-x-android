@@ -144,11 +144,7 @@ fun ConfirmAccountProviderView(
 @ElementPreviews
 @Composable
 fun ConfirmAccountProviderViewLightPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: ConfirmAccountProviderState) {
+    ElementPreview {
     ConfirmAccountProviderView(
         state = state,
         onOidcDetails = {},
@@ -156,4 +152,6 @@ private fun ContentToPreview(state: ConfirmAccountProviderState) {
         onLearnMoreClicked = {},
         onChange = {},
     )
+    }
 }
+

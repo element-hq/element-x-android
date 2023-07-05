@@ -79,11 +79,7 @@ fun TimelineItemStateEventRow(
 @ElementPreviews
 @Composable
 internal fun TimelineItemStateEventRowLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     TimelineItemStateEventRow(
         event = aTimelineItemEvent(
             isMine = false,
@@ -94,4 +90,6 @@ private fun ContentToPreview() {
         onClick = {},
         onLongClick = {},
     )
+    }
 }
+

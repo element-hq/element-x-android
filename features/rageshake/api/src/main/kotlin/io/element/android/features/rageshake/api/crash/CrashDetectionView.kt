@@ -69,13 +69,11 @@ fun CrashDetectionContent(
 @ElementPreviews
 @Composable
 internal fun CrashDetectionViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     CrashDetectionView(
         state = aCrashDetectionState().copy(crashDetected = true)
     )
+    }
 }
+
 

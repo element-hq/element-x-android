@@ -82,10 +82,8 @@ fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Mo
 @ElementPreviews
 @Composable
 internal fun MessagesReactionButtonLightPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) {
-    ElementPreview { ContentToPreview(reaction) }
+    ElementPreview {
+    MessagesReactionButton(reaction, onClick = { })
+    }
 }
 
-@Composable
-private fun ContentToPreview(reaction: AggregatedReaction) {
-    MessagesReactionButton(reaction, onClick = { })
-}

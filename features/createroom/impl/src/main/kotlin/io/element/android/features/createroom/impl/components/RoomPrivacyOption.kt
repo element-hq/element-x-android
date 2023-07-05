@@ -95,11 +95,7 @@ fun RoomPrivacyOption(
 @ElementPreviews
 @Composable
 fun RoomPrivacyOptionLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     val aRoomPrivacyItem = roomPrivacyItems().first()
     Column {
         RoomPrivacyOption(
@@ -111,4 +107,6 @@ private fun ContentToPreview() {
             isSelected = false,
         )
     }
+    }
 }
+

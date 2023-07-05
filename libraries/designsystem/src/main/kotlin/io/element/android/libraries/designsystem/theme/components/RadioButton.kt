@@ -49,15 +49,13 @@ fun RadioButton(
 @ElementPreviews(group = PreviewGroup.Toggles)
 @Composable
 internal fun RadioButtonPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column {
         RadioButton(selected = false, onClick = {})
         RadioButton(selected = true, onClick = {})
         RadioButton(selected = false, enabled = false, onClick = {})
         RadioButton(selected = true, enabled = false, onClick = {})
     }
+    }
 }
+

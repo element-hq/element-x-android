@@ -45,13 +45,11 @@ fun TimelineItemRedactedView(
 @ElementPreviews
 @Composable
 internal fun TimelineItemRedactedViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     TimelineItemRedactedView(
         TimelineItemRedactedContent,
         extraPadding = noExtraPadding
     )
+    }
 }
+

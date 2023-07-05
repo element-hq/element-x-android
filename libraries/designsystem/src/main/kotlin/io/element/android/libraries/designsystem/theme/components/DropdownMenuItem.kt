@@ -72,15 +72,13 @@ fun DropdownMenuItemText(
 @ElementPreviews(group = PreviewGroup.Menus)
 @Composable
 internal fun DropdownMenuItemPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     DropdownMenuItem(
         text = { DropdownMenuItemText(text = "Item") },
         onClick = {},
         leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
         trailingIcon = { Icon(Icons.Default.Share, contentDescription = null) },
     )
+    }
 }
+

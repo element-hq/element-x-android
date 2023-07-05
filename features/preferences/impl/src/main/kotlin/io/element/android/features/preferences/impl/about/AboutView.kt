@@ -51,14 +51,12 @@ fun AboutView(
 @ElementPreviews
 @Composable
 fun AboutViewLightPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: AboutState) {
+    ElementPreview {
     AboutView(
         state = state,
         onElementLegalClicked = {},
         onBackPressed = {},
     )
+    }
 }
+

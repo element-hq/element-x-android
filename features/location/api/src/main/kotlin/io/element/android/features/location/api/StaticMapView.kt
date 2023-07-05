@@ -130,11 +130,7 @@ fun StaticMapView(
 @ElementPreviews
 @Composable
 fun StaticMapViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     StaticMapView(
         lat = 0.0,
         lon = 0.0,
@@ -142,4 +138,6 @@ private fun ContentToPreview() {
         contentDescription = null,
         modifier = Modifier.size(400.dp),
     )
+    }
 }
+

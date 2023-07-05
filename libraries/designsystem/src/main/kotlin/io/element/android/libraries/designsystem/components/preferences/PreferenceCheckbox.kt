@@ -80,15 +80,13 @@ fun PreferenceCheckbox(
 @ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceCheckboxPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     PreferenceCheckbox(
         title = "Checkbox",
         icon = Icons.Default.Announcement,
         enabled = true,
         isChecked = true
     )
+    }
 }
+

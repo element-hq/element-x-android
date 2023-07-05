@@ -67,11 +67,7 @@ fun LabelledTextField(
 @ElementPreviews
 @Composable
 fun LabelledTextFieldLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column {
         LabelledTextField(
             label = "Room name",
@@ -84,4 +80,6 @@ private fun ContentToPreview() {
             placeholder = "e.g. Product Sprint",
         )
     }
+    }
 }
+

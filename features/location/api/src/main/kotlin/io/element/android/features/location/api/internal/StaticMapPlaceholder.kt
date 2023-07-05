@@ -88,18 +88,16 @@ internal fun StaticMapPlaceholder(
 fun StaticMapPlaceholderLightPreview(
     @PreviewParameter(BooleanParameterProvider::class) values: Boolean
 ) {
-    ElementPreview { ContentToPreview(values) }
-}
-
-@Composable
-private fun ContentToPreview(showProgress: Boolean) {
+    ElementPreview {
     StaticMapPlaceholder(
         showProgress = showProgress,
         contentDescription = null,
         modifier = Modifier.size(400.dp),
         onLoadMapClick = {},
     )
+    }
 }
+
 
 internal class BooleanParameterProvider : PreviewParameterProvider<Boolean> {
     override val values: Sequence<Boolean>

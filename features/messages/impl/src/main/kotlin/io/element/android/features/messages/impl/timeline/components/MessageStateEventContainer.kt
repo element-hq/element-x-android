@@ -69,11 +69,7 @@ fun MessageStateEventContainer(
 @ElementPreviews
 @Composable
 internal fun MessageStateEventContainerLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column {
         MessageStateEventContainer(
             isHighlighted = false,
@@ -88,4 +84,6 @@ private fun ContentToPreview() {
             Spacer(modifier = Modifier.size(width = 120.dp, height = 32.dp))
         }
     }
+    }
 }
+

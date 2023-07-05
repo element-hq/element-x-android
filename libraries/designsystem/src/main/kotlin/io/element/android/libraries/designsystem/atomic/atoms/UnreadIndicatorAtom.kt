@@ -50,10 +50,8 @@ fun UnreadIndicatorAtom(
 @ElementPreviews
 @Composable
 internal fun UnreadIndicatorAtomLightPreview() {
-    ElementPreview { ContentToPreview() }
+    ElementPreview {
+    UnreadIndicatorAtom()
+    }
 }
 
-@Composable
-private fun ContentToPreview() {
-    UnreadIndicatorAtom()
-}

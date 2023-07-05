@@ -99,11 +99,7 @@ private fun RoundedIconAtomSize.toIconSize(): Dp {
 @ElementPreviews
 @Composable
 internal fun RoundedIconAtomLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         RoundedIconAtom(
             size = RoundedIconAtomSize.Medium,
@@ -114,7 +110,9 @@ private fun ContentToPreview() {
             imageVector = Icons.Filled.Home,
         )
     }
+    }
 }
+
 
 enum class RoundedIconAtomSize {
     Medium,

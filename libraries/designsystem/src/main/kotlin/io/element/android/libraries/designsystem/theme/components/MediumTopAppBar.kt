@@ -53,11 +53,8 @@ fun MediumTopAppBar(
 @ElementPreviews(group = PreviewGroup.AppBars)
 @Composable
 internal fun MediumTopAppBarPreview() {
-    ElementPreview { ContentToPreview() }
+    ElementPreview {
+    MediumTopAppBar(title = { Text(text = "Title") })
+    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ContentToPreview() {
-    MediumTopAppBar(title = { Text(text = "Title") })
-}

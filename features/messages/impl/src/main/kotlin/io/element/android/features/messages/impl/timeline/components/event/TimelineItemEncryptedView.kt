@@ -46,15 +46,13 @@ fun TimelineItemEncryptedView(
 @ElementPreviews
 @Composable
 internal fun TimelineItemEncryptedViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     TimelineItemEncryptedView(
         content = TimelineItemEncryptedContent(
             data = UnableToDecryptContent.Data.Unknown
         ),
         extraPadding = noExtraPadding
     )
+    }
 }
+

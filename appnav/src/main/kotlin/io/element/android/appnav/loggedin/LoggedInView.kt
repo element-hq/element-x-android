@@ -46,12 +46,10 @@ fun LoggedInView(
 @ElementPreviews
 @Composable
 fun LoggedInViewLightPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: LoggedInState) {
+    ElementPreview {
     LoggedInView(
         state = state
     )
+    }
 }
+

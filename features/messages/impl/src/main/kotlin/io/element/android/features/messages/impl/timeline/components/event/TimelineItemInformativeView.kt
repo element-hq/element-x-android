@@ -67,15 +67,13 @@ fun TimelineItemInformativeView(
 @ElementPreviews
 @Composable
 internal fun TimelineItemInformativeViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     TimelineItemInformativeView(
         text = "Info",
         iconDescription = "",
         icon = Icons.Default.Delete,
         extraPadding = noExtraPadding,
     )
+    }
 }
+

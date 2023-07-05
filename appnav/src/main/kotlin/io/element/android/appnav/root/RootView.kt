@@ -70,12 +70,10 @@ fun RootView(
 @ElementPreviews
 @Composable
 internal fun RootLightPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) {
-    ElementPreview { ContentToPreview(rootState) }
-}
-
-@Composable
-private fun ContentToPreview(rootState: RootState) {
+    ElementPreview {
     RootView(rootState) {
         Text("Children")
     }
+    }
 }
+

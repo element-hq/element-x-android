@@ -199,10 +199,8 @@ private fun SenderRow(sender: InviteSender) {
 @ElementPreviews
 @Composable
 internal fun InviteSummaryRowLightPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) {
-    ElementPreview { ContentToPreview(data) }
+    ElementPreview {
+    InviteSummaryRow(data)
+    }
 }
 
-@Composable
-private fun ContentToPreview(data: InviteListInviteSummary) {
-    InviteSummaryRow(data)
-}

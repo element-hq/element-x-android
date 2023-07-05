@@ -92,13 +92,11 @@ fun TimelineItemFileView(
 @ElementPreviews
 @Composable
 internal fun TimelineItemFileViewLightPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) {
-    ElementPreview { ContentToPreview(content) }
-}
-
-@Composable
-private fun ContentToPreview(content: TimelineItemFileContent) {
+    ElementPreview {
     TimelineItemFileView(
         content,
         extraPadding = noExtraPadding,
     )
+    }
 }
+

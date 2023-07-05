@@ -278,13 +278,11 @@ private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
 @ElementPreviews
 @Composable
 fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: ConfigureRoomState) {
+    ElementPreview {
     ConfigureRoomView(
         state = state,
     )
+    }
 }
+
 

@@ -47,13 +47,11 @@ fun AnalyticsSettingsView(
 @ElementPreviews
 @Composable
 fun AnalyticsSettingsViewLightPreview(@PreviewParameter(AnalyticsSettingsStateProvider::class) state: AnalyticsSettingsState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: AnalyticsSettingsState) {
+    ElementPreview {
     AnalyticsSettingsView(
         state = state,
         onBackPressed = {},
     )
+    }
 }
+

@@ -126,10 +126,8 @@ fun Icon(
 @ElementPreviews(group = PreviewGroup.Icons)
 @Composable
 internal fun IconImageVectorPreview() {
-    ElementPreview { ContentToPreview() }
+    ElementPreview {
+    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+    }
 }
 
-@Composable
-private fun ContentToPreview() {
-    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
-}

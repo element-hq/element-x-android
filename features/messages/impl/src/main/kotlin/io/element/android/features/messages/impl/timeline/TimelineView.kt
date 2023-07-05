@@ -305,11 +305,7 @@ internal fun BoxScope.TimelineScrollHelper(
 fun TimelineViewLightPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
 ) {
-    ElementPreview { ContentToPreview(content) }
-}
-
-@Composable
-private fun ContentToPreview(content: TimelineItemEventContent) {
+    ElementPreview {
     val timelineItems = aTimelineItemList(content)
     TimelineView(
         state = aTimelineState(timelineItems),
@@ -319,4 +315,6 @@ private fun ContentToPreview(content: TimelineItemEventContent) {
         onMessageLongClicked = {},
         onReactionClicked = { _, _ -> },
     )
+    }
 }
+

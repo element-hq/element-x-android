@@ -262,15 +262,13 @@ private fun RoomMemberSearchBar(
 @ElementPreviews
 @Composable
 fun RoomMemberListLightPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: RoomMemberListState) {
+    ElementPreview {
     RoomMemberListView(
         state = state,
         onBackPressed = {},
         onMemberSelected = {},
         onInvitePressed = {},
     )
+    }
 }
+

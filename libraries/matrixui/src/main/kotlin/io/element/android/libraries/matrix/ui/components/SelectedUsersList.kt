@@ -132,11 +132,7 @@ fun SelectedUsersList(
 @ElementPreviews
 @Composable
 internal fun SelectedUsersListLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         // Two users that will be visible with no scrolling
         SelectedUsersList(
@@ -156,4 +152,6 @@ private fun ContentToPreview() {
             )
         }
     }
+    }
 }
+

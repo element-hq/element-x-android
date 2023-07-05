@@ -202,10 +202,8 @@ private fun OnBoardingButtons(
 @ElementPreviews
 @Composable
 internal fun OnBoardingScreenLightPreview(@PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState) {
-    ElementPreview { ContentToPreview(state) }
+    ElementPreview {
+    OnBoardingView(state)
+    }
 }
 
-@Composable
-private fun ContentToPreview(state: OnBoardingState) {
-    OnBoardingView(state)
-}

@@ -114,11 +114,7 @@ fun PreferenceText(
 @ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceTextPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
@@ -163,4 +159,6 @@ private fun ContentToPreview() {
             loadingCurrentValue = true,
         )
     }
+    }
 }
+

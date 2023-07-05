@@ -71,11 +71,7 @@ fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
 @ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceCategoryPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     PreferenceCategory(
         title = "Category title",
     ) {
@@ -95,4 +91,6 @@ private fun ContentToPreview() {
             showIconAreaIfNoIcon = true,
         )
     }
+    }
 }
+

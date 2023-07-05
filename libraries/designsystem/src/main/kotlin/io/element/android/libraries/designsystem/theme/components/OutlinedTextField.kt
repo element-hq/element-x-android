@@ -160,11 +160,7 @@ fun Modifier.onTabOrEnterKeyFocusNext(focusManager: FocusManager): Modifier = on
 @ElementPreviews(group = PreviewGroup.TextFields)
 @Composable
 internal fun OutlinedTextFieldsPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column(modifier = Modifier.padding(4.dp)) {
         allBooleans.forEach { isError ->
             allBooleans.forEach { enabled ->
@@ -182,4 +178,6 @@ private fun ContentToPreview() {
             }
         }
     }
+    }
 }
+

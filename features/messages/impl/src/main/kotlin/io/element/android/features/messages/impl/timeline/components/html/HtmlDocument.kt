@@ -580,10 +580,8 @@ private fun HtmlText(
 @ElementPreviews
 @Composable
 internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class) document: Document) {
-    ElementPreview { ContentToPreview(document) }
+    ElementPreview {
+    HtmlDocument(document, MutableInteractionSource())
+    }
 }
 
-@Composable
-private fun ContentToPreview(document: Document) {
-    HtmlDocument(document, MutableInteractionSource())
-}

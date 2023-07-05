@@ -95,10 +95,8 @@ fun SelectedUser(
 @ElementPreviews
 @Composable
 internal fun SelectedUserLightPreview() {
-    ElementPreview { ContentToPreview() }
+    ElementPreview {
+    SelectedUser(aMatrixUser())
+    }
 }
 
-@Composable
-private fun ContentToPreview() {
-    SelectedUser(aMatrixUser())
-}

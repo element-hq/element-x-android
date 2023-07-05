@@ -93,15 +93,13 @@ fun CheckableUserRow(
 @ElementPreviews
 @Composable
 internal fun CheckableMatrixUserRowLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
-    ElementPreview { ContentToPreview(matrixUser) }
-}
-
-@Composable
-private fun ContentToPreview(matrixUser: MatrixUser) {
+    ElementPreview {
     Column {
         CheckableMatrixUserRow(checked = true, matrixUser)
         CheckableMatrixUserRow(checked = false, matrixUser)
         CheckableMatrixUserRow(checked = true, matrixUser, enabled = false)
         CheckableMatrixUserRow(checked = false, matrixUser, enabled = false)
     }
+    }
 }
+

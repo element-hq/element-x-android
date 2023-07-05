@@ -101,10 +101,8 @@ fun UserRow(
 @ElementPreviews
 @Composable
 internal fun MatrixUserRowLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
-    ElementPreview { ContentToPreview(matrixUser) }
+    ElementPreview {
+    MatrixUserRow(matrixUser)
+    }
 }
 
-@Composable
-private fun ContentToPreview(matrixUser: MatrixUser) {
-    MatrixUserRow(matrixUser)
-}

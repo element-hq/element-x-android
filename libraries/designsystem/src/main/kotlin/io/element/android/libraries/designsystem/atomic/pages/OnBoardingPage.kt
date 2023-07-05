@@ -92,11 +92,7 @@ fun OnBoardingPage(
 @ElementPreviews
 @Composable
 internal fun OnBoardingPageLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     OnBoardingPage(
         content = {
             Box(
@@ -123,4 +119,6 @@ private fun ContentToPreview() {
             }
         }
     )
+    }
 }
+

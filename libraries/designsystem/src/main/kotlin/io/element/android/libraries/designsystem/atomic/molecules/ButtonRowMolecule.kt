@@ -44,11 +44,7 @@ fun ButtonRowMolecule(
 @ElementPreviews
 @Composable
 internal fun ButtonRowMoleculeLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     ButtonRowMolecule {
         TextButton(onClick = { }) {
             Text("Button 1")
@@ -57,4 +53,6 @@ private fun ContentToPreview() {
             Text("Button 2")
         }
     }
+    }
 }
+

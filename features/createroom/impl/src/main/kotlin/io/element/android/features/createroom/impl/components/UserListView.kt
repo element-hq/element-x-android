@@ -80,10 +80,8 @@ fun UserListView(
 @ElementPreviews
 @Composable
 internal fun UserListViewLightPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) {
-    ElementPreview { ContentToPreview(state) }
+    ElementPreview {
+    UserListView(state = state)
+    }
 }
 
-@Composable
-private fun ContentToPreview(state: UserListState) {
-    UserListView(state = state)
-}

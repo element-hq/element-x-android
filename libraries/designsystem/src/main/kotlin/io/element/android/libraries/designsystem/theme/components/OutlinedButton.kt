@@ -77,11 +77,7 @@ object ElementOutlinedButtonDefaults {
 @ElementPreviews(group = PreviewGroup.Buttons)
 @Composable
 internal fun OutlinedButtonsPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedButton(onClick = {}, enabled = true) {
             Text(text = "Click me! - Enabled")
@@ -90,4 +86,6 @@ private fun ContentToPreview() {
             Text(text = "Click me! - Disabled")
         }
     }
+    }
 }
+

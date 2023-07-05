@@ -112,15 +112,13 @@ private fun AvatarActionBottomSheetContent(
 @ElementPreviews
 @Composable
 fun AvatarActionBottomSheetLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
         modalBottomSheetState = ModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Expanded
         ),
     )
+    }
 }
+

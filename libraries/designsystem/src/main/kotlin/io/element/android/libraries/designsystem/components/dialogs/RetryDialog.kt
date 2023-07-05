@@ -117,14 +117,12 @@ object RetryDialogDefaults {
 @ElementPreviews(group = PreviewGroup.Dialogs)
 @Composable
 internal fun RetryDialogPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     DialogPreview {
         RetryDialogContent(
             content = "Content",
         )
     }
+    }
 }
+

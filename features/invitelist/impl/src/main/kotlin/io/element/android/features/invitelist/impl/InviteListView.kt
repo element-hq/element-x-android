@@ -170,10 +170,8 @@ fun InviteListContent(
 @ElementPreviews
 @Composable
 internal fun InviteListViewLightPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) {
-    ElementPreview { ContentToPreview(state) }
+    ElementPreview {
+    InviteListView(state)
+    }
 }
 
-@Composable
-private fun ContentToPreview(state: InviteListState) {
-    InviteListView(state)
-}

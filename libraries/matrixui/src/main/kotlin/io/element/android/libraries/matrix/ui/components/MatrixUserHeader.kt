@@ -104,10 +104,8 @@ private fun MatrixUserHeaderContent(
 @ElementPreviews
 @Composable
 fun MatrixUserHeaderLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
-    ElementPreview { ContentToPreview(matrixUser) }
+    ElementPreview {
+    MatrixUserHeader(matrixUser)
+    }
 }
 
-@Composable
-private fun ContentToPreview(matrixUser: MatrixUser) {
-    MatrixUserHeader(matrixUser)
-}

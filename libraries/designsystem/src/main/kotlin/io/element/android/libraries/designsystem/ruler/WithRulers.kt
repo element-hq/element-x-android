@@ -66,14 +66,12 @@ fun WithRulers(
 @ElementPreviews
 @Composable
 internal fun WithRulerLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     WithRulers(xRulersOffset = 20.dp, yRulersOffset = 15.dp) {
         OutlinedButton(onClick = {}) {
             Text(text = "A Button with rulers on it!")
         }
     }
+    }
 }
+

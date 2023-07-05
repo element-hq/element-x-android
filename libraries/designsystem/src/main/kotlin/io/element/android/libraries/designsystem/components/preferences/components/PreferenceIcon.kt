@@ -57,10 +57,8 @@ fun PreferenceIcon(
 @ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) {
-    ElementPreview { ContentToPreview(content) }
+    ElementPreview {
+    PreferenceIcon(content)
+    }
 }
 
-@Composable
-private fun ContentToPreview(content: ImageVector?) {
-    PreferenceIcon(content)
-}

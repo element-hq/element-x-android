@@ -101,13 +101,11 @@ fun OidcView(
 @ElementPreviews
 @Composable
 fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: OidcState) {
+    ElementPreview {
     OidcView(
         state = state,
         onNavigateBack = { },
     )
+    }
 }
+

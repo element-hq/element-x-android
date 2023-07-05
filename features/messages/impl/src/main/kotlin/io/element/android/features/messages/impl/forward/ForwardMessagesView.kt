@@ -280,14 +280,12 @@ private fun ForwardingErrorDialog(onDismiss: () -> Unit, modifier: Modifier = Mo
 @ElementPreviews
 @Composable
 fun ForwardMessagesViewLightPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: ForwardMessagesState) {
+    ElementPreview {
     ForwardMessagesView(
         state = state,
         onDismiss = {},
         onForwardingSucceeded = {}
     )
+    }
 }
+

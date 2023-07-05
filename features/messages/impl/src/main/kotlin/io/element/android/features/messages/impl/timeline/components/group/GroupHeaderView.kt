@@ -92,11 +92,7 @@ fun GroupHeaderView(
 @ElementPreviews
 @Composable
 fun GroupHeaderViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         GroupHeaderView(
             text = "8 room changes (expanded)",
@@ -123,4 +119,6 @@ private fun ContentToPreview() {
             onClick = {}
         )
     }
+    }
 }
+

@@ -432,11 +432,7 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready) =
 @ElementPreviews
 @Composable
 internal fun TimelineItemEventRowLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
             TimelineItemEventRow(
@@ -472,7 +468,9 @@ private fun ContentToPreview() {
             )
         }
     }
+    }
 }
+
 
 @ElementPreviews
 @Composable

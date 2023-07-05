@@ -62,11 +62,7 @@ fun TextButton(
 @ElementPreviews(group = PreviewGroup.Buttons)
 @Composable
 internal fun TextButtonPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column {
         TextButton(onClick = {}, enabled = true) {
             Text(text = "Click me! - Enabled")
@@ -75,4 +71,6 @@ private fun ContentToPreview() {
             Text(text = "Click me! - Disabled")
         }
     }
+    }
 }
+

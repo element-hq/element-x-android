@@ -116,13 +116,11 @@ fun AccountProviderView(
 @ElementPreviews
 @Composable
 fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) {
-    ElementPreview { ContentToPreview(item) }
-}
-
-@Composable
-private fun ContentToPreview(item: AccountProvider) {
+    ElementPreview {
     AccountProviderView(
         item = item,
         onClick = { }
     )
+    }
 }
+

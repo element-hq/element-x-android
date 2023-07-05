@@ -104,11 +104,7 @@ fun PreferenceTopAppBar(
 @ElementPreviews
 @Composable
 internal fun PreferenceViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     PreferenceView(
         title = "Preference screen"
     ) {
@@ -141,4 +137,6 @@ private fun ContentToPreview() {
             )
         }
     }
+    }
 }
+

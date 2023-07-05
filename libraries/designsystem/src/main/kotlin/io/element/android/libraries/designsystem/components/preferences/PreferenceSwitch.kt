@@ -101,11 +101,7 @@ fun PreferenceSwitch(
 @ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceSwitchPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     PreferenceSwitch(
         title = "Switch",
         subtitle = "Subtitle Switch",
@@ -113,4 +109,6 @@ private fun ContentToPreview() {
         enabled = true,
         isChecked = true
     )
+    }
 }
+

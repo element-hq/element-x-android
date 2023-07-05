@@ -49,11 +49,7 @@ fun ButtonColumnMolecule(
 @ElementPreviews
 @Composable
 internal fun ButtonColumnMoleculeLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     ButtonColumnMolecule {
         Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
             Text(text = "Button")
@@ -62,4 +58,6 @@ private fun ContentToPreview() {
             Text(text = "TextButton")
         }
     }
+    }
 }
+

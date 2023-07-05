@@ -120,10 +120,8 @@ fun AddPeopleViewTopBar(
 @ElementPreviews
 @Composable
 internal fun AddPeopleViewLightPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) {
-    ElementPreview { ContentToPreview(state) }
+    ElementPreview {
+    AddPeopleView(state = state)
+    }
 }
 
-@Composable
-private fun ContentToPreview(state: UserListState) {
-    AddPeopleView(state = state)
-}

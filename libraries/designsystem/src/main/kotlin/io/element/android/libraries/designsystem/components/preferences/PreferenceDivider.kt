@@ -37,10 +37,8 @@ fun PreferenceDivider(
 @ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceDividerPreview() {
-    ElementPreview { ContentToPreview() }
+    ElementPreview {
+    PreferenceDivider()
+    }
 }
 
-@Composable
-private fun ContentToPreview() {
-    PreferenceDivider()
-}

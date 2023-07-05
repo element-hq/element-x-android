@@ -49,13 +49,11 @@ fun TimelineItemReactionsView(
 @ElementPreviews
 @Composable
 internal fun TimelineItemReactionsViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     TimelineItemReactionsView(
         reactionsState = aTimelineItemReactions(),
         onReactionClicked = { }
     )
+    }
 }
+

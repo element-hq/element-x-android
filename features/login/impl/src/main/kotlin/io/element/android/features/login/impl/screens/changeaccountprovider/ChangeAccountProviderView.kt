@@ -128,11 +128,7 @@ fun ChangeAccountProviderView(
 @ElementPreviews
 @Composable
 fun ChangeAccountProviderViewLightPreview(@PreviewParameter(ChangeAccountProviderStateProvider::class) state: ChangeAccountProviderState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: ChangeAccountProviderState) {
+    ElementPreview {
     ChangeAccountProviderView(
         state = state,
         onBackPressed = { },
@@ -140,4 +136,6 @@ private fun ContentToPreview(state: ChangeAccountProviderState) {
         onDone = { },
         onOtherProviderClicked = { },
     )
+    }
 }
+

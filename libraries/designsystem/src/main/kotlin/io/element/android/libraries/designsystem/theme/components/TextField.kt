@@ -147,11 +147,7 @@ fun TextField(
 @ElementPreviews(group = PreviewGroup.TextFields)
 @Composable
 internal fun TextFieldLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column(modifier = Modifier.padding(4.dp)) {
         allBooleans.forEach { isError ->
             allBooleans.forEach { enabled ->
@@ -169,7 +165,9 @@ private fun ContentToPreview() {
             }
         }
     }
+    }
 }
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun Modifier.autofill(autofillTypes: List<AutofillType>, onFill: (String) -> Unit) = composed {

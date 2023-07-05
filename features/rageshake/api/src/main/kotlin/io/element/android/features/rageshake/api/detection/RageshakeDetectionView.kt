@@ -103,10 +103,8 @@ fun RageshakeDialogContent(
 @ElementPreviews
 @Composable
 internal fun RageshakeDialogContentLightPreview() {
-    ElementPreview { ContentToPreview() }
+    ElementPreview {
+    RageshakeDialogContent()
+    }
 }
 
-@Composable
-private fun ContentToPreview() {
-    RageshakeDialogContent()
-}

@@ -53,11 +53,8 @@ fun CenterAlignedTopAppBar(
 @ElementPreviews(group = PreviewGroup.AppBars)
 @Composable
 internal fun CenterAlignedTopAppBarPreview() {
-    ElementPreview { ContentToPreview() }
+    ElementPreview {
+    CenterAlignedTopAppBar(title = { Text(text = "Title") })
+    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ContentToPreview() {
-    CenterAlignedTopAppBar(title = { Text(text = "Title") })
-}

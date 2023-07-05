@@ -100,11 +100,7 @@ fun ClickableLinkText(
 @ElementPreviews(group = PreviewGroup.Text)
 @Composable
 internal fun ClickableLinkTextPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     ClickableLinkText(
         text = AnnotatedString("Hello", ParagraphStyle()),
         linkAnnotationTag = "",
@@ -112,5 +108,7 @@ private fun ContentToPreview() {
         onLongClick = {},
         interactionSource = MutableInteractionSource(),
     )
+    }
 }
+
 

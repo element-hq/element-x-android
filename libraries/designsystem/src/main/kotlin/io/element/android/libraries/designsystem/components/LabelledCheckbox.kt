@@ -55,13 +55,11 @@ fun LabelledCheckbox(
 @ElementPreviews(group = PreviewGroup.Toggles)
 @Composable
 internal fun LabelledCheckboxPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     LabelledCheckbox(
         checked = true,
         text = "Some text",
     )
+    }
 }
+

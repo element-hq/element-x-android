@@ -113,15 +113,13 @@ private fun LeaveRoomErrorDialog(
 internal fun LeaveRoomViewLightPreview(
     @PreviewParameter(LeaveRoomStateProvider::class) state: LeaveRoomState
 ) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: LeaveRoomState) {
+    ElementPreview {
     Box(
         modifier = Modifier.size(300.dp, 300.dp),
         propagateMinConstraints = true,
     ) {
         LeaveRoomView(state = state)
     }
+    }
 }
+

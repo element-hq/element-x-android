@@ -244,11 +244,7 @@ internal fun RoomListRoomSummary.contentType() = isPlaceholder
 @ElementPreviews
 @Composable
 internal fun RoomListViewLightPreview(@PreviewParameter(RoomListStateProvider::class) state: RoomListState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: RoomListState) {
+    ElementPreview {
     RoomListView(
         state = state,
         onRoomClicked = {},
@@ -259,4 +255,6 @@ private fun ContentToPreview(state: RoomListState) {
         onRoomSettingsClicked = {},
         onMenuActionClicked = {},
     )
+    }
 }
+

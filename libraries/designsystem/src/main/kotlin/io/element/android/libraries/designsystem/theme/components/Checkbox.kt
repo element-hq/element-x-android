@@ -49,15 +49,13 @@ fun Checkbox(
 @ElementPreviews(group = PreviewGroup.Toggles)
 @Composable
 internal fun CheckboxesPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column {
         Checkbox(onCheckedChange = {}, enabled = true, checked = true)
         Checkbox(onCheckedChange = {}, enabled = true, checked = false)
         Checkbox(onCheckedChange = {}, enabled = false, checked = true)
         Checkbox(onCheckedChange = {}, enabled = false, checked = false)
     }
+    }
 }
+

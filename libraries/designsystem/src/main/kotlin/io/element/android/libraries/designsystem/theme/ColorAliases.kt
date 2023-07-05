@@ -68,11 +68,7 @@ val SemanticColors.messageFromOtherBackground
 @ElementPreviews
 @Composable
 internal fun ColorAliasesLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     ColorListPreview(
         backgroundColor = Color.Black,
         foregroundColor = Color.White,
@@ -86,4 +82,6 @@ private fun ContentToPreview() {
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
         )
     )
+    }
 }
+

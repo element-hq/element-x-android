@@ -58,11 +58,7 @@ fun SearchMultipleUsersResultItem(
 @ElementPreviews
 @Composable
 internal fun SearchMultipleUsersResultItemPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Column {
         SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false), isUserSelected = false)
         Divider()
@@ -72,4 +68,6 @@ private fun ContentToPreview() {
         Divider()
         SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true), isUserSelected = true)
     }
+    }
 }
+

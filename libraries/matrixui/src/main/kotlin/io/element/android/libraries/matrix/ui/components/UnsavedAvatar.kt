@@ -85,13 +85,11 @@ fun UnsavedAvatar(
 @ElementPreviews
 @Composable
 fun UnsavedAvatarLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Row {
         UnsavedAvatar(null)
         UnsavedAvatar(Uri.EMPTY)
     }
+    }
 }
+

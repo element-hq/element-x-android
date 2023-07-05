@@ -49,11 +49,7 @@ fun IconButton(
 @ElementPreviews(group = PreviewGroup.Buttons)
 @Composable
 internal fun IconButtonPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     Row {
         IconButton(onClick = {}) {
             Icon(imageVector = Icons.Filled.Close, contentDescription = "")
@@ -62,4 +58,6 @@ private fun ContentToPreview() {
             Icon(imageVector = Icons.Filled.Close, contentDescription = "")
         }
     }
+    }
 }
+

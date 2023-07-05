@@ -212,15 +212,13 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
 @ElementPreviews
 @Composable
 fun SearchAccountProviderViewLightPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: SearchAccountProviderState) {
+    ElementPreview {
     SearchAccountProviderView(
         state = state,
         onBackPressed = {},
         onLearnMoreClicked = {},
         onDone = {},
     )
+    }
 }
+

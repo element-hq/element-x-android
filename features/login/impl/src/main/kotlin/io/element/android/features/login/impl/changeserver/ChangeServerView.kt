@@ -72,14 +72,12 @@ fun ChangeServerView(
 @ElementPreviews
 @Composable
 fun ChangeServerViewLightPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: ChangeServerState) {
+    ElementPreview {
     ChangeServerView(
         state = state,
         onLearnMoreClicked = {},
         onDone = {},
     )
+    }
 }
+

@@ -124,14 +124,7 @@ private fun RoomListModalBottomSheetContent(
 @ElementPreviews
 @Composable
 internal fun RoomListModalBottomSheetContentLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-// TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
-// see: https://issuetracker.google.com/issues/283843380
-// Remove this preview when the issue is fixed.
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     RoomListModalBottomSheetContent(
         contextMenu = RoomListState.ContextMenu.Shown(
             roomId = RoomId(value = "!aRoom:aDomain"),
@@ -140,4 +133,6 @@ private fun ContentToPreview() {
         onRoomSettingsClicked = {},
         onLeaveRoomClicked = {}
     )
+    }
 }
+

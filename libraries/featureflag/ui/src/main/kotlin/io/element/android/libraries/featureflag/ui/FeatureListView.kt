@@ -63,13 +63,11 @@ fun FeaturePreferenceView(
 @ElementPreviews
 @Composable
 internal fun FeatureListViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     FeatureListView(
         features = aFeatureUiModelList(),
         onCheckedChange = { _, _ -> }
     )
+    }
 }
+

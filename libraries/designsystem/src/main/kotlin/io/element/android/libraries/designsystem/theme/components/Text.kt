@@ -148,11 +148,7 @@ fun Text(
 @ElementPreviews(group = PreviewGroup.Text)
 @Composable
 internal fun TextLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     val colors = mapOf(
         "primary" to MaterialTheme.colorScheme.primary,
         "secondary" to MaterialTheme.colorScheme.secondary,
@@ -188,4 +184,6 @@ private fun ContentToPreview() {
             Spacer(modifier = Modifier.height(2.dp))
         }
     }
+    }
 }
+

@@ -53,12 +53,10 @@ fun AppErrorViewContent(
 @ElementPreviews
 @Composable
 internal fun AppErrorViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     AppErrorView(
         state = aAppErrorState()
     )
+    }
 }
+

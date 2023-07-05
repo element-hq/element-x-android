@@ -88,14 +88,12 @@ fun IconTitleSubtitleMolecule(
 @ElementPreviews
 @Composable
 internal fun IconTitleSubtitleMoleculeLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     IconTitleSubtitleMolecule(
         iconResourceId = R.drawable.ic_edit,
         title = "Title",
         subTitle = "Sub iitle",
     )
+    }
 }
+

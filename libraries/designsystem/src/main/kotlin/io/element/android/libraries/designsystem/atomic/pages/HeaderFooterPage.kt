@@ -69,11 +69,7 @@ fun HeaderFooterPage(
 @ElementPreviews
 @Composable
 internal fun HeaderFooterPageLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     HeaderFooterPage(
         content = {
             Box(
@@ -112,4 +108,6 @@ private fun ContentToPreview() {
             }
         }
     )
+    }
 }
+

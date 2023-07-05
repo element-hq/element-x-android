@@ -45,13 +45,11 @@ fun TimelineItemUnknownView(
 @ElementPreviews
 @Composable
 internal fun TimelineItemUnknownViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     TimelineItemUnknownView(
         content = TimelineItemUnknownContent,
         extraPadding = noExtraPadding
     )
+    }
 }
+

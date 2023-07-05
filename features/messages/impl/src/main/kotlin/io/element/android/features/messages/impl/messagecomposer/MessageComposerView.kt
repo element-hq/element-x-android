@@ -78,13 +78,11 @@ fun MessageComposerView(
 @ElementPreviews
 @Composable
 internal fun MessageComposerViewLightPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: MessageComposerState) {
+    ElementPreview {
     MessageComposerView(
         state = state,
         onSendLocationClicked = {}
     )
+    }
 }
+

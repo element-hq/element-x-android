@@ -53,11 +53,7 @@ fun PlaceholderAtom(
 @ElementPreviews
 @Composable
 internal fun PlaceholderAtomLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     // Use a Red background to see the shape
     Box(modifier = Modifier.background(color = Color.Red)) {
         PlaceholderAtom(
@@ -65,4 +61,6 @@ private fun ContentToPreview() {
             height = 12.dp
         )
     }
+    }
 }
+

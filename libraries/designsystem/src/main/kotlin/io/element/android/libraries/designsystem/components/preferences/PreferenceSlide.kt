@@ -86,15 +86,13 @@ fun PreferenceSlide(
 @ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceSlidePreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     PreferenceSlide(
         icon = Icons.Default.Person,
         title = "Slide",
         summary = "Summary",
         value = 0.75F
     )
+    }
 }
+

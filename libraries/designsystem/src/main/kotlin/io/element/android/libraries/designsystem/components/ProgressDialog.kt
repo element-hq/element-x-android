@@ -114,12 +114,10 @@ private fun ProgressDialogContent(
 @ElementPreviews(group = PreviewGroup.Dialogs)
 @Composable
 internal fun ProgressDialogPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     DialogPreview {
         ProgressDialogContent(text = "test dialog content")
     }
+    }
 }
+

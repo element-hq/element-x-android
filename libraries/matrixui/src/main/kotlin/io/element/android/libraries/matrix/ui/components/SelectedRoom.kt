@@ -95,11 +95,7 @@ fun SelectedRoom(
 @ElementPreviews
 @Composable
 internal fun SelectedRoomLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     SelectedRoom(
         roomSummary = RoomSummaryDetails(
             roomId = RoomId("!room:domain"),
@@ -113,4 +109,6 @@ private fun ContentToPreview() {
             inviter = null,
         )
     )
+    }
 }
+

@@ -177,14 +177,12 @@ fun BugReportView(
 @ElementPreviews
 @Composable
 fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) {
-    ElementPreview { ContentToPreview(state) }
-}
-
-@Composable
-private fun ContentToPreview(state: BugReportState) {
+    ElementPreview {
     BugReportView(
         state = state,
         onDone = {},
         onBackPressed = {},
     )
+    }
 }
+

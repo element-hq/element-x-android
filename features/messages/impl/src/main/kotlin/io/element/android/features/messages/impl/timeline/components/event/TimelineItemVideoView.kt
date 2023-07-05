@@ -67,10 +67,8 @@ fun TimelineItemVideoView(
 @ElementPreviews
 @Composable
 internal fun TimelineItemVideoViewLightPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) {
-    ElementPreview { ContentToPreview(content) }
+    ElementPreview {
+    TimelineItemVideoView(content)
+    }
 }
 
-@Composable
-private fun ContentToPreview(content: TimelineItemVideoContent) {
-    TimelineItemVideoView(content)
-}

@@ -261,11 +261,7 @@ private suspend inline fun MapView.awaitMap(): MapboxMap =
 @ElementPreviews
 @Composable
 fun MapViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
-
-@Composable
-private fun ContentToPreview() {
+    ElementPreview {
     MapView(
         modifier = Modifier.size(400.dp),
         mapState = rememberMapState(
@@ -288,4 +284,6 @@ private fun ContentToPreview() {
             ).toImmutableList()
         ),
     )
+    }
 }
+
