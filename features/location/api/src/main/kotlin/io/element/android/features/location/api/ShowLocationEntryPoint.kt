@@ -14,29 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.api
 
-import androidx.compose.runtime.Composable
-import io.element.android.features.location.api.Location
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
 
-class FakeLocationActions : LocationActions {
+interface ShowLocationEntryPoint : FeatureEntryPoint {
 
-    var configured = false
-        private set
+    data class Inputs(val location: Location, val description: String?) : NodeInputs
 
-    var sharedLocation: Location? = null
-        private set
-
-    var sharedLabel: String? = null
-        private set
-
-    @Composable
-    override fun Configure() {
-        configured = true
-    }
-
-    override suspend fun share(location: Location, label: String?) {
-        sharedLocation = location
-        sharedLabel = label
-    }
+    fun createNode(parentNode: Node, buildContext: BuildContext, inputs: Inputs): Node
 }

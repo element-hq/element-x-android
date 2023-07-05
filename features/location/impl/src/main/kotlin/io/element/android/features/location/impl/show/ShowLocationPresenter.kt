@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,28 +26,28 @@ import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class ViewLocationPresenter @AssistedInject constructor(
+class ShowLocationPresenter @AssistedInject constructor(
     private val actions: LocationActions,
     @Assisted private val location: Location,
     @Assisted private val description: String?
-) : Presenter<ViewLocationState> {
+) : Presenter<ShowLocationState> {
 
     @AssistedFactory
     interface Factory {
-        fun create(location: Location, description: String?): ViewLocationPresenter
+        fun create(location: Location, description: String?): ShowLocationPresenter
     }
 
     @Composable
-    override fun present(): ViewLocationState {
+    override fun present(): ShowLocationState {
         val coroutineScope = rememberCoroutineScope()
         actions.Configure()
 
-        return ViewLocationState(
+        return ShowLocationState(
             location = location,
             description = description
         ) {
             when (it) {
-                ViewLocationEvents.Share -> coroutineScope.share(location, description)
+                ShowLocationEvents.Share -> coroutineScope.share(location, description)
             }
         }
     }

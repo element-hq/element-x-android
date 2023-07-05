@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
+import androidx.compose.runtime.Composable
 import io.element.android.features.location.api.Location
 
-data class ViewLocationState(
-    val location: Location,
-    val description: String?,
-    val eventSink: (ViewLocationEvents) -> Unit,
-)
+interface LocationActions {
+
+    @Composable
+    fun Configure()
+
+    suspend fun share(location: Location, label: String?)
+
+}

@@ -31,7 +31,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.SendLocationEntryPoint
-import io.element.android.features.location.api.ViewLocationEntryPoint
+import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
@@ -62,7 +62,7 @@ class MessagesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val sendLocationEntryPoint: SendLocationEntryPoint,
-    private val viewLocationEntryPoint: ViewLocationEntryPoint,
+    private val showLocationEntryPoint: ShowLocationEntryPoint,
 ) : BackstackNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -155,8 +155,8 @@ class MessagesFlowNode @AssistedInject constructor(
                 createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
             is NavTarget.LocationViewer -> {
-                val inputs = ViewLocationEntryPoint.Inputs(navTarget.location, navTarget.description)
-                viewLocationEntryPoint.createNode(this, buildContext, inputs)
+                val inputs = ShowLocationEntryPoint.Inputs(navTarget.location, navTarget.description)
+                showLocationEntryPoint.createNode(this, buildContext, inputs)
             }
             is NavTarget.EventDebugInfo -> {
                 val inputs = EventDebugInfoNode.Inputs(navTarget.eventId, navTarget.debugInfo)

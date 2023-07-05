@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
@@ -24,14 +24,14 @@ import io.element.android.features.location.api.Location
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class ViewLocationPresenterTest {
+class ShowLocationPresenterTest {
 
     private val actions = FakeLocationActions()
     private val location = Location(1.23, 4.56, 7.8f)
 
     @Test
     fun `emits initial state`() = runTest {
-        val presenter = ViewLocationPresenter(
+        val presenter = ShowLocationPresenter(
             actions,
             location,
             A_DESCRIPTION,
@@ -48,7 +48,7 @@ class ViewLocationPresenterTest {
 
     @Test
     fun `uses action to share location`() = runTest {
-        val presenter = ViewLocationPresenter(
+        val presenter = ShowLocationPresenter(
             actions,
             location,
             A_DESCRIPTION,
@@ -58,7 +58,7 @@ class ViewLocationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(ViewLocationEvents.Share)
+            initialState.eventSink(ShowLocationEvents.Share)
 
             Truth.assertThat(actions.configured).isTrue()
             Truth.assertThat(actions.sharedLocation).isEqualTo(location)

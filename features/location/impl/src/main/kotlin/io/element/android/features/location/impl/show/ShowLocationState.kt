@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.api
+package io.element.android.features.location.impl.show
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import io.element.android.libraries.architecture.FeatureEntryPoint
-import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.features.location.api.Location
 
-interface ViewLocationEntryPoint : FeatureEntryPoint {
-
-    data class Inputs(val location: Location, val description: String?) : NodeInputs
-
-    fun createNode(parentNode: Node, buildContext: BuildContext, inputs: Inputs): Node
-}
+data class ShowLocationState(
+    val location: Location,
+    val description: String?,
+    val eventSink: (ShowLocationEvents) -> Unit,
+)
