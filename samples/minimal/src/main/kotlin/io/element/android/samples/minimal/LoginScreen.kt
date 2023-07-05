@@ -46,6 +46,7 @@ class LoginScreen(private val authenticationService: MatrixAuthenticationService
             state = state,
             modifier = modifier,
             onBackPressed = {},
+            onWaitListError = {},
         )
     }
 }

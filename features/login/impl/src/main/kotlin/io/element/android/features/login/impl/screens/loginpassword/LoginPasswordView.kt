@@ -56,6 +56,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -82,8 +83,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun LoginPasswordView(
     state: LoginPasswordState,
-    modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
+    onWaitListError: (LoginFormState) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val isLoading by remember(state.loginAction) {
         derivedStateOf {
@@ -133,7 +135,8 @@ fun LoginPasswordView(
                     subTitle = stringResource(id = R.string.screen_login_form_header)
                 )
                 Spacer(Modifier.height(32.dp))
-                LoginForm(state = state,
+                LoginForm(
+                    state = state,
                     isLoading = isLoading,
                     onSubmit = ::submit
                 )
@@ -152,9 +155,16 @@ fun LoginPasswordView(
             }
 
             if (state.loginAction is Async.Failure) {
-                LoginErrorDialog(error = state.loginAction.error, onDismiss = {
-                    state.eventSink(LoginPasswordEvents.ClearError)
-                })
+                when {
+                    state.loginAction.error.isWaitListError() -> {
+                        onWaitListError(state.formState)
+                    }
+                    else -> {
+                        LoginErrorDialog(error = state.loginAction.error, onDismiss = {
+                            state.eventSink(LoginPasswordEvents.ClearError)
+                        })
+                    }
+                }
             }
         }
     }
@@ -269,6 +279,7 @@ internal fun LoginForm(
 @Composable
 internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
+        title = stringResource(id = CommonStrings.dialog_title_error),
         content = stringResource(loginError(error)),
         onDismiss = onDismiss
     )
@@ -288,6 +299,7 @@ internal fun LoginPasswordViewDarkPreview(@PreviewParameter(LoginPasswordStatePr
 private fun ContentToPreview(state: LoginPasswordState) {
     LoginPasswordView(
         state = state,
-        onBackPressed = {}
+        onBackPressed = {},
+        onWaitListError = {},
     )
 }

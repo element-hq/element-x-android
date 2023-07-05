@@ -18,7 +18,6 @@ package io.element.android.features.login.impl
 
 import android.app.Activity
 import android.os.Parcelable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -28,6 +27,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
@@ -39,8 +39,10 @@ import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
 import io.element.android.features.login.impl.oidc.webview.OidcNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
+import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
+import io.element.android.features.login.impl.screens.waitlistscreen.WaitListNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -87,6 +89,9 @@ class LoginFlowNode @AssistedInject constructor(
 
         @Parcelize
         object LoginPassword : NavTarget
+
+        @Parcelize
+        data class WaitList(val loginFormState: LoginFormState) : NavTarget
 
         @Parcelize
         data class OidcView(val oidcDetails: OidcDetails) : NavTarget
@@ -144,11 +149,27 @@ class LoginFlowNode @AssistedInject constructor(
                 createNode<SearchAccountProviderNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.LoginPassword -> {
-                createNode<LoginPasswordNode>(buildContext, plugins = listOf())
+                val callback = object : LoginPasswordNode.Callback {
+                    override fun onWaitListError(loginFormState: LoginFormState) {
+                        backstack.newRoot(NavTarget.WaitList(loginFormState))
+                    }
+                }
+                createNode<LoginPasswordNode>(buildContext, plugins = listOf(callback))
             }
             is NavTarget.OidcView -> {
                 val input = OidcNode.Inputs(navTarget.oidcDetails)
                 createNode<OidcNode>(buildContext, plugins = listOf(input))
+            }
+            is NavTarget.WaitList -> {
+                val inputs = WaitListNode.Inputs(
+                    loginFormState = navTarget.loginFormState,
+                )
+                val callback = object : WaitListNode.Callback {
+                    override fun onCancelClicked() {
+                        navigateUp()
+                    }
+                }
+                createNode<WaitListNode>(buildContext, plugins = listOf(callback, inputs))
             }
         }
     }
