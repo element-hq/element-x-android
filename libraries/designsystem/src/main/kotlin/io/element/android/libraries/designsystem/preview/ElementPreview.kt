@@ -28,9 +28,13 @@ import io.element.android.libraries.theme.ElementTheme
  *
  * NB: Content should be wrapped into [ElementPreview] to apply proper theming.
  */
-@Preview(name = "Day mode")
-@Preview(name = "Night mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-annotation class ElementPreviews
+@Preview(name = "D")
+@Preview(name = "N", uiMode = Configuration.UI_MODE_NIGHT_YES)
+annotation class ElementPreviews(
+    val group: String = "",
+    val widthDp: Int = -1,
+    val heightDp: Int = -1,
+)
 
 @Deprecated("Don't use anymore.")
 @Composable
