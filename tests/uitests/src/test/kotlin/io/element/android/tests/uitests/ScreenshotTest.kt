@@ -79,6 +79,7 @@ class ScreenshotTest {
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
         @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
+        @TestParameter(value = ["false", "true"]) nightMode: Boolean,
     ) {
         paparazzi.unsafeUpdateConfig(
             deviceConfig = baseDeviceConfig.deviceConfig.copy(
@@ -95,6 +96,7 @@ class ScreenshotTest {
                 ),
                 LocalConfiguration provides Configuration().apply {
                     setLocales(LocaleList(localeStr.toLocale()))
+                    if (nightMode) uiMode = Configuration.UI_MODE_NIGHT_YES
                 },
                 // Needed so that UI that uses it don't crash during screenshot tests
                 LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
