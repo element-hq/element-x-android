@@ -101,7 +101,7 @@ class ScreenshotTest {
                 LocalConfiguration provides Configuration().apply {
                     setLocales(LocaleList(localeStr.toLocale()))
                     // Dark mode previews have name "N" so their component is subfixed with "- N"
-                    if (componentTestPreview.name.endsWith("- $NIGHT_MODE_NAME")){
+                    if (componentTestPreview.name.contains("- $NIGHT_MODE_NAME")){
                         uiMode = Configuration.UI_MODE_NIGHT_YES
                     }
                 },
