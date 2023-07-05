@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package io.element.android.appnav
+package io.element.android.appnav.room
 
 import android.os.Parcelable
 import androidx.compose.foundation.background
@@ -43,10 +43,11 @@ import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.NodeLifecycleCallback
+import io.element.android.appnav.safeRoot
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
@@ -59,21 +60,17 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.theme.ElementTheme
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
 class AwaitRoomNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val matrixClient: MatrixClient,
+    awaitRoomStateFlowFactory: AwaitRoomStateFlowFactory,
 ) :
     BackstackNode<AwaitRoomNode.NavTarget>(
         backstack = BackStack(
@@ -90,11 +87,7 @@ class AwaitRoomNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val roomStateFlow = suspend {
-        matrixClient.getRoom(roomId = inputs.roomId)
-    }
-        .asFlow()
-        .stateIn(lifecycleScope, SharingStarted.Eagerly, null)
+    private val awaitRoomStateFlow = awaitRoomStateFlowFactory.create(lifecycleScope, inputs.roomId)
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -105,11 +98,10 @@ class AwaitRoomNode @AssistedInject constructor(
     }
 
     init {
-        roomStateFlow.onEach { room ->
-            if (room == null) {
-                backstack.newRoot(NavTarget.Loading)
-            } else {
-                backstack.newRoot(NavTarget.Loaded)
+        awaitRoomStateFlow.onEach { awaitRoomState ->
+            when (awaitRoomState) {
+                is AwaitRoomState.Loaded -> backstack.safeRoot(NavTarget.Loaded)
+                else -> backstack.safeRoot(NavTarget.Loading)
             }
         }.launchIn(lifecycleScope)
     }
@@ -119,12 +111,12 @@ class AwaitRoomNode @AssistedInject constructor(
             NavTarget.Loaded -> {
                 val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
                 val roomFlowNodeCallback = plugins<RoomFlowNode.Callback>()
-                val room = roomStateFlow.value
-                if (room == null) {
-                    loadingNode(buildContext, this::navigateUp)
-                } else {
-                    val inputs = RoomFlowNode.Inputs(room, initialElement = inputs.initialElement)
+                val awaitRoomState = awaitRoomStateFlow.value
+                if (awaitRoomState is AwaitRoomState.Loaded) {
+                    val inputs = RoomFlowNode.Inputs(awaitRoomState.room, initialElement = inputs.initialElement)
                     createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback + nodeLifecycleCallbacks)
+                } else {
+                    loadingNode(buildContext, this::navigateUp)
                 }
             }
             NavTarget.Loading -> {

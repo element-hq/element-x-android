@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav
+package io.element.android.appnav.room
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -32,6 +32,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.NodeLifecycleCallback
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.BackstackNode

@@ -42,6 +42,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
+import io.element.android.appnav.room.AwaitRoomNode
+import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.invitelist.api.InviteListEntryPoint

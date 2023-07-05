@@ -28,7 +28,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.appnav.LoggedInFlowNode
-import io.element.android.appnav.RoomFlowNode
+import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.RootFlowNode
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
