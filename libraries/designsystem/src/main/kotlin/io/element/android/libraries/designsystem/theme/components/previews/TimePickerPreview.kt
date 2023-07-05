@@ -27,10 +27,11 @@ import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialogContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementWidePreviews
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterial3Api::class)
-@ElementPreviews(widthDp = 600, group = PreviewGroup.DateTimePickers)
+@ElementWidePreviews(group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun TimePickerHorizontalPreview() {
     ElementPreview {
