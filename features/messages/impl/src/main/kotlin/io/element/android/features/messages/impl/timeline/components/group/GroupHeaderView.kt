@@ -95,11 +95,6 @@ fun GroupHeaderViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-fun GroupHeaderViewDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

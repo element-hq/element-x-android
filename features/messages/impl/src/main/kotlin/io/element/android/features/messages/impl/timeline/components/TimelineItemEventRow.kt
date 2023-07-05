@@ -435,11 +435,6 @@ internal fun TimelineItemEventRowLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineItemEventRowDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     Column {
@@ -484,11 +479,6 @@ private fun ContentToPreview() {
 internal fun TimelineItemEventRowWithReplyLightPreview() {
     ElementPreview { ContentToPreviewWithReply() }
 }
-
-@ElementPreviews
-@Composable
-internal fun TimelineItemEventRowWithReplyDarkPreview() =
-    ElementPreviewDark { ContentToPreviewWithReply() }
 
 @Composable
 private fun ContentToPreviewWithReply() {
@@ -555,11 +545,6 @@ private fun aInReplyToReady(
 internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
     ElementPreview { ContentTimestampToPreview(event) }
 }
-
-@ElementPreviews
-@Composable
-internal fun TimelineItemEventRowTimestampDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewDark { ContentTimestampToPreview(event) }
 
 @Composable
 private fun ContentTimestampToPreview(event: TimelineItem.Event) {

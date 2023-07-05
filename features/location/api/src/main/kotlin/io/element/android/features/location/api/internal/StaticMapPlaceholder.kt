@@ -91,12 +91,6 @@ fun StaticMapPlaceholderLightPreview(
     ElementPreview { ContentToPreview(values) }
 }
 
-@ElementPreviews
-@Composable
-fun StaticMapPlaceholderDarkPreview(
-    @PreviewParameter(BooleanParameterProvider::class) values: Boolean
-) = ElementPreviewDark { ContentToPreview(values) }
-
 @Composable
 private fun ContentToPreview(showProgress: Boolean) {
     StaticMapPlaceholder(

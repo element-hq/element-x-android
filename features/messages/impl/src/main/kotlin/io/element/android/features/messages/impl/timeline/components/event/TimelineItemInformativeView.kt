@@ -70,10 +70,6 @@ internal fun TimelineItemInformativeViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineItemInformativeViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     TimelineItemInformativeView(

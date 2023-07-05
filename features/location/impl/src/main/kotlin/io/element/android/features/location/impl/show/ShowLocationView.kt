@@ -111,11 +111,6 @@ fun ShowLocationView(
 internal fun ShowLocationViewLightPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
     ElementPreview { ContentToPreview(state) }
 
-@ElementPreviews
-@Composable
-internal fun ShowLocationViewDarkPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: ShowLocationState) {
     ShowLocationView(

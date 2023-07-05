@@ -264,11 +264,6 @@ fun MapViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-fun MapViewDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     MapView(

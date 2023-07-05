@@ -227,11 +227,6 @@ internal fun RoomListSearchResultContentLightPreview() {
 
 @ElementPreviews
 @Composable
-internal fun RoomListSearchResultContentDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@ElementPreviews
-@Composable
 internal fun ContentToPreview() {
     RoomListSearchResultContent(
         state = aRoomListState(),

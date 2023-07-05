@@ -119,11 +119,6 @@ fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::c
     ElementPreview { ContentToPreview(item) }
 }
 
-@ElementPreviews
-@Composable
-fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
-    ElementPreviewDark { ContentToPreview(item) }
-
 @Composable
 private fun ContentToPreview(item: AccountProvider) {
     AccountProviderView(

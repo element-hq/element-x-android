@@ -377,11 +377,6 @@ fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) s
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: ActionListState) {
     SheetContent(

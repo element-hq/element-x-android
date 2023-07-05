@@ -338,11 +338,6 @@ internal fun MessagesViewLightPreview(@PreviewParameter(MessagesStateProvider::c
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun MessagesViewDarkPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: MessagesState) {
     MessagesView(

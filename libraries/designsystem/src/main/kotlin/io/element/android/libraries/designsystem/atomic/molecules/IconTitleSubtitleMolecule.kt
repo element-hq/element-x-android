@@ -91,11 +91,6 @@ internal fun IconTitleSubtitleMoleculeLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun IconTitleSubtitleMoleculeDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     IconTitleSubtitleMolecule(

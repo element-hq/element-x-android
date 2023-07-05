@@ -136,11 +136,6 @@ internal fun SendLocationViewLightPreview(@PreviewParameter(SendLocationStatePro
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun SendLocationViewDarkPreview(@PreviewParameter(SendLocationStateProvider::class) state: SendLocationState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: SendLocationState) {
     SendLocationView(

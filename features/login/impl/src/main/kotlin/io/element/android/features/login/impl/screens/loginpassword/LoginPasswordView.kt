@@ -280,11 +280,6 @@ internal fun LoginPasswordViewLightPreview(@PreviewParameter(LoginPasswordStateP
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun LoginPasswordViewDarkPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: LoginPasswordState) {
     LoginPasswordView(

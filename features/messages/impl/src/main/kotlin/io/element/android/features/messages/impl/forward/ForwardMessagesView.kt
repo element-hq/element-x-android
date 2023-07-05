@@ -283,11 +283,6 @@ fun ForwardMessagesViewLightPreview(@PreviewParameter(ForwardMessagesStateProvid
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun ForwardMessagesViewDarkPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: ForwardMessagesState) {
     ForwardMessagesView(

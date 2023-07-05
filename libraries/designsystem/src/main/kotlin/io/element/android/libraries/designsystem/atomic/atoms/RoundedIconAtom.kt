@@ -102,11 +102,6 @@ internal fun RoundedIconAtomLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun RoundedIconAtomDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

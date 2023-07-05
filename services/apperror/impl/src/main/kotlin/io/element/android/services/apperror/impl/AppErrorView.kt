@@ -56,10 +56,6 @@ internal fun AppErrorViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun AppErrorViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     AppErrorView(

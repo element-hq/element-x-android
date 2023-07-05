@@ -115,11 +115,6 @@ fun AvatarActionBottomSheetLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-fun AvatarActionBottomSheetDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     AvatarActionBottomSheet(

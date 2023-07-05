@@ -225,11 +225,6 @@ fun RoomInviteMembersLightPreview(@PreviewParameter(RoomInviteMembersStateProvid
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun RoomInviteMembersDarkPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: RoomInviteMembersState) {
     RoomInviteMembersView(state)

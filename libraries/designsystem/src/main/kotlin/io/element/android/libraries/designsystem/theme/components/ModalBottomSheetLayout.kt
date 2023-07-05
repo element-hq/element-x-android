@@ -101,11 +101,6 @@ internal fun ModalBottomSheetLayoutLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews(group = PreviewGroup.BottomSheets)
-@Composable
-internal fun ModalBottomSheetLayoutDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ContentToPreview() {

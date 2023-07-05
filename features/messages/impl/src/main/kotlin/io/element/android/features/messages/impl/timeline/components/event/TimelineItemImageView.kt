@@ -51,11 +51,6 @@ internal fun TimelineItemImageViewLightPreview(@PreviewParameter(TimelineItemIma
     ElementPreview { ContentToPreview(content) }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineItemImageViewDarkPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) =
-    ElementPreviewDark { ContentToPreview(content) }
-
 @Composable
 private fun ContentToPreview(content: TimelineItemImageContent) {
     TimelineItemImageView(content)

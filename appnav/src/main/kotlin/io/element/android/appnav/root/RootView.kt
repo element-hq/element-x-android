@@ -73,10 +73,6 @@ internal fun RootLightPreview(@PreviewParameter(RootStateProvider::class) rootSt
     ElementPreview { ContentToPreview(rootState) }
 }
 
-@ElementPreviews
-@Composable
-internal fun RootDarkPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
-
 @Composable
 private fun ContentToPreview(rootState: RootState) {
     RootView(rootState) {

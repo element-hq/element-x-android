@@ -104,11 +104,6 @@ internal fun MatrixUserRowLightPreview(@PreviewParameter(MatrixUserProvider::cla
     ElementPreview { ContentToPreview(matrixUser) }
 }
 
-@ElementPreviews
-@Composable
-internal fun MatrixUserRowDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
-    ElementPreviewDark { ContentToPreview(matrixUser) }
-
 @Composable
 private fun ContentToPreview(matrixUser: MatrixUser) {
     MatrixUserRow(matrixUser)

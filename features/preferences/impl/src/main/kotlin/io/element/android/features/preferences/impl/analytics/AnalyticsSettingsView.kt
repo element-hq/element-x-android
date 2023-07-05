@@ -50,11 +50,6 @@ fun AnalyticsSettingsViewLightPreview(@PreviewParameter(AnalyticsSettingsStatePr
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun AnalyticsSettingsViewDarkPreview(@PreviewParameter(AnalyticsSettingsStateProvider::class) state: AnalyticsSettingsState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: AnalyticsSettingsState) {
     AnalyticsSettingsView(

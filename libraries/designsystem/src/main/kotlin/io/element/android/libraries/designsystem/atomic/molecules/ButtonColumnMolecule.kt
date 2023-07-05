@@ -52,11 +52,6 @@ internal fun ButtonColumnMoleculeLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun ButtonColumnMoleculeDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     ButtonColumnMolecule {

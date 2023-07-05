@@ -204,11 +204,6 @@ internal fun RoomSummaryRowLightPreview(@PreviewParameter(RoomListRoomSummaryPro
     ElementPreview { ContentToPreview(data) }
 }
 
-@ElementPreviews
-@Composable
-internal fun RoomSummaryRowDarkPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) =
-    ElementPreviewDark { ContentToPreview(data) }
-
 @Composable
 private fun ContentToPreview(data: RoomListRoomSummary) {
     RoomSummaryRow(

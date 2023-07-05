@@ -81,11 +81,6 @@ internal fun MessageComposerViewLightPreview(@PreviewParameter(MessageComposerSt
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun MessageComposerViewDarkPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: MessageComposerState) {
     MessageComposerView(

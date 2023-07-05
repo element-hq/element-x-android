@@ -211,11 +211,6 @@ fun CreateRoomRootViewLightPreview(@PreviewParameter(CreateRoomRootStateProvider
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun CreateRoomRootViewDarkPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: CreateRoomRootState) {
     CreateRoomRootView(

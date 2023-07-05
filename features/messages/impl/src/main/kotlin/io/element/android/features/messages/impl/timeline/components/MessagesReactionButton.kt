@@ -85,11 +85,6 @@ internal fun MessagesReactionButtonLightPreview(@PreviewParameter(AggregatedReac
     ElementPreview { ContentToPreview(reaction) }
 }
 
-@ElementPreviews
-@Composable
-internal fun MessagesReactionButtonDarkPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) =
-    ElementPreviewDark { ContentToPreview(reaction) }
-
 @Composable
 private fun ContentToPreview(reaction: AggregatedReaction) {
     MessagesReactionButton(reaction, onClick = { })

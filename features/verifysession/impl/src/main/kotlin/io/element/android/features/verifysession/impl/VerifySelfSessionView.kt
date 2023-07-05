@@ -239,11 +239,6 @@ fun VerifySelfSessionViewLightPreview(@PreviewParameter(VerifySelfSessionStatePr
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun VerifySelfSessionViewDarkPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: VerifySelfSessionState) {
     VerifySelfSessionView(

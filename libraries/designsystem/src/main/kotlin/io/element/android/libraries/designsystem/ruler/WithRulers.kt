@@ -69,11 +69,6 @@ internal fun WithRulerLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun WithRulerDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     WithRulers(xRulersOffset = 20.dp, yRulersOffset = 15.dp) {

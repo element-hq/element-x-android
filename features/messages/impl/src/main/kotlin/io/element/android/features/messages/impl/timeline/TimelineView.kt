@@ -308,12 +308,6 @@ fun TimelineViewLightPreview(
     ElementPreview { ContentToPreview(content) }
 }
 
-@ElementPreviews
-@Composable
-fun TimelineViewDarkPreview(
-    @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
-) = ElementPreviewDark { ContentToPreview(content) }
-
 @Composable
 private fun ContentToPreview(content: TimelineItemEventContent) {
     val timelineItems = aTimelineItemList(content)

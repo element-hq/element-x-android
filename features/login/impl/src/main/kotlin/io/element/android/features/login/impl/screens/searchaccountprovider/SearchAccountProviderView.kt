@@ -215,11 +215,6 @@ fun SearchAccountProviderViewLightPreview(@PreviewParameter(SearchAccountProvide
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun SearchAccountProviderViewDarkPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: SearchAccountProviderState) {
     SearchAccountProviderView(

@@ -51,11 +51,6 @@ internal fun TimelineItemLocationViewLightPreview(@PreviewParameter(TimelineItem
     ElementPreview { ContentToPreview(content) }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineItemLocationViewDarkPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) =
-    ElementPreviewDark { ContentToPreview(content) }
-
 @Composable
 private fun ContentToPreview(content: TimelineItemLocationContent) {
     TimelineItemLocationView(content)

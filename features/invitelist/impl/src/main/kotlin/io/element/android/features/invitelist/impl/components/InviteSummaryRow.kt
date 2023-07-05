@@ -202,11 +202,6 @@ internal fun InviteSummaryRowLightPreview(@PreviewParameter(InviteListInviteSumm
     ElementPreview { ContentToPreview(data) }
 }
 
-@ElementPreviews
-@Composable
-internal fun InviteSummaryRowDarkPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) =
-    ElementPreviewDark { ContentToPreview(data) }
-
 @Composable
 private fun ContentToPreview(data: InviteListInviteSummary) {
     InviteSummaryRow(data)

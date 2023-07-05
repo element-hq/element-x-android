@@ -72,11 +72,6 @@ fun RageshakePreferencesViewLightPreview(@PreviewParameter(RageshakePreferencesS
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun RageshakePreferencesViewDarkPreview(@PreviewParameter(RageshakePreferencesStateProvider::class) state: RageshakePreferencesState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: RageshakePreferencesState) {
     RageshakePreferencesView(state)

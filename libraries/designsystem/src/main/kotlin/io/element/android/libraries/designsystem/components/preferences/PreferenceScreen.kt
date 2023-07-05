@@ -107,10 +107,6 @@ internal fun PreferenceViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun PreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     PreferenceView(

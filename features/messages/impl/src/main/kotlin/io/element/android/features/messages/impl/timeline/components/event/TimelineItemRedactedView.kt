@@ -48,11 +48,6 @@ internal fun TimelineItemRedactedViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineItemRedactedViewDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     TimelineItemRedactedView(

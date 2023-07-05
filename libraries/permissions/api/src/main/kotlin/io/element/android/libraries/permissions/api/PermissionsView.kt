@@ -87,11 +87,6 @@ fun PermissionsViewLightPreview(@PreviewParameter(PermissionsViewStateProvider::
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun PermissionsViewDarkPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: PermissionsState) {
     PermissionsView(

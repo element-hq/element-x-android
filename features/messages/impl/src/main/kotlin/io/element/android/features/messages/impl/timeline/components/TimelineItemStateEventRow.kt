@@ -82,11 +82,6 @@ internal fun TimelineItemStateEventRowLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineItemStateEventRowDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     TimelineItemStateEventRow(

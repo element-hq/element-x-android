@@ -151,10 +151,6 @@ internal fun TextLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews(group = PreviewGroup.Text)
-@Composable
-internal fun TextDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     val colors = mapOf(

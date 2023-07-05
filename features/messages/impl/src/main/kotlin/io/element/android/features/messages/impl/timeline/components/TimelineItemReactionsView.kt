@@ -52,11 +52,6 @@ internal fun TimelineItemReactionsViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineItemReactionsViewDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     TimelineItemReactionsView(

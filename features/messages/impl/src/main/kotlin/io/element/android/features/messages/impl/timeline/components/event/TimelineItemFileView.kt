@@ -95,11 +95,6 @@ internal fun TimelineItemFileViewLightPreview(@PreviewParameter(TimelineItemFile
     ElementPreview { ContentToPreview(content) }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineItemFileViewDarkPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) =
-    ElementPreviewDark { ContentToPreview(content) }
-
 @Composable
 private fun ContentToPreview(content: TimelineItemFileContent) {
     TimelineItemFileView(

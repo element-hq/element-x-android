@@ -583,11 +583,6 @@ internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class)
     ElementPreview { ContentToPreview(document) }
 }
 
-@ElementPreviews
-@Composable
-internal fun HtmlDocumentDarkPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
-    ElementPreviewDark { ContentToPreview(document) }
-
 @Composable
 private fun ContentToPreview(document: Document) {
     HtmlDocument(document, MutableInteractionSource())

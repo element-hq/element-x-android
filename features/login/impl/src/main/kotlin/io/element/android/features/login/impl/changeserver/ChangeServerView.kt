@@ -75,11 +75,6 @@ fun ChangeServerViewLightPreview(@PreviewParameter(ChangeServerStateProvider::cl
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun ChangeServerViewDarkPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: ChangeServerState) {
     ChangeServerView(

@@ -50,11 +50,6 @@ internal fun TimelineLoadingMoreIndicatorLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineLoadingMoreIndicatorDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     TimelineLoadingMoreIndicator()

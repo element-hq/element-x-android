@@ -68,13 +68,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -422,27 +421,15 @@ internal fun TextComposerSimpleLightPreview() {
 
 @ElementPreviews
 @Composable
-internal fun TextComposerSimpleDarkPreview() = ElementPreviewDark { SimpleContentToPreview() }
-
-@ElementPreviews
-@Composable
 internal fun TextComposerEditLightPreview() {
     ElementPreview { EditContentToPreview() }
 }
 
 @ElementPreviews
 @Composable
-internal fun TextComposerEditDarkPreview() = ElementPreviewDark { EditContentToPreview() }
-
-@ElementPreviews
-@Composable
 internal fun TextComposerReplyLightPreview() {
     ElementPreview { ReplyContentToPreview() }
 }
-
-@ElementPreviews
-@Composable
-internal fun TextComposerReplyDarkPreview() = ElementPreviewDark { ReplyContentToPreview() }
 
 @Composable
 private fun SimpleContentToPreview() {

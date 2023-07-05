@@ -72,10 +72,6 @@ internal fun CrashDetectionViewLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun CrashDetectionViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     CrashDetectionView(

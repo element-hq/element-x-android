@@ -56,11 +56,6 @@ internal fun PlaceholderAtomLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun PlaceholderAtomDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     // Use a Red background to see the shape

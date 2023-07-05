@@ -138,11 +138,6 @@ internal fun MessageEventBubbleLightPreview(@PreviewParameter(BubbleStateProvide
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun MessageEventBubbleDarkPreview(@PreviewParameter(BubbleStateProvider::class) state: BubbleState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: BubbleState) {
     // Due to position offset, surround with a Box

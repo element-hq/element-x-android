@@ -265,11 +265,6 @@ fun RoomMemberListLightPreview(@PreviewParameter(RoomMemberListStateProvider::cl
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun RoomMemberListDarkPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: RoomMemberListState) {
     RoomMemberListView(

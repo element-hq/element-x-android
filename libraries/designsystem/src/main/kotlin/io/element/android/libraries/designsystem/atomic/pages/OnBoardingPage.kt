@@ -95,11 +95,6 @@ internal fun OnBoardingPageLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun OnBoardingPageDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     OnBoardingPage(

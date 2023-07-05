@@ -98,10 +98,6 @@ internal fun SelectedUserLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun SelectedUserDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     SelectedUser(aMatrixUser())

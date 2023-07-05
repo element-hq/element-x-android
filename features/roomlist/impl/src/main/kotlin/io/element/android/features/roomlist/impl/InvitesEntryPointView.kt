@@ -78,11 +78,6 @@ internal fun InvitesEntryPointViewLightPreview(@PreviewParameter(InvitesStatePro
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun InvitesEntryPointViewDarkPreview(@PreviewParameter(InvitesStateProvider::class) state: InvitesState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: InvitesState) {
     InvitesEntryPointView(

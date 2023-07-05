@@ -88,11 +88,6 @@ internal fun ModalBottomSheetLightPreview() {
 }
 
 // This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
-@ElementPreviews(group = PreviewGroup.BottomSheets)
-@Composable
-internal fun ModalBottomSheetDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview() {

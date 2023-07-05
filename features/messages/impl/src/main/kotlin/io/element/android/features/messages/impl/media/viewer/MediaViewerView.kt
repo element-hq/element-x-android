@@ -253,11 +253,6 @@ private fun ErrorView(
     )
 }
 
-@ElementPreviews
-@Composable
-fun MediaViewerViewDarkPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: MediaViewerState) {
     MediaViewerView(

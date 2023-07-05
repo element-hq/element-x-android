@@ -247,11 +247,6 @@ internal fun RoomListViewLightPreview(@PreviewParameter(RoomListStateProvider::c
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun RoomListViewDarkPreview(@PreviewParameter(RoomListStateProvider::class) state: RoomListState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: RoomListState) {
     RoomListView(

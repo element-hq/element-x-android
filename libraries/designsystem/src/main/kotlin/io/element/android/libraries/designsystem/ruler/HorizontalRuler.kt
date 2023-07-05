@@ -71,11 +71,6 @@ internal fun HorizontalRulerLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun HorizontalRulerDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     HorizontalRuler()

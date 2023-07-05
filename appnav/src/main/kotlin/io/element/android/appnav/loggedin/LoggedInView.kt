@@ -49,11 +49,6 @@ fun LoggedInViewLightPreview(@PreviewParameter(LoggedInStateProvider::class) sta
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun LoggedInViewDarkPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: LoggedInState) {
     LoggedInView(

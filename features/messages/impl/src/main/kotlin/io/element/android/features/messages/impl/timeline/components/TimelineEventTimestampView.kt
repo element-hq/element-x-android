@@ -101,11 +101,6 @@ internal fun TimelineEventTimestampViewLightPreview(@PreviewParameter(TimelineIt
     ElementPreview { ContentToPreview(event) }
 }
 
-@ElementPreviews
-@Composable
-internal fun TimelineEventTimestampViewDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewDark { ContentToPreview(event) }
-
 @Composable
 private fun ContentToPreview(event: TimelineItem.Event) {
     TimelineEventTimestampView(

@@ -131,11 +131,6 @@ fun ChangeAccountProviderViewLightPreview(@PreviewParameter(ChangeAccountProvide
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun ChangeAccountProviderViewDarkPreview(@PreviewParameter(ChangeAccountProviderStateProvider::class) state: ChangeAccountProviderState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: ChangeAccountProviderState) {
     ChangeAccountProviderView(

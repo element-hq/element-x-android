@@ -281,11 +281,6 @@ fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStateProvider::
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: ConfigureRoomState) {
     ConfigureRoomView(

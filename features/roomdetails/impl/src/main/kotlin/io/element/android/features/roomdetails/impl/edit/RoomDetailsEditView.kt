@@ -292,11 +292,6 @@ fun RoomDetailsEditViewLightPreview(@PreviewParameter(RoomDetailsEditStateProvid
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun RoomDetailsEditViewDarkPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: RoomDetailsEditState) {
     RoomDetailsEditView(

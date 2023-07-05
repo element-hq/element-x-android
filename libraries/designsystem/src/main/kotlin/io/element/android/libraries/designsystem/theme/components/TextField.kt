@@ -150,11 +150,6 @@ internal fun TextFieldLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews(group = PreviewGroup.TextFields)
-@Composable
-internal fun TextFieldDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     Column(modifier = Modifier.padding(4.dp)) {

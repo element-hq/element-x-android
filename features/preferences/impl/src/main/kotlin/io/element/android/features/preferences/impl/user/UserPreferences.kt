@@ -43,11 +43,6 @@ internal fun UserPreferencesLightPreview(@PreviewParameter(MatrixUserWithNullPro
     ElementPreview { ContentToPreview(matrixUser) }
 }
 
-@ElementPreviews
-@Composable
-internal fun UserPreferencesDarkPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) =
-    ElementPreviewDark { ContentToPreview(matrixUser) }
-
 @Composable
 private fun ContentToPreview(matrixUser: MatrixUser?) {
     UserPreferences(matrixUser)

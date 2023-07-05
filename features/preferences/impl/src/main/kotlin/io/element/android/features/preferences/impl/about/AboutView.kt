@@ -54,11 +54,6 @@ fun AboutViewLightPreview(@PreviewParameter(AboutStateProvider::class) state: Ab
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun AboutViewDarkPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: AboutState) {
     AboutView(

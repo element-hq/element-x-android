@@ -98,10 +98,6 @@ fun RoomPrivacyOptionLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-fun RoomPrivacyOptionDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     val aRoomPrivacyItem = roomPrivacyItems().first()

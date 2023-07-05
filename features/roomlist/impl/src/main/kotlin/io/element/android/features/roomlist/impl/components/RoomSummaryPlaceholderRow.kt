@@ -94,11 +94,6 @@ internal fun RoomSummaryPlaceholderRowLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun RoomSummaryPlaceholderRowDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     RoomSummaryPlaceholderRow()

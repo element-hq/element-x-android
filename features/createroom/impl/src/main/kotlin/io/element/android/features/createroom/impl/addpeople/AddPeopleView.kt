@@ -123,11 +123,6 @@ internal fun AddPeopleViewLightPreview(@PreviewParameter(AddPeopleUserListStateP
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun AddPeopleViewDarkPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: UserListState) {
     AddPeopleView(state = state)

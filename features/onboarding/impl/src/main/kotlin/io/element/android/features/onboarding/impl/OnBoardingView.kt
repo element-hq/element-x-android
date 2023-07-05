@@ -205,11 +205,6 @@ internal fun OnBoardingScreenLightPreview(@PreviewParameter(OnBoardingStateProvi
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun OnBoardingScreenDarkPreview(@PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: OnBoardingState) {
     OnBoardingView(state)

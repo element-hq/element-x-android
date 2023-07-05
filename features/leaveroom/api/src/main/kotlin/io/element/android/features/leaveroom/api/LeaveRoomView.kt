@@ -116,12 +116,6 @@ internal fun LeaveRoomViewLightPreview(
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-internal fun LeaveRoomViewDarkPreview(
-    @PreviewParameter(LeaveRoomStateProvider::class) state: LeaveRoomState
-) = ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: LeaveRoomState) {
     Box(

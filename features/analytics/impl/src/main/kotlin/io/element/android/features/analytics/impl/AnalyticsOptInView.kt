@@ -217,12 +217,6 @@ fun AnalyticsOptInViewLightPreview(@PreviewParameter(AnalyticsOptInStateProvider
     }
 }
 
-@ElementPreviews
-@Composable
-fun AnalyticsOptInViewDarkPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewDark {
-    ContentToPreview(state)
-}
-
 @Composable
 private fun ContentToPreview(state: AnalyticsOptInState) {
     AnalyticsOptInView(

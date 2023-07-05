@@ -96,11 +96,6 @@ internal fun CheckableMatrixUserRowLightPreview(@PreviewParameter(MatrixUserProv
     ElementPreview { ContentToPreview(matrixUser) }
 }
 
-@ElementPreviews
-@Composable
-internal fun CheckableMatrixUserRowDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
-    ElementPreviewDark { ContentToPreview(matrixUser) }
-
 @Composable
 private fun ContentToPreview(matrixUser: MatrixUser) {
     Column {

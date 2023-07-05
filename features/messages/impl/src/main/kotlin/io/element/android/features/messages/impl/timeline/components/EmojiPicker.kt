@@ -119,10 +119,6 @@ internal fun EmojiPickerLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun EmojiPickerDarkPreview() {
-    ElementPreviewDark { ContentToPreview() }
 }
 
 @Composable

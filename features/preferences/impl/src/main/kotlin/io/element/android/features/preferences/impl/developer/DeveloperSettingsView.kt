@@ -94,11 +94,6 @@ fun DeveloperSettingsViewLightPreview(@PreviewParameter(DeveloperSettingsStatePr
     ElementPreview { ContentToPreview(state) }
 }
 
-@ElementPreviews
-@Composable
-fun DeveloperSettingsViewDarkPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
 @Composable
 private fun ContentToPreview(state: DeveloperSettingsState) {
     DeveloperSettingsView(

@@ -72,11 +72,6 @@ internal fun HeaderFooterPageLightPreview() {
     ElementPreview { ContentToPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun HeaderFooterPageDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
 @Composable
 private fun ContentToPreview() {
     HeaderFooterPage(

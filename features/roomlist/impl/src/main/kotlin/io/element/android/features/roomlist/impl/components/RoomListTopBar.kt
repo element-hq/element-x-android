@@ -199,10 +199,6 @@ internal fun DefaultRoomListTopBarLightPreview() {
     ElementPreview { DefaultRoomListTopBarPreview() }
 }
 
-@ElementPreviews
-@Composable
-internal fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRoomListTopBarPreview() }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DefaultRoomListTopBarPreview() {
