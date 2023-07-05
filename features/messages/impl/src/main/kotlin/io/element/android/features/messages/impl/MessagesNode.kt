@@ -54,7 +54,7 @@ class MessagesNode @AssistedInject constructor(
         fun onEventClicked(event: TimelineItem.Event)
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClicked(userId: UserId)
-        fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo)
+        fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
         fun onForwardEventClicked(eventId: EventId)
         fun onReportMessage(eventId: EventId, senderId: UserId)
         fun onSendLocationClicked()
@@ -83,7 +83,7 @@ class MessagesNode @AssistedInject constructor(
     private fun onUserDataClicked(userId: UserId) {
         callback?.onUserDataClicked(userId)
     }
-    override fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo) {
+    override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         callback?.onShowEventDebugInfoClicked(eventId, debugInfo)
     }
 
@@ -94,7 +94,7 @@ class MessagesNode @AssistedInject constructor(
     override fun onReportContentClicked(eventId: EventId, senderId: UserId) {
         callback?.onReportMessage(eventId, senderId)
     }
-    
+
     private fun onSendLocationClicked() {
         callback?.onSendLocationClicked()
     }

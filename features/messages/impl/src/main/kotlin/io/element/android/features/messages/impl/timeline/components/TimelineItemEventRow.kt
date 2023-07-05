@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.Canvas
@@ -33,7 +35,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissState
+import androidx.compose.material3.DismissValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -86,6 +94,7 @@ import org.jsoup.Jsoup
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
     isHighlighted: Boolean,
+    canReply: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onUserDataClick: (UserId) -> Unit,
@@ -93,6 +102,7 @@ fun TimelineItemEventRow(
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
+    onSwipeToReply: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -106,6 +116,73 @@ fun TimelineItemEventRow(
         inReplyToClick(inReplyToEventId)
     }
 
+    if (canReply) {
+        val dismissState = rememberDismissState(
+            confirmValueChange = {
+                if (it == DismissValue.DismissedToEnd) {
+                    onSwipeToReply()
+                }
+                // Do not dismiss the message, return false!
+                false
+            }
+        )
+        SwipeToDismiss(
+            state = dismissState,
+            background = {
+                ReplySwipeIndicator({ dismissState.toSwipeProgress() })
+            },
+            directions = setOf(DismissDirection.StartToEnd),
+            dismissContent = {
+                TimelineItemEventRowContent(
+                    event = event,
+                    isHighlighted = isHighlighted,
+                    interactionSource = interactionSource,
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                    onTimestampClicked = onTimestampClicked,
+                    inReplyToClicked = ::inReplyToClicked,
+                    onUserDataClicked = ::onUserDataClicked,
+                    onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                    onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                )
+            }
+        )
+    } else {
+        TimelineItemEventRowContent(
+            event = event,
+            isHighlighted = isHighlighted,
+            interactionSource = interactionSource,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            onTimestampClicked = onTimestampClicked,
+            inReplyToClicked = ::inReplyToClicked,
+            onUserDataClicked = ::onUserDataClicked,
+            onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+            onMoreReactionsClicked = { onMoreReactionsClick(event) },
+        )
+    }
+    // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
+    if (event.groupPosition.isNew()) {
+        Spacer(modifier = modifier.height(16.dp))
+    } else {
+        Spacer(modifier = modifier.height(2.dp))
+    }
+}
+
+@Composable
+private fun TimelineItemEventRowContent(
+    event: TimelineItem.Event,
+    isHighlighted: Boolean,
+    interactionSource: MutableInteractionSource,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    onTimestampClicked: (TimelineItem.Event) -> Unit,
+    inReplyToClicked: () -> Unit,
+    onUserDataClicked: () -> Unit,
+    onReactionClicked: (emoji: String) -> Unit,
+    onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     // To avoid using negative offset, we display in this Box a column with:
     // - Spacer to give room to the Sender information if they must be displayed;
     // - The message bubble;
@@ -138,7 +215,7 @@ fun TimelineItemEventRow(
                     interactionSource = interactionSource,
                     onMessageClick = onClick,
                     onMessageLongClick = onLongClick,
-                    inReplyToClick = ::inReplyToClicked,
+                    inReplyToClick = inReplyToClicked,
                     onTimestampClicked = {
                         onTimestampClicked(event)
                     }
@@ -156,26 +233,28 @@ fun TimelineItemEventRow(
                 Modifier
                     .padding(horizontal = 16.dp)
                     .align(Alignment.TopStart)
-                    .clickable(onClick = ::onUserDataClicked)
+                    .clickable(onClick = onUserDataClicked)
             )
         }
         // Align to the bottom of the box
         if (event.reactionsState.reactions.isNotEmpty()) {
             TimelineItemReactionsView(
                 reactionsState = event.reactionsState,
-                onReactionClicked = { emoji -> onReactionClick(emoji, event) },
-                onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                onReactionClicked = onReactionClicked,
+                onMoreReactionsClicked = { onMoreReactionsClicked(event) },
                 modifier = Modifier
                     .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
     }
-    // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
-    if (event.groupPosition.isNew()) {
-        Spacer(modifier = modifier.height(16.dp))
-    } else {
-        Spacer(modifier = modifier.height(2.dp))
+}
+
+private fun DismissState.toSwipeProgress(): Float {
+    return when (targetValue) {
+        DismissValue.Default -> 0f
+        DismissValue.DismissedToEnd -> progress * 3
+        DismissValue.DismissedToStart -> progress * 3
     }
 }
 
@@ -451,6 +530,7 @@ private fun ContentToPreview() {
                     )
                 ),
                 isHighlighted = false,
+                canReply = true,
                 onClick = {},
                 onLongClick = {},
                 onUserDataClick = {},
@@ -458,6 +538,7 @@ private fun ContentToPreview() {
                 onReactionClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
+                onSwipeToReply = {},
             )
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
@@ -467,6 +548,7 @@ private fun ContentToPreview() {
                     )
                 ),
                 isHighlighted = false,
+                canReply = true,
                 onClick = {},
                 onLongClick = {},
                 onUserDataClick = {},
@@ -474,6 +556,7 @@ private fun ContentToPreview() {
                 onReactionClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
+                onSwipeToReply = {},
             )
         }
     }
@@ -493,7 +576,7 @@ internal fun TimelineItemEventRowWithReplyDarkPreview() =
 private fun ContentToPreviewWithReply() {
     Column {
         sequenceOf(false, true).forEach {
-            val replyContent = if(it) {
+            val replyContent = if (it) {
                 // Short
                 "Message which are being replied."
             } else {
@@ -510,6 +593,7 @@ private fun ContentToPreviewWithReply() {
                     inReplyTo = aInReplyToReady(replyContent)
                 ),
                 isHighlighted = false,
+                canReply = true,
                 onClick = {},
                 onLongClick = {},
                 onUserDataClick = {},
@@ -517,6 +601,7 @@ private fun ContentToPreviewWithReply() {
                 onReactionClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
+                onSwipeToReply = {},
             )
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
@@ -527,6 +612,7 @@ private fun ContentToPreviewWithReply() {
                     inReplyTo = aInReplyToReady(replyContent)
                 ),
                 isHighlighted = false,
+                canReply = true,
                 onClick = {},
                 onLongClick = {},
                 onUserDataClick = {},
@@ -534,6 +620,7 @@ private fun ContentToPreviewWithReply() {
                 onReactionClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
+                onSwipeToReply = {},
             )
         }
     }
@@ -581,6 +668,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                         senderDisplayName = if (useDocument) "Document case" else "Text case",
                     ),
                     isHighlighted = false,
+                    canReply = true,
                     onClick = {},
                     onLongClick = {},
                     onUserDataClick = {},
@@ -588,6 +676,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                     onReactionClick = { _, _ -> },
                     onMoreReactionsClick = {},
                     onTimestampClicked = {},
+                    onSwipeToReply = {},
                 )
             }
         }

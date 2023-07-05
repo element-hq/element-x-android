@@ -1,0 +1,13 @@
+appId: ${APP_ID}
+---
+# Purpose: Test the creation and deletion of a DM room.
+- tapOn: "Create a new conversation or room"
+- tapOn: "Search for someone"
+- inputText: ${INVITEE1_MXID}
+- tapOn:
+    text: ${INVITEE1_MXID}
+    index: 1
+- takeScreenshot: build/maestro/330-createAndDeleteDM
+- tapOn: "maestroelement2"
+- tapOn: "Leave room"
+- tapOn: "Leave"

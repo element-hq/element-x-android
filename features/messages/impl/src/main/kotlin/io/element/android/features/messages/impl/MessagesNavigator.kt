@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 interface MessagesNavigator {
-    fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo)
+    fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
     fun onForwardEventClicked(eventId: EventId)
     fun onReportContentClicked(eventId: EventId, senderId: UserId)
 }

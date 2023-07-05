@@ -31,7 +31,7 @@ class FakeMessagesNavigator : MessagesNavigator {
     var onReportContentClickedCount = 0
         private set
 
-    override fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo) {
+    override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         onShowEventDebugInfoClickedCount++
     }
 
