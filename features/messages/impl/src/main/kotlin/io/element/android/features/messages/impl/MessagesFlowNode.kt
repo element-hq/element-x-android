@@ -29,7 +29,9 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.SendLocationEntryPoint
+import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
@@ -41,6 +43,7 @@ import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -59,6 +62,7 @@ class MessagesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val sendLocationEntryPoint: SendLocationEntryPoint,
+    private val showLocationEntryPoint: ShowLocationEntryPoint,
 ) : BackstackNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -81,6 +85,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class AttachmentPreview(val attachment: Attachment) : NavTarget
+
+        @Parcelize
+        data class LocationViewer(val location: Location, val description: String?) : NavTarget
 
         @Parcelize
         data class EventDebugInfo(val eventId: EventId, val debugInfo: TimelineItemDebugInfo) : NavTarget
@@ -147,6 +154,10 @@ class MessagesFlowNode @AssistedInject constructor(
                 val inputs = AttachmentsPreviewNode.Inputs(navTarget.attachment)
                 createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
+            is NavTarget.LocationViewer -> {
+                val inputs = ShowLocationEntryPoint.Inputs(navTarget.location, navTarget.description)
+                showLocationEntryPoint.createNode(this, buildContext, inputs)
+            }
             is NavTarget.EventDebugInfo -> {
                 val inputs = EventDebugInfoNode.Inputs(navTarget.eventId, navTarget.debugInfo)
                 createNode<EventDebugInfoNode>(buildContext, listOf(inputs))
@@ -210,6 +221,13 @@ class MessagesFlowNode @AssistedInject constructor(
                     ),
                     mediaSource = mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
+                )
+                backstack.push(navTarget)
+            }
+            is TimelineItemLocationContent -> {
+                val navTarget = NavTarget.LocationViewer(
+                    location = event.content.location,
+                    description = event.content.description,
                 )
                 backstack.push(navTarget)
             }

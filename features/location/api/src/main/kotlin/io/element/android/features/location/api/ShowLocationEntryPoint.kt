@@ -16,19 +16,14 @@
 
 package io.element.android.features.location.api
 
-private const val GEO_URI_REGEX = """geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitude>-?\d+(?:\.\d+)?)(?:;u=(?<uncertainty>\d+(?:\.\d+)?))?"""
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
 
-data class Location(
-    val lat: Double,
-    val lon: Double,
-    val accuracy: Float,
-)
+interface ShowLocationEntryPoint : FeatureEntryPoint {
 
-fun parseGeoUri(geoUri: String): Location? {
-    val result = Regex(GEO_URI_REGEX).matchEntire(geoUri) ?: return null
-    return Location (
-        lat = result.groups["latitude"]?.value?.toDoubleOrNull() ?: return null,
-        lon = result.groups["longitude"]?.value?.toDoubleOrNull() ?: return null,
-        accuracy = result.groups["uncertainty"]?.value?.toFloatOrNull() ?: 0f,
-    )
+    data class Inputs(val location: Location, val description: String?) : NodeInputs
+
+    fun createNode(parentNode: Node, buildContext: BuildContext, inputs: Inputs): Node
 }

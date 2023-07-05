@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.location
+package io.element.android.features.location.impl.show
 
 import io.element.android.features.location.api.Location
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
-fun fakeLocationUpdatesFlow(): Flow<Location> = flow {
-    while (true) {
-        delay(1_000)
-        emit(aLocation())
-    }
-}
-
-private fun aLocation() = Location(
-    lat = 51.49404,
-    lon = -0.25484,
-    accuracy = 5f
+data class ShowLocationState(
+    val location: Location,
+    val description: String?,
+    val eventSink: (ShowLocationEvents) -> Unit,
 )

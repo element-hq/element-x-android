@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.location
+package io.element.android.features.location.impl.show
 
-/**
- * Represents a location sample emitted by the device's location subsystem.
- */
-data class Location(
-    val lat: Double,
-    val lon: Double,
-    val accuracy: Float,
-)
+import io.element.android.features.location.api.Location
+
+class FakeLocationActions : LocationActions {
+
+    var sharedLocation: Location? = null
+        private set
+
+    var sharedLabel: String? = null
+        private set
+
+    override fun share(location: Location, label: String?) {
+        sharedLocation = location
+        sharedLabel = label
+    }
+}
