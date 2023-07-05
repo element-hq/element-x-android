@@ -16,8 +16,10 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,26 +30,36 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun TimelineItemLocationView(
     content: TimelineItemLocationContent,
     modifier: Modifier = Modifier,
 ) {
-    StaticMapView(
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(max = 188.dp),
-        lat = content.location.lat,
-        lon = content.location.lon,
-        zoom = 15.0,
-        contentDescription = content.body
-    )
+    Column(modifier = modifier.fillMaxWidth()) {
+        content.description?.let {
+            Text(
+                text = it,
+                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
+            )
+        }
+
+        StaticMapView(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 188.dp),
+            lat = content.location.lat,
+            lon = content.location.lon,
+            zoom = 15.0,
+            contentDescription = content.body
+        )
+    }
 }
 
 @Preview
 @Composable
-internal fun TimelineItemLocationViewLightPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) =
+internal fun TimelineItemLocationViewPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) =
     ElementPreviewLight { ContentToPreview(content) }
 
 @Preview
