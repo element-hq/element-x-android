@@ -16,38 +16,88 @@
 
 package io.element.android.libraries.designsystem.preview
 
-import android.content.res.Configuration
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.theme.components.Surface
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.Surface
 
-const val DAY_MODE_NAME = "D"
-const val NIGHT_MODE_NAME = "N"
-
-/**
- * Generates 2 previews of the composable it is applied to: day and night mode.
- *
- * NB: Content should be wrapped into [ElementPreview] to apply proper theming.
- */
-@Preview(name = DAY_MODE_NAME)
-@Preview(name = NIGHT_MODE_NAME, uiMode = Configuration.UI_MODE_NIGHT_YES)
-annotation class ElementPreviews(
-    val group: String = "",
-    val widthDp: Int = -1,
-    val heightDp: Int = -1,
-)
-
-@Deprecated("Don't use anymore.")
 @Composable
-fun ElementPreviewDark(content: @Composable () -> Unit) {}
+fun ElementPreviewLight(
+    showBackground: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    ElementPreview(
+        darkTheme = false,
+        showBackground = showBackground,
+        content = content
+    )
+}
+
+@Composable
+fun ElementPreviewDark(
+    showBackground: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    ElementPreview(
+        darkTheme = true,
+        showBackground = showBackground,
+        content = content
+    )
+}
 
 @Composable
 @Suppress("ModifierMissing")
-fun ElementPreview(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+fun ElementThemedPreview(
     showBackground: Boolean = true,
+    vertical: Boolean = true,
+    content: @Composable () -> Unit,
+) {
+    Box(modifier = Modifier
+        .background(Color.Gray)
+        .padding(4.dp)) {
+        if (vertical) {
+            Column {
+                ElementPreviewLight(
+                    showBackground = showBackground,
+                    content = content,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                ElementPreviewDark(
+                    showBackground = showBackground,
+                    content = content
+                )
+            }
+        } else {
+            Row {
+                ElementPreviewLight(
+                    showBackground = showBackground,
+                    content = content,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                ElementPreviewDark(
+                    showBackground = showBackground,
+                    content = content
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@Suppress("ModifierMissing")
+private fun ElementPreview(
+    darkTheme: Boolean,
+    showBackground: Boolean,
     content: @Composable () -> Unit
 ) {
     ElementTheme(darkTheme = darkTheme) {
@@ -59,3 +109,4 @@ fun ElementPreview(
         }
     }
 }
+

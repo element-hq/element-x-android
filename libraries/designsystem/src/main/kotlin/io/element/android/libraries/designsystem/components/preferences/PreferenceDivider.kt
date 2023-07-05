@@ -18,8 +18,8 @@ package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.libraries.designsystem.preview.ElementPreviews
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.theme.ElementTheme
@@ -34,11 +34,9 @@ fun PreferenceDivider(
     )
 }
 
-@ElementPreviews(group = PreviewGroup.Preferences)
+@Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceDividerPreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun PreferenceDividerPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

@@ -40,11 +40,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -193,89 +193,71 @@ sealed interface SearchBarResultState<in T> {
     data class Results<T>(val results: T) : SearchBarResultState<T>
 }
 
-@ElementPreviews(group = PreviewGroup.Search)
+@Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewInactive() {
-    ElementPreview { ContentToPreview() }
+internal fun SearchBarPreviewInactive() = ElementThemedPreview { ContentToPreview() }
+
+@Preview(group = PreviewGroup.Search)
+@Composable
+internal fun SearchBarPreviewActiveEmptyQuery() = ElementThemedPreview {
+    ContentToPreview(
+        query = "",
+        active = true,
+    )
 }
 
-@ElementPreviews(group = PreviewGroup.Search)
+@Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveEmptyQuery() {
-    ElementPreview {
-        ContentToPreview(
-            query = "",
-            active = true,
-        )
-    }
+internal fun SearchBarPreviewActiveWithQuery() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+    )
 }
 
-@ElementPreviews(group = PreviewGroup.Search)
+@Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithQuery() {
-    ElementPreview {
-        ContentToPreview(
-            query = "search term",
-            active = true,
-        )
-    }
+internal fun SearchBarPreviewActiveWithQueryNoBackButton() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+        showBackButton = false,
+    )
 }
 
-@ElementPreviews(group = PreviewGroup.Search)
+@Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithQueryNoBackButton() {
-    ElementPreview {
-        ContentToPreview(
-            query = "search term",
-            active = true,
-            showBackButton = false,
-        )
-    }
+internal fun SearchBarPreviewActiveWithNoResults() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+        resultState = SearchBarResultState.NoResults(),
+    )
 }
 
-@ElementPreviews(group = PreviewGroup.Search)
+@Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithNoResults() {
-    ElementPreview {
-        ContentToPreview(
-            query = "search term",
-            active = true,
-            resultState = SearchBarResultState.NoResults(),
-        )
-    }
-}
-
-@ElementPreviews(group = PreviewGroup.Search)
-@Composable
-internal fun SearchBarPreviewActiveWithContent() {
-    ElementPreview {
-        ContentToPreview(
-            query = "search term",
-            active = true,
-            resultState = SearchBarResultState.Results("result!"),
-            contentPrefix = {
-                Text(
-                    text = "Content that goes before the search results", modifier = Modifier
-                    .background(color = Color.Red)
-                    .fillMaxWidth()
-                )
-            },
-            contentSuffix = {
-                Text(
-                    text = "Content that goes after the search results", modifier = Modifier
-                    .background(color = Color.Blue)
-                    .fillMaxWidth()
-                )
-            },
-            resultHandler = {
-                Text(
-                    text = "Results go here", modifier = Modifier
-                    .background(color = Color.Green)
-                    .fillMaxWidth()
-                )
-            }
-        )
-    }
+internal fun SearchBarPreviewActiveWithContent() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+        resultState = SearchBarResultState.Results("result!"),
+        contentPrefix = {
+            Text(text = "Content that goes before the search results", modifier = Modifier
+                .background(color = Color.Red)
+                .fillMaxWidth())
+        },
+        contentSuffix = {
+            Text(text = "Content that goes after the search results", modifier = Modifier
+                .background(color = Color.Blue)
+                .fillMaxWidth())
+        },
+        resultHandler = {
+            Text(text = "Results go here", modifier = Modifier
+                .background(color = Color.Green)
+                .fillMaxWidth())
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

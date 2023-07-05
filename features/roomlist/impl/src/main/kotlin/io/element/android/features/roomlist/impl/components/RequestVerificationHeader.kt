@@ -32,12 +32,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.ElementTextStyles
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -96,15 +96,15 @@ internal fun RequestVerificationHeader(
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun PreviewRequestVerificationHeaderLight() {
-    ElementPreview {
+    ElementPreviewLight {
         RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun PreviewRequestVerificationHeaderDark() {
     ElementPreviewDark {

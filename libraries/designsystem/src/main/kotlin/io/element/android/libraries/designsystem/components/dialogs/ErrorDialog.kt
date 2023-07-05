@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -95,10 +95,10 @@ object ErrorDialogDefaults {
     val submitText: String @Composable get() = stringResource(id = CommonStrings.action_ok)
 }
 
-@ElementPreviews(group = PreviewGroup.Dialogs)
+@Preview(group = PreviewGroup.Dialogs)
 @Composable
 internal fun ErrorDialogPreview() {
-    ElementPreview {
+    ElementThemedPreview {
         DialogPreview {
             ErrorDialogContent(
                 content = "Content",

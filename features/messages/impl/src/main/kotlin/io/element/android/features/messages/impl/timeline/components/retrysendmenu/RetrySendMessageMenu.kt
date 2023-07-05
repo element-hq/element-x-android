@@ -32,13 +32,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.features.messages.impl.R
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import kotlinx.coroutines.launch
 
@@ -139,15 +139,15 @@ private fun ColumnScope.RetrySendMenuContents(
     )
 }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun RetrySendMessageMenuPreviewLight(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) {
-    ElementPreview {
+    ElementPreviewLight {
         ContentToPreview(state)
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun RetrySendMessageMenuPreviewDark(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) {
     ElementPreviewDark {

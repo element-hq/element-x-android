@@ -27,15 +27,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.features.login.impl.oidc.OidcUrlParser
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 
 @Composable
@@ -98,13 +98,12 @@ fun OidcView(
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
-fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) {
-    ElementPreview { ContentToPreview(state) }
-}
+fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
-@ElementPreviews
+@Preview
 @Composable
 fun OidcViewDarkPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) =
     ElementPreviewDark { ContentToPreview(state) }
