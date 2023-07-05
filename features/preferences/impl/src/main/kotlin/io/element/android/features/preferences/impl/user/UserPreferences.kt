@@ -18,10 +18,10 @@ package io.element.android.features.preferences.impl.user
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
 import io.element.android.libraries.matrix.ui.components.MatrixUserWithNullProvider
@@ -37,13 +37,12 @@ fun UserPreferences(
     )
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun UserPreferencesLightPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) {
-    ElementPreview { ContentToPreview(matrixUser) }
-}
+internal fun UserPreferencesLightPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) =
+    ElementPreviewLight { ContentToPreview(matrixUser) }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun UserPreferencesDarkPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) =
     ElementPreviewDark { ContentToPreview(matrixUser) }

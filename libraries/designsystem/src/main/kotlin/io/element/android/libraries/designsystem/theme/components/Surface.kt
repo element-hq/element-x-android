@@ -26,10 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 
 @Composable
 fun Surface(
@@ -54,11 +54,10 @@ fun Surface(
     )
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun SurfacePreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun SurfacePreview() =
+    ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

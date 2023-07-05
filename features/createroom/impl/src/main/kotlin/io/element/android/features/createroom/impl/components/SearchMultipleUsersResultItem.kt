@@ -19,9 +19,9 @@ package io.element.android.features.createroom.impl.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.matrix.ui.components.CheckableMatrixUserRow
 import io.element.android.libraries.matrix.ui.components.CheckableUnresolvedUserRow
@@ -55,11 +55,9 @@ fun SearchMultipleUsersResultItem(
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun SearchMultipleUsersResultItemPreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

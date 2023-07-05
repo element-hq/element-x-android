@@ -20,11 +20,11 @@ import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.androidutils.system.openAppSettingsPage
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.permissions.api.PermissionsView
 
 @Composable
@@ -43,13 +43,12 @@ fun LoggedInView(
     )
 }
 
-@ElementPreviews
+@Preview
 @Composable
-fun LoggedInViewLightPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) {
-    ElementPreview { ContentToPreview(state) }
-}
+fun LoggedInViewLightPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
-@ElementPreviews
+@Preview
 @Composable
 fun LoggedInViewDarkPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) =
     ElementPreviewDark { ContentToPreview(state) }

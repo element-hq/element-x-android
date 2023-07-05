@@ -21,6 +21,4 @@ import androidx.compose.runtime.Composable
 interface TestPreview {
     @Composable
     fun Content()
-
-    val name: String
 }

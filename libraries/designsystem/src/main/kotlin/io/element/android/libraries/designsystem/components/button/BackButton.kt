@@ -23,8 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.designsystem.preview.ElementPreviews
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -47,13 +47,11 @@ fun BackButton(
     }
 }
 
-@ElementPreviews(group = PreviewGroup.Buttons)
+@Preview(group = PreviewGroup.Buttons)
 @Composable
-internal fun BackButtonPreview() {
-    ElementPreview {
-        Column {
-            BackButton(onClick = { }, enabled = true, contentDescription = "Back")
-            BackButton(onClick = { }, enabled = false, contentDescription = "Back")
-        }
+internal fun BackButtonPreview() = ElementThemedPreview {
+    Column {
+        BackButton(onClick = { }, enabled = true, contentDescription = "Back")
+        BackButton(onClick = { }, enabled = false, contentDescription = "Back")
     }
 }

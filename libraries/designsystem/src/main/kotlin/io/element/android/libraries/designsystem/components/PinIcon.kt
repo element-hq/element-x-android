@@ -23,11 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 
@@ -50,13 +50,12 @@ fun PinIcon(
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
-fun PinIconLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
+fun PinIconLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
 
-@ElementPreviews
+@Preview
 @Composable
 fun PinIconDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

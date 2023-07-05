@@ -32,7 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -44,8 +44,8 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -174,13 +174,11 @@ fun BugReportView(
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
-fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) {
-    ElementPreview { ContentToPreview(state) }
-}
+fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewLight { ContentToPreview(state) }
 
-@ElementPreviews
+@Preview
 @Composable
 fun BugReportViewDarkPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewDark { ContentToPreview(state) }
 

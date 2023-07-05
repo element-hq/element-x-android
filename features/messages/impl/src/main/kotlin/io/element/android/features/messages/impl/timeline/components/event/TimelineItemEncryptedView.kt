@@ -21,10 +21,10 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -43,13 +43,12 @@ fun TimelineItemEncryptedView(
     )
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun TimelineItemEncryptedViewLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun TimelineItemEncryptedViewLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun TimelineItemEncryptedViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

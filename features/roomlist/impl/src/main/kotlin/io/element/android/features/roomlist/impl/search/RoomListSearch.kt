@@ -48,7 +48,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.RoomListEvents
@@ -59,8 +59,8 @@ import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.applyIf
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -219,18 +219,17 @@ internal fun RoomListSearchResultContent(
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun RoomListSearchResultContentLightPreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun RoomListSearchResultContentLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun RoomListSearchResultContentDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun ContentToPreview() {
     RoomListSearchResultContent(

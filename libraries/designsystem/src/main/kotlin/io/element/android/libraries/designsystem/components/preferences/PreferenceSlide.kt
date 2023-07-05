@@ -27,10 +27,10 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -83,11 +83,9 @@ fun PreferenceSlide(
     }
 }
 
-@ElementPreviews(group = PreviewGroup.Preferences)
+@Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceSlidePreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun PreferenceSlidePreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

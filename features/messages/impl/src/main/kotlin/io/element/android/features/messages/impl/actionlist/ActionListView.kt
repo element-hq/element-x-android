@@ -50,7 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -68,8 +68,8 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -371,13 +371,12 @@ private fun EmojiButton(
     )
 }
 
-@ElementPreviews
+@Preview
 @Composable
-fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) {
-    ElementPreview { ContentToPreview(state) }
-}
+fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
-@ElementPreviews
+@Preview
 @Composable
 fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
     ElementPreviewDark { ContentToPreview(state) }

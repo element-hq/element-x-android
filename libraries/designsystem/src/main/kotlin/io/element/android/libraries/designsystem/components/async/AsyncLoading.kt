@@ -22,10 +22,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 
 @Composable
@@ -40,13 +40,11 @@ fun AsyncLoading(modifier: Modifier = Modifier) {
     }
 }
 
-@ElementPreviews
+@Preview
 @Composable
-internal fun AsyncLoadingPreviewLight() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun AsyncLoadingPreviewLight() = ElementPreviewLight { ContentToPreview() }
 
-@ElementPreviews
+@Preview
 @Composable
 internal fun AsyncLoadingPreviewDark() = ElementPreviewDark { ContentToPreview() }
 

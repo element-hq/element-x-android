@@ -29,9 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import io.element.android.libraries.designsystem.preview.ElementPreviews
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
@@ -57,11 +57,10 @@ fun FloatingActionButton(
     )
 }
 
-@ElementPreviews(group = PreviewGroup.FABs)
+@Preview(group = PreviewGroup.FABs)
 @Composable
-internal fun FloatingActionButtonPreview() {
-    ElementPreview { ContentToPreview() }
-}
+internal fun FloatingActionButtonPreview() =
+    ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
