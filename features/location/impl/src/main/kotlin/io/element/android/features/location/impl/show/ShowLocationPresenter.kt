@@ -23,8 +23,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class ShowLocationPresenter @AssistedInject constructor(
     private val actions: LocationActions,
@@ -39,20 +37,13 @@ class ShowLocationPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): ShowLocationState {
-        val coroutineScope = rememberCoroutineScope()
-        actions.Configure()
-
         return ShowLocationState(
             location = location,
             description = description
         ) {
             when (it) {
-                ShowLocationEvents.Share -> coroutineScope.share(location, description)
+                ShowLocationEvents.Share -> actions.share(location, description)
             }
         }
-    }
-
-    private fun CoroutineScope.share(location: Location, label: String?) = launch {
-        actions.share(location, label)
     }
 }

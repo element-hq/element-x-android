@@ -60,7 +60,6 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(ShowLocationEvents.Share)
 
-            Truth.assertThat(actions.configured).isTrue()
             Truth.assertThat(actions.sharedLocation).isEqualTo(location)
             Truth.assertThat(actions.sharedLabel).isEqualTo(A_DESCRIPTION)
         }
