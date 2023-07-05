@@ -18,6 +18,8 @@ package io.element.android.features.messages.impl.actionlist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,6 +30,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -45,6 +48,10 @@ class ActionListPresenter @Inject constructor(
             mutableStateOf(ActionListState.Target.None)
         }
 
+        val displayEmojiReactions by remember {
+            derivedStateOf { (target.value as? ActionListState.Target.Success)?.event?.sendState is EventSendState.Sent }
+        }
+
         fun handleEvents(event: ActionListEvents) {
             when (event) {
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
@@ -54,29 +61,37 @@ class ActionListPresenter @Inject constructor(
 
         return ActionListState(
             target = target.value,
+            displayEmojiReactions = displayEmojiReactions,
             eventSink = ::handleEvents
         )
     }
 
     private fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.Event, target: MutableState<ActionListState.Target>) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
+        val itemSent = timelineItem.sendState is EventSendState.Sent
         val actions =
             when (timelineItem.content) {
-                is TimelineItemRedactedContent,
+                is TimelineItemRedactedContent -> {
+                    if (buildMeta.isDebuggable) {
+                        listOf(TimelineItemAction.Developer)
+                    } else {
+                        emptyList()
+                    }
+                }
                 is TimelineItemStateContent -> {
                     buildList {
-                        if (timelineItem.content.canBeCopied()) {
-                            add(TimelineItemAction.Copy)
-                        }
+                        add(TimelineItemAction.Copy)
                         if (buildMeta.isDebuggable) {
                             add(TimelineItemAction.Developer)
                         }
                     }
                 }
                 else -> buildList<TimelineItemAction> {
-                    add(TimelineItemAction.Reply)
-                    add(TimelineItemAction.Forward)
-                    if (timelineItem.isMine) {
+                    if (itemSent) {
+                        add(TimelineItemAction.Reply)
+                        add(TimelineItemAction.Forward)
+                    }
+                    if (timelineItem.isMine && timelineItem.isTextMessage) {
                         add(TimelineItemAction.Edit)
                     }
                     if (timelineItem.content.canBeCopied()) {
@@ -93,6 +108,10 @@ class ActionListPresenter @Inject constructor(
                     }
                 }
             }
-        target.value = ActionListState.Target.Success(timelineItem, actions.toImmutableList())
+        if (actions.isNotEmpty()) {
+            target.value = ActionListState.Target.Success(timelineItem, actions.toImmutableList())
+        } else {
+            target.value = ActionListState.Target.None
+        }
     }
 }

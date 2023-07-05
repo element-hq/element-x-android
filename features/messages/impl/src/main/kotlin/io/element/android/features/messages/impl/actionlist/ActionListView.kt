@@ -175,13 +175,15 @@ private fun SheetContent(
                         Divider()
                     }
                 }
-                item {
-                    EmojiReactionsRow(
-                        onEmojiReactionClicked = onEmojiReactionClicked,
-                        onCustomReactionClicked = onCustomReactionClicked,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                    Divider()
+                if (state.displayEmojiReactions) {
+                    item {
+                        EmojiReactionsRow(
+                            onEmojiReactionClicked = onEmojiReactionClicked,
+                            onCustomReactionClicked = onCustomReactionClicked,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Divider()
+                    }
                 }
                 items(
                     items = actions,

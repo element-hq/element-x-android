@@ -161,28 +161,20 @@ fun TimelineItemRow(
             )
         }
         is TimelineItem.Event -> {
-            fun onClick() {
-                onClick(timelineItem)
-            }
-
-            fun onLongClick() {
-                onLongClick(timelineItem)
-            }
-
             if (timelineItem.content is TimelineItemStateContent) {
                 TimelineItemStateEventRow(
                     event = timelineItem,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
-                    onClick = ::onClick,
-                    onLongClick = ::onLongClick,
+                    onClick = { onClick(timelineItem) },
+                    onLongClick = { onLongClick(timelineItem) },
                     modifier = modifier,
                 )
             } else {
                 TimelineItemEventRow(
                     event = timelineItem,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
-                    onClick = ::onClick,
-                    onLongClick = ::onLongClick,
+                    onClick = { onClick(timelineItem) },
+                    onLongClick = { onLongClick(timelineItem) },
                     onUserDataClick = onUserDataClick,
                     inReplyToClick = inReplyToClick,
                     onReactionClick = onReactionClick,
