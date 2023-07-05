@@ -32,13 +32,9 @@ import io.element.android.libraries.theme.ElementTheme
 @Preview(name = "Night mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 annotation class ElementPreviews
 
+@Deprecated("Don't use anymore.")
 @Composable
-fun ElementPreviewDark(
-    showBackground: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    // intentionally empty
-}
+fun ElementPreviewDark(content: @Composable () -> Unit) {}
 
 @Composable
 @Suppress("ModifierMissing")
