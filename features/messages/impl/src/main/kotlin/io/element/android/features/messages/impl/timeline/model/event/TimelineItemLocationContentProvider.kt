@@ -23,14 +23,16 @@ open class TimelineItemLocationContentProvider : PreviewParameterProvider<Timeli
     override val values: Sequence<TimelineItemLocationContent>
         get() = sequenceOf(
             aTimelineItemLocationContent(),
+            aTimelineItemLocationContent("This is a description!"),
         )
 }
 
-fun aTimelineItemLocationContent() = TimelineItemLocationContent(
+fun aTimelineItemLocationContent(description: String? = null) = TimelineItemLocationContent(
     body = "User location geo:52.2445,0.7186;u=5000",
     location = Location(
         lat = 52.2445,
         lon = 0.7186,
         accuracy = 5000f,
-    )
+    ),
+    description = description,
 )

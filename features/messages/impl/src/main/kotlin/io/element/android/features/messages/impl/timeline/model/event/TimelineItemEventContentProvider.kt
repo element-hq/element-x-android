@@ -29,6 +29,7 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
         aTimelineItemFileContent("A file.pdf"),
         aTimelineItemFileContent("A bigger file name which doesn't fit.pdf"),
         aTimelineItemLocationContent(),
+        aTimelineItemLocationContent("Location description"),
         aTimelineItemNoticeContent(),
         aTimelineItemRedactedContent(),
         aTimelineItemTextContent(),
