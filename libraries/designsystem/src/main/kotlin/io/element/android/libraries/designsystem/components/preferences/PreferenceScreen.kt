@@ -35,10 +35,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -101,11 +101,13 @@ fun PreferenceTopAppBar(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun PreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun PreferenceViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun PreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

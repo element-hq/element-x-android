@@ -40,12 +40,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.modifiers.applyIf
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -95,12 +95,13 @@ fun ModalBottomSheetLayout(
     )
 }
 
-@Preview(group = PreviewGroup.BottomSheets)
+@ElementPreviews(group = PreviewGroup.BottomSheets)
 @Composable
-internal fun ModalBottomSheetLayoutLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun ModalBottomSheetLayoutLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview(group = PreviewGroup.BottomSheets)
+@ElementPreviews(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetLayoutDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

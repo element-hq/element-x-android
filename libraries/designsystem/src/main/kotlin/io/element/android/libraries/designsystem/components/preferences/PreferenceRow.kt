@@ -24,8 +24,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -48,9 +48,11 @@ fun PreferenceRow(
     }
 }
 
-@Preview(group = PreviewGroup.Preferences)
+@ElementPreviews(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceRowPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun PreferenceRowPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

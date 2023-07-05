@@ -23,10 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
@@ -46,11 +46,13 @@ object ElementDividerDefaults {
     val thickness = 0.5.dp
 }
 
-@Preview(group = PreviewGroup.Dividers)
+@ElementPreviews(group = PreviewGroup.Dividers)
 @Composable
-internal fun DividerPreview() = ElementThemedPreview {
-    Box(Modifier.padding(vertical = 10.dp), contentAlignment = Alignment.Center) {
-        ContentToPreview()
+internal fun DividerPreview() {
+    ElementPreview {
+        Box(Modifier.padding(vertical = 10.dp), contentAlignment = Alignment.Center) {
+            ContentToPreview()
+        }
     }
 }
 

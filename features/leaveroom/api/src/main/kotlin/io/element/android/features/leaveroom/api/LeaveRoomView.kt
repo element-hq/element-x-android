@@ -22,14 +22,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -108,13 +108,15 @@ private fun LeaveRoomErrorDialog(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun LeaveRoomViewLightPreview(
     @PreviewParameter(LeaveRoomStateProvider::class) state: LeaveRoomState
-) = ElementPreviewLight { ContentToPreview(state) }
+) {
+    ElementPreview { ContentToPreview(state) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun LeaveRoomViewDarkPreview(
     @PreviewParameter(LeaveRoomStateProvider::class) state: LeaveRoomState

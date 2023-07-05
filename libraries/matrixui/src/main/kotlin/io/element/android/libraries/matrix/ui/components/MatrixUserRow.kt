@@ -27,15 +27,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -98,12 +98,13 @@ fun UserRow(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun MatrixUserRowLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
-    ElementPreviewLight { ContentToPreview(matrixUser) }
+internal fun MatrixUserRowLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
+    ElementPreview { ContentToPreview(matrixUser) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun MatrixUserRowDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }

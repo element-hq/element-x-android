@@ -20,14 +20,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -66,12 +66,13 @@ fun RageshakePreferencesView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-fun RageshakePreferencesViewLightPreview(@PreviewParameter(RageshakePreferencesStateProvider::class) state: RageshakePreferencesState) =
-    ElementPreviewLight { ContentToPreview(state) }
+fun RageshakePreferencesViewLightPreview(@PreviewParameter(RageshakePreferencesStateProvider::class) state: RageshakePreferencesState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 fun RageshakePreferencesViewDarkPreview(@PreviewParameter(RageshakePreferencesStateProvider::class) state: RageshakePreferencesState) =
     ElementPreviewDark { ContentToPreview(state) }

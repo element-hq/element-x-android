@@ -33,11 +33,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -89,12 +89,13 @@ fun GroupHeaderView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-fun GroupHeaderViewLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+fun GroupHeaderViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 fun GroupHeaderViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

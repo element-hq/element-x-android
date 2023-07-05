@@ -28,9 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
@@ -71,15 +71,17 @@ object ElementButtonDefaults {
 
 }
 
-@Preview(group = PreviewGroup.Buttons)
+@ElementPreviews(group = PreviewGroup.Buttons)
 @Composable
-internal fun ButtonPreview() = ElementThemedPreview {
-    Column {
-        Button(onClick = {}, enabled = true) {
-            Text(text = "Click me! - Enabled")
-        }
-        Button(onClick = {}, enabled = false) {
-            Text(text = "Click me! - Disabled")
+internal fun ButtonPreview() {
+    ElementPreview {
+        Column {
+            Button(onClick = {}, enabled = true) {
+                Text(text = "Click me! - Enabled")
+            }
+            Button(onClick = {}, enabled = false) {
+                Text(text = "Click me! - Disabled")
+            }
         }
     }
 }

@@ -19,9 +19,9 @@ package io.element.android.libraries.designsystem.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.SemanticColors
 import io.element.android.libraries.theme.previews.ColorListPreview
@@ -65,11 +65,13 @@ val SemanticColors.messageFromOtherBackground
         Color(0xFF26282D)
     }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun ColorAliasesLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ColorAliasesLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun ColorAliasesDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

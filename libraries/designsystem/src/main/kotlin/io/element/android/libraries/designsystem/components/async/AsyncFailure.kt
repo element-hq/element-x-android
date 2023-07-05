@@ -25,10 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -55,11 +55,13 @@ fun AsyncFailure(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun AsyncFailurePreviewLight() = ElementPreviewLight { ContentToPreview() }
+internal fun AsyncFailurePreviewLight() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun AsyncFailurePreviewDark() = ElementPreviewDark { ContentToPreview() }
 

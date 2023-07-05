@@ -27,14 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
@@ -85,12 +85,13 @@ fun IconTitleSubtitleMolecule(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun IconTitleSubtitleMoleculeLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun IconTitleSubtitleMoleculeLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun IconTitleSubtitleMoleculeDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

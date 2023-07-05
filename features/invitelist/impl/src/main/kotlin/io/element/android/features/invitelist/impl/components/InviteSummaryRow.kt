@@ -38,7 +38,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,8 +49,8 @@ import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -196,12 +196,13 @@ private fun SenderRow(sender: InviteSender) {
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun InviteSummaryRowLightPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) =
-    ElementPreviewLight { ContentToPreview(data) }
+internal fun InviteSummaryRowLightPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) {
+    ElementPreview { ContentToPreview(data) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun InviteSummaryRowDarkPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) =
     ElementPreviewDark { ContentToPreview(data) }

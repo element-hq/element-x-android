@@ -30,7 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,8 +39,8 @@ import io.element.android.features.messages.impl.timeline.components.html.HtmlDo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
 import io.element.android.libraries.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.theme.LinkColor
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 
@@ -111,12 +111,13 @@ private fun String.linkify(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun TimelineItemTextViewLightPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) =
-    ElementPreviewLight { ContentToPreview(content) }
+internal fun TimelineItemTextViewLightPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) {
+    ElementPreview { ContentToPreview(content) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemTextViewDarkPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) =
     ElementPreviewDark { ContentToPreview(content) }

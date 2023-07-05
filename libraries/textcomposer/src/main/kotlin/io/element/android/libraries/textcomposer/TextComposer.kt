@@ -68,13 +68,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.modifiers.applyIf
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -414,27 +414,33 @@ private fun BoxScope.SendButton(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun TextComposerSimpleLightPreview() = ElementPreviewLight { SimpleContentToPreview() }
+internal fun TextComposerSimpleLightPreview() {
+    ElementPreview { SimpleContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerSimpleDarkPreview() = ElementPreviewDark { SimpleContentToPreview() }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun TextComposerEditLightPreview() = ElementPreviewLight { EditContentToPreview() }
+internal fun TextComposerEditLightPreview() {
+    ElementPreview { EditContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerEditDarkPreview() = ElementPreviewDark { EditContentToPreview() }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun TextComposerReplyLightPreview() = ElementPreviewLight { ReplyContentToPreview() }
+internal fun TextComposerReplyLightPreview() {
+    ElementPreview { ReplyContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TextComposerReplyDarkPreview() = ElementPreviewDark { ReplyContentToPreview() }
 

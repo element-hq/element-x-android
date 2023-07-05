@@ -34,8 +34,8 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableMap
@@ -97,10 +97,11 @@ fun ClickableLinkText(
     )
 }
 
-@Preview(group = PreviewGroup.Text)
+@ElementPreviews(group = PreviewGroup.Text)
 @Composable
-internal fun ClickableLinkTextPreview() =
-    ElementThemedPreview { ContentToPreview() }
+internal fun ClickableLinkTextPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

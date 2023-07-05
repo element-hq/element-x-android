@@ -31,11 +31,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.VectorIcons
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -121,15 +121,16 @@ private fun RoomListModalBottomSheetContent(
 // TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
 // see: https://issuetracker.google.com/issues/283843380
 // Remove this preview when the issue is fixed.
-@Preview
+@ElementPreviews
 @Composable
-internal fun RoomListModalBottomSheetContentLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun RoomListModalBottomSheetContentLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 // TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
 // see: https://issuetracker.google.com/issues/283843380
 // Remove this preview when the issue is fixed.
-@Preview
+@ElementPreviews
 @Composable
 internal fun RoomListModalBottomSheetContentDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

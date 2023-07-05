@@ -32,14 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContentProvider
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
@@ -89,12 +89,13 @@ fun TimelineItemFileView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun TimelineItemFileViewLightPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) =
-    ElementPreviewLight { ContentToPreview(content) }
+internal fun TimelineItemFileViewLightPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) {
+    ElementPreview { ContentToPreview(content) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemFileViewDarkPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) =
     ElementPreviewDark { ContentToPreview(content) }

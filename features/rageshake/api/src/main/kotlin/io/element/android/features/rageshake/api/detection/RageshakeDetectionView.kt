@@ -21,15 +21,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.rageshake.api.R
 import io.element.android.features.rageshake.api.screenshot.ImageResult
 import io.element.android.features.rageshake.api.screenshot.screenshot
 import io.element.android.libraries.androidutils.hardware.vibrate
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -100,11 +100,13 @@ fun RageshakeDialogContent(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun RageshakeDialogContentLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RageshakeDialogContentLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun RageshakeDialogContentDarkPreview() = ElementPreviewDark { ContentToPreview() }
 

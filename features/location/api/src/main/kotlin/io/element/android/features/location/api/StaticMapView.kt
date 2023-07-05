@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
@@ -38,8 +38,8 @@ import coil.request.ImageRequest
 import io.element.android.features.location.api.internal.AttributionPlacement
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.buildStaticMapsApiUrl
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
@@ -127,12 +127,13 @@ fun StaticMapView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-fun StaticMapViewLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+fun StaticMapViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 fun StaticMapViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

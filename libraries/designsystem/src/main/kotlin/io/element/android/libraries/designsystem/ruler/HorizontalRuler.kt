@@ -24,11 +24,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 /**
  * Horizontal ruler is a debug composable that displays a horizontal ruler.
@@ -65,12 +65,13 @@ private fun HorizontalRulerItem(height: Dp, color: Color) {
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun HorizontalRulerLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun HorizontalRulerLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun HorizontalRulerDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

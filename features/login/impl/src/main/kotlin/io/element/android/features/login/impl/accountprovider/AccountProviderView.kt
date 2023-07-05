@@ -31,15 +31,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -113,12 +113,13 @@ fun AccountProviderView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
-    ElementPreviewLight { ContentToPreview(item) }
+fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) {
+    ElementPreview { ContentToPreview(item) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewDark { ContentToPreview(item) }

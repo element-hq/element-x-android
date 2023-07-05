@@ -18,7 +18,6 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
@@ -27,14 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
 import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 @Composable
@@ -65,12 +64,13 @@ fun TimelineItemVideoView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun TimelineItemVideoViewLightPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) =
-    ElementPreviewLight { ContentToPreview(content) }
+internal fun TimelineItemVideoViewLightPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) {
+    ElementPreview { ContentToPreview(content) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemVideoViewDarkPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) =
     ElementPreviewDark { ContentToPreview(content) }

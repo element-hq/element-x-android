@@ -26,8 +26,8 @@ import androidx.compose.material3.MenuItemColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
 
@@ -69,9 +69,11 @@ fun DropdownMenuItemText(
     )
 }
 
-@Preview(group = PreviewGroup.Menus)
+@ElementPreviews(group = PreviewGroup.Menus)
 @Composable
-internal fun DropdownMenuItemPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun DropdownMenuItemPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

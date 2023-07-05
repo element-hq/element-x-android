@@ -23,10 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.x.R
 
-@Preview
+@ElementPreviews
 @Composable
 fun IconPreview(
     modifier: Modifier = Modifier,
@@ -37,7 +37,7 @@ fun IconPreview(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
 fun RoundIconPreview(
     modifier: Modifier = Modifier,

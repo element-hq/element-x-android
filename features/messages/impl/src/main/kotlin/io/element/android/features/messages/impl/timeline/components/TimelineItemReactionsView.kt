@@ -18,13 +18,13 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun TimelineItemReactionsView(
@@ -46,12 +46,13 @@ fun TimelineItemReactionsView(
     }
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun TimelineItemReactionsViewLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun TimelineItemReactionsViewLightPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun TimelineItemReactionsViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }

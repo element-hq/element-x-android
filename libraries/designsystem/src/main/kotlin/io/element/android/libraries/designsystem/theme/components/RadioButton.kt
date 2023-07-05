@@ -23,8 +23,8 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
@@ -46,9 +46,11 @@ fun RadioButton(
     )
 }
 
-@Preview(group = PreviewGroup.Toggles)
+@ElementPreviews(group = PreviewGroup.Toggles)
 @Composable
-internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
+internal fun RadioButtonPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

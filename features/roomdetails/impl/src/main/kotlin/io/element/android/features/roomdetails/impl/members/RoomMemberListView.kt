@@ -38,7 +38,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,8 +47,8 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -259,12 +259,13 @@ private fun RoomMemberSearchBar(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
-fun RoomMemberListLightPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) =
-    ElementPreviewLight { ContentToPreview(state) }
+fun RoomMemberListLightPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) {
+    ElementPreview { ContentToPreview(state) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 fun RoomMemberListDarkPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) =
     ElementPreviewDark { ContentToPreview(state) }

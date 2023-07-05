@@ -42,14 +42,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.libraries.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -577,12 +577,13 @@ private fun HtmlText(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
-    ElementPreviewLight { ContentToPreview(document) }
+internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class) document: Document) {
+    ElementPreview { ContentToPreview(document) }
+}
 
-@Preview
+@ElementPreviews
 @Composable
 internal fun HtmlDocumentDarkPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
     ElementPreviewDark { ContentToPreview(document) }
