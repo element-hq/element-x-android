@@ -28,14 +28,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Icon
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
 internal fun SwitchPreview() {
-    ElementThemedPreview {
+    ElementPreview {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             var checked by remember { mutableStateOf(false) }
             Switch(checked = checked, onCheckedChange = { checked = !checked })
@@ -43,9 +43,13 @@ internal fun SwitchPreview() {
                 Icon(imageVector = Icons.Outlined.Check, contentDescription = null)
             })
             Switch(checked = checked, enabled = false, onCheckedChange = { checked = !checked })
-            Switch(checked = checked, enabled = false, onCheckedChange = { checked = !checked }, thumbContent = {
-                Icon(imageVector = Icons.Outlined.Check, contentDescription = null)
-            })
+            Switch(
+                checked = checked,
+                enabled = false,
+                onCheckedChange = { checked = !checked },
+                thumbContent = {
+                    Icon(imageVector = Icons.Outlined.Check, contentDescription = null)
+                })
         }
     }
 }

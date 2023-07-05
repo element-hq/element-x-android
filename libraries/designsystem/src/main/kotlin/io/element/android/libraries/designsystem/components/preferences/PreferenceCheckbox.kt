@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -79,7 +79,9 @@ fun PreferenceCheckbox(
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceCheckboxPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun PreferenceCheckboxPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

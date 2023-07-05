@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
@@ -59,8 +59,9 @@ fun FloatingActionButton(
 
 @Preview(group = PreviewGroup.FABs)
 @Composable
-internal fun FloatingActionButtonPreview() =
-    ElementThemedPreview { ContentToPreview() }
+internal fun FloatingActionButtonPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

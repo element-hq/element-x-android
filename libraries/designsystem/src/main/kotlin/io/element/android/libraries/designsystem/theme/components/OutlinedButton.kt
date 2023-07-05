@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
@@ -76,7 +76,9 @@ object ElementOutlinedButtonDefaults {
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
-internal fun OutlinedButtonsPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun OutlinedButtonsPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

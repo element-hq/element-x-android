@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.UnresolvedUserRow
@@ -53,7 +53,9 @@ fun SearchSingleUserResultItem(
 
 @Preview
 @Composable
-internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun SearchSingleUserResultItemPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

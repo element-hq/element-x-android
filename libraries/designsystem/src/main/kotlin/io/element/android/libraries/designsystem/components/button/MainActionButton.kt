@@ -37,7 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -80,7 +80,7 @@ fun MainActionButton(
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun MainActionButtonPreview() {
-    ElementThemedPreview {
+    ElementPreview {
         ContentsToPreview()
     }
 }

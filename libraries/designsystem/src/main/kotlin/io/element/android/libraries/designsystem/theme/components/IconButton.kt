@@ -25,7 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
@@ -48,8 +48,9 @@ fun IconButton(
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
-internal fun IconButtonPreview() =
-    ElementThemedPreview { ContentToPreview() }
+internal fun IconButtonPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

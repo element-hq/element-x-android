@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 
 @Composable
 fun Surface(
@@ -56,8 +56,9 @@ fun Surface(
 
 @Preview
 @Composable
-internal fun SurfacePreview() =
-    ElementThemedPreview { ContentToPreview() }
+internal fun SurfacePreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {

@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
 import io.element.android.libraries.designsystem.text.toSp
@@ -102,8 +102,8 @@ private fun InitialsAvatar(
 
 @Preview(group = PreviewGroup.Avatars)
 @Composable
-fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
-    ElementThemedPreview {
+fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) {
+    ElementPreview {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -112,3 +112,4 @@ fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: Avata
             Text(text = avatarData.size.name + " " + avatarData.size.dp)
         }
     }
+}

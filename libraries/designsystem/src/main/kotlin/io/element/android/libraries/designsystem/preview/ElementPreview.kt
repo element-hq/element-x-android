@@ -48,22 +48,7 @@ fun ElementPreviewDark(
     showBackground: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    ElementPreview(
-        showBackground = showBackground,
-        content = content,
-    )
-}
-
-@Composable
-@Suppress("ModifierMissing")
-fun ElementThemedPreview(
-    showBackground: Boolean = true,
-    content: @Composable () -> Unit,
-) {
-    ElementPreview(
-        showBackground = showBackground,
-        content = content,
-    )
+    // intentionally empty
 }
 
 @Composable

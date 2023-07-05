@@ -23,7 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -54,7 +54,9 @@ fun LabelledCheckbox(
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun LabelledCheckboxPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun LabelledCheckboxPreview() {
+    ElementPreview { ContentToPreview() }
+}
 
 @Composable
 private fun ContentToPreview() {
