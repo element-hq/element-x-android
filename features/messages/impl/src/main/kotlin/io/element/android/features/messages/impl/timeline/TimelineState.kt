@@ -26,6 +26,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
     val highlightedEventId: EventId?,
+    val canReply: Boolean,
     val paginationState: MatrixTimeline.PaginationState,
     val eventSink: (TimelineEvents) -> Unit
 )
