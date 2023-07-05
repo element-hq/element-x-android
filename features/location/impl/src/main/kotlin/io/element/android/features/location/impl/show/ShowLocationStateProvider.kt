@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
 
-class ViewLocationStateProvider : PreviewParameterProvider<ViewLocationState> {
-    override val values: Sequence<ViewLocationState>
+class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
+    override val values: Sequence<ShowLocationState>
         get() = sequenceOf(
-            ViewLocationState(
+            ShowLocationState(
                 Location(1.23, 2.34, 4f),
                 description = null,
                 eventSink = {},
             ),
-            ViewLocationState(
+            ShowLocationState(
                 Location(1.23, 2.34, 4f),
                 description = "My favourite place!",
                 eventSink = {},
             ),
-            ViewLocationState(
+            ShowLocationState(
                 Location(1.23, 2.34, 4f),
                 description = "For some reason I decided to write a small essay in the location description. " +
                     "It is so long that it will wrap onto more than two lines!",

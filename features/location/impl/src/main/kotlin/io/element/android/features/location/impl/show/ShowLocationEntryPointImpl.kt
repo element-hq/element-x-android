@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.location.api.ViewLocationEntryPoint
+import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class ViewLocationEntryPointImpl @Inject constructor() : ViewLocationEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext, inputs: ViewLocationEntryPoint.Inputs): Node {
-        return parentNode.createNode<ViewLocationNode>(buildContext, listOf(inputs))
+class ShowLocationEntryPointImpl @Inject constructor() : ShowLocationEntryPoint {
+    override fun createNode(parentNode: Node, buildContext: BuildContext, inputs: ShowLocationEntryPoint.Inputs): Node {
+        return parentNode.createNode<ShowLocationNode>(buildContext, listOf(inputs))
     }
 }

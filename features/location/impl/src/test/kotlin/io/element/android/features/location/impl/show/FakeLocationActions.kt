@@ -14,16 +14,29 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.location.api.Location
 
-interface LocationActions {
+class FakeLocationActions : LocationActions {
+
+    var configured = false
+        private set
+
+    var sharedLocation: Location? = null
+        private set
+
+    var sharedLabel: String? = null
+        private set
 
     @Composable
-    fun Configure()
+    override fun Configure() {
+        configured = true
+    }
 
-    suspend fun share(location: Location, label: String?)
-
+    override suspend fun share(location: Location, label: String?) {
+        sharedLocation = location
+        sharedLabel = label
+    }
 }

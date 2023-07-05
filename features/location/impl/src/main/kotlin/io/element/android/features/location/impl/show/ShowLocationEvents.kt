@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
-sealed interface ViewLocationEvents {
-    object Share : ViewLocationEvents
+sealed interface ShowLocationEvents {
+    object Share : ShowLocationEvents
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,14 +26,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.location.api.ViewLocationEntryPoint
+import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
-class ViewLocationNode @AssistedInject constructor(
-    presenterFactory: ViewLocationPresenter.Factory,
+class ShowLocationNode @AssistedInject constructor(
+    presenterFactory: ShowLocationPresenter.Factory,
     analyticsService: AnalyticsService,
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
@@ -47,12 +47,12 @@ class ViewLocationNode @AssistedInject constructor(
         )
     }
 
-    private val inputs: ViewLocationEntryPoint.Inputs = inputs()
+    private val inputs: ShowLocationEntryPoint.Inputs = inputs()
     private val presenter = presenterFactory.create(inputs.location, inputs.description)
 
     @Composable
     override fun View(modifier: Modifier) {
-        ViewLocationView(
+        ShowLocationView(
             state = presenter.present(),
             modifier = modifier,
             onBackPressed = ::navigateUp

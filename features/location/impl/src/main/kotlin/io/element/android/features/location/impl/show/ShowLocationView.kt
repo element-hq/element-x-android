@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.view
+package io.element.android.features.location.impl.show
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -49,8 +49,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ViewLocationView(
-    state: ViewLocationState,
+fun ShowLocationView(
+    state: ShowLocationState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
@@ -72,7 +72,7 @@ fun ViewLocationView(
                     BackButton(onClick = onBackPressed)
                 },
                 actions = {
-                    IconButton(onClick = { state.eventSink(ViewLocationEvents.Share) }) {
+                    IconButton(onClick = { state.eventSink(ShowLocationEvents.Share) }) {
                         Icon(imageVector = Icons.Outlined.Share, contentDescription = stringResource(CommonStrings.action_share))
                     }
                 }
@@ -108,17 +108,17 @@ fun ViewLocationView(
 
 @Preview
 @Composable
-internal fun ViewLocationViewLightPreview(@PreviewParameter(ViewLocationStateProvider::class) state: ViewLocationState) =
+internal fun ShowLocationViewLightPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun ViewLocationViewDarkPreview(@PreviewParameter(ViewLocationStateProvider::class) state: ViewLocationState) =
+internal fun ShowLocationViewDarkPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview(state: ViewLocationState) {
-    ViewLocationView(
+private fun ContentToPreview(state: ShowLocationState) {
+    ShowLocationView(
         state = state,
         onBackPressed = {},
     )
