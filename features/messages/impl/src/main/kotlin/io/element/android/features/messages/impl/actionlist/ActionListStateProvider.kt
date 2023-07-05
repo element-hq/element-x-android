@@ -61,11 +61,19 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                     actions = aTimelineItemActionList(),
                 )
             ),
+            anActionListState().copy(
+                target = ActionListState.Target.Success(
+                    event = aTimelineItemEvent(content = aTimelineItemLocationContent()),
+                    actions = aTimelineItemActionList(),
+                ),
+                displayEmojiReactions = false,
+            ),
         )
 }
 
 fun anActionListState() = ActionListState(
     target = ActionListState.Target.None,
+    displayEmojiReactions = true,
     eventSink = {}
 )
 

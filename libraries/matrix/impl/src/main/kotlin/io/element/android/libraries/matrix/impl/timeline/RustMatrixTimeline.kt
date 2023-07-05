@@ -110,4 +110,8 @@ class RustMatrixTimeline(
             innerRoom.sendReadReceipt(eventId = eventId.value)
         }
     }
+
+    fun getItemById(eventId: EventId): MatrixTimelineItem.Event? {
+        return _timelineItems.value.firstOrNull { (it as? MatrixTimelineItem.Event)?.eventId == eventId } as? MatrixTimelineItem.Event
+    }
 }
