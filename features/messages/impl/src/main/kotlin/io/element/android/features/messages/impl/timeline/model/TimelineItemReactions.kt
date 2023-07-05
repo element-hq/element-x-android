@@ -20,4 +20,9 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class TimelineItemReactions(
     val reactions: ImmutableList<AggregatedReaction>
-)
+) {
+    val highlightedKeys
+        get() = reactions
+            .filter { it.isHighlighted }
+            .map { it.key }
+}
