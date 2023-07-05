@@ -267,14 +267,14 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
             is NavTarget.Room -> {
-                    val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
-                    val callback = object : RoomFlowNode.Callback {
-                        override fun onForwardedToSingleRoom(roomId: RoomId) {
-                            coroutineScope.launch { attachRoom(roomId) }
-                        }
+                val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
+                val callback = object : RoomFlowNode.Callback {
+                    override fun onForwardedToSingleRoom(roomId: RoomId) {
+                        coroutineScope.launch { attachRoom(roomId) }
                     }
-                    val inputs = AwaitRoomNode.Inputs(roomId = navTarget.roomId, initialElement = navTarget.initialElement)
-                    createNode<AwaitRoomNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
+                }
+                val inputs = AwaitRoomNode.Inputs(roomId = navTarget.roomId, initialElement = navTarget.initialElement)
+                createNode<AwaitRoomNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
             }
             NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
