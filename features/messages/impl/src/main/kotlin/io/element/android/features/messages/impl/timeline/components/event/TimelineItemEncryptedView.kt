@@ -45,7 +45,7 @@ fun TimelineItemEncryptedView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemEncryptedViewLightPreview() {
+internal fun TimelineItemEncryptedViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

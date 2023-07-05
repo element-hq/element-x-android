@@ -92,7 +92,7 @@ fun CheckableUserRow(
 
 @ElementPreviews
 @Composable
-internal fun CheckableMatrixUserRowLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
+internal fun CheckableMatrixUserRowPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
     ElementPreview { ContentToPreview(matrixUser) }
 }
 

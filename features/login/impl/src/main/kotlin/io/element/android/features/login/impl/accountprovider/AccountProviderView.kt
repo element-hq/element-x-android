@@ -115,7 +115,7 @@ fun AccountProviderView(
 
 @ElementPreviews
 @Composable
-fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) {
+fun AccountProviderViewPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) {
     ElementPreview { ContentToPreview(item) }
 }
 

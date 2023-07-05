@@ -44,7 +44,7 @@ fun TimelineItemUnknownView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemUnknownViewLightPreview() {
+internal fun TimelineItemUnknownViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

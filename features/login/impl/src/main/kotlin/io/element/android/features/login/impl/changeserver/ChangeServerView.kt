@@ -71,7 +71,7 @@ fun ChangeServerView(
 
 @ElementPreviews
 @Composable
-fun ChangeServerViewLightPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) {
+fun ChangeServerViewPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) {
     ElementPreview { ContentToPreview(state) }
 }
 

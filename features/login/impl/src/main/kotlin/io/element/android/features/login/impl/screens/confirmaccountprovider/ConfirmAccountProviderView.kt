@@ -143,7 +143,7 @@ fun ConfirmAccountProviderView(
 
 @ElementPreviews
 @Composable
-fun ConfirmAccountProviderViewLightPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) {
+fun ConfirmAccountProviderViewPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) {
     ElementPreview { ContentToPreview(state) }
 }
 

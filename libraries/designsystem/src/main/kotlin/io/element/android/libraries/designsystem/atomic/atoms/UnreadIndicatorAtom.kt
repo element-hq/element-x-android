@@ -49,7 +49,7 @@ fun UnreadIndicatorAtom(
 
 @ElementPreviews
 @Composable
-internal fun UnreadIndicatorAtomLightPreview() {
+internal fun UnreadIndicatorAtomPreview() {
     ElementPreview { ContentToPreview() }
 }
 

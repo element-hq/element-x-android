@@ -90,7 +90,7 @@ internal fun RoomSummaryPlaceholderRow(
 
 @ElementPreviews
 @Composable
-internal fun RoomSummaryPlaceholderRowLightPreview() {
+internal fun RoomSummaryPlaceholderRowPreview() {
     ElementPreview { ContentToPreview() }
 }
 

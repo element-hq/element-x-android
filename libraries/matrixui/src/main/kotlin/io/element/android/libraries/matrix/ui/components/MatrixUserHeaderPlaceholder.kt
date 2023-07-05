@@ -68,7 +68,7 @@ fun MatrixUserHeaderPlaceholder(
 
 @ElementPreviews
 @Composable
-fun MatrixUserHeaderPlaceholderLightPreview() {
+fun MatrixUserHeaderPlaceholderPreview() {
     ElementPreview { ContentToPreview() }
 }
 

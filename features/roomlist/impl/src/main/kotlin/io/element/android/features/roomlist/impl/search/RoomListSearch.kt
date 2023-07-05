@@ -221,7 +221,7 @@ internal fun RoomListSearchResultContent(
 
 @ElementPreviews
 @Composable
-internal fun RoomListSearchResultContentLightPreview() {
+internal fun RoomListSearchResultContentPreview() {
     ElementPreview { ContentToPreview() }
 }
 

@@ -416,7 +416,7 @@ private fun BoxScope.SendButton(
 
 @ElementPreviews
 @Composable
-internal fun TextComposerSimpleLightPreview() {
+internal fun TextComposerSimplePreview() {
     ElementPreview { SimpleContentToPreview() }
 }
 
@@ -426,7 +426,7 @@ internal fun TextComposerSimpleDarkPreview() = ElementPreviewDark { SimpleConten
 
 @ElementPreviews
 @Composable
-internal fun TextComposerEditLightPreview() {
+internal fun TextComposerEditPreview() {
     ElementPreview { EditContentToPreview() }
 }
 
@@ -436,7 +436,7 @@ internal fun TextComposerEditDarkPreview() = ElementPreviewDark { EditContentToP
 
 @ElementPreviews
 @Composable
-internal fun TextComposerReplyLightPreview() {
+internal fun TextComposerReplyPreview() {
     ElementPreview { ReplyContentToPreview() }
 }
 

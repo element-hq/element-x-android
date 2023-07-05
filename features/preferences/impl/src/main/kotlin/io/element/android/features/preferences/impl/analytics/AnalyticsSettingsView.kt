@@ -46,7 +46,7 @@ fun AnalyticsSettingsView(
 
 @ElementPreviews
 @Composable
-fun AnalyticsSettingsViewLightPreview(@PreviewParameter(AnalyticsSettingsStateProvider::class) state: AnalyticsSettingsState) {
+fun AnalyticsSettingsViewPreview(@PreviewParameter(AnalyticsSettingsStateProvider::class) state: AnalyticsSettingsState) {
     ElementPreview { ContentToPreview(state) }
 }
 

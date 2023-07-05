@@ -260,7 +260,7 @@ private suspend inline fun MapView.awaitMap(): MapboxMap =
 
 @ElementPreviews
 @Composable
-fun MapViewLightPreview() {
+fun MapViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

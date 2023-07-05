@@ -66,7 +66,7 @@ fun TimelineItemInformativeView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemInformativeViewLightPreview() {
+internal fun TimelineItemInformativeViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

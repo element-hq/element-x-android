@@ -52,7 +52,7 @@ fun PlaceholderAtom(
 
 @ElementPreviews
 @Composable
-internal fun PlaceholderAtomLightPreview() {
+internal fun PlaceholderAtomPreview() {
     ElementPreview { ContentToPreview() }
 }
 

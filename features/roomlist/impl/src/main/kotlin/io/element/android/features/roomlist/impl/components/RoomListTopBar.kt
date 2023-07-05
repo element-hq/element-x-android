@@ -195,7 +195,7 @@ private fun DefaultRoomListTopBar(
 
 @ElementPreviews
 @Composable
-internal fun DefaultRoomListTopBarLightPreview() {
+internal fun DefaultRoomListTopBarPreview() {
     ElementPreview { DefaultRoomListTopBarPreview() }
 }
 

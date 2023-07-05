@@ -67,7 +67,7 @@ private fun VerticalRulerItem(width: Dp, color: Color) {
 
 @ElementPreviews
 @Composable
-internal fun VerticalRulerLightPreview() {
+internal fun VerticalRulerPreview() {
     ElementPreview { ContentToPreview() }
 }
 

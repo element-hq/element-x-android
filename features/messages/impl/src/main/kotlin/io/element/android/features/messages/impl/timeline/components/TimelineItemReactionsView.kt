@@ -48,7 +48,7 @@ fun TimelineItemReactionsView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemReactionsViewLightPreview() {
+internal fun TimelineItemReactionsViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

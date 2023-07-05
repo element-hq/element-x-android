@@ -132,7 +132,7 @@ fun SendLocationView(
 
 @ElementPreviews
 @Composable
-internal fun SendLocationViewLightPreview(@PreviewParameter(SendLocationStateProvider::class) state: SendLocationState) {
+internal fun SendLocationViewPreview(@PreviewParameter(SendLocationStateProvider::class) state: SendLocationState) {
     ElementPreview { ContentToPreview(state) }
 }
 

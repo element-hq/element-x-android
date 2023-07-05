@@ -68,7 +68,7 @@ fun MessageStateEventContainer(
 
 @ElementPreviews
 @Composable
-internal fun MessageStateEventContainerLightPreview() {
+internal fun MessageStateEventContainerPreview() {
     ElementPreview { ContentToPreview() }
 }
 

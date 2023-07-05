@@ -147,7 +147,7 @@ fun Text(
 
 @ElementPreviews(group = PreviewGroup.Text)
 @Composable
-internal fun TextLightPreview() {
+internal fun TextPreview() {
     ElementPreview { ContentToPreview() }
 }
 

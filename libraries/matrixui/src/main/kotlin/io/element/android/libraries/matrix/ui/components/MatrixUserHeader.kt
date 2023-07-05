@@ -103,7 +103,7 @@ private fun MatrixUserHeaderContent(
 
 @ElementPreviews
 @Composable
-fun MatrixUserHeaderLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
+fun MatrixUserHeaderPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) {
     ElementPreview { ContentToPreview(matrixUser) }
 }
 

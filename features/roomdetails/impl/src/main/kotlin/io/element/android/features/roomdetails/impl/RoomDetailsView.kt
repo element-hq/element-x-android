@@ -322,7 +322,7 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
 
 @LargeHeightPreview
 @Composable
-fun RoomDetailsLightPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) {
+fun RoomDetailsPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) {
     ElementPreview { ContentToPreview(state) }
 }
 

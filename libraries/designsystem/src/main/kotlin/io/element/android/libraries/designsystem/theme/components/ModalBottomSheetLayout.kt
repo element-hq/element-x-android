@@ -97,7 +97,7 @@ fun ModalBottomSheetLayout(
 
 @ElementPreviews(group = PreviewGroup.BottomSheets)
 @Composable
-internal fun ModalBottomSheetLayoutLightPreview() {
+internal fun ModalBottomSheetLayoutPreview() {
     ElementPreview { ContentToPreview() }
 }
 

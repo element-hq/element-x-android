@@ -108,7 +108,7 @@ fun ShowLocationView(
 
 @ElementPreviews
 @Composable
-internal fun ShowLocationViewLightPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
+internal fun ShowLocationViewPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
     ElementPreview { ContentToPreview(state) }
 
 @ElementPreviews

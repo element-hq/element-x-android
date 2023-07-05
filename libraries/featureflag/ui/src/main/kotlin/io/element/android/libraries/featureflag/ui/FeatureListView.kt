@@ -62,7 +62,7 @@ fun FeaturePreferenceView(
 
 @ElementPreviews
 @Composable
-internal fun FeatureListViewLightPreview() {
+internal fun FeatureListViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

@@ -431,7 +431,7 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready) =
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemEventRowLightPreview() {
+internal fun TimelineItemEventRowPreview() {
     ElementPreview { ContentToPreview() }
 }
 
@@ -481,7 +481,7 @@ private fun ContentToPreview() {
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemEventRowWithReplyLightPreview() {
+internal fun TimelineItemEventRowWithReplyPreview() {
     ElementPreview { ContentToPreviewWithReply() }
 }
 
@@ -552,7 +552,7 @@ private fun aInReplyToReady(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
+internal fun TimelineItemEventRowTimestampPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) {
     ElementPreview { ContentTimestampToPreview(event) }
 }
 

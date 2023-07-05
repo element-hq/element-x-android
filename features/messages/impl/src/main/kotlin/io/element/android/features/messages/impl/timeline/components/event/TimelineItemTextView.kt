@@ -113,7 +113,7 @@ private fun String.linkify(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemTextViewLightPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) {
+internal fun TimelineItemTextViewPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) {
     ElementPreview { ContentToPreview(content) }
 }
 

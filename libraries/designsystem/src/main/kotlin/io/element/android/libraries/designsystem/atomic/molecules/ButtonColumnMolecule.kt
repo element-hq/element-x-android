@@ -48,7 +48,7 @@ fun ButtonColumnMolecule(
 
 @ElementPreviews
 @Composable
-internal fun ButtonColumnMoleculeLightPreview() {
+internal fun ButtonColumnMoleculePreview() {
     ElementPreview { ContentToPreview() }
 }
 

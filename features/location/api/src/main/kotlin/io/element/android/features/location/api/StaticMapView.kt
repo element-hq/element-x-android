@@ -129,7 +129,7 @@ fun StaticMapView(
 
 @ElementPreviews
 @Composable
-fun StaticMapViewLightPreview() {
+fun StaticMapViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

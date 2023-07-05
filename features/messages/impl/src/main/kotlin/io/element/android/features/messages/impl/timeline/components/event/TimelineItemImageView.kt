@@ -47,7 +47,7 @@ fun TimelineItemImageView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemImageViewLightPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) {
+internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) {
     ElementPreview { ContentToPreview(content) }
 }
 

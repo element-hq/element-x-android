@@ -91,7 +91,7 @@ fun GroupHeaderView(
 
 @ElementPreviews
 @Composable
-fun GroupHeaderViewLightPreview() {
+fun GroupHeaderViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

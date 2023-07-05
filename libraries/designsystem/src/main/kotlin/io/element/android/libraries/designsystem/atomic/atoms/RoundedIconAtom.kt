@@ -98,7 +98,7 @@ private fun RoundedIconAtomSize.toIconSize(): Dp {
 
 @ElementPreviews
 @Composable
-internal fun RoundedIconAtomLightPreview() {
+internal fun RoundedIconAtomPreview() {
     ElementPreview { ContentToPreview() }
 }
 

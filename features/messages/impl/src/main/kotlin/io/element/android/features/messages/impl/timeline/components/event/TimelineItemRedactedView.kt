@@ -44,7 +44,7 @@ fun TimelineItemRedactedView(
 
 @ElementPreviews
 @Composable
-internal fun TimelineItemRedactedViewLightPreview() {
+internal fun TimelineItemRedactedViewPreview() {
     ElementPreview { ContentToPreview() }
 }
 

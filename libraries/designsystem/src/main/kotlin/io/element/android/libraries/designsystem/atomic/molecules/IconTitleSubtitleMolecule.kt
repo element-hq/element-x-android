@@ -87,7 +87,7 @@ fun IconTitleSubtitleMolecule(
 
 @ElementPreviews
 @Composable
-internal fun IconTitleSubtitleMoleculeLightPreview() {
+internal fun IconTitleSubtitleMoleculePreview() {
     ElementPreview { ContentToPreview() }
 }
 

@@ -65,7 +65,7 @@ fun WithRulers(
 
 @ElementPreviews
 @Composable
-internal fun WithRulerLightPreview() {
+internal fun WithRulerPreview() {
     ElementPreview { ContentToPreview() }
 }
 

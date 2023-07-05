@@ -169,7 +169,7 @@ fun ReportMessageView(
 
 @ElementPreviews
 @Composable
-fun ReportMessageViewLightPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) {
+fun ReportMessageViewPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) {
     ElementPreview { ContentToPreview(state) }
 }
 

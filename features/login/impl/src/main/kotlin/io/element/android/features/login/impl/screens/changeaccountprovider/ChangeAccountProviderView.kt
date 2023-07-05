@@ -127,7 +127,7 @@ fun ChangeAccountProviderView(
 
 @ElementPreviews
 @Composable
-fun ChangeAccountProviderViewLightPreview(@PreviewParameter(ChangeAccountProviderStateProvider::class) state: ChangeAccountProviderState) {
+fun ChangeAccountProviderViewPreview(@PreviewParameter(ChangeAccountProviderStateProvider::class) state: ChangeAccountProviderState) {
     ElementPreview { ContentToPreview(state) }
 }
 

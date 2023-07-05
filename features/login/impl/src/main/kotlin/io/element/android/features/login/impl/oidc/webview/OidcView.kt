@@ -100,7 +100,7 @@ fun OidcView(
 
 @ElementPreviews
 @Composable
-fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) {
+fun OidcViewPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) {
     ElementPreview { ContentToPreview(state) }
 }
 

@@ -83,7 +83,7 @@ fun PermissionsView(
 
 @ElementPreviews
 @Composable
-fun PermissionsViewLightPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) {
+fun PermissionsViewPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) {
     ElementPreview { ContentToPreview(state) }
 }
 

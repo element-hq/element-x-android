@@ -579,7 +579,7 @@ private fun HtmlText(
 
 @ElementPreviews
 @Composable
-internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class) document: Document) {
+internal fun HtmlDocumentPreview(@PreviewParameter(DocumentProvider::class) document: Document) {
     ElementPreview { ContentToPreview(document) }
 }
 

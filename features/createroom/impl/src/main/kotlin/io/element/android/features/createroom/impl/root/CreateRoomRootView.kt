@@ -207,7 +207,7 @@ fun CreateRoomActionButton(
 
 @ElementPreviews
 @Composable
-fun CreateRoomRootViewLightPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) {
+fun CreateRoomRootViewPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) {
     ElementPreview { ContentToPreview(state) }
 }
 

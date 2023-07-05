@@ -94,7 +94,7 @@ fun RoomPrivacyOption(
 
 @ElementPreviews
 @Composable
-fun RoomPrivacyOptionLightPreview() {
+fun RoomPrivacyOptionPreview() {
     ElementPreview { ContentToPreview() }
 }
 

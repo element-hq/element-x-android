@@ -67,7 +67,7 @@ val SemanticColors.messageFromOtherBackground
 
 @ElementPreviews
 @Composable
-internal fun ColorAliasesLightPreview() {
+internal fun ColorAliasesPreview() {
     ElementPreview { ContentToPreview() }
 }
 

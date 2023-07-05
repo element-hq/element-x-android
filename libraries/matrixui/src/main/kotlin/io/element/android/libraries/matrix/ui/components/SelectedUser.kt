@@ -94,7 +94,7 @@ fun SelectedUser(
 
 @ElementPreviews
 @Composable
-internal fun SelectedUserLightPreview() {
+internal fun SelectedUserPreview() {
     ElementPreview { ContentToPreview() }
 }
 

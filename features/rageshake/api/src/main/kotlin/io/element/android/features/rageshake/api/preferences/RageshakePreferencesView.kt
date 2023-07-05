@@ -68,7 +68,7 @@ fun RageshakePreferencesView(
 
 @ElementPreviews
 @Composable
-fun RageshakePreferencesViewLightPreview(@PreviewParameter(RageshakePreferencesStateProvider::class) state: RageshakePreferencesState) {
+fun RageshakePreferencesViewPreview(@PreviewParameter(RageshakePreferencesStateProvider::class) state: RageshakePreferencesState) {
     ElementPreview { ContentToPreview(state) }
 }
 
