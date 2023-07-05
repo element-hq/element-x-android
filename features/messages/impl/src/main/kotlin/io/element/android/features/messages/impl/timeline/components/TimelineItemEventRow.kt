@@ -136,7 +136,6 @@ fun TimelineItemEventRow(
             directions = setOf(DismissDirection.StartToEnd),
             dismissContent = {
                 TimelineItemEventRowContent(
-                    modifier = Modifier,
                     event = event,
                     isHighlighted = isHighlighted,
                     interactionSource = interactionSource,
@@ -145,13 +144,12 @@ fun TimelineItemEventRow(
                     onTimestampClicked = onTimestampClicked,
                     inReplyToClicked = ::inReplyToClicked,
                     onUserDataClicked = ::onUserDataClicked,
-                    onReactionClicked = ::onReactionClicked
+                    onReactionClicked = ::onReactionClicked,
                 )
             }
         )
     } else {
         TimelineItemEventRowContent(
-            modifier = Modifier,
             event = event,
             isHighlighted = isHighlighted,
             interactionSource = interactionSource,
@@ -160,7 +158,7 @@ fun TimelineItemEventRow(
             onTimestampClicked = onTimestampClicked,
             inReplyToClicked = ::inReplyToClicked,
             onUserDataClicked = ::onUserDataClicked,
-            onReactionClicked = ::onReactionClicked
+            onReactionClicked = ::onReactionClicked,
         )
     }
     // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
@@ -173,7 +171,6 @@ fun TimelineItemEventRow(
 
 @Composable
 private fun TimelineItemEventRowContent(
-    modifier: Modifier,
     event: TimelineItem.Event,
     isHighlighted: Boolean,
     interactionSource: MutableInteractionSource,
@@ -182,7 +179,8 @@ private fun TimelineItemEventRowContent(
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
-    onReactionClicked: (emoji: String) -> Unit
+    onReactionClicked: (emoji: String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     // To avoid using negative offset, we display in this Box a column with:
     // - Spacer to give room to the Sender information if they must be displayed;

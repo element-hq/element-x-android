@@ -38,9 +38,12 @@ import io.element.android.libraries.designsystem.theme.components.Icon
  * @param swipeProgress the progress of the swipe, between 0 and X. When swipeProgress >= 1 the swipe will be detected.
  */
 @Composable
-fun RowScope.ReplySwipeIndicator(swipeProgress: Float) {
+fun RowScope.ReplySwipeIndicator(
+    swipeProgress: Float,
+    modifier: Modifier = Modifier,
+) {
     Icon(
-        modifier = Modifier
+        modifier = modifier
             .align(Alignment.CenterVertically)
             .padding(start = 36.dp * swipeProgress.coerceAtMost(1f))
             .alpha(swipeProgress),
