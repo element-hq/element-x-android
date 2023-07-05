@@ -23,13 +23,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.theme.ElementTheme
 
+const val DAY_MODE_NAME = "D"
+const val NIGHT_MODE_NAME = "N"
+
 /**
  * Generates 2 previews of the composable it is applied to: day and night mode.
  *
  * NB: Content should be wrapped into [ElementPreview] to apply proper theming.
  */
-@Preview(name = "D")
-@Preview(name = "N", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = DAY_MODE_NAME)
+@Preview(name = NIGHT_MODE_NAME, uiMode = Configuration.UI_MODE_NIGHT_YES)
 annotation class ElementPreviews(
     val group: String = "",
     val widthDp: Int = -1,
