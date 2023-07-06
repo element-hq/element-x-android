@@ -20,20 +20,19 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.CacheService
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultCacheService @Inject constructor() : CacheService {
-    private val cacheIndexState = MutableStateFlow(0)
 
-    override fun cacheIndex(): Flow<Int> {
-        return cacheIndexState
-    }
+    private val _clearedCacheEventFlow = MutableSharedFlow<SessionId>(0)
+    override val clearedCacheEventFlow: Flow<SessionId> = _clearedCacheEventFlow
 
-    fun incrementCacheIndex() {
-        cacheIndexState.value++
+    suspend fun onClearedCache(sessionId: SessionId) {
+        _clearedCacheEventFlow.emit(sessionId)
     }
 }
