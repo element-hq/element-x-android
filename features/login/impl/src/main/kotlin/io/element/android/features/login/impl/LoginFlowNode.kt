@@ -60,6 +60,7 @@ class LoginFlowNode @AssistedInject constructor(
     private val customTabAvailabilityChecker: CustomTabAvailabilityChecker,
     private val customTabHandler: CustomTabHandler,
     private val accountProviderDataSource: AccountProviderDataSource,
+    private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : BackstackNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.ConfirmAccountProvider,
@@ -76,6 +77,11 @@ class LoginFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
+
+    override fun onBuilt() {
+        super.onBuilt()
+        defaultLoginUserStory.setLoginFlowIsDone(false)
+    }
 
     sealed interface NavTarget : Parcelable {
         @Parcelize

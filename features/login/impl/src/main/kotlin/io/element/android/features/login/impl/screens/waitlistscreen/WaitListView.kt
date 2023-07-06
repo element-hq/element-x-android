@@ -208,7 +208,7 @@ private fun WaitListContent(
         }
         if (state.loginAction is Async.Success) {
             Button(
-                onClick = { TODO() },
+                onClick = { state.eventSink.invoke(WaitListEvents.Continue) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black,

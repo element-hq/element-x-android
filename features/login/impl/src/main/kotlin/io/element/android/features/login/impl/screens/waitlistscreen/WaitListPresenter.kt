@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
@@ -38,6 +39,7 @@ class WaitListPresenter @AssistedInject constructor(
     @Assisted private val formState: LoginFormState,
     private val buildMeta: BuildMeta,
     private val authenticationService: MatrixAuthenticationService,
+    private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<WaitListState> {
 
     @AssistedFactory
@@ -68,6 +70,7 @@ class WaitListPresenter @AssistedInject constructor(
                     }
                 }
                 WaitListEvents.ClearError -> loginAction.value = Async.Uninitialized
+                WaitListEvents.Continue -> defaultLoginUserStory.setLoginFlowIsDone(true)
             }
         }
 

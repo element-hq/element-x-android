@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.waitlistscreen
+package io.element.android.features.login.api
 
-sealed interface WaitListEvents {
-    object AttemptLogin : WaitListEvents
-    object ClearError : WaitListEvents
-    object Continue : WaitListEvents
+import kotlinx.coroutines.flow.Flow
+
+interface LoginUserStory {
+    fun loginFlowIsDone(): Flow<Boolean>
 }
