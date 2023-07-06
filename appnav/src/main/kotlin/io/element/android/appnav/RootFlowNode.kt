@@ -119,7 +119,7 @@ class RootFlowNode @AssistedInject constructor(
     private fun isUserLoggedInFlow(): Flow<Boolean> {
         return combine(
             authenticationService.isLoggedIn(),
-            loginUserStory.loginFlowIsDone()
+            loginUserStory.loginFlowIsDone
         ) { isLoggedIn, loginFlowIsDone ->
             isLoggedIn && loginFlowIsDone
         }

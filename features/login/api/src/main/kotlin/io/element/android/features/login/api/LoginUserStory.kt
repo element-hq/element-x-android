@@ -16,8 +16,8 @@
 
 package io.element.android.features.login.api
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface LoginUserStory {
-    fun loginFlowIsDone(): Flow<Boolean>
+    val loginFlowIsDone: StateFlow<Boolean>
 }

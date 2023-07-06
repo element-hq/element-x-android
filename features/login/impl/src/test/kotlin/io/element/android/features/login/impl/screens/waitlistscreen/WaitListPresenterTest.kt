@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -101,7 +100,7 @@ class WaitListPresenterTest {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            assertThat(loginUserStory.loginFlowIsDone().first()).isFalse()
+            assertThat(loginUserStory.loginFlowIsDone.value).isFalse()
             val initialState = awaitItem()
             // First usage of AttemptLogin, nothing should happen
             initialState.eventSink.invoke(WaitListEvents.AttemptLogin)
@@ -111,9 +110,9 @@ class WaitListPresenterTest {
             assertThat(submitState.loginAction).isInstanceOf(Async.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.loginAction).isEqualTo(Async.Success(A_USER_ID))
-            assertThat(loginUserStory.loginFlowIsDone().first()).isFalse()
+            assertThat(loginUserStory.loginFlowIsDone.value).isFalse()
             successState.eventSink.invoke(WaitListEvents.Continue)
-            assertThat(loginUserStory.loginFlowIsDone().first()).isTrue()
+            assertThat(loginUserStory.loginFlowIsDone.value).isTrue()
         }
     }
 }
