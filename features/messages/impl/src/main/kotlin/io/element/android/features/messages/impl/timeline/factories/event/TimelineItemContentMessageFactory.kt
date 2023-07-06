@@ -79,6 +79,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     TimelineItemLocationContent(
                         body = messageType.body,
                         location = location,
+                        description = messageType.description
                     )
                 }
             }

@@ -55,7 +55,7 @@ class EventMessageMapper {
                     ImageMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
                 }
                 is MessageType.Location -> {
-                    LocationMessageType(type.content.body, type.content.geoUri)
+                    LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
                 }
                 is MessageType.Notice -> {
                     NoticeMessageType(type.content.body, type.content.formatted?.map())

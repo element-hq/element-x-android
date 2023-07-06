@@ -128,6 +128,7 @@ data class ImageMessageType(
 data class LocationMessageType(
     val body: String,
     val geoUri: String,
+    val description: String?,
 ) : MessageType
 
 data class AudioMessageType(
