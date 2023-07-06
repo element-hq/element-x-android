@@ -18,6 +18,7 @@ package io.element.android.appnav
 
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.NewRoot
+import com.bumble.appyx.navmodel.backstack.operation.Remove
 
 /**
  * Don't process NewRoot if the nav target already exists in the stack.
@@ -29,3 +30,14 @@ fun <T : Any> BackStack<T>.safeRoot(element: T) {
     if (containsRoot) return
     accept(NewRoot(element))
 }
+
+/**
+ * Remove the last element on the backstack equals to the given one.
+ */
+fun <T : Any> BackStack<T>.removeLast(element: T) {
+    val lastExpectedNavElement = elements.value.lastOrNull {
+        it.key.navTarget == element
+    } ?: return
+    accept(Remove(lastExpectedNavElement.key))
+}
+
