@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordPresenter
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordView
@@ -33,7 +34,8 @@ class LoginScreen(private val authenticationService: MatrixAuthenticationService
         val presenter = remember {
             LoginPasswordPresenter(
                 authenticationService = authenticationService,
-                AccountProviderDataSource()
+                AccountProviderDataSource(),
+                DefaultLoginUserStory(),
             )
         }
 
@@ -46,6 +48,7 @@ class LoginScreen(private val authenticationService: MatrixAuthenticationService
             state = state,
             modifier = modifier,
             onBackPressed = {},
+            onWaitListError = {},
         )
     }
 }
