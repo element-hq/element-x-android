@@ -41,6 +41,8 @@ import kotlinx.collections.immutable.toPersistentList
  *
  * TODO The threshold should be based on the number of rows, rather than items.
  *       Once items would spill onto a third row, they should be hidden.
+ *       Note this could be particularly worthwhile to handle reactions that are
+ *       longer than a single character (as annotation keys are free text).
  */
 private const val COLLAPSE_ITEMS_THRESHOLD = 8
 
