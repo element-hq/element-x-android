@@ -41,6 +41,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -128,4 +130,13 @@ internal fun AttachmentSourcePickerMenu(
             text = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
         )
     }
+}
+
+@DayNightPreviews
+@Composable
+internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
+    AttachmentSourcePickerMenu(
+        eventSink = {},
+        onSendLocationClicked = {},
+    )
 }
