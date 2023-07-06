@@ -16,12 +16,14 @@
 
 package io.element.android.appnav.room
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
@@ -29,25 +31,36 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-sealed interface AwaitRoomState {
-    object Loading : AwaitRoomState
-    object Error : AwaitRoomState
-    data class Loaded(val room: MatrixRoom) : AwaitRoomState
+sealed interface LoadingRoomState {
+    object Loading : LoadingRoomState
+    object Error : LoadingRoomState
+    data class Loaded(val room: MatrixRoom) : LoadingRoomState
+}
+
+open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState> {
+    override val values: Sequence<LoadingRoomState>
+        get() = sequenceOf(
+            LoadingRoomState.Loading,
+            LoadingRoomState.Error
+        )
 }
 
 @SingleIn(SessionScope::class)
 class AwaitRoomStateFlowFactory @Inject constructor(private val matrixClient: MatrixClient) {
 
-    fun create(lifecycleScope: CoroutineScope, roomId: RoomId): StateFlow<AwaitRoomState> = suspend {
+    fun create(lifecycleScope: CoroutineScope, roomId: RoomId): StateFlow<LoadingRoomState> =
+        getRoomFlow(roomId)
+            .map { room ->
+                if (room != null) {
+                    LoadingRoomState.Loaded(room)
+                } else {
+                    LoadingRoomState.Error
+                }
+            }
+            .stateIn(lifecycleScope, SharingStarted.Eagerly, LoadingRoomState.Loading)
+
+    private fun getRoomFlow(roomId: RoomId): Flow<MatrixRoom?> = suspend {
         matrixClient.getRoom(roomId = roomId)
     }
         .asFlow()
-        .map { room ->
-            if (room != null) {
-                AwaitRoomState.Loaded(room)
-            } else {
-                AwaitRoomState.Error
-            }
-        }
-        .stateIn(lifecycleScope, SharingStarted.Eagerly, AwaitRoomState.Loading)
 }

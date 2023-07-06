@@ -28,7 +28,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.appnav.LoggedInFlowNode
-import io.element.android.appnav.room.RoomFlowNode
+import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.appnav.RootFlowNode
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
@@ -67,7 +67,7 @@ class MainNode(
         }
     }
 
-    private val roomFlowNodeCallback = object : RoomFlowNode.LifecycleCallback {
+    private val roomFlowNodeCallback = object : RoomLoadedFlowNode.LifecycleCallback {
         override fun onFlowCreated(identifier: String, room: MatrixRoom) {
             val component = bindings<RoomComponent.ParentBindings>().roomComponentBuilder().room(room).build()
             mainDaggerComponentOwner.addComponent(identifier, component)

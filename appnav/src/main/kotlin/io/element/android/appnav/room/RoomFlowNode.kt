@@ -14,166 +14,122 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package io.element.android.appnav.room
 
 import android.os.Parcelable
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
-import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.NodeLifecycleCallback
-import io.element.android.features.messages.api.MessagesEntryPoint
-import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.appnav.safeRoot
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.services.appnavstate.api.AppNavigationStateService
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class RoomFlowNode @AssistedInject constructor(
-    @Assisted buildContext: BuildContext,
+    @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val messagesEntryPoint: MessagesEntryPoint,
-    private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
-    private val appNavigationStateService: AppNavigationStateService,
-    roomMembershipObserver: RoomMembershipObserver,
-) : BackstackNode<RoomFlowNode.NavTarget>(
-    backstack = BackStack(
-        initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialElement,
-        savedStateMap = buildContext.savedStateMap,
-    ),
-    buildContext = buildContext,
-    plugins = plugins,
-) {
-
-    interface Callback : Plugin {
-        fun onForwardedToSingleRoom(roomId: RoomId)
-    }
-
-    interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(identifier: String, room: MatrixRoom) = Unit
-        fun onFlowReleased(identifier: String, room: MatrixRoom) = Unit
-    }
+    awaitRoomStateFlowFactory: AwaitRoomStateFlowFactory,
+) :
+    BackstackNode<RoomFlowNode.NavTarget>(
+        backstack = BackStack(
+            initialElement = NavTarget.Loading,
+            savedStateMap = buildContext.savedStateMap,
+        ),
+        buildContext = buildContext,
+        plugins = plugins
+    ) {
 
     data class Inputs(
-        val room: MatrixRoom,
-        val initialElement: NavTarget = NavTarget.Messages,
+        val roomId: RoomId,
+        val initialElement: RoomLoadedFlowNode.NavTarget = RoomLoadedFlowNode.NavTarget.Messages,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val callbacks = plugins.filterIsInstance<Callback>()
+    private val loadingRoomStateStateFlow = awaitRoomStateFlowFactory.create(lifecycleScope, inputs.roomId)
 
-    init {
-        lifecycle.subscribe(
-            onCreate = {
-                Timber.v("OnCreate")
-                plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.room) }
-                appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
-                fetchRoomMembers()
-            },
-            onDestroy = {
-                Timber.v("OnDestroy")
-                plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.room) }
-                appNavigationStateService.onLeavingRoom(id)
-            }
-        )
-        roomMembershipObserver.updates
-            .filter { update -> update.roomId == inputs.room.roomId && !update.isUserInRoom }
-            .onEach {
-                navigateUp()
-            }
-            .launchIn(lifecycleScope)
-        inputs<Inputs>()
+    sealed interface NavTarget : Parcelable {
+        @Parcelize
+        object Loading : NavTarget
+
+        @Parcelize
+        object Loaded : NavTarget
     }
 
-    private fun fetchRoomMembers() = lifecycleScope.launch {
-        val room = inputs.room
-        room.updateMembers()
-            .onFailure {
-                Timber.e(it, "Fail to fetch members for room ${room.roomId}")
-            }.onSuccess {
-                Timber.v("Success fetching members for room ${room.roomId}")
+    override fun onBuilt() {
+        super.onBuilt()
+        loadingRoomStateStateFlow
+            .map {
+                it is LoadingRoomState.Loaded
             }
+            .distinctUntilChanged()
+            .onEach { isLoaded ->
+                if (isLoaded) {
+                    backstack.safeRoot(NavTarget.Loaded)
+                } else {
+                    backstack.safeRoot(NavTarget.Loading)
+                }
+            }.launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Messages -> {
-                val callback = object : MessagesEntryPoint.Callback {
-                    override fun onRoomDetailsClicked() {
-                        backstack.push(NavTarget.RoomDetails)
-                    }
-
-                    override fun onUserDataClicked(userId: UserId) {
-                        backstack.push(NavTarget.RoomMemberDetails(userId))
-                    }
-
-                    override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
-                    }
+            NavTarget.Loaded -> {
+                val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
+                val roomFlowNodeCallback = plugins<RoomLoadedFlowNode.Callback>()
+                val awaitRoomState = loadingRoomStateStateFlow.value
+                if (awaitRoomState is LoadingRoomState.Loaded) {
+                    val inputs = RoomLoadedFlowNode.Inputs(awaitRoomState.room, initialElement = inputs.initialElement)
+                    createNode<RoomLoadedFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback + nodeLifecycleCallbacks)
+                } else {
+                    loadingNode(buildContext, this::navigateUp)
                 }
-                messagesEntryPoint.createNode(this, buildContext, callback)
             }
-            NavTarget.RoomDetails -> {
-                val inputs = RoomDetailsEntryPoint.Inputs(RoomDetailsEntryPoint.InitialTarget.RoomDetails)
-                roomDetailsEntryPoint.createNode(this, buildContext, inputs, emptyList())
-            }
-            is NavTarget.RoomMemberDetails -> {
-                val inputs = RoomDetailsEntryPoint.Inputs(RoomDetailsEntryPoint.InitialTarget.RoomMemberDetails(navTarget.userId))
-                roomDetailsEntryPoint.createNode(this, buildContext, inputs, emptyList())
+            NavTarget.Loading -> {
+                loadingNode(buildContext, this::navigateUp)
             }
         }
     }
 
-    sealed interface NavTarget : Parcelable {
-        @Parcelize
-        object Messages : NavTarget
-
-        @Parcelize
-        object RoomDetails : NavTarget
-
-        @Parcelize
-        data class RoomMemberDetails(val userId: UserId) : NavTarget
+    private fun loadingNode(buildContext: BuildContext, onBackClicked: () -> Unit) = node(buildContext) { modifier ->
+        val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
+        LoadingRoomNodeView(
+            state = loadingRoomState,
+            modifier = modifier,
+            onBackClicked = onBackClicked
+        )
     }
 
     @Composable
     override fun View(modifier: Modifier) {
-        // Rely on the View Lifecycle instead of the Node Lifecycle,
-        // because this node enters 'onDestroy' before his children, so it can leads to
-        // using the room in a child node where it's already closed.
-        DisposableEffect(Unit) {
-            inputs.room.open()
-            onDispose {
-                inputs.room.close()
-            }
-        }
         Children(
             navModel = backstack,
             modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }
+
