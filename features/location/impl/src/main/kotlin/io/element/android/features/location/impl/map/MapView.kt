@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
@@ -89,11 +90,14 @@ fun MapView(
     }
     var mapRefs by remember { mutableStateOf<MapRefs?>(null) }
 
+    val attributionColour = ElementTheme.colors.iconPrimary
+
     // Build map
     LaunchedEffect(darkMode) {
         mapView.awaitMap().let { map ->
             map.uiSettings.apply {
                 attributionGravity = Gravity.TOP
+                setAttributionTintColor(attributionColour.toArgb())
                 logoGravity = Gravity.TOP
                 isCompassEnabled = false
                 isRotateGesturesEnabled = false
