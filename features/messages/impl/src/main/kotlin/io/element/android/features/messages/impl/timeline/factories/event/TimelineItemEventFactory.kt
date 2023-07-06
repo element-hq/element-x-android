@@ -26,7 +26,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
@@ -83,7 +82,7 @@ class TimelineItemEventFactory @Inject constructor(
             sentTime = sentTime,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
-            sendState = currentTimelineItem.event.localSendState ?: EventSendState.NotSentYet,
+            localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo(),
             debugInfo = currentTimelineItem.event.debugInfo,
         )

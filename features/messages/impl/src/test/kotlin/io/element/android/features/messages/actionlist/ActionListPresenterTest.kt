@@ -30,7 +30,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.collections.immutable.persistentListOf
@@ -319,9 +319,9 @@ class ActionListPresenterTest {
         }.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
+                eventId = null, // No event id, so it's not sent yet
                 isMine = true,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
-                sendState = EventSendState.NotSentYet,
             )
 
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))

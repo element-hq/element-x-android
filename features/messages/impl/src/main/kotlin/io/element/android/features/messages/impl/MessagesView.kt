@@ -78,7 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
@@ -153,7 +153,7 @@ fun MessagesView(
                 onMessageLongClicked = ::onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = { event ->
-                    if (event.sendState is EventSendState.SendingFailed) {
+                    if (event.localSendState is LocalEventSendState.SendingFailed) {
                         state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
                     }
                 },

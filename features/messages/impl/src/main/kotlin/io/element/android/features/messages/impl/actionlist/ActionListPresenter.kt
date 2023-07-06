@@ -30,7 +30,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ class ActionListPresenter @Inject constructor(
         }
 
         val displayEmojiReactions by remember {
-            derivedStateOf { (target.value as? ActionListState.Target.Success)?.event?.sendState is EventSendState.Sent }
+            derivedStateOf { (target.value as? ActionListState.Target.Success)?.event?.isRemote == true }
         }
 
         fun handleEvents(event: ActionListEvents) {
@@ -68,7 +68,6 @@ class ActionListPresenter @Inject constructor(
 
     private fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.Event, target: MutableState<ActionListState.Target>) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
-        val itemSent = timelineItem.sendState is EventSendState.Sent
         val actions =
             when (timelineItem.content) {
                 is TimelineItemRedactedContent -> {
@@ -87,7 +86,8 @@ class ActionListPresenter @Inject constructor(
                     }
                 }
                 else -> buildList<TimelineItemAction> {
-                    if (itemSent) {
+                    if (timelineItem.isRemote) {
+                        // Can only reply or forward messages already uploaded to the server
                         add(TimelineItemAction.Reply)
                         add(TimelineItemAction.Forward)
                     }

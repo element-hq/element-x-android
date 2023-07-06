@@ -20,19 +20,19 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 
 class TimelineItemEventForTimestampViewProvider : PreviewParameterProvider<TimelineItem.Event> {
     override val values: Sequence<TimelineItem.Event>
         get() = sequenceOf(
             aTimelineItemEvent(),
             // Sending failed
-            aTimelineItemEvent().copy(sendState = EventSendState.SendingFailed("AN_ERROR")),
+            aTimelineItemEvent().copy(localSendState = LocalEventSendState.SendingFailed("AN_ERROR")),
             // Edited
             aTimelineItemEvent().copy(content = aTimelineItemTextContent().copy(isEdited = true)),
             // Sending failed + Edited (not sure this is possible IRL, but should be covered by test)
             aTimelineItemEvent().copy(
-                sendState = EventSendState.SendingFailed("AN_ERROR"),
+                localSendState = LocalEventSendState.SendingFailed("AN_ERROR"),
                 content = aTimelineItemTextContent().copy(isEdited = true),
             ),
         )
