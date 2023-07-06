@@ -30,7 +30,9 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.ui.room.canSendEventAsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -44,7 +46,7 @@ private const val backPaginationPageSize = 50
 
 class TimelinePresenter @Inject constructor(
     private val timelineItemsFactory: TimelineItemsFactory,
-    room: MatrixRoom,
+    private val room: MatrixRoom,
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline
@@ -61,6 +63,9 @@ class TimelinePresenter @Inject constructor(
 
         val timelineItems by timelineItemsFactory.collectItemsAsState()
         val paginationState by timeline.paginationState.collectAsState()
+
+        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
+        val userHasPermissionToSendMessage by room.canSendEventAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
@@ -92,6 +97,7 @@ class TimelinePresenter @Inject constructor(
 
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
+            canReply = userHasPermissionToSendMessage,
             paginationState = paginationState,
             timelineItems = timelineItems,
             eventSink = ::handleEvents

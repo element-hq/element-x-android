@@ -80,7 +80,9 @@ fun TimelineView(
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onSwipeToReply: (TimelineItem.Event) -> Unit,
     onReactionClicked: (emoji: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onReachedLoadMore() {
@@ -120,12 +122,15 @@ fun TimelineView(
                 TimelineItemRow(
                     timelineItem = timelineItem,
                     highlightedItem = state.highlightedEventId?.value,
+                    canReply = state.canReply,
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked,
                     onUserDataClick = onUserDataClicked,
                     inReplyToClick = ::inReplyToClicked,
                     onReactionClick = onReactionClicked,
+                    onMoreReactionsClick = onMoreReactionsClicked,
                     onTimestampClicked = onTimestampClicked,
+                    onSwipeToReply = onSwipeToReply,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -145,12 +150,15 @@ fun TimelineView(
 fun TimelineItemRow(
     timelineItem: TimelineItem,
     highlightedItem: String?,
+    canReply: Boolean,
     onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onSwipeToReply: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
@@ -173,12 +181,15 @@ fun TimelineItemRow(
                 TimelineItemEventRow(
                     event = timelineItem,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
+                    canReply = canReply,
                     onClick = { onClick(timelineItem) },
                     onLongClick = { onLongClick(timelineItem) },
                     onUserDataClick = onUserDataClick,
                     inReplyToClick = inReplyToClick,
                     onReactionClick = onReactionClick,
+                    onMoreReactionsClick = onMoreReactionsClick,
                     onTimestampClicked = onTimestampClicked,
+                    onSwipeToReply = { onSwipeToReply(timelineItem) },
                     modifier = modifier,
                 )
             }
@@ -207,12 +218,15 @@ fun TimelineItemRow(
                             TimelineItemRow(
                                 timelineItem = subGroupEvent,
                                 highlightedItem = highlightedItem,
+                                canReply = false,
                                 onClick = onClick,
                                 onLongClick = onLongClick,
                                 inReplyToClick = inReplyToClick,
                                 onUserDataClick = onUserDataClick,
                                 onTimestampClicked = onTimestampClicked,
                                 onReactionClick = onReactionClick,
+                                onMoreReactionsClick = onMoreReactionsClick,
+                                onSwipeToReply = {},
                             )
                         }
                     }
@@ -314,5 +328,7 @@ private fun ContentToPreview(content: TimelineItemEventContent) {
         onUserDataClicked = {},
         onMessageLongClicked = {},
         onReactionClicked = { _, _ -> },
+        onMoreReactionsClicked = {},
+        onSwipeToReply = {},
     )
 }
