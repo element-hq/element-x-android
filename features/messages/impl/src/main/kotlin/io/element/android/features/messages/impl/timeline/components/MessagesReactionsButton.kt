@@ -34,9 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -100,7 +102,7 @@ private fun IconContent(
     modifier: Modifier = Modifier
 ) = Icon(
     imageVector = imageVector,
-    contentDescription = "Add emoji",
+    contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
     tint = MaterialTheme.colorScheme.secondary,
     modifier = modifier
         .size(reactionEmojiTextSize.toDp())

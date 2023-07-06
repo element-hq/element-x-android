@@ -25,9 +25,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
@@ -126,12 +128,16 @@ private fun TimelineItemReactionsView(
         when (expandableState) {
             ExpandableState.Expanded ->
                 MessagesReactionsButton(
-                    content = MessagesReactionsButtonContent.Text("Show less"),
+                    content = MessagesReactionsButtonContent.Text(
+                        text = stringResource(id = R.string.screen_room_timeline_less_reactions)
+                    ),
                     onClick = onCollapseClick,
                 )
             is ExpandableState.Collapsed ->
                 MessagesReactionsButton(
-                    content = MessagesReactionsButtonContent.Text(text = "${expandableState.hidden} more"),
+                    content = MessagesReactionsButtonContent.Text(
+                        text = stringResource(id = R.string.screen_room_timeline_more_reactions, expandableState.hidden)
+                    ),
                     onClick = onExpandClick,
                 )
             ExpandableState.None -> {
