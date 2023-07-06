@@ -30,10 +30,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissState
@@ -57,6 +57,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.constraintlayout.compose.ConstrainScope
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
@@ -185,18 +187,28 @@ private fun TimelineItemEventRowContent(
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
+        end.linkTo(parent.end)
+    } else {
+        start.linkTo(parent.start)
+    }
+
+    ConstraintLayout(
         modifier = modifier
+            .wrapContentHeight()
             .fillMaxWidth(),
-        horizontalAlignment = if (event.isMine) Alignment.End else Alignment.Start
     ) {
+        val (sender, message, reactions) = createRefs()
+
         // Sender
-        val showSender = event.showSenderInformation
-        if (showSender) {
+        if (event.showSenderInformation) {
             MessageSenderInformation(
                 event.safeSenderName,
                 event.senderAvatar,
                 Modifier
+                    .constrainAs(sender) {
+                        top.linkTo(parent.top)
+                    }
                     .padding(horizontal = 16.dp)
                     .zIndex(1f)
                     .clickable(onClick = onUserDataClicked)
@@ -209,13 +221,12 @@ private fun TimelineItemEventRowContent(
             isMine = event.isMine,
             isHighlighted = isHighlighted,
         )
-        val bubbleOffset = if (showSender) {
-            (-12).dp
-        } else {
-            0.dp
-        }
         MessageEventBubble(
-            modifier = Modifier.offset(y = bubbleOffset),
+            modifier = Modifier
+                .constrainAs(message) {
+                    top.linkTo(sender.bottom, margin = (-12).dp)
+                    this.linkStartOrEnd(event)
+                },
             state = bubbleState,
             interactionSource = interactionSource,
             onClick = onClick,
@@ -235,16 +246,17 @@ private fun TimelineItemEventRowContent(
 
         // Reactions
         if (event.reactionsState.reactions.isNotEmpty()) {
-            val reactionsOffset = bubbleOffset - 4.dp
             TimelineItemReactionsView(
                 reactionsState = event.reactionsState,
                 mainAxisAlignment = if (event.isMine) FlowMainAxisAlignment.End else FlowMainAxisAlignment.Start,
                 onReactionClicked = onReactionClicked,
                 onMoreReactionsClicked = { onMoreReactionsClicked(event) },
                 modifier = Modifier
+                    .constrainAs(reactions) {
+                        top.linkTo(message.bottom, margin = (-4).dp)
+                        this.linkStartOrEnd(event)
+                    }
                     .zIndex(1f)
-                    .offset(y = reactionsOffset)
-                    .align(if (event.isMine) Alignment.End else Alignment.Start)
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
@@ -528,7 +540,7 @@ private fun ContentToPreview() {
                     content = aTimelineItemTextContent().copy(
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
-                    )
+                    ),
                 ),
                 isHighlighted = false,
                 canReply = true,
@@ -546,7 +558,7 @@ private fun ContentToPreview() {
                     isMine = it,
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
-                    )
+                    ),
                 ),
                 isHighlighted = false,
                 canReply = true,
