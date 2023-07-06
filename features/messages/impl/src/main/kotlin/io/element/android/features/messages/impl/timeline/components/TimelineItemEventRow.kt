@@ -54,6 +54,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -201,10 +202,12 @@ private fun TimelineItemEventRowContent(
         val (sender, message, reactions) = createRefs()
 
         // Sender
+        val avatarStrokeSize = 3.dp
         if (event.showSenderInformation) {
             MessageSenderInformation(
                 event.safeSenderName,
                 event.senderAvatar,
+                avatarStrokeSize,
                 Modifier
                     .constrainAs(sender) {
                         top.linkTo(parent.top)
@@ -224,7 +227,7 @@ private fun TimelineItemEventRowContent(
         MessageEventBubble(
             modifier = Modifier
                 .constrainAs(message) {
-                    top.linkTo(sender.bottom, margin = (-12).dp)
+                    top.linkTo(sender.bottom, margin = -avatarStrokeSize - 8.dp)
                     this.linkStartOrEnd(event)
                 },
             state = bubbleState,
@@ -275,9 +278,9 @@ private fun DismissState.toSwipeProgress(): Float {
 private fun MessageSenderInformation(
     sender: String,
     senderAvatar: AvatarData,
+    avatarStrokeSize: Dp,
     modifier: Modifier = Modifier
 ) {
-    val avatarStrokeSize = 3.dp
     val avatarStrokeColor = MaterialTheme.colorScheme.background
     val avatarSize = senderAvatar.size.dp
     Box(
