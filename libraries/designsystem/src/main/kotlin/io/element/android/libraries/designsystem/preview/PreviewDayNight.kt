@@ -22,12 +22,16 @@ import androidx.compose.ui.tooling.preview.Preview
 /**
  * Marker for a night mode preview.
  *
+ * Previews with such marker will be rendered in night mode during screenshot testing.
+ *
  * NB: Length of this constant is kept to a minimum to avoid screenshot file names being too long.
  */
 const val NIGHT_MODE_NAME = "N"
 
 /**
  * Marker for a day mode preview.
+ *
+ * This marker is currently not used during screenshot testing, it mainly act as a counterpart to [NIGHT_MODE_NAME].
  *
  * NB: Length of this constant is kept to a minimum to avoid screenshot file names being too long.
  */
