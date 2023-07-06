@@ -177,9 +177,9 @@ class MessagesPresenter @AssistedInject constructor(
 
     private fun MatrixRoom.avatarData(): AvatarData {
         return AvatarData(
-            id = room.roomId.value,
-            name = room.displayName,
-            url = room.avatarUrl,
+            id = roomId.value,
+            name = displayName,
+            url = avatarUrl,
             size = AvatarSize.TimelineRoom
         )
     }

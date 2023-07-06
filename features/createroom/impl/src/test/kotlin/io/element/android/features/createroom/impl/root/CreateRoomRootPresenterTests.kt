@@ -176,7 +176,6 @@ class CreateRoomRootPresenterTests {
             // Retry with success
             fakeMatrixClient.givenCreateDmError(null)
             stateAfterSecondAttempt.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
-            assertThat(awaitItem().startDmAction).isInstanceOf(Async.Uninitialized::class.java)
             assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterRetryStartDM = awaitItem()
             assertThat(stateAfterRetryStartDM.startDmAction).isInstanceOf(Async.Success::class.java)

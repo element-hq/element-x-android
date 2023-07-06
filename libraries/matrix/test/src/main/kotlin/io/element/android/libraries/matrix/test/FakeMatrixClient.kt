@@ -64,7 +64,7 @@ class FakeMatrixClient(
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
 
-    override fun getRoom(roomId: RoomId): MatrixRoom? {
+    override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
     }
 
