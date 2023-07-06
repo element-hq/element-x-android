@@ -20,7 +20,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.leaveroom.api.LeaveRoomEvent
+import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.LeaveRoomPresenterFake
+import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.RoomTopicState
@@ -44,13 +47,13 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
-    private fun aRoomDetailsPresenter(room: MatrixRoom): RoomDetailsPresenter {
+    private fun aRoomDetailsPresenter(room: MatrixRoom, leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake()): RoomDetailsPresenter {
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
                 return RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMemberId)
             }
         }
-        return RoomDetailsPresenter(room, roomMemberDetailsPresenterFactory, LeaveRoomPresenterFake())
+        return RoomDetailsPresenter(room, roomMemberDetailsPresenterFactory, leaveRoomPresenter)
     }
 
     @Test
@@ -301,6 +304,22 @@ class RoomDetailsPresenterTests {
 
             // When the async permission check finishes, the topic state will be updated
             assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.CanAddTopic)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - leave room event is passed on to leave room presenter`() = runTest {
+        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val room = aMatrixRoom()
+        val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(RoomDetailsEvent.LeaveRoom)
+
+            assertThat(leaveRoomPresenter.events).contains(LeaveRoomEvent.ShowConfirmation(room.roomId))
 
             cancelAndIgnoreRemainingEvents()
         }
