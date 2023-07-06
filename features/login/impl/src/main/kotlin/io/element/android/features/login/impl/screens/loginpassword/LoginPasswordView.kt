@@ -145,7 +145,7 @@ fun LoginPasswordView(
                 text = stringResource(R.string.screen_login_submit),
                 showProgress = isLoading,
                 onClick = ::submit,
-                enabled = state.submitEnabled,
+                enabled = state.submitEnabled || isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag(TestTags.loginContinue)
