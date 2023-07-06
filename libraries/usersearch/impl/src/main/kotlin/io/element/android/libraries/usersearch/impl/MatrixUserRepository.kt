@@ -18,6 +18,7 @@ package io.element.android.libraries.usersearch.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -31,13 +32,16 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class MatrixUserRepository @Inject constructor(
+    client: MatrixClient,
     private val dataSource: UserListDataSource
 ) : UserRepository {
 
+    private val sessionId = client.sessionId
+
     override suspend fun search(query: String): Flow<List<UserSearchResult>> = flow {
-        // Manually add a fake result with the matrixId, if any
-        val isUserId = MatrixPatterns.isUserId(query)
-        if (isUserId) {
+        // Manually add a fake result with the matrixId, if provided and not the local user
+        val isAnotherUsersId =  query != sessionId.value && MatrixPatterns.isUserId(query)
+        if (isAnotherUsersId) {
             emit(listOf(UserSearchResult(MatrixUser(UserId(query)))))
         }
 
@@ -45,10 +49,14 @@ class MatrixUserRepository @Inject constructor(
             // Debounce
             delay(DEBOUNCE_TIME_MILLIS)
 
-            val results = dataSource.search(query, MAXIMUM_SEARCH_RESULTS).map { UserSearchResult(it) }.toMutableList()
+            val results = dataSource
+                .search(query, MAXIMUM_SEARCH_RESULTS)
+                .filter { it.userId != sessionId }
+                .map { UserSearchResult(it) }
+                .toMutableList()
 
-            // If the query is a user ID and the result doesn't contain that user ID, query the profile information explicitly
-            if (isUserId && results.none { it.matrixUser.userId.value == query }) {
+            // If the query is another user's MXID and the result doesn't contain that user ID, query the profile information explicitly
+            if (isAnotherUsersId && results.none { it.matrixUser.userId.value == query }) {
                 results.add(
                     0,
                     dataSource.getProfile(UserId(query))
