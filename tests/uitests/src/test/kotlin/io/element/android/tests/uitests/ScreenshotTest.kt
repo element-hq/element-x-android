@@ -38,6 +38,7 @@ import com.airbnb.android.showkase.models.Showkase
 import com.android.ide.common.rendering.api.SessionParams
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.theme.ElementTheme
 import org.junit.Rule
 import org.junit.Test
@@ -95,6 +96,10 @@ class ScreenshotTest {
                 ),
                 LocalConfiguration provides Configuration().apply {
                     setLocales(LocaleList(localeStr.toLocale()))
+                    // Dark mode previews have name "N" so their component name contains "- N"
+                    if (componentTestPreview.name.contains("- $NIGHT_MODE_NAME")){
+                        uiMode = Configuration.UI_MODE_NIGHT_YES
+                    }
                 },
                 // Needed so that UI that uses it don't crash during screenshot tests
                 LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {

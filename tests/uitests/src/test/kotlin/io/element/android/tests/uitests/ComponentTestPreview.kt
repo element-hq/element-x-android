@@ -25,5 +25,7 @@ class ComponentTestPreview(
     @Composable
     override fun Content() = showkaseBrowserComponent.component()
 
+    override val name: String = showkaseBrowserComponent.componentName
+
     override fun toString(): String = showkaseBrowserComponent.componentKey
 }

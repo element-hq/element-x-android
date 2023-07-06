@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.preview
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,8 +29,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun ElementPreviewLight(
@@ -62,29 +63,35 @@ fun ElementThemedPreview(
     vertical: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    Box(modifier = Modifier
-        .background(Color.Gray)
-        .padding(4.dp)) {
+    Box(
+        modifier = Modifier
+            .background(Color.Gray)
+            .padding(4.dp)
+    ) {
         if (vertical) {
             Column {
-                ElementPreviewLight(
+                ElementPreview(
+                    darkTheme = false,
                     showBackground = showBackground,
                     content = content,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                ElementPreviewDark(
+                ElementPreview(
+                    darkTheme = true,
                     showBackground = showBackground,
                     content = content
                 )
             }
         } else {
             Row {
-                ElementPreviewLight(
+                ElementPreview(
+                    darkTheme = false,
                     showBackground = showBackground,
                     content = content,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                ElementPreviewDark(
+                ElementPreview(
+                    darkTheme = true,
                     showBackground = showBackground,
                     content = content
                 )
@@ -95,18 +102,17 @@ fun ElementThemedPreview(
 
 @Composable
 @Suppress("ModifierMissing")
-private fun ElementPreview(
-    darkTheme: Boolean,
-    showBackground: Boolean,
+fun ElementPreview(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    showBackground: Boolean = true,
     content: @Composable () -> Unit
 ) {
     ElementTheme(darkTheme = darkTheme) {
         if (showBackground) {
             // If we have a proper contentColor applied we need a Surface instead of a Box
-            Surface { content() }
+            Surface(content = content)
         } else {
             content()
         }
     }
 }
-
