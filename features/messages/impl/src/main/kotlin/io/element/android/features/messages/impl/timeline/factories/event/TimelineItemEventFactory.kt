@@ -71,6 +71,14 @@ class TimelineItemEventFactory @Inject constructor(
             url = senderAvatarUrl,
             size = AvatarSize.TimelineSender
         )
+        // Send state based on local data
+        fun localSendState(): EventSendState {
+            return currentTimelineItem.event.localSendState ?: EventSendState.NotSentYet
+        }
+        // Send state: if the event has an event id, then it's already sent
+        val processedSendState = currentTimelineItem.eventId?.let {
+            currentTimelineItem.event.localSendState ?: EventSendState.Sent(it)
+        } ?: localSendState()
         return TimelineItem.Event(
             id = currentTimelineItem.uniqueId,
             eventId = currentTimelineItem.eventId,
@@ -83,7 +91,7 @@ class TimelineItemEventFactory @Inject constructor(
             sentTime = sentTime,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
-            sendState = currentTimelineItem.event.localSendState ?: EventSendState.NotSentYet,
+            sendState = processedSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo(),
             debugInfo = currentTimelineItem.event.debugInfo,
         )
