@@ -162,7 +162,7 @@ class DefaultRoomLastMessageFormatterTests {
             AudioMessageType(body, MediaSource("url"), null),
             ImageMessageType(body, MediaSource("url"), null),
             FileMessageType(body, MediaSource("url"), null),
-            LocationMessageType(body, "geo:1,2"),
+            LocationMessageType(body, "geo:1,2", null),
             NoticeMessageType(body, null),
             EmoteMessageType(body, null),
         )
