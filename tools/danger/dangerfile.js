@@ -133,7 +133,7 @@ if (allowList.includes(user)) {
 const previewAnnotations = [
     'androidx.compose.ui.tooling.preview.Preview',
     'io.element.android.libraries.designsystem.preview.LargeHeightPreview',
-    'io.element.android.libraries.designsystem.preview.PreviewDayNight'
+    'io.element.android.libraries.designsystem.preview.DayNightPreviews'
 ]
 
 const filesWithPreviews = editedFiles.filter(file => file.endsWith(".kt")).filter(file => {

@@ -44,4 +44,4 @@ const val DAY_MODE_NAME = "D"
  */
 @Preview(name = DAY_MODE_NAME)
 @Preview(name = NIGHT_MODE_NAME, uiMode = Configuration.UI_MODE_NIGHT_YES)
-annotation class PreviewDayNight
+annotation class DayNightPreviews
