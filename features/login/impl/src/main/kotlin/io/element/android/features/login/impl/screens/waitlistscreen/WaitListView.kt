@@ -48,9 +48,11 @@ import androidx.lifecycle.Lifecycle
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -137,19 +139,21 @@ private fun WaitListContent(
             .systemBarsPadding()
             .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
-        TextButton(
-            onClick = onCancelClicked,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color.Black,
-                disabledContainerColor = Color.White,
-                disabledContentColor = Color.Black,
-            ),
-        ) {
-            Text(
-                text = stringResource(CommonStrings.action_cancel),
-                style = ElementTheme.typography.fontBodyLgMedium,
-            )
+        if (state.loginAction !is Async.Success) {
+            TextButton(
+                onClick = onCancelClicked,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black,
+                    disabledContainerColor = Color.White,
+                    disabledContentColor = Color.Black,
+                ),
+            ) {
+                Text(
+                    text = stringResource(CommonStrings.action_cancel),
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                )
+            }
         }
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -171,23 +175,54 @@ private fun WaitListContent(
                     Spacer(modifier = Modifier.height(24.dp))
                 }
                 Spacer(modifier = Modifier.height(18.dp))
+                val titleRes = when (state.loginAction) {
+                    is Async.Success -> R.string.screen_waitlist_title_success
+                    else -> R.string.screen_waitlist_title
+                }
                 Text(
-                    text = withColoredPeriod(R.string.screen_waitlist_title),
+                    text = withColoredPeriod(titleRes),
                     style = ElementTheme.typography.fontHeadingXlBold,
                     textAlign = TextAlign.Center,
                     color = Color.White,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    modifier = Modifier.widthIn(max = 360.dp),
-                    text = stringResource(
+                val subtitle = when (state.loginAction) {
+                    is Async.Success -> stringResource(
+                        id = R.string.screen_waitlist_message_success,
+                        state.appName,
+                    )
+                    else -> stringResource(
                         id = R.string.screen_waitlist_message,
                         state.appName,
                         state.serverName,
-                    ),
+                    )
+                }
+                Text(
+                    modifier = Modifier.widthIn(max = 360.dp),
+                    text = subtitle,
                     style = ElementTheme.typography.fontBodyLgRegular,
                     textAlign = TextAlign.Center,
                     color = Color.White,
+                )
+            }
+        }
+        if (state.loginAction is Async.Success) {
+            Button(
+                onClick = { TODO() },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black,
+                    disabledContainerColor = Color.White,
+                    disabledContentColor = Color.Black,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(id = CommonStrings.action_continue),
+                    style = ElementTheme.typography.fontBodyLgMedium,
                 )
             }
         }

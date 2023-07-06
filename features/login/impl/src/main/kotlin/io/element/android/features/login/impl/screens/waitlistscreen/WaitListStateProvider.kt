@@ -27,12 +27,13 @@ open class WaitListStateProvider : PreviewParameterProvider<WaitListState> {
             aWaitListState(loginAction = Async.Loading()),
             aWaitListState(loginAction = Async.Failure(Throwable())),
             aWaitListState(loginAction = Async.Failure(Throwable(message = "IO_ELEMENT_X_WAIT_LIST"))),
+            aWaitListState(loginAction = Async.Success(SessionId("@alice:element.io"))),
             // Add other state here
         )
 }
 
 fun aWaitListState(
-    appName: String = "Element",
+    appName: String = "Element X",
     serverName: String = "server.org",
     loginAction: Async<SessionId> = Async.Uninitialized,
 ) = WaitListState(
