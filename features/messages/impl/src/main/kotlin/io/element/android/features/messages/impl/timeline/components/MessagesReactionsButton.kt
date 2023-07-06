@@ -20,6 +20,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
@@ -31,18 +33,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun MessagesMoreReactionsButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun MessagesReactionsButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    content: MessagesReactionsButtonContent,
+) {
     val buttonColor = ElementTheme.colors.bgSubtleSecondary
     Surface(
         modifier = modifier
@@ -60,28 +69,62 @@ fun MessagesMoreReactionsButton(modifier: Modifier = Modifier, onClick: () -> Un
             .padding(vertical = 4.dp, horizontal = 10.dp),
         color = buttonColor
     ) {
-            Icon(
-                imageVector = Icons.Outlined.AddReaction,
-                contentDescription = "Add emoji",
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    // Same size as the line height of reaction emoji text
-                    .size(with(LocalDensity.current) { 20.sp.toDp() })
-            )
+        when (content) {
+            is MessagesReactionsButtonContent.Icon -> IconContent(imageVector = content.imageVector)
+            is MessagesReactionsButtonContent.Text -> TextContent(text = content.text)
+        }
     }
 }
 
+sealed class MessagesReactionsButtonContent {
+    data class Text(val text: String) : MessagesReactionsButtonContent()
+    data class Icon(val imageVector: ImageVector) : MessagesReactionsButtonContent()
+}
+
+private val reactionEmojiTextSize = 20.sp
+
+@Composable
+private fun TextContent(
+    text: String,
+    modifier: Modifier = Modifier,
+) = Text(
+    modifier = modifier
+        .height(reactionEmojiTextSize.toDp()),
+    text = text,
+    style = ElementTextStyles.Regular.bodyMD
+)
+
+@Composable
+private fun IconContent(
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier
+) = Icon(
+    imageVector = imageVector,
+    contentDescription = "Add emoji",
+    tint = MaterialTheme.colorScheme.secondary,
+    modifier = modifier
+        .size(reactionEmojiTextSize.toDp())
+)
+
 @Preview
 @Composable
-internal fun MessagesMoreReactionsButtonLightPreview() =
+internal fun MessagesReactionsButtonLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-internal fun MessagesMoreReactionsButtonDarkPreview() =
+internal fun MessagesReactionsButtonDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    MessagesMoreReactionsButton(onClick = {})
+    Row {
+        MessagesReactionsButton(
+            content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+            onClick = {})
+        MessagesReactionsButton(
+            content = MessagesReactionsButtonContent.Text("Click me"),
+            onClick = {}
+        )
+    }
 }

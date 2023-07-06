@@ -249,7 +249,7 @@ private fun TimelineItemEventRowContent(
 
         // Reactions
         if (event.reactionsState.reactions.isNotEmpty()) {
-            TimelineItemReactionsView(
+            TimelineItemReactions(
                 reactionsState = event.reactionsState,
                 mainAxisAlignment = if (event.isMine) FlowMainAxisAlignment.End else FlowMainAxisAlignment.Start,
                 onReactionClicked = onReactionClicked,
