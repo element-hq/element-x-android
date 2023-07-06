@@ -126,6 +126,9 @@ fun MessagesView(
         state.eventSink(MessagesEvents.ToggleReaction(emoji, event.eventId))
     }
 
+    fun onMoreReactionsClicked(event: TimelineItem.Event): Unit =
+        state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event.eventId))
+
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
@@ -155,7 +158,11 @@ fun MessagesView(
                     }
                 },
                 onReactionClicked = ::onEmojiReactionClicked,
+                onMoreReactionsClicked = ::onMoreReactionsClicked,
                 onSendLocationClicked = onSendLocationClicked,
+                onSwipeToReply = { targetEvent ->
+                    state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
+                },
             )
         },
         snackbarHost = {
@@ -237,10 +244,12 @@ fun MessagesViewContent(
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    onSwipeToReply: (TimelineItem.Event) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -258,6 +267,8 @@ fun MessagesViewContent(
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = onTimestampClicked,
                 onReactionClicked = onReactionClicked,
+                onMoreReactionsClicked = onMoreReactionsClicked,
+                onSwipeToReply = onSwipeToReply,
             )
         }
         if (state.userHasPermissionToSendMessage) {
