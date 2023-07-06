@@ -26,7 +26,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
@@ -71,14 +70,6 @@ class TimelineItemEventFactory @Inject constructor(
             url = senderAvatarUrl,
             size = AvatarSize.TimelineSender
         )
-        // Send state based on local data
-        fun localSendState(): EventSendState {
-            return currentTimelineItem.event.localSendState ?: EventSendState.NotSentYet
-        }
-        // Send state: if the event has an event id, then it's already sent
-        val processedSendState = currentTimelineItem.eventId?.let {
-            currentTimelineItem.event.localSendState ?: EventSendState.Sent(it)
-        } ?: localSendState()
         return TimelineItem.Event(
             id = currentTimelineItem.uniqueId,
             eventId = currentTimelineItem.eventId,
@@ -91,7 +82,7 @@ class TimelineItemEventFactory @Inject constructor(
             sentTime = sentTime,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
-            sendState = processedSendState,
+            localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo(),
             debugInfo = currentTimelineItem.event.debugInfo,
         )

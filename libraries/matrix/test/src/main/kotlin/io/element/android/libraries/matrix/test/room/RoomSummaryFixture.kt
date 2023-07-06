@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
@@ -94,7 +94,7 @@ fun anEventTimelineItem(
     isLocal: Boolean = false,
     isOwn: Boolean = false,
     isRemote: Boolean = false,
-    localSendState: EventSendState? = null,
+    localSendState: LocalEventSendState? = null,
     reactions: List<EventReaction> = emptyList(),
     sender: UserId = A_USER_ID,
     senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),

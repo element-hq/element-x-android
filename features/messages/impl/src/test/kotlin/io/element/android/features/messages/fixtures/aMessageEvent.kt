@@ -24,7 +24,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -38,7 +38,7 @@ internal fun aMessageEvent(
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
     inReplyTo: InReplyTo? = null,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
-    sendState: EventSendState = EventSendState.Sent(AN_EVENT_ID),
+    sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
 ) = TimelineItem.Event(
     id = eventId?.value.orEmpty(),
     eventId = eventId,
@@ -49,7 +49,7 @@ internal fun aMessageEvent(
     sentTime = "",
     isMine = isMine,
     reactionsState = aTimelineItemReactions(count = 0),
-    sendState = sendState,
+    localSendState = sendState,
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,
 )

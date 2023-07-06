@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import org.matrix.rustcomponents.sdk.Reaction
@@ -64,13 +64,13 @@ fun RustProfileDetails.map(): ProfileTimelineDetails {
     }
 }
 
-fun RustEventSendState?.map(): EventSendState? {
+fun RustEventSendState?.map(): LocalEventSendState? {
     return when (this) {
         null -> null
-        RustEventSendState.NotSentYet -> EventSendState.NotSentYet
-        is RustEventSendState.SendingFailed -> EventSendState.SendingFailed(error)
-        is RustEventSendState.Sent -> EventSendState.Sent(EventId(eventId))
-        RustEventSendState.Cancelled -> EventSendState.Canceled
+        RustEventSendState.NotSentYet -> LocalEventSendState.NotSentYet
+        is RustEventSendState.SendingFailed -> LocalEventSendState.SendingFailed(error)
+        is RustEventSendState.Sent -> LocalEventSendState.Sent(EventId(eventId))
+        RustEventSendState.Cancelled -> LocalEventSendState.Canceled
     }
 }
 

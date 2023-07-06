@@ -28,7 +28,7 @@ data class EventTimelineItem(
     val isLocal: Boolean,
     val isOwn: Boolean,
     val isRemote: Boolean,
-    val localSendState: EventSendState?,
+    val localSendState: LocalEventSendState?,
     val reactions: List<EventReaction>,
     val sender: UserId,
     val senderProfile: ProfileTimelineDetails,

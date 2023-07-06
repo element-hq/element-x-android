@@ -24,7 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -42,7 +42,7 @@ class TimelineItemGrouperTest {
         senderDisplayName = "",
         content = TimelineItemStateEventContent(body = "a state event"),
         reactionsState = aTimelineItemReactions(count = 0),
-        sendState = EventSendState.Sent(AN_EVENT_ID),
+        localSendState = LocalEventSendState.Sent(AN_EVENT_ID),
         inReplyTo = null,
         debugInfo = aTimelineItemDebugInfo(),
     )
