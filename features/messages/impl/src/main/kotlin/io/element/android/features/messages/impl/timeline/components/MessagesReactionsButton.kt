@@ -48,9 +48,9 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun MessagesReactionsButton(
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     content: MessagesReactionsButtonContent,
+    modifier: Modifier = Modifier,
 ) {
     val buttonColor = ElementTheme.colors.bgSubtleSecondary
     Surface(

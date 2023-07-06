@@ -39,7 +39,7 @@ import kotlinx.collections.immutable.toPersistentList
 /**
  * The maximum number of items that can be displayed before some items will be hidden
  *
- * TODO: The threshold should be based on the number of rows, rather than items.
+ * TODO The threshold should be based on the number of rows, rather than items.
  *       Once items would spill onto a third row, they should be hidden.
  */
 private const val COLLAPSE_ITEMS_THRESHOLD = 8
