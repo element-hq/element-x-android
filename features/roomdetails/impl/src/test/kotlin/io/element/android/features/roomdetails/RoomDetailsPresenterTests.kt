@@ -174,6 +174,64 @@ class RoomDetailsPresenterTests {
     }
 
     @Test
+    fun `present - initial state when user can edit attributes in a DM`() = runTest {
+        val myRoomMember = aRoomMember(A_SESSION_ID)
+        val otherRoomMember = aRoomMember(A_USER_ID_2)
+        val room = aMatrixRoom(
+            isEncrypted = true,
+            isDirect = true,
+        ).apply {
+            val roomMembers = listOf(myRoomMember, otherRoomMember)
+            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false
+            assertThat(awaitItem().canEdit).isFalse()
+            // Then the asynchronous check completes, but editing is still disallowed because it's a DM
+            val settledState = awaitItem()
+            assertThat(settledState.canEdit).isFalse()
+            // If there is a topic, it's visible
+            assertThat(settledState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+    @Test
+    fun `present - initial state when in a DM with no topic`() = runTest {
+        val myRoomMember = aRoomMember(A_SESSION_ID)
+        val otherRoomMember = aRoomMember(A_USER_ID_2)
+        val room = aMatrixRoom(
+            isEncrypted = true,
+            isDirect = true,
+            topic = null,
+        ).apply {
+            val roomMembers = listOf(myRoomMember, otherRoomMember)
+            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            // There's no topic, so we hide the entire UI for DMs
+            assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.Hidden)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - initial state when user can edit all attributes`() = runTest {
         val room = aMatrixRoom().apply {
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
