@@ -37,6 +37,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.NodeLifecycleCallback
 import io.element.android.appnav.safeRoot
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
@@ -53,7 +55,8 @@ import kotlinx.parcelize.Parcelize
 class RoomFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    awaitRoomStateFlowFactory: AwaitRoomStateFlowFactory,
+    loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,
+    private val networkMonitor: NetworkMonitor,
 ) :
     BackstackNode<RoomFlowNode.NavTarget>(
         backstack = BackStack(
@@ -70,7 +73,7 @@ class RoomFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val loadingRoomStateStateFlow = awaitRoomStateFlowFactory.create(lifecycleScope, inputs.roomId)
+    private val loadingRoomStateStateFlow = loadingRoomStateFlowFactory.create(lifecycleScope, inputs.roomId)
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -117,8 +120,10 @@ class RoomFlowNode @AssistedInject constructor(
 
     private fun loadingNode(buildContext: BuildContext, onBackClicked: () -> Unit) = node(buildContext) { modifier ->
         val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
+        val networkStatus by networkMonitor.connectivity.collectAsState()
         LoadingRoomNodeView(
             state = loadingRoomState,
+            hasNetworkConnection = networkStatus == NetworkStatus.Online,
             modifier = modifier,
             onBackClicked = onBackClicked
         )

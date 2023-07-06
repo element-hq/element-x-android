@@ -18,6 +18,7 @@ package io.element.android.appnav.room
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -36,9 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.appnav.loggedin.LoggedInState
-import io.element.android.appnav.loggedin.LoggedInStateProvider
-import io.element.android.appnav.loggedin.LoggedInView
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -52,10 +51,10 @@ import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadingRoomNodeView(
     state: LoadingRoomState,
+    hasNetworkConnection: Boolean,
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -63,28 +62,10 @@ fun LoadingRoomNodeView(
         modifier = modifier,
         contentWindowInsets = WindowInsets.systemBars,
         topBar = {
-            TopAppBar(
-                modifier = Modifier,
-                navigationIcon = {
-                    BackButton(onClick = onBackClicked)
-                },
-                title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(AvatarSize.TimelineRoom.dp)
-                                .align(Alignment.CenterVertically)
-                                .background(color = ElementTheme.colors.placeholderBackground, shape = CircleShape)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        PlaceholderAtom(width = 20.dp, height = 7.dp)
-                        Spacer(modifier = Modifier.width(7.dp))
-                        PlaceholderAtom(width = 45.dp, height = 7.dp)
-                    }
-                },
-            )
+            Column {
+                ConnectivityIndicatorView(isOnline = hasNetworkConnection)
+                LoadingRoomTopBar(onBackClicked)
+            }
         },
         content = { padding ->
             Box(
@@ -107,6 +88,33 @@ fun LoadingRoomNodeView(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun LoadingRoomTopBar(onBackClicked: () -> Unit) {
+    TopAppBar(
+        modifier = Modifier,
+        navigationIcon = {
+            BackButton(onClick = onBackClicked)
+        },
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(AvatarSize.TimelineRoom.dp)
+                        .align(Alignment.CenterVertically)
+                        .background(color = ElementTheme.colors.placeholderBackground, shape = CircleShape)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                PlaceholderAtom(width = 20.dp, height = 7.dp)
+                Spacer(modifier = Modifier.width(7.dp))
+                PlaceholderAtom(width = 45.dp, height = 7.dp)
+            }
+        },
+    )
+}
+
 @Preview
 @Composable
 fun LoadingRoomNodeViewLightPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
@@ -121,6 +129,7 @@ fun LoadingRoomNodeViewDarkPreview(@PreviewParameter(LoadingRoomStateProvider::c
 private fun ContentToPreview(state: LoadingRoomState) {
     LoadingRoomNodeView(
         state = state,
-        onBackClicked = {}
+        onBackClicked = {},
+        hasNetworkConnection = false
     )
 }
