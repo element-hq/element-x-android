@@ -121,20 +121,20 @@ private fun TimelineItemReactionsView(
     ) {
         reactions.forEach { reaction ->
             MessagesReactionButton(
-                reaction = reaction,
+                content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
                 onClick = { onReactionClick(reaction.key) }
             )
         }
         when (expandableState) {
             ExpandableState.Expanded ->
-                MessagesReactionsButton(
+                MessagesReactionButton(
                     content = MessagesReactionsButtonContent.Text(
                         text = stringResource(id = R.string.screen_room_timeline_less_reactions)
                     ),
                     onClick = onCollapseClick,
                 )
             is ExpandableState.Collapsed ->
-                MessagesReactionsButton(
+                MessagesReactionButton(
                     content = MessagesReactionsButtonContent.Text(
                         text = stringResource(id = R.string.screen_room_timeline_more_reactions, expandableState.hidden)
                     ),
@@ -144,7 +144,7 @@ private fun TimelineItemReactionsView(
                 // No expand or collapse action available
             }
         }
-        MessagesReactionsButton(
+        MessagesReactionButton(
             content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
             onClick = onMoreReactionsClick
         )

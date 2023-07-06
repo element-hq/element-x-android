@@ -22,40 +22,55 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.text.toDp
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    val buttonColor = if (reaction.isHighlighted) {
+fun MessagesReactionButton(
+    onClick: () -> Unit,
+    content: MessagesReactionsButtonContent,
+    modifier: Modifier = Modifier,
+) {
+    val buttonColor = if (content.isHighlighted) {
         ElementTheme.colors.bgSubtlePrimary
     } else {
         ElementTheme.colors.bgSubtleSecondary
     }
-    val borderColor = if (reaction.isHighlighted) {
+
+    val borderColor = if (content.isHighlighted) {
         ElementTheme.colors.borderInteractivePrimary
     } else {
         buttonColor
     }
+
     Surface(
         modifier = modifier
             .background(Color.Transparent)
@@ -74,35 +89,91 @@ fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Mo
             .padding(vertical = 4.dp, horizontal = 10.dp),
         color = buttonColor
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = reaction.key, fontSize = 15.sp, lineHeight = 20.sp
-            )
-            if (reaction.count > 1) {
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = reaction.count.toString(),
-                    color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-                    fontSize = 14.sp
-                )
-            }
+        when (content) {
+            is MessagesReactionsButtonContent.Icon -> IconContent(imageVector = content.imageVector)
+            is MessagesReactionsButtonContent.Text -> TextContent(text = content.text)
+            is MessagesReactionsButtonContent.Reaction -> ReactionContent(reaction = content.reaction)
         }
     }
 }
 
-@Preview
-@Composable
-internal fun MessagesReactionButtonLightPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) =
-    ElementPreviewLight { ContentToPreview(reaction) }
+sealed class MessagesReactionsButtonContent {
+    data class Text(val text: String) : MessagesReactionsButtonContent()
+    data class Icon(val imageVector: ImageVector) : MessagesReactionsButtonContent()
 
-@Preview
-@Composable
-internal fun MessagesReactionButtonDarkPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) =
-    ElementPreviewDark { ContentToPreview(reaction) }
+    data class Reaction(val reaction: AggregatedReaction) : MessagesReactionsButtonContent()
 
-@Composable
-private fun ContentToPreview(reaction: AggregatedReaction) {
-    MessagesReactionButton(reaction, onClick = { })
+    val isHighlighted get() = this is Reaction && reaction.isHighlighted
 }
+
+private val reactionEmojiLineHeight = 20.sp
+
+@Composable
+private fun TextContent(
+    text: String,
+    modifier: Modifier = Modifier,
+) = Text(
+    modifier = modifier
+        .height(reactionEmojiLineHeight.toDp()),
+    text = text,
+    style = ElementTextStyles.Regular.bodyMD
+)
+
+@Composable
+private fun IconContent(
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier
+) = Icon(
+    imageVector = imageVector,
+    contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
+    tint = MaterialTheme.colorScheme.secondary,
+    modifier = modifier
+        .size(reactionEmojiLineHeight.toDp())
+)
+
+@Composable
+fun ReactionContent(
+    reaction: AggregatedReaction,
+    modifier: Modifier = Modifier,
+) = Row(
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = modifier,
+) {
+    Text(
+        text = reaction.key,
+        fontSize = 15.sp, lineHeight = reactionEmojiLineHeight
+    )
+    if (reaction.count > 1) {
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = reaction.count.toString(),
+            color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+            fontSize = 14.sp
+        )
+    }
+}
+
+@DayNightPreviews
+@Composable
+internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) = ElementPreview {
+    MessagesReactionButton(
+        content = MessagesReactionsButtonContent.Reaction(reaction),
+        onClick = {}
+    )
+}
+
+@DayNightPreviews
+@Composable
+internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
+    Row {
+        MessagesReactionButton(
+            content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+            onClick = {}
+        )
+        MessagesReactionButton(
+            content = MessagesReactionsButtonContent.Text("12 more"),
+            onClick = {}
+        )
+    }
+}
+
