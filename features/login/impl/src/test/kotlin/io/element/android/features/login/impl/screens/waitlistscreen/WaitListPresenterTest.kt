@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -38,10 +40,12 @@ class WaitListPresenterTest {
         val authenticationService = FakeAuthenticationService().apply {
             givenHomeserver(A_HOMESERVER)
         }
+        val loginUserStory = DefaultLoginUserStory()
         val presenter = WaitListPresenter(
             LoginFormState.Default,
             aBuildMeta(applicationName = "Application Name"),
             authenticationService,
+            loginUserStory,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -58,10 +62,12 @@ class WaitListPresenterTest {
         val authenticationService = FakeAuthenticationService().apply {
             givenLoginError(A_THROWABLE)
         }
+        val loginUserStory = DefaultLoginUserStory()
         val presenter = WaitListPresenter(
             LoginFormState.Default,
             aBuildMeta(),
             authenticationService,
+            loginUserStory,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -85,14 +91,17 @@ class WaitListPresenterTest {
     @Test
     fun `present - attempt login with success`() = runTest {
         val authenticationService = FakeAuthenticationService()
+        val loginUserStory = DefaultLoginUserStory().apply { setLoginFlowIsDone(false) }
         val presenter = WaitListPresenter(
             LoginFormState.Default,
             aBuildMeta(),
             authenticationService,
+            loginUserStory,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
+            assertThat(loginUserStory.loginFlowIsDone().first()).isFalse()
             val initialState = awaitItem()
             // First usage of AttemptLogin, nothing should happen
             initialState.eventSink.invoke(WaitListEvents.AttemptLogin)
@@ -102,6 +111,9 @@ class WaitListPresenterTest {
             assertThat(submitState.loginAction).isInstanceOf(Async.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.loginAction).isEqualTo(Async.Success(A_USER_ID))
+            assertThat(loginUserStory.loginFlowIsDone().first()).isFalse()
+            successState.eventSink.invoke(WaitListEvents.Continue)
+            assertThat(loginUserStory.loginFlowIsDone().first()).isTrue()
         }
     }
 }

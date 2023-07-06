@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.util.defaultAccountProvider
 import io.element.android.libraries.architecture.Async
@@ -30,6 +31,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -38,9 +40,11 @@ class LoginPasswordPresenterTest {
     fun `present - initial state`() = runTest {
         val authenticationService = FakeAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
+        val loginUserStory = DefaultLoginUserStory()
         val presenter = LoginPasswordPresenter(
             authenticationService,
             accountProviderDataSource,
+            loginUserStory,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -57,9 +61,11 @@ class LoginPasswordPresenterTest {
     fun `present - enter login and password`() = runTest {
         val authenticationService = FakeAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
+        val loginUserStory = DefaultLoginUserStory()
         val presenter = LoginPasswordPresenter(
             authenticationService,
             accountProviderDataSource,
+            loginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionClock.Immediate) {
@@ -81,14 +87,17 @@ class LoginPasswordPresenterTest {
     fun `present - submit`() = runTest {
         val authenticationService = FakeAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
+        val loginUserStory = DefaultLoginUserStory().apply { setLoginFlowIsDone(false) }
         val presenter = LoginPasswordPresenter(
             authenticationService,
             accountProviderDataSource,
+            loginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
+            assertThat(loginUserStory.loginFlowIsDone().first()).isFalse()
             val initialState = awaitItem()
             initialState.eventSink.invoke(LoginPasswordEvents.SetLogin(A_USER_NAME))
             initialState.eventSink.invoke(LoginPasswordEvents.SetPassword(A_PASSWORD))
@@ -99,6 +108,7 @@ class LoginPasswordPresenterTest {
             assertThat(submitState.loginAction).isInstanceOf(Async.Loading::class.java)
             val loggedInState = awaitItem()
             assertThat(loggedInState.loginAction).isEqualTo(Async.Success(A_SESSION_ID))
+            assertThat(loginUserStory.loginFlowIsDone().first()).isTrue()
         }
     }
 
@@ -106,9 +116,11 @@ class LoginPasswordPresenterTest {
     fun `present - submit with error`() = runTest {
         val authenticationService = FakeAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
+        val loginUserStory = DefaultLoginUserStory()
         val presenter = LoginPasswordPresenter(
             authenticationService,
             accountProviderDataSource,
+            loginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionClock.Immediate) {
@@ -132,9 +144,11 @@ class LoginPasswordPresenterTest {
     fun `present - clear error`() = runTest {
         val authenticationService = FakeAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
+        val loginUserStory = DefaultLoginUserStory()
         val presenter = LoginPasswordPresenter(
             authenticationService,
             accountProviderDataSource,
+            loginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionClock.Immediate) {
