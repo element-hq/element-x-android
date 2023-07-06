@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -68,6 +69,9 @@ class FakeMatrixRoom(
     private var userAvatarUrlResult = Result.success<String?>(null)
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
     private var joinRoomResult = Result.success(Unit)
+    private var updateRoomNotificationSettingsResult: Result<Unit> = Result.success(Unit)
+    private var acceptInviteResult = Result.success(Unit)
+    private var rejectInviteResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
     private var canRedactResult = Result.success(canRedact)
@@ -128,8 +132,15 @@ class FakeMatrixRoom(
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
+    override val roomNotificationSettingsStateFlow: MutableStateFlow<MatrixRoomNotificationSettingsState> =
+        MutableStateFlow(MatrixRoomNotificationSettingsState.Unknown)
+
     override suspend fun updateMembers(): Result<Unit> = simulateLongTask {
         updateMembersResult
+    }
+
+    override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
+        updateRoomNotificationSettingsResult
     }
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)

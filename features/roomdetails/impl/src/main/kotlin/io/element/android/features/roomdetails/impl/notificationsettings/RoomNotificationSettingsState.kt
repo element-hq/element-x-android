@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl
+package io.element.android.features.roomdetails.impl.notificationsettings
 
-sealed interface RoomDetailsEvent {
-    object LeaveRoom : RoomDetailsEvent
-    object MuteNotification : RoomDetailsEvent
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
-    object UnmuteNotification : RoomDetailsEvent
-}
+data class RoomNotificationSettingsState(
+    val roomNotificationSettings: RoomNotificationSettings?,
+    val defaultRoomNotificationMode: RoomNotificationMode?,
+    val eventSink: (RoomNotificationSettingsEvents) -> Unit
+)

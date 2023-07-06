@@ -33,6 +33,7 @@ import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
+import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -67,6 +68,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         object InviteMembers : NavTarget
 
         @Parcelize
+        object RoomNotificationSettings : NavTarget
+
+        @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
     }
 
@@ -84,6 +88,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openInviteMembers() {
                         backstack.push(NavTarget.InviteMembers)
+                    }
+
+                    override fun openRoomNotificationSettings() {
+                        backstack.push(NavTarget.RoomNotificationSettings)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -108,6 +116,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
             NavTarget.InviteMembers -> {
                 createNode<RoomInviteMembersNode>(buildContext)
+            }
+
+            NavTarget.RoomNotificationSettings -> {
+                createNode<RoomNotificationSettingsNode>(buildContext)
             }
 
             is NavTarget.RoomMemberDetails -> {

@@ -51,6 +51,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openRoomMemberList()
         fun openInviteMembers()
         fun editRoomDetails()
+        fun openRoomNotificationSettings()
     }
 
     private val callbacks = plugins<Callback>()
@@ -65,6 +66,10 @@ class RoomDetailsNode @AssistedInject constructor(
 
     private fun openRoomMemberList() {
         callbacks.forEach { it.openRoomMemberList() }
+    }
+
+    private fun openRoomNotificationSettings() {
+        callbacks.forEach { it.openRoomNotificationSettings() }
     }
 
     private fun invitePeople() {
@@ -133,6 +138,7 @@ class RoomDetailsNode @AssistedInject constructor(
             onShareRoom = ::onShareRoom,
             onShareMember = ::onShareMember,
             openRoomMemberList = ::openRoomMemberList,
+            openRoomNotificationSettings = ::openRoomNotificationSettings,
             invitePeople = ::invitePeople,
         )
     }
