@@ -19,6 +19,7 @@ package io.element.android.features.roomdetails.impl
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 data class RoomDetailsState(
     val roomId: String,
@@ -33,6 +34,7 @@ data class RoomDetailsState(
     val canEdit: Boolean,
     val canInvite: Boolean,
     val leaveRoomState: LeaveRoomState,
+    val roomNotificationSettings: RoomNotificationSettings?,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 

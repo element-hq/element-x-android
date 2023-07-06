@@ -22,6 +22,8 @@ import io.element.android.features.roomdetails.impl.members.details.aRoomMemberD
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState> {
     override val values: Sequence<RoomDetailsState>
@@ -78,6 +80,7 @@ fun aRoomDetailsState() = RoomDetailsState(
     roomType = RoomDetailsType.Room,
     roomMemberDetailsState = null,
     leaveRoomState = LeaveRoomState(),
+    roomNotificationSettings = RoomNotificationSettings(mode = RoomNotificationMode.MUTE, isDefault = false),
     eventSink = {}
 )
 

@@ -28,17 +28,25 @@ import androidx.compose.foundation.progressSemantics
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.toEnabledColor
+import io.element.android.libraries.designsystem.toSecondaryEnabledColor
 import io.element.android.libraries.theme.ElementTheme
 
 /**
@@ -48,6 +56,7 @@ import io.element.android.libraries.theme.ElementTheme
 fun PreferenceText(
     title: String,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     subtitle: String? = null,
     currentValue: String? = null,
     loadingCurrentValue: Boolean = false,
@@ -68,8 +77,9 @@ fun PreferenceText(
     ) {
         PreferenceIcon(
             icon = icon,
+            enabled = enabled,
             isVisible = showIconAreaIfNoIcon,
-            tintColor = tintColor ?: ElementTheme.materialColors.secondary
+            tintColor = tintColor ?: enabled.toSecondaryEnabledColor(),
         )
         Column(
             modifier = Modifier
@@ -79,13 +89,13 @@ fun PreferenceText(
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
                 text = title,
-                color = tintColor ?: ElementTheme.materialColors.primary,
+                color = tintColor ?: enabled.toEnabledColor(),
             )
             if (subtitle != null) {
                 Text(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     text = subtitle,
-                    color = tintColor ?: ElementTheme.materialColors.secondary,
+                    color = tintColor ?: enabled.toSecondaryEnabledColor(),
                 )
             }
         }
@@ -96,7 +106,7 @@ fun PreferenceText(
                     .padding(start = 16.dp, end = 8.dp),
                 text = currentValue,
                 style = ElementTheme.typography.fontBodyXsMedium,
-                color = ElementTheme.materialColors.secondary,
+                color = enabled.toSecondaryEnabledColor(),
             )
         } else if (loadingCurrentValue) {
             CircularProgressIndicator(
@@ -134,6 +144,13 @@ private fun ContentToPreview() {
             subtitle = "Some content",
             icon = Icons.Default.BugReport,
             currentValue = "123",
+        )
+        PreferenceText(
+            title = "Title",
+            subtitle = "Some content",
+            icon = Icons.Default.BugReport,
+            currentValue = "123",
+            enabled = false,
         )
         PreferenceText(
             title = "Title",

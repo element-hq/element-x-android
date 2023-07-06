@@ -22,6 +22,7 @@ import dagger.Provides
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -35,6 +36,13 @@ object SessionMatrixModule {
     }
 
     @Provides
+    @SingleIn(SessionScope::class)
+    fun providesNotificationSettingsService(matrixClient: MatrixClient): NotificationSettingsService {
+        return matrixClient.notificationSettingsService()
+    }
+
+    @Provides
+    @SingleIn(SessionScope::class)
     fun provideRoomMembershipObserver(matrixClient: MatrixClient): RoomMembershipObserver {
         return matrixClient.roomMembershipObserver()
     }

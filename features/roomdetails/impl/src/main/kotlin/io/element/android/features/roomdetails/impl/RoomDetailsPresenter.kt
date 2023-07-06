@@ -24,30 +24,45 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
+import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
+    private val client: MatrixClient,
     private val room: MatrixRoom,
+    private val notificationSettingsService: NotificationSettingsService,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: LeaveRoomPresenter,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<RoomDetailsState> {
 
     @Composable
     override fun present(): RoomDetailsState {
+        val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         LaunchedEffect(Unit) {
             room.updateMembers()
+            room.updateRoomNotificationSettings()
+            observeNotificationSettings()
         }
 
         val membersState by room.membersStateFlow.collectAsState()
@@ -69,10 +84,22 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+        val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
+
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
-                is RoomDetailsEvent.LeaveRoom ->
+                RoomDetailsEvent.LeaveRoom ->
                     leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(room.roomId))
+                RoomDetailsEvent.MuteNotification -> {
+                    scope.launch(dispatchers.io) {
+                        client.notificationSettingsService().muteRoom(room.roomId)
+                    }
+                }
+                RoomDetailsEvent.UnmuteNotification -> {
+                    scope.launch(dispatchers.io) {
+                        client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.joinedMemberCount.toULong())
+                    }
+                }
             }
         }
 
@@ -91,6 +118,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomType = roomType,
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
+            roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             eventSink = ::handleEvents,
         )
     }
@@ -121,5 +149,11 @@ class RoomDetailsPresenter @Inject constructor(
     @Composable
     private fun getCanSendState(membersState: MatrixRoomMembersState, type: StateEventType) = produceState(false, membersState) {
         value = room.canSendState(type).getOrElse { false }
+    }
+
+    private fun CoroutineScope.observeNotificationSettings() {
+        notificationSettingsService.notificationSettingsChangeFlow.onEach {
+            room.updateRoomNotificationSettings()
+        }.launchIn(this)
     }
 }

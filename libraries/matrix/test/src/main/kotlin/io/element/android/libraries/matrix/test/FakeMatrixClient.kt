@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -33,6 +34,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
@@ -50,6 +52,7 @@ class FakeMatrixClient(
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),
+    private val notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     private val syncService: FakeSyncService = FakeSyncService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
 ) : MatrixClient {
@@ -142,6 +145,7 @@ class FakeMatrixClient(
     override fun pushersService(): PushersService = pushersService
 
     override fun notificationService(): NotificationService = notificationService
+    override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver()
