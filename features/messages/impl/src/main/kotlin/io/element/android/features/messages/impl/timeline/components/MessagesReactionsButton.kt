@@ -121,9 +121,10 @@ private fun ContentToPreview() {
     Row {
         MessagesReactionsButton(
             content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-            onClick = {})
+            onClick = {}
+        )
         MessagesReactionsButton(
-            content = MessagesReactionsButtonContent.Text("Click me"),
+            content = MessagesReactionsButtonContent.Text("12 more"),
             onClick = {}
         )
     }
