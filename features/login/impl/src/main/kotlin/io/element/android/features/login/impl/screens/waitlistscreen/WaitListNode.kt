@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.loginpassword
+package io.element.android.features.login.impl.screens.waitlistscreen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,31 +25,38 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class LoginPasswordNode @AssistedInject constructor(
+class WaitListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: LoginPasswordPresenter,
+    presenterFactory: WaitListPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
+    data class Inputs(val loginFormState: LoginFormState) : NodeInputs
+
+    private val inputs: Inputs = inputs()
+    private val presenter = presenterFactory.create(inputs.loginFormState)
+
     interface Callback : Plugin {
-        fun onWaitListError(loginFormState: LoginFormState)
+        fun onCancelClicked()
     }
 
-    private fun onWaitListError(loginFormState: LoginFormState) {
-        plugins<Callback>().forEach { it.onWaitListError(loginFormState) }
+    private fun onCancelClicked() {
+        plugins<Callback>().forEach { it.onCancelClicked() }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        LoginPasswordView(
+        WaitListView(
             state = state,
-            modifier = modifier,
-            onBackPressed = ::navigateUp,
-            onWaitListError = ::onWaitListError,
+            onCancelClicked = ::onCancelClicked,
+            modifier = modifier
         )
     }
 }

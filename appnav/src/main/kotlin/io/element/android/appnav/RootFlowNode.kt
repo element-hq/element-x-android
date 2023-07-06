@@ -42,6 +42,7 @@ import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
+import io.element.android.features.login.api.LoginUserStory
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.preferences.api.CacheService
@@ -55,6 +56,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -74,6 +76,7 @@ class RootFlowNode @AssistedInject constructor(
     private val bugReportEntryPoint: BugReportEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
+    private val loginUserStory: LoginUserStory,
 ) :
     BackstackNode<RootFlowNode.NavTarget>(
         backstack = BackStack(
@@ -90,8 +93,7 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private fun observeLoggedInState() {
-        authenticationService.isLoggedIn()
-            .distinctUntilChanged()
+        isUserLoggedInFlow()
             .combine(
                 cacheService.cacheIndex().onEach {
                     Timber.v("cacheIndex=$it")
@@ -112,6 +114,16 @@ class RootFlowNode @AssistedInject constructor(
                 }
             }
             .launchIn(lifecycleScope)
+    }
+
+    private fun isUserLoggedInFlow(): Flow<Boolean> {
+        return combine(
+            authenticationService.isLoggedIn(),
+            loginUserStory.loginFlowIsDone
+        ) { isLoggedIn, loginFlowIsDone ->
+            isLoggedIn && loginFlowIsDone
+        }
+            .distinctUntilChanged()
     }
 
     private fun switchToLoggedInFlow(sessionId: SessionId, cacheIndex: Int) {
