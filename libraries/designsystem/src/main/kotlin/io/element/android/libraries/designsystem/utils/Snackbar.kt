@@ -69,14 +69,13 @@ fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> 
 @Composable
 fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostState {
     val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
     val snackbarMessageText = snackbarMessage?.let {
         stringResource(id = snackbarMessage.messageResId)
     }
     val dispatcher = LocalSnackbarDispatcher.current
     LaunchedEffect(snackbarMessage) {
         if (snackbarMessageText == null) return@LaunchedEffect
-        coroutineScope.launch {
+        launch {
             snackbarHostState.showSnackbar(
                 message = snackbarMessageText,
                 duration = snackbarMessage.duration,
