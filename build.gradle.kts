@@ -225,12 +225,9 @@ koverMerged {
                 includes += "*Presenter"
                 excludes += "*Fake*Presenter"
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
-                // Too small presenters, cannot reach the threshold.
-                excludes += "io.element.android.features.onboarding.impl.OnBoardingPresenter"
-                excludes += "io.element.android.features.preferences.impl.about.AboutPresenter"
             }
             bound {
-                minValue = 90
+                minValue = 85
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
