@@ -142,7 +142,7 @@ fun CreateRoomRootViewTopBar(
                 fontWeight = FontWeight.SemiBold,
             )
         },
-        actions = {
+        navigationIcon = {
             IconButton(onClick = onClosePressed) {
                 Icon(
                     imageVector = Icons.Default.Close,
