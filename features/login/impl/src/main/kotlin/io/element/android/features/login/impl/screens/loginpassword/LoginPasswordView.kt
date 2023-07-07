@@ -128,7 +128,7 @@ fun LoginPasswordView(
                     id = R.string.screen_account_provider_signin_title,
                     state.accountProvider.title
                 ),
-                subTitle = stringResource(id = R.string.screen_server_confirmation_message_login_matrix_dot_org)
+                subTitle = stringResource(id = R.string.screen_login_subtitle)
             )
             Spacer(Modifier.height(40.dp))
             LoginForm(
