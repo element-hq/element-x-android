@@ -32,15 +32,13 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class MatrixUserRepository @Inject constructor(
-    client: MatrixClient,
+    private val client: MatrixClient,
     private val dataSource: UserListDataSource
 ) : UserRepository {
 
-    private val sessionId = client.sessionId
-
     override suspend fun search(query: String): Flow<List<UserSearchResult>> = flow {
         // Manually add a fake result with the matrixId, if provided and not the local user
-        val isAnotherUsersId =  query != sessionId.value && MatrixPatterns.isUserId(query)
+        val isAnotherUsersId = MatrixPatterns.isUserId(query) && !client.isMe(UserId(query))
         if (isAnotherUsersId) {
             emit(listOf(UserSearchResult(MatrixUser(UserId(query)))))
         }
@@ -51,7 +49,7 @@ class MatrixUserRepository @Inject constructor(
 
             val results = dataSource
                 .search(query, MAXIMUM_SEARCH_RESULTS)
-                .filter { it.userId != sessionId }
+                .filter { !client.isMe(it.userId) }
                 .map { UserSearchResult(it) }
                 .toMutableList()
 

@@ -60,4 +60,6 @@ interface MatrixClient : Closeable {
     suspend fun loadUserAvatarURLString(): Result<String?>
     suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>
     fun roomMembershipObserver(): RoomMembershipObserver
+
+    fun isMe(userId: UserId?) = userId == sessionId
 }
