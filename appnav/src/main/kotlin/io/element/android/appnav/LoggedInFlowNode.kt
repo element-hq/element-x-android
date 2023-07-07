@@ -56,7 +56,6 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
@@ -92,7 +91,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.SplashScreen,
+        initialElement = NavTarget.RoomList,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -104,20 +103,12 @@ class LoggedInFlowNode @AssistedInject constructor(
             .distinctUntilChanged()
             .onEach { isConsentAsked ->
                 if (isConsentAsked) {
-                    switchToRoomList()
+                    backstack.removeLast(NavTarget.AnalyticsOptIn)
                 } else {
-                    switchToAnalytics()
+                    backstack.push(NavTarget.AnalyticsOptIn)
                 }
             }
             .launchIn(lifecycleScope)
-    }
-
-    private fun switchToRoomList() {
-        backstack.safeRoot(NavTarget.RoomList)
-    }
-
-    private fun switchToAnalytics() {
-        backstack.safeRoot(NavTarget.AnalyticsSettings)
     }
 
     interface Callback : Plugin {
@@ -195,9 +186,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object SplashScreen : NavTarget
-
-        @Parcelize
         object Permanent : NavTarget
 
         @Parcelize
@@ -222,12 +210,11 @@ class LoggedInFlowNode @AssistedInject constructor(
         object InviteList : NavTarget
 
         @Parcelize
-        object AnalyticsSettings : NavTarget
+        object AnalyticsOptIn : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.SplashScreen -> splashNode(buildContext)
             NavTarget.Permanent -> {
                 createNode<LoggedInNode>(buildContext)
             }
@@ -330,7 +317,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
-            NavTarget.AnalyticsSettings -> {
+            NavTarget.AnalyticsOptIn -> {
                 analyticsOptInEntryPoint.createNode(this, buildContext)
             }
         }
@@ -346,12 +333,6 @@ class LoggedInFlowNode @AssistedInject constructor(
         return attachChild {
             backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId))
-        }
-    }
-
-    private fun splashNode(buildContext: BuildContext) = node(buildContext) {
-        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
         }
     }
 
