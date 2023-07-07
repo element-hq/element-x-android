@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,15 +36,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissState
-import androidx.compose.material3.DismissValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismiss
-import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -78,6 +75,9 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
+import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
+import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -93,7 +93,10 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @Composable
 fun TimelineItemEventRow(
@@ -110,6 +113,7 @@ fun TimelineItemEventRow(
     onSwipeToReply: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
 
     fun onUserDataClicked() {
@@ -123,54 +127,47 @@ fun TimelineItemEventRow(
 
     Column(modifier = modifier.fillMaxWidth()) {
         if (canReply) {
-            val dismissState = rememberDismissState(
-                confirmValueChange = {
-                    if (it == DismissValue.DismissedToEnd) {
-                        onSwipeToReply()
-                    }
-                    // Do not dismiss the message, return false!
-                    false
+            val state: SwipeableActionsState = rememberSwipeableActionsState()
+            val offset = state.offset.value
+            val swipeThresholdPx = 40.dp.toPx()
+            val thresholdCrossed = abs(offset) > swipeThresholdPx
+            Box(Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.matchParentSize()) {
+                    ReplySwipeIndicator({ offset / 120 })
                 }
-            )
-            SwipeToDismiss(
-                state = dismissState,
-                background = {
-                    ReplySwipeIndicator({ dismissState.toSwipeProgress() })
-                },
-                directions = setOf(DismissDirection.StartToEnd),
-                dismissContent = {
-                    TimelineItemEventRowContent(
-                        event = event,
-                        isHighlighted = isHighlighted,
-                        interactionSource = interactionSource,
-                        onClick = onClick,
-                        onLongClick = onLongClick,
-                        onTimestampClicked = onTimestampClicked,
-                        inReplyToClicked = ::inReplyToClicked,
-                        onUserDataClicked = ::onUserDataClicked,
-                        onReactionClicked = { emoji -> onReactionClick(emoji, event) },
-                        onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                    )
-                }
-            )
-        } else {
-            TimelineItemEventRowContent(
-                event = event,
-                isHighlighted = isHighlighted,
-                interactionSource = interactionSource,
-                onClick = onClick,
-                onLongClick = onLongClick,
-                onTimestampClicked = onTimestampClicked,
-                inReplyToClicked = ::inReplyToClicked,
-                onUserDataClicked = ::onUserDataClicked,
-                onReactionClicked = { emoji -> onReactionClick(emoji, event) },
-                onMoreReactionsClicked = { onMoreReactionsClick(event) },
-            )
-        }
-        if (event.groupPosition.isNew()) {
-            Spacer(modifier = Modifier.height(16.dp))
-        } else {
-            Spacer(modifier = Modifier.height(2.dp))
+                TimelineItemEventRowContent(
+                    modifier = Modifier
+                        .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
+                        .draggable(
+                            orientation = Orientation.Horizontal,
+                            enabled = !state.isResettingOnRelease,
+                            onDragStopped = {
+                                coroutineScope.launch {
+                                    if (thresholdCrossed) {
+                                        onSwipeToReply()
+                                    }
+                                    state.resetOffset()
+                                }
+                            },
+                            state = state.draggableState,
+                        ),
+                    event = event,
+                    isHighlighted = isHighlighted,
+                    interactionSource = interactionSource,
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                    onTimestampClicked = onTimestampClicked,
+                    inReplyToClicked = ::inReplyToClicked,
+                    onUserDataClicked = ::onUserDataClicked,
+                    onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                    onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                )
+            }
+            if (event.groupPosition.isNew()) {
+                Spacer(modifier = Modifier.height(16.dp))
+            } else {
+                Spacer(modifier = Modifier.height(2.dp))
+            }
         }
     }
 }
@@ -264,14 +261,6 @@ private fun TimelineItemEventRowContent(
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
-    }
-}
-
-private fun DismissState.toSwipeProgress(): Float {
-    return when (targetValue) {
-        DismissValue.Default -> 0f
-        DismissValue.DismissedToEnd -> progress * 3
-        DismissValue.DismissedToStart -> progress * 3
     }
 }
 
@@ -699,7 +688,6 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
         }
     }
 }
-
 
 @Preview
 @Composable
