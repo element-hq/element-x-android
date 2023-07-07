@@ -37,9 +37,9 @@ class MatrixUserRepository @Inject constructor(
 ) : UserRepository {
 
     override suspend fun search(query: String): Flow<List<UserSearchResult>> = flow {
-        // Manually add a fake result with the matrixId, if provided and not the local user
-        val isAnotherUsersId = MatrixPatterns.isUserId(query) && !client.isMe(UserId(query))
-        if (isAnotherUsersId) {
+        // If the search term is a MXID that's not ours, we'll show a 'fake' result for that user, then update it when we get search results.
+        val shouldQueryProfile = MatrixPatterns.isUserId(query) && !client.isMe(UserId(query))
+        if (shouldQueryProfile) {
             emit(listOf(UserSearchResult(MatrixUser(UserId(query)))))
         }
 
@@ -54,7 +54,7 @@ class MatrixUserRepository @Inject constructor(
                 .toMutableList()
 
             // If the query is another user's MXID and the result doesn't contain that user ID, query the profile information explicitly
-            if (isAnotherUsersId && results.none { it.matrixUser.userId.value == query }) {
+            if (shouldQueryProfile && results.none { it.matrixUser.userId.value == query }) {
                 results.add(
                     0,
                     dataSource.getProfile(UserId(query))
