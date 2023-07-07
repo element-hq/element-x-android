@@ -5,7 +5,9 @@
     <item quantity="other">"%1$d room changes"</item>
   </plurals>
   <string name="screen_room_timeline_less_reactions">"Show less"</string>
-  <string name="screen_room_timeline_more_reactions">"%1$d more"</string>
+  <plurals name="screen_room_timeline_more_reactions">
+    <item quantity="other">"%1$d more"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Add emoji"</string>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>

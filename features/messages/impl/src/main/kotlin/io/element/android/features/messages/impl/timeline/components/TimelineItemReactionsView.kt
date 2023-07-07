@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -134,13 +135,15 @@ private fun TimelineItemReactionsView(
                     ),
                     onClick = onCollapseClick,
                 )
-            is ExpandableState.Collapsed ->
+            is ExpandableState.Collapsed -> {
+                val hidden = expandableState.hidden
                 MessagesReactionButton(
                     content = MessagesReactionsButtonContent.Text(
-                        text = stringResource(id = R.string.screen_room_timeline_more_reactions, expandableState.hidden)
+                        text = pluralStringResource(id = R.plurals.screen_room_timeline_more_reactions, hidden, hidden)
                     ),
                     onClick = onExpandClick,
                 )
+            }
             ExpandableState.None -> {
                 // No expand or collapse action available
             }
