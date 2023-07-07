@@ -72,7 +72,8 @@ fun LoadingRoomNodeView(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(16.dp), contentAlignment = Alignment.Center
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
             ) {
                 if (state is LoadingRoomState.Error) {
                     Text(
@@ -90,9 +91,12 @@ fun LoadingRoomNodeView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LoadingRoomTopBar(onBackClicked: () -> Unit) {
+private fun LoadingRoomTopBar(
+    onBackClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     TopAppBar(
-        modifier = Modifier,
+        modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackClicked)
         },
@@ -112,6 +116,7 @@ private fun LoadingRoomTopBar(onBackClicked: () -> Unit) {
                 PlaceholderAtom(width = 45.dp, height = 7.dp)
             }
         },
+        windowInsets = WindowInsets(0.dp),
     )
 }
 
