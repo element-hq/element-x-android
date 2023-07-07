@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.room.awaitAllRoomsAreLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -55,10 +56,8 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -131,11 +130,11 @@ class RustMatrixClient constructor(
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
+        // Check if already in memory...
         var cachedPairOfRoom = pairOfRoom(roomId)
         if (cachedPairOfRoom == null) {
-            roomSummaryDataSource.allRoomsLoadingState().firstOrNull {
-                it is RoomSummaryDataSource.LoadingState.Loaded
-            }
+            //... otherwise, lets wait for the SS to load all rooms and check again.
+            roomSummaryDataSource.awaitAllRoomsAreLoaded()
             cachedPairOfRoom = pairOfRoom(roomId)
         }
         if (cachedPairOfRoom == null) return null

@@ -16,17 +16,34 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withTimeout
+import timber.log.Timber
+import kotlin.time.Duration
 
 interface RoomSummaryDataSource {
 
     sealed class LoadingState {
         object NotLoaded : LoadingState()
-        data class Loaded(val numberOfRooms: Int): LoadingState()
+        data class Loaded(val numberOfRooms: Int) : LoadingState()
     }
 
     fun updateAllRoomsVisibleRange(range: IntRange)
     fun allRoomsLoadingState(): StateFlow<LoadingState>
     fun allRooms(): StateFlow<List<RoomSummary>>
     fun inviteRooms(): StateFlow<List<RoomSummary>>
+}
+
+suspend fun RoomSummaryDataSource.awaitAllRoomsAreLoaded(timeout: Duration = Duration.INFINITE) {
+    try {
+        withTimeout(timeout) {
+            allRoomsLoadingState().firstOrNull {
+                it is RoomSummaryDataSource.LoadingState.Loaded
+            }
+        }
+    } catch (timeoutException: TimeoutCancellationException) {
+        Timber.v("AwaitAllRooms: no response after $timeout")
+    }
 }
