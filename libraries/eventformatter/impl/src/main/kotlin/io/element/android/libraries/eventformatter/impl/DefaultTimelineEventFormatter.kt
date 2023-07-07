@@ -49,7 +49,7 @@ class DefaultTimelineEventFormatter @Inject constructor(
 ) : TimelineEventFormatter {
 
     override fun format(event: EventTimelineItem): CharSequence? {
-        val isOutgoing = event.sender == matrixClient.sessionId
+        val isOutgoing = matrixClient.isMe(event.sender)
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
         return when (val content = event.content) {
             is RoomMembershipContent -> {
