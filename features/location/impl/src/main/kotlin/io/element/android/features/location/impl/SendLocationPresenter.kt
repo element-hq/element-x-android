@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -62,6 +63,9 @@ class SendLocationPresenter @Inject constructor(
         room.sendLocation(
             body = "Location at latitude: ${event.lat}, longitude: ${event.lng}",
             geoUri = "geo:${event.lat},${event.lng}",
+            description = null,
+            zoomLevel = 15, // Send default zoom level for now.
+            assetType = AssetType.PIN,
         )
     }
 }

@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.actionlist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +47,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -78,7 +80,9 @@ import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -175,13 +179,16 @@ private fun SheetContent(
                         Divider()
                     }
                 }
-                item {
-                    EmojiReactionsRow(
-                        onEmojiReactionClicked = onEmojiReactionClicked,
-                        onCustomReactionClicked = onCustomReactionClicked,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                    Divider()
+                if (state.displayEmojiReactions) {
+                    item {
+                        EmojiReactionsRow(
+                            highlightedEmojis = target.event.reactionsState.highlightedKeys,
+                            onEmojiReactionClicked = onEmojiReactionClicked,
+                            onCustomReactionClicked = onCustomReactionClicked,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Divider()
+                    }
                 }
                 items(
                     items = actions,
@@ -320,6 +327,7 @@ private val emojiRippleRadius = 24.dp
 
 @Composable
 internal fun EmojiReactionsRow(
+    highlightedEmojis: ImmutableList<String>,
     onEmojiReactionClicked: (String) -> Unit,
     onCustomReactionClicked: () -> Unit,
     modifier: Modifier = Modifier,
@@ -333,7 +341,8 @@ internal fun EmojiReactionsRow(
             "👍", "👎", "🔥", "❤️", "👏"
         )
         for (emoji in defaultEmojis) {
-            EmojiButton(emoji, onEmojiReactionClicked)
+            val isHighlighted = highlightedEmojis.contains(emoji)
+            EmojiButton(emoji, isHighlighted, onEmojiReactionClicked)
         }
 
         Icon(
@@ -356,19 +365,34 @@ internal fun EmojiReactionsRow(
 @Composable
 private fun EmojiButton(
     emoji: String,
+    isHighlighted: Boolean,
     onClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Text(
-        emoji,
-        fontSize = 28.dp.toSp(),
-        modifier = modifier.clickable(
-            enabled = true,
-            onClick = { onClicked(emoji) },
-            indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
-            interactionSource = remember { MutableInteractionSource() }
+    val backgroundColor = if (isHighlighted) {
+        ElementTheme.colors.bgActionPrimaryRest
+    } else {
+        Color.Transparent
+    }
+    Box(
+        modifier = modifier
+            .size(48.dp)
+            .background(backgroundColor, RoundedCornerShape(24.dp)),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            emoji,
+            fontSize = 28.dp.toSp(),
+            color = Color.White,
+            modifier = Modifier
+                .clickable(
+                    enabled = true,
+                    onClick = { onClicked(emoji) },
+                    indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                    interactionSource = remember { MutableInteractionSource() }
+                )
         )
-    )
+    }
 }
 
 @Preview

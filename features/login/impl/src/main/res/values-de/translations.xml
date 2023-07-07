@@ -24,7 +24,6 @@
   <string name="screen_login_error_invalid_user_id">"Dies ist kein gültiger Benutzeridentifikator. Erwartetes Format: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_unsupported_authentication">"Der ausgewählte Homeserver unterstützt kein Passwort- oder OIDC-Login. Bitte kontaktiere deinen Admin oder wähle einen anderen Homeserver."</string>
   <string name="screen_login_form_header">"Gib deine Daten ein"</string>
-  <string name="screen_login_server_header">"Wo deine Gespräche leben"</string>
   <string name="screen_login_title">"Willkommen zurück!"</string>
   <string name="screen_login_title_with_homeserver">"Bei %1$s anmelden"</string>
   <string name="screen_server_confirmation_change_server">"Kontoanbieter wechseln"</string>
@@ -33,6 +32,12 @@
   <string name="screen_server_confirmation_message_register">"Hier werden deine Konversationen stattfinden — genau so wie du einen E-Mail-Anbieter verwenden würdest, um deine E-Mails aufzubewahren."</string>
   <string name="screen_server_confirmation_title_login">"Du bist dabei dich bei %1$s anzumelden"</string>
   <string name="screen_server_confirmation_title_register">"Du bist dabei einen Account auf %1$s zu erstellen"</string>
+  <string name="screen_waitlist_message">"Im Moment besteht eine hohe Nachfrage nach %1$s auf %2$s. Besuche die App in ein paar Tagen wieder und versuche es erneut.
+
+Vielen Dank für deine Geduld!"</string>
+  <string name="screen_waitlist_message_success">"Willkommen bei %1$s!"</string>
+  <string name="screen_waitlist_title">"Du hast es fast geschafft!"</string>
+  <string name="screen_waitlist_title_success">"Du bist dabei."</string>
   <string name="screen_change_server_submit">"Weiter"</string>
   <string name="screen_change_server_title">"Wählen deinen Server"</string>
   <string name="screen_login_password_hint">"Passwort"</string>

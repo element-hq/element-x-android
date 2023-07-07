@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
@@ -29,13 +30,16 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 @Composable
 fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
+    mainAxisAlignment: FlowMainAxisAlignment,
+    onReactionClicked: (emoji: String) -> Unit,
+    onMoreReactionsClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onReactionClicked: (emoji: String) -> Unit
 ) {
     FlowRow(
         modifier = modifier,
-        mainAxisSpacing = 2.dp,
-        crossAxisSpacing = 8.dp,
+        mainAxisSpacing = 4.dp,
+        crossAxisSpacing = 4.dp,
+        mainAxisAlignment = mainAxisAlignment,
     ) {
         reactionsState.reactions.forEach { reaction ->
             MessagesReactionButton(
@@ -43,6 +47,9 @@ fun TimelineItemReactionsView(
                 onClick = { onReactionClicked(reaction.key) }
             )
         }
+        MessagesMoreReactionsButton(
+            onClick = onMoreReactionsClicked
+        )
     }
 }
 
@@ -60,6 +67,8 @@ internal fun TimelineItemReactionsViewDarkPreview() =
 private fun ContentToPreview() {
     TimelineItemReactionsView(
         reactionsState = aTimelineItemReactions(),
-        onReactionClicked = { }
+        mainAxisAlignment = FlowMainAxisAlignment.Center,
+        onReactionClicked = {},
+        onMoreReactionsClicked = {},
     )
 }

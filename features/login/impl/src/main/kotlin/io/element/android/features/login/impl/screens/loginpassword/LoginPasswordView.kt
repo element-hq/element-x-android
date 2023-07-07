@@ -16,7 +16,6 @@
 
 package io.element.android.features.login.impl.screens.loginpassword
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
@@ -56,6 +55,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -68,9 +68,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.autofill
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
@@ -82,8 +82,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun LoginPasswordView(
     state: LoginPasswordState,
-    modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
+    onWaitListError: (LoginFormState) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val isLoading by remember(state.loginAction) {
         derivedStateOf {
@@ -108,53 +109,60 @@ fun LoginPasswordView(
             )
         }
     ) { padding ->
-        Box(
+        val scrollState = rememberScrollState()
+
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .imePadding()
                 .padding(padding)
                 .consumeWindowInsets(padding)
+                .verticalScroll(state = scrollState)
+                .padding(horizontal = 16.dp),
         ) {
-            val scrollState = rememberScrollState()
-
-            Column(
+            // Title
+            IconTitleSubtitleMolecule(
+                modifier = Modifier.padding(top = 20.dp, start = 16.dp, end = 16.dp),
+                iconImageVector = Icons.Filled.AccountCircle,
+                title = stringResource(
+                    id = R.string.screen_account_provider_signin_title,
+                    state.accountProvider.title
+                ),
+                subTitle = stringResource(id = R.string.screen_login_subtitle)
+            )
+            Spacer(Modifier.height(40.dp))
+            LoginForm(
+                state = state,
+                isLoading = isLoading,
+                onSubmit = ::submit
+            )
+            // Min spacing
+            Spacer(Modifier.height(24.dp))
+            // Flexible spacing to keep the submit button at the bottom
+            Spacer(modifier = Modifier.weight(1f))
+            // Submit
+            ButtonWithProgress(
+                text = stringResource(R.string.screen_login_submit),
+                showProgress = isLoading,
+                onClick = ::submit,
+                enabled = state.submitEnabled || isLoading,
                 modifier = Modifier
-                    .verticalScroll(state = scrollState)
-                    .padding(horizontal = 16.dp),
-            ) {
-                // Title
-                IconTitleSubtitleMolecule(
-                    modifier = Modifier.padding(top = 20.dp),
-                    iconImageVector = Icons.Filled.AccountCircle,
-                    title = stringResource(
-                        id = R.string.screen_account_provider_signin_title,
-                        state.accountProvider.title
-                    ),
-                    subTitle = stringResource(id = R.string.screen_login_form_header)
-                )
-                Spacer(Modifier.height(32.dp))
-                LoginForm(state = state,
-                    isLoading = isLoading,
-                    onSubmit = ::submit
-                )
-                Spacer(Modifier.height(28.dp))
-                // Submit
-                ButtonWithProgress(
-                    text = stringResource(R.string.screen_login_submit),
-                    showProgress = isLoading,
-                    onClick = ::submit,
-                    enabled = state.submitEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.loginContinue)
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-            }
+                    .fillMaxWidth()
+                    .testTag(TestTags.loginContinue)
+            )
+            Spacer(modifier = Modifier.height(60.dp))
 
             if (state.loginAction is Async.Failure) {
-                LoginErrorDialog(error = state.loginAction.error, onDismiss = {
-                    state.eventSink(LoginPasswordEvents.ClearError)
-                })
+                when {
+                    state.loginAction.error.isWaitListError() -> {
+                        onWaitListError(state.formState)
+                    }
+                    else -> {
+                        LoginErrorDialog(error = state.loginAction.error, onDismiss = {
+                            state.eventSink(LoginPasswordEvents.ClearError)
+                        })
+                    }
+                }
             }
         }
     }
@@ -182,7 +190,7 @@ internal fun LoginForm(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(
+        OutlinedTextField(
             value = loginFieldState,
             readOnly = isLoading,
             modifier = Modifier
@@ -193,7 +201,7 @@ internal fun LoginForm(
                     loginFieldState = it
                     eventSink(LoginPasswordEvents.SetLogin(it))
                 }),
-            label = {
+            placeholder = {
                 Text(text = stringResource(R.string.screen_login_username_hint))
             },
             onValueChange = {
@@ -225,7 +233,7 @@ internal fun LoginForm(
             passwordVisible = false
         }
         Spacer(Modifier.height(20.dp))
-        TextField(
+        OutlinedTextField(
             value = passwordFieldState,
             readOnly = isLoading,
             modifier = Modifier
@@ -240,7 +248,7 @@ internal fun LoginForm(
                 passwordFieldState = it
                 eventSink(LoginPasswordEvents.SetPassword(it))
             },
-            label = {
+            placeholder = {
                 Text(text = stringResource(R.string.screen_login_password_hint))
             },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -269,6 +277,7 @@ internal fun LoginForm(
 @Composable
 internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
+        title = stringResource(id = CommonStrings.dialog_title_error),
         content = stringResource(loginError(error)),
         onDismiss = onDismiss
     )
@@ -288,6 +297,7 @@ internal fun LoginPasswordViewDarkPreview(@PreviewParameter(LoginPasswordStatePr
 private fun ContentToPreview(state: LoginPasswordState) {
     LoginPasswordView(
         state = state,
-        onBackPressed = {}
+        onBackPressed = {},
+        onWaitListError = {},
     )
 }

@@ -91,7 +91,7 @@ fun ConfirmAccountProviderView(
                     text = stringResource(id = R.string.screen_account_provider_continue),
                     showProgress = isLoading,
                     onClick = { eventSink.invoke(ConfirmAccountProviderEvents.Continue) },
-                    enabled = state.submitEnabled,
+                    enabled = state.submitEnabled || isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.loginContinue)

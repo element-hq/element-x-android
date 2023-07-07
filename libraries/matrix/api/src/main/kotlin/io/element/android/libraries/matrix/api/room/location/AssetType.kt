@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.timeline.item.event
+package io.element.android.libraries.matrix.api.room.location
 
-import io.element.android.libraries.matrix.api.core.EventId
-
-sealed interface EventSendState {
-    object NotSentYet : EventSendState
-    object Canceled : EventSendState
-
-    data class SendingFailed(
-        val error: String
-    ) : EventSendState
-
-    data class Sent(
-        val eventId: EventId
-    ) : EventSendState
+enum class AssetType {
+    SENDER,
+    PIN
 }

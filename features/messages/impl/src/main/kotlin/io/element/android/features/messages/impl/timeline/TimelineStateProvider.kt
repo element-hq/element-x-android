@@ -31,7 +31,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -43,6 +43,7 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     timelineItems = timelineItems,
     paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, canBackPaginate = true),
     highlightedEventId = null,
+    canReply = true,
     eventSink = {}
 )
 
@@ -58,7 +59,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             isMine = false,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle,
-            sendState = EventSendState.SendingFailed("Message failed to send"),
+            sendState = LocalEventSendState.SendingFailed("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = false,
@@ -81,7 +82,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             isMine = true,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle,
-            sendState = EventSendState.SendingFailed("Message failed to send"),
+            sendState = LocalEventSendState.SendingFailed("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = true,
@@ -111,7 +112,7 @@ internal fun aTimelineItemEvent(
     isMine: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
-    sendState: EventSendState = EventSendState.Sent(eventId),
+    sendState: LocalEventSendState = LocalEventSendState.Sent(eventId),
     inReplyTo: InReplyTo? = null,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
@@ -128,7 +129,7 @@ internal fun aTimelineItemEvent(
         isMine = isMine,
         senderDisplayName = "Sender",
         groupPosition = groupPosition,
-        sendState = sendState,
+        localSendState = sendState,
         inReplyTo = inReplyTo,
         debugInfo = debugInfo,
     )
@@ -138,10 +139,12 @@ fun aTimelineItemReactions(
     count: Int = 1,
     isHighlighted: Boolean = false,
 ): TimelineItemReactions {
+    val emojis = arrayOf("👍", "😀️", "😁️", "😆️", "😅️", "🤣️", "🥰️", "😇️", "😊️", "😉️", "🙃️", "🙂️", "😍️", "🤗️", "🤭️")
     return TimelineItemReactions(
         reactions = buildList {
-            repeat(count) {
-                add(AggregatedReaction(key = "👍", count = 1 + it, isHighlighted = isHighlighted))
+            repeat(count) { index ->
+                val key = emojis[index % emojis.size]
+                add(AggregatedReaction(key = key, count = 1 + index, isHighlighted = isHighlighted))
             }
         }.toPersistentList()
     )

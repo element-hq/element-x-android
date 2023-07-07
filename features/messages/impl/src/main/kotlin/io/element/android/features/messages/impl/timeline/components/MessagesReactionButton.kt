@@ -17,9 +17,9 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -45,35 +46,47 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    // First Surface is to render a border with the same background color as the background
+    val buttonColor = if (reaction.isHighlighted) {
+        ElementTheme.colors.bgSubtlePrimary
+    } else {
+        ElementTheme.colors.bgSubtleSecondary
+    }
+    val borderColor = if (reaction.isHighlighted) {
+        ElementTheme.colors.borderInteractivePrimary
+    } else {
+        buttonColor
+    }
     Surface(
-        modifier = modifier.clickable(onClick = onClick::invoke),
-        // TODO Should use compound.bgSubtlePrimary
-        color = ElementTheme.legacyColors.gray300,
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.background),
-        shape = RoundedCornerShape(corner = CornerSize(14.dp)),
+        modifier = modifier
+            .background(Color.Transparent)
+            // Outer border, same colour as background
+            .border(
+                BorderStroke(2.dp, MaterialTheme.colorScheme.background),
+                shape = RoundedCornerShape(corner = CornerSize(14.dp))
+            )
+            .padding(vertical = 2.dp, horizontal = 2.dp)
+            // Clip click indicator inside the outer border
+            .clip(RoundedCornerShape(corner = CornerSize(12.dp)))
+            .clickable(onClick = onClick)
+            // Inner border, to highlight when selected
+            .border(BorderStroke(1.dp, borderColor), RoundedCornerShape(corner = CornerSize(12.dp)))
+            .background(buttonColor, RoundedCornerShape(corner = CornerSize(12.dp)))
+            .padding(vertical = 4.dp, horizontal = 10.dp),
+        color = buttonColor
     ) {
-        Box(modifier = Modifier.padding(2.dp)) {
-            val reactionModifier = if (reaction.isHighlighted) {
-                Modifier
-                    // TODO Check the color, should use compound.borderInteractivePrimary
-                    .border(BorderStroke(1.dp, Color(0xFF808994)), RoundedCornerShape(corner = CornerSize(12.dp)))
-            } else {
-                Modifier
-            }
-            Row(
-                modifier = reactionModifier.padding(vertical = 4.dp, horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = reaction.key, fontSize = 15.sp)
-                if (reaction.count > 1) {
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = reaction.count.toString(),
-                        color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-                        fontSize = 14.sp
-                    )
-                }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = reaction.key, fontSize = 15.sp, lineHeight = 20.sp
+            )
+            if (reaction.count > 1) {
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = reaction.count.toString(),
+                    color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                    fontSize = 14.sp
+                )
             }
         }
     }

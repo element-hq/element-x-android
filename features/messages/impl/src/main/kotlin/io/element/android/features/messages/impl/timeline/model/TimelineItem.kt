@@ -18,12 +18,13 @@ package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.collections.immutable.ImmutableList
 
@@ -61,7 +62,7 @@ sealed interface TimelineItem {
         val isMine: Boolean = false,
         val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
         val reactionsState: TimelineItemReactions,
-        val sendState: EventSendState,
+        val localSendState: LocalEventSendState?,
         val inReplyTo: InReplyTo?,
         val debugInfo: TimelineItemDebugInfo,
     ) : TimelineItem {
@@ -69,6 +70,12 @@ sealed interface TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
         val safeSenderName: String = senderDisplayName ?: senderId.value
+
+        val failedToSend: Boolean = localSendState is LocalEventSendState.SendingFailed
+
+        val isTextMessage: Boolean = content is TimelineItemTextBasedContent
+
+        val isRemote = eventId != null
     }
 
     @Immutable

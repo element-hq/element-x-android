@@ -78,7 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
@@ -126,6 +126,9 @@ fun MessagesView(
         state.eventSink(MessagesEvents.ToggleReaction(emoji, event.eventId))
     }
 
+    fun onMoreReactionsClicked(event: TimelineItem.Event): Unit =
+        state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event.eventId))
+
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
@@ -150,12 +153,16 @@ fun MessagesView(
                 onMessageLongClicked = ::onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = { event ->
-                    if (event.sendState is EventSendState.SendingFailed) {
+                    if (event.localSendState is LocalEventSendState.SendingFailed) {
                         state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
                     }
                 },
                 onReactionClicked = ::onEmojiReactionClicked,
+                onMoreReactionsClicked = ::onMoreReactionsClicked,
                 onSendLocationClicked = onSendLocationClicked,
+                onSwipeToReply = { targetEvent ->
+                    state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
+                },
             )
         },
         snackbarHost = {
@@ -237,10 +244,12 @@ fun MessagesViewContent(
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    onSwipeToReply: (TimelineItem.Event) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -258,6 +267,8 @@ fun MessagesViewContent(
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = onTimestampClicked,
                 onReactionClicked = onReactionClicked,
+                onMoreReactionsClicked = onMoreReactionsClicked,
+                onSwipeToReply = onSwipeToReply,
             )
         }
         if (state.userHasPermissionToSendMessage) {

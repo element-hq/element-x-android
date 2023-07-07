@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
-import io.element.android.features.location.api.parseGeoUri
+import io.element.android.features.location.api.Location
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -68,7 +68,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 )
             }
             is LocationMessageType -> {
-                val location = parseGeoUri(messageType.geoUri)
+                val location = Location.fromGeoUri(messageType.geoUri)
                 if (location == null) {
                     TimelineItemTextContent(
                         body = messageType.body,
@@ -79,6 +79,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     TimelineItemLocationContent(
                         body = messageType.body,
                         location = location,
+                        description = messageType.description
                     )
                 }
             }

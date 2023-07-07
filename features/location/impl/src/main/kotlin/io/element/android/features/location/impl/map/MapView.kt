@@ -19,6 +19,7 @@ package io.element.android.features.location.impl.map
 import android.annotation.SuppressLint
 import android.view.Gravity
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -29,7 +30,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,10 +48,12 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
+import com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_BOTTOM
+import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.buildTileServerUrl
-import io.element.android.features.location.impl.location.Location
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -69,7 +75,11 @@ fun MapView(
     // When in preview, early return a Box with the received modifier preserving layout
     if (LocalInspectionMode.current) {
         @Suppress("ModifierReused") // False positive, the modifier is not reused due to the early return.
-        Box(modifier = modifier)
+        Box(
+            modifier = modifier.background(Color.DarkGray)
+        ) {
+            Text("[MapView]", modifier = Modifier.align(Alignment.Center))
+        }
         return
     }
 
@@ -80,11 +90,14 @@ fun MapView(
     }
     var mapRefs by remember { mutableStateOf<MapRefs?>(null) }
 
+    val attributionColour = ElementTheme.colors.iconPrimary
+
     // Build map
     LaunchedEffect(darkMode) {
         mapView.awaitMap().let { map ->
             map.uiSettings.apply {
                 attributionGravity = Gravity.TOP
+                setAttributionTintColor(attributionColour.toArgb())
                 logoGravity = Gravity.TOP
                 isCompassEnabled = false
                 isRotateGesturesEnabled = false
@@ -155,7 +168,7 @@ fun MapView(
                         .withLatLng(LatLng(location.lat, location.lon))
                         .withIconImage("pin")
                         .withIconSize(1.3f)
-                        .withIconOffset(arrayOf(0f, 0.5f))
+                        .withIconAnchor(ICON_ANCHOR_BOTTOM)
                 )
                 Timber.d("Shown pin at location: $location")
             }

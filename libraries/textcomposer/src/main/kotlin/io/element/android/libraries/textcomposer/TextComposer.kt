@@ -473,7 +473,7 @@ private fun EditContentToPreview() {
     TextComposer(
         onSendMessage = {},
         onComposerTextChange = {},
-        composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text"),
+        composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", "1234"),
         onResetComposerMode = {},
         composerCanSendMessage = true,
         composerText = "A message",

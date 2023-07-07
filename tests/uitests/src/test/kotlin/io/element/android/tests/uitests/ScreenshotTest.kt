@@ -38,6 +38,7 @@ import com.airbnb.android.showkase.models.Showkase
 import com.android.ide.common.rendering.api.SessionParams
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.theme.ElementTheme
 import org.junit.Rule
 import org.junit.Test
@@ -80,6 +81,8 @@ class ScreenshotTest {
         @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
         @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
     ) {
+        val locale = localeStr.toLocale()
+        Locale.setDefault(locale) // Needed for regional settings, as first day of week
         paparazzi.unsafeUpdateConfig(
             deviceConfig = baseDeviceConfig.deviceConfig.copy(
                 softButtons = false
@@ -94,7 +97,11 @@ class ScreenshotTest {
                     fontScale = fontScale
                 ),
                 LocalConfiguration provides Configuration().apply {
-                    setLocales(LocaleList(localeStr.toLocale()))
+                    setLocales(LocaleList(locale))
+                    // Dark mode previews have name "N" so their component name contains "- N"
+                    if (componentTestPreview.name.contains("- $NIGHT_MODE_NAME")){
+                        uiMode = Configuration.UI_MODE_NIGHT_YES
+                    }
                 },
                 // Needed so that UI that uses it don't crash during screenshot tests
                 LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
@@ -117,7 +124,7 @@ class ScreenshotTest {
 
 private fun String.toLocale(): Locale {
     return when (this) {
-        "en" -> Locale.ENGLISH
+        "en" -> Locale.US
         "fr" -> Locale.FRANCE
         "de" -> Locale.GERMAN
         else -> Locale.Builder().setLanguage(this).build()

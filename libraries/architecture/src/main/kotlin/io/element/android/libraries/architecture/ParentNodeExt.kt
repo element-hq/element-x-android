@@ -16,12 +16,35 @@
 
 package io.element.android.libraries.architecture
 
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.children.nodeOrNull
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 fun <NavTarget : Any> ParentNode<NavTarget>.childNode(navTarget: NavTarget): Node? {
     val childMap = children.value
     val key = childMap.keys.find { it.navTarget == navTarget }
     return childMap[key]?.nodeOrNull
 }
+
+suspend inline fun <reified N : Node, NavTarget : Any> ParentNode<NavTarget>.waitForChildAttached(crossinline predicate: (NavTarget) -> Boolean): N =
+    suspendCancellableCoroutine { continuation ->
+        lifecycleScope.launch {
+            children.collect { childMap ->
+                val expectedChildNode = childMap.entries
+                    .map { it.key.navTarget }
+                    .lastOrNull(predicate)
+                    ?.let {
+                        childNode(it) as? N
+                    }
+                if (expectedChildNode != null && !continuation.isCompleted) {
+                    continuation.resume(expectedChildNode)
+                }
+            }
+        }.invokeOnCompletion {
+            continuation.cancel()
+        }
+    }

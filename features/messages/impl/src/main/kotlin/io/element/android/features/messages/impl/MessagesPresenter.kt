@@ -226,15 +226,19 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {
-        if (event.eventId == null) return
-        room.redactEvent(event.eventId)
+        if (event.failedToSend) {
+            // If the message hasn't been sent yet, just cancel it
+            event.transactionId?.let { room.cancelSend(it) }
+        } else if (event.eventId != null) {
+            room.redactEvent(event.eventId)
+        }
     }
 
     private fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
-        if (targetEvent.eventId == null) return
         val composerMode = MessageComposerMode.Edit(
             targetEvent.eventId,
-            (targetEvent.content as? TimelineItemTextBasedContent)?.body.orEmpty()
+            (targetEvent.content as? TimelineItemTextBasedContent)?.body.orEmpty(),
+            targetEvent.transactionId,
         )
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
@@ -287,7 +291,6 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private fun handleShowDebugInfoAction(event: TimelineItem.Event) {
-        if (event.eventId == null) return
         navigator.onShowEventDebugInfoClicked(event.eventId, event.debugInfo)
     }
 

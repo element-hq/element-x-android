@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.location
+package io.element.android.features.login.api
 
-/**
- * Represents a location sample emitted by the device's location subsystem.
- */
-data class Location(
-    val lat: Double,
-    val lon: Double,
-    val accuracy: Float,
-)
+import kotlinx.coroutines.flow.StateFlow
+
+interface LoginUserStory {
+    val loginFlowIsDone: StateFlow<Boolean>
+}

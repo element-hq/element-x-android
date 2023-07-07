@@ -22,7 +22,6 @@
   <string name="screen_login_error_invalid_user_id">"Il ne s\'agit pas d\'un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »"</string>
   <string name="screen_login_error_unsupported_authentication">"Le serveur domestique sélectionné ne prend pas en charge le mot de passe ou la connexion OIDC. Contactez votre administrateur ou choisissez un autre serveur domestique."</string>
   <string name="screen_login_form_header">"Saisir vos informations personnelles"</string>
-  <string name="screen_login_server_header">"Où se déroulent vos conversations"</string>
   <string name="screen_login_title">"Heureux de vous revoir!"</string>
   <string name="screen_change_server_submit">"Continuer"</string>
   <string name="screen_change_server_title">"Sélectionnez votre serveur"</string>

@@ -38,5 +38,7 @@ class ColorTestPreview(
         )
     }
 
+    override val name: String = showkaseBrowserColor.colorName
+
     override fun toString(): String = "Color_${showkaseBrowserColor.colorGroup}_${showkaseBrowserColor.colorName}"
 }

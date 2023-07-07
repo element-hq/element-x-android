@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.Canvas
@@ -33,7 +35,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissState
+import androidx.compose.material3.DismissValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,8 +54,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import androidx.constraintlayout.compose.ConstrainScope
+import androidx.constraintlayout.compose.ConstraintLayout
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -86,12 +99,15 @@ import org.jsoup.Jsoup
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
     isHighlighted: Boolean,
+    canReply: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onUserDataClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
+    onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
+    onSwipeToReply: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -100,77 +116,55 @@ fun TimelineItemEventRow(
         onUserDataClick(event.senderId)
     }
 
-    fun onReactionClicked(emoji: String) =
-        onReactionClick(emoji, event)
-
     fun inReplyToClicked() {
         val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
         inReplyToClick(inReplyToEventId)
     }
 
-    // To avoid using negative offset, we display in this Box a column with:
-    // - Spacer to give room to the Sender information if they must be displayed;
-    // - The message bubble;
-    // - Spacer for the reactions if there are some.
-    // Then the Sender information and the reactions are displayed on top of it.
-    // This fixes some clickable issue and some unexpected margin on top and bottom of each message row
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        contentAlignment = if (event.isMine) Alignment.CenterEnd else Alignment.CenterStart
-    ) {
-        Column {
-            if (event.showSenderInformation) {
-                Spacer(modifier = Modifier.height(event.senderAvatar.size.dp - 8.dp))
+    if (canReply) {
+        val dismissState = rememberDismissState(
+            confirmValueChange = {
+                if (it == DismissValue.DismissedToEnd) {
+                    onSwipeToReply()
+                }
+                // Do not dismiss the message, return false!
+                false
             }
-            val bubbleState = BubbleState(
-                groupPosition = event.groupPosition,
-                isMine = event.isMine,
-                isHighlighted = isHighlighted,
-            )
-            MessageEventBubble(
-                state = bubbleState,
-                interactionSource = interactionSource,
-                onClick = onClick,
-                onLongClick = onLongClick,
-            ) {
-                MessageEventBubbleContent(
+        )
+        SwipeToDismiss(
+            state = dismissState,
+            background = {
+                ReplySwipeIndicator({ dismissState.toSwipeProgress() })
+            },
+            directions = setOf(DismissDirection.StartToEnd),
+            dismissContent = {
+                TimelineItemEventRowContent(
                     event = event,
+                    isHighlighted = isHighlighted,
                     interactionSource = interactionSource,
-                    onMessageClick = onClick,
-                    onMessageLongClick = onLongClick,
-                    inReplyToClick = ::inReplyToClicked,
-                    onTimestampClicked = {
-                        onTimestampClicked(event)
-                    }
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                    onTimestampClicked = onTimestampClicked,
+                    inReplyToClicked = ::inReplyToClicked,
+                    onUserDataClicked = ::onUserDataClicked,
+                    onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                    onMoreReactionsClicked = { onMoreReactionsClick(event) },
                 )
             }
-            if (event.reactionsState.reactions.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(28.dp))
-            }
-        }
-        // Align to the top of the box
-        if (event.showSenderInformation) {
-            MessageSenderInformation(
-                event.safeSenderName,
-                event.senderAvatar,
-                Modifier
-                    .padding(horizontal = 16.dp)
-                    .align(Alignment.TopStart)
-                    .clickable(onClick = ::onUserDataClicked)
-            )
-        }
-        // Align to the bottom of the box
-        if (event.reactionsState.reactions.isNotEmpty()) {
-            TimelineItemReactionsView(
-                reactionsState = event.reactionsState,
-                onReactionClicked = ::onReactionClicked,
-                modifier = Modifier
-                    .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
-                    .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
-            )
-        }
+        )
+    } else {
+        TimelineItemEventRowContent(
+            event = event,
+            isHighlighted = isHighlighted,
+            interactionSource = interactionSource,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            onTimestampClicked = onTimestampClicked,
+            inReplyToClicked = ::inReplyToClicked,
+            onUserDataClicked = ::onUserDataClicked,
+            onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+            onMoreReactionsClicked = { onMoreReactionsClick(event) },
+        )
     }
     // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
     if (event.groupPosition.isNew()) {
@@ -181,12 +175,112 @@ fun TimelineItemEventRow(
 }
 
 @Composable
+private fun TimelineItemEventRowContent(
+    event: TimelineItem.Event,
+    isHighlighted: Boolean,
+    interactionSource: MutableInteractionSource,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    onTimestampClicked: (TimelineItem.Event) -> Unit,
+    inReplyToClicked: () -> Unit,
+    onUserDataClicked: () -> Unit,
+    onReactionClicked: (emoji: String) -> Unit,
+    onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
+        end.linkTo(parent.end)
+    } else {
+        start.linkTo(parent.start)
+    }
+
+    ConstraintLayout(
+        modifier = modifier
+            .wrapContentHeight()
+            .fillMaxWidth(),
+    ) {
+        val (sender, message, reactions) = createRefs()
+
+        // Sender
+        val avatarStrokeSize = 3.dp
+        if (event.showSenderInformation) {
+            MessageSenderInformation(
+                event.safeSenderName,
+                event.senderAvatar,
+                avatarStrokeSize,
+                Modifier
+                    .constrainAs(sender) {
+                        top.linkTo(parent.top)
+                    }
+                    .padding(horizontal = 16.dp)
+                    .zIndex(1f)
+                    .clickable(onClick = onUserDataClicked)
+            )
+        }
+
+        // Message bubble
+        val bubbleState = BubbleState(
+            groupPosition = event.groupPosition,
+            isMine = event.isMine,
+            isHighlighted = isHighlighted,
+        )
+        MessageEventBubble(
+            modifier = Modifier
+                .constrainAs(message) {
+                    top.linkTo(sender.bottom, margin = -avatarStrokeSize - 8.dp)
+                    this.linkStartOrEnd(event)
+                },
+            state = bubbleState,
+            interactionSource = interactionSource,
+            onClick = onClick,
+            onLongClick = onLongClick,
+        ) {
+            MessageEventBubbleContent(
+                event = event,
+                interactionSource = interactionSource,
+                onMessageClick = onClick,
+                onMessageLongClick = onLongClick,
+                inReplyToClick = inReplyToClicked,
+                onTimestampClicked = {
+                    onTimestampClicked(event)
+                }
+            )
+        }
+
+        // Reactions
+        if (event.reactionsState.reactions.isNotEmpty()) {
+            TimelineItemReactionsView(
+                reactionsState = event.reactionsState,
+                mainAxisAlignment = if (event.isMine) FlowMainAxisAlignment.End else FlowMainAxisAlignment.Start,
+                onReactionClicked = onReactionClicked,
+                onMoreReactionsClicked = { onMoreReactionsClicked(event) },
+                modifier = Modifier
+                    .constrainAs(reactions) {
+                        top.linkTo(message.bottom, margin = (-4).dp)
+                        this.linkStartOrEnd(event)
+                    }
+                    .zIndex(1f)
+                    .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
+            )
+        }
+    }
+}
+
+private fun DismissState.toSwipeProgress(): Float {
+    return when (targetValue) {
+        DismissValue.Default -> 0f
+        DismissValue.DismissedToEnd -> progress * 3
+        DismissValue.DismissedToStart -> progress * 3
+    }
+}
+
+@Composable
 private fun MessageSenderInformation(
     sender: String,
     senderAvatar: AvatarData,
+    avatarStrokeSize: Dp,
     modifier: Modifier = Modifier
 ) {
-    val avatarStrokeSize = 3.dp
     val avatarStrokeColor = MaterialTheme.colorScheme.background
     val avatarSize = senderAvatar.size.dp
     Box(
@@ -449,30 +543,36 @@ private fun ContentToPreview() {
                     content = aTimelineItemTextContent().copy(
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
-                    )
+                    ),
                 ),
                 isHighlighted = false,
+                canReply = true,
                 onClick = {},
                 onLongClick = {},
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
+                onSwipeToReply = {},
             )
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
-                    )
+                    ),
                 ),
                 isHighlighted = false,
+                canReply = true,
                 onClick = {},
                 onLongClick = {},
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
+                onSwipeToReply = {},
             )
         }
     }
@@ -492,7 +592,7 @@ internal fun TimelineItemEventRowWithReplyDarkPreview() =
 private fun ContentToPreviewWithReply() {
     Column {
         sequenceOf(false, true).forEach {
-            val replyContent = if(it) {
+            val replyContent = if (it) {
                 // Short
                 "Message which are being replied."
             } else {
@@ -509,12 +609,15 @@ private fun ContentToPreviewWithReply() {
                     inReplyTo = aInReplyToReady(replyContent)
                 ),
                 isHighlighted = false,
+                canReply = true,
                 onClick = {},
                 onLongClick = {},
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
+                onSwipeToReply = {},
             )
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
@@ -525,12 +628,15 @@ private fun ContentToPreviewWithReply() {
                     inReplyTo = aInReplyToReady(replyContent)
                 ),
                 isHighlighted = false,
+                canReply = true,
                 onClick = {},
                 onLongClick = {},
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
                 onTimestampClicked = {},
+                onSwipeToReply = {},
             )
         }
     }
@@ -578,14 +684,56 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                         senderDisplayName = if (useDocument) "Document case" else "Text case",
                     ),
                     isHighlighted = false,
+                    canReply = true,
                     onClick = {},
                     onLongClick = {},
                     onUserDataClick = {},
                     inReplyToClick = {},
                     onReactionClick = { _, _ -> },
+                    onMoreReactionsClick = {},
                     onTimestampClicked = {},
+                    onSwipeToReply = {},
                 )
             }
+        }
+    }
+}
+
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowWithManyReactionsLightPreview() =
+    ElementPreviewLight { ContentWithManyReactionsToPreview() }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowWithManyReactionsDarkPreview() =
+    ElementPreviewDark { ContentWithManyReactionsToPreview() }
+
+@Composable
+private fun ContentWithManyReactionsToPreview() {
+    Column {
+        listOf(false, true).forEach { isMine ->
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemTextContent().copy(
+                        body = "A couple of multi-line messages with many reactions attached." +
+                            " One sent by me and another from someone else."
+                    ),
+                    timelineItemReactions = aTimelineItemReactions(count = 20),
+                ),
+                isHighlighted = false,
+                canReply = true,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onReactionClick = { _, _ -> },
+                onMoreReactionsClick = {},
+                onSwipeToReply = {},
+                onTimestampClicked = {},
+            )
         }
     }
 }

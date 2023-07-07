@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.TextUnit
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -39,7 +39,7 @@ val noExtraPadding = ExtraPadding(0)
 @Composable
 fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
     val formattedTime = sentTime
-    val hasMessageSendingFailed = sendState is EventSendState.SendingFailed
+    val hasMessageSendingFailed = localSendState is LocalEventSendState.SendingFailed
     val isMessageEdited = (content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
 
     var strLen = 6

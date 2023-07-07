@@ -1,6 +1,8 @@
 appId: ${APP_ID}
 ---
-- takeScreenshot: build/maestro/300-RoomList
 - runFlow: searchRoomList.yaml
+- takeScreenshot: build/maestro/300-RoomList
 - runFlow: timeline/timeline.yaml
-
+- runFlow: roomContextMenu.yaml
+- runFlow: createAndDeleteRoom.yaml
+- runFlow: createAndDeleteDM.yaml

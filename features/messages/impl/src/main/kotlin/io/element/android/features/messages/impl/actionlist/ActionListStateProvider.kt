@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.actionlist
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemLocationContent
@@ -28,44 +29,67 @@ import kotlinx.collections.immutable.persistentListOf
 
 open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
     override val values: Sequence<ActionListState>
-        get() = sequenceOf(
-            anActionListState(),
-            anActionListState().copy(target = ActionListState.Target.Loading(aTimelineItemEvent())),
-            anActionListState().copy(
-                target = ActionListState.Target.Success(
-                    event = aTimelineItemEvent(),
-                    actions = aTimelineItemActionList(),
-                )
-            ),
-            anActionListState().copy(
-                target = ActionListState.Target.Success(
-                    event = aTimelineItemEvent(content = aTimelineItemImageContent()),
-                    actions = aTimelineItemActionList(),
-                )
-            ),
-            anActionListState().copy(
-                target = ActionListState.Target.Success(
-                    event = aTimelineItemEvent(content = aTimelineItemVideoContent()),
-                    actions = aTimelineItemActionList(),
-                )
-            ),
-            anActionListState().copy(
-                target = ActionListState.Target.Success(
-                    event = aTimelineItemEvent(content = aTimelineItemFileContent()),
-                    actions = aTimelineItemActionList(),
-                )
-            ),
-            anActionListState().copy(
-                target = ActionListState.Target.Success(
-                    event = aTimelineItemEvent(content = aTimelineItemLocationContent()),
-                    actions = aTimelineItemActionList(),
-                )
-            ),
-        )
+        get() {
+            val reactionsState = aTimelineItemReactions(1, isHighlighted = true)
+            return sequenceOf(
+                anActionListState(),
+                anActionListState().copy(target = ActionListState.Target.Loading(aTimelineItemEvent())),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent().copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    )
+                ),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent(content = aTimelineItemImageContent()).copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    )
+                ),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent(content = aTimelineItemVideoContent()).copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    )
+                ),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent(content = aTimelineItemFileContent()).copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    )
+                ),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent(content = aTimelineItemLocationContent()).copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    )
+                ),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent(content = aTimelineItemLocationContent()).copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    ),
+                    displayEmojiReactions = false,
+                ),
+            )
+        }
 }
 
 fun anActionListState() = ActionListState(
     target = ActionListState.Target.None,
+    displayEmojiReactions = true,
     eventSink = {}
 )
 
