@@ -23,6 +23,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -56,7 +57,7 @@ fun TimelineItemReactions(
     onMoreReactionsClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var expanded: Boolean by remember { mutableStateOf(false) }
+    var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
 
     val reactions by remember(reactionsState, expanded) {
         derivedStateOf {
