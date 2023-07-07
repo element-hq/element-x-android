@@ -121,56 +121,57 @@ fun TimelineItemEventRow(
         inReplyToClick(inReplyToEventId)
     }
 
-    if (canReply) {
-        val dismissState = rememberDismissState(
-            confirmValueChange = {
-                if (it == DismissValue.DismissedToEnd) {
-                    onSwipeToReply()
+    Column(modifier = modifier.fillMaxWidth()) {
+        if (canReply) {
+            val dismissState = rememberDismissState(
+                confirmValueChange = {
+                    if (it == DismissValue.DismissedToEnd) {
+                        onSwipeToReply()
+                    }
+                    // Do not dismiss the message, return false!
+                    false
                 }
-                // Do not dismiss the message, return false!
-                false
-            }
-        )
-        SwipeToDismiss(
-            state = dismissState,
-            background = {
-                ReplySwipeIndicator({ dismissState.toSwipeProgress() })
-            },
-            directions = setOf(DismissDirection.StartToEnd),
-            dismissContent = {
-                TimelineItemEventRowContent(
-                    event = event,
-                    isHighlighted = isHighlighted,
-                    interactionSource = interactionSource,
-                    onClick = onClick,
-                    onLongClick = onLongClick,
-                    onTimestampClicked = onTimestampClicked,
-                    inReplyToClicked = ::inReplyToClicked,
-                    onUserDataClicked = ::onUserDataClicked,
-                    onReactionClicked = { emoji -> onReactionClick(emoji, event) },
-                    onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                )
-            }
-        )
-    } else {
-        TimelineItemEventRowContent(
-            event = event,
-            isHighlighted = isHighlighted,
-            interactionSource = interactionSource,
-            onClick = onClick,
-            onLongClick = onLongClick,
-            onTimestampClicked = onTimestampClicked,
-            inReplyToClicked = ::inReplyToClicked,
-            onUserDataClicked = ::onUserDataClicked,
-            onReactionClicked = { emoji -> onReactionClick(emoji, event) },
-            onMoreReactionsClicked = { onMoreReactionsClick(event) },
-        )
-    }
-    // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
-    if (event.groupPosition.isNew()) {
-        Spacer(modifier = modifier.height(16.dp))
-    } else {
-        Spacer(modifier = modifier.height(2.dp))
+            )
+            SwipeToDismiss(
+                state = dismissState,
+                background = {
+                    ReplySwipeIndicator({ dismissState.toSwipeProgress() })
+                },
+                directions = setOf(DismissDirection.StartToEnd),
+                dismissContent = {
+                    TimelineItemEventRowContent(
+                        event = event,
+                        isHighlighted = isHighlighted,
+                        interactionSource = interactionSource,
+                        onClick = onClick,
+                        onLongClick = onLongClick,
+                        onTimestampClicked = onTimestampClicked,
+                        inReplyToClicked = ::inReplyToClicked,
+                        onUserDataClicked = ::onUserDataClicked,
+                        onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                        onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                    )
+                }
+            )
+        } else {
+            TimelineItemEventRowContent(
+                event = event,
+                isHighlighted = isHighlighted,
+                interactionSource = interactionSource,
+                onClick = onClick,
+                onLongClick = onLongClick,
+                onTimestampClicked = onTimestampClicked,
+                inReplyToClicked = ::inReplyToClicked,
+                onUserDataClicked = ::onUserDataClicked,
+                onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                onMoreReactionsClicked = { onMoreReactionsClick(event) },
+            )
+        }
+        if (event.groupPosition.isNew()) {
+            Spacer(modifier = Modifier.height(16.dp))
+        } else {
+            Spacer(modifier = Modifier.height(2.dp))
+        }
     }
 }
 
