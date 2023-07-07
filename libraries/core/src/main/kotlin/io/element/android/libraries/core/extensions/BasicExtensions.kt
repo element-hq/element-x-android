@@ -58,6 +58,21 @@ fun String?.insertBeforeLast(insert: String, delimiter: String = "."): String {
     }
 }
 
+/**
+ * Truncate and ellipsize text if it exceeds the given length.
+ *
+ * Throws if length is < 1.
+ */
+fun String.ellipsize(length: Int): String {
+    require(length > 1)
+
+    if (this.length <= length) {
+        return this
+    }
+
+    return "${this.take(length)}…"
+}
+
 inline fun <reified R> Any?.takeAs(): R? {
     return takeIf { it is R } as R?
 }
