@@ -16,59 +16,184 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
+import io.element.android.features.messages.impl.R
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
+
+/**
+ * The maximum number of items that can be displayed before some items will be hidden
+ *
+ * TODO The threshold should be based on the number of rows, rather than items.
+ *       Once items would spill onto a third row, they should be hidden.
+ *       Note this could be particularly worthwhile to handle reactions that are
+ *       longer than a single character (as annotation keys are free text).
+ */
+private const val COLLAPSE_ITEMS_THRESHOLD = 8
 
 @Composable
-fun TimelineItemReactionsView(
+fun TimelineItemReactions(
     reactionsState: TimelineItemReactions,
     mainAxisAlignment: FlowMainAxisAlignment,
     onReactionClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
+
+    val reactions by remember(reactionsState, expanded) {
+        derivedStateOf {
+            val numToDisplay = if (expanded) {
+                reactionsState.reactions.count()
+            } else {
+                COLLAPSE_ITEMS_THRESHOLD
+            }
+            reactionsState.reactions.take(numToDisplay).toPersistentList()
+        }
+    }
+
+    val expandableState by remember {
+        derivedStateOf {
+            if (expanded) {
+                ExpandableState.Expanded
+            } else {
+                val hiddenItems = reactionsState.reactions.count() - reactions.count()
+                if (hiddenItems > 0) {
+                    ExpandableState.Collapsed(hidden = hiddenItems)
+                } else {
+                    ExpandableState.None
+                }
+            }
+        }
+    }
+
+    TimelineItemReactionsView(
+        modifier = modifier,
+        reactions = reactions,
+        expandableState = expandableState,
+        mainAxisAlignment = mainAxisAlignment,
+        onReactionClick = onReactionClicked,
+        onMoreReactionsClick = onMoreReactionsClicked,
+        onExpandClick = { expanded = true },
+        onCollapseClick = { expanded = false }
+    )
+}
+
+private sealed class ExpandableState {
+    object None: ExpandableState()
+    data class Collapsed(val hidden: Int): ExpandableState()
+    object Expanded : ExpandableState()
+}
+
+@Composable
+private fun TimelineItemReactionsView(
+    reactions: ImmutableList<AggregatedReaction>,
+    expandableState: ExpandableState,
+    mainAxisAlignment: FlowMainAxisAlignment,
+    onReactionClick: (emoji: String) -> Unit,
+    onMoreReactionsClick: () -> Unit,
+    onExpandClick: () -> Unit,
+    onCollapseClick: () -> Unit,
+    modifier: Modifier = Modifier
+) =
     FlowRow(
         modifier = modifier,
         mainAxisSpacing = 4.dp,
         crossAxisSpacing = 4.dp,
         mainAxisAlignment = mainAxisAlignment,
     ) {
-        reactionsState.reactions.forEach { reaction ->
+        reactions.forEach { reaction ->
             MessagesReactionButton(
-                reaction = reaction,
-                onClick = { onReactionClicked(reaction.key) }
+                content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
+                onClick = { onReactionClick(reaction.key) }
             )
         }
-        MessagesMoreReactionsButton(
-            onClick = onMoreReactionsClicked
+        when (expandableState) {
+            ExpandableState.Expanded ->
+                MessagesReactionButton(
+                    content = MessagesReactionsButtonContent.Text(
+                        text = stringResource(id = R.string.screen_room_timeline_less_reactions)
+                    ),
+                    onClick = onCollapseClick,
+                )
+            is ExpandableState.Collapsed -> {
+                val hidden = expandableState.hidden
+                MessagesReactionButton(
+                    content = MessagesReactionsButtonContent.Text(
+                        text = pluralStringResource(id = R.plurals.screen_room_timeline_more_reactions, hidden, hidden)
+                    ),
+                    onClick = onExpandClick,
+                )
+            }
+            ExpandableState.None -> {
+                // No expand or collapse action available
+            }
+        }
+        MessagesReactionButton(
+            content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+            onClick = onMoreReactionsClick
         )
     }
-}
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun TimelineItemReactionsViewLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemReactionsViewDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
-    TimelineItemReactionsView(
-        reactionsState = aTimelineItemReactions(),
-        mainAxisAlignment = FlowMainAxisAlignment.Center,
-        onReactionClicked = {},
-        onMoreReactionsClicked = {},
+fun TimelineItemReactionsViewPreview() = ElementPreview {
+    ContentToPreview(
+        reactions = aTimelineItemReactions(count = 1).reactions,
+        expandableState = ExpandableState.None,
     )
 }
+
+@DayNightPreviews
+@Composable
+fun TimelineItemReactionsViewCollapsedPreview() = ElementPreview {
+    ContentToPreview(
+        reactions = aTimelineItemReactions(count = 3).reactions,
+        expandableState = ExpandableState.Collapsed(hidden = 7),
+    )
+}
+
+@DayNightPreviews
+@Composable
+fun TimelineItemReactionsViewExpandedPreview() = ElementPreview {
+    ContentToPreview(
+        reactions = aTimelineItemReactions(count = 10).reactions,
+        expandableState = ExpandableState.Expanded,
+    )
+}
+
+@Composable
+private fun ContentToPreview(
+    reactions: ImmutableList<AggregatedReaction>,
+    expandableState: ExpandableState
+) {
+    TimelineItemReactionsView(
+        reactions = reactions,
+        expandableState = expandableState,
+        mainAxisAlignment = FlowMainAxisAlignment.Center,
+        onReactionClick = {},
+        onMoreReactionsClick = {},
+        onExpandClick = {},
+        onCollapseClick = {}
+    )
+}
+

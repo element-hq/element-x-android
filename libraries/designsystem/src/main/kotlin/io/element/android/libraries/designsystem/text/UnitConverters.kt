@@ -29,6 +29,13 @@ import androidx.compose.ui.unit.TextUnit
 fun Dp.toSp(): TextUnit = with(LocalDensity.current) { toSp() }
 
 /**
+ * Convert Sp to Dp, regarding current density.
+ * Can be used for instance to use Sp unit for size.
+ */
+@Composable
+fun TextUnit.toDp(): Dp = with(LocalDensity.current) { toDp() }
+
+/**
  * Convert Px value to Dp, regarding current density.
  */
 @Composable
