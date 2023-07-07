@@ -24,7 +24,4 @@ sealed interface VirtualTimelineItem {
 
     object ReadMarker : VirtualTimelineItem
 
-    object LoadingIndicator : VirtualTimelineItem
-
-    object TimelineStart : VirtualTimelineItem
 }

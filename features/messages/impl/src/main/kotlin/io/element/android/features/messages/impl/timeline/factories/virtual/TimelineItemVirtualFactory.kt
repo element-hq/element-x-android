@@ -17,9 +17,7 @@
 package io.element.android.features.messages.impl.timeline.factories.virtual
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
-import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemUnknownVirtualModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
@@ -30,23 +28,19 @@ class TimelineItemVirtualFactory @Inject constructor(
 ) {
 
     fun create(
-        currentTimelineItem: MatrixTimelineItem.Virtual,
+        virtualTimelineItem: MatrixTimelineItem.Virtual,
         index: Int,
-        timelineItems: List<MatrixTimelineItem>,
     ): TimelineItem.Virtual {
         return TimelineItem.Virtual(
             id = "virtual_item_$index",
-            model = currentTimelineItem.computeModel(index)
+            model = virtualTimelineItem.computeModel()
         )
     }
 
-    private fun MatrixTimelineItem.Virtual.computeModel(index: Int): TimelineItemVirtualModel {
+    private fun MatrixTimelineItem.Virtual.computeModel(): TimelineItemVirtualModel {
         return when (val inner = virtual) {
             is VirtualTimelineItem.DayDivider -> daySeparatorFactory.create(inner)
             is VirtualTimelineItem.ReadMarker -> TimelineItemReadMarkerModel
-            is VirtualTimelineItem.LoadingIndicator -> TimelineItemLoadingModel
-            is VirtualTimelineItem.TimelineStart -> TimelineItemReadMarkerModel
-            else -> TimelineItemUnknownVirtualModel
         }
     }
 }

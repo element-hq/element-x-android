@@ -32,7 +32,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -59,6 +59,7 @@ import io.element.android.features.messages.impl.timeline.components.TimelineIte
 import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
+import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
@@ -114,11 +115,11 @@ fun TimelineView(
             reverseLayout = true,
             contentPadding = PaddingValues(vertical = 8.dp),
         ) {
-            itemsIndexed(
+            items(
                 items = state.timelineItems,
-                contentType = { _, timelineItem -> timelineItem.contentType() },
-                key = { _, timelineItem -> timelineItem.identifier() },
-            ) { index, timelineItem ->
+                contentType = { timelineItem -> timelineItem.contentType() },
+                key = { timelineItem -> timelineItem.identifier() },
+            ) { timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
                     highlightedItem = state.highlightedEventId?.value,
@@ -132,8 +133,14 @@ fun TimelineView(
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = onSwipeToReply,
                 )
-                if (index == state.timelineItems.lastIndex) {
-                    onReachedLoadMore()
+            }
+            if (state.paginationState.canBackPaginate) {
+                // Do not use key parameter to avoid wrong positioning
+                item(contentType = "TimelineLoadingMoreIndicator") {
+                    TimelineLoadingMoreIndicator()
+                    LaunchedEffect(Unit) {
+                        onReachedLoadMore()
+                    }
                 }
             }
         }
