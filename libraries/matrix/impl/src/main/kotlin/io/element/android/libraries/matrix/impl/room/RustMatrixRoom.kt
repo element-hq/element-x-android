@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
+import io.element.android.libraries.matrix.impl.timeline.backPaginationStatusFlow
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -111,6 +112,12 @@ class RustMatrixRoom(
                 _syncUpdateFlow.value = systemClock.epochMillis()
                 _timeline.postDiff(it)
             }.launchIn(this)
+
+            innerRoom.backPaginationStatusFlow()
+                .onEach {
+                    _timeline.postPaginationStatus(it)
+                }.launchIn(this)
+
             fetchMembers()
         }
         isInit.value = true

@@ -31,8 +31,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.TimelineDiff
@@ -65,7 +67,6 @@ class RustMatrixTimeline(
     )
 
     private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
-        paginationState = _paginationState,
         timelineItems = _timelineItems,
         timelineItemFactory = timelineItemFactory,
     )
@@ -81,6 +82,31 @@ class RustMatrixTimeline(
 
     internal suspend fun postDiff(timelineDiff: TimelineDiff) {
         timelineDiffProcessor.postDiff(timelineDiff)
+    }
+
+    internal fun postPaginationStatus(status: BackPaginationStatus) {
+        _paginationState.getAndUpdate { currentPaginationState ->
+            when (status) {
+                BackPaginationStatus.IDLE -> {
+                    currentPaginationState.copy(
+                        isBackPaginating = false,
+                        canBackPaginate = true
+                    )
+                }
+                BackPaginationStatus.PAGINATING -> {
+                    currentPaginationState.copy(
+                        isBackPaginating = true,
+                        canBackPaginate = true
+                    )
+                }
+                BackPaginationStatus.TIMELINE_START_REACHED -> {
+                    currentPaginationState.copy(
+                        isBackPaginating = false,
+                        canBackPaginate = false
+                    )
+                }
+            }
+        }
     }
 
     override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = withContext(coroutineDispatchers.io) {

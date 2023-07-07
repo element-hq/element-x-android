@@ -44,8 +44,6 @@ class TimelineItemVirtualFactory @Inject constructor(
         return when (val inner = virtual) {
             is VirtualTimelineItem.DayDivider -> daySeparatorFactory.create(inner)
             is VirtualTimelineItem.ReadMarker -> TimelineItemReadMarkerModel
-            is VirtualTimelineItem.LoadingIndicator -> TimelineItemLoadingModel
-            is VirtualTimelineItem.TimelineStart -> TimelineItemReadMarkerModel
             else -> TimelineItemUnknownVirtualModel
         }
     }

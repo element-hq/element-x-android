@@ -24,9 +24,7 @@ class VirtualTimelineItemMapper {
     fun map(virtualTimelineItem: RustVirtualTimelineItem): VirtualTimelineItem {
         return when (virtualTimelineItem) {
             is RustVirtualTimelineItem.DayDivider -> VirtualTimelineItem.DayDivider(virtualTimelineItem.ts.toLong())
-            RustVirtualTimelineItem.LoadingIndicator -> VirtualTimelineItem.LoadingIndicator
             RustVirtualTimelineItem.ReadMarker -> VirtualTimelineItem.ReadMarker
-            RustVirtualTimelineItem.TimelineStart -> VirtualTimelineItem.TimelineStart
         }
     }
 }
