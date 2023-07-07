@@ -32,13 +32,13 @@ class NotificationMapper {
             NotificationData(
                 senderId = UserId(item.event.senderId()),
                 eventId = EventId(item.event.eventId()),
-                roomId = RoomId(item.roomId),
-                senderAvatarUrl = item.senderAvatarUrl,
-                senderDisplayName = item.senderDisplayName,
-                roomAvatarUrl = item.roomAvatarUrl ?: item.senderAvatarUrl.takeIf { item.isDirect },
-                roomDisplayName = item.roomDisplayName,
-                isDirect = item.isDirect,
-                isEncrypted = item.isEncrypted.orFalse(),
+                roomId = RoomId(item.roomInfo.id),
+                senderAvatarUrl = item.senderInfo.avatarUrl,
+                senderDisplayName = item.senderInfo.displayName,
+                roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { item.roomInfo.isDirect },
+                roomDisplayName = item.roomInfo.displayName,
+                isDirect = item.roomInfo.isDirect,
+                isEncrypted = item.roomInfo.isEncrypted.orFalse(),
                 isNoisy = item.isNoisy,
                 event = item.event.use { event -> timelineEventMapper.map(event) }
             )

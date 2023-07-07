@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.roomListPlaceholder
+import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.theme.ElementTheme
 
 /**
@@ -56,7 +56,7 @@ internal fun RoomSummaryPlaceholderRow(
             modifier = Modifier
                 .size(AvatarSize.RoomListItem.dp)
                 .align(Alignment.CenterVertically)
-                .background(color = ElementTheme.colors.roomListPlaceholder, shape = CircleShape)
+                .background(color = ElementTheme.colors.placeholderBackground, shape = CircleShape)
         )
         Column(
             modifier = Modifier

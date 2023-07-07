@@ -100,7 +100,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             avatarUrl = userAvatar,
             isBlocked = isBlocked.value,
             displayConfirmationDialog = confirmationDialog,
-            isCurrentUser = roomMember?.userId == client.sessionId,
+            isCurrentUser = client.isMe(roomMember?.userId),
             eventSink = ::handleEvents
         )
     }

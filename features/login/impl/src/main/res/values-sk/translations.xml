@@ -24,7 +24,6 @@
   <string name="screen_login_error_invalid_user_id">"Toto nie je platný identifikátor používateľa. Očakávaný formát: \'@pouzivatel:homeserver.sk\'"</string>
   <string name="screen_login_error_unsupported_authentication">"Vybraný domovský server nepodporuje prihlásenie pomocou hesla alebo OIDC. Obráťte sa na správcu alebo vyberte iný domovský server."</string>
   <string name="screen_login_form_header">"Zadajte svoje údaje"</string>
-  <string name="screen_login_server_header">"Kde žijú vaše rozhovory"</string>
   <string name="screen_login_title">"Vitajte späť!"</string>
   <string name="screen_login_title_with_homeserver">"Prihlásiť sa do %1$s"</string>
   <string name="screen_server_confirmation_change_server">"Zmeniť poskytovateľa účtu"</string>

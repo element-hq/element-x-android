@@ -65,20 +65,9 @@ class CreateRoomRootPresenter @Inject constructor(
         val localCoroutineScope = rememberCoroutineScope()
         val startDmAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
 
-        fun startDm(matrixUser: MatrixUser) {
-            startDmAction.value = Async.Uninitialized
-            matrixClient.findDM(matrixUser.userId).use { existingDM ->
-                if (existingDM == null) {
-                    localCoroutineScope.createDM(matrixUser, startDmAction)
-                } else {
-                    startDmAction.value = Async.Success(existingDM.roomId)
-                }
-            }
-        }
-
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
-                is CreateRoomRootEvents.StartDM -> startDm(event.matrixUser)
+                is CreateRoomRootEvents.StartDM -> localCoroutineScope.startDm(event.matrixUser, startDmAction)
                 CreateRoomRootEvents.CancelStartDM -> startDmAction.value = Async.Uninitialized
             }
         }
@@ -91,10 +80,20 @@ class CreateRoomRootPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.createDM(user: MatrixUser, startDmAction: MutableState<Async<RoomId>>) = launch {
+    private fun CoroutineScope.startDm(matrixUser: MatrixUser, startDmAction: MutableState<Async<RoomId>>) = launch {
         suspend {
-            matrixClient.createDM(user.userId).getOrThrow()
-                .also { analyticsService.capture(CreatedRoom(isDM = true)) }
+            matrixClient.findDM(matrixUser.userId).use { existingDM ->
+                existingDM?.roomId ?: createDM(matrixUser)
+            }
         }.runCatchingUpdatingState(startDmAction)
+    }
+
+    private suspend fun createDM(user: MatrixUser): RoomId {
+        return matrixClient
+            .createDM(user.userId)
+            .onSuccess {
+                analyticsService.capture(CreatedRoom(isDM = true))
+            }
+            .getOrThrow()
     }
 }

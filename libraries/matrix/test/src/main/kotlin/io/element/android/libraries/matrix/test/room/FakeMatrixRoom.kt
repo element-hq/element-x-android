@@ -44,7 +44,6 @@ class FakeMatrixRoom(
     override val sessionId: SessionId = A_SESSION_ID,
     override val roomId: RoomId = A_ROOM_ID,
     override val name: String? = null,
-    override val bestName: String = "",
     override val displayName: String = "",
     override val topic: String? = null,
     override val avatarUrl: String? = null,

@@ -31,7 +31,6 @@ import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
@@ -50,20 +49,23 @@ import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.coroutines.flow.distinctUntilChanged
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import java.util.UUID
 
 @ContributesNode(AppScope::class)
 class RootFlowNode @AssistedInject constructor(
@@ -93,20 +95,15 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private fun observeLoggedInState() {
-        isUserLoggedInFlow()
-            .combine(
-                cacheService.cacheIndex().onEach {
-                    Timber.v("cacheIndex=$it")
-                    matrixClientsHolder.removeAll()
-                }
-            ) { isLoggedIn, cacheIdx -> isLoggedIn to cacheIdx }
-            .onEach { pair ->
-                val isLoggedIn = pair.first
-                val cacheIndex = pair.second
-                Timber.v("isLoggedIn=$isLoggedIn, cacheIndex=$cacheIndex")
+        combine(
+            cacheService.onClearedCacheEventFlow(),
+            isUserLoggedInFlow(),
+        ) { _, isLoggedIn -> isLoggedIn }
+            .onEach { isLoggedIn ->
+                Timber.v("isLoggedIn=$isLoggedIn")
                 if (isLoggedIn) {
                     tryToRestoreLatestSession(
-                        onSuccess = { switchToLoggedInFlow(it, cacheIndex) },
+                        onSuccess = { switchToLoggedInFlow(it) },
                         onFailure = { switchToNotLoggedInFlow() }
                     )
                 } else {
@@ -114,6 +111,11 @@ class RootFlowNode @AssistedInject constructor(
                 }
             }
             .launchIn(lifecycleScope)
+    }
+
+
+    private fun switchToLoggedInFlow(sessionId: SessionId) {
+        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId))
     }
 
     private fun isUserLoggedInFlow(): Flow<Boolean> {
@@ -126,37 +128,43 @@ class RootFlowNode @AssistedInject constructor(
             .distinctUntilChanged()
     }
 
-    private fun switchToLoggedInFlow(sessionId: SessionId, cacheIndex: Int) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, cacheIndex))
-    }
-
     private fun switchToNotLoggedInFlow() {
         matrixClientsHolder.removeAll()
         backstack.safeRoot(NavTarget.NotLoggedInFlow)
     }
 
+    private suspend fun restoreSessionIfNeeded(
+        sessionId: SessionId,
+        onFailure: () -> Unit = {},
+        onSuccess: (SessionId) -> Unit = {},
+    ) {
+        // If the session is already known it'll be restored by the node hierarchy
+        if (matrixClientsHolder.knowSession(sessionId)) {
+            Timber.v("Session $sessionId already alive, no need to restore.")
+            return
+        }
+        authenticationService.restoreSession(sessionId)
+            .onSuccess { matrixClient ->
+                matrixClientsHolder.add(matrixClient)
+                Timber.v("Succeed to restore session $sessionId")
+                onSuccess(sessionId)
+            }
+            .onFailure {
+                Timber.v("Failed to restore session $sessionId")
+                onFailure()
+            }
+    }
+
     private suspend fun tryToRestoreLatestSession(
-        onSuccess: (UserId) -> Unit = {},
+        onSuccess: (SessionId) -> Unit = {},
         onFailure: () -> Unit = {}
     ) {
-        val latestKnownUserId = authenticationService.getLatestSessionId()
-        if (latestKnownUserId == null) {
+        val latestSessionId = authenticationService.getLatestSessionId()
+        if (latestSessionId == null) {
             onFailure()
             return
         }
-        if (matrixClientsHolder.knowSession(latestKnownUserId)) {
-            onSuccess(latestKnownUserId)
-            return
-        }
-        authenticationService.restoreSession(UserId(latestKnownUserId.value))
-            .onSuccess { matrixClient ->
-                matrixClientsHolder.add(matrixClient)
-                onSuccess(matrixClient.sessionId)
-            }
-            .onFailure {
-                Timber.v("Failed to restore session...")
-                onFailure()
-            }
+        restoreSessionIfNeeded(latestSessionId, onFailure, onSuccess)
     }
 
     private fun onOpenBugReport() {
@@ -187,7 +195,10 @@ class RootFlowNode @AssistedInject constructor(
         object NotLoggedInFlow : NavTarget
 
         @Parcelize
-        data class LoggedInFlow(val sessionId: SessionId, val cacheIndex: Int) : NavTarget
+        data class LoggedInFlow(
+            val sessionId: SessionId,
+            val navId: UUID = UUID.randomUUID(),
+        ) : NavTarget
 
         @Parcelize
         object BugReport : NavTarget
@@ -198,7 +209,6 @@ class RootFlowNode @AssistedInject constructor(
             is NavTarget.LoggedInFlow -> {
                 val matrixClient = matrixClientsHolder.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
                     Timber.w("Couldn't find any session, go through SplashScreen")
-                    backstack.newRoot(NavTarget.SplashScreen)
                 }
                 val inputs = LoggedInFlowNode.Inputs(matrixClient)
                 val callback = object : LoggedInFlowNode.Callback {
@@ -256,9 +266,16 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
-        val cacheIndex = cacheService.cacheIndex().first()
-        return attachChild {
-            backstack.newRoot(NavTarget.LoggedInFlow(sessionId, cacheIndex))
+        //TODO handle multi-session
+        return waitForChildAttached { navTarget ->
+            navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId
         }
+    }
+
+    private fun CacheService.onClearedCacheEventFlow(): Flow<Unit> {
+        return clearedCacheEventFlow
+            .onEach { sessionId -> matrixClientsHolder.remove(sessionId) }
+            .map { }
+            .onStart { emit((Unit)) }
     }
 }

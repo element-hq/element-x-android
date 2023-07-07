@@ -172,7 +172,7 @@ class RoomListPresenter @Inject constructor(
         // Safe to give bigger size than room list
         val extendedRangeEnd = range.last + midExtendedRangeSize
         val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
-        client.roomSummaryDataSource.updateRoomListVisibleRange(extendedRange)
+        client.roomSummaryDataSource.updateAllRoomsVisibleRange(extendedRange)
     }
 
     private suspend fun mapRoomSummaries(

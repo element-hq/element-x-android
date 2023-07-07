@@ -16,13 +16,13 @@
 
 package io.element.android.features.preferences.api
 
+import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 
 interface CacheService {
     /**
-     * Returns a flow of the current cache index, can let the app to know when the
-     * cache has been cleared, for instance to restart the app.
-     * Will be a flow of Int, starting from 0, and incrementing each time the cache is cleared.
+     * A flow of [SessionId], can let the app to know when the
+     * cache has been cleared for a given session, for instance to restart the app.
      */
-    fun cacheIndex(): Flow<Int>
+    val clearedCacheEventFlow: Flow<SessionId>
 }

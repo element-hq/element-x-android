@@ -24,7 +24,6 @@
   <string name="screen_login_error_invalid_user_id">"Dies ist kein gültiger Benutzeridentifikator. Erwartetes Format: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_unsupported_authentication">"Der ausgewählte Homeserver unterstützt kein Passwort- oder OIDC-Login. Bitte kontaktiere deinen Admin oder wähle einen anderen Homeserver."</string>
   <string name="screen_login_form_header">"Gib deine Daten ein"</string>
-  <string name="screen_login_server_header">"Wo deine Gespräche leben"</string>
   <string name="screen_login_title">"Willkommen zurück!"</string>
   <string name="screen_login_title_with_homeserver">"Bei %1$s anmelden"</string>
   <string name="screen_server_confirmation_change_server">"Kontoanbieter wechseln"</string>

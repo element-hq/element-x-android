@@ -2,6 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_roomlist_a11y_create_message">"Create a new conversation or room"</string>
   <string name="screen_roomlist_main_space_title">"All Chats"</string>
-  <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify it’s you to access your encrypted messages."</string>
-  <string name="session_verification_banner_title">"Access your message history"</string>
+  <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards."</string>
+  <string name="session_verification_banner_title">"Verify it’s you"</string>
 </resources>
