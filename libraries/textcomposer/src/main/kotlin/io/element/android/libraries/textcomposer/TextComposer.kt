@@ -73,7 +73,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.modifiers.applyIf
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -414,32 +415,9 @@ private fun BoxScope.SendButton(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun TextComposerSimpleLightPreview() = ElementPreviewLight { SimpleContentToPreview() }
-
-@Preview
-@Composable
-internal fun TextComposerSimpleDarkPreview() = ElementPreviewDark { SimpleContentToPreview() }
-
-@Preview
-@Composable
-internal fun TextComposerEditLightPreview() = ElementPreviewLight { EditContentToPreview() }
-
-@Preview
-@Composable
-internal fun TextComposerEditDarkPreview() = ElementPreviewDark { EditContentToPreview() }
-
-@Preview
-@Composable
-internal fun TextComposerReplyLightPreview() = ElementPreviewLight { ReplyContentToPreview() }
-
-@Preview
-@Composable
-internal fun TextComposerReplyDarkPreview() = ElementPreviewDark { ReplyContentToPreview() }
-
-@Composable
-private fun SimpleContentToPreview() {
+fun TextComposerSimplePreview() = ElementPreview {
     Column {
         TextComposer(
             onSendMessage = {},
@@ -468,8 +446,9 @@ private fun SimpleContentToPreview() {
     }
 }
 
+@DayNightPreviews
 @Composable
-private fun EditContentToPreview() {
+fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
         onSendMessage = {},
         onComposerTextChange = {},
@@ -480,8 +459,9 @@ private fun EditContentToPreview() {
     )
 }
 
+@DayNightPreviews
 @Composable
-private fun ReplyContentToPreview() {
+fun TextComposerReplyPreview() = ElementPreview {
     Column {
         TextComposer(
             onSendMessage = {},

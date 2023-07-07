@@ -36,9 +36,9 @@ import androidx.lifecycle.Lifecycle
 import app.cash.paparazzi.Paparazzi
 import com.airbnb.android.showkase.models.Showkase
 import com.android.ide.common.rendering.api.SessionParams
+import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
-import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.theme.ElementTheme
 import org.junit.Rule
 import org.junit.Test
@@ -85,7 +85,13 @@ class ScreenshotTest {
         Locale.setDefault(locale) // Needed for regional settings, as first day of week
         paparazzi.unsafeUpdateConfig(
             deviceConfig = baseDeviceConfig.deviceConfig.copy(
-                softButtons = false
+                softButtons = false,
+                nightMode = componentTestPreview.isNightMode().let {
+                    when (it) {
+                        true -> NightMode.NIGHT
+                        false -> NightMode.NOTNIGHT
+                    }
+                },
             ),
         )
         paparazzi.snapshot {
@@ -98,9 +104,9 @@ class ScreenshotTest {
                 ),
                 LocalConfiguration provides Configuration().apply {
                     setLocales(LocaleList(locale))
-                    // Dark mode previews have name "N" so their component name contains "- N"
-                    if (componentTestPreview.name.contains("- $NIGHT_MODE_NAME")){
-                        uiMode = Configuration.UI_MODE_NIGHT_YES
+                    uiMode = when (componentTestPreview.isNightMode()) {
+                        true -> Configuration.UI_MODE_NIGHT_YES
+                        false -> Configuration.UI_MODE_NIGHT_NO
                     }
                 },
                 // Needed so that UI that uses it don't crash during screenshot tests

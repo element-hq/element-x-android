@@ -17,10 +17,22 @@
 package io.element.android.tests.uitests
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
+import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 
 interface TestPreview {
     @Composable
     fun Content()
 
     val name: String
+}
+
+/**
+ * Showkase doesn't put the [Preview.uiMode] parameter in its [ShowkaseElementsMetadata]
+ * so we have to encode the night mode bit in a preview's name.
+ */
+fun TestPreview.isNightMode(): Boolean {
+    // Dark mode previews have name "N" so their component name contains "- N"
+    return this.name.contains("- $NIGHT_MODE_NAME")
 }
