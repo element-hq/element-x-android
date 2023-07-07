@@ -25,7 +25,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,14 +68,13 @@ fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> 
 @Composable
 fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostState {
     val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
     val snackbarMessageText = snackbarMessage?.let {
         stringResource(id = snackbarMessage.messageResId)
     }
     val dispatcher = LocalSnackbarDispatcher.current
     LaunchedEffect(snackbarMessage) {
         if (snackbarMessageText == null) return@LaunchedEffect
-        coroutineScope.launch {
+        launch {
             snackbarHostState.showSnackbar(
                 message = snackbarMessageText,
                 duration = snackbarMessage.duration,
