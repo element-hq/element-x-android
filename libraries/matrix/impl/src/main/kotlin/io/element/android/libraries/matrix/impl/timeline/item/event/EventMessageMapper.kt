@@ -92,9 +92,10 @@ class EventMessageMapper {
             VideoMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
         }
         is RustMessageType.Location -> {
-            LocationMessageType(type.content.body, type.content.geoUri)
+            LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
         }
-        is RustMessageType.Location, null -> UnknownMessageType
+        is RustMessageType.Location -> UnknownMessageType
+        null -> UnknownMessageType
     }
 }
 

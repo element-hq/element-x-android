@@ -50,8 +50,6 @@ class DeeplinkParserTest {
             .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, null))
         assertThat(sut.getFromIntent(createIntent(A_URI_WITH_ROOM_WITH_THREAD)))
             .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID))
-        assertThat(sut.getFromIntent(createIntent(A_URI_WITH_ROOM_WITH_THREAD)))
-            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID))
         assertThat(sut.getFromIntent(createIntent(A_URI_FOR_INVITE_LIST)))
             .isEqualTo(DeeplinkData.InviteList(A_SESSION_ID))
     }

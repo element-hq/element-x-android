@@ -52,7 +52,7 @@ class InviteListPresenterTests {
     @Test
     fun `present - starts empty, adds invites when received`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
-        val presenter = aPresenter(
+        val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -73,7 +73,7 @@ class InviteListPresenterTests {
     @Test
     fun `present - uses user ID and avatar for direct invites`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withDirectChatInvitation()
-        val presenter = aPresenter(
+        val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -99,7 +99,7 @@ class InviteListPresenterTests {
     @Test
     fun `present - includes sender details for room invites`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-        val presenter = aPresenter(
+        val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -149,7 +149,7 @@ class InviteListPresenterTests {
     @Test
     fun `present - shows confirm dialog for declining room invites`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-        val presenter = aPresenter(
+        val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -170,7 +170,7 @@ class InviteListPresenterTests {
     @Test
     fun `present - hides confirm dialog when cancelling`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-        val presenter = aPresenter(
+        val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -196,7 +196,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = aPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
+        val presenter = createPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -223,7 +223,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = aPresenter(client)
+        val presenter = createPresenter(client)
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -254,7 +254,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = aPresenter(client)
+        val presenter = createPresenter(client)
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -287,7 +287,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = aPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
+        val presenter = createPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -311,7 +311,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = aPresenter(client)
+        val presenter = createPresenter(client)
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -336,7 +336,7 @@ class InviteListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = aPresenter(client)
+        val presenter = createPresenter(client)
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -493,7 +493,7 @@ class InviteListPresenterTests {
         )
     )
 
-    private fun aPresenter(
+    private fun createPresenter(
         client: MatrixClient,
         seenInvitesStore: SeenInvitesStore = FakeSeenInvitesStore(),
         fakeAnalyticsService: AnalyticsService = FakeAnalyticsService(),

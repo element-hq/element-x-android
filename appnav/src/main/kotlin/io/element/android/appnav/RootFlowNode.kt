@@ -56,7 +56,6 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -77,7 +76,6 @@ class RootFlowNode @AssistedInject constructor(
     private val bugReportEntryPoint: BugReportEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
-    private val notificationDrawerManager: NotificationDrawerManager,
     private val loginUserStory: LoginUserStory,
 ) :
     BackstackNode<RootFlowNode.NavTarget>(
@@ -251,15 +249,6 @@ class RootFlowNode @AssistedInject constructor(
                     is DeeplinkData.InviteList -> attachInviteList(deeplinkData)
                 }
             }
-    }
-
-    private suspend fun LoggedInFlowNode.attachRoom(deeplinkData: DeeplinkData.Room) {
-        backstack.push(LoggedInFlowNode.NavTarget.Room(deeplinkData.roomId))
-    }
-
-    private suspend fun LoggedInFlowNode.attachInviteList(deeplinkData: DeeplinkData.InviteList) {
-        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
-        backstack.push(LoggedInFlowNode.NavTarget.InviteList)
     }
 
     private fun onOidcAction(oidcAction: OidcAction) {
