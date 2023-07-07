@@ -22,6 +22,7 @@ import android.content.Intent
 import androidx.core.app.PendingIntentCompat
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -80,6 +81,35 @@ class PendingIntentFactory @Inject constructor(
         intent.data = createIgnoredUri("deleteRoom/$sessionId/$roomId")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
         intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
+        return PendingIntent.getBroadcast(
+            context,
+            clock.epochMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    fun createDismissInvitePendingIntent(sessionId: SessionId, roomId: RoomId): PendingIntent {
+        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+        intent.action = actionIds.dismissInvite
+        intent.data = createIgnoredUri("deleteInvite/$sessionId/$roomId")
+        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
+        return PendingIntent.getBroadcast(
+            context,
+            clock.epochMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    fun createDismissEventPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId): PendingIntent {
+        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+        intent.action = actionIds.dismissEvent
+        intent.data = createIgnoredUri("deleteEvent/$sessionId/$roomId")
+        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_EVENT_ID, eventId.value)
         return PendingIntent.getBroadcast(
             context,
             clock.epochMillis().toInt(),

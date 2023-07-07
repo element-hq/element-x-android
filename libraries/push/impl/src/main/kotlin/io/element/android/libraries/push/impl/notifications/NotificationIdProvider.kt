@@ -37,12 +37,17 @@ class NotificationIdProvider @Inject constructor() {
         return getOffset(sessionId) + ROOM_INVITATION_NOTIFICATION_ID
     }
 
+    fun getFallbackNotificationId(sessionId: SessionId): Int {
+        return getOffset(sessionId) + FALLBACK_NOTIFICATION_ID
+    }
+
     private fun getOffset(sessionId: SessionId): Int {
         // Compute a int from a string with a low risk of collision.
         return abs(sessionId.value.hashCode() % 100_000) * 10
     }
 
     companion object {
+        private const val FALLBACK_NOTIFICATION_ID = -1
         private const val SUMMARY_NOTIFICATION_ID = 0
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
         private const val ROOM_EVENT_NOTIFICATION_ID = 2

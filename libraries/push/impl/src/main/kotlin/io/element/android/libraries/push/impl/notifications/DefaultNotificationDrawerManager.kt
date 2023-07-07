@@ -24,6 +24,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -32,7 +33,7 @@ import io.element.android.libraries.push.api.notifications.NotificationDrawerMan
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreMessageEventInRoom
+import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -169,6 +170,15 @@ class DefaultNotificationDrawerManager @Inject constructor(
     }
 
     /**
+     * Clear the notifications for a single event.
+     */
+    fun clearEvent(eventId: EventId) {
+        updateEvents {
+            it.clearEvent(eventId)
+        }
+    }
+
+    /**
      * Should be called when the application is currently opened and showing timeline for the given threadId.
      * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
      */
@@ -267,6 +277,6 @@ class DefaultNotificationDrawerManager @Inject constructor(
     }
 
     fun shouldIgnoreMessageEventInRoom(resolvedEvent: NotifiableMessageEvent): Boolean {
-        return resolvedEvent.shouldIgnoreMessageEventInRoom(currentAppNavigationState)
+        return resolvedEvent.shouldIgnoreEventInRoom(currentAppNavigationState)
     }
 }

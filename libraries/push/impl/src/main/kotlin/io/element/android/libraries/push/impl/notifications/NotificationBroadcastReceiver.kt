@@ -22,6 +22,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -50,6 +51,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         Timber.tag(loggerTag.value).v("NotificationBroadcastReceiver received : $intent")
         val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.let(::SessionId) ?: return
         val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
+        val eventId = intent.getStringExtra(KEY_EVENT_ID)?.let(::EventId)
         when (intent.action) {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
@@ -58,6 +60,12 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             }
             actionIds.dismissSummary ->
                 defaultNotificationDrawerManager.clearAllEvents(sessionId)
+            actionIds.dismissInvite -> if (roomId != null) {
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+            }
+            actionIds.dismissEvent -> if (eventId != null) {
+                defaultNotificationDrawerManager.clearEvent(eventId)
+            }
             actionIds.markRoomRead -> if (roomId != null) {
                 defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
                 handleMarkAsRead(sessionId, roomId)
@@ -240,6 +248,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         const val KEY_SESSION_ID = "sessionID"
         const val KEY_ROOM_ID = "roomID"
         const val KEY_THREAD_ID = "threadID"
+        const val KEY_EVENT_ID = "eventID"
         const val KEY_TEXT_REPLY = "key_text_reply"
     }
 }

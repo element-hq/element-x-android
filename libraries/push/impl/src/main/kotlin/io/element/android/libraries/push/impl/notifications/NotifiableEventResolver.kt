@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessag
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.log.pushLoggerTag
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -132,15 +133,16 @@ class NotifiableEventResolver @Inject constructor(
         userId: SessionId,
         roomId: RoomId,
         eventId: EventId
-    ) = buildNotifiableMessageEvent(
+    ) = FallbackNotifiableEvent(
         sessionId = userId,
         roomId = roomId,
         eventId = eventId,
-        noisy = false,
+        editedEventId = null,
+        canBeReplaced = true,
+        isRedacted = false,
+        isUpdated = false,
         timestamp = clock.epochMillis(),
-        body = stringProvider.getString(R.string.notification_fallback_content),
-        senderName = null,
-        senderId = null,
+        description = stringProvider.getString(R.string.notification_fallback_content),
     )
 
     private fun descriptionFromMessageContent(

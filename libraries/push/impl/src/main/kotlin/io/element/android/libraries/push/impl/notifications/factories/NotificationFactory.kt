@@ -34,6 +34,7 @@ import io.element.android.libraries.push.impl.notifications.channels.Notificatio
 import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -169,6 +170,12 @@ class NotificationFactory @Inject constructor(
                 } else {
                     priority = NotificationCompat.PRIORITY_LOW
                 }
+                setDeleteIntent(
+                    pendingIntentFactory.createDismissInvitePendingIntent(
+                        inviteNotifiableEvent.sessionId,
+                        inviteNotifiableEvent.roomId,
+                    )
+                )
                 setAutoCancel(true)
             }
             .build()
@@ -204,6 +211,39 @@ class NotificationFactory @Inject constructor(
                 } else {
                     priority = NotificationCompat.PRIORITY_LOW
                 }
+                setAutoCancel(true)
+            }
+            .build()
+    }
+
+    fun createFallbackNotification(
+        fallbackNotifiableEvent: FallbackNotifiableEvent,
+    ): Notification {
+        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+        val smallIcon = R.drawable.ic_notification
+
+        val channelId = notificationChannels.getChannelIdForMessage(false)
+        return NotificationCompat.Builder(context, channelId)
+            .setOnlyAlertOnce(true)
+            .setContentTitle(buildMeta.applicationName.annotateForDebug(7))
+            .setContentText(fallbackNotifiableEvent.description.orEmpty().annotateForDebug(8))
+            .setGroup(fallbackNotifiableEvent.sessionId.value)
+            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
+            .setSmallIcon(smallIcon)
+            .setColor(accentColor)
+            .setAutoCancel(true)
+            // Ideally we'd use `createOpenRoomPendingIntent` here, but the broken notification might apply to an invite
+            // and the user won't have access to the room yet, resulting in an error screen.
+            .setContentIntent(pendingIntentFactory.createOpenSessionPendingIntent(fallbackNotifiableEvent.sessionId))
+            .setDeleteIntent(
+                pendingIntentFactory.createDismissEventPendingIntent(
+                    fallbackNotifiableEvent.sessionId,
+                    fallbackNotifiableEvent.roomId,
+                    fallbackNotifiableEvent.eventId
+                )
+            )
+            .apply {
+                priority = NotificationCompat.PRIORITY_LOW
                 setAutoCancel(true)
             }
             .build()
