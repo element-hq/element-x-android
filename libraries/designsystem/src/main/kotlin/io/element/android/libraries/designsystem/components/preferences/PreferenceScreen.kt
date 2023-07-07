@@ -50,6 +50,7 @@ fun PreferenceView(
     title: String,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
+    snackbarHost: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Scaffold(
@@ -64,6 +65,7 @@ fun PreferenceView(
                 onBackPressed = onBackPressed,
             )
         },
+        snackbarHost = snackbarHost,
         content = {
             Column(
                 modifier = Modifier

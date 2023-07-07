@@ -28,6 +28,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
@@ -43,6 +45,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val buildType: BuildType,
     private val versionFormatter: VersionFormatter,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<PreferencesRootState> {
 
     @Composable
@@ -53,6 +56,8 @@ class PreferencesRootPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             initialLoad(matrixUser)
         }
+
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         // Session verification status (unknown, not verified, verified)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
@@ -67,7 +72,8 @@ class PreferencesRootPresenter @Inject constructor(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
             showCompleteVerification = sessionIsNotVerified,
-            showDeveloperSettings = showDeveloperSettings
+            showDeveloperSettings = showDeveloperSettings,
+            snackbarMessage = snackbarMessage,
         )
     }
 
