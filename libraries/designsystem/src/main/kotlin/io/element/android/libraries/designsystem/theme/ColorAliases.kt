@@ -42,7 +42,7 @@ fun MaterialTheme.roomListRoomMessageDate() = colorScheme.secondary
 val SemanticColors.unreadIndicator
     get() = iconAccentTertiary
 
-val SemanticColors.roomListPlaceholder
+val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
 // This color is not present in Semantic color, so put hard-coded value for now
@@ -83,7 +83,7 @@ private fun ContentToPreview() {
             "roomListRoomMessage" to MaterialTheme.roomListRoomMessage(),
             "roomListRoomMessageDate" to MaterialTheme.roomListRoomMessageDate(),
             "unreadIndicator" to ElementTheme.colors.unreadIndicator,
-            "roomListPlaceholder" to ElementTheme.colors.roomListPlaceholder,
+            "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
         )

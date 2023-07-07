@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.room.awaitAllRoomsAreLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -63,6 +64,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -90,7 +93,6 @@ class RustMatrixClient constructor(
         dispatchers = dispatchers,
     )
     private val notificationService = RustNotificationService(client)
-
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -127,9 +129,16 @@ class RustMatrixClient constructor(
             }.launchIn(sessionCoroutineScope)
     }
 
-    override fun getRoom(roomId: RoomId): MatrixRoom? {
-        val roomListItem = roomListService.roomOrNull(roomId.value) ?: return null
-        val fullRoom = roomListItem.fullRoom()
+    override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
+        // Check if already in memory...
+        var cachedPairOfRoom = pairOfRoom(roomId)
+        if (cachedPairOfRoom == null) {
+            //... otherwise, lets wait for the SS to load all rooms and check again.
+            roomSummaryDataSource.awaitAllRoomsAreLoaded()
+            cachedPairOfRoom = pairOfRoom(roomId)
+        }
+        if (cachedPairOfRoom == null) return null
+        val (roomListItem, fullRoom) = cachedPairOfRoom
         return RustMatrixRoom(
             sessionId = sessionId,
             roomListItem = roomListItem,
@@ -141,7 +150,17 @@ class RustMatrixClient constructor(
         )
     }
 
-    override fun findDM(userId: UserId): MatrixRoom? {
+    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? = withContext(dispatchers.io) {
+        val cachedRoomListItem = roomListService.roomOrNull(roomId.value)
+        val fullRoom = cachedRoomListItem?.fullRoom()
+        if (cachedRoomListItem == null || fullRoom == null) {
+            null
+        } else {
+            Pair(cachedRoomListItem, fullRoom)
+        }
+    }
+
+    override suspend fun findDM(userId: UserId): MatrixRoom? {
         val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
         return roomId?.let { getRoom(it) }
     }

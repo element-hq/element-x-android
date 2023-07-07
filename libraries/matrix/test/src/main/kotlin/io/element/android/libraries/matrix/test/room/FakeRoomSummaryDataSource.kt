@@ -54,7 +54,7 @@ class FakeRoomSummaryDataSource : RoomSummaryDataSource {
     var latestSlidingSyncRange: IntRange? = null
         private set
 
-    override fun updateRoomListVisibleRange(range: IntRange) {
+    override fun updateAllRoomsVisibleRange(range: IntRange) {
         latestSlidingSyncRange = range
     }
 }

@@ -35,7 +35,6 @@ interface MatrixRoom : Closeable {
     val sessionId: SessionId
     val roomId: RoomId
     val name: String?
-    val bestName: String
     val displayName: String
     val alias: String?
     val alternativeAliases: List<String>

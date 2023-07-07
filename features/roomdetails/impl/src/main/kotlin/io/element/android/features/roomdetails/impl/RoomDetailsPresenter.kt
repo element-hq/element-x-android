@@ -78,7 +78,7 @@ class RoomDetailsPresenter @Inject constructor(
 
         return RoomDetailsState(
             roomId = room.roomId.value,
-            roomName = room.name ?: room.displayName,
+            roomName = room.displayName,
             roomAlias = room.alias,
             roomAvatarUrl = room.avatarUrl,
             roomTopic = topicState,

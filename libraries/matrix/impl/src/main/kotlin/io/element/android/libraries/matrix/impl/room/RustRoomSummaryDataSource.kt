@@ -90,7 +90,7 @@ internal class RustRoomSummaryDataSource(
         return allRoomsLoadingState
     }
 
-    override fun updateRoomListVisibleRange(range: IntRange) {
+    override fun updateAllRoomsVisibleRange(range: IntRange) {
         Timber.v("setVisibleRange=$range")
         sessionCoroutineScope.launch {
             try {

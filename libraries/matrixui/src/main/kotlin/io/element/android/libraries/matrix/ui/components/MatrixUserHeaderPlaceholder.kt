@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.roomListPlaceholder
+import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -53,7 +53,7 @@ fun MatrixUserHeaderPlaceholder(
             modifier = Modifier
                 .padding(vertical = 12.dp)
                 .size(AvatarSize.UserPreference.dp)
-                .background(color = ElementTheme.colors.roomListPlaceholder, shape = CircleShape)
+                .background(color = ElementTheme.colors.placeholderBackground, shape = CircleShape)
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(

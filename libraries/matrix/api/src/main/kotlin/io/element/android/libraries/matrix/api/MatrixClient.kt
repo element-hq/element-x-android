@@ -31,14 +31,16 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import kotlinx.coroutines.TimeoutCancellationException
 import java.io.Closeable
+import kotlin.time.Duration
 
 interface MatrixClient : Closeable {
     val sessionId: SessionId
     val roomSummaryDataSource: RoomSummaryDataSource
     val mediaLoader: MatrixMediaLoader
-    fun getRoom(roomId: RoomId): MatrixRoom?
-    fun findDM(userId: UserId): MatrixRoom?
+    suspend fun getRoom(roomId: RoomId): MatrixRoom?
+    suspend fun findDM(userId: UserId): MatrixRoom?
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>

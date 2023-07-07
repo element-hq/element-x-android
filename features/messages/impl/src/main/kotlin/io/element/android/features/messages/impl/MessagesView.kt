@@ -288,8 +288,8 @@ fun MessagesViewContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessagesViewTopBar(
-    roomTitle: String?,
-    roomAvatar: AvatarData?,
+    roomTitle: String,
+    roomAvatar: AvatarData,
     modifier: Modifier = Modifier,
     onRoomDetailsClicked: () -> Unit = {},
     onBackPressed: () -> Unit = {},
@@ -304,14 +304,12 @@ fun MessagesViewTopBar(
                 modifier = Modifier.clickable { onRoomDetailsClicked() },
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (roomAvatar != null) {
-                    Avatar(roomAvatar)
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
+                Avatar(roomAvatar)
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    text = roomTitle ?: "Unknown room",
+                    text = roomTitle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
