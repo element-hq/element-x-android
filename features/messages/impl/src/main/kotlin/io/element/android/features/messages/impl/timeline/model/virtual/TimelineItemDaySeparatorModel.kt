@@ -20,4 +20,5 @@ data class TimelineItemDaySeparatorModel(
     val formattedDate: String
 ) : TimelineItemVirtualModel {
     override val type: String = "TimelineItemDaySeparatorModel"
+    override val id: String = formattedDate
 }

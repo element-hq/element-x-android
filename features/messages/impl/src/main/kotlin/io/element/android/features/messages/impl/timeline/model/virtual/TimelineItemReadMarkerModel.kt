@@ -18,4 +18,5 @@ package io.element.android.features.messages.impl.timeline.model.virtual
 
 object TimelineItemReadMarkerModel : TimelineItemVirtualModel {
     override val type: String = "TimelineItemReadMarkerModel"
+    override val id: String = type
 }

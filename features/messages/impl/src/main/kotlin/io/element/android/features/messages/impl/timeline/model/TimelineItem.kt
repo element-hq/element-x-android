@@ -24,8 +24,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -45,9 +45,10 @@ sealed interface TimelineItem {
 
     @Immutable
     data class Virtual(
-        val id: String,
         val model: TimelineItemVirtualModel
-    ) : TimelineItem
+    ) : TimelineItem {
+        val id = model.id
+    }
 
     @Immutable
     data class Event(

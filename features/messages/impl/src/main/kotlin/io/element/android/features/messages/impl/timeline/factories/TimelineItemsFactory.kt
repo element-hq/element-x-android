@@ -106,7 +106,7 @@ class TimelineItemsFactory @Inject constructor(
         val timelineItemState =
             when (val currentTimelineItem = timelineItems[index]) {
                 is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems)
-                is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem, index, timelineItems)
+                is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }
         timelineItemsCache[index] = timelineItemState
