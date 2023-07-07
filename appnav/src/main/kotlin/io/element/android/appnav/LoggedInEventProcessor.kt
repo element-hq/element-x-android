@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationFlowStat
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -47,12 +47,15 @@ class LoggedInEventProcessor @Inject constructor(
 
     fun observeEvents(coroutineScope: CoroutineScope) {
         observingJob = coroutineScope.launch {
-            displayLeftRoomMessage.onEach {
-                displayMessage(CommonStrings.common_current_user_left_room)
-            }.launchIn(this)
+            displayLeftRoomMessage
+                .filter { it }
+                .onEach {
+                    displayMessage(CommonStrings.common_current_user_left_room)
+                }
+                .launchIn(this)
 
             displayVerificationSuccessfulMessage
-                .drop(1)
+                .filter { it }
                 .onEach {
                     displayMessage(CommonStrings.common_verification_complete)
                 }.launchIn(this)
