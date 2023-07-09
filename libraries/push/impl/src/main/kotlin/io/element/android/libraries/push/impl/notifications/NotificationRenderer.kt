@@ -37,12 +37,12 @@ class NotificationRenderer @Inject constructor(
         useCompleteNotificationFormat: Boolean,
         eventsToProcess: List<ProcessedEvent<NotifiableEvent>>
     ) {
-        val (roomEvents, simpleEvents, invitationEvents, fallbackEvents) = eventsToProcess.groupByType()
+        val groupedEvents = eventsToProcess.groupByType()
         with(notificationFactory) {
-            val roomNotifications = roomEvents.toNotifications(currentUser)
-            val invitationNotifications = invitationEvents.toNotifications()
-            val simpleNotifications = simpleEvents.toNotifications()
-            val fallbackNotifications = fallbackEvents.toNotifications()
+            val roomNotifications = groupedEvents.roomEvents.toNotifications(currentUser)
+            val invitationNotifications = groupedEvents.invitationEvents.toNotifications()
+            val simpleNotifications = groupedEvents.simpleEvents.toNotifications()
+            val fallbackNotifications = groupedEvents.fallbackEvents.toNotifications()
             val summaryNotification = createSummaryNotification(
                 currentUser = currentUser,
                 roomNotifications = roomNotifications,

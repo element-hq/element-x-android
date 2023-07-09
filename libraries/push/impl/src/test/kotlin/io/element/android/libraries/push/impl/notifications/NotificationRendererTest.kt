@@ -33,7 +33,7 @@ private const val MY_USER_AVATAR_URL = "avatar-url"
 private const val USE_COMPLETE_NOTIFICATION_FORMAT = true
 
 private val AN_EVENT_LIST = listOf<ProcessedEvent<NotifiableEvent>>()
-private val A_PROCESSED_EVENTS = GroupedNotificationEvents(emptyMap(), emptyList(), emptyList())
+private val A_PROCESSED_EVENTS = GroupedNotificationEvents(emptyMap(), emptyList(), emptyList(), emptyList())
 private val A_SUMMARY_NOTIFICATION = SummaryNotification.Update(mockk())
 private val A_REMOVE_SUMMARY_NOTIFICATION = SummaryNotification.Removed
 private val A_NOTIFICATION = mockk<Notification>()
@@ -202,13 +202,14 @@ class NotificationRendererTest {
     }
 
     private fun givenNoNotifications() {
-        givenNotifications(emptyList(), emptyList(), emptyList(), USE_COMPLETE_NOTIFICATION_FORMAT, A_REMOVE_SUMMARY_NOTIFICATION)
+        givenNotifications(emptyList(), emptyList(), emptyList(), emptyList(), USE_COMPLETE_NOTIFICATION_FORMAT, A_REMOVE_SUMMARY_NOTIFICATION)
     }
 
     private fun givenNotifications(
         roomNotifications: List<RoomNotification> = emptyList(),
         invitationNotifications: List<OneShotNotification> = emptyList(),
         simpleNotifications: List<OneShotNotification> = emptyList(),
+        fallbackNotifications: List<OneShotNotification> = emptyList(),
         useCompleteNotificationFormat: Boolean = USE_COMPLETE_NOTIFICATION_FORMAT,
         summaryNotification: SummaryNotification = A_SUMMARY_NOTIFICATION
     ) {
@@ -219,6 +220,7 @@ class NotificationRendererTest {
             roomNotifications = roomNotifications,
             invitationNotifications = invitationNotifications,
             simpleNotifications = simpleNotifications,
+            fallbackNotifications = fallbackNotifications,
             summaryNotification = summaryNotification
         )
     }
