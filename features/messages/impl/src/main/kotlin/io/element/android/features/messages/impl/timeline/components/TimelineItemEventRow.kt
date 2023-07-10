@@ -126,6 +126,11 @@ fun TimelineItemEventRow(
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
+        if (event.groupPosition.isNew()) {
+            Spacer(modifier = Modifier.height(16.dp))
+        } else {
+            Spacer(modifier = Modifier.height(2.dp))
+        }
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
             val offset = state.offset.value
@@ -176,11 +181,6 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
             )
-        }
-        if (event.groupPosition.isNew()) {
-            Spacer(modifier = Modifier.height(16.dp))
-        } else {
-            Spacer(modifier = Modifier.height(2.dp))
         }
     }
 }
