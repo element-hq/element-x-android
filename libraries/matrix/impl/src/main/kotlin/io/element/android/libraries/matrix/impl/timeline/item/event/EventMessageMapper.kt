@@ -33,48 +33,17 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessag
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.impl.media.map
 import org.matrix.rustcomponents.sdk.Message
-import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.ProfileDetails
 import org.matrix.rustcomponents.sdk.RepliedToEventDetails
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
+import org.matrix.rustcomponents.sdk.MessageType as RustMessageType
 
 class EventMessageMapper {
 
     fun map(message: Message): MessageContent = message.use {
-        val type = it.msgtype().use { type ->
-            when (type) {
-                is MessageType.Audio -> {
-                    AudioMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
-                }
-                is MessageType.File -> {
-                    FileMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
-                }
-                is MessageType.Image -> {
-                    ImageMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
-                }
-                is MessageType.Location -> {
-                    LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
-                }
-                is MessageType.Notice -> {
-                    NoticeMessageType(type.content.body, type.content.formatted?.map())
-                }
-                is MessageType.Text -> {
-                    TextMessageType(type.content.body, type.content.formatted?.map())
-                }
-                is MessageType.Emote -> {
-                    EmoteMessageType(type.content.body, type.content.formatted?.map())
-                }
-                is MessageType.Video -> {
-                    VideoMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
-                }
-                null -> {
-                    UnknownMessageType
-                }
-
-            }
-        }
+        val type = it.msgtype().use(this::mapMessageType)
         val inReplyToId = it.inReplyTo()?.eventId?.let(::EventId)
         val inReplyToEvent: InReplyTo? = (it.inReplyTo()?.event)?.use { details ->
             when (details) {
@@ -98,6 +67,34 @@ class EventMessageMapper {
             isEdited = it.isEdited(),
             type = type
         )
+    }
+
+    fun mapMessageType(type: RustMessageType?) = when (type) {
+        is RustMessageType.Audio -> {
+            AudioMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
+        }
+        is RustMessageType.File -> {
+            FileMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
+        }
+        is RustMessageType.Image -> {
+            ImageMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
+        }
+        is RustMessageType.Notice -> {
+            NoticeMessageType(type.content.body, type.content.formatted?.map())
+        }
+        is RustMessageType.Text -> {
+            TextMessageType(type.content.body, type.content.formatted?.map())
+        }
+        is RustMessageType.Emote -> {
+            EmoteMessageType(type.content.body, type.content.formatted?.map())
+        }
+        is RustMessageType.Video -> {
+            VideoMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
+        }
+        is RustMessageType.Location -> {
+            LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
+        }
+        null -> UnknownMessageType
     }
 }
 

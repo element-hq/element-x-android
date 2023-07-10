@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.uiStrings)
     api(projects.libraries.pushproviders.api)
     api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)
@@ -51,10 +52,6 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
-
-    api(libs.gujun.span) {
-        exclude(group = "com.android.support", module = "support-annotations")
-    }
 
     // TODO Temporary use the deprecated LocalBroadcastManager, to be changed later.
     implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")

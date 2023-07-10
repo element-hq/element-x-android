@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.deeplink
+plugins {
+    id("io.element.android-library")
+}
 
-internal const val SCHEME = "elementx"
-internal const val HOST = "open"
+android {
+    namespace = "io.element.android.libraries.push.test"
+}
 
-object DeepLinkPaths {
-    const val INVITE_LIST = "invites"
+dependencies {
+    api(projects.libraries.push.api)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.tests.testutils)
 }

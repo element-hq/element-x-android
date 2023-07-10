@@ -18,9 +18,7 @@ package io.element.android.appnav
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -30,7 +28,6 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
@@ -58,6 +55,7 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -65,6 +63,7 @@ import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
+import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -89,6 +88,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
+    private val notificationDrawerManager: NotificationDrawerManager,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -339,5 +339,14 @@ class LoggedInFlowNode @AssistedInject constructor(
 
             PermanentChild(navTarget = NavTarget.Permanent)
         }
+    }
+
+    internal suspend fun attachRoom(deeplinkData: DeeplinkData.Room) {
+        backstack.push(NavTarget.Room(deeplinkData.roomId))
+    }
+
+    internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) {
+        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
+        backstack.push(NavTarget.InviteList)
     }
 }

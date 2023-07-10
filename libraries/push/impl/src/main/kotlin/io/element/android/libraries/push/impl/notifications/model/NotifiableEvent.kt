@@ -29,6 +29,7 @@ sealed interface NotifiableEvent : Serializable {
     val roomId: RoomId
     val eventId: EventId
     val editedEventId: EventId?
+    val description: String?
 
     // Used to know if event should be replaced with the one coming from eventstream
     val canBeReplaced: Boolean

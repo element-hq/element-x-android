@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.element.android.libraries.push.impl.notifications.model
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 
-data class InviteNotifiableEvent(
+/**
+ * Used for notifications with events that couldn't be retrieved or decrypted, so we don't know their contents.
+ * These are created separately from message notifications, so they can be displayed differently.
+ */
+data class FallbackNotifiableEvent(
     override val sessionId: SessionId,
     override val roomId: RoomId,
     override val eventId: EventId,
     override val editedEventId: EventId?,
+    override val description: String?,
     override val canBeReplaced: Boolean,
-    val roomName: String?,
-    val noisy: Boolean,
-    val title: String?,
-    override val description: String,
-    val type: String?,
+    override val isRedacted: Boolean,
+    override val isUpdated: Boolean,
     val timestamp: Long,
-    val soundName: String?,
-    override val isRedacted: Boolean = false,
-    override val isUpdated: Boolean = false
 ) : NotifiableEvent

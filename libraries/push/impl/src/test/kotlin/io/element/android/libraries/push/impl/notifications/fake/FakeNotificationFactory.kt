@@ -36,12 +36,14 @@ class FakeNotificationFactory {
         roomNotifications: List<RoomNotification>,
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
+        fallbackNotifications: List<OneShotNotification>,
         summaryNotification: SummaryNotification
     ) {
         with(instance) {
             coEvery { groupedEvents.roomEvents.toNotifications(matrixUser) } returns roomNotifications
             every { groupedEvents.invitationEvents.toNotifications() } returns invitationNotifications
             every { groupedEvents.simpleEvents.toNotifications() } returns simpleNotifications
+            every { groupedEvents.fallbackEvents.toNotifications() } returns fallbackNotifications
 
             every {
                 createSummaryNotification(
@@ -49,6 +51,7 @@ class FakeNotificationFactory {
                     roomNotifications,
                     invitationNotifications,
                     simpleNotifications,
+                    fallbackNotifications,
                     useCompleteNotificationFormat
                 )
             } returns summaryNotification

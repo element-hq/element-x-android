@@ -19,8 +19,10 @@ package io.element.android.libraries.push.impl.notifications.factories
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.PendingIntentCompat
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -39,19 +41,19 @@ class PendingIntentFactory @Inject constructor(
     private val actionIds: NotificationActionIds,
 ) {
     fun createOpenSessionPendingIntent(sessionId: SessionId): PendingIntent? {
-        return createPendingIntent(sessionId = sessionId, roomId = null, threadId = null)
+        return createRoomPendingIntent(sessionId = sessionId, roomId = null, threadId = null)
     }
 
     fun createOpenRoomPendingIntent(sessionId: SessionId, roomId: RoomId): PendingIntent? {
-        return createPendingIntent(sessionId = sessionId, roomId = roomId, threadId = null)
+        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, threadId = null)
     }
 
     fun createOpenThreadPendingIntent(roomInfo: RoomEventGroupInfo, threadId: ThreadId?): PendingIntent? {
-        return createPendingIntent(sessionId = roomInfo.sessionId, roomId = roomInfo.roomId, threadId = threadId)
+        return createRoomPendingIntent(sessionId = roomInfo.sessionId, roomId = roomInfo.roomId, threadId = threadId)
     }
 
-    private fun createPendingIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): PendingIntent? {
-        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
+    private fun createRoomPendingIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): PendingIntent? {
+        val intent = intentProvider.getViewRoomIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
         return PendingIntent.getActivity(
             context,
             clock.epochMillis().toInt(),
@@ -87,6 +89,35 @@ class PendingIntentFactory @Inject constructor(
         )
     }
 
+    fun createDismissInvitePendingIntent(sessionId: SessionId, roomId: RoomId): PendingIntent {
+        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+        intent.action = actionIds.dismissInvite
+        intent.data = createIgnoredUri("deleteInvite/$sessionId/$roomId")
+        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
+        return PendingIntent.getBroadcast(
+            context,
+            clock.epochMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    fun createDismissEventPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId): PendingIntent {
+        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+        intent.action = actionIds.dismissEvent
+        intent.data = createIgnoredUri("deleteEvent/$sessionId/$roomId")
+        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_EVENT_ID, eventId.value)
+        return PendingIntent.getBroadcast(
+            context,
+            clock.epochMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
     fun createTestPendingIntent(): PendingIntent? {
         val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
         testActionIntent.action = actionIds.diagnostic
@@ -96,5 +127,10 @@ class PendingIntentFactory @Inject constructor(
             testActionIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+    }
+
+    fun createInviteListPendingIntent(sessionId: SessionId): PendingIntent {
+        val intent = intentProvider.getInviteListIntent(sessionId)
+        return PendingIntentCompat.getActivity(context, 0, intent, 0, false)
     }
 }

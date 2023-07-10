@@ -24,14 +24,16 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreMessageEventInRoom
+import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +49,7 @@ import javax.inject.Inject
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
 @SingleIn(AppScope::class)
-class NotificationDrawerManager @Inject constructor(
+class DefaultNotificationDrawerManager @Inject constructor(
     private val pushDataStore: PushDataStore,
     private val notifiableEventProcessor: NotifiableEventProcessor,
     private val notificationRenderer: NotificationRenderer,
@@ -58,7 +60,7 @@ class NotificationDrawerManager @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
     private val matrixAuthenticationService: MatrixAuthenticationService,
-) {
+) : NotificationDrawerManager {
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
@@ -152,12 +154,27 @@ class NotificationDrawerManager @Inject constructor(
         }
     }
 
+    override fun clearMembershipNotificationForSession(sessionId: SessionId) {
+        updateEvents {
+            it.clearMembershipNotificationForSession(sessionId)
+        }
+    }
+
     /**
      * Clear invitation notification for the provided room.
      */
-    fun clearMemberShipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
+    override fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
         updateEvents {
-            it.clearMemberShipNotificationForRoom(sessionId, roomId)
+            it.clearMembershipNotificationForRoom(sessionId, roomId)
+        }
+    }
+
+    /**
+     * Clear the notifications for a single event.
+     */
+    fun clearEvent(eventId: EventId) {
+        updateEvents {
+            it.clearEvent(eventId)
         }
     }
 
@@ -183,7 +200,7 @@ class NotificationDrawerManager @Inject constructor(
         }
     }
 
-    private fun updateEvents(action: NotificationDrawerManager.(NotificationEventQueue) -> Unit) {
+    private fun updateEvents(action: DefaultNotificationDrawerManager.(NotificationEventQueue) -> Unit) {
         notificationState.updateQueuedEvents(this) { queuedEvents, _ ->
             action(queuedEvents)
         }
@@ -260,6 +277,6 @@ class NotificationDrawerManager @Inject constructor(
     }
 
     fun shouldIgnoreMessageEventInRoom(resolvedEvent: NotifiableMessageEvent): Boolean {
-        return resolvedEvent.shouldIgnoreMessageEventInRoom(currentAppNavigationState)
+        return resolvedEvent.shouldIgnoreEventInRoom(currentAppNavigationState)
     }
 }

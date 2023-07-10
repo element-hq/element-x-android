@@ -19,6 +19,8 @@ package io.element.android.libraries.matrix.api.notification
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 
 data class NotificationData(
     val senderId: UserId,
@@ -36,7 +38,60 @@ data class NotificationData(
 
 data class NotificationEvent(
     val timestamp: Long,
-    val content: String,
+    val content: NotificationContent,
     // For images for instance
     val contentUrl: String?
 )
+
+sealed interface NotificationContent {
+    sealed interface MessageLike : NotificationContent {
+        object CallAnswer : MessageLike
+        object CallInvite : MessageLike
+        object CallHangup : MessageLike
+        object CallCandidates : MessageLike
+        object KeyVerificationReady : MessageLike
+        object KeyVerificationStart : MessageLike
+        object KeyVerificationCancel : MessageLike
+        object KeyVerificationAccept : MessageLike
+        object KeyVerificationKey : MessageLike
+        object KeyVerificationMac : MessageLike
+        object KeyVerificationDone : MessageLike
+        data class ReactionContent(
+            val relatedEventId: String
+        ) : MessageLike
+        object RoomEncrypted : MessageLike
+        data class RoomMessage(
+            val messageType: MessageType
+        ) : MessageLike
+        object RoomRedaction : MessageLike
+        object Sticker : MessageLike
+    }
+
+    sealed interface StateEvent : NotificationContent {
+        object PolicyRuleRoom : StateEvent
+        object PolicyRuleServer : StateEvent
+        object PolicyRuleUser : StateEvent
+        object RoomAliases : StateEvent
+        object RoomAvatar : StateEvent
+        object RoomCanonicalAlias : StateEvent
+        object RoomCreate : StateEvent
+        object RoomEncryption : StateEvent
+        object RoomGuestAccess : StateEvent
+        object RoomHistoryVisibility : StateEvent
+        object RoomJoinRules : StateEvent
+        data class RoomMemberContent(
+            val userId: String,
+            val membershipState: RoomMembershipState
+        ) : StateEvent
+        object RoomName : StateEvent
+        object RoomPinnedEvents : StateEvent
+        object RoomPowerLevels : StateEvent
+        object RoomServerAcl : StateEvent
+        object RoomThirdPartyInvite : StateEvent
+        object RoomTombstone : StateEvent
+        object RoomTopic : StateEvent
+        object SpaceChild : StateEvent
+        object SpaceParent : StateEvent
+    }
+
+}

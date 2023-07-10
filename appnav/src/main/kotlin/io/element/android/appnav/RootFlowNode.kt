@@ -253,13 +253,10 @@ class RootFlowNode @AssistedInject constructor(
         Timber.d("Navigating to $deeplinkData")
         attachSession(deeplinkData.sessionId)
             .apply {
-                val roomId = deeplinkData.roomId
-                if (roomId == null) {
-                    // In case room is not provided, ensure the app navigate back to the room list
-                    attachRoot()
-                } else {
-                    attachRoom(roomId)
-                    // TODO .attachThread(deeplinkData.threadId)
+                when (deeplinkData) {
+                    is DeeplinkData.Root -> attachRoot()
+                    is DeeplinkData.Room -> attachRoom(deeplinkData)
+                    is DeeplinkData.InviteList -> attachInviteList(deeplinkData)
                 }
             }
     }

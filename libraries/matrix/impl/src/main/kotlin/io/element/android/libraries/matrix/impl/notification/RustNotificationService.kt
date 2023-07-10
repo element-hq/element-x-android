@@ -36,7 +36,8 @@ class RustNotificationService(
         filterByPushRules: Boolean,
     ): Result<NotificationData?> {
         return runCatching {
-            client.getNotificationItem(roomId.value, eventId.value, filterByPushRules)?.use(notificationMapper::map)
+            val item = client.getNotificationItem(roomId.value, eventId.value, filterByPushRules)
+            item?.use(notificationMapper::map)
         }
     }
 }

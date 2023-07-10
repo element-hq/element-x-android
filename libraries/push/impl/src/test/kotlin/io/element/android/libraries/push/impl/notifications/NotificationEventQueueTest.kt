@@ -208,7 +208,7 @@ class NotificationEventQueueTest {
             )
         )
 
-        queue.clearMemberShipNotificationForRoom(A_SESSION_ID, A_ROOM_ID)
+        queue.clearMembershipNotificationForRoom(A_SESSION_ID, A_ROOM_ID)
 
         assertThat(queue.rawEvents()).isEqualTo(listOf(aNotifiableMessageEvent(roomId = A_ROOM_ID)))
     }

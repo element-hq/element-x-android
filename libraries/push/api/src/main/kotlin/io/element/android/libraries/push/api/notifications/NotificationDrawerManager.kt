@@ -13,25 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.element.android.libraries.push.impl.notifications.model
 
-import io.element.android.libraries.matrix.api.core.EventId
+package io.element.android.libraries.push.api.notifications
+
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 
-data class InviteNotifiableEvent(
-    override val sessionId: SessionId,
-    override val roomId: RoomId,
-    override val eventId: EventId,
-    override val editedEventId: EventId?,
-    override val canBeReplaced: Boolean,
-    val roomName: String?,
-    val noisy: Boolean,
-    val title: String?,
-    override val description: String,
-    val type: String?,
-    val timestamp: Long,
-    val soundName: String?,
-    override val isRedacted: Boolean = false,
-    override val isUpdated: Boolean = false
-) : NotifiableEvent
+interface NotificationDrawerManager {
+    fun clearMembershipNotificationForSession(sessionId: SessionId)
+    fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId)
+}

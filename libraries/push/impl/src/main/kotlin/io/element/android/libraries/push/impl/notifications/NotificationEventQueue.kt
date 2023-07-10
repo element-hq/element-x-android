@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -45,6 +46,7 @@ data class NotificationEventQueue constructor(
                     is InviteNotifiableEvent -> it.copy(isRedacted = true)
                     is NotifiableMessageEvent -> it.copy(isRedacted = true)
                     is SimpleNotifiableEvent -> it.copy(isRedacted = true)
+                    is FallbackNotifiableEvent -> it.copy(isRedacted = true)
                 }
             }
         }
@@ -57,7 +59,8 @@ data class NotificationEventQueue constructor(
                 when (it) {
                     is NotifiableMessageEvent -> roomsLeft.contains(it.roomId)
                     is InviteNotifiableEvent -> roomsLeft.contains(it.roomId) || roomsJoined.contains(it.roomId)
-                    else -> false
+                    is SimpleNotifiableEvent -> false
+                    is FallbackNotifiableEvent -> roomsLeft.contains(it.roomId)
                 }
             }
         }
@@ -127,11 +130,21 @@ data class NotificationEventQueue constructor(
                 is InviteNotifiableEvent -> with.copy(isUpdated = true)
                 is NotifiableMessageEvent -> with.copy(isUpdated = true)
                 is SimpleNotifiableEvent -> with.copy(isUpdated = true)
+                is FallbackNotifiableEvent -> with.copy(isUpdated = true)
             }
         )
     }
 
-    fun clearMemberShipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
+    fun clearEvent(eventId: EventId) {
+        queue.removeAll { it.eventId == eventId }
+    }
+
+    fun clearMembershipNotificationForSession(sessionId: SessionId) {
+        Timber.d("clearMemberShipOfSession $sessionId")
+        queue.removeAll { it is InviteNotifiableEvent && it.sessionId == sessionId }
+    }
+
+    fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
         Timber.d("clearMemberShipOfRoom $sessionId, $roomId")
         queue.removeAll { it is InviteNotifiableEvent && it.sessionId == sessionId && it.roomId == roomId }
     }
