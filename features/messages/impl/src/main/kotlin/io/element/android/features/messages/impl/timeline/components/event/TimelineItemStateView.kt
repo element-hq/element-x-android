@@ -21,12 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TimelineItemStateView(
@@ -36,7 +36,7 @@ fun TimelineItemStateView(
     Text(
         modifier = modifier,
         color = MaterialTheme.colorScheme.secondary,
-        fontSize = 13.sp,
+        style = ElementTheme.typography.fontBodyMdRegular,
         text = content.body,
         textAlign = TextAlign.Center,
     )

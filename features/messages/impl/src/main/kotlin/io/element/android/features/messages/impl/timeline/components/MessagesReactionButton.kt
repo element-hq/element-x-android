@@ -151,7 +151,7 @@ private fun ReactionContent(
         Text(
             text = reaction.count.toString(),
             color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-            fontSize = 14.sp,
+            style = ElementTheme.typography.fontBodyMdRegular,
         )
     }
 }

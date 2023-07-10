@@ -56,8 +56,6 @@ fun Text(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    // Will be removed, only style should be used
-    fontSize: TextUnit = TextUnit.Unspecified,
     fontStyle: FontStyle? = null,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
@@ -72,7 +70,6 @@ fun Text(
         text = text,
         modifier = modifier,
         color = color,
-        fontSize = fontSize,
         fontStyle = fontStyle,
         textDecoration = textDecoration,
         textAlign = textAlign,

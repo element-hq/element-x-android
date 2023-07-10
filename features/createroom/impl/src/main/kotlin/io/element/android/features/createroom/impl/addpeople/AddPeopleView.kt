@@ -110,7 +110,7 @@ fun AddPeopleViewTopBar(
                 val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip
                 Text(
                     text = stringResource(id = textActionResId),
-                    fontSize = 16.sp,
+                    style = ElementTheme.typography.fontBodyLgMedium,
                 )
             }
         }

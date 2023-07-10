@@ -158,7 +158,10 @@ internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier
 @Composable
 internal fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Text(emoji.code, fontSize = 34.sp)
+        Text(
+            text = emoji.code,
+            style = ElementTheme.typography.fontBodyMdRegular.copy(fontSize = 34.sp),
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             emoji.name,
@@ -227,7 +230,10 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 onClick = negativeButtonCallback,
                 enabled = negativeButtonEnabled,
             ) {
-                Text(stringResource(negativeButtonTitle), fontSize = 16.sp)
+                Text(
+                    text = stringResource(negativeButtonTitle),
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                )
             }
         }
     }

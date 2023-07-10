@@ -218,7 +218,7 @@ private fun RoomMemberListTopBar(
                 ) {
                     Text(
                         text = stringResource(CommonStrings.action_invite),
-                        fontSize = 16.sp,
+                        style = ElementTheme.typography.fontBodyLgMedium,
                     )
                 }
             }

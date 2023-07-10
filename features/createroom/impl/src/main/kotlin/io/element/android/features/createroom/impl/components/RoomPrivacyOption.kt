@@ -71,7 +71,7 @@ fun RoomPrivacyOption(
         ) {
             Text(
                 text = roomPrivacyItem.title,
-                fontSize = 16.sp,
+                style = ElementTheme.typography.fontBodyLgRegular,
                 color = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.size(3.dp))

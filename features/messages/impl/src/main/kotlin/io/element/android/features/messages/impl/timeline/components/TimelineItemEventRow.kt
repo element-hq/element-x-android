@@ -336,9 +336,8 @@ private fun MessageSenderInformation(
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = sender,
-                fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleMedium,
+                style = ElementTheme.typography.fontBodyMdMedium,
             )
         }
     }

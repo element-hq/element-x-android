@@ -43,11 +43,9 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.libraries.architecture.Async
@@ -199,7 +197,7 @@ fun ConfigureRoomToolbar(
             ) {
                 Text(
                     text = stringResource(CommonStrings.action_create),
-                    fontSize = 16.sp,
+                    style = ElementTheme.typography.fontBodyLgMedium,
                 )
             }
         }

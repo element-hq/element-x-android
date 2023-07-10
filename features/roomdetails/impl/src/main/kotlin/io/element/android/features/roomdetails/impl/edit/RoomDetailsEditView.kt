@@ -121,7 +121,7 @@ fun RoomDetailsEditView(
                     ) {
                         Text(
                             text = stringResource(CommonStrings.action_save),
-                            fontSize = 16.sp,
+                            style = ElementTheme.typography.fontBodyLgMedium,
                         )
                     }
                 }

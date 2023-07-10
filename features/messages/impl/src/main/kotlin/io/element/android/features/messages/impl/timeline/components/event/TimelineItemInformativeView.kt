@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TimelineItemInformativeView(
@@ -58,7 +59,7 @@ fun TimelineItemInformativeView(
         Text(
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.secondary,
-            fontSize = 14.sp,
+            style = ElementTheme.typography.fontBodyMdRegular,
             text = text + extraPadding.getStr(14.sp)
         )
     }
