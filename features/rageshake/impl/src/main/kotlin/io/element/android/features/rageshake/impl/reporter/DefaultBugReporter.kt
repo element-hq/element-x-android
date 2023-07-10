@@ -32,6 +32,7 @@ import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.toOnOff
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -68,13 +69,13 @@ class DefaultBugReporter @Inject constructor(
     private val okHttpClient: Provider<OkHttpClient>,
     private val userAgentProvider: UserAgentProvider,
     private val sessionStore: SessionStore,
+    private val buildMeta: BuildMeta,
     /*
     private val versionProvider: VersionProvider,
     private val vectorPreferences: VectorPreferences,
     private val vectorFileLogger: VectorFileLogger,
     private val systemLocaleProvider: SystemLocaleProvider,
     private val matrix: Matrix,
-    private val buildMeta: BuildMeta,
     private val processInfo: ProcessInfo,
     private val sdkIntProvider: BuildVersionSdkIntProvider,
     private val vectorLocale: VectorLocaleProvider,
@@ -268,7 +269,7 @@ class DefaultBugReporter @Inject constructor(
                 }
 
                 // add some github labels
-                // builder.addFormDataPart("label", buildMeta.versionName)
+                builder.addFormDataPart("label", buildMeta.versionName)
                 // builder.addFormDataPart("label", buildMeta.flavorDescription)
                 // builder.addFormDataPart("label", buildMeta.gitBranchName)
 
