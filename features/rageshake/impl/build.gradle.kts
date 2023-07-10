@@ -38,6 +38,7 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.sessionStorage.api)
     api(libs.squareup.seismic)
     api(projects.features.rageshake.api)
     implementation(libs.androidx.datastore.preferences)

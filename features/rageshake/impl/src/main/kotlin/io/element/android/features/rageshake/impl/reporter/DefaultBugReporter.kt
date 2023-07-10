@@ -32,10 +32,12 @@ import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.toOnOff
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import okhttp3.Call
@@ -66,14 +68,14 @@ class DefaultBugReporter @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val okHttpClient: Provider<OkHttpClient>,
     private val userAgentProvider: UserAgentProvider,
+    private val sessionStore: SessionStore,
+    private val buildMeta: BuildMeta,
     /*
-    private val activeSessionHolder: ActiveSessionHolder,
     private val versionProvider: VersionProvider,
     private val vectorPreferences: VectorPreferences,
     private val vectorFileLogger: VectorFileLogger,
     private val systemLocaleProvider: SystemLocaleProvider,
     private val matrix: Matrix,
-    private val buildMeta: BuildMeta,
     private val processInfo: ProcessInfo,
     private val sdkIntProvider: BuildVersionSdkIntProvider,
     private val vectorLocale: VectorLocaleProvider,
@@ -198,17 +200,10 @@ class DefaultBugReporter @Inject constructor(
                     ?.let { gzippedFiles.add(it) }
              */
 
-            var deviceId = "undefined"
-            var userId = "undefined"
+            val sessionData = sessionStore.getLatestSession()
+            val deviceId = sessionData?.deviceId ?: "undefined"
+            val userId = sessionData?.userId ?: "undefined"
             var olmVersion = "undefined"
-
-            /*
-            activeSessionHolder.getSafeActiveSession()?.let { session ->
-                userId = session.myUserId
-                deviceId = session.sessionParams.deviceId ?: "undefined"
-                olmVersion = session.cryptoService().getCryptoVersion(context, true)
-            }
-             */
 
             if (!mIsCancelled) {
                 val text = when (reportType) {
@@ -274,7 +269,7 @@ class DefaultBugReporter @Inject constructor(
                 }
 
                 // add some github labels
-                // builder.addFormDataPart("label", buildMeta.versionName)
+                builder.addFormDataPart("label", buildMeta.versionName)
                 // builder.addFormDataPart("label", buildMeta.flavorDescription)
                 // builder.addFormDataPart("label", buildMeta.gitBranchName)
 
