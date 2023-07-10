@@ -163,11 +163,24 @@ fun TimelineItemEventRow(
                     onMoreReactionsClicked = { onMoreReactionsClick(event) },
                 )
             }
-            if (event.groupPosition.isNew()) {
-                Spacer(modifier = Modifier.height(16.dp))
-            } else {
-                Spacer(modifier = Modifier.height(2.dp))
-            }
+        } else {
+            TimelineItemEventRowContent(
+                event = event,
+                isHighlighted = isHighlighted,
+                interactionSource = interactionSource,
+                onClick = onClick,
+                onLongClick = onLongClick,
+                onTimestampClicked = onTimestampClicked,
+                inReplyToClicked = ::inReplyToClicked,
+                onUserDataClicked = ::onUserDataClicked,
+                onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                onMoreReactionsClicked = { onMoreReactionsClick(event) },
+            )
+        }
+        if (event.groupPosition.isNew()) {
+            Spacer(modifier = Modifier.height(16.dp))
+        } else {
+            Spacer(modifier = Modifier.height(2.dp))
         }
     }
 }
