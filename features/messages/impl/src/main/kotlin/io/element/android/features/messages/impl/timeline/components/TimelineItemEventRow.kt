@@ -63,6 +63,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -547,6 +548,7 @@ private fun ContentToPreview() {
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
+                    groupPosition = TimelineItemGroupPosition.First,
                 ),
                 isHighlighted = false,
                 canReply = true,
@@ -565,6 +567,7 @@ private fun ContentToPreview() {
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
+                    groupPosition = TimelineItemGroupPosition.Last,
                 ),
                 isHighlighted = false,
                 canReply = true,
@@ -609,7 +612,8 @@ private fun ContentToPreviewWithReply() {
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
-                    inReplyTo = aInReplyToReady(replyContent)
+                    inReplyTo = aInReplyToReady(replyContent),
+                    groupPosition = TimelineItemGroupPosition.First,
                 ),
                 isHighlighted = false,
                 canReply = true,
@@ -628,7 +632,8 @@ private fun ContentToPreviewWithReply() {
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
-                    inReplyTo = aInReplyToReady(replyContent)
+                    inReplyTo = aInReplyToReady(replyContent),
+                    groupPosition = TimelineItemGroupPosition.Last,
                 ),
                 isHighlighted = false,
                 canReply = true,
