@@ -24,23 +24,30 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.RoomListServiceState
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 class RustSyncService(
     private val roomListService: RoomListService,
     sessionCoroutineScope: CoroutineScope
 ) : SyncService {
 
+    private val isSyncing = AtomicBoolean(false)
+
     override fun startSync() = runCatching {
-        if (!roomListService.isSyncing()) {
+        if (isSyncing.compareAndSet(false, true)) {
+            Timber.v("Start sync")
             roomListService.sync()
         }
     }
 
     override fun stopSync() = runCatching {
-        if (roomListService.isSyncing()) {
+        if (isSyncing.compareAndSet(true, false)) {
+            Timber.v("Stop sync")
             roomListService.stopSync()
         }
     }
@@ -49,6 +56,12 @@ class RustSyncService(
         roomListService
             .stateFlow()
             .map(RoomListServiceState::toSyncState)
+            .onEach { state ->
+                Timber.v("Sync state=$state")
+                if (state == SyncState.InError || state == SyncState.Terminated) {
+                    isSyncing.set(false)
+                }
+            }
             .distinctUntilChanged()
-            .stateIn(sessionCoroutineScope, SharingStarted.WhileSubscribed(), SyncState.Idle)
+            .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)
 }
