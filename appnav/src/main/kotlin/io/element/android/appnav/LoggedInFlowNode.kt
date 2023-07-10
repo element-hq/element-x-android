@@ -139,7 +139,6 @@ class LoggedInFlowNode @AssistedInject constructor(
         observeAnalyticsState()
         lifecycle.subscribe(
             onCreate = {
-                syncService.startSync()
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.matrixClient) }
                 val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
