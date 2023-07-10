@@ -16,6 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.model.virtual
 
-class TimelineItemEncryptedHistoryBannerVirtualModel : TimelineItemVirtualModel {
+object TimelineItemEncryptedHistoryBannerVirtualModel : TimelineItemVirtualModel {
     override val type: String = "TimelineItemEncryptedHistoryBannerVirtualModel"
 }

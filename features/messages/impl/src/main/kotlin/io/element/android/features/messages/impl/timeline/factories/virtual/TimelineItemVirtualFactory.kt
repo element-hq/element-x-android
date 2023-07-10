@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.factories.virtual
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -40,6 +41,7 @@ class TimelineItemVirtualFactory @Inject constructor(
         return when (val inner = virtual) {
             is VirtualTimelineItem.DayDivider -> daySeparatorFactory.create(inner)
             is VirtualTimelineItem.ReadMarker -> TimelineItemReadMarkerModel
+            is VirtualTimelineItem.EncryptedHistoryBanner -> TimelineItemEncryptedHistoryBannerVirtualModel
         }
     }
 }

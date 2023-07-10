@@ -26,12 +26,9 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.sessionstorage.api.SessionData
-import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -87,26 +84,15 @@ class TimelineItemsFactory @Inject constructor(
 
     private suspend fun buildAndEmitTimelineItemStates(timelineItems: List<MatrixTimelineItem>) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
-        var lastEncryptedHistoryItemIndex = -1
         for (index in timelineItemsCache.indices.reversed()) {
             val cacheItem = timelineItemsCache[index]
             if (cacheItem == null) {
-                val item = timelineItems[index]
-                if (!isItemEncryptionHistory(item) && lastEncryptedHistoryItemIndex == -1) {
-                    buildAndCacheItem(timelineItems, index)?.also { timelineItemState ->
-                        newTimelineItemStates.add(timelineItemState)
-                    }
-                } else {
-                    lastEncryptedHistoryItemIndex = index
+                buildAndCacheItem(timelineItems, index)?.also { timelineItemState ->
+                    newTimelineItemStates.add(timelineItemState)
                 }
             } else {
                 newTimelineItemStates.add(cacheItem)
             }
-        }
-        if (lastEncryptedHistoryItemIndex >= 0) {
-            newTimelineItemStates.add(
-                TimelineItem.Virtual("encrypted_history_banner", TimelineItemEncryptedHistoryBannerVirtualModel())
-            )
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()
         this.timelineItems.emit(result)
