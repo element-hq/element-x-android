@@ -19,13 +19,14 @@ package io.element.android.appnav.room
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LoadingRoomNodeView(
     state: LoadingRoomState,
@@ -60,7 +62,6 @@ fun LoadingRoomNodeView(
 ) {
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets.systemBars,
         topBar = {
             Column {
                 ConnectivityIndicatorView(isOnline = hasNetworkConnection)
@@ -72,7 +73,9 @@ fun LoadingRoomNodeView(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(16.dp), contentAlignment = Alignment.Center
+                    .consumeWindowInsets(padding)
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
             ) {
                 if (state is LoadingRoomState.Error) {
                     Text(
@@ -90,9 +93,12 @@ fun LoadingRoomNodeView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LoadingRoomTopBar(onBackClicked: () -> Unit) {
+private fun LoadingRoomTopBar(
+    onBackClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     TopAppBar(
-        modifier = Modifier,
+        modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackClicked)
         },
@@ -112,6 +118,7 @@ private fun LoadingRoomTopBar(onBackClicked: () -> Unit) {
                 PlaceholderAtom(width = 45.dp, height = 7.dp)
             }
         },
+        windowInsets = WindowInsets(0.dp),
     )
 }
 
