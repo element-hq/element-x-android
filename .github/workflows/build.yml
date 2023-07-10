@@ -38,6 +38,8 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble debug APK
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
         run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug APKs
         uses: actions/upload-artifact@v3
