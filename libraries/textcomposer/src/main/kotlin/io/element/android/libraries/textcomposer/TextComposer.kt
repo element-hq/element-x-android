@@ -68,14 +68,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -141,7 +138,7 @@ fun TextComposer(
             if (composerMode is MessageComposerMode.Special) {
                 ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
             }
-            val defaultTypography = ElementTextStyles.Regular.callout.copy(textAlign = TextAlign.Start)
+            val defaultTypography = ElementTheme.typography.fontBodyLgRegular
             Box {
                 BasicTextField(
                     modifier = Modifier

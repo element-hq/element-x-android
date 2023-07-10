@@ -35,13 +35,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -65,7 +65,7 @@ internal fun RequestVerificationHeader(
                     Text(
                         stringResource(R.string.session_verification_banner_title),
                         modifier = Modifier.weight(1f),
-                        style = ElementTextStyles.Bold.body,
+                        style = ElementTheme.typography.fontBodyLgMedium,
                         color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Start,
                     )
@@ -78,7 +78,7 @@ internal fun RequestVerificationHeader(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.session_verification_banner_message),
-                    style = ElementTextStyles.Regular.bodyMD
+                    style = ElementTheme.typography.fontBodyMdRegular,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
@@ -88,7 +88,7 @@ internal fun RequestVerificationHeader(
                 ) {
                     Text(
                         stringResource(CommonStrings.action_continue),
-                        style = ElementTextStyles.Button
+                        style = ElementTheme.typography.fontBodyLgMedium
                     )
                 }
             }

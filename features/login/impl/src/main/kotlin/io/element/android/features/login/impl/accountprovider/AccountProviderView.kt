@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -43,6 +42,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=604-60817
@@ -86,7 +86,7 @@ fun AccountProviderView(
                         .padding(start = 16.dp)
                         .weight(1f),
                     text = item.title,
-                    style = ElementTextStyles.Regular.headline.copy(textAlign = TextAlign.Start),
+                    style = ElementTheme.typography.fontBodyLgMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
                 if (item.isPublic) {
@@ -105,7 +105,7 @@ fun AccountProviderView(
                     modifier = Modifier
                         .padding(start = 46.dp, bottom = 12.dp, end = 26.dp),
                     text = item.subtitle,
-                    style = ElementTextStyles.Regular.subheadline.copy(textAlign = TextAlign.Start),
+                    style = ElementTheme.typography.fontBodyMdRegular,
                     color = MaterialTheme.colorScheme.secondary,
                 )
             }

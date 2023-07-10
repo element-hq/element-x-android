@@ -48,7 +48,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -109,7 +108,7 @@ private fun AnalyticsOptInHeader(
                 .clip(shape = RoundedCornerShape(8.dp))
                 .clickable { onClickTerms() }
                 .padding(8.dp),
-            style = ElementTextStyles.Regular.subheadline,
+            style = ElementTheme.typography.fontBodyMdRegular,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.secondary,
         )

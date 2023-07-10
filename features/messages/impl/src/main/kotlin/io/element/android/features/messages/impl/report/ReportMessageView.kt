@@ -38,13 +38,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -54,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedTextFi
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -87,8 +86,7 @@ fun ReportMessageView(
                 title = {
                     Text(
                         stringResource(CommonStrings.action_report_content),
-                        style = ElementTextStyles.Regular.callout,
-                        fontWeight = FontWeight.Medium,
+                        style = ElementTheme.typography.fontHeadingSmMedium,
                     )
                 },
                 navigationIcon = {
@@ -120,7 +118,7 @@ fun ReportMessageView(
             )
             Text(
                 text = stringResource(CommonStrings.report_content_explanation),
-                style = ElementTextStyles.Regular.caption1,
+                style = ElementTheme.typography.fontBodySmRegular,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(top = 4.dp, bottom = 24.dp, start = 16.dp, end = 16.dp)
@@ -134,11 +132,11 @@ fun ReportMessageView(
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         text = stringResource(CommonStrings.screen_report_content_block_user),
-                        style = ElementTextStyles.Regular.callout,
+                        style = ElementTheme.typography.fontBodyLgRegular,
                     )
                     Text(
                         text = stringResource(CommonStrings.screen_report_content_block_user_hint),
-                        style = ElementTextStyles.Regular.bodyMD,
+                        style = ElementTheme.typography.fontBodyMdRegular,
                         color = MaterialTheme.colorScheme.secondary,
                     )
                 }

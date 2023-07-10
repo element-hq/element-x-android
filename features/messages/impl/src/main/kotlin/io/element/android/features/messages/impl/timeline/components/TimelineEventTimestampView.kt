@@ -38,12 +38,12 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -78,14 +78,14 @@ fun TimelineEventTimestampView(
         if (isMessageEdited) {
             Text(
                 stringResource(CommonStrings.common_edited_suffix),
-                style = ElementTextStyles.Regular.caption2,
+                style = ElementTheme.typography.fontBodyXsRegular,
                 color = tint ?: MaterialTheme.colorScheme.secondary,
             )
             Spacer(modifier = Modifier.width(4.dp))
         }
         Text(
             formattedTime,
-            style = ElementTextStyles.Regular.caption2,
+            style = ElementTheme.typography.fontBodyXsRegular,
             color = tint ?: MaterialTheme.colorScheme.secondary,
         )
         if (hasMessageSendingFailed && tint != null) {

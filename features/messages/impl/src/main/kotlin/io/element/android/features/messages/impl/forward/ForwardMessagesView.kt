@@ -44,7 +44,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -67,6 +66,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -112,7 +112,12 @@ fun ForwardMessagesView(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(CommonStrings.common_forward_message), style = ElementTextStyles.Bold.callout) },
+                title = {
+                    Text(
+                        text = stringResource(CommonStrings.common_forward_message),
+                        style = ElementTheme.typography.fontHeadingSmMedium
+                    )
+                },
                 navigationIcon = {
                     BackButton(onClick = { onBackButton(state) })
                 },

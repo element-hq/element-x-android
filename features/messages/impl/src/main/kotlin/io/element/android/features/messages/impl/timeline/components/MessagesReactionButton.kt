@@ -45,7 +45,6 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toDp
@@ -117,7 +116,7 @@ private fun TextContent(
     modifier = modifier
         .height(reactionEmojiLineHeight.toDp()),
     text = text,
-    style = ElementTextStyles.Regular.bodyMD
+    style = ElementTheme.typography.fontBodyMdRegular,
 )
 
 @Composable

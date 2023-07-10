@@ -57,7 +57,6 @@ import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -77,6 +76,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -234,10 +234,10 @@ internal fun RoomHeaderSection(
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Text(roomName, style = ElementTextStyles.Bold.title1)
+        Text(roomName, style = ElementTheme.typography.fontHeadingLgBold)
         if (roomAlias != null) {
             Spacer(modifier = Modifier.height(6.dp))
-            Text(roomAlias, style = ElementTextStyles.Regular.body, color = MaterialTheme.colorScheme.secondary)
+            Text(roomAlias, style = ElementTheme.typography.fontBodyLgRegular, color = MaterialTheme.colorScheme.secondary)
         }
         Spacer(Modifier.height(32.dp))
     }

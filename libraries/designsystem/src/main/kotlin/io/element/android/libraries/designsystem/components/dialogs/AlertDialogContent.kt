@@ -38,8 +38,8 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 import kotlin.math.max
 
 @Composable
@@ -72,24 +72,26 @@ internal fun SimpleAlertDialogContent(
                     // If there is a 3rd item it should be at the end of the dialog
                     // Having this 3rd action is discouraged, see https://m3.material.io/components/dialogs/guidelines#e13b68f5-e367-4275-ad6f-c552ee8e358f
                     TextButton(onClick = onThirdButtonClicked) {
-                        Text(thirdButtonText)
+                        Text(
+                            text = thirdButtonText,
+                            style = ElementTheme.typography.fontBodyMdRegular,
+                        )
                     }
                 }
                 TextButton(onClick = onCancelClicked) {
-                    Text(cancelText)
+                    Text(
+                        text = cancelText,
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                    )
                 }
                 if (submitText != null) {
-                    TextButton(
-                        onClick = {
-                            onSubmitClicked()
-                        },
-                    ) {
+                    TextButton(onClick = onSubmitClicked) {
                         Text(
-                            submitText,
+                            text = submitText,
                             style = if (emphasizeSubmitButton) {
-                                ElementTextStyles.Bold.subheadline
+                                ElementTheme.typography.fontBodyMdMedium
                             } else {
-                                MaterialTheme.typography.labelLarge
+                                ElementTheme.typography.fontBodyMdRegular
                             }
                         )
                     }
@@ -98,10 +100,18 @@ internal fun SimpleAlertDialogContent(
         },
         modifier = modifier,
         title = {
-            if (title != null) { Text(text = title) }
+            if (title != null) {
+                Text(
+                    text = title,
+                    style = ElementTheme.typography.fontHeadingSmRegular,
+                )
+            }
         },
         text = {
-            Text(content)
+            Text(
+                text = content,
+                style = ElementTheme.typography.fontBodyMdRegular,
+            )
         },
         shape = shape,
         containerColor = containerColor,
