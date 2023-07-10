@@ -36,6 +36,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import okhttp3.Call
@@ -66,8 +67,8 @@ class DefaultBugReporter @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val okHttpClient: Provider<OkHttpClient>,
     private val userAgentProvider: UserAgentProvider,
+    private val sessionStore: SessionStore,
     /*
-    private val activeSessionHolder: ActiveSessionHolder,
     private val versionProvider: VersionProvider,
     private val vectorPreferences: VectorPreferences,
     private val vectorFileLogger: VectorFileLogger,
@@ -198,17 +199,10 @@ class DefaultBugReporter @Inject constructor(
                     ?.let { gzippedFiles.add(it) }
              */
 
-            var deviceId = "undefined"
-            var userId = "undefined"
+            val sessionData = sessionStore.getLatestSession()
+            val deviceId = sessionData?.deviceId ?: "undefined"
+            val userId = sessionData?.userId ?: "undefined"
             var olmVersion = "undefined"
-
-            /*
-            activeSessionHolder.getSafeActiveSession()?.let { session ->
-                userId = session.myUserId
-                deviceId = session.sessionParams.deviceId ?: "undefined"
-                olmVersion = session.cryptoService().getCryptoVersion(context, true)
-            }
-             */
 
             if (!mIsCancelled) {
                 val text = when (reportType) {
