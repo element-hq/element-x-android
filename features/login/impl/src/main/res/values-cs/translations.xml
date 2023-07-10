@@ -42,5 +42,6 @@ Díky za trpělivost!"</string>
   <string name="screen_change_server_title">"Vyberte svůj server"</string>
   <string name="screen_login_password_hint">"Heslo"</string>
   <string name="screen_login_submit">"Pokračovat"</string>
+  <string name="screen_login_subtitle">"Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci."</string>
   <string name="screen_login_username_hint">"Uživatelské jméno"</string>
 </resources>

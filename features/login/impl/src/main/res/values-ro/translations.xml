@@ -42,5 +42,6 @@ Vă mulțumim pentru răbdare!"</string>
   <string name="screen_change_server_title">"Selectați serverul"</string>
   <string name="screen_login_password_hint">"Parola"</string>
   <string name="screen_login_submit">"Continuați"</string>
+  <string name="screen_login_subtitle">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
   <string name="screen_login_username_hint">"Utilizator"</string>
 </resources>
