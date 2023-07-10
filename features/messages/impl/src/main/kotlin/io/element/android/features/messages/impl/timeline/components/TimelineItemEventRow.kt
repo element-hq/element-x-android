@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -45,6 +46,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalViewConfiguration
+import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -137,37 +140,39 @@ fun TimelineItemEventRow(
             val offset = state.offset.value
             val swipeThresholdPx = 40.dp.toPx()
             val thresholdCrossed = abs(offset) > swipeThresholdPx
-            Box(Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.matchParentSize()) {
-                    ReplySwipeIndicator({ offset / 120 })
-                }
-                TimelineItemEventRowContent(
-                    modifier = Modifier
-                        .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
-                        .draggable(
-                            orientation = Orientation.Horizontal,
-                            enabled = !state.isResettingOnRelease,
-                            onDragStopped = {
-                                coroutineScope.launch {
-                                    if (thresholdCrossed) {
-                                        onSwipeToReply()
+            SwipeSensitivity(3f) {
+                Box(Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.matchParentSize()) {
+                        ReplySwipeIndicator({ offset / 120 })
+                    }
+                    TimelineItemEventRowContent(
+                        modifier = Modifier
+                            .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
+                            .draggable(
+                                orientation = Orientation.Horizontal,
+                                enabled = !state.isResettingOnRelease,
+                                onDragStopped = {
+                                    coroutineScope.launch {
+                                        if (thresholdCrossed) {
+                                            onSwipeToReply()
+                                        }
+                                        state.resetOffset()
                                     }
-                                    state.resetOffset()
-                                }
-                            },
-                            state = state.draggableState,
-                        ),
-                    event = event,
-                    isHighlighted = isHighlighted,
-                    interactionSource = interactionSource,
-                    onClick = onClick,
-                    onLongClick = onLongClick,
-                    onTimestampClicked = onTimestampClicked,
-                    inReplyToClicked = ::inReplyToClicked,
-                    onUserDataClicked = ::onUserDataClicked,
-                    onReactionClicked = { emoji -> onReactionClick(emoji, event) },
-                    onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                )
+                                },
+                                state = state.draggableState,
+                            ),
+                        event = event,
+                        isHighlighted = isHighlighted,
+                        interactionSource = interactionSource,
+                        onClick = onClick,
+                        onLongClick = onLongClick,
+                        onTimestampClicked = onTimestampClicked,
+                        inReplyToClicked = ::inReplyToClicked,
+                        onUserDataClicked = ::onUserDataClicked,
+                        onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                        onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                    )
+                }
             }
         } else {
             TimelineItemEventRowContent(
@@ -183,6 +188,29 @@ fun TimelineItemEventRow(
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
             )
         }
+    }
+}
+
+/**
+ * Impact ViewConfiguration.touchSlop by [sensitivityFactor].
+ * Inspired from https://issuetracker.google.com/u/1/issues/269627294.
+ * @param sensitivityFactor the factor to multiply the touchSlop by. The highest value, the more the user will
+ * have to drag to start the drag.
+ * @param content the content to display.
+ */
+@Composable
+fun SwipeSensitivity(
+    sensitivityFactor: Float,
+    content: @Composable () -> Unit,
+) {
+    val current = LocalViewConfiguration.current
+    CompositionLocalProvider(
+        LocalViewConfiguration provides object : ViewConfiguration by current {
+            override val touchSlop: Float
+                get() = current.touchSlop * sensitivityFactor
+        }
+    ) {
+        content()
     }
 }
 
