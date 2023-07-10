@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.invitelist.impl.R
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummaryProvider
@@ -53,7 +52,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -106,21 +104,18 @@ internal fun DefaultInviteSummaryRow(
 
             // Name
             Text(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
                 text = invite.roomName,
                 color = MaterialTheme.colorScheme.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = noFontPadding,
+                style = ElementTheme.typography.fontBodyLgMedium,
                 modifier = Modifier.padding(end = bonusPadding),
             )
 
             // ID or Alias
             invite.roomAlias?.let {
                 Text(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
+                    style = ElementTheme.typography.fontBodyMdRegular,
                     text = it,
                     color = MaterialTheme.colorScheme.secondary,
                     maxLines = 1,
@@ -188,10 +183,8 @@ private fun SenderRow(sender: InviteSender) {
                     )
                 )
             },
-            style = noFontPadding,
+            style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.secondary,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal,
         )
     }
 }

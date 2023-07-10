@@ -38,12 +38,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -253,8 +251,7 @@ internal fun RoomSummaryView(
         ) {
             // Name
             Text(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = ElementTheme.typography.fontBodyLgRegular,
                 text = summary.name,
                 color = MaterialTheme.roomListRoomName(),
                 maxLines = 1,
@@ -264,7 +261,7 @@ internal fun RoomSummaryView(
             Text(
                 text = roomAlias,
                 color = MaterialTheme.roomListRoomMessage(),
-                fontSize = 14.sp,
+                style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

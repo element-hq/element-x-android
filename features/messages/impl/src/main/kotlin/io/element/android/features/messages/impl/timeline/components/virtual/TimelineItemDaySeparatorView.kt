@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 internal fun TimelineItemDaySeparatorView(
@@ -48,7 +49,7 @@ internal fun TimelineItemDaySeparatorView(
     ) {
         Text(
             text = model.formattedDate,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+            style = ElementTheme.typography.fontBodyMdMedium,
             color = MaterialTheme.colorScheme.primary,
         )
     }

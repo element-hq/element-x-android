@@ -47,6 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -70,13 +71,11 @@ fun UnresolvedUserRow(
         ) {
             // ID
             Text(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
                 text = id,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.primary,
-                style = noFontPadding,
+                style = ElementTheme.typography.fontBodyLgMedium,
             )
 
             // Warning

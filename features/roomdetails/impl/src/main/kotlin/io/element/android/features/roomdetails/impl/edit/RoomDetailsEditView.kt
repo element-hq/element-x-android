@@ -264,8 +264,7 @@ private fun LabelledReadOnlyField(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Normal,
+            style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.primary,
             text = title,
         )

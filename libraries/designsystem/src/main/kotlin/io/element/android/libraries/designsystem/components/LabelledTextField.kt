@@ -23,13 +23,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun LabelledTextField(
@@ -47,8 +47,7 @@ fun LabelledTextField(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Normal,
+            style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.primary,
             text = label
         )

@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun MatrixUserRow(
@@ -75,23 +76,20 @@ fun UserRow(
         ) {
             // Name
             Text(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
                 text = name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.primary,
-                style = noFontPadding,
+                style = ElementTheme.typography.fontBodyLgRegular,
             )
             // Id
             subtext?.let {
                 Text(
                     text = subtext,
                     color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 12.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = noFontPadding,
+                    style = ElementTheme.typography.fontBodySmRegular,
                 )
             }
         }

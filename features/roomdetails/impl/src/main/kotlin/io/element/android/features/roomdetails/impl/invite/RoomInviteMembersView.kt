@@ -174,8 +174,8 @@ private fun RoomInviteMembersSearchBar(
         resultState = state,
         resultHandler = { results ->
             Text(
-                text = "Search results",
-                fontWeight = FontWeight.Medium,
+                text = stringResource(id = CommonStrings.common_search_results),
+                style = ElementTheme.typography.fontBodyLgMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 8.dp)

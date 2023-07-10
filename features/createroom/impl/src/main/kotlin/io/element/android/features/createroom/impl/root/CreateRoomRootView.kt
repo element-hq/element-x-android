@@ -36,11 +36,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.libraries.architecture.Async
@@ -199,8 +197,7 @@ fun CreateRoomActionButton(
         )
         Text(
             text = text,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal
+            style = ElementTheme.typography.fontBodyLgRegular,
         )
     }
 }
