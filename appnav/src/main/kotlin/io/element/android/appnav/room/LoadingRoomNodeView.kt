@@ -19,9 +19,11 @@ package io.element.android.appnav.room
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -51,6 +53,7 @@ import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LoadingRoomNodeView(
     state: LoadingRoomState,
@@ -72,6 +75,7 @@ fun LoadingRoomNodeView(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
+                    .consumeWindowInsets(padding)
                     .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
