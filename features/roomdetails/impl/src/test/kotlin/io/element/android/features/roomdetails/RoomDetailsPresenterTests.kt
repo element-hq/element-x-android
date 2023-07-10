@@ -20,7 +20,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.leaveroom.api.LeaveRoomEvent
+import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.LeaveRoomPresenterFake
+import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.RoomTopicState
@@ -44,13 +47,13 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
-    private fun aRoomDetailsPresenter(room: MatrixRoom): RoomDetailsPresenter {
+    private fun aRoomDetailsPresenter(room: MatrixRoom, leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake()): RoomDetailsPresenter {
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
                 return RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMemberId)
             }
         }
-        return RoomDetailsPresenter(room, roomMemberDetailsPresenterFactory, LeaveRoomPresenterFake())
+        return RoomDetailsPresenter(room, roomMemberDetailsPresenterFactory, leaveRoomPresenter)
     }
 
     @Test
@@ -174,6 +177,64 @@ class RoomDetailsPresenterTests {
     }
 
     @Test
+    fun `present - initial state when user can edit attributes in a DM`() = runTest {
+        val myRoomMember = aRoomMember(A_SESSION_ID)
+        val otherRoomMember = aRoomMember(A_USER_ID_2)
+        val room = aMatrixRoom(
+            isEncrypted = true,
+            isDirect = true,
+        ).apply {
+            val roomMembers = listOf(myRoomMember, otherRoomMember)
+            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false
+            assertThat(awaitItem().canEdit).isFalse()
+            // Then the asynchronous check completes, but editing is still disallowed because it's a DM
+            val settledState = awaitItem()
+            assertThat(settledState.canEdit).isFalse()
+            // If there is a topic, it's visible
+            assertThat(settledState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+    @Test
+    fun `present - initial state when in a DM with no topic`() = runTest {
+        val myRoomMember = aRoomMember(A_SESSION_ID)
+        val otherRoomMember = aRoomMember(A_USER_ID_2)
+        val room = aMatrixRoom(
+            isEncrypted = true,
+            isDirect = true,
+            topic = null,
+        ).apply {
+            val roomMembers = listOf(myRoomMember, otherRoomMember)
+            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            // There's no topic, so we hide the entire UI for DMs
+            assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.Hidden)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - initial state when user can edit all attributes`() = runTest {
         val room = aMatrixRoom().apply {
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
@@ -243,6 +304,22 @@ class RoomDetailsPresenterTests {
 
             // When the async permission check finishes, the topic state will be updated
             assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.CanAddTopic)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - leave room event is passed on to leave room presenter`() = runTest {
+        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val room = aMatrixRoom()
+        val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(RoomDetailsEvent.LeaveRoom)
+
+            assertThat(leaveRoomPresenter.events).contains(LeaveRoomEvent.ShowConfirmation(room.roomId))
 
             cancelAndIgnoreRemainingEvents()
         }

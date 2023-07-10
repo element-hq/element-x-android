@@ -22,7 +22,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
@@ -55,14 +55,14 @@ class RoomDetailsPresenter @Inject constructor(
         val canEditTopic by getCanSendStateEvent(membersState, StateEventType.ROOM_TOPIC)
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
-        val roomType = getRoomType(dmMember)
+        val roomType by getRoomType(dmMember)
 
-        val topicState = remember(canEditTopic, room.topic) {
+        val topicState = remember(canEditTopic, room.topic, roomType) {
             val topic = room.topic
 
             when {
                 !topic.isNullOrBlank() -> RoomTopicState.ExistingTopic(topic)
-                canEditTopic -> RoomTopicState.CanAddTopic
+                canEditTopic && roomType is RoomDetailsType.Room -> RoomTopicState.CanAddTopic
                 else -> RoomTopicState.Hidden
             }
         }
@@ -85,8 +85,8 @@ class RoomDetailsPresenter @Inject constructor(
             memberCount = room.joinedMemberCount,
             isEncrypted = room.isEncrypted,
             canInvite = canInvite,
-            canEdit = canEditAvatar || canEditName || canEditTopic,
-            roomType = roomType.value,
+            canEdit = (canEditAvatar || canEditName || canEditTopic) && roomType == RoomDetailsType.Room,
+            roomType = roomType,
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
             eventSink = ::handleEvents,
@@ -112,20 +112,12 @@ class RoomDetailsPresenter @Inject constructor(
     }
 
     @Composable
-    private fun getCanInvite(membersState: MatrixRoomMembersState): State<Boolean> {
-        val canInvite = remember(membersState) { mutableStateOf(false) }
-        LaunchedEffect(membersState) {
-            canInvite.value = room.canInvite().getOrElse { false }
-        }
-        return canInvite
+    private fun getCanInvite(membersState: MatrixRoomMembersState) = produceState(false, membersState) {
+        value = room.canInvite().getOrElse { false }
     }
 
     @Composable
-    private fun getCanSendStateEvent(membersState: MatrixRoomMembersState, type: StateEventType): State<Boolean> {
-        val canSendEvent = remember(membersState) { mutableStateOf(false) }
-        LaunchedEffect(membersState) {
-            canSendEvent.value = room.canSendStateEvent(type).getOrElse { false }
-        }
-        return canSendEvent
+    private fun getCanSendStateEvent(membersState: MatrixRoomMembersState, type: StateEventType) = produceState(false, membersState) {
+        value = room.canSendStateEvent(type).getOrElse { false }
     }
 }
