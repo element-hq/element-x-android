@@ -14,7 +14,7 @@
   <string name="screen_room_details_encryption_enabled_subtitle">"Správy sú zabezpečené zámkami. Jedine vy a príjemcovia máte jedinečné kľúče na ich odomknutie."</string>
   <string name="screen_room_details_encryption_enabled_title">"Šifrovanie správ je zapnuté"</string>
   <string name="screen_room_details_invite_people_title">"Pozvať ľudí"</string>
-  <string name="screen_room_details_notification_title">"Oznámenie"</string>
+  <string name="screen_room_details_notification_title">"Oznámenia"</string>
   <string name="screen_room_details_room_name_label">"Názov miestnosti"</string>
   <string name="screen_room_details_share_room_title">"Zdieľať miestnosť"</string>
   <string name="screen_room_details_updating_room">"Aktualizácia miestnosti…"</string>
