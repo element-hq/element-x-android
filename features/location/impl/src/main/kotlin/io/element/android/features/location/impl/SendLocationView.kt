@@ -48,9 +48,9 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
-import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.designsystem.R as DesignSystemR
 
@@ -91,7 +91,7 @@ fun SendLocationView(
         sheetDragHandle = {},
         sheetSwipeEnabled = false,
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = {
                     Text(
                         text = stringResource(CommonStrings.screen_share_location_title),

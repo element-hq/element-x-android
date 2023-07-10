@@ -68,11 +68,11 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -102,7 +102,7 @@ fun RoomDetailsEditView(
     Scaffold(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = {
                     Text(
                         text = stringResource(id = R.string.screen_room_details_edit_room_title),

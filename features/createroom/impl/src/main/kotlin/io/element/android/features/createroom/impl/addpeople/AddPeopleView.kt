@@ -38,10 +38,10 @@ import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -92,7 +92,7 @@ fun AddPeopleViewTopBar(
     onBackPressed: () -> Unit = {},
     onNextPressed: () -> Unit = {},
 ) {
-    CenterAlignedTopAppBar(
+    TopAppBar(
         modifier = modifier,
         title = {
             Text(
