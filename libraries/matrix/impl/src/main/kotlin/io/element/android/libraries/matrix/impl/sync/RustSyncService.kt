@@ -58,9 +58,7 @@ class RustSyncService(
             .map(RoomListServiceState::toSyncState)
             .onEach { state ->
                 Timber.v("Sync state=$state")
-                if (state == SyncState.InError || state == SyncState.Terminated) {
-                    isSyncing.set(false)
-                }
+                isSyncing.set(state == SyncState.Syncing)
             }
             .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)
