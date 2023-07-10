@@ -162,7 +162,7 @@ private fun AnalyticsOptInContentRow(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = ElementTheme.legacyColors.quinary,
+                color = ElementTheme.materialColors.surfaceVariant,
                 shape = bgShape,
             )
             .padding(vertical = 12.dp, horizontal = 20.dp),

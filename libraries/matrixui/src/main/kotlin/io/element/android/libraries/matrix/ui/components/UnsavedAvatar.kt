@@ -69,7 +69,7 @@ fun UnsavedAvatar(
             contentDescription = null,
         )
     } else {
-        Box(modifier = commonModifier.background(ElementTheme.legacyColors.quinary)) {
+        Box(modifier = commonModifier.background(ElementTheme.materialColors.surfaceVariant)) {
             Icon(
                 imageVector = Icons.Outlined.AddAPhoto,
                 contentDescription = "",

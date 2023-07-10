@@ -59,7 +59,7 @@ fun RoundedIconAtom(
         modifier = modifier
             .size(size.toContainerSize())
             .background(
-                color = ElementTheme.legacyColors.quinary,
+                color = ElementTheme.materialColors.surfaceVariant,
                 shape = RoundedCornerShape(size.toCornerSize())
             )
     ) {

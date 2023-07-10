@@ -393,7 +393,7 @@ private fun MessageEventBubbleContent(
                     onLongClick = ::onTimestampLongClick,
                     modifier = timestampModifier
                         .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
-                        .background(ElementTheme.legacyColors.gray300, RoundedCornerShape(10.0.dp))
+                        .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
                         .align(Alignment.BottomEnd)
                         .padding(horizontal = 4.dp, vertical = 2.dp) // Inner padding
                 )
