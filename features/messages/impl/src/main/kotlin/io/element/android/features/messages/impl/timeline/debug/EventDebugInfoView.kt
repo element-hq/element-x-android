@@ -18,7 +18,6 @@ package io.element.android.features.messages.impl.timeline.debug
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -94,11 +93,12 @@ fun EventDebugInfoView(
         },
         modifier = modifier
     ) { padding ->
-        LazyColumn(modifier = Modifier
-            .fillMaxWidth()
-            .padding(padding) // Window insets
-            .consumeWindowInsets(padding)
-            .padding(horizontal = 16.dp) // Internal padding
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(padding) // Window insets
+                .consumeWindowInsets(padding)
+                .padding(horizontal = 16.dp) // Internal padding
         ) {
             item {
                 Column(Modifier.padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -165,7 +165,11 @@ private fun CopyableText(
             .padding(6.dp)
             .clickable { clipboardManager.setPrimaryClip(ClipData.newPlainText("JSON", text)) }
     ) {
-        Text(text = text, fontFamily = FontFamily.Monospace, fontSize = 14.sp, modifier = Modifier.padding(8.dp))
+        Text(
+            text = text,
+            style = ElementTheme.typography.fontBodyMdRegular.copy(fontFamily = FontFamily.Monospace),
+            modifier = Modifier.padding(8.dp),
+        )
     }
 }
 
