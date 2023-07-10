@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.TimeoutCancellationException
 import java.io.Closeable
+import java.util.Date
 import kotlin.time.Duration
 
 interface MatrixClient : Closeable {
@@ -64,4 +65,6 @@ interface MatrixClient : Closeable {
     fun roomMembershipObserver(): RoomMembershipObserver
 
     fun isMe(userId: UserId?) = userId == sessionId
+
+    suspend fun lastLoginTimestamp(): Date?
 }

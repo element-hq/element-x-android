@@ -19,10 +19,11 @@ package io.element.android.features.messages.impl.timeline.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
-import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
+import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun TimelineItemVirtualRow(
@@ -32,5 +33,11 @@ fun TimelineItemVirtualRow(
     when (virtual.model) {
         is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model, modifier)
         TimelineItemReadMarkerModel -> return
+        is TimelineItemEncryptedHistoryBannerVirtualModel -> TimelineEncryptedHistoryBannerView(modifier)
     }
+}
+
+@Composable
+fun TimelineEncryptedHistoryBannerView(modifier: Modifier = Modifier) {
+    Text("Encrypted history!")
 }

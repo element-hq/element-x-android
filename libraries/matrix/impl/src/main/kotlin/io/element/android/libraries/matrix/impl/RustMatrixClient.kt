@@ -70,6 +70,7 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
+import java.util.Date
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
@@ -300,6 +301,10 @@ class RustMatrixClient constructor(
         runCatching {
             client.uploadMedia(mimeType, data.toUByteArray().toList(), progressCallback?.toProgressWatcher())
         }
+    }
+
+    override suspend fun lastLoginTimestamp(): Date? {
+        return sessionStore.getSession(sessionId.value)?.loginTimestamp
     }
 
     private fun onSlidingSyncUpdate() {
