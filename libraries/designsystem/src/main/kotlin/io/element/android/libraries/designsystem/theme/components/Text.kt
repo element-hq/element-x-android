@@ -61,8 +61,6 @@ fun Text(
     fontStyle: FontStyle? = null,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
-    // Will be removed, only style should be used
-    lineHeight: TextUnit = TextUnit.Unspecified,
     overflow: TextOverflow = TextOverflow.Clip,
     softWrap: Boolean = true,
     minLines: Int = 1,
@@ -78,7 +76,6 @@ fun Text(
         fontStyle = fontStyle,
         textDecoration = textDecoration,
         textAlign = textAlign,
-        lineHeight = lineHeight,
         overflow = overflow,
         softWrap = softWrap,
         minLines = minLines,

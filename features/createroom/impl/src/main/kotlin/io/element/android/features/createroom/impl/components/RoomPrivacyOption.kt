@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun RoomPrivacyOption(
@@ -76,8 +77,7 @@ fun RoomPrivacyOption(
             Spacer(Modifier.size(3.dp))
             Text(
                 text = roomPrivacyItem.description,
-                fontSize = 12.sp,
-                lineHeight = 17.sp,
+                style = ElementTheme.typography.fontBodySmRegular,
                 color = MaterialTheme.colorScheme.tertiary,
             )
         }

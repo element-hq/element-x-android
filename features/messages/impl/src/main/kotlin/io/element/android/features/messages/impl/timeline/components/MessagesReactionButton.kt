@@ -141,7 +141,10 @@ private fun ReactionContent(
 ) {
     Text(
         text = reaction.displayKey,
-        fontSize = 15.sp, lineHeight = reactionEmojiLineHeight
+        style = ElementTheme.typography.fontBodyMdRegular.copy(
+            fontSize = 15.sp,
+            lineHeight = reactionEmojiLineHeight,
+        ),
     )
     if (reaction.count > 1) {
         Spacer(modifier = Modifier.width(4.dp))
@@ -175,9 +178,11 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
             onClick = {}
         )
         MessagesReactionButton(
-            content = MessagesReactionsButtonContent.Reaction(aTimelineItemReactions().reactions.first().copy(
-                key = "A very long reaction with many characters that should be truncated"
-            )),
+            content = MessagesReactionsButtonContent.Reaction(
+                aTimelineItemReactions().reactions.first().copy(
+                    key = "A very long reaction with many characters that should be truncated"
+                )
+            ),
             onClick = {}
         )
     }
