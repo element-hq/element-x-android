@@ -59,8 +59,6 @@ fun Text(
     // Will be removed, only style should be used
     fontSize: TextUnit = TextUnit.Unspecified,
     fontStyle: FontStyle? = null,
-    // Will be removed, only style should be used
-    letterSpacing: TextUnit = TextUnit.Unspecified,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
     // Will be removed, only style should be used
@@ -78,7 +76,6 @@ fun Text(
         color = color,
         fontSize = fontSize,
         fontStyle = fontStyle,
-        letterSpacing = letterSpacing,
         textDecoration = textDecoration,
         textAlign = textAlign,
         lineHeight = lineHeight,
