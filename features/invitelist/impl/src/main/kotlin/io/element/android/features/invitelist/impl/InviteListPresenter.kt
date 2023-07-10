@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.extensions.toAnalyticsJoinedRoom
 import kotlinx.collections.immutable.toPersistentList
@@ -49,6 +50,7 @@ class InviteListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val store: SeenInvitesStore,
     private val analyticsService: AnalyticsService,
+    private val notificationDrawerManager: NotificationDrawerManager,
 ) : Presenter<InviteListState> {
 
     @Composable
@@ -138,6 +140,7 @@ class InviteListPresenter @Inject constructor(
         suspend {
             client.getRoom(roomId)?.use {
                 it.acceptInvitation().getOrThrow()
+                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
                 analyticsService.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
             }
             roomId
@@ -148,7 +151,9 @@ class InviteListPresenter @Inject constructor(
         suspend {
             client.getRoom(roomId)?.use {
                 it.rejectInvitation().getOrThrow()
-            } ?: Unit
+                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
+            }
+            Unit
         }.runCatchingUpdatingState(declinedAction)
     }
 

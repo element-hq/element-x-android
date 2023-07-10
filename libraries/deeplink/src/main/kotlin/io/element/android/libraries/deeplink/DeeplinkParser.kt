@@ -18,6 +18,7 @@ package io.element.android.libraries.deeplink
 
 import android.content.Intent
 import android.net.Uri
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -36,12 +37,21 @@ class DeeplinkParser @Inject constructor() {
         if (host != HOST) return null
         val pathBits = path.orEmpty().split("/").drop(1)
         val sessionId = pathBits.elementAtOrNull(0)?.let(::SessionId) ?: return null
-        val roomId = pathBits.elementAtOrNull(1)?.let(::RoomId)
-        val threadId = pathBits.elementAtOrNull(2)?.let(::ThreadId)
-        return DeeplinkData(
-            sessionId = sessionId,
-            roomId = roomId,
-            threadId = threadId,
-        )
+        val screenPathComponent = pathBits.elementAtOrNull(1)
+        val roomId = tryOrNull { screenPathComponent?.let(::RoomId) }
+
+        return when {
+            roomId != null -> {
+                val threadId = pathBits.elementAtOrNull(2)?.let(::ThreadId)
+                DeeplinkData.Room(sessionId, roomId, threadId)
+            }
+            screenPathComponent == DeepLinkPaths.INVITE_LIST -> {
+                DeeplinkData.InviteList(sessionId)
+            }
+            screenPathComponent == null -> {
+                DeeplinkData.Root(sessionId)
+            }
+            else -> null
+        }
     }
 }

@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
+import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -132,7 +133,7 @@ private fun IconContent(
 )
 
 @Composable
-fun ReactionContent(
+private fun ReactionContent(
     reaction: AggregatedReaction,
     modifier: Modifier = Modifier,
 ) = Row(
@@ -140,7 +141,7 @@ fun ReactionContent(
     modifier = modifier,
 ) {
     Text(
-        text = reaction.key,
+        text = reaction.displayKey,
         fontSize = 15.sp, lineHeight = reactionEmojiLineHeight
     )
     if (reaction.count > 1) {
@@ -148,7 +149,7 @@ fun ReactionContent(
         Text(
             text = reaction.count.toString(),
             color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-            fontSize = 14.sp
+            fontSize = 14.sp,
         )
     }
 }
@@ -172,6 +173,12 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
         )
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Text("12 more"),
+            onClick = {}
+        )
+        MessagesReactionButton(
+            content = MessagesReactionsButtonContent.Reaction(aTimelineItemReactions().reactions.first().copy(
+                key = "A very long reaction with many characters that should be truncated"
+            )),
             onClick = {}
         )
     }

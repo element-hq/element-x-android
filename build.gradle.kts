@@ -59,7 +59,7 @@ allprojects {
         config = files("$rootDir/tools/detekt/detekt.yml")
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.1.11")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.1.12")
     }
 
     // KtLint
@@ -247,6 +247,7 @@ koverMerged {
                 excludes += "io.element.android.features.messages.impl.media.local.LocalMediaViewState"
                 excludes += "io.element.android.features.location.impl.map.MapState"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState*"
+                excludes += "io.element.android.libraries.designsystem.swipe.SwipeableActionsState*"
             }
             bound {
                 minValue = 90

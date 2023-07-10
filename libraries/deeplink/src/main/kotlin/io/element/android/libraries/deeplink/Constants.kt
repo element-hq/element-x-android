@@ -18,3 +18,7 @@ package io.element.android.libraries.deeplink
 
 internal const val SCHEME = "elementx"
 internal const val HOST = "open"
+
+object DeepLinkPaths {
+    const val INVITE_LIST = "invites"
+}

@@ -4,6 +4,7 @@
   <string name="notification_channel_listening_for_events">"Listening for events"</string>
   <string name="notification_channel_noisy">"Noisy notifications"</string>
   <string name="notification_channel_silent">"Silent notifications"</string>
+  <string name="notification_fallback_content">"Notification"</string>
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
   <string name="notification_invitation_action_join">"Join"</string>
   <string name="notification_invitation_action_reject">"Reject"</string>
@@ -47,6 +48,5 @@
   <string name="push_distributor_background_sync_android">"Background synchronization"</string>
   <string name="push_distributor_firebase_android">"Google Services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"No valid Google Play Services found. Notifications may not work properly."</string>
-  <string name="notification_fallback_content">"Notification"</string>
   <string name="notification_room_action_quick_reply">"Quick reply"</string>
 </resources>

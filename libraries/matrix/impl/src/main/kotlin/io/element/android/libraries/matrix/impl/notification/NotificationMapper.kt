@@ -28,19 +28,19 @@ class NotificationMapper {
     private val timelineEventMapper = TimelineEventMapper()
 
     fun map(notificationItem: NotificationItem): NotificationData {
-        return notificationItem.use {
+        return notificationItem.use { item ->
             NotificationData(
-                senderId = UserId(it.event.senderId()),
-                eventId = EventId(it.event.eventId()),
-                roomId = RoomId(it.roomInfo.id),
-                senderAvatarUrl = it.senderInfo.avatarUrl,
-                senderDisplayName = it.senderInfo.displayName,
-                roomAvatarUrl = it.roomInfo.avatarUrl,
-                roomDisplayName = it.roomInfo.displayName,
-                isDirect = it.roomInfo.isDirect,
-                isEncrypted = it.roomInfo.isEncrypted.orFalse(),
-                isNoisy = it.isNoisy,
-                event = it.event.use { event -> timelineEventMapper.map(event) }
+                senderId = UserId(item.event.senderId()),
+                eventId = EventId(item.event.eventId()),
+                roomId = RoomId(item.roomInfo.id),
+                senderAvatarUrl = item.senderInfo.avatarUrl,
+                senderDisplayName = item.senderInfo.displayName,
+                roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { item.roomInfo.isDirect },
+                roomDisplayName = item.roomInfo.displayName,
+                isDirect = item.roomInfo.isDirect,
+                isEncrypted = item.roomInfo.isEncrypted.orFalse(),
+                isNoisy = item.isNoisy,
+                event = item.event.use { event -> timelineEventMapper.map(event) }
             )
         }
     }

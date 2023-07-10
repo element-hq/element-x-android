@@ -27,6 +27,13 @@ android {
         buildConfig = true
     }
 
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            consumerProguardFiles("proguard-rules.pro")
+        }
+    }
+
     dependencies {
         api(projects.libraries.theme)
         // Should not be there, but this is a POC

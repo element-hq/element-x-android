@@ -20,8 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
-import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -29,13 +28,13 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultPushService @Inject constructor(
-    private val notificationDrawerManager: NotificationDrawerManager,
+    private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     private val pushersManager: PushersManager,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,
 ) : PushService {
     override fun notificationStyleChanged() {
-        notificationDrawerManager.notificationStyleChanged()
+        defaultNotificationDrawerManager.notificationStyleChanged()
     }
 
     override fun getAvailablePushProviders(): List<PushProvider> {

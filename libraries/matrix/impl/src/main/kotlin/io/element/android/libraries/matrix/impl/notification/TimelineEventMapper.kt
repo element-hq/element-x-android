@@ -16,9 +16,11 @@
 
 package io.element.android.libraries.matrix.impl.notification
 
+import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationEvent
+import io.element.android.libraries.matrix.impl.room.RoomMemberMapper
+import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
-import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
@@ -38,71 +40,62 @@ class TimelineEventMapper @Inject constructor() {
     }
 }
 
-private fun TimelineEventType.toContent(): String {
+private fun TimelineEventType.toContent(): NotificationContent {
     return when (this) {
         is TimelineEventType.MessageLike -> content.toContent()
         is TimelineEventType.State -> content.toContent()
     }
 }
 
-private fun StateEventContent.toContent(): String {
+private fun StateEventContent.toContent(): NotificationContent.StateEvent {
     return when (this) {
-        StateEventContent.PolicyRuleRoom -> "PolicyRuleRoom"
-        StateEventContent.PolicyRuleServer -> "PolicyRuleServer"
-        StateEventContent.PolicyRuleUser -> "PolicyRuleUser"
-        StateEventContent.RoomAliases -> "RoomAliases"
-        StateEventContent.RoomAvatar -> "RoomAvatar"
-        StateEventContent.RoomCanonicalAlias -> "RoomCanonicalAlias"
-        StateEventContent.RoomCreate -> "RoomCreate"
-        StateEventContent.RoomEncryption -> "RoomEncryption"
-        StateEventContent.RoomGuestAccess -> "RoomGuestAccess"
-        StateEventContent.RoomHistoryVisibility -> "RoomHistoryVisibility"
-        StateEventContent.RoomJoinRules -> "RoomJoinRules"
-        is StateEventContent.RoomMemberContent -> "$userId is now $membershipState"
-        StateEventContent.RoomName -> "RoomName"
-        StateEventContent.RoomPinnedEvents -> "RoomPinnedEvents"
-        StateEventContent.RoomPowerLevels -> "RoomPowerLevels"
-        StateEventContent.RoomServerAcl -> "RoomServerAcl"
-        StateEventContent.RoomThirdPartyInvite -> "RoomThirdPartyInvite"
-        StateEventContent.RoomTombstone -> "RoomTombstone"
-        StateEventContent.RoomTopic -> "RoomTopic"
-        StateEventContent.SpaceChild -> "SpaceChild"
-        StateEventContent.SpaceParent -> "SpaceParent"
+        StateEventContent.PolicyRuleRoom -> NotificationContent.StateEvent.PolicyRuleRoom
+        StateEventContent.PolicyRuleServer -> NotificationContent.StateEvent.PolicyRuleServer
+        StateEventContent.PolicyRuleUser -> NotificationContent.StateEvent.PolicyRuleUser
+        StateEventContent.RoomAliases -> NotificationContent.StateEvent.RoomAliases
+        StateEventContent.RoomAvatar -> NotificationContent.StateEvent.RoomAvatar
+        StateEventContent.RoomCanonicalAlias -> NotificationContent.StateEvent.RoomCanonicalAlias
+        StateEventContent.RoomCreate -> NotificationContent.StateEvent.RoomCreate
+        StateEventContent.RoomEncryption -> NotificationContent.StateEvent.RoomEncryption
+        StateEventContent.RoomGuestAccess -> NotificationContent.StateEvent.RoomGuestAccess
+        StateEventContent.RoomHistoryVisibility -> NotificationContent.StateEvent.RoomHistoryVisibility
+        StateEventContent.RoomJoinRules -> NotificationContent.StateEvent.RoomJoinRules
+        is StateEventContent.RoomMemberContent -> {
+            NotificationContent.StateEvent.RoomMemberContent(userId, RoomMemberMapper.mapMembership(membershipState))
+        }
+        StateEventContent.RoomName -> NotificationContent.StateEvent.RoomName
+        StateEventContent.RoomPinnedEvents -> NotificationContent.StateEvent.RoomPinnedEvents
+        StateEventContent.RoomPowerLevels -> NotificationContent.StateEvent.RoomPowerLevels
+        StateEventContent.RoomServerAcl -> NotificationContent.StateEvent.RoomServerAcl
+        StateEventContent.RoomThirdPartyInvite -> NotificationContent.StateEvent.RoomThirdPartyInvite
+        StateEventContent.RoomTombstone -> NotificationContent.StateEvent.RoomTombstone
+        StateEventContent.RoomTopic -> NotificationContent.StateEvent.RoomTopic
+        StateEventContent.SpaceChild -> NotificationContent.StateEvent.SpaceChild
+        StateEventContent.SpaceParent -> NotificationContent.StateEvent.SpaceParent
     }
 }
 
-private fun MessageLikeEventContent.toContent(): String {
+private fun MessageLikeEventContent.toContent(): NotificationContent.MessageLike {
     return use {
         when (it) {
-            MessageLikeEventContent.CallAnswer -> "CallAnswer"
-            MessageLikeEventContent.CallCandidates -> "CallCandidates"
-            MessageLikeEventContent.CallHangup -> "CallHangup"
-            MessageLikeEventContent.CallInvite -> "CallInvite"
-            MessageLikeEventContent.KeyVerificationAccept -> "KeyVerificationAccept"
-            MessageLikeEventContent.KeyVerificationCancel -> "KeyVerificationCancel"
-            MessageLikeEventContent.KeyVerificationDone -> "KeyVerificationDone"
-            MessageLikeEventContent.KeyVerificationKey -> "KeyVerificationKey"
-            MessageLikeEventContent.KeyVerificationMac -> "KeyVerificationMac"
-            MessageLikeEventContent.KeyVerificationReady -> "KeyVerificationReady"
-            MessageLikeEventContent.KeyVerificationStart -> "KeyVerificationStart"
-            is MessageLikeEventContent.ReactionContent -> "Reacted to ${it.relatedEventId.take(8)}…"
-            MessageLikeEventContent.RoomEncrypted -> "RoomEncrypted"
-            is MessageLikeEventContent.RoomMessage -> it.messageType.toContent()
-            MessageLikeEventContent.RoomRedaction -> "RoomRedaction"
-            MessageLikeEventContent.Sticker -> "Sticker"
+            MessageLikeEventContent.CallAnswer -> NotificationContent.MessageLike.CallAnswer
+            MessageLikeEventContent.CallCandidates -> NotificationContent.MessageLike.CallCandidates
+            MessageLikeEventContent.CallHangup -> NotificationContent.MessageLike.CallHangup
+            MessageLikeEventContent.CallInvite -> NotificationContent.MessageLike.CallInvite
+            MessageLikeEventContent.KeyVerificationAccept -> NotificationContent.MessageLike.KeyVerificationAccept
+            MessageLikeEventContent.KeyVerificationCancel -> NotificationContent.MessageLike.KeyVerificationCancel
+            MessageLikeEventContent.KeyVerificationDone -> NotificationContent.MessageLike.KeyVerificationDone
+            MessageLikeEventContent.KeyVerificationKey -> NotificationContent.MessageLike.KeyVerificationKey
+            MessageLikeEventContent.KeyVerificationMac -> NotificationContent.MessageLike.KeyVerificationMac
+            MessageLikeEventContent.KeyVerificationReady -> NotificationContent.MessageLike.KeyVerificationReady
+            MessageLikeEventContent.KeyVerificationStart -> NotificationContent.MessageLike.KeyVerificationStart
+            is MessageLikeEventContent.ReactionContent -> NotificationContent.MessageLike.ReactionContent(it.relatedEventId)
+            MessageLikeEventContent.RoomEncrypted -> NotificationContent.MessageLike.RoomEncrypted
+            is MessageLikeEventContent.RoomMessage -> {
+                NotificationContent.MessageLike.RoomMessage(EventMessageMapper().mapMessageType(it.messageType))
+            }
+            MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction
+            MessageLikeEventContent.Sticker -> NotificationContent.MessageLike.Sticker
         }
-    }
-}
-
-private fun MessageType.toContent(): String {
-    return when (this) {
-        is MessageType.Audio -> content.use { it.body }
-        is MessageType.Emote -> content.body
-        is MessageType.File -> content.use { it.body }
-        is MessageType.Image -> content.use { it.body }
-        is MessageType.Location -> content.body
-        is MessageType.Notice -> content.body
-        is MessageType.Text -> content.body
-        is MessageType.Video -> content.use { it.body }
     }
 }

@@ -36,8 +36,6 @@ dependencyResolutionManagement {
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
             }
         }
-        //noinspection JcenterRepositoryObsolete
-        jcenter()
         flatDir {
             dirs("libraries/matrix/libs")
         }

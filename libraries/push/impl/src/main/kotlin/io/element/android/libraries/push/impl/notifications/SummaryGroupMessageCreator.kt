@@ -49,12 +49,14 @@ class SummaryGroupMessageCreator @Inject constructor(
         roomNotifications: List<RoomNotification.Message.Meta>,
         invitationNotifications: List<OneShotNotification.Append.Meta>,
         simpleNotifications: List<OneShotNotification.Append.Meta>,
+        fallbackNotifications: List<OneShotNotification.Append.Meta>,
         useCompleteNotificationFormat: Boolean
     ): Notification {
         val summaryInboxStyle = NotificationCompat.InboxStyle().also { style ->
             roomNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(40)) }
             invitationNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(41)) }
             simpleNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(42)) }
+            fallbackNotifications.forEach { style.addLine(it.summaryLine) }
         }
 
         val summaryIsNoisy = roomNotifications.any { it.shouldBing } ||

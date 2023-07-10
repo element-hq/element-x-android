@@ -26,7 +26,7 @@ data class SimpleNotifiableEvent(
     override val editedEventId: EventId?,
     val noisy: Boolean,
     val title: String,
-    val description: String,
+    override val description: String,
     val type: String?,
     val timestamp: Long,
     val soundName: String?,

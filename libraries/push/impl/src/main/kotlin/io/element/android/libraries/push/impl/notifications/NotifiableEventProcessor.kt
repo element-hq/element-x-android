@@ -17,11 +17,12 @@
 package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreMessageEventInRoom
+import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
 import io.element.android.services.appnavstate.api.AppNavigationState
 import timber.log.Timber
 import javax.inject.Inject
@@ -41,7 +42,7 @@ class NotifiableEventProcessor @Inject constructor(
             val type = when (it) {
                 is InviteNotifiableEvent -> ProcessedEvent.Type.KEEP
                 is NotifiableMessageEvent -> when {
-                    it.shouldIgnoreMessageEventInRoom(appNavigationState) -> {
+                    it.shouldIgnoreEventInRoom(appNavigationState) -> {
                         ProcessedEvent.Type.REMOVE
                             .also { Timber.d("notification message removed due to currently viewing the same room or thread") }
                     }
@@ -51,6 +52,13 @@ class NotifiableEventProcessor @Inject constructor(
                 }
                 is SimpleNotifiableEvent -> when (it.type) {
                     EventType.REDACTION -> ProcessedEvent.Type.REMOVE
+                    else -> ProcessedEvent.Type.KEEP
+                }
+                is FallbackNotifiableEvent -> when {
+                    it.shouldIgnoreEventInRoom(appNavigationState) -> {
+                        ProcessedEvent.Type.REMOVE
+                            .also { Timber.d("notification fallback removed due to currently viewing the same room or thread") }
+                    }
                     else -> ProcessedEvent.Type.KEEP
                 }
             }

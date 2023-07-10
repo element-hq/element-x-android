@@ -22,6 +22,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -37,7 +38,7 @@ private val loggerTag = LoggerTag("NotificationBroadcastReceiver", notificationL
  */
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var defaultNotificationDrawerManager: DefaultNotificationDrawerManager
 
     //@Inject lateinit var activeSessionHolder: ActiveSessionHolder
     //@Inject lateinit var analyticsTracker: AnalyticsTracker
@@ -50,24 +51,31 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         Timber.tag(loggerTag.value).v("NotificationBroadcastReceiver received : $intent")
         val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.let(::SessionId) ?: return
         val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
+        val eventId = intent.getStringExtra(KEY_EVENT_ID)?.let(::EventId)
         when (intent.action) {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
             actionIds.dismissRoom -> if (roomId != null) {
-                notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
             }
             actionIds.dismissSummary ->
-                notificationDrawerManager.clearAllEvents(sessionId)
+                defaultNotificationDrawerManager.clearAllEvents(sessionId)
+            actionIds.dismissInvite -> if (roomId != null) {
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+            }
+            actionIds.dismissEvent -> if (eventId != null) {
+                defaultNotificationDrawerManager.clearEvent(eventId)
+            }
             actionIds.markRoomRead -> if (roomId != null) {
-                notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
                 handleMarkAsRead(sessionId, roomId)
             }
             actionIds.join -> if (roomId != null) {
-                notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleJoinRoom(sessionId, roomId)
             }
             actionIds.reject -> if (roomId != null) {
-                notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleRejectRoom(sessionId, roomId)
             }
         }
@@ -240,6 +248,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         const val KEY_SESSION_ID = "sessionID"
         const val KEY_ROOM_ID = "roomID"
         const val KEY_THREAD_ID = "threadID"
+        const val KEY_EVENT_ID = "eventID"
         const val KEY_TEXT_REPLY = "key_text_reply"
     }
 }

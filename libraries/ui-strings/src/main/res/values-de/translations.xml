@@ -140,7 +140,10 @@
   <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
   <string name="emoji_picker_category_symbols">"Symbole"</string>
   <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>
+  <string name="error_failed_loading_map">"Element konnte die Karte nicht laden. Bitte versuche es später erneut."</string>
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
+  <string name="error_failed_locating_user">"Element konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut."</string>
+  <string name="error_missing_location_auth">"Element hat keine Berechtigung, auf deinen Standort zuzugreifen. Du kannst den Zugriff unter Einstellungen > Standort aktivieren."</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, ein Fehler ist aufgetreten."</string>
   <string name="invite_friends_rich_title">"🔐️ Besuchen Sie mich auf %1$s"</string>
@@ -174,6 +177,12 @@
   <string name="screen_share_open_osm_maps">"In OpenStreetMap öffnen"</string>
   <string name="screen_share_this_location_action">"Diesen Ort teilen"</string>
   <string name="screen_view_location_title">"Standort"</string>
+  <string name="screen_welcome_bullet_1">"Anrufe, Standortfreigabe, Suche und mehr werden später in diesem Jahr hinzugefügt."</string>
+  <string name="screen_welcome_bullet_2">"Der Nachrichtenverlauf für verschlüsselte Räume wird in diesem Update nicht verfügbar sein."</string>
+  <string name="screen_welcome_bullet_3">"Wir würden uns freuen, wenn du uns über die Einstellungsseite deine Meinung mitteilst."</string>
+  <string name="screen_welcome_button">"Los geht\'s!"</string>
+  <string name="screen_welcome_subtitle">"Folgendes musst du wissen:"</string>
+  <string name="screen_welcome_title">"Willkommen bei %1$s!"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>
   <string name="settings_title_general">"Allgemein"</string>

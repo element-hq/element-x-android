@@ -16,8 +16,18 @@
 
 package io.element.android.features.messages.impl.timeline.model
 
+import io.element.android.libraries.core.extensions.ellipsize
+
 /**
- * @property key the reaction key (e.g. "👍")
+ * Length at which we ellipsize a reaction key for display
+ *
+ * Reactions can be free text, so we need to limit the length
+ * displayed on screen.
+ */
+private const val MAX_DISPLAY_CHARS = 16
+
+/**
+ * @property key the full reaction key (e.g. "👍", "YES!")
  * @property count the number of users who reacted with this key
  * @property isHighlighted true if the reaction has (also) been sent by the current user.
  */
@@ -25,4 +35,14 @@ data class AggregatedReaction(
     val key: String,
     val count: Int,
     val isHighlighted: Boolean = false
-)
+) {
+
+    /**
+     * The key to be displayed on screen.
+     *
+     * See [MAX_DISPLAY_CHARS].
+     */
+    val displayKey: String by lazy {
+        key.ellipsize(MAX_DISPLAY_CHARS)
+    }
+}

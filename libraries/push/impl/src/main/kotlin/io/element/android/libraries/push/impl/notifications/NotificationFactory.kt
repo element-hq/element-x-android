@@ -20,6 +20,7 @@ import android.app.Notification
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
@@ -94,16 +95,35 @@ class NotificationFactory @Inject constructor(
         }
     }
 
+    fun List<ProcessedEvent<FallbackNotifiableEvent>>.toNotifications(): List<OneShotNotification> {
+        return map { (processed, event) ->
+            when (processed) {
+                ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.eventId.value)
+                ProcessedEvent.Type.KEEP -> OneShotNotification.Append(
+                    notificationFactory.createFallbackNotification(event),
+                    OneShotNotification.Append.Meta(
+                        key = event.eventId.value,
+                        summaryLine = event.description.orEmpty(),
+                        isNoisy = false,
+                        timestamp = event.timestamp
+                    )
+                )
+            }
+        }
+    }
+
     fun createSummaryNotification(
         currentUser: MatrixUser,
         roomNotifications: List<RoomNotification>,
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
+        fallbackNotifications: List<OneShotNotification>,
         useCompleteNotificationFormat: Boolean
     ): SummaryNotification {
         val roomMeta = roomNotifications.filterIsInstance<RoomNotification.Message>().map { it.meta }
         val invitationMeta = invitationNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
         val simpleMeta = simpleNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
+        val fallbackMeta = simpleNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
         return when {
             roomMeta.isEmpty() && invitationMeta.isEmpty() && simpleMeta.isEmpty() -> SummaryNotification.Removed
             else -> SummaryNotification.Update(
@@ -112,6 +132,7 @@ class NotificationFactory @Inject constructor(
                     roomNotifications = roomMeta,
                     invitationNotifications = invitationMeta,
                     simpleNotifications = simpleMeta,
+                    fallbackNotifications = fallbackMeta,
                     useCompleteNotificationFormat = useCompleteNotificationFormat
                 )
             )

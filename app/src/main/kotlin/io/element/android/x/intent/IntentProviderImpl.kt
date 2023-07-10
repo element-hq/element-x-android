@@ -35,14 +35,21 @@ class IntentProviderImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val deepLinkCreator: DeepLinkCreator,
 ) : IntentProvider {
-    override fun getViewIntent(
+    override fun getViewRoomIntent(
         sessionId: SessionId,
         roomId: RoomId?,
         threadId: ThreadId?,
     ): Intent {
         return Intent(context, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
-            data = deepLinkCreator.create(sessionId, roomId, threadId).toUri()
+            data = deepLinkCreator.room(sessionId, roomId, threadId).toUri()
+        }
+    }
+
+    override fun getInviteListIntent(sessionId: SessionId): Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            data = deepLinkCreator.inviteList(sessionId).toUri()
         }
     }
 }

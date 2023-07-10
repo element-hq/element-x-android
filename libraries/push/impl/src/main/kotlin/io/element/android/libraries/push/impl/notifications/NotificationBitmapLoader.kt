@@ -49,6 +49,7 @@ class NotificationBitmapLoader @Inject constructor(
         return try {
             val imageRequest = ImageRequest.Builder(context)
                 .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(1024)))
+                .transformations(CircleCropTransformation())
                 .build()
             val result = context.imageLoader.execute(imageRequest)
             result.drawable?.toBitmap()

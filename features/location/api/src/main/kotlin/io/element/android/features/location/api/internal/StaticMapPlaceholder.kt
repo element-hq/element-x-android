@@ -29,13 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.features.location.api.R
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -83,22 +82,13 @@ internal fun StaticMapPlaceholder(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-fun StaticMapPlaceholderLightPreview(
+fun StaticMapPlaceholderPreview(
     @PreviewParameter(BooleanParameterProvider::class) values: Boolean
-) = ElementPreviewLight { ContentToPreview(values) }
-
-@Preview
-@Composable
-fun StaticMapPlaceholderDarkPreview(
-    @PreviewParameter(BooleanParameterProvider::class) values: Boolean
-) = ElementPreviewDark { ContentToPreview(values) }
-
-@Composable
-private fun ContentToPreview(showProgress: Boolean) {
+) = ElementPreview {
     StaticMapPlaceholder(
-        showProgress = showProgress,
+        showProgress = values,
         contentDescription = null,
         modifier = Modifier.size(400.dp),
         onLoadMapClick = {},

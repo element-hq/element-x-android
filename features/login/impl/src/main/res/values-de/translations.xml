@@ -42,5 +42,6 @@ Vielen Dank für deine Geduld!"</string>
   <string name="screen_change_server_title">"Wählen deinen Server"</string>
   <string name="screen_login_password_hint">"Passwort"</string>
   <string name="screen_login_submit">"Weiter"</string>
+  <string name="screen_login_subtitle">"Matrix ist ein offenes Netzwerk für sichere, dezentrale Kommunikation"</string>
   <string name="screen_login_username_hint">"Benutzername"</string>
 </resources>
