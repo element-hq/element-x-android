@@ -16,9 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
@@ -28,7 +26,6 @@ import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 
 internal class MatrixTimelineDiffProcessor(
-    private val paginationState: MutableStateFlow<MatrixTimeline.PaginationState>,
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>>,
     private val timelineItemFactory: MatrixTimelineItemMapper,
 ) {
@@ -40,7 +37,6 @@ internal class MatrixTimelineDiffProcessor(
         updateTimelineItems {
             val mappedItems = items.map { it.asMatrixTimelineItem() }
             addAll(mappedItems)
-            updateBackPaginationState()
         }
         initLatch.complete(Unit)
     }
@@ -50,27 +46,7 @@ internal class MatrixTimelineDiffProcessor(
         initLatch.await()
         updateTimelineItems {
             applyDiff(diff)
-            updateBackPaginationState()
         }
-    }
-
-    private fun updateBackPaginationState(virtualItem: VirtualTimelineItem?) {
-        val currentPaginationState = paginationState.value
-        val newPaginationState = when (virtualItem) {
-            VirtualTimelineItem.LoadingIndicator -> currentPaginationState.copy(
-                isBackPaginating = true,
-                canBackPaginate = true
-            )
-            VirtualTimelineItem.TimelineStart -> currentPaginationState.copy(
-                isBackPaginating = false,
-                canBackPaginate = false
-            )
-            else -> currentPaginationState.copy(
-                isBackPaginating = false,
-                canBackPaginate = true
-            )
-        }
-        paginationState.value = newPaginationState
     }
 
     private suspend fun updateTimelineItems(block: MutableList<MatrixTimelineItem>.() -> Unit) =
@@ -122,13 +98,6 @@ internal class MatrixTimelineDiffProcessor(
             TimelineChange.CLEAR -> {
                 clear()
             }
-        }
-    }
-
-    private fun List<MatrixTimelineItem>.updateBackPaginationState() {
-        when (val firstItem = firstOrNull()) {
-            is MatrixTimelineItem.Virtual -> updateBackPaginationState(firstItem.virtual)
-            else -> updateBackPaginationState(null)
         }
     }
 

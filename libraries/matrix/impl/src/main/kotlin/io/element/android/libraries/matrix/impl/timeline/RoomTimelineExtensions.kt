@@ -21,6 +21,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
+import org.matrix.rustcomponents.sdk.BackPaginationStatus
+import org.matrix.rustcomponents.sdk.BackPaginationStatusListener
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
@@ -36,4 +38,14 @@ internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -
         val result = addTimelineListener(listener)
         onInitialList(result.items)
         result.itemsStream
+    }.buffer(Channel.UNLIMITED)
+
+internal fun Room.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
+    mxCallbackFlow {
+        val listener = object : BackPaginationStatusListener {
+            override fun onUpdate(status: BackPaginationStatus) {
+                trySendBlocking(status)
+            }
+        }
+        subscribeToBackPaginationStatus(listener)
     }.buffer(Channel.UNLIMITED)
