@@ -51,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.BottomSheetSca
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.designsystem.R as DesignSystemR
 
@@ -95,8 +96,7 @@ fun SendLocationView(
                 title = {
                     Text(
                         text = stringResource(CommonStrings.screen_share_location_title),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        style = ElementTheme.typography.fontHeadingSmMedium,
                     )
                 },
                 navigationIcon = {

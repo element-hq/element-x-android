@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.TypographyTokens
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -65,7 +66,7 @@ fun ShowLocationView(
                 title = {
                     Text(
                         text = stringResource(CommonStrings.screen_view_location_title),
-                        style = TypographyTokens.fontBodyLgMedium,
+                        style = ElementTheme.typography.fontHeadingSmMedium,
                     )
                 },
                 navigationIcon = {

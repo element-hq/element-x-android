@@ -206,8 +206,7 @@ private fun RoomMemberListTopBar(
         title = {
             Text(
                 text = stringResource(R.string.screen_room_details_people_title),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = ElementTheme.typography.fontHeadingSmMedium,
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },

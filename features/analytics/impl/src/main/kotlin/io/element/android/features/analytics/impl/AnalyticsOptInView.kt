@@ -41,12 +41,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -178,8 +176,7 @@ private fun AnalyticsOptInContentRow(
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = text,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold,
+            style = ElementTheme.typography.fontBodyMdMedium,
             color = MaterialTheme.colorScheme.primary,
         )
     }

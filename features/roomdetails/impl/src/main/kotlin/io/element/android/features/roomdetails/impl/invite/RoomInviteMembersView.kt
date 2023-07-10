@@ -52,6 +52,7 @@ import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -122,8 +123,7 @@ fun RoomInviteMembersTopBar(
         title = {
             Text(
                 text = stringResource(R.string.screen_room_details_invite_people_title),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = ElementTheme.typography.fontHeadingSmMedium,
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
