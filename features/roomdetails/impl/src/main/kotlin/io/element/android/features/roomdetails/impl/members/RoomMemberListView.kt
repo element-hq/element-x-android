@@ -60,6 +60,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -206,7 +207,7 @@ private fun RoomMemberListTopBar(
         title = {
             Text(
                 text = stringResource(R.string.screen_room_details_people_title),
-                style = ElementTheme.typography.fontHeadingSmMedium,
+                style = ElementTheme.typography.aliasScreenTitle,
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },

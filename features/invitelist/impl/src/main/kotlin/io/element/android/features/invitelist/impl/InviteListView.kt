@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -127,7 +128,7 @@ fun InviteListContent(
                 title = {
                     Text(
                         text = stringResource(CommonStrings.action_invites_list),
-                        style = ElementTheme.typography.fontHeadingSmMedium,
+                        style = ElementTheme.typography.aliasScreenTitle,
                     )
                 }
             )

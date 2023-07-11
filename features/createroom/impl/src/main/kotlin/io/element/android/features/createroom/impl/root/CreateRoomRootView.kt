@@ -53,6 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.designsystem.R as DrawableR
 
@@ -137,7 +138,7 @@ fun CreateRoomRootViewTopBar(
         title = {
             Text(
                 text = stringResource(id = CommonStrings.action_start_chat),
-                style = ElementTheme.typography.fontHeadingSmMedium,
+                style = ElementTheme.typography.aliasScreenTitle,
             )
         },
         navigationIcon = {

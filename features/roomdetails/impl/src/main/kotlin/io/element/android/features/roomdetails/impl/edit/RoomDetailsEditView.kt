@@ -76,6 +76,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -107,7 +108,7 @@ fun RoomDetailsEditView(
                 title = {
                     Text(
                         text = stringResource(id = R.string.screen_room_details_edit_room_title),
-                        style = ElementTheme.typography.fontHeadingSmMedium,
+                        style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
                 navigationIcon = { BackButton(onClick = onBackPressed) },

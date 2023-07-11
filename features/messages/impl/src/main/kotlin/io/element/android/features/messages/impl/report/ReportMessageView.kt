@@ -53,6 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -86,7 +87,7 @@ fun ReportMessageView(
                 title = {
                     Text(
                         stringResource(CommonStrings.action_report_content),
-                        style = ElementTheme.typography.fontHeadingSmMedium,
+                        style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
                 navigationIcon = {

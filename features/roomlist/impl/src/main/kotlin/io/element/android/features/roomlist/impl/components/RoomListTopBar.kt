@@ -57,6 +57,7 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,7 +112,7 @@ private fun DefaultRoomListTopBar(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         title = {
             val fontStyle = if (scrollBehavior.state.collapsedFraction > 0.5)
-                ElementTheme.typography.fontHeadingSmMedium
+                ElementTheme.typography.aliasScreenTitle
             else
                 ElementTheme.typography.fontHeadingLgBold
             Text(

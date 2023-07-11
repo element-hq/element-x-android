@@ -62,6 +62,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 
 /**
  * Screen used to display debug info for events.
@@ -85,7 +86,7 @@ fun EventDebugInfoView(
                 title = {
                     Text(
                         text = "Debug event info",
-                        style = ElementTheme.typography.fontHeadingSmMedium,
+                        style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
                 navigationIcon = { BackButton(onClick = onBackPressed) }

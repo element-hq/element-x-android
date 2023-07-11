@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -94,7 +95,7 @@ fun PreferenceTopAppBar(
         title = {
             Text(
                 text = title,
-                style = ElementTheme.typography.fontHeadingSmMedium,
+                style = ElementTheme.typography.aliasScreenTitle,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

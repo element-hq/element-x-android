@@ -65,6 +65,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -113,7 +114,7 @@ fun ForwardMessagesView(
                 title = {
                     Text(
                         text = stringResource(CommonStrings.common_forward_message),
-                        style = ElementTheme.typography.fontHeadingSmMedium
+                        style = ElementTheme.typography.aliasScreenTitle
                     )
                 },
                 navigationIcon = {
