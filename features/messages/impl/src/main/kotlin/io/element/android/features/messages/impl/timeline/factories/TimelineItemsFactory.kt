@@ -27,19 +27,15 @@ import io.element.android.features.messages.impl.timeline.factories.virtual.Time
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.Date
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
@@ -48,11 +44,7 @@ class TimelineItemsFactory @Inject constructor(
     private val eventItemFactory: TimelineItemEventFactory,
     private val virtualItemFactory: TimelineItemVirtualFactory,
     private val timelineItemGrouper: TimelineItemGrouper,
-    private val coroutineScope: CoroutineScope,
-    private val client: MatrixClient,
 ) {
-    private var loginTimestamp: Date? = null
-
     private val timelineItems = MutableStateFlow(persistentListOf<TimelineItem>())
     private val timelineItemsCache = arrayListOf<TimelineItem?>()
 
@@ -61,12 +53,6 @@ class TimelineItemsFactory @Inject constructor(
 
     private val lock = Mutex()
     private val cacheInvalidator = CacheInvalidator(timelineItemsCache)
-
-    init {
-        coroutineScope.launch {
-            loginTimestamp = client.lastLoginTimestamp()
-        }
-    }
 
     @Composable
     fun collectItemsAsState(): State<ImmutableList<TimelineItem>> {
@@ -96,12 +82,6 @@ class TimelineItemsFactory @Inject constructor(
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()
         this.timelineItems.emit(result)
-    }
-
-    private fun isItemEncryptionHistory(item: MatrixTimelineItem): Boolean {
-        val timestamp = (item as? MatrixTimelineItem.Event)?.event?.timestamp ?: return false
-        val lastLoginTimestamp = loginTimestamp ?: return false
-        return timestamp <= lastLoginTimestamp.time
     }
 
     private fun calculateAndApplyDiff(newTimelineItems: List<MatrixTimelineItem>) {
