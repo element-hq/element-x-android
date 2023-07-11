@@ -37,10 +37,8 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.plus
 import java.io.File
-import java.util.concurrent.Executors
 
 @Module
 @ContributesTo(AppScope::class)
@@ -99,7 +97,6 @@ object AppModule {
             io = Dispatchers.IO,
             computation = Dispatchers.Default,
             main = Dispatchers.Main,
-            diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         )
     }
 

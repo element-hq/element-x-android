@@ -22,10 +22,8 @@ import io.element.android.libraries.matrix.api.tracing.TracingConfigurations
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.plus
 import timber.log.Timber
-import java.util.concurrent.Executors
 
 object Singleton {
 
@@ -39,6 +37,5 @@ object Singleton {
         io = Dispatchers.IO,
         computation = Dispatchers.Default,
         main = Dispatchers.Main,
-        diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher(),
     )
 }
