@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
-import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,7 +34,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.sample
@@ -62,6 +61,12 @@ class RustMatrixTimeline(
         MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
     )
 
+    private val encryptedHistoryPostProcessor = TimelineEncryptedHistoryPostProcessor(
+        lastLoginTimestamp = lastLoginTimestamp,
+        isRoomEncrypted = matrixRoom.isEncrypted,
+        paginationStateFlow = _paginationState,
+    )
+
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
         roomCoroutineScope = roomCoroutineScope,
@@ -83,45 +88,8 @@ class RustMatrixTimeline(
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.sample(50)
         .mapLatest { items ->
-            val filteredList = items.toMutableList()
-            val replaced = replaceWithEncryptionHistoryBannerIfNeeded(filteredList)
-            // Disable back pagination
-            if (replaced && _paginationState.value.canBackPaginate) {
-                _paginationState.getAndUpdate {
-                    it.copy(
-                        isBackPaginating = false,
-                        canBackPaginate = false
-                    )
-                }
-            }
-            filteredList
+            encryptedHistoryPostProcessor.process(items)
         }
-
-    private fun replaceWithEncryptionHistoryBannerIfNeeded(list: MutableList<MatrixTimelineItem>): Boolean {
-        var lastEncryptedHistoryBannerIndex = -1
-        for ((i, item) in list.withIndex()) {
-            if (isItemEncryptionHistory(item)) {
-                lastEncryptedHistoryBannerIndex = i
-            }
-        }
-        if (lastEncryptedHistoryBannerIndex >= 0) {
-            val sublist = list.drop(lastEncryptedHistoryBannerIndex + 1)
-            list.clear()
-            list.addAll(sublist)
-            list.add(0, MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner))
-        }
-        return lastEncryptedHistoryBannerIndex >= 0
-    }
-
-    private fun isItemEncryptionHistory(item: MatrixTimelineItem): Boolean {
-        if (!matrixRoom.isEncrypted) return false
-        if ((item as? MatrixTimelineItem.Virtual)?.virtual is VirtualTimelineItem.EncryptedHistoryBanner) {
-            return true
-        }
-        val timestamp = (item as? MatrixTimelineItem.Event)?.event?.timestamp ?: return false
-        val lastLoginTimestamp = lastLoginTimestamp ?: return false
-        return timestamp <= lastLoginTimestamp.time
-    }
 
     internal suspend fun postItems(items: List<TimelineItem>) {
         timelineDiffProcessor.postItems(items)
