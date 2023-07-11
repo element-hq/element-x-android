@@ -64,6 +64,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
@@ -72,6 +73,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 @Composable
@@ -327,7 +330,10 @@ fun TimelineViewDarkPreview(
 
 @Composable
 private fun ContentToPreview(content: TimelineItemEventContent) {
-    val timelineItems = aTimelineItemList(content)
+    val timelineItems = buildList {
+        addAll(aTimelineItemList(content))
+        add(TimelineItem.Virtual("banner", TimelineItemEncryptedHistoryBannerVirtualModel))
+    }.toPersistentList()
     TimelineView(
         state = aTimelineState(timelineItems),
         onMessageClicked = {},
