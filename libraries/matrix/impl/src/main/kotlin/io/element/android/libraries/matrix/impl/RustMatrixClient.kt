@@ -54,7 +54,7 @@ import io.element.android.libraries.matrix.impl.verification.RustSessionVerifica
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -73,6 +73,7 @@ import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParam
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient constructor(
     private val client: Client,
     private val sessionStore: SessionStore,
@@ -85,6 +86,7 @@ class RustMatrixClient constructor(
 
     override val sessionId: UserId = UserId(client.userId())
     private val roomListService = client.roomListServiceWithEncryption()
+    private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
     private val syncService = RustSyncService(roomListService, sessionCoroutineScope)
@@ -92,6 +94,7 @@ class RustMatrixClient constructor(
         client = client,
         dispatchers = dispatchers,
     )
+    
     private val notificationService = RustNotificationService(client)
 
     private val clientDelegate = object : ClientDelegate {
@@ -105,7 +108,7 @@ class RustMatrixClient constructor(
         RustRoomSummaryDataSource(
             roomListService = roomListService,
             sessionCoroutineScope = sessionCoroutineScope,
-            coroutineDispatchers = dispatchers,
+            dispatcher = sessionDispatcher,
         )
 
     override val roomSummaryDataSource: RoomSummaryDataSource
@@ -150,7 +153,7 @@ class RustMatrixClient constructor(
         )
     }
 
-    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? = withContext(dispatchers.io) {
+    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? = withContext(sessionDispatcher) {
         val cachedRoomListItem = roomListService.roomOrNull(roomId.value)
         val fullRoom = cachedRoomListItem?.fullRoom()
         if (cachedRoomListItem == null || fullRoom == null) {
@@ -165,19 +168,19 @@ class RustMatrixClient constructor(
         return roomId?.let { getRoom(it) }
     }
 
-    override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
         runCatching {
             client.ignoreUser(userId.value)
         }
     }
 
-    override suspend fun unignoreUser(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
         runCatching {
             client.unignoreUser(userId.value)
         }
     }
 
-    override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(dispatchers.io) {
+    override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(sessionDispatcher) {
         runCatching {
             val rustParams = RustCreateRoomParameters(
                 name = createRoomParams.name,
@@ -221,14 +224,14 @@ class RustMatrixClient constructor(
         return createRoom(createRoomParams)
     }
 
-    override suspend fun getProfile(userId: UserId): Result<MatrixUser> = withContext(Dispatchers.IO) {
+    override suspend fun getProfile(userId: UserId): Result<MatrixUser> = withContext(sessionDispatcher) {
         runCatching {
             client.getProfile(userId.value).let(UserProfileMapper::map)
         }
     }
 
     override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
-        withContext(dispatchers.io) {
+        withContext(sessionDispatcher) {
             runCatching {
                 client.searchUsers(searchTerm, limit.toULong()).let(UserSearchResultMapper::map)
             }
@@ -260,7 +263,7 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout() = withContext(dispatchers.io) {
+    override suspend fun logout() = withContext(sessionDispatcher) {
         try {
             client.logout()
         } catch (failure: Throwable) {
@@ -271,20 +274,20 @@ class RustMatrixClient constructor(
         sessionStore.removeSession(sessionId.value)
     }
 
-    override suspend fun loadUserDisplayName(): Result<String> = withContext(dispatchers.io) {
+    override suspend fun loadUserDisplayName(): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.displayName()
         }
     }
 
-    override suspend fun loadUserAvatarURLString(): Result<String?> = withContext(dispatchers.io) {
+    override suspend fun loadUserAvatarURLString(): Result<String?> = withContext(sessionDispatcher) {
         runCatching {
             client.avatarUrl()
         }
     }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(dispatchers.io) {
+    override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.uploadMedia(mimeType, data.toUByteArray().toList(), progressCallback?.toProgressWatcher())
         }
@@ -305,7 +308,7 @@ class RustMatrixClient constructor(
     private suspend fun File.getCacheSize(
         userID: String,
         includeCryptoDb: Boolean = false,
-    ): Long = withContext(dispatchers.io) {
+    ): Long = withContext(sessionDispatcher) {
         // Rust sanitises the user ID replacing invalid characters with an _
         val sanitisedUserID = userID.replace(":", "_")
         val sessionDirectory = File(this@getCacheSize, sanitisedUserID)
@@ -327,7 +330,7 @@ class RustMatrixClient constructor(
     private suspend fun File.deleteSessionDirectory(
         userID: String,
         deleteCryptoDb: Boolean = false,
-    ): Boolean = withContext(dispatchers.io) {
+    ): Boolean = withContext(sessionDispatcher) {
         // Rust sanitises the user ID replacing invalid characters with an _
         val sanitisedUserID = userID.replace(":", "_")
         val sessionDirectory = File(this@deleteSessionDirectory, sanitisedUserID)

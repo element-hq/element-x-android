@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -25,6 +24,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +45,7 @@ class RustMatrixTimeline(
     roomCoroutineScope: CoroutineScope,
     private val matrixRoom: MatrixRoom,
     private val innerRoom: Room,
-    private val coroutineDispatchers: CoroutineDispatchers,
+    private val dispatcher: CoroutineDispatcher,
 ) : MatrixTimeline {
 
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
@@ -109,13 +109,13 @@ class RustMatrixTimeline(
         }
     }
 
-    override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = withContext(dispatcher) {
         runCatching {
             innerRoom.fetchDetailsForEvent(eventId.value)
         }
     }
 
-    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> = withContext(dispatcher) {
         runCatching {
             Timber.v("Start back paginating for room ${matrixRoom.roomId} ")
             val paginationOptions = PaginationOptions.UntilNumItems(
@@ -131,7 +131,7 @@ class RustMatrixTimeline(
         }
     }
 
-    override suspend fun sendReadReceipt(eventId: EventId) = withContext(coroutineDispatchers.io) {
+    override suspend fun sendReadReceipt(eventId: EventId) = withContext(dispatcher) {
         runCatching {
             innerRoom.sendReadReceipt(eventId = eventId.value)
         }

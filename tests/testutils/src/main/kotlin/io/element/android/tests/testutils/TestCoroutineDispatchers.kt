@@ -37,12 +37,10 @@ fun TestScope.testCoroutineDispatchers(
         io = UnconfinedTestDispatcher(testScheduler),
         computation = UnconfinedTestDispatcher(testScheduler),
         main = UnconfinedTestDispatcher(testScheduler),
-        diffUpdateDispatcher = UnconfinedTestDispatcher(testScheduler),
     )
     false -> CoroutineDispatchers(
         io = StandardTestDispatcher(testScheduler),
         computation = StandardTestDispatcher(testScheduler),
         main = StandardTestDispatcher(testScheduler),
-        diffUpdateDispatcher = StandardTestDispatcher(testScheduler),
     )
 }

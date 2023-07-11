@@ -22,5 +22,4 @@ data class CoroutineDispatchers(
     val io: CoroutineDispatcher,
     val computation: CoroutineDispatcher,
     val main: CoroutineDispatcher,
-    val diffUpdateDispatcher: CoroutineDispatcher,
 )

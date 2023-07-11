@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.matrix.impl.room
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +41,7 @@ import timber.log.Timber
 internal class RustRoomSummaryDataSource(
     private val roomListService: RoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    coroutineDispatchers: CoroutineDispatchers,
+    dispatcher: CoroutineDispatcher,
     roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) : RoomSummaryDataSource {
 
@@ -53,7 +53,7 @@ internal class RustRoomSummaryDataSource(
     private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, roomListService, roomSummaryDetailsFactory, shouldFetchFullRoom = true)
 
     init {
-        sessionCoroutineScope.launch(coroutineDispatchers.computation) {
+        sessionCoroutineScope.launch(dispatcher) {
             val allRooms = roomListService.allRooms()
             allRooms
                 .observeEntriesWithProcessor(allRoomsListProcessor)
