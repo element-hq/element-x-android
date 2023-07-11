@@ -55,6 +55,8 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasButtonText
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -64,8 +66,6 @@ import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.aliasButtonText
-import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 

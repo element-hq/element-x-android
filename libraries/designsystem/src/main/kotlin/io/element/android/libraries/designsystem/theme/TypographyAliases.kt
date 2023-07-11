@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.theme
+package io.element.android.libraries.designsystem.theme
 
 import androidx.compose.ui.text.TextStyle
 import io.element.android.libraries.theme.compound.generated.TypographyTokens

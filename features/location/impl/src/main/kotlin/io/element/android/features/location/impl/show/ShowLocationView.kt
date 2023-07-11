@@ -39,13 +39,13 @@ import io.element.android.features.location.impl.map.rememberMapState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.theme.compound.generated.TypographyTokens
 import io.element.android.libraries.ui.strings.CommonStrings
 

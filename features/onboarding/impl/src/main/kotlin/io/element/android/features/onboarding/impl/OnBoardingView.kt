@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
@@ -51,7 +52,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.ui.strings.CommonStrings
 
 // Refs:

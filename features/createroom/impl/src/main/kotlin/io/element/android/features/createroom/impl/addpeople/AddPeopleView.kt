@@ -26,11 +26,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.features.createroom.impl.userlist.UserListEvents
@@ -38,13 +36,13 @@ import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasButtonText
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.aliasButtonText
-import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class)

@@ -47,11 +47,11 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
