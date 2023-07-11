@@ -76,6 +76,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -122,7 +123,7 @@ fun RoomDetailsEditView(
                     ) {
                         Text(
                             text = stringResource(CommonStrings.action_save),
-                            style = ElementTheme.typography.fontBodyLgMedium,
+                            style = ElementTheme.typography.aliasButtonText,
                         )
                     }
                 }

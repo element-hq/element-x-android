@@ -58,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.ui.strings.CommonStrings
 
 // Ref: https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?type=design&node-id=6761-148425
@@ -151,7 +152,7 @@ private fun WaitListContent(
             ) {
                 Text(
                     text = stringResource(CommonStrings.action_cancel),
-                    style = ElementTheme.typography.fontBodyLgMedium,
+                    style = ElementTheme.typography.aliasButtonText,
                 )
             }
         }
@@ -222,7 +223,7 @@ private fun WaitListContent(
             ) {
                 Text(
                     text = stringResource(id = CommonStrings.action_continue),
-                    style = ElementTheme.typography.fontBodyLgMedium,
+                    style = ElementTheme.typography.aliasButtonText,
                 )
             }
         }

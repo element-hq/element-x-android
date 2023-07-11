@@ -60,6 +60,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -219,7 +220,7 @@ private fun RoomMemberListTopBar(
                 ) {
                     Text(
                         text = stringResource(CommonStrings.action_invite),
-                        style = ElementTheme.typography.fontBodyLgMedium,
+                        style = ElementTheme.typography.aliasButtonText,
                     )
                 }
             }

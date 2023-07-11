@@ -51,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.ui.strings.CommonStrings
 
 // Refs:
@@ -166,7 +167,7 @@ private fun OnBoardingButtons(
                 Spacer(Modifier.width(14.dp))
                 Text(
                     text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
-                    style = ElementTheme.typography.fontBodyLgMedium,
+                    style = ElementTheme.typography.aliasButtonText,
                 )
             }
         }
@@ -179,7 +180,7 @@ private fun OnBoardingButtons(
         ) {
             Text(
                 text = stringResource(id = signInButtonStringRes),
-                style = ElementTheme.typography.fontBodyLgMedium,
+                style = ElementTheme.typography.aliasButtonText,
             )
         }
         if (state.canCreateAccount) {
@@ -191,7 +192,7 @@ private fun OnBoardingButtons(
             ) {
                 Text(
                     text = stringResource(id = R.string.screen_onboarding_sign_up),
-                    style = ElementTheme.typography.fontBodyLgMedium,
+                    style = ElementTheme.typography.aliasButtonText,
                 )
             }
         }

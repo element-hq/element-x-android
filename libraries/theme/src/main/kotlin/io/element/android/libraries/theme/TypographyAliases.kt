@@ -25,3 +25,6 @@ import io.element.android.libraries.theme.compound.generated.TypographyTokens
 
 val TypographyTokens.aliasScreenTitle: TextStyle
     get() = fontHeadingSmMedium
+
+val TypographyTokens.aliasButtonText: TextStyle
+    get() = fontBodyLgMedium

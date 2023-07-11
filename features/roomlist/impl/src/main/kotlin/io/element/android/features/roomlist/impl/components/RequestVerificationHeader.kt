@@ -42,6 +42,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -88,7 +89,7 @@ internal fun RequestVerificationHeader(
                 ) {
                     Text(
                         stringResource(CommonStrings.action_continue),
-                        style = ElementTheme.typography.fontBodyLgMedium
+                        style = ElementTheme.typography.aliasButtonText
                     )
                 }
             }

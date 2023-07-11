@@ -53,6 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private val minHeight = 72.dp
@@ -132,7 +133,7 @@ internal fun DefaultInviteSummaryRow(
             // CTAs
             Row(Modifier.padding(top = 12.dp)) {
                 OutlinedButton(
-                    content = { Text(stringResource(CommonStrings.action_decline), style = ElementTheme.typography.fontBodyLgMedium) },
+                    content = { Text(stringResource(CommonStrings.action_decline), style = ElementTheme.typography.aliasButtonText) },
                     onClick = onDeclineClicked,
                     modifier = Modifier
                         .weight(1f)
@@ -143,7 +144,7 @@ internal fun DefaultInviteSummaryRow(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(
-                    content = { Text(stringResource(CommonStrings.action_accept), style = ElementTheme.typography.fontBodyLgMedium) },
+                    content = { Text(stringResource(CommonStrings.action_accept), style = ElementTheme.typography.aliasButtonText) },
                     onClick = onAcceptClicked,
                     modifier = Modifier
                         .weight(1f)

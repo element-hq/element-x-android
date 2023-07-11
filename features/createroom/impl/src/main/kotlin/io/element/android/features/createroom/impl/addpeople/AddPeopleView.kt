@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasButtonText
 import io.element.android.libraries.theme.aliasScreenTitle
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -111,7 +112,7 @@ fun AddPeopleViewTopBar(
                 val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip
                 Text(
                     text = stringResource(id = textActionResId),
-                    style = ElementTheme.typography.fontBodyLgMedium,
+                    style = ElementTheme.typography.aliasButtonText,
                 )
             }
         }

@@ -39,6 +39,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.ElementButtonDefaults
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.aliasButtonText
 
 /**
  * A component that will display a button with an indeterminate circular progressbar.
@@ -87,10 +88,10 @@ fun ButtonWithProgress(
             )
             if (progressText != null) {
                 Spacer(Modifier.width(10.dp))
-                Text(progressText, style = ElementTheme.typography.fontBodyLgMedium)
+                Text(progressText, style = ElementTheme.typography.aliasButtonText)
             }
         } else if (text != null) {
-            Text(text, style = ElementTheme.typography.fontBodyLgMedium)
+            Text(text, style = ElementTheme.typography.aliasButtonText)
         }
     }
 }
