@@ -64,14 +64,6 @@ object ElementTheme {
         get() = MaterialTheme.colorScheme
 
     /**
-     * Material 3 [Typography] tokens. In Figma, these have the `M3/` prefix.
-     */
-    val materialTypography: Typography
-        @Composable
-        @ReadOnlyComposable
-        get() = MaterialTheme.typography
-
-    /**
      * Compound [Typography] tokens. In Figma, these have the `Android/font/` prefix.
      */
     val typography: TypographyTokens = TypographyTokens
