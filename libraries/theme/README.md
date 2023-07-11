@@ -10,7 +10,6 @@ All tokens can be accessed through the `ElementTheme` object, which contains the
 
 * `ElementTheme.materialColors`: contains all Material color tokens. In Figma, they're prefixed with `M3/`. It's an alias to `MaterialTheme.colorScheme`.
 * `ElementTheme.colors`: contains all Compound semantic color tokens. In Figma, they're prefixed with either `Light/` or `Dark/`.
-* `ElementTheme.materialTypography`: contains the Material `Typography` values. In Figma, they're prefixed with `M3/`. It's an alias to `MaterialTheme.typography`.
 * `ElementTheme.typography`: contains the Compound `TypographyTokens` values. In Figma, they're prefixed with `Android/font/`.
 
 ## Adding new tokens
