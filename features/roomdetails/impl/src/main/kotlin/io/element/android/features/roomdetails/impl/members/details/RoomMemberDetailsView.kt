@@ -43,7 +43,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -57,6 +56,7 @@ import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -118,10 +118,10 @@ internal fun RoomMemberHeaderSection(
         }
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
-            Text(userName, style = ElementTextStyles.Bold.title1)
+            Text(userName, style = ElementTheme.typography.fontHeadingLgBold)
             Spacer(modifier = Modifier.height(6.dp))
         }
-        Text(userId, style = ElementTextStyles.Regular.body, color = MaterialTheme.colorScheme.secondary)
+        Text(userId, style = ElementTheme.typography.fontBodyLgRegular, color = MaterialTheme.colorScheme.secondary)
         Spacer(Modifier.height(40.dp))
     }
 }

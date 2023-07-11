@@ -35,11 +35,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -112,11 +113,17 @@ private fun ColumnScope.RetrySendMenuContents(
     val coroutineScope = rememberCoroutineScope()
 
     ListItem(headlineContent = {
-        Text(stringResource(R.string.screen_room_retry_send_menu_title), fontWeight = FontWeight.Medium)
+        Text(
+            text = stringResource(R.string.screen_room_retry_send_menu_title),
+            style = ElementTheme.typography.fontBodyLgMedium,
+        )
     })
     ListItem(
         headlineContent = {
-            Text(stringResource(R.string.screen_room_retry_send_menu_send_again_action))
+            Text(
+                text = stringResource(R.string.screen_room_retry_send_menu_send_again_action),
+                style = ElementTheme.typography.fontBodyLgRegular,
+            )
         },
         modifier = Modifier.clickable {
             coroutineScope.launch {
@@ -127,7 +134,10 @@ private fun ColumnScope.RetrySendMenuContents(
     )
     ListItem(
         headlineContent = {
-            Text(stringResource(R.string.screen_room_retry_send_menu_remove_action))
+            Text(
+                text = stringResource(R.string.screen_room_retry_send_menu_remove_action),
+                style = ElementTheme.typography.fontBodyLgRegular,
+            )
         },
         colors = ListItemDefaults.colors(headlineColor = MaterialTheme.colorScheme.error),
         modifier = Modifier.clickable {

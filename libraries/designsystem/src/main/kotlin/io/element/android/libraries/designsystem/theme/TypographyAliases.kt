@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.theme
+package io.element.android.libraries.designsystem.theme
 
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import io.element.android.libraries.theme.compound.generated.TypographyTokens
 
-// =================================================================================================
-// IMPORTANT!
-// We should not be adding any new colors here. This file is only for legacy colors.
-// In fact, we should try to remove any references to these colors as we
-// iterate through the designs. All new colors should come from Compound's Design Tokens.
-// =================================================================================================
+/*
+ * This file contains aliases for TypographyTokens.
+ */
 
-val LinkColor = Color(0xFF0086E6)
+val TypographyTokens.aliasScreenTitle: TextStyle
+    get() = fontHeadingSmMedium
+
+val TypographyTokens.aliasButtonText: TextStyle
+    get() = fontBodyLgMedium

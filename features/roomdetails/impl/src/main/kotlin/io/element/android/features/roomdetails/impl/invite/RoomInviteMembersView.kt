@@ -29,16 +29,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
@@ -52,6 +51,7 @@ import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -122,8 +122,7 @@ fun RoomInviteMembersTopBar(
         title = {
             Text(
                 text = stringResource(R.string.screen_room_details_invite_people_title),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = ElementTheme.typography.aliasScreenTitle,
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
@@ -174,8 +173,8 @@ private fun RoomInviteMembersSearchBar(
         resultState = state,
         resultHandler = { results ->
             Text(
-                text = "Search results",
-                fontWeight = FontWeight.Medium,
+                text = stringResource(id = CommonStrings.common_search_results),
+                style = ElementTheme.typography.fontBodyLgMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 8.dp)

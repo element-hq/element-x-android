@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -37,15 +36,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
@@ -113,10 +111,12 @@ private fun DefaultRoomListTopBar(
         modifier = modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         title = {
-            val fontSize = if (scrollBehavior.state.collapsedFraction > 0.5) 20.sp else 22.sp
+            val fontStyle = if (scrollBehavior.state.collapsedFraction > 0.5)
+                ElementTheme.typography.aliasScreenTitle
+            else
+                ElementTheme.typography.fontHeadingLgBold
             Text(
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineMedium.copy(fontSize = fontSize),
+                style = fontStyle,
                 text = stringResource(id = R.string.screen_roomlist_main_space_title)
             )
         },

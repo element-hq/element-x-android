@@ -75,13 +75,13 @@ fun TimelineItemFileView(
                 text = content.body,
                 color = ElementTheme.materialColors.primary,
                 maxLines = 2,
-                fontSize = 16.sp,
+                style = ElementTheme.typography.fontBodyLgRegular,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = content.fileExtensionAndSize + extraPadding.getStr(12.sp),
                 color = ElementTheme.materialColors.secondary,
-                fontSize = 12.sp,
+                style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

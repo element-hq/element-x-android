@@ -40,6 +40,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 import io.element.android.libraries.theme.ElementTheme
 
 /**
@@ -69,7 +70,7 @@ fun UnsavedAvatar(
             contentDescription = null,
         )
     } else {
-        Box(modifier = commonModifier.background(ElementTheme.legacyColors.quinary)) {
+        Box(modifier = commonModifier.background(ElementTheme.colors.temporaryColorBgSpecial)) {
             Icon(
                 imageVector = Icons.Outlined.AddAPhoto,
                 contentDescription = "",

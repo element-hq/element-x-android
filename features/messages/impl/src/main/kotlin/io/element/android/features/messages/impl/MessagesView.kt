@@ -79,6 +79,7 @@ import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
@@ -307,9 +308,8 @@ fun MessagesViewTopBar(
                 Avatar(roomAvatar)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
                     text = roomTitle,
+                    style = ElementTheme.typography.fontBodyLgMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

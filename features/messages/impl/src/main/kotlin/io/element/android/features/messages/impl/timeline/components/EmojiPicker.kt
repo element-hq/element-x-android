@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -105,8 +106,10 @@ fun EmojiPicker(
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = item.unicode, fontSize = 20.sp)
-                    }
+                        Text(
+                            text = item.unicode,
+                            style = ElementTheme.typography.fontHeadingSmRegular,
+                        )                    }
                 }
             }
         }

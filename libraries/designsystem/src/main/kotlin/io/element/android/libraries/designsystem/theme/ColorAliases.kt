@@ -65,6 +65,10 @@ val SemanticColors.messageFromOtherBackground
         Color(0xFF26282D)
     }
 
+// Temporary color, which is not in the token right now
+val SemanticColors.temporaryColorBgSpecial
+    get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
+
 @Preview
 @Composable
 internal fun ColorAliasesLightPreview() = ElementPreviewLight { ContentToPreview() }
@@ -86,6 +90,7 @@ private fun ContentToPreview() {
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
+            "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
         )
     )
 }

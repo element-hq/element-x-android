@@ -52,6 +52,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -151,7 +152,7 @@ private fun WaitListContent(
             ) {
                 Text(
                     text = stringResource(CommonStrings.action_cancel),
-                    style = ElementTheme.typography.fontBodyLgMedium,
+                    style = ElementTheme.typography.aliasButtonText,
                 )
             }
         }
@@ -222,7 +223,7 @@ private fun WaitListContent(
             ) {
                 Text(
                     text = stringResource(id = CommonStrings.action_continue),
-                    style = ElementTheme.typography.fontBodyLgMedium,
+                    style = ElementTheme.typography.aliasButtonText,
                 )
             }
         }

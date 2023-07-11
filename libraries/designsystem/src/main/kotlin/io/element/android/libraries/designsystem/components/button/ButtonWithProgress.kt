@@ -32,13 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ElementButtonDefaults
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * A component that will display a button with an indeterminate circular progressbar.
@@ -64,7 +65,9 @@ fun ButtonWithProgress(
 ) {
     Button(
         onClick = {
-            if (!showProgress) { onClick() }
+            if (!showProgress) {
+                onClick()
+            }
         },
         modifier = modifier,
         enabled = enabled,
@@ -85,10 +88,10 @@ fun ButtonWithProgress(
             )
             if (progressText != null) {
                 Spacer(Modifier.width(10.dp))
-                Text(progressText, style = ElementTextStyles.Button)
+                Text(progressText, style = ElementTheme.typography.aliasButtonText)
             }
         } else if (text != null) {
-            Text(text, style = ElementTextStyles.Button)
+            Text(text, style = ElementTheme.typography.aliasButtonText)
         }
     }
 }

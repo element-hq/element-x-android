@@ -36,19 +36,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasButtonText
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
@@ -60,6 +58,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -163,10 +162,8 @@ private fun LazyListScope.roomMemberListSection(
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             text = headerText(),
-            fontSize = 16.sp,
-            style = ElementTextStyles.Regular.callout,
+            style = ElementTheme.typography.fontBodyLgRegular,
             color = MaterialTheme.colorScheme.secondary,
-            textAlign = TextAlign.Start,
         )
     }
     items(members) { matrixUser ->
@@ -208,8 +205,7 @@ private fun RoomMemberListTopBar(
         title = {
             Text(
                 text = stringResource(R.string.screen_room_details_people_title),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = ElementTheme.typography.aliasScreenTitle,
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
@@ -221,7 +217,7 @@ private fun RoomMemberListTopBar(
                 ) {
                     Text(
                         text = stringResource(CommonStrings.action_invite),
-                        fontSize = 16.sp,
+                        style = ElementTheme.typography.aliasButtonText,
                     )
                 }
             }

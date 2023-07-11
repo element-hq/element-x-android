@@ -66,6 +66,7 @@ import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
+import io.element.android.libraries.theme.ElementTheme
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.ZoomableState
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
@@ -238,7 +239,7 @@ fun MediaFileView(
                 Text(
                     text = info.name,
                     maxLines = 2,
-                    fontSize = 16.sp,
+                    style = ElementTheme.typography.fontBodyLgRegular,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.primary
@@ -246,7 +247,7 @@ fun MediaFileView(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = formatFileExtensionAndSize(info.fileExtension, info.formattedFileSize),
-                    fontSize = 14.sp,
+                    style = ElementTheme.typography.fontBodyMdRegular,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.primary

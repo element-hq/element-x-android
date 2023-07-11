@@ -45,15 +45,6 @@ import io.element.android.libraries.theme.compound.generated.TypographyTokens
  */
 object ElementTheme {
     /**
-     * The current [ElementColors] provided by [ElementTheme]. Usage of these colors is discouraged.
-     * In Figma, they usually have the `Zzz` prefix or have no name at all.
-     */
-    val legacyColors: ElementColors
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalLegacyColors.current
-
-    /**
      * The current [SemanticColors] provided by [ElementTheme].
      * These come from Compound and are the recommended colors to use for custom components.
      * In Figma, these colors usually have the `Light/` or `Dark/` prefix.
@@ -73,14 +64,6 @@ object ElementTheme {
         get() = MaterialTheme.colorScheme
 
     /**
-     * Material 3 [Typography] tokens. In Figma, these have the `M3/` prefix.
-     */
-    val materialTypography: Typography
-        @Composable
-        @ReadOnlyComposable
-        get() = MaterialTheme.typography
-
-    /**
      * Compound [Typography] tokens. In Figma, these have the `Android/font/` prefix.
      */
     val typography: TypographyTokens = TypographyTokens
@@ -95,14 +78,12 @@ object ElementTheme {
 }
 
 /* Global variables (application level) */
-internal val LocalLegacyColors = staticCompositionLocalOf { elementColorsLight() }
 internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLight }
 
 @Composable
 fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false, /* true to enable MaterialYou */
-    legacyColors: ElementColors = if (darkTheme) elementColorsDark() else elementColorsLight(),
     compoundColors: SemanticColors = if (darkTheme) compoundColorsDark else compoundColorsLight,
     materialLightColors: ColorScheme = materialColorSchemeLight,
     materialDarkColors: ColorScheme = materialColorSchemeDark,
@@ -110,9 +91,6 @@ fun ElementTheme(
     content: @Composable () -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
-    val currentLegacyColor = remember(darkTheme) {
-        legacyColors.copy()
-    }.apply { updateColorsFrom(legacyColors) }
     val currentCompoundColor = remember(darkTheme) {
         compoundColors.copy()
     }.apply { updateColorsFrom(compoundColors) }
@@ -128,7 +106,6 @@ fun ElementTheme(
         systemUiController.applyTheme(colorScheme = colorScheme, darkTheme = darkTheme)
     }
     CompositionLocalProvider(
-        LocalLegacyColors provides currentLegacyColor,
         LocalCompoundColors provides currentCompoundColor,
     ) {
         MaterialTheme(
@@ -149,7 +126,7 @@ fun ForcedDarkElementTheme(
 ) {
     val systemUiController = rememberSystemUiController()
     val colorScheme = MaterialTheme.colorScheme
-    val wasDarkTheme = !ElementTheme.legacyColors.isLight
+    val wasDarkTheme = !ElementTheme.colors.isLight
     DisposableEffect(Unit) {
         onDispose {
             systemUiController.applyTheme(colorScheme, wasDarkTheme)

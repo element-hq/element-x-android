@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,8 +44,8 @@ import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -70,13 +69,11 @@ fun UnresolvedUserRow(
         ) {
             // ID
             Text(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
                 text = id,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.primary,
-                style = noFontPadding,
+                style = ElementTheme.typography.fontBodyLgMedium,
             )
 
             // Warning
@@ -98,8 +95,7 @@ fun UnresolvedUserRow(
                 Text(
                     text = stringResource(CommonStrings.common_invite_unknown_profile),
                     color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 12.sp,
-                    lineHeight = 16.sp,
+                    style = ElementTheme.typography.fontBodySmRegular.copy(lineHeight = 16.sp),
                 )
             }
         }

@@ -94,7 +94,7 @@ private fun InitialsAvatar(
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = avatarData.initial,
-            fontSize = avatarData.size.dp.toSp() / 2,
+            style = ElementTheme.typography.fontBodyMdRegular.copy(fontSize = avatarData.size.dp.toSp() / 2),
             color = Color.White,
         )
     }

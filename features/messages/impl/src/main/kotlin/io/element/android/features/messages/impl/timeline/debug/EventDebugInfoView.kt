@@ -18,7 +18,6 @@ package io.element.android.features.messages.impl.timeline.debug
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -52,16 +51,17 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.getSystemService
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * Screen used to display debug info for events.
@@ -83,18 +83,22 @@ fun EventDebugInfoView(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Debug event info")
+                    Text(
+                        text = "Debug event info",
+                        style = ElementTheme.typography.aliasScreenTitle,
+                    )
                 },
                 navigationIcon = { BackButton(onClick = onBackPressed) }
             )
         },
         modifier = modifier
     ) { padding ->
-        LazyColumn(modifier = Modifier
-            .fillMaxWidth()
-            .padding(padding) // Window insets
-            .consumeWindowInsets(padding)
-            .padding(horizontal = 16.dp) // Internal padding
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(padding) // Window insets
+                .consumeWindowInsets(padding)
+                .padding(horizontal = 16.dp) // Internal padding
         ) {
             item {
                 Column(Modifier.padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -161,7 +165,11 @@ private fun CopyableText(
             .padding(6.dp)
             .clickable { clipboardManager.setPrimaryClip(ClipData.newPlainText("JSON", text)) }
     ) {
-        Text(text = text, fontFamily = FontFamily.Monospace, fontSize = 14.sp, modifier = Modifier.padding(8.dp))
+        Text(
+            text = text,
+            style = ElementTheme.typography.fontBodyMdRegular.copy(fontFamily = FontFamily.Monospace),
+            modifier = Modifier.padding(8.dp),
+        )
     }
 }
 

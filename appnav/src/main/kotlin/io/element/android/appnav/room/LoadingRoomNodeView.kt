@@ -81,7 +81,7 @@ fun LoadingRoomNodeView(
                     Text(
                         text = stringResource(id = CommonStrings.error_unknown),
                         color = ElementTheme.colors.textSecondary,
-                        fontSize = 14.sp,
+                        style = ElementTheme.typography.fontBodyMdRegular,
                     )
                 } else {
                     CircularProgressIndicator()

@@ -163,8 +163,8 @@ private fun ContentToPreview(state: BubbleState) {
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    fontSize = 10.sp,
-                    text = "${state.groupPosition.javaClass.simpleName} m:${state.isMine.to01()} h:${state.isHighlighted.to01()}"
+                    text = "${state.groupPosition.javaClass.simpleName} m:${state.isMine.to01()} h:${state.isHighlighted.to01()}",
+                    style = ElementTheme.typography.fontBodyXsRegular,
                 )
             }
         }

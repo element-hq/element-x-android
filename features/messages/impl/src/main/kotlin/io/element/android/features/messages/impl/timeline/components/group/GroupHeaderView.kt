@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 private val CORNER_RADIUS = 8.dp
 
@@ -76,7 +77,7 @@ fun GroupHeaderView(
                 Text(
                     text = text,
                     color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 13.sp
+                    style = ElementTheme.typography.fontBodyMdRegular,
                 )
                 val icon = if (isExpanded) {
                     Icons.Default.ExpandLess

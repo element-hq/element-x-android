@@ -41,20 +41,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.invitelist.impl.R
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummaryProvider
 import io.element.android.features.invitelist.impl.model.InviteSender
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.noFontPadding
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private val minHeight = 72.dp
@@ -106,21 +105,18 @@ internal fun DefaultInviteSummaryRow(
 
             // Name
             Text(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
                 text = invite.roomName,
                 color = MaterialTheme.colorScheme.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = noFontPadding,
+                style = ElementTheme.typography.fontBodyLgMedium,
                 modifier = Modifier.padding(end = bonusPadding),
             )
 
             // ID or Alias
             invite.roomAlias?.let {
                 Text(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
+                    style = ElementTheme.typography.fontBodyMdRegular,
                     text = it,
                     color = MaterialTheme.colorScheme.secondary,
                     maxLines = 1,
@@ -137,7 +133,7 @@ internal fun DefaultInviteSummaryRow(
             // CTAs
             Row(Modifier.padding(top = 12.dp)) {
                 OutlinedButton(
-                    content = { Text(stringResource(CommonStrings.action_decline), style = ElementTextStyles.Button) },
+                    content = { Text(stringResource(CommonStrings.action_decline), style = ElementTheme.typography.aliasButtonText) },
                     onClick = onDeclineClicked,
                     modifier = Modifier
                         .weight(1f)
@@ -148,7 +144,7 @@ internal fun DefaultInviteSummaryRow(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(
-                    content = { Text(stringResource(CommonStrings.action_accept), style = ElementTextStyles.Button) },
+                    content = { Text(stringResource(CommonStrings.action_accept), style = ElementTheme.typography.aliasButtonText) },
                     onClick = onAcceptClicked,
                     modifier = Modifier
                         .weight(1f)
@@ -188,10 +184,8 @@ private fun SenderRow(sender: InviteSender) {
                     )
                 )
             },
-            style = noFontPadding,
+            style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.secondary,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal,
         )
     }
 }

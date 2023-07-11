@@ -38,13 +38,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -54,6 +51,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -67,6 +65,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -112,7 +111,12 @@ fun ForwardMessagesView(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(CommonStrings.common_forward_message), style = ElementTextStyles.Bold.callout) },
+                title = {
+                    Text(
+                        text = stringResource(CommonStrings.common_forward_message),
+                        style = ElementTheme.typography.aliasScreenTitle
+                    )
+                },
                 navigationIcon = {
                     BackButton(onClick = { onBackButton(state) })
                 },
@@ -248,8 +252,7 @@ internal fun RoomSummaryView(
         ) {
             // Name
             Text(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = ElementTheme.typography.fontBodyLgRegular,
                 text = summary.name,
                 color = MaterialTheme.roomListRoomName(),
                 maxLines = 1,
@@ -259,7 +262,7 @@ internal fun RoomSummaryView(
             Text(
                 text = roomAlias,
                 color = MaterialTheme.roomListRoomMessage(),
-                fontSize = 14.sp,
+                style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

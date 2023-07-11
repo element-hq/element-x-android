@@ -41,16 +41,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
@@ -158,11 +159,14 @@ internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier
 @Composable
 internal fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Text(emoji.code, fontSize = 34.sp)
+        Text(
+            text = emoji.code,
+            style = ElementTheme.typography.fontBodyMdRegular.copy(fontSize = 34.sp),
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             emoji.name,
-            style = ElementTextStyles.Regular.bodyMD,
+            style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.secondary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -227,7 +231,10 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 onClick = negativeButtonCallback,
                 enabled = negativeButtonEnabled,
             ) {
-                Text(stringResource(negativeButtonTitle), fontSize = 16.sp)
+                Text(
+                    text = stringResource(negativeButtonTitle),
+                    style = ElementTheme.typography.aliasButtonText,
+                )
             }
         }
     }

@@ -66,12 +66,10 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -221,7 +219,7 @@ private fun SheetContent(
 private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modifier) {
     val content: @Composable () -> Unit
     var icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender)) }
-    val contentStyle = ElementTextStyles.Regular.bodyMD.copy(color = MaterialTheme.colorScheme.secondary)
+    val contentStyle = ElementTheme.typography.fontBodyMdRegular.copy(color = MaterialTheme.colorScheme.secondary)
     val imageModifier = Modifier
         .size(AvatarSize.MessageActionSender.dp)
         .clip(RoundedCornerShape(9.dp))
@@ -306,7 +304,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 if (event.senderDisplayName != null) {
                     Text(
                         text = event.senderDisplayName,
-                        style = ElementTextStyles.Bold.caption1,
+                        style = ElementTheme.typography.fontBodySmMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -316,7 +314,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             event.sentTime,
-            style = ElementTextStyles.Regular.caption2,
+            style = ElementTheme.typography.fontBodyXsRegular,
             color = MaterialTheme.colorScheme.secondary,
             textAlign = TextAlign.End,
         )

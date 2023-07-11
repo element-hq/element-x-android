@@ -336,9 +336,8 @@ private fun MessageSenderInformation(
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = sender,
-                fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleMedium,
+                style = ElementTheme.typography.fontBodyMdMedium,
             )
         }
     }
@@ -393,7 +392,7 @@ private fun MessageEventBubbleContent(
                     onLongClick = ::onTimestampLongClick,
                     modifier = timestampModifier
                         .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
-                        .background(ElementTheme.legacyColors.gray300, RoundedCornerShape(10.0.dp))
+                        .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
                         .align(Alignment.BottomEnd)
                         .padding(horizontal = 4.dp, vertical = 2.dp) // Inner padding
                 )

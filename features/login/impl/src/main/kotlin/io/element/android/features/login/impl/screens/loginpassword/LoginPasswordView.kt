@@ -58,7 +58,6 @@ import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
@@ -76,6 +75,7 @@ import io.element.android.libraries.designsystem.theme.components.autofill
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -186,7 +186,7 @@ internal fun LoginForm(
         Text(
             text = stringResource(R.string.screen_login_form_header),
             modifier = Modifier.padding(start = 16.dp),
-            style = ElementTextStyles.Regular.formHeader
+            style = ElementTheme.typography.fontBodyMdRegular,
         )
 
         Spacer(modifier = Modifier.height(8.dp))

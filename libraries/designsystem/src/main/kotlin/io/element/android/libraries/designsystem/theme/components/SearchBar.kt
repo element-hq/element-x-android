@@ -156,10 +156,10 @@ object ElementSearchBarDefaults {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun inactiveColors() = SearchBarDefaults.colors(
-        containerColor = ElementTheme.legacyColors.gray300,
+        containerColor = ElementTheme.materialColors.surfaceVariant,
         inputFieldColors = TextFieldDefaults.colors(
-            unfocusedPlaceholderColor = ElementTheme.legacyColors.placeholder,
-            focusedPlaceholderColor = ElementTheme.legacyColors.placeholder,
+            unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
+            focusedPlaceholderColor = ElementTheme.colors.textDisabled,
             unfocusedLeadingIconColor = MaterialTheme.colorScheme.primary,
             focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
             unfocusedTrailingIconColor = MaterialTheme.colorScheme.primary,
@@ -172,8 +172,8 @@ object ElementSearchBarDefaults {
     fun activeColors() = SearchBarDefaults.colors(
         containerColor = Color.Transparent,
         inputFieldColors = TextFieldDefaults.colors(
-            unfocusedPlaceholderColor = ElementTheme.legacyColors.placeholder,
-            focusedPlaceholderColor = ElementTheme.legacyColors.placeholder,
+            unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
+            focusedPlaceholderColor = ElementTheme.colors.textDisabled,
             unfocusedLeadingIconColor = MaterialTheme.colorScheme.primary,
             focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
             unfocusedTrailingIconColor = MaterialTheme.colorScheme.primary,
@@ -243,19 +243,28 @@ internal fun SearchBarPreviewActiveWithContent() = ElementThemedPreview {
         active = true,
         resultState = SearchBarResultState.Results("result!"),
         contentPrefix = {
-            Text(text = "Content that goes before the search results", modifier = Modifier
-                .background(color = Color.Red)
-                .fillMaxWidth())
+            Text(
+                text = "Content that goes before the search results",
+                modifier = Modifier
+                    .background(color = Color.Red)
+                    .fillMaxWidth()
+            )
         },
         contentSuffix = {
-            Text(text = "Content that goes after the search results", modifier = Modifier
-                .background(color = Color.Blue)
-                .fillMaxWidth())
+            Text(
+                text = "Content that goes after the search results",
+                modifier = Modifier
+                    .background(color = Color.Blue)
+                    .fillMaxWidth()
+            )
         },
         resultHandler = {
-            Text(text = "Results go here", modifier = Modifier
-                .background(color = Color.Green)
-                .fillMaxWidth())
+            Text(
+                text = "Results go here",
+                modifier = Modifier
+                    .background(color = Color.Green)
+                    .fillMaxWidth()
+            )
         }
     )
 }

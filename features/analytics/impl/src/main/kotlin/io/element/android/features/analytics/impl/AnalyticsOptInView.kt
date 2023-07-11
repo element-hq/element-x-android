@@ -41,14 +41,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -59,6 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -109,7 +107,7 @@ private fun AnalyticsOptInHeader(
                 .clip(shape = RoundedCornerShape(8.dp))
                 .clickable { onClickTerms() }
                 .padding(8.dp),
-            style = ElementTextStyles.Regular.subheadline,
+            style = ElementTheme.typography.fontBodyMdRegular,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.secondary,
         )
@@ -162,7 +160,7 @@ private fun AnalyticsOptInContentRow(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = ElementTheme.legacyColors.quinary,
+                color = ElementTheme.colors.temporaryColorBgSpecial,
                 shape = bgShape,
             )
             .padding(vertical = 12.dp, horizontal = 20.dp),
@@ -179,8 +177,7 @@ private fun AnalyticsOptInContentRow(
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = text,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold,
+            style = ElementTheme.typography.fontBodyMdMedium,
             color = MaterialTheme.colorScheme.primary,
         )
     }

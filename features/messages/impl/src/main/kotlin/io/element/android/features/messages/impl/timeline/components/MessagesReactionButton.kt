@@ -45,7 +45,6 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toDp
@@ -117,7 +116,7 @@ private fun TextContent(
     modifier = modifier
         .height(reactionEmojiLineHeight.toDp()),
     text = text,
-    style = ElementTextStyles.Regular.bodyMD
+    style = ElementTheme.typography.fontBodyMdRegular,
 )
 
 @Composable
@@ -142,14 +141,17 @@ private fun ReactionContent(
 ) {
     Text(
         text = reaction.displayKey,
-        fontSize = 15.sp, lineHeight = reactionEmojiLineHeight
+        style = ElementTheme.typography.fontBodyMdRegular.copy(
+            fontSize = 15.sp,
+            lineHeight = reactionEmojiLineHeight,
+        ),
     )
     if (reaction.count > 1) {
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = reaction.count.toString(),
             color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-            fontSize = 14.sp,
+            style = ElementTheme.typography.fontBodyMdRegular,
         )
     }
 }
@@ -176,9 +178,11 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
             onClick = {}
         )
         MessagesReactionButton(
-            content = MessagesReactionsButtonContent.Reaction(aTimelineItemReactions().reactions.first().copy(
-                key = "A very long reaction with many characters that should be truncated"
-            )),
+            content = MessagesReactionsButtonContent.Reaction(
+                aTimelineItemReactions().reactions.first().copy(
+                    key = "A very long reaction with many characters that should be truncated"
+                )
+            ),
             onClick = {}
         )
     }

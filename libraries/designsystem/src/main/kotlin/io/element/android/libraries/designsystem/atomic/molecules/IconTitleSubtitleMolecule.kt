@@ -29,13 +29,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * IconTitleSubtitleMolecule is a molecule which displays an icon, a title and a subtitle.
@@ -71,7 +71,7 @@ fun IconTitleSubtitleMolecule(
             modifier = Modifier
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = ElementTextStyles.Bold.title2,
+            style = ElementTheme.typography.fontHeadingMdBold,
             color = MaterialTheme.colorScheme.primary,
         )
         Spacer(Modifier.height(8.dp))
@@ -79,7 +79,7 @@ fun IconTitleSubtitleMolecule(
             text = subTitle,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = ElementTextStyles.Regular.subheadline,
+            style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.secondary,
         )
     }

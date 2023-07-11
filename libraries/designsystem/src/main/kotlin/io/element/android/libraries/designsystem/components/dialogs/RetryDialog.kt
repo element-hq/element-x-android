@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -51,19 +52,31 @@ fun RetryDialog(
         modifier = modifier,
         onDismissRequest = onDismiss,
         title = {
-            Text(title)
+            Text(
+                text = title,
+                style = ElementTheme.typography.fontHeadingSmRegular,
+            )
         },
         text = {
-            Text(content)
+            Text(
+                text = content,
+                style = ElementTheme.typography.fontBodyMdRegular,
+            )
         },
         confirmButton = {
             TextButton(onClick = onRetry) {
-                Text(retryText)
+                Text(
+                    text = retryText,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(dismissText)
+                Text(
+                    text = dismissText,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                )
             }
         },
         shape = shape,

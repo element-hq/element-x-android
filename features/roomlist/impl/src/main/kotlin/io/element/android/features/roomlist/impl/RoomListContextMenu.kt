@@ -40,6 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,13 +80,16 @@ private fun RoomListModalBottomSheetContent(
             headlineContent = {
                 Text(
                     text = contextMenu.roomName,
-                    fontWeight = FontWeight.Bold,
+                    style = ElementTheme.typography.fontBodyLgMedium,
                 )
             }
         )
         ListItem(
             headlineContent = {
-                Text(text = stringResource(id = CommonStrings.common_settings))
+                Text(
+                    text = stringResource(id = CommonStrings.common_settings),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
             },
             modifier = Modifier.clickable { onRoomSettingsClicked(contextMenu.roomId) },
             leadingContent = {
@@ -102,6 +106,7 @@ private fun RoomListModalBottomSheetContent(
                 Text(
                     text = stringResource(id = CommonStrings.action_leave_room),
                     color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
             },
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
