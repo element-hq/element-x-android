@@ -20,6 +20,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
@@ -29,10 +30,12 @@ import org.matrix.rustcomponents.sdk.MediaSource as RustMediaSource
 
 class RustMediaLoader(
     baseCacheDirectory: File,
-    private val dispatchers: CoroutineDispatchers,
+    dispatchers: CoroutineDispatchers,
     private val innerClient: Client,
 ) : MatrixMediaLoader {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val mediaDispatcher = dispatchers.io.limitedParallelism(32)
     private val cacheDirectory = File(baseCacheDirectory, "temp/media").apply {
         if (!exists()) {
             mkdirs()
@@ -41,7 +44,7 @@ class RustMediaLoader(
 
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
-        withContext(dispatchers.io) {
+        withContext(mediaDispatcher) {
             runCatching {
                 source.toRustMediaSource().use { source ->
                     innerClient.getMediaContent(source).toUByteArray().toByteArray()
@@ -55,7 +58,7 @@ class RustMediaLoader(
         width: Long,
         height: Long
     ): Result<ByteArray> =
-        withContext(dispatchers.io) {
+        withContext(mediaDispatcher) {
             runCatching {
                 source.toRustMediaSource().use { mediaSource ->
                     innerClient.getMediaThumbnail(
@@ -68,7 +71,7 @@ class RustMediaLoader(
         }
 
     override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> =
-        withContext(dispatchers.io) {
+        withContext(mediaDispatcher) {
             runCatching {
                 source.toRustMediaSource().use { mediaSource ->
                     val mediaFile = innerClient.getMediaFile(
