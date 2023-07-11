@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 import io.element.android.libraries.theme.ElementTheme
 
 /**
@@ -59,7 +60,7 @@ fun RoundedIconAtom(
         modifier = modifier
             .size(size.toContainerSize())
             .background(
-                color = ElementTheme.materialColors.surfaceVariant,
+                color = ElementTheme.colors.temporaryColorBgSpecial,
                 shape = RoundedCornerShape(size.toCornerSize())
             )
     ) {

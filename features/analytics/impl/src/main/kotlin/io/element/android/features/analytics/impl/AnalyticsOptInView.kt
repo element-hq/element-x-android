@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -159,7 +160,7 @@ private fun AnalyticsOptInContentRow(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = ElementTheme.materialColors.surfaceVariant,
+                color = ElementTheme.colors.temporaryColorBgSpecial,
                 shape = bgShape,
             )
             .padding(vertical = 12.dp, horizontal = 20.dp),
