@@ -28,4 +28,15 @@ class ComponentTestPreview(
     override val name: String = showkaseBrowserComponent.componentName
 
     override fun toString(): String = showkaseBrowserComponent.componentKey
+        // Strip common package beginning
+        .replace("io.element.android.features.", "f.")
+        .replace("io.element.android.libraries.", "l.")
+        .replace("io.element.android.", "")
+        // Reduce default group (if present)
+        .replace("_DefaultGroup_", "_")
+        // No need to include `Preview` suffix of function name
+        .replace("Preview_", "_")
+        // Also for preview annotated with @ElementPreview
+        .replace("Preview-", "-")
+
 }
