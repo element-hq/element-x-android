@@ -1,0 +1,23 @@
+Element X is the future Element. 
+
+It is the brand new, and fastest ever, Matrix client. It is for personal and community use, and will support enterprise functionality later this year.
+
+A complete new build, Element X transforms performance. It’s not just the fastest Matrix client, it’s also fresher and more reliable.
+
+It’s so fast for a number of reasons, but in particular we’ve introduced a completely new syncing service (‘sliding sync’). So even in big end-to-end encrypted chat rooms it operates incredibly quickly.
+
+It’s fresher because we’ve rebuilt the entire user experience. All the power of Matrix - and the complexity of decentralized end-to-end encryption - is now hidden under a beautiful and intuitive user interface using the very latest frameworks and accessibility features.
+
+Element X delivers speed, usability and reliability on the decentralized Matrix open standard.
+
+<b>Own your data</b>
+Matrix-based, Element X lets you self-host your data or choose from any free public server (the default is matrix.org, but there are plenty of others to choose from). However you host, you have ownership; it’s your data. You’re not the product. You’re in control.
+
+<b>Interoperate natively</b>
+Enjoy the freedom of the Matrix open standard! You have native interoperability with any other Matrix-based app. So just like email, it doesn't matter if your friends are on a different Matrix-based app you can still connect and chat.
+
+<b>Encrypt your data</b>
+Enjoy your right to private conversations - free from data mining, ads and all the rest of it - and stay secure. Only the people in your conversation can read your messages. And Element X E2EE applies to voice and video calls too.
+
+<b>Chat across multiple devices</b>
+Stay in touch wherever you are with fully synchronized message history across all your devices, even those running ‘traditional’ Element, and on the web at https://app.element.io
