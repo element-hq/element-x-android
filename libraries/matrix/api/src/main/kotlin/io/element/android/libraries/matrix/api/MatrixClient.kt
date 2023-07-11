@@ -65,6 +65,4 @@ interface MatrixClient : Closeable {
     fun roomMembershipObserver(): RoomMembershipObserver
 
     fun isMe(userId: UserId?) = userId == sessionId
-
-    suspend fun lastLoginTimestamp(): Date?
 }
