@@ -34,7 +34,7 @@ class RoomMembershipContentFormatter @Inject constructor(
     ): CharSequence? {
         val userId = membershipContent.userId
         val memberIsYou = matrixClient.isMe(userId)
-        return when (val change = membershipContent.change) {
+        return when (membershipContent.change) {
             MembershipChange.JOINED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_join_by_you)
             } else {
