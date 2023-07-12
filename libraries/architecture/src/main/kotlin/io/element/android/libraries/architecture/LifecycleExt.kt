@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.libraries.architecture
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.di.AppScope
+import androidx.lifecycle.Lifecycle
+import com.bumble.appyx.core.lifecycle.subscribe
+import timber.log.Timber
 
-@ContributesTo(AppScope::class)
-interface AppBindings {
-    fun mainDaggerComponentOwner(): MainDaggerComponentsOwner
-    fun snackbarDispatcher(): SnackbarDispatcher
+fun Lifecycle.logLifecycle(name: String) {
+    subscribe(
+        onCreate = { Timber.tag("Lifecycle").d("onCreate $name") },
+        onPause = { Timber.tag("Lifecycle").d("onPause $name") },
+        onResume = { Timber.tag("Lifecycle").d("onResume $name") },
+        onDestroy = { Timber.tag("Lifecycle").d("onDestroy $name") },
+    )
 }

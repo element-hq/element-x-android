@@ -62,7 +62,7 @@ fun RoomListService.roomOrNull(roomId: String): RoomListItem? {
     return try {
         room(roomId)
     } catch (exception: RoomListException) {
-        Timber.e(exception, "Failed finding room with id=$roomId")
+        Timber.d(exception, "Failed finding room with id=$roomId.")
         return null
     }
 }
