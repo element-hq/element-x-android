@@ -37,25 +37,25 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal fun BlockUserSection(state: RoomMemberDetailsState, modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
         when (state.isBlocked) {
-            is Async.Failure -> {
-                PreferenceBlockUser(state.isBlocked.prevData, false, state.eventSink, modifier)
-                RetryDialog(
-                    content = stringResource(CommonStrings.error_unknown),
-                    onDismiss = { state.eventSink(RoomMemberDetailsEvents.ClearBlockUserError) },
-                    onRetry = {
-                        val event = when (state.isBlocked.prevData) {
-                            true -> RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false)
-                            false -> RoomMemberDetailsEvents.BlockUser(needsConfirmation = false)
-                            null -> /*Should not happen */ RoomMemberDetailsEvents.ClearBlockUserError
-                        }
-                        state.eventSink(event)
-                    },
-                )
-            }
-            is Async.Loading -> PreferenceBlockUser(state.isBlocked.prevData, true, state.eventSink, modifier)
-            is Async.Success -> PreferenceBlockUser(state.isBlocked.data, false, state.eventSink, modifier)
-            Async.Uninitialized -> PreferenceBlockUser(null, true, state.eventSink, modifier)
+            is Async.Failure -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = false, eventSink = state.eventSink)
+            is Async.Loading -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = true, eventSink = state.eventSink)
+            is Async.Success -> PreferenceBlockUser(isBlocked = state.isBlocked.data, isLoading = false, eventSink = state.eventSink)
+            Async.Uninitialized -> PreferenceBlockUser(isBlocked = null, isLoading = true, eventSink = state.eventSink)
         }
+    }
+    if (state.isBlocked is Async.Failure) {
+        RetryDialog(
+            content = stringResource(CommonStrings.error_unknown),
+            onDismiss = { state.eventSink(RoomMemberDetailsEvents.ClearBlockUserError) },
+            onRetry = {
+                val event = when (state.isBlocked.prevData) {
+                    true -> RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false)
+                    false -> RoomMemberDetailsEvents.BlockUser(needsConfirmation = false)
+                    null -> /*Should not happen */ RoomMemberDetailsEvents.ClearBlockUserError
+                }
+                state.eventSink(event)
+            },
+        )
     }
 }
 
