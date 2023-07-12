@@ -38,12 +38,13 @@ interface RoomSummaryDataSource {
 
 suspend fun RoomSummaryDataSource.awaitAllRoomsAreLoaded(timeout: Duration = Duration.INFINITE) {
     try {
+        Timber.d("awaitAllRoomsAreLoaded: wait")
         withTimeout(timeout) {
             allRoomsLoadingState().firstOrNull {
                 it is RoomSummaryDataSource.LoadingState.Loaded
             }
         }
     } catch (timeoutException: TimeoutCancellationException) {
-        Timber.v("AwaitAllRooms: no response after $timeout")
+        Timber.d("awaitAllRoomsAreLoaded: no response after $timeout")
     }
 }

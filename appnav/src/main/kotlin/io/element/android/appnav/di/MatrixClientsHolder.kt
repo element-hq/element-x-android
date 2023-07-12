@@ -54,10 +54,12 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
 
     @Suppress("UNCHECKED_CAST")
     fun restore(state: SavedStateMap?) {
+        Timber.d("Restore state")
         if (state == null || sessionIdsToMatrixClient.isNotEmpty()) return Unit.also {
             Timber.w("Restore with non-empty map")
         }
         val sessionIds = state[SAVE_INSTANCE_KEY] as? Array<SessionId>
+        Timber.d("Restore matrix session keys = ${sessionIds?.map { it.value }}")
         if (sessionIds.isNullOrEmpty()) return
         // Not ideal but should only happens in case of process recreation. This ensure we restore all the active sessions before restoring the node graphs.
         runBlocking {
@@ -76,7 +78,7 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
 
     fun save(state: MutableSavedStateMap) {
         val sessionKeys = sessionIdsToMatrixClient.keys.toTypedArray()
-        Timber.d("Save matrix session keys = $sessionKeys")
+        Timber.d("Save matrix session keys = ${sessionKeys.map { it.value }}")
         state[SAVE_INSTANCE_KEY] = sessionKeys
     }
 }
