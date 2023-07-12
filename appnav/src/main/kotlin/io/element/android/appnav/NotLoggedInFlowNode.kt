@@ -34,9 +34,8 @@ import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.onboarding.api.OnBoardingEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
-import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
+import io.element.android.libraries.matrix.ui.media.NotLoggedInImageLoaderFactory
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -45,6 +44,7 @@ class NotLoggedInFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val onBoardingEntryPoint: OnBoardingEntryPoint,
     private val loginEntryPoint: LoginEntryPoint,
+    private val notLoggedInImageLoaderFactory: NotLoggedInImageLoaderFactory,
 ) : BackstackNode<NotLoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.OnBoarding,
@@ -57,8 +57,7 @@ class NotLoggedInFlowNode @AssistedInject constructor(
         super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
-                val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
-                Coil.setImageLoader(imageLoaderFactory)
+                Coil.setImageLoader(notLoggedInImageLoaderFactory)
             },
         )
     }
