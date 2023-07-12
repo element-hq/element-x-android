@@ -48,8 +48,8 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun WelcomeView(
-    modifier: Modifier = Modifier,
     applicationName: String,
+    modifier: Modifier = Modifier,
     onContinueClicked: () -> Unit,
 ) {
     OnBoardingPage(

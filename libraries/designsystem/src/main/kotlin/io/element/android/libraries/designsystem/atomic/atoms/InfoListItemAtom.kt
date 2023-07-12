@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun InfoListItemAtom(
-    modifier: Modifier = Modifier,
     message: @Composable () -> Unit,
     position: InfoListItemPosition,
     backgroundColor: Color,
+    modifier: Modifier = Modifier,
     icon: @Composable () -> Unit = {},
 ) {
     val radius = 14.dp

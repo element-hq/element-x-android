@@ -52,6 +52,7 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun ElementLogoAtom(
     size: ElementLogoAtomSize,
+    modifier: Modifier = Modifier,
 ) {
     val outerSize = when (size) {
         ElementLogoAtomSize.Large -> 158.dp
@@ -83,7 +84,7 @@ fun ElementLogoAtom(
     val backgroundColor = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.2f) else Color.White.copy(alpha = 0.4f)
     val borderColor = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.8f) else Color.White.copy(alpha = 0.4f)
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(outerSize)
             .border(borderWidth, borderColor, RoundedCornerShape(cornerRadius)),
         contentAlignment = Alignment.Center,

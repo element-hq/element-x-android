@@ -41,6 +41,7 @@ import io.element.android.libraries.theme.ElementTheme
  *
  * Ref: https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=133-5427&t=5SHVppfYzjvkEywR-0
  * @param modifier Classical modifier.
+ * @param contentAlignment horizontal alignment of the contents.
  * @param footer optional footer.
  * @param content main content.
  */
