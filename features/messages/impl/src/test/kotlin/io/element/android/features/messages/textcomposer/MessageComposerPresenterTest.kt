@@ -37,6 +37,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -510,7 +511,7 @@ class MessageComposerPresenterTest {
 fun anEditMode(
     eventId: EventId? = AN_EVENT_ID,
     message: String = A_MESSAGE,
-    transactionId: String? = null,
+    transactionId: TransactionId? = null,
 ) = MessageComposerMode.Edit(eventId, message, transactionId)
 fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, null, AN_EVENT_ID, A_MESSAGE)
 fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)

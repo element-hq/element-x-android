@@ -18,6 +18,7 @@ package io.element.android.libraries.textcomposer
 
 import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import kotlinx.parcelize.Parcelize
 
@@ -29,7 +30,7 @@ sealed interface MessageComposerMode : Parcelable {
         MessageComposerMode
 
     @Parcelize
-    data class Edit(override val eventId: EventId?, override val defaultContent: CharSequence, val transactionId: String?) :
+    data class Edit(override val eventId: EventId?, override val defaultContent: CharSequence, val transactionId: TransactionId?) :
         Special(eventId, defaultContent)
 
     @Parcelize
