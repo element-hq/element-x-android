@@ -37,8 +37,11 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
+      - name: ⚙️ Run unit & screenshot tests, debug and release
+        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+
       - name: ⚙️ Run unit & screenshot tests, generate kover report
-        run: ./gradlew test koverMergedReport $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+        run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
       - name: 📈 Verify coverage
         run: ./gradlew koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
