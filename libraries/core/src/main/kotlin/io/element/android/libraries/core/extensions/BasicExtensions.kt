@@ -64,7 +64,7 @@ fun String?.insertBeforeLast(insert: String, delimiter: String = "."): String {
  * Throws if length is < 1.
  */
 fun String.ellipsize(length: Int): String {
-    require(length > 1)
+    require(length >= 1)
 
     if (this.length <= length) {
         return this
