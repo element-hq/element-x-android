@@ -47,6 +47,7 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun OnBoardingPage(
     modifier: Modifier = Modifier,
+    contentAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     footer: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
@@ -78,6 +79,7 @@ fun OnBoardingPage(
                     .weight(1f)
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
+                horizontalAlignment = contentAlignment,
             ) {
                 content()
             }

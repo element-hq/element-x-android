@@ -140,10 +140,10 @@
   <string name="emoji_picker_category_places">"Travel &amp; Places"</string>
   <string name="emoji_picker_category_symbols">"Symbols"</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
-  <string name="error_failed_loading_map">"Element could not load the map. Please try again later."</string>
+  <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
-  <string name="error_failed_locating_user">"Element could not access your location. Please try again later."</string>
-  <string name="error_missing_location_auth">"Element does not have permission to access your location. You can enable access in Settings > Location"</string>
+  <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
+  <string name="error_missing_location_auth">"%1$s does not have permission to access your location. You can enable access in Settings > Location"</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
@@ -182,12 +182,6 @@
   <string name="screen_share_open_osm_maps">"Open in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Share this location"</string>
   <string name="screen_view_location_title">"Location"</string>
-  <string name="screen_welcome_bullet_1">"Calls, location sharing, search and more will be added later this year."</string>
-  <string name="screen_welcome_bullet_2">"Message history for encrypted rooms won’t be available in this update."</string>
-  <string name="screen_welcome_bullet_3">"We’d love to hear from you, let us know what you think via the settings page."</string>
-  <string name="screen_welcome_button">"Let\'s go!"</string>
-  <string name="screen_welcome_subtitle">"Here’s what you need to know:"</string>
-  <string name="screen_welcome_title">"Welcome to %1$s!"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
   <string name="settings_title_general">"General"</string>

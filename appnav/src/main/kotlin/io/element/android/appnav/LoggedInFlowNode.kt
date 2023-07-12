@@ -19,6 +19,8 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -41,7 +43,6 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomLoadedFlowNode
-import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -49,6 +50,8 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.features.ftue.api.FtueEntryPoint
+import io.element.android.features.ftue.api.FtueState
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -64,13 +67,10 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
-import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -81,14 +81,14 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val roomListEntryPoint: RoomListEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
-    private val analyticsOptInEntryPoint: AnalyticsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
     private val inviteListEntryPoint: InviteListEntryPoint,
-    private val analyticsService: AnalyticsService,
+    private val ftueEntryPoint: FtueEntryPoint,
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
     private val notificationDrawerManager: NotificationDrawerManager,
+    private val ftueState: FtueState,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -98,19 +98,6 @@ class LoggedInFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
-    private fun observeAnalyticsState() {
-        analyticsService.didAskUserConsent()
-            .distinctUntilChanged()
-            .onEach { isConsentAsked ->
-                if (isConsentAsked) {
-                    backstack.removeLast(NavTarget.AnalyticsOptIn)
-                } else {
-                    backstack.push(NavTarget.AnalyticsOptIn)
-                }
-            }
-            .launchIn(lifecycleScope)
-    }
 
     interface Callback : Plugin {
         fun onOpenBugReport() = Unit
@@ -136,7 +123,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
-        observeAnalyticsState()
+
         lifecycle.subscribe(
             onCreate = {
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.matrixClient) }
@@ -146,6 +133,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
+
+                if (ftueState.shouldDisplayFlow.value) {
+                    backstack.push(NavTarget.Ftue)
+                }
             },
             onResume = {
                 syncService.startSync()
@@ -209,7 +200,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         object InviteList : NavTarget
 
         @Parcelize
-        object AnalyticsOptIn : NavTarget
+        object Ftue : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -306,8 +297,13 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
-            NavTarget.AnalyticsOptIn -> {
-                analyticsOptInEntryPoint.createNode(this, buildContext)
+            NavTarget.Ftue -> {
+                ftueEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(object : FtueEntryPoint.Callback {
+                        override fun onFtueFlowFinished() {
+                            backstack.pop()
+                        }
+                    }).build()
             }
         }
     }
@@ -335,7 +331,11 @@ class LoggedInFlowNode @AssistedInject constructor(
                 transitionHandler = rememberDefaultTransitionHandler(),
             )
 
-            PermanentChild(navTarget = NavTarget.Permanent)
+            val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
+
+            if (!isFtueDisplayed) {
+                PermanentChild(navTarget = NavTarget.Permanent)
+            }
         }
     }
 

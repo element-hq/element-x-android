@@ -113,6 +113,12 @@
       "includeRegex": [
         "screen_analytics_prompt.*"
       ]
+    },
+    {
+      "name": ":features:ftue:impl",
+      "includeRegex": [
+        "screen_welcome_.*"
+      ]
     }
   ]
 }
