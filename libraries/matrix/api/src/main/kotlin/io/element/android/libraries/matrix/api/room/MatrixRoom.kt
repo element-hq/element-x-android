@@ -86,7 +86,7 @@ interface MatrixRoom : Closeable {
 
     suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit>
 
-    suspend fun forwardEvent(eventId: EventId, rooms: List<RoomId>): Result<Unit>
+    suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
 
     suspend fun retrySendMessage(transactionId: String): Result<Unit>
 

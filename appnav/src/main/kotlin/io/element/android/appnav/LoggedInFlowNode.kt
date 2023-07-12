@@ -154,8 +154,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                 syncService.stopSync()
             },
             onDestroy = {
-                val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
-                Coil.setImageLoader(imageLoaderFactory)
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.matrixClient) }
                 appNavigationStateService.onLeavingSpace(id)
                 appNavigationStateService.onLeavingSession(id)

@@ -123,7 +123,7 @@ class NotificationFactory @Inject constructor(
         val roomMeta = roomNotifications.filterIsInstance<RoomNotification.Message>().map { it.meta }
         val invitationMeta = invitationNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
         val simpleMeta = simpleNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
-        val fallbackMeta = simpleNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
+        val fallbackMeta = fallbackNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
         return when {
             roomMeta.isEmpty() && invitationMeta.isEmpty() && simpleMeta.isEmpty() -> SummaryNotification.Removed
             else -> SummaryNotification.Update(

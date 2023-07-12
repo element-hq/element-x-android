@@ -30,6 +30,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
+import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
@@ -90,8 +91,14 @@ class RootFlowNode @AssistedInject constructor(
     ) {
 
     override fun onBuilt() {
+        matrixClientsHolder.restore(buildContext.savedStateMap)
         super.onBuilt()
         observeLoggedInState()
+    }
+
+    override fun onSaveInstanceState(state: MutableSavedStateMap) {
+        super.onSaveInstanceState(state)
+        matrixClientsHolder.save(state)
     }
 
     private fun observeLoggedInState() {

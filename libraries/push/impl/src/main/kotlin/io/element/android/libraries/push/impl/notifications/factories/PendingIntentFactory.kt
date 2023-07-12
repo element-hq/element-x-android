@@ -106,7 +106,7 @@ class PendingIntentFactory @Inject constructor(
     fun createDismissEventPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.dismissEvent
-        intent.data = createIgnoredUri("deleteEvent/$sessionId/$roomId")
+        intent.data = createIgnoredUri("deleteEvent/$sessionId/$roomId/$eventId")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
         intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
         intent.putExtra(NotificationBroadcastReceiver.KEY_EVENT_ID, eventId.value)

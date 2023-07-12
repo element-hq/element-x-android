@@ -19,6 +19,7 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import coil.Coil
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -34,8 +35,8 @@ import io.element.android.features.onboarding.api.OnBoardingEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.ui.media.NotLoggedInImageLoaderFactory
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 
 @ContributesNode(AppScope::class)
 class NotLoggedInFlowNode @AssistedInject constructor(
@@ -43,6 +44,7 @@ class NotLoggedInFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val onBoardingEntryPoint: OnBoardingEntryPoint,
     private val loginEntryPoint: LoginEntryPoint,
+    private val notLoggedInImageLoaderFactory: NotLoggedInImageLoaderFactory,
 ) : BackstackNode<NotLoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.OnBoarding,
@@ -51,10 +53,12 @@ class NotLoggedInFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-    init {
+    override fun onBuilt() {
+        super.onBuilt()
         lifecycle.subscribe(
-            onCreate = { Timber.v("OnCreate") },
-            onDestroy = { Timber.v("OnDestroy") }
+            onCreate = {
+                Coil.setImageLoader(notLoggedInImageLoaderFactory)
+            },
         )
     }
 

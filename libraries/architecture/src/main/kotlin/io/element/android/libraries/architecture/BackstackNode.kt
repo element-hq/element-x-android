@@ -19,6 +19,7 @@ package io.element.android.libraries.architecture
 import androidx.compose.runtime.Stable
 import com.bumble.appyx.core.children.ChildEntry
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
@@ -39,4 +40,15 @@ abstract class BackstackNode<NavTarget : Any>(
     buildContext = buildContext,
     plugins = plugins,
     childKeepMode = childKeepMode,
-)
+) {
+    override fun onBuilt() {
+        super.onBuilt()
+        lifecycle.logLifecycle(this::class.java.simpleName)
+        whenChildAttached<Node> { _, child ->
+            // BackstackNode will be logged by their parent.
+            if (child !is BackstackNode<*>) {
+                child.lifecycle.logLifecycle(child::class.java.simpleName)
+            }
+        }
+    }
+}

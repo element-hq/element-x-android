@@ -25,7 +25,9 @@ import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -50,7 +52,7 @@ class RoomMemberDetailsPresenterTests {
             Truth.assertThat(initialState.userId).isEqualTo(roomMember.userId.value)
             Truth.assertThat(initialState.userName).isEqualTo(roomMember.displayName)
             Truth.assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
-            Truth.assertThat(initialState.isBlocked).isEqualTo(roomMember.isIgnored)
+            Truth.assertThat(initialState.isBlocked).isEqualTo(Async.Success(roomMember.isIgnored))
             skipItems(1)
             val loadedState = awaitItem()
             Truth.assertThat(loadedState.userName).isEqualTo("A custom name")
@@ -129,10 +131,33 @@ class RoomMemberDetailsPresenterTests {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = false))
-            Truth.assertThat(awaitItem().isBlocked).isTrue()
+            Truth.assertThat(awaitItem().isBlocked.isLoading()).isTrue()
+            Truth.assertThat(awaitItem().isBlocked.dataOrNull()).isTrue()
 
             initialState.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false))
-            Truth.assertThat(awaitItem().isBlocked).isFalse()
+            Truth.assertThat(awaitItem().isBlocked.isLoading()).isTrue()
+            Truth.assertThat(awaitItem().isBlocked.dataOrNull()).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - BlockUser with error`() = runTest {
+        val room = aMatrixRoom()
+        val roomMember = aRoomMember()
+        val matrixClient = FakeMatrixClient()
+        matrixClient.givenIgnoreUserResult(Result.failure(A_THROWABLE))
+        val presenter = RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = false))
+            Truth.assertThat(awaitItem().isBlocked.isLoading()).isTrue()
+            val errorState = awaitItem()
+            Truth.assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
+            // Clear error
+            initialState.eventSink(RoomMemberDetailsEvents.ClearBlockUserError)
+            Truth.assertThat(awaitItem().isBlocked).isEqualTo(Async.Success(false))
         }
     }
 

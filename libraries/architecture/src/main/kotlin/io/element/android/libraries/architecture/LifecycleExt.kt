@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members.details
+package io.element.android.libraries.architecture
 
-import io.element.android.libraries.architecture.Async
+import androidx.lifecycle.Lifecycle
+import com.bumble.appyx.core.lifecycle.subscribe
+import timber.log.Timber
 
-data class RoomMemberDetailsState(
-    val userId: String,
-    val userName: String?,
-    val avatarUrl: String?,
-    val isBlocked: Async<Boolean>,
-    val displayConfirmationDialog: ConfirmationDialog? = null,
-    val isCurrentUser: Boolean,
-    val eventSink: (RoomMemberDetailsEvents) -> Unit
-) {
-    enum class ConfirmationDialog {
-        Block, Unblock
-    }
+fun Lifecycle.logLifecycle(name: String) {
+    subscribe(
+        onCreate = { Timber.tag("Lifecycle").d("onCreate $name") },
+        onPause = { Timber.tag("Lifecycle").d("onPause $name") },
+        onResume = { Timber.tag("Lifecycle").d("onResume $name") },
+        onDestroy = { Timber.tag("Lifecycle").d("onDestroy $name") },
+    )
 }
