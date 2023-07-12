@@ -32,8 +32,8 @@ import kotlinx.collections.immutable.ImmutableList
 sealed interface TimelineItem {
 
     fun identifier(): String = when (this) {
-        is Event -> id.toString()
-        is Virtual -> id.toString()
+        is Event -> id
+        is Virtual -> id
         is GroupedEvents -> id
     }
 
@@ -45,13 +45,13 @@ sealed interface TimelineItem {
 
     @Immutable
     data class Virtual(
-        val id: Long,
+        val id: String,
         val model: TimelineItemVirtualModel
     ) : TimelineItem
 
     @Immutable
     data class Event(
-        val id: Long,
+        val id: String,
         val eventId: EventId? = null,
         val transactionId: String? = null,
         val senderId: UserId,

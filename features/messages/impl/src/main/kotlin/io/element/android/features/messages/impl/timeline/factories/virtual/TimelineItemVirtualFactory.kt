@@ -31,7 +31,7 @@ class TimelineItemVirtualFactory @Inject constructor(
         virtualTimelineItem: MatrixTimelineItem.Virtual,
     ): TimelineItem.Virtual {
         return TimelineItem.Virtual(
-            id = virtualTimelineItem.uniqueId,
+            id = virtualTimelineItem.uniqueId.toString(),
             model = virtualTimelineItem.computeModel()
         )
     }

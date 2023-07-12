@@ -97,7 +97,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
 }
 
 fun aTimelineItemDaySeparator(): TimelineItem.Virtual {
-    return TimelineItem.Virtual(UUID.randomUUID().mostSignificantBits, aTimelineItemDaySeparatorModel("Today"))
+    return TimelineItem.Virtual(UUID.randomUUID().toString(), aTimelineItemDaySeparatorModel("Today"))
 }
 
 internal fun aTimelineItemEvent(
@@ -112,7 +112,7 @@ internal fun aTimelineItemEvent(
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
 ): TimelineItem.Event {
     return TimelineItem.Event(
-        id = UUID.randomUUID().mostSignificantBits,
+        id = UUID.randomUUID().toString(),
         eventId = eventId,
         transactionId = transactionId,
         senderId = UserId("@senderId:domain"),

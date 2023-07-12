@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import java.util.UUID
 
 const val A_USER_NAME = "alice"
 const val A_PASSWORD = "password"
@@ -57,4 +58,3 @@ const val A_FAILURE_REASON = "There has been a failure"
 
 val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)
-

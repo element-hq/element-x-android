@@ -71,7 +71,7 @@ class TimelineItemEventFactory @Inject constructor(
             size = AvatarSize.TimelineSender
         )
         return TimelineItem.Event(
-            id = currentTimelineItem.uniqueId,
+            id = currentTimelineItem.uniqueId.toString(),
             eventId = currentTimelineItem.eventId,
             transactionId = currentTimelineItem.transactionId,
             senderId = currentSender,
