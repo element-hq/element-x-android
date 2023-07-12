@@ -27,7 +27,7 @@ jobs:
           java-version: '17'
 
       - name: ⚙️ Run unit & screenshot tests, generate kover report
-        run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+        run: ./gradlew test koverMergedReport $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
       - name: ✅ Upload kover report
         if: always()
