@@ -330,10 +330,7 @@ fun TimelineViewDarkPreview(
 
 @Composable
 private fun ContentToPreview(content: TimelineItemEventContent) {
-    val timelineItems = buildList {
-        addAll(aTimelineItemList(content))
-        add(TimelineItem.Virtual("banner", TimelineItemEncryptedHistoryBannerVirtualModel))
-    }.toPersistentList()
+    val timelineItems = aTimelineItemList(content)
     TimelineView(
         state = aTimelineState(timelineItems),
         onMessageClicked = {},

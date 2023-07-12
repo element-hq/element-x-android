@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem
@@ -88,7 +87,7 @@ fun WelcomeView(
         },
         footer = {
             Button(modifier = Modifier.fillMaxWidth(), onClick = onContinueClicked) {
-                Text(text = stringResource(CommonStrings.action_continue), style = ElementTextStyles.Button)
+                Text(text = stringResource(CommonStrings.action_continue))
             }
             Spacer(modifier = Modifier.height(32.dp))
         }
