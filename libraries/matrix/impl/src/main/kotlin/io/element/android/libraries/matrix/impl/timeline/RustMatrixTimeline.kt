@@ -44,6 +44,7 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
+private const val INITIAL_MAX_SIZE = 50
 
 class RustMatrixTimeline(
     roomCoroutineScope: CoroutineScope,
@@ -84,7 +85,10 @@ class RustMatrixTimeline(
     override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.sample(50)
 
     internal suspend fun postItems(items: List<TimelineItem>) {
-        timelineDiffProcessor.postItems(items)
+        // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
+        items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
+            timelineDiffProcessor.postItems(it)
+        }
         isInit.set(true)
         initLatch.complete(Unit)
     }
