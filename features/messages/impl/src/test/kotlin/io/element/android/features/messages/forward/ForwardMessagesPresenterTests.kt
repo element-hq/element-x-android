@@ -65,7 +65,6 @@ class ForwardMessagesPresenterTests {
         }.test {
             val initialState = awaitItem()
             skipItems(1)
-            val summary = aRoomSummaryDetail()
 
             initialState.eventSink(ForwardMessagesEvents.ToggleSearchActive)
             assertThat(awaitItem().isSearchActive).isTrue()

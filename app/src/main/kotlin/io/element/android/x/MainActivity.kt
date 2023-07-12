@@ -52,8 +52,7 @@ class MainActivity : NodeComponentActivity() {
         Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        appBindings = bindings<AppBindings>()
-        appBindings.matrixClientsHolder().restore(savedInstanceState)
+        appBindings = bindings()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             MainContent(appBindings)
@@ -124,10 +123,5 @@ class MainActivity : NodeComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Timber.tag(loggerTag.value).w("onDestroy")
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        bindings<AppBindings>().matrixClientsHolder().onSaveInstanceState(outState)
     }
 }

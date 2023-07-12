@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.delay
 
 class FakeMatrixClient(
@@ -72,11 +73,11 @@ class FakeMatrixClient(
         return findDmResult
     }
 
-    override suspend fun ignoreUser(userId: UserId): Result<Unit> {
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> = simulateLongTask {
         return ignoreUserResult
     }
 
-    override suspend fun unignoreUser(userId: UserId): Result<Unit> {
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> = simulateLongTask {
         return unignoreUserResult
     }
 

@@ -17,15 +17,17 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 
 open class RoomMemberDetailsStateProvider : PreviewParameterProvider<RoomMemberDetailsState> {
     override val values: Sequence<RoomMemberDetailsState>
         get() = sequenceOf(
             aRoomMemberDetailsState(),
             aRoomMemberDetailsState().copy(userName = null),
-            aRoomMemberDetailsState().copy(isBlocked = true),
+            aRoomMemberDetailsState().copy(isBlocked = Async.Success(true)),
             aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Block),
             aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Unblock),
+            aRoomMemberDetailsState().copy(isBlocked = Async.Loading(true)),
             // Add other states here
         )
 }
@@ -34,7 +36,7 @@ fun aRoomMemberDetailsState() = RoomMemberDetailsState(
     userId = "@daniel:domain.com",
     userName = "Daniel",
     avatarUrl = null,
-    isBlocked = false,
+    isBlocked = Async.Success(false),
     isCurrentUser = false,
     eventSink = {},
 )

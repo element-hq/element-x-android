@@ -239,7 +239,7 @@ class FakeMatrixRoom(
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia(progressCallback)
 
-    override suspend fun forwardEvent(eventId: EventId, rooms: List<RoomId>): Result<Unit> = simulateLongTask {
+    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = simulateLongTask {
         forwardEventResult
     }
 
