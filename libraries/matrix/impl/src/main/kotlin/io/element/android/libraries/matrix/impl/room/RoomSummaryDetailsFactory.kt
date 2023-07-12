@@ -24,7 +24,7 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 
 class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
 
-    fun create(roomListItem: RoomListItem, room: Room?): RoomSummaryDetails {
+    suspend fun create(roomListItem: RoomListItem, room: Room?): RoomSummaryDetails {
         val latestRoomMessage = roomListItem.latestEvent()?.use {
             roomMessageFactory.create(it)
         }

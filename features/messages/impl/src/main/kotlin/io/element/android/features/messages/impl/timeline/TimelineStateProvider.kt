@@ -36,6 +36,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import java.util.UUID
 import kotlin.random.Random
 
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
@@ -96,7 +97,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
 }
 
 fun aTimelineItemDaySeparator(): TimelineItem.Virtual {
-    return TimelineItem.Virtual("virtual_day", aTimelineItemDaySeparatorModel("Today"))
+    return TimelineItem.Virtual(UUID.randomUUID().mostSignificantBits, aTimelineItemDaySeparatorModel("Today"))
 }
 
 internal fun aTimelineItemEvent(
@@ -111,7 +112,7 @@ internal fun aTimelineItemEvent(
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
 ): TimelineItem.Event {
     return TimelineItem.Event(
-        id = eventId.value,
+        id = UUID.randomUUID().mostSignificantBits,
         eventId = eventId,
         transactionId = transactionId,
         senderId = UserId("@senderId:domain"),

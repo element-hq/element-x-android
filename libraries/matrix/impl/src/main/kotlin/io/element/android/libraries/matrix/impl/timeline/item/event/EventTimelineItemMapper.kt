@@ -20,8 +20,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
@@ -33,7 +33,6 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
 
     fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.use {
         EventTimelineItem(
-            uniqueIdentifier = it.uniqueIdentifier(),
             eventId = it.eventId()?.let(::EventId),
             transactionId = it.transactionId(),
             isEditable = it.isEditable(),
@@ -79,7 +78,7 @@ private fun List<Reaction>?.map(): List<EventReaction> {
         EventReaction(
             key = it.key,
             count = it.count.toLong(),
-            senderIds = it.senders.map { sender -> UserId(sender) }
+            senderIds = it.senders.map { sender -> UserId(sender.senderId) }
         )
     } ?: emptyList()
 }

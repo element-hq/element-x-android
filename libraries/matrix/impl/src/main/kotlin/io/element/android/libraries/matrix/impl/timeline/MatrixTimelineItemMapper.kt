@@ -32,21 +32,20 @@ class MatrixTimelineItemMapper(
 ) {
 
     fun map(timelineItem: TimelineItem): MatrixTimelineItem = timelineItem.use {
+        val uniqueId = timelineItem.uniqueId().toLong()
         val asEvent = it.asEvent()
         if (asEvent != null) {
             val eventTimelineItem = eventTimelineItemMapper.map(asEvent)
-
-
             if (eventTimelineItem.hasNotLoadedInReplyTo() && eventTimelineItem.eventId != null) {
                 fetchEventDetails(eventTimelineItem.eventId!!)
             }
 
-            return MatrixTimelineItem.Event(eventTimelineItem)
+            return MatrixTimelineItem.Event(uniqueId, eventTimelineItem)
         }
         val asVirtual = it.asVirtual()
         if (asVirtual != null) {
             val virtualTimelineItem = virtualTimelineItemMapper.map(asVirtual)
-            return MatrixTimelineItem.Virtual(virtualTimelineItem)
+            return MatrixTimelineItem.Virtual(uniqueId, virtualTimelineItem)
         }
         return MatrixTimelineItem.Other
     }

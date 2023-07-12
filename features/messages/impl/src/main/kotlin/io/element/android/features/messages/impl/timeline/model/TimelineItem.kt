@@ -24,16 +24,16 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 sealed interface TimelineItem {
 
     fun identifier(): String = when (this) {
-        is Event -> id
-        is Virtual -> id
+        is Event -> id.toString()
+        is Virtual -> id.toString()
         is GroupedEvents -> id
     }
 
@@ -45,13 +45,13 @@ sealed interface TimelineItem {
 
     @Immutable
     data class Virtual(
-        val id: String,
+        val id: Long,
         val model: TimelineItemVirtualModel
     ) : TimelineItem
 
     @Immutable
     data class Event(
-        val id: String,
+        val id: Long,
         val eventId: EventId? = null,
         val transactionId: String? = null,
         val senderId: UserId,
@@ -83,6 +83,6 @@ sealed interface TimelineItem {
         val events: ImmutableList<Event>,
     ) : TimelineItem {
         // use last id with a suffix. Last will not change in cas of new event from backpagination.
-        val id = events.last().id + "_group"
+        val id = "${events.last().id}_group"
     }
 }
