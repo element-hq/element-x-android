@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState.ConfirmationDialog
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -53,8 +54,13 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         val roomMember by room.getRoomMemberAsState(roomMemberId)
         // the room member is not really live...
-        val isBlocked = remember {
-            mutableStateOf(roomMember?.isIgnored.orFalse())
+        val isBlocked: MutableState<Async<Boolean>> = remember(roomMember) {
+            val isIgnored = roomMember?.isIgnored
+            if (isIgnored == null) {
+                mutableStateOf(Async.Uninitialized)
+            } else {
+                mutableStateOf(Async.Success(isIgnored))
+            }
         }
         LaunchedEffect(Unit) {
             room.updateMembers()
@@ -79,6 +85,9 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                     }
                 }
                 RoomMemberDetailsEvents.ClearConfirmationDialog -> confirmationDialog = null
+                RoomMemberDetailsEvents.ClearBlockUserError -> {
+                    isBlocked.value = Async.Success(isBlocked.value.dataOrNull().orFalse())
+                }
             }
         }
 
@@ -105,20 +114,31 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.blockUser(userId: UserId, isBlockedState: MutableState<Boolean>) = launch {
+    private fun CoroutineScope.blockUser(userId: UserId, isBlockedState: MutableState<Async<Boolean>>) = launch {
+        isBlockedState.value = Async.Loading(false)
         client.ignoreUser(userId)
-            .map {
-                isBlockedState.value = true
-                room.updateMembers()
-            }
-
+            .fold(
+                onSuccess = {
+                    isBlockedState.value = Async.Success(true)
+                    room.updateMembers()
+                },
+                onFailure = {
+                    isBlockedState.value = Async.Failure(it, false)
+                }
+            )
     }
 
-    private fun CoroutineScope.unblockUser(userId: UserId, isBlockedState: MutableState<Boolean>) = launch {
+    private fun CoroutineScope.unblockUser(userId: UserId, isBlockedState: MutableState<Async<Boolean>>) = launch {
+        isBlockedState.value = Async.Loading(true)
         client.unignoreUser(userId)
-            .map {
-                isBlockedState.value = false
-                room.updateMembers()
-            }
+            .fold(
+                onSuccess = {
+                    isBlockedState.value = Async.Success(false)
+                    room.updateMembers()
+                },
+                onFailure = {
+                    isBlockedState.value = Async.Failure(it, true)
+                }
+            )
     }
 }
