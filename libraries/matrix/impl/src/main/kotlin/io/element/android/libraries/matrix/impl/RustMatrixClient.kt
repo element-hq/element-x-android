@@ -94,8 +94,11 @@ class RustMatrixClient constructor(
         client = client,
         dispatchers = dispatchers,
     )
-    
-    private val notificationService = RustNotificationService(client)
+    private val notificationClient = client.notificationClient().use { builder ->
+        builder.finish()
+    }
+
+    private val notificationService = RustNotificationService(notificationClient)
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -250,6 +253,7 @@ class RustMatrixClient constructor(
         client.setDelegate(null)
         verificationService.destroy()
         roomListService.destroy()
+        notificationClient.destroy()
         client.destroy()
     }
 
