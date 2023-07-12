@@ -20,6 +20,13 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.network"
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            consumerProguardFiles("consumer-rules.pro")
+        }
+    }
 }
 
 anvil {
