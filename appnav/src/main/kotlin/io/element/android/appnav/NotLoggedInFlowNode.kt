@@ -20,7 +20,6 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
-import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -35,7 +34,6 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.di.AppScope
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 
 @ContributesNode(AppScope::class)
 class NotLoggedInFlowNode @AssistedInject constructor(
@@ -51,13 +49,6 @@ class NotLoggedInFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-    init {
-        lifecycle.subscribe(
-            onCreate = { Timber.v("OnCreate") },
-            onDestroy = { Timber.v("OnDestroy") }
-        )
-    }
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object OnBoarding : NavTarget
