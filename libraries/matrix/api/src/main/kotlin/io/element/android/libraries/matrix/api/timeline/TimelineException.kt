@@ -16,6 +16,6 @@
 
 package io.element.android.libraries.matrix.api.timeline
 
-sealed class TimelineException: Exception() {
-    object CannotPaginate: TimelineException()
+sealed class TimelineException : Exception() {
+    object CannotPaginate : TimelineException()
 }
