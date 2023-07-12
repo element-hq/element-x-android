@@ -59,14 +59,14 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.paginationState.canBackPaginate).isTrue()
+            assertThat(initialState.paginationState.hasMoreToLoadBackwards).isTrue()
             assertThat(initialState.paginationState.isBackPaginating).isFalse()
             initialState.eventSink.invoke(TimelineEvents.LoadMore)
             val inPaginationState = awaitItem()
             assertThat(inPaginationState.paginationState.isBackPaginating).isTrue()
-            assertThat(inPaginationState.paginationState.canBackPaginate).isTrue()
+            assertThat(inPaginationState.paginationState.hasMoreToLoadBackwards).isTrue()
             val postPaginationState = awaitItem()
-            assertThat(postPaginationState.paginationState.canBackPaginate).isTrue()
+            assertThat(postPaginationState.paginationState.hasMoreToLoadBackwards).isTrue()
             assertThat(postPaginationState.paginationState.isBackPaginating).isFalse()
         }
     }
