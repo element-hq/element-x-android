@@ -82,9 +82,8 @@ sealed interface TimelineItem {
 
     @Immutable
     data class GroupedEvents(
+        val id: String,
         val events: ImmutableList<Event>,
-    ) : TimelineItem {
-        // use last id with a suffix. Last will not change in cas of new event from backpagination.
-        val id = "${events.last().id}_group"
-    }
+    ) : TimelineItem
+
 }

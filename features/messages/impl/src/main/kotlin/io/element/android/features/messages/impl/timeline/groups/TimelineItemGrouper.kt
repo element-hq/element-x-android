@@ -17,10 +17,20 @@
 package io.element.android.features.messages.impl.timeline.groups
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.SingleIn
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
+@SingleIn(RoomScope::class)
 class TimelineItemGrouper @Inject constructor() {
+
+    /**
+     * Keys are identifier of items in a group, only one by group will be kept.
+     * Values are the actual groupIds.
+     */
+    private val groupIds = HashMap<String, String>()
+
     /**
      * Create a new list of [TimelineItem] by grouping some of them into [TimelineItem.GroupedEvents].
      */
@@ -34,14 +44,14 @@ class TimelineItemGrouper @Inject constructor() {
                 // timelineItem cannot be grouped
                 if (currentGroup.isNotEmpty()) {
                     // There is a pending group, create a TimelineItem.GroupedEvents if there is more than 1 Event in the pending group.
-                    result.addGroup(currentGroup)
+                    result.addGroup(groupIds, currentGroup)
                     currentGroup.clear()
                 }
                 result.add(timelineItem)
             }
         }
         if (currentGroup.isNotEmpty()) {
-            result.addGroup(currentGroup)
+            result.addGroup(groupIds, currentGroup)
         }
         return result
     }
@@ -51,16 +61,33 @@ class TimelineItemGrouper @Inject constructor() {
  * Will add a group if there is more than 1 item, else add the item to the list.
  */
 private fun MutableList<TimelineItem>.addGroup(
-    group: MutableList<TimelineItem.Event>
+    groupIds: MutableMap<String, String>,
+    groupOfItems: MutableList<TimelineItem.Event>
 ) {
-    if (group.size == 1) {
+    if (groupOfItems.size == 1) {
         // Do not create a group with just 1 item, just add the item to the result
-        add(group.first())
+        add(groupOfItems.first())
     } else {
+        val groupId = groupIds.getOrPutGroupId(groupOfItems)
         add(
             TimelineItem.GroupedEvents(
-                events = group.toImmutableList()
+                id = groupId,
+                events = groupOfItems.toImmutableList()
             )
         )
+    }
+}
+
+private fun MutableMap<String, String>.getOrPutGroupId(timelineItems: List<TimelineItem>): String {
+    assert(timelineItems.isNotEmpty())
+    for (item in timelineItems) {
+        val itemIdentifier = item.identifier()
+        if (this.contains(itemIdentifier)) {
+            return this[itemIdentifier]!!
+        }
+    }
+    val itemIdentifier = timelineItems.first().identifier()
+    return "${itemIdentifier}_group".also { groupId ->
+        this[itemIdentifier] = groupId
     }
 }
