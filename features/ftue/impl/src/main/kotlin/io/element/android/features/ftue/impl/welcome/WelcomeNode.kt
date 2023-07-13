@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl
+package io.element.android.features.ftue.impl.welcome
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,7 +24,6 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 

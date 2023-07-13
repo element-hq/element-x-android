@@ -51,7 +51,7 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
-import io.element.android.features.ftue.api.FtueState
+import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler

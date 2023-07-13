@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.api
+package io.element.android.features.ftue.impl.welcome.state
 
-import kotlinx.coroutines.flow.StateFlow
-
-interface FtueState {
-    val shouldDisplayFlow: StateFlow<Boolean>
-
-    fun getNextStep(current: FtueStep? = null): FtueStep?
-
+interface WelcomeScreenState {
+    fun isWelcomeScreenNeeded(): Boolean
     fun setWelcomeScreenShown()
-}
-
-sealed interface FtueStep {
-    object WelcomeScreen : FtueStep
-    object AnalyticsOptIn : FtueStep
 }

@@ -34,8 +34,9 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
-import io.element.android.features.ftue.api.FtueState
-import io.element.android.features.ftue.api.FtueStep
+import io.element.android.features.ftue.api.state.FtueState
+import io.element.android.features.ftue.api.state.FtueStep
+import io.element.android.features.ftue.impl.welcome.WelcomeNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl
+package io.element.android.features.ftue.impl.state
 
-import android.content.SharedPreferences
+import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.ftue.api.FtueState
-import io.element.android.features.ftue.api.FtueStep
+import io.element.android.features.ftue.api.state.FtueState
+import io.element.android.features.ftue.api.state.FtueStep
+import io.element.android.features.ftue.impl.welcome.state.WelcomeScreenState
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,12 +36,8 @@ import javax.inject.Inject
 class DefaultFtueState @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
-    @DefaultPreferences private val sharedPreferences: SharedPreferences,
+    private val welcomeScreenState: WelcomeScreenState,
 ) : FtueState {
-
-    companion object {
-        private const val IS_WELCOME_SCREEN_SHOWN = "is_welcome_screen_shown"
-    }
 
     private val _shouldDisplayFlow = MutableStateFlow(isAnyStepInComplete())
     override val shouldDisplayFlow: StateFlow<Boolean> = _shouldDisplayFlow
@@ -54,15 +50,14 @@ class DefaultFtueState @Inject constructor(
 
     override fun getNextStep(currentStep: FtueStep?): FtueStep? =
         when (currentStep) {
-            null -> if (shouldDisplayWelcomeScreen()) FtueStep.WelcomeScreen else getNextStep(FtueStep.WelcomeScreen)
-            FtueStep.WelcomeScreen -> if (needsAnalyticsOptIn()) FtueStep.AnalyticsOptIn else getNextStep(FtueStep.AnalyticsOptIn)
+            null -> if (shouldDisplayWelcomeScreen()) FtueStep.WelcomeScreen else getNextStep(
+                FtueStep.WelcomeScreen
+            )
+            FtueStep.WelcomeScreen -> if (needsAnalyticsOptIn()) FtueStep.AnalyticsOptIn else getNextStep(
+                FtueStep.AnalyticsOptIn
+            )
             FtueStep.AnalyticsOptIn -> null
         }
-
-    override fun setWelcomeScreenShown() {
-        sharedPreferences.edit().putBoolean(IS_WELCOME_SCREEN_SHOWN, true).apply()
-        updateState()
-    }
 
     private fun isAnyStepInComplete(): Boolean {
         return listOf(
@@ -77,10 +72,16 @@ class DefaultFtueState @Inject constructor(
     }
 
     private fun shouldDisplayWelcomeScreen(): Boolean {
-        return sharedPreferences.getBoolean(IS_WELCOME_SCREEN_SHOWN, false).not()
+        return welcomeScreenState.isWelcomeScreenNeeded()
     }
 
-    private fun updateState() {
+    override fun setWelcomeScreenShown() {
+        welcomeScreenState.setWelcomeScreenShown()
+        updateState()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun updateState() {
         _shouldDisplayFlow.value = isAnyStepInComplete()
     }
 }

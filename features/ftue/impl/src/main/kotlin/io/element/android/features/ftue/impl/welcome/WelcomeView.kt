@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl
+package io.element.android.features.ftue.impl.welcome
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem

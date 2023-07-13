@@ -259,6 +259,8 @@ koverMerged {
                 excludes += "io.element.android.libraries.designsystem.swipe.SwipeableActionsState*"
                 excludes += "io.element.android.features.messages.impl.timeline.components.ExpandableState*"
                 excludes += "io.element.android.features.messages.impl.timeline.model.bubble.BubbleState*"
+                excludes += "io.element.android.features.ftue.api.state.*"
+                excludes += "io.element.android.features.ftue.impl.welcome.state.*"
             }
             bound {
                 minValue = 90
