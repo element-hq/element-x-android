@@ -20,9 +20,11 @@ import android.content.SharedPreferences
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DefaultPreferences
+import io.element.android.libraries.di.SingleIn
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
 class AndroidWelcomeScreenState @Inject constructor(
     @DefaultPreferences private val sharedPreferences: SharedPreferences,
 ): WelcomeScreenState {

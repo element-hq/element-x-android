@@ -246,7 +246,7 @@ koverMerged {
             name = "Check code coverage of states"
             target = kotlinx.kover.api.VerificationTarget.CLASS
             overrideClassFilter {
-                includes += "*State"
+                includes += "^*State$"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*"
                 excludes += "io.element.android.libraries.matrix.api.room.RoomMembershipState*"

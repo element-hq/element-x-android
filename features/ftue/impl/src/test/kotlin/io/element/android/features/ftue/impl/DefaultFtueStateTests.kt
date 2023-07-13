@@ -92,12 +92,15 @@ class DefaultFtueStateTests {
 
     @Test
     fun `if a check for a step is true, start from the next one`() = runTest {
-        val welcomeState = FakeWelcomeState().apply { setWelcomeScreenShown() }
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
+        val analyticsService = FakeAnalyticsService()
+        val state = createState(coroutineScope = coroutineScope, analyticsService = analyticsService)
 
-        val state = createState(coroutineScope, welcomeState)
-
+        state.setWelcomeScreenShown()
         assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
+
+        analyticsService.setDidAskUserConsent()
+        assertThat(state.getNextStep(FtueStep.WelcomeScreen)).isNull()
 
         // Cleanup
         coroutineScope.cancel()
