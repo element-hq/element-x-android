@@ -20,10 +20,12 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -40,6 +42,9 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
+
+private const val INITIAL_MAX_SIZE = 50
 
 class RustMatrixTimeline(
     roomCoroutineScope: CoroutineScope,
@@ -48,11 +53,14 @@ class RustMatrixTimeline(
     private val dispatcher: CoroutineDispatcher,
 ) : MatrixTimeline {
 
+    private val initLatch = CompletableDeferred<Unit>()
+    private val isInit = AtomicBoolean(false)
+
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 
     private val _paginationState = MutableStateFlow(
-        MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
+        MatrixTimeline.PaginationState(hasMoreToLoadBackwards = true, isBackPaginating = false)
     )
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
@@ -77,10 +85,16 @@ class RustMatrixTimeline(
     override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.sample(50)
 
     internal suspend fun postItems(items: List<TimelineItem>) {
-        timelineDiffProcessor.postItems(items)
+        // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
+        items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
+            timelineDiffProcessor.postItems(it)
+        }
+        isInit.set(true)
+        initLatch.complete(Unit)
     }
 
     internal suspend fun postDiff(timelineDiff: TimelineDiff) {
+        initLatch.await()
         timelineDiffProcessor.postDiff(timelineDiff)
     }
 
@@ -90,19 +104,19 @@ class RustMatrixTimeline(
                 BackPaginationStatus.IDLE -> {
                     currentPaginationState.copy(
                         isBackPaginating = false,
-                        canBackPaginate = true
+                        hasMoreToLoadBackwards = true
                     )
                 }
                 BackPaginationStatus.PAGINATING -> {
                     currentPaginationState.copy(
                         isBackPaginating = true,
-                        canBackPaginate = true
+                        hasMoreToLoadBackwards = true
                     )
                 }
                 BackPaginationStatus.TIMELINE_START_REACHED -> {
                     currentPaginationState.copy(
                         isBackPaginating = false,
-                        canBackPaginate = false
+                        hasMoreToLoadBackwards = false
                     )
                 }
             }
@@ -117,6 +131,7 @@ class RustMatrixTimeline(
 
     override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> = withContext(dispatcher) {
         runCatching {
+            if (!canBackPaginate()) throw TimelineException.CannotPaginate
             Timber.v("Start back paginating for room ${matrixRoom.roomId} ")
             val paginationOptions = PaginationOptions.UntilNumItems(
                 eventLimit = requestSize.toUShort(),
@@ -125,10 +140,14 @@ class RustMatrixTimeline(
             )
             innerRoom.paginateBackwards(paginationOptions)
         }.onFailure {
-            Timber.e(it, "Fail to paginate for room ${matrixRoom.roomId}")
+            Timber.d(it, "Fail to paginate for room ${matrixRoom.roomId}")
         }.onSuccess {
             Timber.v("Success back paginating for room ${matrixRoom.roomId}")
         }
+    }
+
+    private fun canBackPaginate(): Boolean {
+        return isInit.get() && paginationState.value.canBackPaginate
     }
 
     override suspend fun sendReadReceipt(eventId: EventId) = withContext(dispatcher) {
