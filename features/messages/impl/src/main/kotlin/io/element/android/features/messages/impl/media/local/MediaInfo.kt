@@ -43,3 +43,7 @@ fun aPdfInfo(): MediaInfo = MediaInfo(
 fun aFileInfo(): MediaInfo = MediaInfo(
     "an apk file.apk", MimeTypes.Apk, "50MB", "apk"
 )
+
+fun anAudioInfo(): MediaInfo = MediaInfo(
+    "an audio file.mp3", MimeTypes.Mp3, "7MB", "mp3"
+)

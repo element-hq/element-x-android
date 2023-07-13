@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.local.aFileInfo
 import io.element.android.features.messages.impl.media.local.aPdfInfo
 import io.element.android.features.messages.impl.media.local.aVideoInfo
+import io.element.android.features.messages.impl.media.local.anAudioInfo
 import io.element.android.features.messages.impl.media.local.anImageInfo
 import io.element.android.libraries.architecture.Async
 
@@ -59,7 +60,17 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     LocalMedia(Uri.EMPTY, aFileInfo())
                 ),
                 aFileInfo(),
-            )
+            ),
+            aMediaViewerState(
+                Async.Loading(),
+                anAudioInfo(),
+            ),
+            aMediaViewerState(
+                Async.Success(
+                    LocalMedia(Uri.EMPTY, anAudioInfo())
+                ),
+                anAudioInfo(),
+            ),
         )
 }
 
