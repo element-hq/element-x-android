@@ -30,8 +30,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -154,13 +154,14 @@ internal fun aTimelineItemDebugInfo(
     model, originalJson, latestEditedJson
 )
 
-fun aGroupedEvents(): TimelineItem.GroupedEvents {
+fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
     val event = aTimelineItemEvent(
         isMine = true,
         content = aTimelineItemStateEventContent(),
         groupPosition = TimelineItemGroupPosition.None
     )
     return TimelineItem.GroupedEvents(
+        id = id.toString(),
         events = listOf(
             event,
             event,

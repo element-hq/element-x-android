@@ -45,6 +45,7 @@ class TimelineItemGrouperTest {
         localSendState = LocalEventSendState.Sent(AN_EVENT_ID),
         inReplyTo = null,
         debugInfo = aTimelineItemDebugInfo(),
+        origin = null
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual("virtual", aTimelineItemDaySeparatorModel("Today"))

@@ -23,22 +23,25 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.tests.testutils.awaitWithLatch
+import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class TimelinePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = TimelinePresenter(
-            timelineItemsFactory = aTimelineItemsFactory(),
-            room = FakeMatrixRoom(),
-        )
+        val presenter = createTimelinePresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -51,10 +54,7 @@ class TimelinePresenterTest {
 
     @Test
     fun `present - load more`() = runTest {
-        val presenter = TimelinePresenter(
-            timelineItemsFactory = aTimelineItemsFactory(),
-            room = FakeMatrixRoom(),
-        )
+        val presenter = createTimelinePresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -73,10 +73,7 @@ class TimelinePresenterTest {
 
     @Test
     fun `present - set highlighted event`() = runTest {
-        val presenter = TimelinePresenter(
-            timelineItemsFactory = aTimelineItemsFactory(),
-            room = FakeMatrixRoom(),
-        )
+        val presenter = createTimelinePresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -94,70 +91,106 @@ class TimelinePresenterTest {
 
     @Test
     fun `present - on scroll finished send read receipt if an event is before the index`() = runTest {
-        val timeline = FakeMatrixTimeline()
-        val timelineItemsFactory = aTimelineItemsFactory().apply {
-            replaceWith(listOf(MatrixTimelineItem.Event(0, anEventTimelineItem())))
-        }
-        val room = FakeMatrixRoom(matrixTimeline = timeline)
-        val presenter = TimelinePresenter(
-            timelineItemsFactory = timelineItemsFactory,
-            room = room,
+        val timeline = FakeMatrixTimeline(
+            initialTimelineItems = listOf(
+                MatrixTimelineItem.Event(0, anEventTimelineItem())
+            )
         )
+        val presenter = createTimelinePresenter(timeline)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitItem()
-
-            initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
-
+            awaitWithLatch { latch ->
+                timeline.sendReadReceiptLatch = latch
+                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
+            }
             assertThat(timeline.sendReadReceiptCount).isEqualTo(1)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
     fun `present - on scroll finished will not send read receipt no event is before the index`() = runTest {
-        val timeline = FakeMatrixTimeline()
-        val timelineItemsFactory = aTimelineItemsFactory().apply {
-            replaceWith(listOf(MatrixTimelineItem.Event(0, anEventTimelineItem())))
-        }
-        val room = FakeMatrixRoom(matrixTimeline = timeline)
-        val presenter = TimelinePresenter(
-            timelineItemsFactory = timelineItemsFactory,
-            room = room,
+        val timeline = FakeMatrixTimeline(
+            initialTimelineItems = listOf(
+                MatrixTimelineItem.Event(0, anEventTimelineItem())
+            )
         )
+        val presenter = createTimelinePresenter(timeline)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitItem()
-
-            initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
-
+            awaitWithLatch { latch ->
+                timeline.sendReadReceiptLatch = latch
+                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
+            }
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
     fun `present - on scroll finished will not send read receipt only virtual events exist before the index`() = runTest {
-        val timeline = FakeMatrixTimeline()
-        val timelineItemsFactory = aTimelineItemsFactory().apply {
-            replaceWith(listOf(MatrixTimelineItem.Virtual(0, VirtualTimelineItem.ReadMarker)))
-        }
-        val room = FakeMatrixRoom(matrixTimeline = timeline)
-        val presenter = TimelinePresenter(
-            timelineItemsFactory = timelineItemsFactory,
-            room = room,
+        val timeline = FakeMatrixTimeline(
+            initialTimelineItems = listOf(
+                MatrixTimelineItem.Virtual(0, VirtualTimelineItem.ReadMarker)
+            )
         )
+        val presenter = createTimelinePresenter(timeline)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitItem()
-
-            initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
-
+            awaitWithLatch { latch ->
+                timeline.sendReadReceiptLatch = latch
+                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
+            }
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun `present - covers hasNewItems scenarios`() = runTest {
+        val timeline = FakeMatrixTimeline()
+        val presenter = createTimelinePresenter(timeline)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.hasNewItems).isFalse()
+            assertThat(initialState.timelineItems.size).isEqualTo(0)
+            timeline.updateTimelineItems {
+                listOf(MatrixTimelineItem.Event(0, anEventTimelineItem(content = aMessageContent())))
+            }
+            skipItems(1)
+            assertThat(awaitItem().timelineItems.size).isEqualTo(1)
+            timeline.updateTimelineItems { items ->
+                items + listOf(MatrixTimelineItem.Event(1, anEventTimelineItem(content = aMessageContent())))
+            }
+            skipItems(1)
+            assertThat(awaitItem().timelineItems.size).isEqualTo(2)
+            assertThat(awaitItem().hasNewItems).isTrue()
+            initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
+            assertThat(awaitItem().hasNewItems).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun TestScope.createTimelinePresenter(
+        timeline: MatrixTimeline = FakeMatrixTimeline(),
+        timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory()
+    ): TimelinePresenter {
+        return TimelinePresenter(
+            timelineItemsFactory = timelineItemsFactory,
+            room = FakeMatrixRoom(matrixTimeline = timeline),
+            dispatchers = testCoroutineDispatchers(),
+            appScope = this
+        )
     }
 }

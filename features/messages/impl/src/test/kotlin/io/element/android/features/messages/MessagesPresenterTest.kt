@@ -572,6 +572,8 @@ class MessagesPresenterTest {
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
+            dispatchers = coroutineDispatchers,
+            appScope = this
         )
         val buildMeta = aBuildMeta()
         val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)

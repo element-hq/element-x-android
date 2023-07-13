@@ -262,6 +262,7 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     JumpToBottomButton(
+        // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
         isVisible = !canAutoScroll,
         modifier = Modifier
             .align(Alignment.BottomEnd)
