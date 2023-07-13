@@ -24,10 +24,13 @@ import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.services.appnavstate.api.AppNavigationStateService
 
 @SingleIn(AppScope::class)
 @MergeComponent(AppScope::class)
 interface AppComponent : NodeFactoriesBindings {
+
+    fun appNavigationStateService(): AppNavigationStateService
 
     @Component.Factory
     interface Factory {

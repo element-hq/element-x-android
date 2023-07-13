@@ -87,7 +87,7 @@ class RustMatrixClient constructor(
 
     override val sessionId: UserId = UserId(client.userId())
     private val app = client.app().use { builder ->
-        builder.finish()
+        builder.withEncryptionSync(false, "").finish()
     }
     private val roomListService = app.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)

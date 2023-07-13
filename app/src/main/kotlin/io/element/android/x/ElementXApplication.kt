@@ -17,6 +17,12 @@
 package io.element.android.x
 
 import android.app.Application
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleInitializer
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.startup.AppInitializer
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.AppComponent
@@ -43,6 +49,13 @@ class ElementXApplication : Application(), DaggerComponentOwner {
             initializeComponent(MatrixInitializer::class.java)
             initializeComponent(EmojiInitializer::class.java)
         }
+
+        val appNavigationStateService = appComponent.appNavigationStateService()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                appNavigationStateService.onAppMovedToLifecycleState(event.targetState)
+            }
+        })
         logApplicationInfo()
     }
 }

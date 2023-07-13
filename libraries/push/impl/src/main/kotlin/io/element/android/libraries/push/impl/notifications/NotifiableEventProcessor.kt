@@ -24,6 +24,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
 import io.element.android.services.appnavstate.api.AppNavigationState
+import io.element.android.services.appnavstate.api.AppNavigationStateService
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -31,18 +32,20 @@ private typealias ProcessedEvents = List<ProcessedEvent<NotifiableEvent>>
 
 class NotifiableEventProcessor @Inject constructor(
     private val outdatedDetector: OutdatedEventDetector,
+    private val appNavigationStateService: AppNavigationStateService,
 ) {
 
     fun process(
         queuedEvents: List<NotifiableEvent>,
-        appNavigationState: AppNavigationState?,
         renderedEvents: ProcessedEvents,
     ): ProcessedEvents {
+        val appNavigationState = appNavigationStateService.appNavigationStateFlow.value
+        val isAppInForeground = appNavigationStateService.appIsInForeground.value
         val processedEvents = queuedEvents.map {
             val type = when (it) {
                 is InviteNotifiableEvent -> ProcessedEvent.Type.KEEP
                 is NotifiableMessageEvent -> when {
-                    it.shouldIgnoreEventInRoom(appNavigationState) -> {
+                    it.shouldIgnoreEventInRoom(appNavigationState, isAppInForeground) -> {
                         ProcessedEvent.Type.REMOVE
                             .also { Timber.d("notification message removed due to currently viewing the same room or thread") }
                     }
@@ -55,7 +58,7 @@ class NotifiableEventProcessor @Inject constructor(
                     else -> ProcessedEvent.Type.KEEP
                 }
                 is FallbackNotifiableEvent -> when {
-                    it.shouldIgnoreEventInRoom(appNavigationState) -> {
+                    it.shouldIgnoreEventInRoom(appNavigationState, isAppInForeground) -> {
                         ProcessedEvent.Type.REMOVE
                             .also { Timber.d("notification fallback removed due to currently viewing the same room or thread") }
                     }

@@ -32,6 +32,10 @@
         android:theme="@style/Theme.ElementX"
         tools:targetApi="33">
 
+        <meta-data
+            android:name='androidx.lifecycle.ProcessLifecycleInitializer'
+            android:value='androidx.startup' />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"

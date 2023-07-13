@@ -16,6 +16,7 @@
 
 package io.element.android.services.appnavstate.api
 
+import androidx.lifecycle.Lifecycle
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
@@ -24,6 +25,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface AppNavigationStateService {
     val appNavigationStateFlow: StateFlow<AppNavigationState>
+    val appIsInForeground: StateFlow<Boolean>
+
+    fun onAppMovedToLifecycleState(lifecycleState: Lifecycle.State)
 
     fun onNavigateToSession(owner: String, sessionId: SessionId)
     fun onLeavingSession(owner: String)

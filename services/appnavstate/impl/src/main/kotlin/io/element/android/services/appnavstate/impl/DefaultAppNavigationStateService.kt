@@ -16,6 +16,7 @@
 
 package io.element.android.services.appnavstate.impl
 
+import androidx.lifecycle.Lifecycle
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
@@ -42,6 +43,13 @@ class DefaultAppNavigationStateService @Inject constructor() : AppNavigationStat
 
     private val currentAppNavigationState: MutableStateFlow<AppNavigationState> = MutableStateFlow(AppNavigationState.Root)
     override val appNavigationStateFlow: StateFlow<AppNavigationState> = currentAppNavigationState
+
+    private val currentAppIsInForeground = MutableStateFlow(true)
+    override val appIsInForeground: StateFlow<Boolean> = currentAppIsInForeground
+
+    override fun onAppMovedToLifecycleState(lifecycleState: Lifecycle.State) {
+        currentAppIsInForeground.value = lifecycleState.isAtLeast(Lifecycle.State.STARTED)
+    }
 
     override fun onNavigateToSession(owner: String, sessionId: SessionId) {
         val currentValue = currentAppNavigationState.value
