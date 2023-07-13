@@ -34,6 +34,7 @@ data class EventTimelineItem(
     val timestamp: Long,
     val content: EventContent,
     val debugInfo: TimelineItemDebugInfo,
+    val origin: TimelineItemEventOrigin?,
 ) {
     fun inReplyTo(): InReplyTo? {
         return (content as? MessageContent)?.inReplyTo

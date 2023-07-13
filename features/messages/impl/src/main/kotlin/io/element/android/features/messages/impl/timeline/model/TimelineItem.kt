@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -65,6 +66,7 @@ sealed interface TimelineItem {
         val localSendState: LocalEventSendState?,
         val inReplyTo: InReplyTo?,
         val debugInfo: TimelineItemDebugInfo,
+        val origin: TimelineItemEventOrigin?,
     ) : TimelineItem {
 
         val showSenderInformation = groupPosition.isNew() && !isMine
