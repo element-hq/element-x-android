@@ -33,7 +33,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given an unencrypted room, nothing is done`() {
         val processor = createPostProcessor(isRoomEncrypted = false)
         val items = listOf(
-            MatrixTimelineItem.Event(anEventTimelineItem())
+            MatrixTimelineItem.Event(0L, anEventTimelineItem())
         )
         assertThat(processor.process(items)).isSameInstanceAs(items)
     }
@@ -42,7 +42,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given a null lastLoginTimestamp, nothing is done`() {
         val processor = createPostProcessor(lastLoginTimestamp = null)
         val items = listOf(
-            MatrixTimelineItem.Event(anEventTimelineItem())
+            MatrixTimelineItem.Event(0L, anEventTimelineItem())
         )
         assertThat(processor.process(items)).isSameInstanceAs(items)
     }
@@ -58,7 +58,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given a list with no items before lastLoginTimestamp, nothing is done`() {
         val processor = createPostProcessor()
         val items = listOf(
-            MatrixTimelineItem.Event(anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
+            MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
         )
         assertThat(processor.process(items)).isSameInstanceAs(items)
     }
@@ -67,20 +67,20 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given a list with an item with equal timestamp as lastLoginTimestamp, it's replaced`() {
         val processor = createPostProcessor()
         val items = listOf(
-            MatrixTimelineItem.Event(anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time))
+            MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time))
         )
         assertThat(processor.process(items))
-            .isEqualTo(listOf(MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner)))
+            .isEqualTo(listOf(MatrixTimelineItem.Virtual(0L, VirtualTimelineItem.EncryptedHistoryBanner)))
     }
 
     @Test
     fun `given a list with an item with a lower timestamp than lastLoginTimestamp, it's replaced`() {
         val processor = createPostProcessor()
         val items = listOf(
-            MatrixTimelineItem.Event(anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1))
+            MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1))
         )
         assertThat(processor.process(items)).isEqualTo(
-            listOf(MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner))
+            listOf(MatrixTimelineItem.Virtual(0L, VirtualTimelineItem.EncryptedHistoryBanner))
         )
     }
 
@@ -89,14 +89,14 @@ class TimelineEncryptedHistoryPostProcessorTest {
         val paginationStateFlow = MutableStateFlow(MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false))
         val processor = createPostProcessor(paginationStateFlow = paginationStateFlow)
         val items = listOf(
-            MatrixTimelineItem.Event(anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1)),
-            MatrixTimelineItem.Event(anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time)),
-            MatrixTimelineItem.Event(anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1)),
+            MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1)),
+            MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time)),
+            MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1)),
         )
         assertThat(processor.process(items)).isEqualTo(
             listOf(
-                MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner),
-                MatrixTimelineItem.Event(anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
+                MatrixTimelineItem.Virtual(0L, VirtualTimelineItem.EncryptedHistoryBanner),
+                MatrixTimelineItem.Event(1L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
             )
         )
         assertThat(paginationStateFlow.value).isEqualTo(MatrixTimeline.PaginationState(canBackPaginate = false, isBackPaginating = false))

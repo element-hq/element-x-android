@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import java.util.Date
+import java.util.UUID
 
 class TimelineEncryptedHistoryPostProcessor(
     private val lastLoginTimestamp: Date?,
@@ -55,7 +56,7 @@ class TimelineEncryptedHistoryPostProcessor(
         }
         return if (lastEncryptedHistoryBannerIndex >= 0) {
             val sublist = list.drop(lastEncryptedHistoryBannerIndex + 1).toMutableList()
-            sublist.add(0, MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner))
+            sublist.add(0, MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner.uniqueId, VirtualTimelineItem.EncryptedHistoryBanner))
             sublist
         } else {
             list

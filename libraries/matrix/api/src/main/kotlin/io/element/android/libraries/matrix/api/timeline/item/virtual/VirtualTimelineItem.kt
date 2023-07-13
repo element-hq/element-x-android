@@ -24,5 +24,7 @@ sealed interface VirtualTimelineItem {
 
     object ReadMarker : VirtualTimelineItem
 
-    object EncryptedHistoryBanner : VirtualTimelineItem
+    object EncryptedHistoryBanner : VirtualTimelineItem {
+        const val uniqueId = -1L
+    }
 }
