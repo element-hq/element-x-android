@@ -26,11 +26,14 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
 
-      - name: ⚙️ Run unit & screenshot tests, debug and release
+      - name: ⚙️ Run unit tests, debug and release
         run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
-      - name: ⚙️ Run unit & screenshot tests, generate kover report
-        run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+      - name: 📸️ Run screenshot tests (debug)
+        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+
+      - name: 📈 Generate kover report and verify coverage
+        run: ./gradlew koverMergedReport koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
       - name: ✅ Upload kover report
         if: always()
