@@ -85,6 +85,11 @@ class TimelinePresenter @Inject constructor(
             timeline
                 .timelineItems
                 .onEach(timelineItemsFactory::replaceWith)
+                .onEach { timelineItems ->
+                    if (timelineItems.isEmpty()) {
+                        paginateBackwards()
+                    }
+                }
                 .launchIn(this)
         }
 
