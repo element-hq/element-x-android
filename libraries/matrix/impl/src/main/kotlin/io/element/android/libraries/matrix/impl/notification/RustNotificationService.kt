@@ -21,11 +21,11 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
-import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.use
 
 class RustNotificationService(
-    private val client: Client,
+    private val notificationClient: NotificationClient,
 ) : NotificationService {
     private val notificationMapper: NotificationMapper = NotificationMapper()
 
@@ -36,8 +36,10 @@ class RustNotificationService(
         filterByPushRules: Boolean,
     ): Result<NotificationData?> {
         return runCatching {
-            val item = client.getNotificationItem(roomId.value, eventId.value, filterByPushRules)
-            item?.use(notificationMapper::map)
+            val item = notificationClient.getNotification(roomId.value, eventId.value)
+            item?.use {
+                notificationMapper.map(roomId, it)
+            }
         }
     }
 }

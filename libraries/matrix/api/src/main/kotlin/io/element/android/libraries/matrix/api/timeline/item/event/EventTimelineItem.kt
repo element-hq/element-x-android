@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 data class EventTimelineItem(
-    val uniqueIdentifier: String,
     val eventId: EventId?,
     val transactionId: String?,
     val isEditable: Boolean,

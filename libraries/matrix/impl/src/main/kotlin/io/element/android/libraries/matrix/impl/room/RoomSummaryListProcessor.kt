@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +44,8 @@ class RoomSummaryListProcessor(
     suspend fun postEntries(entries: List<RoomListEntry>) {
         updateRoomSummaries {
             Timber.v("Update rooms from postEntries (with ${entries.size} items) on ${Thread.currentThread()}")
-            addAll(entries.map(::buildSummaryForRoomListEntry))
+            val roomSummaries = entries.parallelMap(::buildSummaryForRoomListEntry)
+            addAll(roomSummaries)
         }
         initLatch.complete(Unit)
     }
@@ -57,7 +59,7 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
+    private suspend fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
         when (update) {
             is RoomListEntriesUpdate.Append -> {
                 val roomSummaries = update.values.map {
@@ -100,7 +102,7 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
+    private suspend fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
         return when (entry) {
             RoomListEntry.Empty -> buildEmptyRoomSummary()
             is RoomListEntry.Filled -> buildAndCacheRoomSummaryForIdentifier(entry.roomId)
@@ -114,7 +116,7 @@ class RoomSummaryListProcessor(
         return RoomSummary.Empty(UUID.randomUUID().toString())
     }
 
-    private fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
+    private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
             roomListItem.fullRoomOrNull().use { fullRoom ->
                 RoomSummary.Filled(
@@ -134,7 +136,7 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private suspend fun updateRoomSummaries(block: MutableList<RoomSummary>.() -> Unit) =
+    private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) =
         mutex.withLock {
             val mutableRoomSummaries = roomSummaries.value.toMutableList()
             block(mutableRoomSummaries)
