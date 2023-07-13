@@ -40,7 +40,7 @@ class TimelineEncryptedHistoryPostProcessor(
             paginationStateFlow.getAndUpdate {
                 it.copy(
                     isBackPaginating = false,
-                    canBackPaginate = false
+                    hasMoreToLoadBackwards = false
                 )
             }
         }
@@ -56,7 +56,7 @@ class TimelineEncryptedHistoryPostProcessor(
         }
         return if (lastEncryptedHistoryBannerIndex >= 0) {
             val sublist = list.drop(lastEncryptedHistoryBannerIndex + 1).toMutableList()
-            sublist.add(0, MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner.uniqueId, VirtualTimelineItem.EncryptedHistoryBanner))
+            sublist.add(0, MatrixTimelineItem.Virtual(0L, VirtualTimelineItem.EncryptedHistoryBanner))
             sublist
         } else {
             list

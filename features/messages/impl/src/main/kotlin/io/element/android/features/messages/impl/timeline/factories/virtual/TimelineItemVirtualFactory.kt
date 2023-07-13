@@ -31,8 +31,13 @@ class TimelineItemVirtualFactory @Inject constructor(
     fun create(
         virtualTimelineItem: MatrixTimelineItem.Virtual,
     ): TimelineItem.Virtual {
+        val id = if (virtualTimelineItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner) {
+            "encrypted_history_banner"
+        } else {
+            virtualTimelineItem.uniqueId.toString()
+        }
         return TimelineItem.Virtual(
-            id = virtualTimelineItem.uniqueId.toString(),
+            id = id,
             model = virtualTimelineItem.computeModel()
         )
     }

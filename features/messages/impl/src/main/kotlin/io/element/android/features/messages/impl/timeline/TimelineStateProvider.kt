@@ -41,7 +41,7 @@ import kotlin.random.Random
 
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
     timelineItems = timelineItems,
-    paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, canBackPaginate = true),
+    paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, hasMoreToLoadBackwards = true),
     highlightedEventId = null,
     canReply = true,
     eventSink = {}

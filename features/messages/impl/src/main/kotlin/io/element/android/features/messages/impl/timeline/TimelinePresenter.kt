@@ -31,14 +31,12 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.ui.room.canSendEventAsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 private const val backPaginationEventLimit = 20
@@ -69,7 +67,7 @@ class TimelinePresenter @Inject constructor(
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
-                TimelineEvents.LoadMore -> localCoroutineScope.loadMore(paginationState)
+                TimelineEvents.LoadMore -> localCoroutineScope.paginateBackwards()
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
                 is TimelineEvents.OnScrollFinished -> {
                     // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
@@ -89,7 +87,7 @@ class TimelinePresenter @Inject constructor(
                 .onEach(timelineItemsFactory::replaceWith)
                 .onEach { timelineItems ->
                     if (timelineItems.isEmpty()) {
-                        loadMore(paginationState)
+                        paginateBackwards()
                     }
                 }
                 .launchIn(this)
@@ -113,12 +111,8 @@ class TimelinePresenter @Inject constructor(
         return null
     }
 
-    private fun CoroutineScope.loadMore(paginationState: MatrixTimeline.PaginationState) = launch {
-        if (paginationState.canBackPaginate && !paginationState.isBackPaginating) {
-            timeline.paginateBackwards(backPaginationEventLimit, backPaginationPageSize)
-        } else {
-            Timber.v("Can't back paginate as paginationState = $paginationState")
-        }
+    private fun CoroutineScope.paginateBackwards() = launch {
+        timeline.paginateBackwards(backPaginationEventLimit, backPaginationPageSize)
     }
 
     private fun CoroutineScope.sendReadReceipt(eventId: EventId) = launch {

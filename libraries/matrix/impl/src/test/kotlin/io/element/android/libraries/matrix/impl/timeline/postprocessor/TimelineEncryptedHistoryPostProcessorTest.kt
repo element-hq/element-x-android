@@ -86,7 +86,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
 
     @Test
     fun `given a list with several with lower or equal timestamps than lastLoginTimestamp, they're replaced and the user can't back paginate`() {
-        val paginationStateFlow = MutableStateFlow(MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false))
+        val paginationStateFlow = MutableStateFlow(MatrixTimeline.PaginationState(hasMoreToLoadBackwards = true, isBackPaginating = false))
         val processor = createPostProcessor(paginationStateFlow = paginationStateFlow)
         val items = listOf(
             MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1)),
@@ -96,17 +96,17 @@ class TimelineEncryptedHistoryPostProcessorTest {
         assertThat(processor.process(items)).isEqualTo(
             listOf(
                 MatrixTimelineItem.Virtual(0L, VirtualTimelineItem.EncryptedHistoryBanner),
-                MatrixTimelineItem.Event(1L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
+                MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
             )
         )
-        assertThat(paginationStateFlow.value).isEqualTo(MatrixTimeline.PaginationState(canBackPaginate = false, isBackPaginating = false))
+        assertThat(paginationStateFlow.value).isEqualTo(MatrixTimeline.PaginationState(hasMoreToLoadBackwards = false, isBackPaginating = false))
     }
 
     private fun createPostProcessor(
         lastLoginTimestamp: Date? = defaultLastLoginTimestamp,
         isRoomEncrypted: Boolean = true,
         paginationStateFlow: MutableStateFlow<MatrixTimeline.PaginationState> =
-            MutableStateFlow(MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false))
+            MutableStateFlow(MatrixTimeline.PaginationState(hasMoreToLoadBackwards = true, isBackPaginating = false))
     ) = TimelineEncryptedHistoryPostProcessor(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = isRoomEncrypted,
