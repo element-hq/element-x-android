@@ -255,9 +255,11 @@ koverMerged {
                 excludes += "io.element.android.libraries.push.impl.notifications.NotificationState*"
                 excludes += "io.element.android.features.messages.impl.media.local.pdf.PdfViewerState"
                 excludes += "io.element.android.features.messages.impl.media.local.LocalMediaViewState"
-                excludes += "io.element.android.features.location.impl.map.MapState"
+                excludes += "io.element.android.features.location.impl.map.MapState*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState*"
                 excludes += "io.element.android.libraries.designsystem.swipe.SwipeableActionsState*"
+                excludes += "io.element.android.features.messages.impl.timeline.components.ExpandableState*"
+                excludes += "io.element.android.features.messages.impl.timeline.model.bubble.BubbleState*"
             }
             bound {
                 minValue = 90
