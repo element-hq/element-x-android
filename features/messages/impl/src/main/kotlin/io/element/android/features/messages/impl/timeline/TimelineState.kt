@@ -28,5 +28,6 @@ data class TimelineState(
     val highlightedEventId: EventId?,
     val canReply: Boolean,
     val paginationState: MatrixTimeline.PaginationState,
+    val hasNewItems: Boolean,
     val eventSink: (TimelineEvents) -> Unit
 )

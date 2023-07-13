@@ -49,7 +49,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -72,7 +71,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.theme.ElementTheme
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
 @Composable
@@ -141,8 +139,8 @@ fun TimelineView(
 
         TimelineScrollHelper(
             lazyListState = lazyListState,
-            timelineItems = state.timelineItems,
-            onScrollFinishedAt = ::onScrollFinishedAt,
+            hasNewItems = state.hasNewItems,
+            onScrollFinishedAt = ::onScrollFinishedAt
         )
     }
 }
@@ -238,53 +236,62 @@ fun TimelineItemRow(
 }
 
 @Composable
-internal fun BoxScope.TimelineScrollHelper(
+private fun BoxScope.TimelineScrollHelper(
     lazyListState: LazyListState,
-    timelineItems: ImmutableList<TimelineItem>,
-    onScrollFinishedAt: (Int) -> Unit = {},
+    hasNewItems: Boolean,
+    onScrollFinishedAt: (Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
-    val shouldAutoScrollToBottom by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 2 } }
-    val showScrollToBottomButton by remember { derivedStateOf { lazyListState.firstVisibleItemIndex > 0 } }
+    val canAutoScroll by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 3 } }
 
-    LaunchedEffect(timelineItems, firstVisibleItemIndex) {
-        if (!isScrollFinished) return@LaunchedEffect
-
-        // Auto-scroll when new timeline items appear
-        if (shouldAutoScrollToBottom) {
+    LaunchedEffect(canAutoScroll, hasNewItems) {
+        val shouldAutoScroll = isScrollFinished && canAutoScroll && hasNewItems
+        if (shouldAutoScroll) {
             coroutineScope.launch {
                 lazyListState.animateScrollToItem(0)
             }
         }
     }
-    LaunchedEffect(isScrollFinished) {
-        if (!isScrollFinished) return@LaunchedEffect
 
-        // Notify the parent composable about the first visible item index when scrolling finishes
-        onScrollFinishedAt(firstVisibleItemIndex)
+    LaunchedEffect(isScrollFinished) {
+        if (isScrollFinished) {
+            // Notify the parent composable about the first visible item index when scrolling finishes
+            onScrollFinishedAt(lazyListState.firstVisibleItemIndex)
+        }
     }
 
-    // Jump to bottom button (display also in previews)
-    AnimatedVisibility(
+    JumpToBottomButton(
+        isVisible = !canAutoScroll,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
-        visible = showScrollToBottomButton || LocalInspectionMode.current,
+        onClick = {
+            coroutineScope.launch {
+                if (lazyListState.firstVisibleItemIndex > 10) {
+                    lazyListState.scrollToItem(0)
+                } else {
+                    lazyListState.animateScrollToItem(0)
+                }
+            }
+        }
+    )
+}
+
+@Composable
+private fun JumpToBottomButton(
+    isVisible: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = isVisible || LocalInspectionMode.current,
         enter = scaleIn(animationSpec = tween(100)),
         exit = scaleOut(animationSpec = tween(100)),
     ) {
         FloatingActionButton(
-            onClick = {
-                coroutineScope.launch {
-                    if (firstVisibleItemIndex > 10) {
-                        lazyListState.scrollToItem(0)
-                    } else {
-                        lazyListState.animateScrollToItem(0)
-                    }
-                }
-            },
+            onClick = onClick,
             elevation = FloatingActionButtonDefaults.elevation(4.dp, 4.dp, 4.dp, 4.dp),
             shape = CircleShape,
             modifier = Modifier.size(36.dp),
