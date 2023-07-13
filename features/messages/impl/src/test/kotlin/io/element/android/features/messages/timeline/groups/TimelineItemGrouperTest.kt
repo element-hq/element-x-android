@@ -20,13 +20,13 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
+import io.element.android.features.messages.impl.timeline.groups.computeGroupIdWith
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.aTimelineItemDebugInfo
 import kotlinx.collections.immutable.toImmutableList
@@ -36,7 +36,7 @@ class TimelineItemGrouperTest {
     private val sut = TimelineItemGrouper()
 
     private val aGroupableItem = TimelineItem.Event(
-        id = AN_EVENT_ID.value,
+        id = "0",
         senderId = A_USER_ID,
         senderAvatar = anAvatarData(),
         senderDisplayName = "",
@@ -76,16 +76,17 @@ class TimelineItemGrouperTest {
     fun `test groupables and ensure reordering`() {
         val result = sut.group(
             listOf(
-                aGroupableItem.copy(id = AN_EVENT_ID_2.value),
-                aGroupableItem,
+                aGroupableItem.copy(id = "1"),
+                aGroupableItem.copy(id = "0"),
             ),
         )
         assertThat(result).isEqualTo(
             listOf(
                 TimelineItem.GroupedEvents(
+                    computeGroupIdWith(aGroupableItem),
                     events = listOf(
-                        aGroupableItem,
-                        aGroupableItem.copy(id = AN_EVENT_ID_2.value),
+                        aGroupableItem.copy("0"),
+                        aGroupableItem.copy(id = "1"),
                     ).toImmutableList()
                 ),
             )
@@ -128,6 +129,7 @@ class TimelineItemGrouperTest {
         assertThat(result).isEqualTo(
             listOf(
                 TimelineItem.GroupedEvents(
+                    computeGroupIdWith(aGroupableItem),
                     events = listOf(
                         aGroupableItem,
                         aGroupableItem,
@@ -135,6 +137,7 @@ class TimelineItemGrouperTest {
                 ),
                 aNonGroupableItem,
                 TimelineItem.GroupedEvents(
+                    computeGroupIdWith(aGroupableItem),
                     events = listOf(
                         aGroupableItem,
                         aGroupableItem,
@@ -143,5 +146,21 @@ class TimelineItemGrouperTest {
                 )
             )
         )
+    }
+
+    @Test
+    fun `when calling multiple time the method group over a growing list of groupable items, then groupId is stable`() {
+        // When
+        val groupableItems = mutableListOf(
+            aGroupableItem.copy(id = "1"),
+            aGroupableItem.copy(id = "2")
+        )
+        val expectedGroupId = sut.group(groupableItems).first().identifier()
+        groupableItems.add(0, aGroupableItem.copy("3"))
+        groupableItems.add(2, aGroupableItem.copy("4"))
+        groupableItems.add(aGroupableItem.copy("5"))
+        val actualGroupId = sut.group(groupableItems).first().identifier()
+        // Then
+        assertThat(actualGroupId).isEqualTo(expectedGroupId)
     }
 }

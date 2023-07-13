@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.groups
 
+import androidx.annotation.VisibleForTesting
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
@@ -86,8 +87,11 @@ private fun MutableMap<String, String>.getOrPutGroupId(timelineItems: List<Timel
             return this[itemIdentifier]!!
         }
     }
-    val itemIdentifier = timelineItems.first().identifier()
-    return "${itemIdentifier}_group".also { groupId ->
-        this[itemIdentifier] = groupId
+    val timelineItem = timelineItems.first()
+    return computeGroupIdWith(timelineItem).also { groupId ->
+        this[timelineItem.identifier()] = groupId
     }
 }
+
+@VisibleForTesting
+internal fun computeGroupIdWith(timelineItem: TimelineItem): String = "${timelineItem.identifier()}_group"
