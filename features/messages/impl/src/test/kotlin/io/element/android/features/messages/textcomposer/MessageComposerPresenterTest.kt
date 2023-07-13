@@ -324,7 +324,7 @@ class MessageComposerPresenterTest {
             Result.success(
                 MediaUploadInfo.Image(
                     file = File("/some/path"),
-                    info = ImageInfo(
+                    imageInfo = ImageInfo(
                         width = null,
                         height = null,
                         mimetype = null,
@@ -357,7 +357,7 @@ class MessageComposerPresenterTest {
             Result.success(
                 MediaUploadInfo.Video(
                     file = File("/some/path"),
-                    info = VideoInfo(
+                    videoInfo = VideoInfo(
                         width = null,
                         height = null,
                         mimetype = null,

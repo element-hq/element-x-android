@@ -605,7 +605,7 @@ class RoomDetailsEditPresenterTest {
             Result.success(
                 MediaUploadInfo.AnyFile(
                     file = processedFile,
-                    info = mockk(),
+                    fileInfo = mockk(),
                 )
             )
         )

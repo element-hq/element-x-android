@@ -29,7 +29,7 @@ data class MediaInfo(
 ) : Parcelable
 
 fun anImageInfo(): MediaInfo = MediaInfo(
-    "an image file.jpg", MimeTypes.Jpeg, "4MB","jpg"
+    "an image file.jpg", MimeTypes.Jpeg, "4MB", "jpg"
 )
 
 fun aVideoInfo(): MediaInfo = MediaInfo(
