@@ -24,8 +24,10 @@ interface MatrixTimeline {
 
     data class PaginationState(
         val isBackPaginating: Boolean,
-        val canBackPaginate: Boolean
-    )
+        val hasMoreToLoadBackwards: Boolean
+    ) {
+        val canBackPaginate = !isBackPaginating && hasMoreToLoadBackwards
+    }
 
     val paginationState: StateFlow<PaginationState>
     val timelineItems: Flow<List<MatrixTimelineItem>>

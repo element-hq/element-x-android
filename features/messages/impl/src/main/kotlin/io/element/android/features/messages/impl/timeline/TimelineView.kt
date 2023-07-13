@@ -128,7 +128,7 @@ fun TimelineView(
                     onSwipeToReply = onSwipeToReply,
                 )
             }
-            if (state.paginationState.canBackPaginate) {
+            if (state.paginationState.hasMoreToLoadBackwards) {
                 // Do not use key parameter to avoid wrong positioning
                 item(contentType = "TimelineLoadingMoreIndicator") {
                     TimelineLoadingMoreIndicator()
