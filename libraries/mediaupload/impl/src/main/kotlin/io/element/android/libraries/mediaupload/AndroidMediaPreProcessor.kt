@@ -196,7 +196,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             val info = AudioInfo(
                 duration = extractDuration(),
                 size = file.length(),
-                mimeType = mimeType,
+                mimetype = mimeType,
             )
 
             MediaUploadInfo.Audio(file, info)

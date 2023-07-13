@@ -56,6 +56,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -246,7 +247,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                     info = AttachmentThumbnailInfo(
                         type = AttachmentThumbnailType.Location,
                         textContent = stringResource(CommonStrings.common_shared_location),
-                        mediaSource = null,
+                        thumbnailSource = null,
                         blurHash = null,
                     )
                 )
@@ -258,7 +259,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 AttachmentThumbnail(
                     modifier = imageModifier,
                     info = AttachmentThumbnailInfo(
-                        mediaSource = event.content.mediaSource,
+                        thumbnailSource = event.content.mediaSource,
                         textContent = textContent,
                         type = AttachmentThumbnailType.File,
                         blurHash = event.content.blurhash,
@@ -272,7 +273,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 AttachmentThumbnail(
                     modifier = imageModifier,
                     info = AttachmentThumbnailInfo(
-                        mediaSource = event.content.thumbnailSource,
+                        thumbnailSource = event.content.thumbnailSource,
                         textContent = textContent,
                         type = AttachmentThumbnailType.Video,
                         blurHash = event.content.blurHash,
@@ -286,10 +287,22 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 AttachmentThumbnail(
                     modifier = imageModifier,
                     info = AttachmentThumbnailInfo(
-                        mediaSource = null,
+                        thumbnailSource = event.content.thumbnailSource,
                         textContent = textContent,
                         type = AttachmentThumbnailType.File,
                         blurHash = null
+                    )
+                )
+            }
+            content = { ContentForBody(event.content.body) }
+        }
+        is TimelineItemAudioContent -> {
+            icon = {
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.Audio,
                     )
                 )
             }
