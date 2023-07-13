@@ -16,6 +16,7 @@
 
 package io.element.android.services.appnavstate.test
 
+import androidx.lifecycle.Lifecycle
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
@@ -25,11 +26,16 @@ import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class NoopAppNavigationStateService : AppNavigationStateService {
+class FakeAppNavigationStateService(
+    private val fakeAppNavigationState: MutableStateFlow<AppNavigationState> = MutableStateFlow(AppNavigationState.Root),
+    private val fakeAppIsInForeground: MutableStateFlow<Boolean> = MutableStateFlow(false)
+) : AppNavigationStateService {
 
-    private val currentAppNavigationState: MutableStateFlow<AppNavigationState> =
-        MutableStateFlow(AppNavigationState.Root)
-    override val appNavigationStateFlow: StateFlow<AppNavigationState> = currentAppNavigationState
+    override val appNavigationStateFlow: StateFlow<AppNavigationState> = fakeAppNavigationState
+
+    override val appIsInForeground: StateFlow<Boolean> = fakeAppIsInForeground
+
+    override fun onAppMovedToLifecycleState(lifecycleState: Lifecycle.State) {}
 
     override fun onNavigateToSession(owner: String, sessionId: SessionId) = Unit
     override fun onLeavingSession(owner: String) = Unit
