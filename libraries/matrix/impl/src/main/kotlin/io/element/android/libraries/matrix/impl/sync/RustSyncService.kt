@@ -18,47 +18,39 @@ package io.element.android.libraries.matrix.impl.sync
 
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.matrix.impl.room.stateFlow
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.App
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 
 class RustSyncService(
-    private val roomListService: RoomListService,
+    private val app: App,
+    roomListStateFlow: Flow<RoomListServiceState>,
     sessionCoroutineScope: CoroutineScope
 ) : SyncService {
 
-    private val isSyncing = AtomicBoolean(false)
-
     override fun startSync() = runCatching {
-        if (isSyncing.compareAndSet(false, true)) {
-            Timber.v("Start sync")
-            roomListService.sync()
-        }
+        Timber.v("Start sync")
+        app.start()
     }
 
     override fun stopSync() = runCatching {
-        if (isSyncing.compareAndSet(true, false)) {
-            Timber.v("Stop sync")
-            roomListService.stopSync()
-        }
+        Timber.v("Stop sync")
+        app.pause()
     }
 
     override val syncState: StateFlow<SyncState> =
-        roomListService
-            .stateFlow()
+        roomListStateFlow
             .map(RoomListServiceState::toSyncState)
             .onEach { state ->
                 Timber.v("Sync state=$state")
-                isSyncing.set(state == SyncState.Syncing)
             }
             .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)

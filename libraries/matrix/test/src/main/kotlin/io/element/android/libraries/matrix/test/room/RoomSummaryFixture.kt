@@ -87,7 +87,6 @@ fun aRoomMessage(
 )
 
 fun anEventTimelineItem(
-    uniqueIdentifier: String = A_UNIQUE_ID,
     eventId: EventId = AN_EVENT_ID,
     transactionId: String? = null,
     isEditable: Boolean = false,
@@ -102,7 +101,6 @@ fun anEventTimelineItem(
     content: EventContent = aProfileChangeMessageContent(),
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
 ) = EventTimelineItem(
-    uniqueIdentifier = uniqueIdentifier,
     eventId = eventId,
     transactionId = transactionId,
     isEditable = isEditable,

@@ -21,13 +21,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
 sealed interface MatrixTimelineItem {
-    data class Event(val event: EventTimelineItem) : MatrixTimelineItem {
-        val uniqueId: String = event.uniqueIdentifier
+    data class Event(val uniqueId: Long, val event: EventTimelineItem) : MatrixTimelineItem {
         val eventId: EventId? = event.eventId
         val transactionId: String? = event.transactionId
     }
 
-    data class Virtual(val virtual: VirtualTimelineItem) : MatrixTimelineItem
+    data class Virtual(val uniqueId: Long, val virtual: VirtualTimelineItem) : MatrixTimelineItem
     object Other : MatrixTimelineItem
 }
 

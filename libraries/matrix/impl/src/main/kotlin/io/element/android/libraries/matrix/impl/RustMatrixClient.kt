@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.room.roomOrNull
+import io.element.android.libraries.matrix.impl.room.stateFlow
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
@@ -85,17 +86,23 @@ class RustMatrixClient constructor(
 ) : MatrixClient {
 
     override val sessionId: UserId = UserId(client.userId())
-    private val roomListService = client.roomListServiceWithEncryption()
+    private val app = client.app().use { builder ->
+        builder.finish()
+    }
+    private val roomListService = app.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
-    private val syncService = RustSyncService(roomListService, sessionCoroutineScope)
+    private val syncService = RustSyncService(app, roomListService.stateFlow(), sessionCoroutineScope)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
     )
-    
-    private val notificationService = RustNotificationService(client)
+    private val notificationClient = client.notificationClient().use { builder ->
+        builder.finish()
+    }
+
+    private val notificationService = RustNotificationService(notificationClient)
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -249,7 +256,9 @@ class RustMatrixClient constructor(
         sessionCoroutineScope.cancel()
         client.setDelegate(null)
         verificationService.destroy()
+        app.destroy()
         roomListService.destroy()
+        notificationClient.destroy()
         client.destroy()
     }
 

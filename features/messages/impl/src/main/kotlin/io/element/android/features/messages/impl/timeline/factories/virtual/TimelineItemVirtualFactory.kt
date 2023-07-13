@@ -29,10 +29,9 @@ class TimelineItemVirtualFactory @Inject constructor(
 
     fun create(
         virtualTimelineItem: MatrixTimelineItem.Virtual,
-        index: Int,
     ): TimelineItem.Virtual {
         return TimelineItem.Virtual(
-            id = "virtual_item_$index",
+            id = virtualTimelineItem.uniqueId.toString(),
             model = virtualTimelineItem.computeModel()
         )
     }

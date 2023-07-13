@@ -27,12 +27,12 @@ import org.matrix.rustcomponents.sdk.use
 class NotificationMapper {
     private val timelineEventMapper = TimelineEventMapper()
 
-    fun map(notificationItem: NotificationItem): NotificationData {
+    fun map(roomId: RoomId, notificationItem: NotificationItem): NotificationData {
         return notificationItem.use { item ->
             NotificationData(
                 senderId = UserId(item.event.senderId()),
                 eventId = EventId(item.event.eventId()),
-                roomId = RoomId(item.roomInfo.id),
+                roomId = roomId,
                 senderAvatarUrl = item.senderInfo.avatarUrl,
                 senderDisplayName = item.senderInfo.displayName,
                 roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { item.roomInfo.isDirect },

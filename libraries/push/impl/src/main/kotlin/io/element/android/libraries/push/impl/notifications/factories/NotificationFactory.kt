@@ -232,6 +232,7 @@ class NotificationFactory @Inject constructor(
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
             .setAutoCancel(true)
+            .setWhen(fallbackNotifiableEvent.timestamp)
             // Ideally we'd use `createOpenRoomPendingIntent` here, but the broken notification might apply to an invite
             // and the user won't have access to the room yet, resulting in an error screen.
             .setContentIntent(pendingIntentFactory.createOpenSessionPendingIntent(fallbackNotifiableEvent.sessionId))
