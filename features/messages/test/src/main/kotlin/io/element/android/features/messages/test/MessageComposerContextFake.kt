@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.features.messages.test
 
-android {
-    namespace = "io.element.android.features.messages.api"
-}
+import io.element.android.features.messages.api.MessageComposerContext
+import io.element.android.libraries.textcomposer.MessageComposerMode
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
-    api(projects.libraries.textcomposer)
-}
+class MessageComposerContextFake(
+    override var composerMode: MessageComposerMode = MessageComposerMode.Normal(null)
+) : MessageComposerContext

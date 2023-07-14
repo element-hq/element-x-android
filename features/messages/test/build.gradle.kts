@@ -19,11 +19,9 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.messages.api"
+    namespace = "io.element.android.features.messages.test"
 }
 
 dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
-    api(projects.libraries.textcomposer)
+    api(projects.features.messages.api)
 }
