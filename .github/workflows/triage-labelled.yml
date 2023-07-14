@@ -17,24 +17,23 @@ jobs:
           project-url: https://github.com/orgs/vector-im/projects/43
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-  move_needs_info:
-    name: Move triaged needs info issues on board
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/add-to-project@main
-        id: addItem
-        with:
-          project-url: https://github.com/orgs/vector-im/projects/91
-          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-          labeled: X-Needs-Info
-      - name: Print itemId
-        run: echo ${{ steps.addItem.outputs.itemId }}
-      - uses: kalgurn/update-project-item-status@main
-        with:
-          project-url: https://github.com/orgs/vector-im/projects/91
-          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-          item-id: ${{ steps.addItem.outputs.itemId }}
-          status: "Needs info"
+#  move_needs_info:
+#    name: Move triaged needs info issues on board
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/add-to-project@main
+#        id: addItem
+#        with:
+#          project-url: https://github.com/orgs/vector-im/projects/91
+#          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+#          labeled: X-Needs-Info
+#
+#      - uses: kalgurn/update-project-item-status@main
+#        with:
+#          project-url: https://github.com/orgs/vector-im/projects/91
+#          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+#          item-id: ${{ steps.addItem.outputs.itemId }}
+#          status: "Needs info"
 
   ex_plorers:
     name: Add labelled issues to X-Plorer project
