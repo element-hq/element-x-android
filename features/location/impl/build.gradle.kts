@@ -30,18 +30,21 @@ anvil {
 
 dependencies {
     api(projects.features.location.api)
+    implementation(projects.features.messages.api)
+    implementation(projects.libraries.maplibreCompose)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.di)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrixui)
     implementation(projects.services.analytics.api)
-    implementation(libs.maplibre)
-    implementation(libs.maplibre.annotation)
+    implementation(libs.accompanist.permission)
     implementation(projects.libraries.uiStrings)
     implementation(libs.dagger)
     implementation(projects.anvilannotations)
+    implementation(projects.services.toolbox.api)
     anvil(projects.anvilcodegen)
     ksp(libs.showkase.processor)
 
@@ -52,4 +55,6 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.truth)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.features.analytics.test)
+    testImplementation(projects.features.messages.test)
 }

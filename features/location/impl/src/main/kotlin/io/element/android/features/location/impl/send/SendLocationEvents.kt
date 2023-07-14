@@ -14,22 +14,29 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.location
+package io.element.android.features.location.impl.send
 
 import io.element.android.features.location.api.Location
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
-fun fakeLocationUpdatesFlow(): Flow<Location> = flow {
-    while (true) {
-        delay(1_000)
-        emit(aLocation())
+sealed interface SendLocationEvents {
+    data class SendLocation(
+        val cameraPosition: CameraPosition,
+        val location: Location?,
+    ) : SendLocationEvents {
+        data class CameraPosition(
+            val lat: Double,
+            val lon: Double,
+            val zoom: Double,
+        )
     }
-}
 
-private fun aLocation() = Location(
-    lat = 51.49404,
-    lon = -0.25484,
-    accuracy = 5f
-)
+    object SwitchToMyLocationMode : SendLocationEvents
+
+    object SwitchToPinLocationMode : SendLocationEvents
+
+    object DismissDialog : SendLocationEvents
+
+    object RequestPermissions : SendLocationEvents
+
+    object OpenAppSettings : SendLocationEvents
+}

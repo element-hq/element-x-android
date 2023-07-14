@@ -359,7 +359,7 @@ private fun AttachmentButton(
         Image(
             modifier = Modifier.size(12.5f.dp),
             painter = painterResource(R.drawable.ic_add_attachment),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
             contentScale = ContentScale.Inside,
             colorFilter = ColorFilter.tint(
                 LocalContentColor.current

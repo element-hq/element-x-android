@@ -16,6 +16,6 @@
 
 package io.element.android.services.toolbox.api.systemclock
 
-interface SystemClock {
+fun interface SystemClock {
     fun epochMillis(): Long
 }
