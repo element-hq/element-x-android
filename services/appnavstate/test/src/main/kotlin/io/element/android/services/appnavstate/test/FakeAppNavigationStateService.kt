@@ -16,26 +16,26 @@
 
 package io.element.android.services.appnavstate.test
 
-import androidx.lifecycle.Lifecycle
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.services.appnavstate.api.AppNavigationState
+import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
+import io.element.android.services.appnavstate.api.AppNavigationState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeAppNavigationStateService(
-    private val fakeAppNavigationState: MutableStateFlow<AppNavigationState> = MutableStateFlow(AppNavigationState.Root),
-    private val fakeAppIsInForeground: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val fakeAppNavigationState: MutableStateFlow<AppNavigationState> = MutableStateFlow(
+        AppNavigationState(
+            navigationState = NavigationState.Root,
+            isInForeground = true,
+        )
+    ),
 ) : AppNavigationStateService {
 
-    override val appNavigationStateFlow: StateFlow<AppNavigationState> = fakeAppNavigationState
-
-    override val appIsInForeground: StateFlow<Boolean> = fakeAppIsInForeground
-
-    override fun onAppMovedToLifecycleState(lifecycleState: Lifecycle.State) {}
+    override val appNavigationState: StateFlow<AppNavigationState> = fakeAppNavigationState
 
     override fun onNavigateToSession(owner: String, sessionId: SessionId) = Unit
     override fun onLeavingSession(owner: String) = Unit

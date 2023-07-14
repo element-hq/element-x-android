@@ -67,16 +67,13 @@ data class NotifiableMessageEvent(
 /**
  * Used to check if a notification should be ignored based on the current app and navigation state.
  */
-fun NotifiableEvent.shouldIgnoreEventInRoom(
-    appNavigationState: AppNavigationState?,
-    isAppInForeground: Boolean,
-): Boolean {
-    val currentSessionId = appNavigationState?.currentSessionId() ?: return false
-    return when (val currentRoomId = appNavigationState.currentRoomId()) {
+fun NotifiableEvent.shouldIgnoreEventInRoom(appNavigationState: AppNavigationState): Boolean {
+    val currentSessionId = appNavigationState.navigationState.currentSessionId() ?: return false
+    return when (val currentRoomId = appNavigationState.navigationState.currentRoomId()) {
         null -> false
-        else -> isAppInForeground
+        else -> appNavigationState.isInForeground
             && sessionId == currentSessionId
             && roomId == currentRoomId
-            && (this as? NotifiableMessageEvent)?.threadId == appNavigationState.currentThreadId()
+            && (this as? NotifiableMessageEvent)?.threadId == appNavigationState.navigationState.currentThreadId()
     }
 }

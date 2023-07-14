@@ -32,7 +32,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
-import io.element.android.services.appnavstate.api.AppNavigationState
+import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -71,25 +71,25 @@ class DefaultNotificationDrawerManager @Inject constructor(
     init {
         // Observe application state
         coroutineScope.launch {
-            appNavigationStateService.appNavigationStateFlow
-                .collect { onAppNavigationStateChange(it) }
+            appNavigationStateService.appNavigationState
+                .collect { onAppNavigationStateChange(it.navigationState) }
         }
     }
 
-    private fun onAppNavigationStateChange(appNavigationState: AppNavigationState) {
-        when (appNavigationState) {
-            AppNavigationState.Root -> {}
-            is AppNavigationState.Session -> {}
-            is AppNavigationState.Space -> {}
-            is AppNavigationState.Room -> {
+    private fun onAppNavigationStateChange(navigationState: NavigationState) {
+        when (navigationState) {
+            NavigationState.Root -> {}
+            is NavigationState.Session -> {}
+            is NavigationState.Space -> {}
+            is NavigationState.Room -> {
                 // Cleanup notification for current room
-                clearMessagesForRoom(appNavigationState.parentSpace.parentSession.sessionId, appNavigationState.roomId)
+                clearMessagesForRoom(navigationState.parentSpace.parentSession.sessionId, navigationState.roomId)
             }
-            is AppNavigationState.Thread -> {
+            is NavigationState.Thread -> {
                 onEnteringThread(
-                    appNavigationState.parentRoom.parentSpace.parentSession.sessionId,
-                    appNavigationState.parentRoom.roomId,
-                    appNavigationState.threadId
+                    navigationState.parentRoom.parentSpace.parentSession.sessionId,
+                    navigationState.parentRoom.roomId,
+                    navigationState.threadId
                 )
             }
         }

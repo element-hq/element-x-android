@@ -23,7 +23,6 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
-import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,13 +38,12 @@ class NotifiableEventProcessor @Inject constructor(
         queuedEvents: List<NotifiableEvent>,
         renderedEvents: ProcessedEvents,
     ): ProcessedEvents {
-        val appNavigationState = appNavigationStateService.appNavigationStateFlow.value
-        val isAppInForeground = appNavigationStateService.appIsInForeground.value
+        val appState = appNavigationStateService.appNavigationState.value
         val processedEvents = queuedEvents.map {
             val type = when (it) {
                 is InviteNotifiableEvent -> ProcessedEvent.Type.KEEP
                 is NotifiableMessageEvent -> when {
-                    it.shouldIgnoreEventInRoom(appNavigationState, isAppInForeground) -> {
+                    it.shouldIgnoreEventInRoom(appState) -> {
                         ProcessedEvent.Type.REMOVE
                             .also { Timber.d("notification message removed due to currently viewing the same room or thread") }
                     }
@@ -58,7 +56,7 @@ class NotifiableEventProcessor @Inject constructor(
                     else -> ProcessedEvent.Type.KEEP
                 }
                 is FallbackNotifiableEvent -> when {
-                    it.shouldIgnoreEventInRoom(appNavigationState, isAppInForeground) -> {
+                    it.shouldIgnoreEventInRoom(appState) -> {
                         ProcessedEvent.Type.REMOVE
                             .also { Timber.d("notification fallback removed due to currently viewing the same room or thread") }
                     }

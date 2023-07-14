@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.services.appnavstate.impl.di
 
 import android.content.Context
-import com.squareup.anvil.annotations.MergeComponent
-import dagger.BindsInstance
-import dagger.Component
-import io.element.android.libraries.architecture.NodeFactoriesBindings
+import androidx.startup.AppInitializer
+import com.squareup.anvil.annotations.ContributesTo
+import dagger.Module
+import dagger.Provides
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
+import io.element.android.services.appnavstate.api.AppForegroundStateService
+import io.element.android.services.appnavstate.impl.initializer.AppForegroundStateServiceInitializer
 
-@SingleIn(AppScope::class)
-@MergeComponent(AppScope::class)
-interface AppComponent : NodeFactoriesBindings {
+@Module
+@ContributesTo(AppScope::class)
+object AppNavStateModule {
 
-    @Component.Factory
-    interface Factory {
-        fun create(@ApplicationContext @BindsInstance context: Context): AppComponent
-    }
+    @Provides
+    fun provideAppForegroundStateService(
+        @ApplicationContext context: Context
+    ): AppForegroundStateService =
+        AppInitializer.getInstance(context).initializeComponent(AppForegroundStateServiceInitializer::class.java)
+
 }

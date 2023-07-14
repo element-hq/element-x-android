@@ -30,15 +30,16 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
-import io.element.android.services.appnavstate.test.anAppNavigationState
+import io.element.android.services.appnavstate.test.aNavigationState
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
 
-private val NOT_VIEWING_A_ROOM = anAppNavigationState()
-private val VIEWING_A_ROOM = anAppNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_ID)
-private val VIEWING_A_THREAD = anAppNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_ID, A_THREAD_ID)
+private val NOT_VIEWING_A_ROOM = aNavigationState()
+private val VIEWING_A_ROOM = aNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_ID)
+private val VIEWING_A_THREAD = aNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_ID, A_THREAD_ID)
 
 class NotifiableEventProcessorTest {
 
@@ -50,7 +51,7 @@ class NotifiableEventProcessorTest {
             aSimpleNotifiableEvent(eventId = AN_EVENT_ID),
             aSimpleNotifiableEvent(eventId = AN_EVENT_ID_2)
         )
-        val eventProcessor = createProcessor(appNavigationState = NOT_VIEWING_A_ROOM)
+        val eventProcessor = createProcessor(navigationState = NOT_VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -65,7 +66,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given redacted simple event when processing then remove redaction event`() {
         val events = listOf(aSimpleNotifiableEvent(eventId = AN_EVENT_ID, type = EventType.REDACTION))
-        val eventProcessor = createProcessor(appNavigationState = NOT_VIEWING_A_ROOM)
+        val eventProcessor = createProcessor(navigationState = NOT_VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -82,7 +83,7 @@ class NotifiableEventProcessorTest {
             anInviteNotifiableEvent(roomId = A_ROOM_ID),
             anInviteNotifiableEvent(roomId = A_ROOM_ID_2)
         )
-        val eventProcessor = createProcessor(appNavigationState = NOT_VIEWING_A_ROOM)
+        val eventProcessor = createProcessor(navigationState = NOT_VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -99,7 +100,7 @@ class NotifiableEventProcessorTest {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID))
         outdatedDetector.givenEventIsOutOfDate(events[0])
 
-        val eventProcessor = createProcessor(appNavigationState = NOT_VIEWING_A_ROOM)
+        val eventProcessor = createProcessor(navigationState = NOT_VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -114,7 +115,7 @@ class NotifiableEventProcessorTest {
     fun `given in date message event when processing then keep message event`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID))
         outdatedDetector.givenEventIsInDate(events[0])
-        val eventProcessor = createProcessor(appNavigationState = NOT_VIEWING_A_ROOM)
+        val eventProcessor = createProcessor(navigationState = NOT_VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -129,7 +130,7 @@ class NotifiableEventProcessorTest {
     fun `given viewing the same room main timeline when processing main timeline message event then removes message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, threadId = null))
         events.forEach { outdatedDetector.givenEventIsOutOfDate(it) }
-        val eventProcessor = createProcessor(appNavigationState = VIEWING_A_ROOM)
+        val eventProcessor = createProcessor(isInForeground = true, navigationState = VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -144,7 +145,7 @@ class NotifiableEventProcessorTest {
     fun `given viewing the same thread timeline when processing thread message event then removes message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, threadId = A_THREAD_ID))
         events.forEach { outdatedDetector.givenEventIsOutOfDate(it) }
-        val eventProcessor = createProcessor(appNavigationState = VIEWING_A_THREAD)
+        val eventProcessor = createProcessor(isInForeground = true, navigationState = VIEWING_A_THREAD)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -159,7 +160,7 @@ class NotifiableEventProcessorTest {
     fun `given viewing main timeline of the same room when processing thread timeline message event then keep message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, threadId = A_THREAD_ID))
         outdatedDetector.givenEventIsInDate(events[0])
-        val eventProcessor = createProcessor(appNavigationState = VIEWING_A_ROOM)
+        val eventProcessor = createProcessor(isInForeground = true, navigationState = VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -174,7 +175,7 @@ class NotifiableEventProcessorTest {
     fun `given viewing thread timeline of the same room when processing main timeline message event then keep message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID))
         outdatedDetector.givenEventIsInDate(events[0])
-        val eventProcessor = createProcessor(appNavigationState = VIEWING_A_THREAD)
+        val eventProcessor = createProcessor(isInForeground = true, navigationState = VIEWING_A_THREAD)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
 
@@ -192,7 +193,7 @@ class NotifiableEventProcessorTest {
             ProcessedEvent(ProcessedEvent.Type.KEEP, events[0]),
             ProcessedEvent(ProcessedEvent.Type.KEEP, anInviteNotifiableEvent(eventId = AN_EVENT_ID_2))
         )
-        val eventProcessor = createProcessor(appNavigationState = NOT_VIEWING_A_ROOM)
+        val eventProcessor = createProcessor(navigationState = NOT_VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = renderedEvents)
 
@@ -210,11 +211,11 @@ class NotifiableEventProcessorTest {
 
     private fun createProcessor(
         isInForeground: Boolean = false,
-        appNavigationState: AppNavigationState
+        navigationState: NavigationState
     ): NotifiableEventProcessor {
         return NotifiableEventProcessor(
             outdatedDetector.instance,
-            FakeAppNavigationStateService(MutableStateFlow(appNavigationState), MutableStateFlow(isInForeground)),
+            FakeAppNavigationStateService(MutableStateFlow(AppNavigationState(navigationState, isInForeground))),
         )
     }
 }
