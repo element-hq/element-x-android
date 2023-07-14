@@ -26,6 +26,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -503,7 +504,8 @@ class MessageComposerPresenterTest {
         localMediaFactory,
         MediaSender(mediaPreProcessor, room),
         snackbarDispatcher,
-        FakeAnalyticsService()
+        FakeAnalyticsService(),
+        MessageComposerContextImpl(),
     )
 }
 

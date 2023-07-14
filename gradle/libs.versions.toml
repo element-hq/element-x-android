@@ -48,7 +48,7 @@ sqldelight = "1.5.5"
 telephoto = "0.4.0"
 
 # DI
-dagger = "2.46.1"
+dagger = "2.47"
 anvil = "2.4.6"
 
 # Auto service

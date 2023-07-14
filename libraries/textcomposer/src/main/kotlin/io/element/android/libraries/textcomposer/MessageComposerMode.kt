@@ -51,4 +51,13 @@ sealed interface MessageComposerMode : Parcelable {
             is Quote -> eventId
             is Reply -> eventId
         }
+
+    val isEditing: Boolean
+        get() = this is Edit
+
+    val isReply: Boolean
+        get() = this is Reply
+
+    val inThread: Boolean
+        get() = false // TODO
 }
