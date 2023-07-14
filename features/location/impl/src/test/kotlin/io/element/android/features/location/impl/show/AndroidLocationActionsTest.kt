@@ -18,6 +18,7 @@ package io.element.android.features.location.impl.show
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.buildUrl
 import org.junit.Test
 import java.net.URLEncoder
 

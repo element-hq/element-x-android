@@ -33,9 +33,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.location.impl.map.MapState
-import io.element.android.features.location.impl.map.MapView
-import io.element.android.features.location.impl.map.rememberMapState
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.geometry.LatLng
+import io.element.android.features.location.api.internal.rememberTileStyleUrl
+import io.element.android.features.location.impl.MapDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -45,9 +46,16 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.maplibre.compose.IconAnchor
+import io.element.android.libraries.maplibre.compose.MapboxMap
+import io.element.android.libraries.maplibre.compose.Symbol
+import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
+import io.element.android.libraries.maplibre.compose.rememberSymbolState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.TypographyTokens
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableMap
+import io.element.android.libraries.designsystem.R as DesignSystemR
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -56,11 +64,6 @@ fun ShowLocationView(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
-    val mapState = rememberMapState(
-        location = state.location,
-        position = MapState.CameraPosition(state.location.lat, state.location.lon, 15.0),
-    )
-
     Scaffold(modifier,
         topBar = {
             TopAppBar(
@@ -100,10 +103,27 @@ fun ShowLocationView(
                 )
             }
 
-            MapView(
-                mapState = mapState,
+            MapboxMap(
+                styleUri = rememberTileStyleUrl(),
                 modifier = Modifier.fillMaxSize(),
-            )
+                images = mapOf("pin" to DesignSystemR.drawable.pin).toImmutableMap(),
+                cameraPositionState = rememberCameraPositionState {
+                    position = CameraPosition.Builder()
+                        .target(LatLng(state.location.lat, state.location.lon))
+                        .zoom(15.0)
+                        .build()
+                },
+                uiSettings = MapDefaults.uiSettings,
+                symbolManagerSettings = MapDefaults.symbolManagerSettings,
+            ) {
+                Symbol(
+                    iconId = "pin",
+                    state = rememberSymbolState(
+                        position = LatLng(state.location.lat, state.location.lon)
+                    ),
+                    iconAnchor = IconAnchor.BOTTOM,
+                )
+            }
         }
     }
 }

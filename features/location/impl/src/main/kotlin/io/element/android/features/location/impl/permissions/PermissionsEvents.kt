@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl
+package io.element.android.features.location.impl.permissions
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-
-class SendLocationStateProvider : PreviewParameterProvider<SendLocationState> {
-    override val values: Sequence<SendLocationState>
-        get() = sequenceOf(
-            SendLocationState(),
-        )
+sealed interface PermissionsEvents {
+    object RequestPermissions : PermissionsEvents
 }

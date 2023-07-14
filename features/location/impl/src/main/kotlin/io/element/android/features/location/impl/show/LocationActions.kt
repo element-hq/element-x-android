@@ -20,4 +20,5 @@ import io.element.android.features.location.api.Location
 
 interface LocationActions {
     fun share(location: Location, label: String?)
+    fun openSettings()
 }

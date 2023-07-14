@@ -14,9 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl
+package io.element.android.features.location.impl.send
 
-sealed interface SendLocationEvents {
-    data class ShareLocation(val lat: Double, val lng: Double) : SendLocationEvents
-    data class SwitchMode(val mode: SendLocationState.Mode) : SendLocationEvents
+data class SendLocationState(
+    val permissionDialog: Dialog = Dialog.None,
+    val mode: Mode = Mode.PinLocation,
+    val hasLocationPermission: Boolean = false,
+    val appName: String = "AppName",
+    val eventSink: (SendLocationEvents) -> Unit = {},
+) {
+    sealed interface Mode {
+        object SenderLocation : Mode
+        object PinLocation : Mode
+    }
+
+    sealed interface Dialog {
+        object None : Dialog
+        object PermissionRationale : Dialog
+        object PermissionDenied : Dialog
+    }
 }

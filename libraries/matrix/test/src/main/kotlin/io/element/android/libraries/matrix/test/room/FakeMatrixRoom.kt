@@ -97,8 +97,8 @@ class FakeMatrixRoom(
     var reportedContentCount: Int = 0
         private set
 
-    var sendLocationCount: Int = 0
-        private set
+    private val _sentLocations = mutableListOf<SendLocationInvocation>()
+    val sentLocations: List<SendLocationInvocation> = _sentLocations
 
 
     var invitedUserId: UserId? = null
@@ -279,7 +279,7 @@ class FakeMatrixRoom(
         zoomLevel: Int?,
         assetType: AssetType?,
     ): Result<Unit> = simulateLongTask {
-        sendLocationCount++
+        _sentLocations.add(SendLocationInvocation(body, geoUri, description, zoomLevel, assetType))
         return sendLocationResult
     }
 
@@ -381,3 +381,11 @@ class FakeMatrixRoom(
         progressCallbackValues = values
     }
 }
+
+data class SendLocationInvocation(
+    val body: String,
+    val geoUri: String,
+    val description: String?,
+    val zoomLevel: Int?,
+    val assetType: AssetType?,
+)
