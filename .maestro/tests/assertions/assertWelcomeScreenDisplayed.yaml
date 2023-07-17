@@ -1,0 +1,6 @@
+appId: ${APP_ID}
+---
+- extendedWaitUntil:
+    visible:
+      id: "welcome_screen-title"
+    timeout: 10_000

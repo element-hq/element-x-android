@@ -183,12 +183,6 @@
   <string name="screen_share_open_osm_maps">"Otvoriť v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Zdieľajte túto polohu"</string>
   <string name="screen_view_location_title">"Poloha"</string>
-  <string name="screen_welcome_bullet_1">"Hovory, zdieľanie polohy, vyhľadávanie a ďalšie funkcie pribudnú neskôr v tomto roku."</string>
-  <string name="screen_welcome_bullet_2">"História správ pre zašifrované miestnosti nebude v tejto aktualizácii k dispozícii."</string>
-  <string name="screen_welcome_bullet_3">"Radi by sme od vás počuli, dajte nám vedieť, čo si myslíte, prostredníctvom stránky nastavení."</string>
-  <string name="screen_welcome_button">"Poďme na to!"</string>
-  <string name="screen_welcome_subtitle">"Tu je to, čo potrebujete vedieť:"</string>
-  <string name="screen_welcome_title">"Vitajte v %1$s!"</string>
   <string name="settings_rageshake">"Zúrivé potrasenie"</string>
   <string name="settings_rageshake_detection_threshold">"Prahová hodnota detekcie"</string>
   <string name="settings_title_general">"Všeobecné"</string>

@@ -35,7 +35,8 @@ class DatabaseSessionStoreTests {
         accessToken = "accessToken",
         refreshToken = "refreshToken",
         homeserverUrl = "homeserverUrl",
-        slidingSyncProxy = null
+        slidingSyncProxy = null,
+        loginTimestamp = null,
     )
 
     @Before

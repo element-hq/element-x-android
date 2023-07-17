@@ -45,6 +45,7 @@ import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
 import java.io.File
+import java.util.Date
 import javax.inject.Inject
 import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
 
@@ -208,4 +209,5 @@ private fun Session.toSessionData() = SessionData(
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl,
     slidingSyncProxy = slidingSyncProxy,
+    loginTimestamp = Date(),
 )

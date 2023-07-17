@@ -157,6 +157,7 @@ class RustMatrixClient constructor(
             coroutineDispatchers = dispatchers,
             systemClock = clock,
             roomContentForwarder = roomContentForwarder,
+            sessionData = sessionStore.getSession(sessionId.value)!!,
         )
     }
 

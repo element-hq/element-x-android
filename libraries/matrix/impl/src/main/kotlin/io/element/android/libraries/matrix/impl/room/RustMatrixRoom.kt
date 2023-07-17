@@ -42,6 +42,8 @@ import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.backPaginationStatusFlow
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
+import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -73,6 +75,7 @@ class RustMatrixRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
+    private val sessionData: SessionData,
 ) : MatrixRoom {
 
     override val roomId = RoomId(innerRoom.id())
@@ -91,7 +94,8 @@ class RustMatrixRoom(
             matrixRoom = this,
             innerRoom = innerRoom,
             roomCoroutineScope = roomCoroutineScope,
-            dispatcher = roomDispatcher
+            dispatcher = roomDispatcher,
+            lastLoginTimestamp = sessionData.loginTimestamp,
         )
     }
 
