@@ -27,4 +27,8 @@ class FakeWelcomeState : WelcomeScreenState {
     override fun setWelcomeScreenShown() {
         isWelcomeScreenNeeded = false
     }
+
+    override fun reset() {
+        isWelcomeScreenNeeded = true
+    }
 }
