@@ -16,10 +16,8 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.matrix.ui.di.MatrixClientsHolder
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -36,6 +34,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessage
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
@@ -60,26 +59,25 @@ class NotifiableEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
     // private val noticeEventFormatter: NoticeEventFormatter,
     // private val displayableEventFormatter: DisplayableEventFormatter,
-    private val matrixAuthenticationService: MatrixAuthenticationService,
     private val buildMeta: BuildMeta,
     private val clock: SystemClock,
-    private val matrixClientsHolder: MatrixClientsHolder,
+    private val matrixClientProvider: MatrixClientProvider,
 ) {
 
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
-        val client = matrixClientsHolder.requireSession(sessionId)
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val notificationService = client.notificationService()
         val notificationData = notificationService.getNotification(
-                userId = sessionId,
-                roomId = roomId,
-                eventId = eventId,
+            userId = sessionId,
+            roomId = roomId,
+            eventId = eventId,
             // FIXME should be true in the future, but right now it's broken
             //  (https://github.com/vector-im/element-x-android/issues/640#issuecomment-1612913658)
-                filterByPushRules = false,
-            ).onFailure {
-                Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
-            }.getOrNull()
+            filterByPushRules = false,
+        ).onFailure {
+            Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
+        }.getOrNull()
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
         return notificationData?.asNotifiableEvent(sessionId)

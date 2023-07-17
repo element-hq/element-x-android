@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.matrix.ui.di.MatrixClientsHolder
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.core.cache.CircularCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -24,12 +23,12 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -60,8 +59,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
-    private val matrixAuthenticationService: MatrixAuthenticationService,
-    private val matrixClientsHolder: MatrixClientsHolder,
+    private val matrixClientProvider: MatrixClientProvider,
 ) : NotificationDrawerManager {
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
@@ -257,8 +255,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
             val currentUser = tryOrNull(
                 onError = { Timber.e(it, "Unable to retrieve info for user ${sessionId.value}") },
                 operation = {
-                    val client = matrixClientsHolder.requireSession(sessionId)
-
+                    val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
                     // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
                     val myUserDisplayName = client.loadUserDisplayName().getOrNull() ?: sessionId.value
                     val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
