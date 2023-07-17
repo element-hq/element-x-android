@@ -5,6 +5,11 @@
     <item quantity="few">"%1$d zmeny miestnosti"</item>
     <item quantity="other">"%1$d zmien miestnosti"</item>
   </plurals>
+  <plurals name="screen_room_timeline_more_reactions">
+    <item quantity="one"></item>
+    <item quantity="few">"%1$d ďalšie"</item>
+    <item quantity="other">"%1$d ďalších"</item>
+  </plurals>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Odfotiť"</string>
   <string name="screen_room_attachment_source_camera_video">"Nahrať video"</string>
@@ -21,6 +26,8 @@
   <string name="screen_room_reactions_show_more">"Zobraziť viac"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Odoslať znova"</string>
   <string name="screen_room_retry_send_menu_title">"Vašu správu sa nepodarilo odoslať"</string>
+  <string name="screen_room_timeline_add_reaction">"Pridať emoji"</string>
+  <string name="screen_room_timeline_less_reactions">"Zobraziť menej"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_retry_send_menu_remove_action">"Odstrániť"</string>
 </resources>

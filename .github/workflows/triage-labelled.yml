@@ -30,6 +30,7 @@ jobs:
       - name: Print itemId
         run: echo ${{ steps.addItem.outputs.itemId }}
       - uses: kalgurn/update-project-item-status@main
+        if: ${{ steps.addItem.outputs.itemId }}
         with:
           project-url: https://github.com/orgs/vector-im/projects/91
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

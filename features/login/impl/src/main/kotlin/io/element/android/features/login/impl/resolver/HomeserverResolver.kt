@@ -19,11 +19,10 @@ package io.element.android.features.login.impl.resolver
 import io.element.android.features.login.impl.resolver.network.WellknownRequest
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.core.uri.isValidUrl
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -49,30 +48,28 @@ class HomeserverResolver @Inject constructor(
         val currentList = Collections.synchronizedList(mutableListOf<HomeserverData>())
         // Run all the requests in parallel
         withContext(dispatchers.io) {
-            list.map { url ->
-                async {
-                    val wellKnown = tryOrNull {
-                        withTimeout(5000) {
-                            wellknownRequest.execute(url)
-                        }
-                    }
-                    val isValid = wellKnown?.isValid().orFalse()
-                    if (isValid) {
-                        val supportSlidingSync = wellKnown?.supportSlidingSync().orFalse()
-                        // Emit the list as soon as possible
-                        currentList.add(
-                            HomeserverData(
-                                homeserverUrl = url,
-                                isWellknownValid = true,
-                                supportSlidingSync = supportSlidingSync
-                            )
-                        )
-                        withContext(flowContext) {
-                            emit(currentList.toList())
-                        }
+            list.parallelMap { url ->
+                val wellKnown = tryOrNull {
+                    withTimeout(5000) {
+                        wellknownRequest.execute(url)
                     }
                 }
-            }.awaitAll()
+                val isValid = wellKnown?.isValid().orFalse()
+                if (isValid) {
+                    val supportSlidingSync = wellKnown?.supportSlidingSync().orFalse()
+                    // Emit the list as soon as possible
+                    currentList.add(
+                        HomeserverData(
+                            homeserverUrl = url,
+                            isWellknownValid = true,
+                            supportSlidingSync = supportSlidingSync
+                        )
+                    )
+                    withContext(flowContext) {
+                        emit(currentList.toList())
+                    }
+                }
+            }
         }
         // If list is empty, and the user has entered an URL, do not block the user.
         if (currentList.isEmpty() && trimmedUserInput.isValidUrl()) {
