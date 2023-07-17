@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.services.appnavstate.api
+package io.element.android.services.appnavstate.impl
 
-/**
- * A wrapper for the current navigation state of the app, along with its foreground/background state.
- */
-data class AppNavigationState(
-    val navigationState: NavigationState,
-    val isInForeground: Boolean,
-)
+import io.element.android.services.appnavstate.api.AppForegroundStateService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+class FakeAppForegroundStateService(
+    initialValue: Boolean = true,
+) : AppForegroundStateService {
+
+    private val state = MutableStateFlow(initialValue)
+    override val isInForeground: StateFlow<Boolean> = state
+
+    override fun start() {
+        // No-op
+    }
+
+    fun givenIsInForeground(isInForeground: Boolean) {
+        state.value = isInForeground
+    }
+}

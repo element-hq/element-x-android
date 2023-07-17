@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.services.appnavstate.api
+package io.element.android.tests.testutils
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.test.runTest
 
 /**
- * A wrapper for the current navigation state of the app, along with its foreground/background state.
+ * Run a test with a [CoroutineScope] that will be cancelled automatically and avoiding failing the test.
  */
-data class AppNavigationState(
-    val navigationState: NavigationState,
-    val isInForeground: Boolean,
-)
+fun runCancellableScopeTest(block: suspend (CoroutineScope) -> Unit) = runTest {
+    val scope = CoroutineScope(coroutineContext + SupervisorJob())
+    block(scope)
+    scope.cancel()
+}

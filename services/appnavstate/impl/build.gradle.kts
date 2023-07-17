@@ -38,6 +38,7 @@ dependencies {
 
     implementation(libs.coroutines.core)
     implementation(libs.androidx.corektx)
+    implementation(libs.androidx.lifecycle.process)
 
     api(projects.services.appnavstate.api)
 
@@ -45,5 +46,6 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.truth)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
     testImplementation(projects.services.appnavstate.test)
 }

@@ -31,7 +31,6 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.security.crypto)
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)

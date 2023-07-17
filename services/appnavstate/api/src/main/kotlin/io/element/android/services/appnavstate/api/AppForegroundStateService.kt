@@ -16,10 +16,19 @@
 
 package io.element.android.services.appnavstate.api
 
+import kotlinx.coroutines.flow.StateFlow
+
 /**
- * A wrapper for the current navigation state of the app, along with its foreground/background state.
+ * A service that tracks the foreground state of the app.
  */
-data class AppNavigationState(
-    val navigationState: NavigationState,
-    val isInForeground: Boolean,
-)
+interface AppForegroundStateService {
+    /**
+     * Any updates to the foreground state of the app will be emitted here.
+     */
+    val isInForeground: StateFlow<Boolean>
+
+    /**
+     * Start observing the foreground state.
+     */
+    fun start()
+}
