@@ -32,6 +32,8 @@ import com.mapbox.mapboxsdk.location.engine.LocationEngineRequest
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 
+private const val LOCATION_REQUEST_INTERVAL = 750L
+
 internal class MapPropertiesNode(
     val map: MapboxMap,
     style: Style,
@@ -48,9 +50,9 @@ internal class MapPropertiesNode(
                         .build()
                 )
                 .locationEngineRequest(
-                    LocationEngineRequest.Builder(750)
+                    LocationEngineRequest.Builder(LOCATION_REQUEST_INTERVAL)
                         .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-                        .setFastestInterval(750)
+                        .setFastestInterval(LOCATION_REQUEST_INTERVAL)
                         .build()
                 )
                 .build()
