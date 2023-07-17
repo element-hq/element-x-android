@@ -63,7 +63,7 @@ import kotlin.coroutines.suspendCoroutine
  * Heavily inspired by https://github.com/googlemaps/android-maps-compose
  *
  * @param styleUri a URI where to asynchronously fetch a style for the map
- * @param modifier Modifier to be applied to the GoogleMap
+ * @param modifier Modifier to be applied to the MapboxMap
  * @param images images added to the map's style to be later used with [Symbol]
  * @param cameraPositionState the [CameraPositionState] to be used to control or observe the map's
  * camera state
@@ -223,7 +223,7 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
         when (event) {
             Lifecycle.Event.ON_CREATE -> {
                 // Skip calling mapView.onCreate if the lifecycle did not go through onDestroy - in
-                // this case the GoogleMap composable also doesn't leave the composition. So,
+                // this case the MapboxMap composable also doesn't leave the composition. So,
                 // recreating the map does not restore state properly which must be avoided.
                 if (previousState.value != Lifecycle.Event.ON_STOP) {
                     this.onCreate(Bundle())

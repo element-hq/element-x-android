@@ -151,7 +151,7 @@ public class CameraPositionState(
         synchronized(lock) {
             if (this.map == null && map == null) return
             if (this.map != null && map != null) {
-                error("CameraPositionState may only be associated with one GoogleMap at a time")
+                error("CameraPositionState may only be associated with one MapboxMap at a time")
             }
             this.map = map
             if (map == null) {

@@ -26,7 +26,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_DE
 /**
  * Enumerates the different reasons why the map camera started to move.
  *
- * Based on enum values from https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnCameraMoveStartedListener#constants.
+ * Based on enum values from https://docs.maptiler.com/maplibre-gl-native-android/com.mapbox.mapboxsdk.maps/#oncameramovestartedlistener.
  *
  * [NO_MOVEMENT_YET] is used as the initial state before any map movement has been observed.
  *
@@ -44,11 +44,11 @@ public enum class CameraMoveStartedReason(public val value: Int) {
 
     public companion object {
         /**
-         * Converts from the Maps SDK [com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener]
+         * Converts from the Maps SDK [com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener]
          * constants to [CameraMoveStartedReason], or returns [UNKNOWN] if there is no such
          * [CameraMoveStartedReason] for the given [value].
          *
-         * See https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnCameraMoveStartedListener#constants.
+         * See https://docs.maptiler.com/maplibre-gl-native-android/com.mapbox.mapboxsdk.maps/#oncameramovestartedlistener.
          */
         public fun fromInt(value: Int): CameraMoveStartedReason {
             return values().firstOrNull { it.value == value } ?: return UNKNOWN
