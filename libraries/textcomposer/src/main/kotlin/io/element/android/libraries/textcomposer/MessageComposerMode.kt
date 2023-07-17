@@ -18,6 +18,7 @@ package io.element.android.libraries.textcomposer
 
 import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import kotlinx.parcelize.Parcelize
 
@@ -25,15 +26,15 @@ sealed interface MessageComposerMode : Parcelable {
     @Parcelize
     data class Normal(val content: CharSequence?) : MessageComposerMode
 
-    sealed class Special(open val eventId: EventId?, open val defaultContent: CharSequence) :
+    sealed class Special(open val eventId: EventId?, open val defaultContent: String) :
         MessageComposerMode
 
     @Parcelize
-    data class Edit(override val eventId: EventId?, override val defaultContent: CharSequence, val transactionId: String?) :
+    data class Edit(override val eventId: EventId?, override val defaultContent: String, val transactionId: TransactionId?) :
         Special(eventId, defaultContent)
 
     @Parcelize
-    class Quote(override val eventId: EventId, override val defaultContent: CharSequence) :
+    class Quote(override val eventId: EventId, override val defaultContent: String) :
         Special(eventId, defaultContent)
 
     @Parcelize
@@ -41,7 +42,7 @@ sealed interface MessageComposerMode : Parcelable {
         val senderName: String,
         val attachmentThumbnailInfo: AttachmentThumbnailInfo?,
         override val eventId: EventId,
-        override val defaultContent: CharSequence
+        override val defaultContent: String
     ) : Special(eventId, defaultContent)
 
     val relatedEventId: EventId?
@@ -51,4 +52,13 @@ sealed interface MessageComposerMode : Parcelable {
             is Quote -> eventId
             is Reply -> eventId
         }
+
+    val isEditing: Boolean
+        get() = this is Edit
+
+    val isReply: Boolean
+        get() = this is Reply
+
+    val inThread: Boolean
+        get() = false // TODO
 }

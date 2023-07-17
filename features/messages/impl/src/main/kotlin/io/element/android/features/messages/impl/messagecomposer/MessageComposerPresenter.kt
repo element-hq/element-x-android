@@ -34,8 +34,6 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.data.StableCharSequence
-import io.element.android.libraries.core.data.toStableCharSequence
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.di.RoomScope
@@ -64,6 +62,7 @@ class MessageComposerPresenter @Inject constructor(
     private val mediaSender: MediaSender,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
+    private val messageComposerContext: MessageComposerContextImpl,
 ) : Presenter<MessageComposerState> {
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -93,18 +92,15 @@ class MessageComposerPresenter @Inject constructor(
         val hasFocus = remember {
             mutableStateOf(false)
         }
-        val text: MutableState<StableCharSequence> = remember {
-            mutableStateOf(StableCharSequence(""))
-        }
-        val composerMode: MutableState<MessageComposerMode> = rememberSaveable {
-            mutableStateOf(MessageComposerMode.Normal(""))
+        val text: MutableState<String> = rememberSaveable {
+            mutableStateOf("")
         }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
-        LaunchedEffect(composerMode.value) {
-            when (val modeValue = composerMode.value) {
-                is MessageComposerMode.Edit -> text.value = modeValue.defaultContent.toStableCharSequence()
+        LaunchedEffect(messageComposerContext.composerMode) {
+            when (val modeValue = messageComposerContext.composerMode) {
+                is MessageComposerMode.Edit -> text.value = modeValue.defaultContent
                 else -> Unit
             }
         }
@@ -122,20 +118,24 @@ class MessageComposerPresenter @Inject constructor(
 
                 is MessageComposerEvents.FocusChanged -> hasFocus.value = event.hasFocus
 
-                is MessageComposerEvents.UpdateText -> text.value = event.text.toStableCharSequence()
+                is MessageComposerEvents.UpdateText -> text.value = event.text
                 MessageComposerEvents.CloseSpecialMode -> {
-                    text.value = "".toStableCharSequence()
-                    composerMode.setToNormal()
+                    text.value = ""
+                    messageComposerContext.composerMode = MessageComposerMode.Normal("")
                 }
 
-                is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode, text)
+                is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
+                    text = event.message,
+                    updateComposerMode = { messageComposerContext.composerMode = it },
+                    textState = text
+                )
                 is MessageComposerEvents.SetMode -> {
-                    composerMode.value = event.composerMode
+                    messageComposerContext.composerMode = event.composerMode
                     analyticsService.capture(
                         Composer(
-                            inThread = false,
-                            isEditing = composerMode.value is MessageComposerMode.Edit,
-                            isReply = composerMode.value is MessageComposerMode.Reply,
+                            inThread = messageComposerContext.composerMode.inThread,
+                            isEditing = messageComposerContext.composerMode.isEditing,
+                            isReply = messageComposerContext.composerMode.isReply,
                             isLocation = false,
                         )
                     )
@@ -171,7 +171,7 @@ class MessageComposerPresenter @Inject constructor(
             text = text.value,
             isFullScreen = isFullScreen.value,
             hasFocus = hasFocus.value,
-            mode = composerMode.value,
+            mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             attachmentsState = attachmentsState.value,
             eventSink = ::handleEvents
@@ -184,31 +184,30 @@ class MessageComposerPresenter @Inject constructor(
         }
     }
 
-    private fun MutableState<MessageComposerMode>.setToNormal() {
-        value = MessageComposerMode.Normal("")
-    }
-
-    private fun CoroutineScope.sendMessage(text: String, composerMode: MutableState<MessageComposerMode>, textState: MutableState<StableCharSequence>) =
-        launch {
-            val capturedMode = composerMode.value
-            // Reset composer right away
-            textState.value = "".toStableCharSequence()
-            composerMode.setToNormal()
-            when (capturedMode) {
-                is MessageComposerMode.Normal -> room.sendMessage(text)
-                is MessageComposerMode.Edit -> {
-                    val eventId = capturedMode.eventId
-                    val transactionId = capturedMode.transactionId
-                    room.editMessage(eventId, transactionId, text)
-                }
-
-                is MessageComposerMode.Quote -> TODO()
-                is MessageComposerMode.Reply -> room.replyMessage(
-                    capturedMode.eventId,
-                    text
-                )
+    private fun CoroutineScope.sendMessage(
+        text: String,
+        updateComposerMode: (newComposerMode: MessageComposerMode) -> Unit,
+        textState: MutableState<String>
+    ) = launch {
+        val capturedMode = messageComposerContext.composerMode
+        // Reset composer right away
+        textState.value = ""
+        updateComposerMode(MessageComposerMode.Normal(""))
+        when (capturedMode) {
+            is MessageComposerMode.Normal -> room.sendMessage(text)
+            is MessageComposerMode.Edit -> {
+                val eventId = capturedMode.eventId
+                val transactionId = capturedMode.transactionId
+                room.editMessage(eventId, transactionId, text)
             }
+
+            is MessageComposerMode.Quote -> TODO()
+            is MessageComposerMode.Reply -> room.replyMessage(
+                capturedMode.eventId,
+                text
+            )
         }
+    }
 
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,

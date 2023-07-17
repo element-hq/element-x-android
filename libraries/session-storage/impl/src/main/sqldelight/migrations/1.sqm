@@ -1,0 +1,1 @@
+ALTER TABLE SessionData ADD COLUMN loginTimestamp INTEGER;

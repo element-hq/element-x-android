@@ -17,19 +17,22 @@
 package io.element.android.libraries.sessionstorage.impl
 
 import io.element.android.libraries.sessionstorage.api.SessionData
+import java.util.Date
+import io.element.android.libraries.matrix.session.SessionData as DbSessionData
 
-internal fun SessionData.toDbModel(): io.element.android.libraries.matrix.session.SessionData {
-    return io.element.android.libraries.matrix.session.SessionData(
+internal fun SessionData.toDbModel(): DbSessionData {
+    return DbSessionData(
         userId = userId,
         deviceId = deviceId,
         accessToken = accessToken,
         refreshToken = refreshToken,
         homeserverUrl = homeserverUrl,
         slidingSyncProxy = slidingSyncProxy,
+        loginTimestamp = loginTimestamp?.time,
     )
 }
 
-internal fun io.element.android.libraries.matrix.session.SessionData.toApiModel(): SessionData {
+internal fun DbSessionData.toApiModel(): SessionData {
     return SessionData(
         userId = userId,
         deviceId = deviceId,
@@ -37,5 +40,6 @@ internal fun io.element.android.libraries.matrix.session.SessionData.toApiModel(
         refreshToken = refreshToken,
         homeserverUrl = homeserverUrl,
         slidingSyncProxy = slidingSyncProxy,
+        loginTimestamp = loginTimestamp?.let { Date(it) }
     )
 }

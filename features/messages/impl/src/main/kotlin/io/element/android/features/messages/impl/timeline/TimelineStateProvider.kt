@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.timeline.model.virtual.aTimelin
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -103,7 +104,7 @@ fun aTimelineItemDaySeparator(): TimelineItem.Virtual {
 
 internal fun aTimelineItemEvent(
     eventId: EventId = EventId("\$" + Random.nextInt().toString()),
-    transactionId: String? = null,
+    transactionId: TransactionId? = null,
     isMine: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,

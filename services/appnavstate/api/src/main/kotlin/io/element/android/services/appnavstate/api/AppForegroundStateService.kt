@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.data
+package io.element.android.services.appnavstate.api
+
+import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Wrapper for a CharSequence, which support mutation of the CharSequence.
+ * A service that tracks the foreground state of the app.
  */
-class StableCharSequence(val charSequence: CharSequence) {
-    private val hash = charSequence.toString().hashCode()
+interface AppForegroundStateService {
+    /**
+     * Any updates to the foreground state of the app will be emitted here.
+     */
+    val isInForeground: StateFlow<Boolean>
 
-    override fun hashCode() = hash
-    override fun equals(other: Any?) = other is StableCharSequence && other.hash == hash
-
-    override fun toString(): String = "StableCharSequence(\"$charSequence\")"
+    /**
+     * Start observing the foreground state.
+     */
+    fun start()
 }
-
-fun CharSequence.toStableCharSequence() = StableCharSequence(this)

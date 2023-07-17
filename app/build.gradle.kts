@@ -209,6 +209,7 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.preference)

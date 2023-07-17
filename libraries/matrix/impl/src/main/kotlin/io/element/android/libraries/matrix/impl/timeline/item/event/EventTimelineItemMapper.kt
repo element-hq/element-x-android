@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
@@ -36,7 +37,7 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
     fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.use {
         EventTimelineItem(
             eventId = it.eventId()?.let(::EventId),
-            transactionId = it.transactionId(),
+            transactionId = it.transactionId()?.let(::TransactionId),
             isEditable = it.isEditable(),
             isLocal = it.isLocal(),
             isOwn = it.isOwn(),
