@@ -16,6 +16,7 @@
 
 package io.element.android.features.ftue.impl.welcome
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,6 +55,7 @@ fun WelcomeView(
     modifier: Modifier = Modifier,
     onContinueClicked: () -> Unit,
 ) {
+    BackHandler(onBack = onContinueClicked)
     OnBoardingPage(
         modifier = modifier
             .systemBarsPadding()

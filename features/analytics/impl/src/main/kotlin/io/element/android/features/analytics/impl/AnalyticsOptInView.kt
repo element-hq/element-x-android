@@ -16,6 +16,7 @@
 
 package io.element.android.features.analytics.impl
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -69,6 +70,16 @@ fun AnalyticsOptInView(
 ) {
     LogCompositions(tag = "Analytics", msg = "Root")
     val eventSink = state.eventSink
+
+    fun onTermsAccepted() {
+        eventSink(AnalyticsOptInEvents.EnableAnalytics(true))
+    }
+
+    fun onTermsDeclined() {
+        eventSink(AnalyticsOptInEvents.EnableAnalytics(true))
+    }
+
+    BackHandler(onBack = ::onTermsDeclined)
     HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
@@ -76,7 +87,13 @@ fun AnalyticsOptInView(
             .imePadding(),
         header = { AnalyticsOptInHeader(state, onClickTerms) },
         content = { AnalyticsOptInContent() },
-        footer = { AnalyticsOptInFooter(eventSink) })
+        footer = {
+            AnalyticsOptInFooter(
+                onTermsAccepted = ::onTermsAccepted,
+                onTermsDeclined = ::onTermsDeclined,
+            )
+        }
+    )
 }
 
 @Composable
@@ -185,20 +202,21 @@ private fun AnalyticsOptInContentRow(
 
 @Composable
 private fun AnalyticsOptInFooter(
-    eventSink: (AnalyticsOptInEvents) -> Unit,
+    onTermsAccepted: () -> Unit,
+    onTermsDeclined: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ButtonColumnMolecule(
         modifier = modifier,
     ) {
         Button(
-            onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
+            onClick = onTermsAccepted,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(text = stringResource(id = CommonStrings.action_ok))
         }
         TextButton(
-            onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
+            onClick = onTermsDeclined,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(text = stringResource(id = CommonStrings.action_not_now))
