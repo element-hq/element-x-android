@@ -37,7 +37,7 @@ class DefaultFtueState @Inject constructor(
     private val welcomeScreenState: WelcomeScreenState,
 ) : FtueState {
 
-    override val shouldDisplayFlow = MutableStateFlow(isAnyStepInComplete())
+    override val shouldDisplayFlow = MutableStateFlow(isAnyStepIncomplete())
 
     init {
         analyticsService.didAskUserConsent()
@@ -56,7 +56,7 @@ class DefaultFtueState @Inject constructor(
             FtueStep.AnalyticsOptIn -> null
         }
 
-    private fun isAnyStepInComplete(): Boolean {
+    private fun isAnyStepIncomplete(): Boolean {
         return listOf(
             shouldDisplayWelcomeScreen(),
             needsAnalyticsOptIn()
@@ -79,7 +79,7 @@ class DefaultFtueState @Inject constructor(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun updateState() {
-        shouldDisplayFlow.value = isAnyStepInComplete()
+        shouldDisplayFlow.value = isAnyStepIncomplete()
     }
 }
 
