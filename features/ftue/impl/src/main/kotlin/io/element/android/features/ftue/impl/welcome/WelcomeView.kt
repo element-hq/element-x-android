@@ -39,7 +39,7 @@ import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem
-import io.element.android.libraries.designsystem.atomic.molecules.InfoListItemMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -82,7 +82,7 @@ fun WelcomeView(
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(40.dp))
-                InfoListItemMolecule(
+                InfoListOrganism(
                     items = listItems(),
                     textStyle = ElementTheme.typography.fontBodyMdMedium,
                     iconTint = ElementTheme.colors.iconSecondary,

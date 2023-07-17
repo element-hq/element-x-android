@@ -27,23 +27,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.atomic.atoms.InfoListItemAtom
+import io.element.android.libraries.designsystem.atomic.atoms.InfoListItemMolecule
 import io.element.android.libraries.designsystem.atomic.atoms.InfoListItemPosition
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun InfoListItemMolecule(
+fun InfoListOrganism(
     items: ImmutableList<InfoListItem>,
     backgroundColor: Color,
     modifier: Modifier = Modifier,
     iconTint: Color = LocalContentColor.current,
     textStyle: TextStyle = LocalTextStyle.current,
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp),
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = verticalArrangement,
     ) {
         for ((index, item) in items.withIndex()) {
             val position = when {
@@ -52,13 +53,15 @@ fun InfoListItemMolecule(
                 index == items.size - 1 -> InfoListItemPosition.Bottom
                 else -> InfoListItemPosition.Middle
             }
-            InfoListItemAtom(
+            InfoListItemMolecule(
                 message = { Text(item.message, style = textStyle) },
                 icon = {
                     if (item.iconId != null) {
                         Icon(resourceId = item.iconId, contentDescription = null, tint = iconTint)
                     } else if (item.iconVector != null) {
                         Icon(imageVector = item.iconVector, contentDescription = null, tint = iconTint)
+                    } else {
+                        item.iconComposable()
                     }
                 },
                 position = position,
@@ -72,4 +75,5 @@ data class InfoListItem(
     val message: String,
     @DrawableRes val iconId: Int? = null,
     val iconVector: ImageVector? = null,
+    val iconComposable: @Composable () -> Unit = {},
 )
