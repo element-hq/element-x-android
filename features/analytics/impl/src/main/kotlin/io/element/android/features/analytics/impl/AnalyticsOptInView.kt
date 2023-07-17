@@ -77,7 +77,7 @@ fun AnalyticsOptInView(
     }
 
     fun onTermsDeclined() {
-        eventSink(AnalyticsOptInEvents.EnableAnalytics(true))
+        eventSink(AnalyticsOptInEvents.EnableAnalytics(false))
     }
 
     BackHandler(onBack = ::onTermsDeclined)
