@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import io.element.android.libraries.matrix.ui.di.MatrixClientsHolder
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -62,12 +63,13 @@ class NotifiableEventResolver @Inject constructor(
     private val matrixAuthenticationService: MatrixAuthenticationService,
     private val buildMeta: BuildMeta,
     private val clock: SystemClock,
+    private val matrixClientsHolder: MatrixClientsHolder,
 ) {
 
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
-        val session = matrixAuthenticationService.restoreSession(sessionId).getOrNull() ?: return null
-        val notificationService = session.notificationService()
+        val client = matrixClientsHolder.getOrNull(sessionId) ?: return null
+        val notificationService = client.notificationService()
         val notificationData = notificationService.getNotification(
                 userId = sessionId,
                 roomId = roomId,

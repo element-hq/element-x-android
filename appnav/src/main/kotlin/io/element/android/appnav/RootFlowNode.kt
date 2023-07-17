@@ -37,7 +37,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.appnav.di.MatrixClientsHolder
+import io.element.android.libraries.matrix.ui.di.MatrixClientsHolder
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.root.RootPresenter

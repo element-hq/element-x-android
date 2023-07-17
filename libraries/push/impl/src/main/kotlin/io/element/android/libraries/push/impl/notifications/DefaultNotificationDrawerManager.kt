@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import io.element.android.libraries.matrix.ui.di.MatrixClientsHolder
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.core.cache.CircularCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -60,6 +61,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
     private val matrixAuthenticationService: MatrixAuthenticationService,
+    private val matrixClientsHolder: MatrixClientsHolder,
 ) : NotificationDrawerManager {
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
@@ -255,7 +257,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
             val currentUser = tryOrNull(
                 onError = { Timber.e(it, "Unable to retrieve info for user ${sessionId.value}") },
                 operation = {
-                    val client = matrixAuthenticationService.restoreSession(sessionId).getOrNull()
+                    val client = matrixClientsHolder.getOrNull(sessionId)
 
                     // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
                     val myUserDisplayName = client?.loadUserDisplayName()?.getOrNull() ?: sessionId.value
