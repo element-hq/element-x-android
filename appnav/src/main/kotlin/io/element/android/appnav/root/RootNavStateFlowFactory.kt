@@ -31,6 +31,10 @@ import javax.inject.Inject
 
 private const val SAVE_INSTANCE_KEY = "io.element.android.x.RootNavStateFlowFactory.SAVE_INSTANCE_KEY"
 
+/**
+ * This class is responsible for creating a flow of [RootNavState].
+ * It gathers data from multiple datasource and creates a unique one.
+ */
 class RootNavStateFlowFactory @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val cacheService: CacheService,
@@ -41,11 +45,24 @@ class RootNavStateFlowFactory @Inject constructor(
     private var currentCacheIndex = 0
 
     fun create(savedStateMap: SavedStateMap?): Flow<RootNavState> {
-        /**
-         * A flow of integer, where each time a clear cache is done, we have a new incremented value.
-         */
+        return combine(
+            cacheIndexFlow(savedStateMap),
+            isUserLoggedInFlow(),
+        ) { cacheIndex, isLoggedIn ->
+            RootNavState(cacheIndex = cacheIndex, isLoggedIn = isLoggedIn)
+        }
+    }
+
+    fun saveIntoSavedState(stateMap: MutableSavedStateMap) {
+        stateMap[SAVE_INSTANCE_KEY] = currentCacheIndex
+    }
+
+    /**
+     * @return a flow of integer, where each time a clear cache is done, we have a new incremented value.
+     */
+    private fun cacheIndexFlow(savedStateMap: SavedStateMap?): Flow<Int> {
         val initialCacheIndex = savedStateMap.getCacheIndexOrDefault()
-        val cacheIndexFlow = cacheService.clearedCacheEventFlow
+        return cacheService.clearedCacheEventFlow
             .onEach { sessionId ->
                 matrixClientsHolder.remove(sessionId)
             }
@@ -53,17 +70,6 @@ class RootNavStateFlowFactory @Inject constructor(
             .onEach { cacheIndex ->
                 currentCacheIndex = cacheIndex
             }
-
-        return combine(
-            cacheIndexFlow,
-            isUserLoggedInFlow(),
-        ) { navId, isLoggedIn ->
-            RootNavState(navId, isLoggedIn)
-        }
-    }
-
-    fun saveIntoSavedState(stateMap: MutableSavedStateMap) {
-        stateMap[SAVE_INSTANCE_KEY] = currentCacheIndex
     }
 
     private fun isUserLoggedInFlow(): Flow<Boolean> {
@@ -76,6 +82,9 @@ class RootNavStateFlowFactory @Inject constructor(
             .distinctUntilChanged()
     }
 
+    /**
+     * @return a flow of integer that increments the value by one each time a new element is emitted upstream.
+     */
     private fun Flow<Any>.toIndexFlow(initialValue: Int): Flow<Int> = flow {
         var index = initialValue
         emit(initialValue)

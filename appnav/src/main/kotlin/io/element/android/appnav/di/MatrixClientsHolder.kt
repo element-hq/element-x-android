@@ -22,9 +22,9 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.MatrixClientProvider
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -36,7 +36,7 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class MatrixClientsHolder @Inject constructor(private val authenticationService: MatrixAuthenticationService): MatrixClientProvider {
+class MatrixClientsHolder @Inject constructor(private val authenticationService: MatrixAuthenticationService) : MatrixClientProvider {
 
     private val sessionIdsToMatrixClient = ConcurrentHashMap<SessionId, MatrixClient>()
     private val restoreMutex = Mutex()
@@ -49,15 +49,13 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
         sessionIdsToMatrixClient.remove(sessionId)
     }
 
-    fun isEmpty(): Boolean = sessionIdsToMatrixClient.isEmpty()
-
     fun getOrNull(sessionId: SessionId): MatrixClient? {
         return sessionIdsToMatrixClient[sessionId]
     }
 
     override suspend fun getOrRestore(sessionId: SessionId): Result<MatrixClient> {
         return restoreMutex.withLock {
-            when (val matrixClient = sessionIdsToMatrixClient[sessionId]) {
+            when (val matrixClient = getOrNull(sessionId)) {
                 null -> restore(sessionId)
                 else -> Result.success(matrixClient)
             }
@@ -97,5 +95,4 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
                 Timber.e("Fail to restore session")
             }
     }
-
 }

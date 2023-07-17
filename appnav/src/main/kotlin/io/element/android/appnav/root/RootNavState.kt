@@ -16,7 +16,17 @@
 
 package io.element.android.appnav.root
 
+/**
+ * [RootNavState] produced by [RootNavStateFlowFactory].
+ */
 data class RootNavState(
+    /**
+     * This value is incremented when a clear cache is done.
+     * Can be useful to track to force ui state to re-render
+     */
     val cacheIndex: Int,
+    /**
+     * true if we are currently loggedIn.
+     */
     val isLoggedIn: Boolean
 )
