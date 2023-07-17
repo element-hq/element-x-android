@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -58,7 +59,7 @@ fun TimelineEncryptedHistoryBannerView(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
+@DayNightPreviews
 @Composable
 internal fun TimelineEncryptedHistoryBannerViewPreview() {
     ElementTheme {
