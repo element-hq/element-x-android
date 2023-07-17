@@ -92,7 +92,7 @@ class MessageComposerPresenter @Inject constructor(
         val hasFocus = remember {
             mutableStateOf(false)
         }
-        val text: MutableState<String> = remember {
+        val text: MutableState<String> = rememberSaveable {
             mutableStateOf("")
         }
 
