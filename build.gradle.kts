@@ -259,6 +259,9 @@ koverMerged {
                 excludes += "io.element.android.libraries.designsystem.swipe.SwipeableActionsState*"
                 excludes += "io.element.android.features.messages.impl.timeline.components.ExpandableState*"
                 excludes += "io.element.android.features.messages.impl.timeline.model.bubble.BubbleState*"
+                excludes += "io.element.android.libraries.maplibre.compose.CameraPositionState*"
+                excludes += "io.element.android.libraries.maplibre.compose.SaveableCameraPositionState"
+                excludes += "io.element.android.libraries.maplibre.compose.SymbolState*"
             }
             bound {
                 minValue = 90
