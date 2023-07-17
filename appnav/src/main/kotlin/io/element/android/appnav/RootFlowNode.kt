@@ -40,12 +40,11 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.MatrixClientsHolder
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
+import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
-import io.element.android.features.login.api.LoginUserStory
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
-import io.element.android.features.preferences.api.CacheService
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -57,29 +56,22 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.distinctUntilChanged
-
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
-import java.util.UUID
 
 @ContributesNode(AppScope::class)
 class RootFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val authenticationService: MatrixAuthenticationService,
-    private val cacheService: CacheService,
+    private val navStateFlowFactory: RootNavStateFlowFactory,
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
-    private val loginUserStory: LoginUserStory,
 ) :
     BackstackNode<RootFlowNode.NavTarget>(
         backstack = BackStack(
@@ -91,26 +83,25 @@ class RootFlowNode @AssistedInject constructor(
     ) {
 
     override fun onBuilt() {
-        matrixClientsHolder.restore(buildContext.savedStateMap)
+        matrixClientsHolder.restoreWithSavedState(buildContext.savedStateMap)
         super.onBuilt()
-        observeLoggedInState()
+        observeNavState()
     }
 
     override fun onSaveInstanceState(state: MutableSavedStateMap) {
         super.onSaveInstanceState(state)
-        matrixClientsHolder.save(state)
+        matrixClientsHolder.saveIntoSavedState(state)
+        navStateFlowFactory.saveIntoSavedState(state)
     }
 
-    private fun observeLoggedInState() {
-        combine(
-            cacheService.onClearedCacheEventFlow(),
-            isUserLoggedInFlow(),
-        ) { _, isLoggedIn -> isLoggedIn }
-            .onEach { isLoggedIn ->
-                Timber.v("isLoggedIn=$isLoggedIn")
-                if (isLoggedIn) {
+    private fun observeNavState() {
+        navStateFlowFactory.create(buildContext.savedStateMap)
+            .distinctUntilChanged()
+            .onEach { navState ->
+                Timber.v("navState=$navState")
+                if (navState.isLoggedIn) {
                     tryToRestoreLatestSession(
-                        onSuccess = { switchToLoggedInFlow(it) },
+                        onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
                         onFailure = { switchToNotLoggedInFlow() }
                     )
                 } else {
@@ -120,19 +111,8 @@ class RootFlowNode @AssistedInject constructor(
             .launchIn(lifecycleScope)
     }
 
-
-    private fun switchToLoggedInFlow(sessionId: SessionId) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId))
-    }
-
-    private fun isUserLoggedInFlow(): Flow<Boolean> {
-        return combine(
-            authenticationService.isLoggedIn(),
-            loginUserStory.loginFlowIsDone
-        ) { isLoggedIn, loginFlowIsDone ->
-            isLoggedIn && loginFlowIsDone
-        }
-            .distinctUntilChanged()
+    private fun switchToLoggedInFlow(sessionId: SessionId, navId: Int) {
+        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, navId))
     }
 
     private fun switchToNotLoggedInFlow() {
@@ -145,14 +125,8 @@ class RootFlowNode @AssistedInject constructor(
         onFailure: () -> Unit = {},
         onSuccess: (SessionId) -> Unit = {},
     ) {
-        // If the session is already known it'll be restored by the node hierarchy
-        if (matrixClientsHolder.knowSession(sessionId)) {
-            Timber.v("Session $sessionId already alive, no need to restore.")
-            return
-        }
-        authenticationService.restoreSession(sessionId)
-            .onSuccess { matrixClient ->
-                matrixClientsHolder.add(matrixClient)
+        matrixClientsHolder.getOrRestore(sessionId)
+            .onSuccess {
                 Timber.v("Succeed to restore session $sessionId")
                 onSuccess(sessionId)
             }
@@ -204,7 +178,7 @@ class RootFlowNode @AssistedInject constructor(
         @Parcelize
         data class LoggedInFlow(
             val sessionId: SessionId,
-            val navId: UUID = UUID.randomUUID(),
+            val navId: Int
         ) : NavTarget
 
         @Parcelize
@@ -278,11 +252,5 @@ class RootFlowNode @AssistedInject constructor(
             navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId
         }
     }
-
-    private fun CacheService.onClearedCacheEventFlow(): Flow<Unit> {
-        return clearedCacheEventFlow
-            .onEach { sessionId -> matrixClientsHolder.remove(sessionId) }
-            .map { }
-            .onStart { emit((Unit)) }
-    }
 }
+

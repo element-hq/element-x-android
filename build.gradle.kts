@@ -247,6 +247,7 @@ koverMerged {
             target = kotlinx.kover.api.VerificationTarget.CLASS
             overrideClassFilter {
                 includes += "^*State$"
+                excludes += "io.element.android.appnav.root.RootNavState*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*"
                 excludes += "io.element.android.libraries.matrix.api.room.RoomMembershipState*"
