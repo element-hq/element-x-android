@@ -34,8 +34,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
-import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.ftue.api.state.FtueStep
+import io.element.android.features.ftue.impl.state.DefaultFtueState
+import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.welcome.WelcomeNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -54,7 +54,7 @@ import kotlinx.parcelize.Parcelize
 class FtueFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val ftueState: FtueState,
+    private val ftueState: DefaultFtueState,
     private val analyticsEntryPoint: AnalyticsEntryPoint,
     private val analyticsService: AnalyticsService,
 ) : BackstackNode<FtueFlowNode.NavTarget>(

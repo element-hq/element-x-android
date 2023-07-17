@@ -18,8 +18,8 @@ package io.element.android.features.ftue.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.test.FakeAnalyticsService
-import io.element.android.features.ftue.api.state.FtueStep
 import io.element.android.features.ftue.impl.state.DefaultFtueState
+import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.welcome.state.FakeWelcomeState
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope

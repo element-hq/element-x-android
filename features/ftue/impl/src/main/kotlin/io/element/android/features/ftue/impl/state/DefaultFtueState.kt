@@ -19,13 +19,11 @@ package io.element.android.features.ftue.impl.state
 import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.ftue.api.state.FtueStep
 import io.element.android.features.ftue.impl.welcome.state.WelcomeScreenState
 import io.element.android.libraries.di.AppScope
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -47,7 +45,7 @@ class DefaultFtueState @Inject constructor(
             .launchIn(coroutineScope)
     }
 
-    override fun getNextStep(currentStep: FtueStep?): FtueStep? =
+    fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
         when (currentStep) {
             null -> if (shouldDisplayWelcomeScreen()) FtueStep.WelcomeScreen else getNextStep(
                 FtueStep.WelcomeScreen
@@ -74,7 +72,7 @@ class DefaultFtueState @Inject constructor(
         return welcomeScreenState.isWelcomeScreenNeeded()
     }
 
-    override fun setWelcomeScreenShown() {
+    fun setWelcomeScreenShown() {
         welcomeScreenState.setWelcomeScreenShown()
         updateState()
     }
@@ -83,4 +81,9 @@ class DefaultFtueState @Inject constructor(
     internal fun updateState() {
         shouldDisplayFlow.value = isAnyStepInComplete()
     }
+}
+
+sealed interface FtueStep {
+    object WelcomeScreen : FtueStep
+    object AnalyticsOptIn : FtueStep
 }

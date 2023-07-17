@@ -20,13 +20,4 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface FtueState {
     val shouldDisplayFlow: StateFlow<Boolean>
-
-    fun getNextStep(current: FtueStep? = null): FtueStep?
-
-    fun setWelcomeScreenShown()
-}
-
-sealed interface FtueStep {
-    object WelcomeScreen : FtueStep
-    object AnalyticsOptIn : FtueStep
 }
