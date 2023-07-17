@@ -77,6 +77,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
@@ -449,7 +450,7 @@ fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
         onSendMessage = {},
         onComposerTextChange = {},
-        composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", "1234"),
+        composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
         onResetComposerMode = {},
         composerCanSendMessage = true,
         composerText = "A message",

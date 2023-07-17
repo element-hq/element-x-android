@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.media.AudioInfo
@@ -164,17 +165,17 @@ class FakeMatrixRoom(
         return toggleReactionResult
     }
 
-    override suspend fun retrySendMessage(transactionId: String): Result<Unit> {
+    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {
         retrySendMessageCount++
         return retrySendMessageResult
     }
 
-    override suspend fun cancelSend(transactionId: String): Result<Unit> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
         cancelSendCount++
         return cancelSendResult
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: String?, message: String): Result<Unit> {
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, message: String): Result<Unit> {
         editMessageCalls += message
         return Result.success(Unit)
     }

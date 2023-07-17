@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
@@ -53,7 +54,7 @@ sealed interface TimelineItem {
     data class Event(
         val id: String,
         val eventId: EventId? = null,
-        val transactionId: String? = null,
+        val transactionId: TransactionId? = null,
         val senderId: UserId,
         val senderDisplayName: String?,
         val senderAvatar: AvatarData,
