@@ -27,6 +27,5 @@ internal val DefaultMapLocationSettings = MapLocationSettings()
  * on future changes. See: https://jakewharton.com/public-api-challenges-in-kotlin/
  */
 public data class MapLocationSettings(
-    public val pulseEnabled: Boolean = false,
     public val locationEnabled: Boolean = false,
 )
