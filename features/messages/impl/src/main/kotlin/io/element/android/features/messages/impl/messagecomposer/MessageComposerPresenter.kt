@@ -34,8 +34,6 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.data.StableCharSequence
-import io.element.android.libraries.core.data.toStableCharSequence
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.di.RoomScope
@@ -94,15 +92,15 @@ class MessageComposerPresenter @Inject constructor(
         val hasFocus = remember {
             mutableStateOf(false)
         }
-        val text: MutableState<StableCharSequence> = remember {
-            mutableStateOf(StableCharSequence(""))
+        val text: MutableState<String> = remember {
+            mutableStateOf("")
         }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
-                is MessageComposerMode.Edit -> text.value = modeValue.defaultContent.toStableCharSequence()
+                is MessageComposerMode.Edit -> text.value = modeValue.defaultContent
                 else -> Unit
             }
         }
@@ -120,9 +118,9 @@ class MessageComposerPresenter @Inject constructor(
 
                 is MessageComposerEvents.FocusChanged -> hasFocus.value = event.hasFocus
 
-                is MessageComposerEvents.UpdateText -> text.value = event.text.toStableCharSequence()
+                is MessageComposerEvents.UpdateText -> text.value = event.text
                 MessageComposerEvents.CloseSpecialMode -> {
-                    text.value = "".toStableCharSequence()
+                    text.value = ""
                     messageComposerContext.composerMode = MessageComposerMode.Normal("")
                 }
 
@@ -189,11 +187,11 @@ class MessageComposerPresenter @Inject constructor(
     private fun CoroutineScope.sendMessage(
         text: String,
         updateComposerMode: (newComposerMode: MessageComposerMode) -> Unit,
-        textState: MutableState<StableCharSequence>
+        textState: MutableState<String>
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
         // Reset composer right away
-        textState.value = "".toStableCharSequence()
+        textState.value = ""
         updateComposerMode(MessageComposerMode.Normal(""))
         when (capturedMode) {
             is MessageComposerMode.Normal -> room.sendMessage(text)

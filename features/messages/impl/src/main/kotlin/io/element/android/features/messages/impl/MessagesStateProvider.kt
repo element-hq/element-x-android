@@ -25,7 +25,6 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -48,7 +47,7 @@ fun aMessagesState() = MessagesState(
     roomAvatar = AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom),
     userHasPermissionToSendMessage = true,
     composerState = aMessageComposerState().copy(
-        text = StableCharSequence("Hello"),
+        text = "Hello",
         isFullScreen = false,
         mode = MessageComposerMode.Normal("Hello"),
     ),
