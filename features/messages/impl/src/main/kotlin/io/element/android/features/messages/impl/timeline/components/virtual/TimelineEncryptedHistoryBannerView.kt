@@ -54,7 +54,8 @@ fun TimelineEncryptedHistoryBannerView(modifier: Modifier = Modifier) {
         )
         Text(
             text = stringResource(R.string.screen_room_encrypted_history_banner),
-            style = ElementTheme.typography.fontBodyMdMedium.copy(color = ElementTheme.colors.textInfoPrimary),
+            style = ElementTheme.typography.fontBodyMdMedium,
+            color = ElementTheme.colors.textInfoPrimary
         )
     }
 }
