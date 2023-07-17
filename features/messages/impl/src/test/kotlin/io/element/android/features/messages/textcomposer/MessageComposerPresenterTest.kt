@@ -31,7 +31,6 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.media.FakeLocalMediaFactory
-import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -84,7 +83,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.isFullScreen).isFalse()
-            assertThat(initialState.text).isEqualTo(StableCharSequence(""))
+            assertThat(initialState.text).isEqualTo("")
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal(""))
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.attachmentsState).isEqualTo(AttachmentsState.None)
@@ -117,11 +116,11 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessageComposerEvents.UpdateText(A_MESSAGE))
             val withMessageState = awaitItem()
-            assertThat(withMessageState.text).isEqualTo(StableCharSequence(A_MESSAGE))
+            assertThat(withMessageState.text).isEqualTo(A_MESSAGE)
             assertThat(withMessageState.isSendButtonVisible).isTrue()
             withMessageState.eventSink.invoke(MessageComposerEvents.UpdateText(""))
             val withEmptyMessageState = awaitItem()
-            assertThat(withEmptyMessageState.text).isEqualTo(StableCharSequence(""))
+            assertThat(withEmptyMessageState.text).isEqualTo("")
             assertThat(withEmptyMessageState.isSendButtonVisible).isFalse()
         }
     }
@@ -138,7 +137,7 @@ class MessageComposerPresenterTest {
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
             state = awaitItem()
-            assertThat(state.text).isEqualTo(StableCharSequence(A_MESSAGE))
+            assertThat(state.text).isEqualTo(A_MESSAGE)
             assertThat(state.isSendButtonVisible).isTrue()
             backToNormalMode(state, skipCount = 1)
         }
@@ -155,7 +154,7 @@ class MessageComposerPresenterTest {
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            assertThat(state.text).isEqualTo(StableCharSequence(""))
+            assertThat(state.text).isEqualTo("")
             assertThat(state.isSendButtonVisible).isFalse()
             backToNormalMode(state)
         }
@@ -172,7 +171,7 @@ class MessageComposerPresenterTest {
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            assertThat(state.text).isEqualTo(StableCharSequence(""))
+            assertThat(state.text).isEqualTo("")
             assertThat(state.isSendButtonVisible).isFalse()
             backToNormalMode(state)
         }
@@ -187,11 +186,11 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessageComposerEvents.UpdateText(A_MESSAGE))
             val withMessageState = awaitItem()
-            assertThat(withMessageState.text).isEqualTo(StableCharSequence(A_MESSAGE))
+            assertThat(withMessageState.text).isEqualTo(A_MESSAGE)
             assertThat(withMessageState.isSendButtonVisible).isTrue()
             withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(A_MESSAGE))
             val messageSentState = awaitItem()
-            assertThat(messageSentState.text).isEqualTo(StableCharSequence(""))
+            assertThat(messageSentState.text).isEqualTo("")
             assertThat(messageSentState.isSendButtonVisible).isFalse()
         }
     }
@@ -207,21 +206,21 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.text).isEqualTo(StableCharSequence(""))
+            assertThat(initialState.text).isEqualTo("")
             val mode = anEditMode()
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             skipItems(1)
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
-            assertThat(withMessageState.text).isEqualTo(StableCharSequence(A_MESSAGE))
+            assertThat(withMessageState.text).isEqualTo(A_MESSAGE)
             assertThat(withMessageState.isSendButtonVisible).isTrue()
             withMessageState.eventSink.invoke(MessageComposerEvents.UpdateText(ANOTHER_MESSAGE))
             val withEditedMessageState = awaitItem()
-            assertThat(withEditedMessageState.text).isEqualTo(StableCharSequence(ANOTHER_MESSAGE))
+            assertThat(withEditedMessageState.text).isEqualTo(ANOTHER_MESSAGE)
             withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(ANOTHER_MESSAGE))
             skipItems(1)
             val messageSentState = awaitItem()
-            assertThat(messageSentState.text).isEqualTo(StableCharSequence(""))
+            assertThat(messageSentState.text).isEqualTo("")
             assertThat(messageSentState.isSendButtonVisible).isFalse()
             assertThat(fakeMatrixRoom.editMessageCalls.first()).isEqualTo(ANOTHER_MESSAGE)
         }
@@ -238,21 +237,21 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.text).isEqualTo(StableCharSequence(""))
+            assertThat(initialState.text).isEqualTo("")
             val mode = anEditMode(eventId = null, transactionId = A_TRANSACTION_ID)
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             skipItems(1)
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
-            assertThat(withMessageState.text).isEqualTo(StableCharSequence(A_MESSAGE))
+            assertThat(withMessageState.text).isEqualTo(A_MESSAGE)
             assertThat(withMessageState.isSendButtonVisible).isTrue()
             withMessageState.eventSink.invoke(MessageComposerEvents.UpdateText(ANOTHER_MESSAGE))
             val withEditedMessageState = awaitItem()
-            assertThat(withEditedMessageState.text).isEqualTo(StableCharSequence(ANOTHER_MESSAGE))
+            assertThat(withEditedMessageState.text).isEqualTo(ANOTHER_MESSAGE)
             withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(ANOTHER_MESSAGE))
             skipItems(1)
             val messageSentState = awaitItem()
-            assertThat(messageSentState.text).isEqualTo(StableCharSequence(""))
+            assertThat(messageSentState.text).isEqualTo("")
             assertThat(messageSentState.isSendButtonVisible).isFalse()
             assertThat(fakeMatrixRoom.editMessageCalls.first()).isEqualTo(ANOTHER_MESSAGE)
         }
@@ -269,21 +268,21 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.text).isEqualTo(StableCharSequence(""))
+            assertThat(initialState.text).isEqualTo("")
             val mode = aReplyMode()
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             val state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            assertThat(state.text).isEqualTo(StableCharSequence(""))
+            assertThat(state.text).isEqualTo("")
             assertThat(state.isSendButtonVisible).isFalse()
             initialState.eventSink.invoke(MessageComposerEvents.UpdateText(A_REPLY))
             val withMessageState = awaitItem()
-            assertThat(withMessageState.text).isEqualTo(StableCharSequence(A_REPLY))
+            assertThat(withMessageState.text).isEqualTo(A_REPLY)
             assertThat(withMessageState.isSendButtonVisible).isTrue()
             withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(A_REPLY))
             skipItems(1)
             val messageSentState = awaitItem()
-            assertThat(messageSentState.text).isEqualTo(StableCharSequence(""))
+            assertThat(messageSentState.text).isEqualTo("")
             assertThat(messageSentState.isSendButtonVisible).isFalse()
             assertThat(fakeMatrixRoom.replyMessageParameter).isEqualTo(A_REPLY)
         }
@@ -486,7 +485,7 @@ class MessageComposerPresenterTest {
         skipItems(skipCount)
         val normalState = awaitItem()
         assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal(""))
-        assertThat(normalState.text).isEqualTo(StableCharSequence(""))
+        assertThat(normalState.text).isEqualTo("")
         assertThat(normalState.isSendButtonVisible).isFalse()
     }
 

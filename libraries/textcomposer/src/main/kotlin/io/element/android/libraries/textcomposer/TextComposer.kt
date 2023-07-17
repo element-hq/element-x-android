@@ -96,7 +96,7 @@ fun TextComposer(
     focusRequester: FocusRequester = FocusRequester(),
     onSendMessage: (String) -> Unit = {},
     onResetComposerMode: () -> Unit = {},
-    onComposerTextChange: (CharSequence) -> Unit = {},
+    onComposerTextChange: (String) -> Unit = {},
     onAddAttachment: () -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
 ) {
