@@ -32,7 +32,7 @@ import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.childNode
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.services.appnavstate.test.NoopAppNavigationStateService
+import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import org.junit.Rule
 import org.junit.Test
 
@@ -82,7 +82,7 @@ class RoomFlowNodeTest {
         plugins = plugins,
         messagesEntryPoint = messagesEntryPoint,
         roomDetailsEntryPoint = roomDetailsEntryPoint,
-        appNavigationStateService = NoopAppNavigationStateService(),
+        appNavigationStateService = FakeAppNavigationStateService(),
         roomMembershipObserver = RoomMembershipObserver()
     )
 

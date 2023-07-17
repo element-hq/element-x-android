@@ -54,6 +54,8 @@ dependencies {
     implementation(projects.tests.uitests)
     implementation(libs.coil)
 
+    implementation(projects.features.ftue.api)
+
     implementation(projects.services.apperror.impl)
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.analytics.api)

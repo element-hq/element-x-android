@@ -17,12 +17,13 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 data class EventTimelineItem(
     val eventId: EventId?,
-    val transactionId: String?,
+    val transactionId: TransactionId?,
     val isEditable: Boolean,
     val isLocal: Boolean,
     val isOwn: Boolean,

@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -41,6 +42,8 @@ import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.backPaginationStatusFlow
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
+import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -72,6 +75,7 @@ class RustMatrixRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
+    private val sessionData: SessionData,
 ) : MatrixRoom {
 
     override val roomId = RoomId(innerRoom.id())
@@ -90,7 +94,8 @@ class RustMatrixRoom(
             matrixRoom = this,
             innerRoom = innerRoom,
             roomCoroutineScope = roomCoroutineScope,
-            dispatcher = roomDispatcher
+            dispatcher = roomDispatcher,
+            lastLoginTimestamp = sessionData.loginTimestamp,
         )
     }
 
@@ -218,10 +223,10 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: String?, message: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, message: String): Result<Unit> = withContext(roomDispatcher) {
         if (originalEventId != null) {
             runCatching {
-                innerRoom.edit(/* TODO use content */ message, originalEventId.value, transactionId)
+                innerRoom.edit(/* TODO use content */ message, originalEventId.value, transactionId?.value)
             }
         } else {
             runCatching {
@@ -326,17 +331,17 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun retrySendMessage(transactionId: String): Result<Unit> =
+    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> =
         withContext(roomDispatcher) {
             runCatching {
-                innerRoom.retrySend(transactionId)
+                innerRoom.retrySend(transactionId.value)
             }
         }
 
-    override suspend fun cancelSend(transactionId: String): Result<Unit> =
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
         withContext(roomDispatcher) {
             runCatching {
-                innerRoom.cancelSend(transactionId)
+                innerRoom.cancelSend(transactionId.value)
             }
         }
 

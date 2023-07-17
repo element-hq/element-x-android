@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
@@ -88,7 +89,7 @@ fun aRoomMessage(
 
 fun anEventTimelineItem(
     eventId: EventId = AN_EVENT_ID,
-    transactionId: String? = null,
+    transactionId: TransactionId? = null,
     isEditable: Boolean = false,
     isLocal: Boolean = false,
     isOwn: Boolean = false,

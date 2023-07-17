@@ -40,8 +40,11 @@ jobs:
       - name: ⚙️ Run unit tests, debug and release
         run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
 
-      - name: 📈 Run screenshot tests, generate kover report and verify coverage
-        run: ./gradlew verifyPaparazziDebug koverMergedReport koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+      - name: 📸 Run screenshot tests
+        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
+
+      - name: 📈Generate kover report and verify coverage
+        run: ./gradlew koverMergedReport koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
@@ -79,13 +82,6 @@ jobs:
           path: |
             **/out/failures/
             **/build/reports/tests/*UnitTest/
-
-      - name: 🔊 Publish results to Sonar
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
-        run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
 
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov

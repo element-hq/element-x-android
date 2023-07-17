@@ -48,5 +48,7 @@ dependencies {
 }
 
 sqldelight {
-    database("SessionDatabase") {}
+    database("SessionDatabase") {
+        verifyMigrations = true
+    }
 }

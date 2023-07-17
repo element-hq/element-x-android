@@ -140,10 +140,10 @@
   <string name="emoji_picker_category_places">"Cestovanie a miesta"</string>
   <string name="emoji_picker_category_symbols">"Symboly"</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
-  <string name="error_failed_loading_map">"Element nedokázal načítať mapu. Skúste to prosím neskôr."</string>
+  <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
-  <string name="error_failed_locating_user">"Element nemohol získať prístup k vašej polohe. Skúste to prosím neskôr."</string>
-  <string name="error_missing_location_auth">"Element nemá povolenie na prístup k vašej polohe. Prístup môžete povoliť v Nastavenia > Poloha"</string>
+  <string name="error_failed_locating_user">"%1$s nemohol získať prístup k vašej polohe. Skúste to prosím neskôr."</string>
+  <string name="error_missing_location_auth">"%1$s nemá povolenie na prístup k vašej polohe. Prístup môžete povoliť v Nastavenia > Poloha"</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
@@ -183,12 +183,6 @@
   <string name="screen_share_open_osm_maps">"Otvoriť v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Zdieľajte túto polohu"</string>
   <string name="screen_view_location_title">"Poloha"</string>
-  <string name="screen_welcome_bullet_1">"Hovory, zdieľanie polohy, vyhľadávanie a ďalšie funkcie pribudnú neskôr v tomto roku."</string>
-  <string name="screen_welcome_bullet_2">"História správ pre zašifrované miestnosti nebude v tejto aktualizácii k dispozícii."</string>
-  <string name="screen_welcome_bullet_3">"Radi by sme od vás počuli, dajte nám vedieť, čo si myslíte, prostredníctvom stránky nastavení."</string>
-  <string name="screen_welcome_button">"Poďme na to!"</string>
-  <string name="screen_welcome_subtitle">"Tu je to, čo potrebujete vedieť:"</string>
-  <string name="screen_welcome_title">"Vitajte v %1$s!"</string>
   <string name="settings_rageshake">"Zúrivé potrasenie"</string>
   <string name="settings_rageshake_detection_threshold">"Prahová hodnota detekcie"</string>
   <string name="settings_title_general">"Všeobecné"</string>

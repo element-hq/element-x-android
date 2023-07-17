@@ -1,0 +1,8 @@
+CREATE TABLE SessionData (
+    userId TEXT NOT NULL PRIMARY KEY,
+    deviceId TEXT NOT NULL,
+    accessToken TEXT NOT NULL,
+    refreshToken TEXT,
+    homeserverUrl TEXT NOT NULL,
+    slidingSyncProxy TEXT
+);

@@ -246,7 +246,7 @@ koverMerged {
             name = "Check code coverage of states"
             target = kotlinx.kover.api.VerificationTarget.CLASS
             overrideClassFilter {
-                includes += "*State"
+                includes += "^*State$"
                 excludes += "io.element.android.appnav.root.RootNavState*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*"
@@ -260,6 +260,11 @@ koverMerged {
                 excludes += "io.element.android.libraries.designsystem.swipe.SwipeableActionsState*"
                 excludes += "io.element.android.features.messages.impl.timeline.components.ExpandableState*"
                 excludes += "io.element.android.features.messages.impl.timeline.model.bubble.BubbleState*"
+                excludes += "io.element.android.libraries.maplibre.compose.CameraPositionState*"
+                excludes += "io.element.android.libraries.maplibre.compose.SaveableCameraPositionState"
+                excludes += "io.element.android.libraries.maplibre.compose.SymbolState*"
+                excludes += "io.element.android.features.ftue.api.state.*"
+                excludes += "io.element.android.features.ftue.impl.welcome.state.*"
             }
             bound {
                 minValue = 90
@@ -281,13 +286,6 @@ koverMerged {
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
         }
-    }
-}
-
-// Make Kover depend on Paparazzi
-tasks.whenTaskAdded {
-    if (name.startsWith("koverMerged")) {
-        dependsOn(":tests:uitests:verifyPaparazziDebug")
     }
 }
 
