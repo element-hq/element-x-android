@@ -21,12 +21,16 @@ import com.bumble.appyx.core.state.SavedStateMap
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
+import kotlin.jvm.Throws
 
 private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHolder.SaveInstanceKey"
 
@@ -34,8 +38,9 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
 class MatrixClientsHolder @Inject constructor(private val authenticationService: MatrixAuthenticationService) {
 
     private val sessionIdsToMatrixClient = ConcurrentHashMap<SessionId, MatrixClient>()
+    private val restoreMutex = Mutex()
 
-    fun add(matrixClient: MatrixClient) {
+    private fun add(matrixClient: MatrixClient) {
         sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
     }
 
@@ -55,6 +60,27 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
         return sessionIdsToMatrixClient[sessionId]
     }
 
+    @Throws(AuthenticationException::class)
+    suspend fun requireSession(sessionId: SessionId): MatrixClient {
+        return restoreMutex.withLock {
+             when (val matrixClient = sessionIdsToMatrixClient[sessionId]) {
+                null -> restore(sessionId).getOrThrow()
+                else -> matrixClient
+            }
+        }
+    }
+
+    private suspend fun restore(sessionId: SessionId): Result<MatrixClient> {
+        Timber.d("Restore matrix session: $sessionId")
+        return authenticationService.restoreSession(sessionId)
+            .onSuccess { matrixClient ->
+                add(matrixClient)
+            }
+            .onFailure {
+                Timber.e("Fail to restore session")
+            }
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun restore(state: SavedStateMap?) {
         Timber.d("Restore state")
@@ -67,14 +93,7 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
         // Not ideal but should only happens in case of process recreation. This ensure we restore all the active sessions before restoring the node graphs.
         runBlocking {
             sessionIds.forEach { sessionId ->
-                Timber.d("Restore matrix session: $sessionId")
-                authenticationService.restoreSession(sessionId)
-                    .onSuccess { matrixClient ->
-                        add(matrixClient)
-                    }
-                    .onFailure {
-                        Timber.e("Fail to restore session")
-                    }
+                restore(sessionId)
             }
         }
     }

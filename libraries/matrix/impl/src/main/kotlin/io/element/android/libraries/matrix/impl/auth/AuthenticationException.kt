@@ -35,6 +35,6 @@ fun Throwable.mapAuthenticationException(): Throwable {
         is RustAuthenticationException.OidcNotSupported -> AuthenticationException.OidcError("OidcNotSupported", message!!)
          */
 
-        else -> this
+        else -> AuthenticationException.Generic(this.message ?: "Unknown error")
     }
 }

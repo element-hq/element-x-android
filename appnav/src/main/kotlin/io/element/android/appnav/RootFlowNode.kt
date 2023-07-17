@@ -145,14 +145,10 @@ class RootFlowNode @AssistedInject constructor(
         onFailure: () -> Unit = {},
         onSuccess: (SessionId) -> Unit = {},
     ) {
-        // If the session is already known it'll be restored by the node hierarchy
-        if (matrixClientsHolder.knowSession(sessionId)) {
-            Timber.v("Session $sessionId already alive, no need to restore.")
-            return
+        runCatching {
+            matrixClientsHolder.requireSession(sessionId)
         }
-        authenticationService.restoreSession(sessionId)
-            .onSuccess { matrixClient ->
-                matrixClientsHolder.add(matrixClient)
+            .onSuccess {
                 Timber.v("Succeed to restore session $sessionId")
                 onSuccess(sessionId)
             }

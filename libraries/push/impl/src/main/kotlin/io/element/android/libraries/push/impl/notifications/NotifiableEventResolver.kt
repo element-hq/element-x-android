@@ -68,7 +68,7 @@ class NotifiableEventResolver @Inject constructor(
 
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
-        val client = matrixClientsHolder.getOrNull(sessionId) ?: return null
+        val client = matrixClientsHolder.requireSession(sessionId)
         val notificationService = client.notificationService()
         val notificationData = notificationService.getNotification(
                 userId = sessionId,

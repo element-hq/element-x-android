@@ -257,11 +257,11 @@ class DefaultNotificationDrawerManager @Inject constructor(
             val currentUser = tryOrNull(
                 onError = { Timber.e(it, "Unable to retrieve info for user ${sessionId.value}") },
                 operation = {
-                    val client = matrixClientsHolder.getOrNull(sessionId)
+                    val client = matrixClientsHolder.requireSession(sessionId)
 
                     // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-                    val myUserDisplayName = client?.loadUserDisplayName()?.getOrNull() ?: sessionId.value
-                    val userAvatarUrl = client?.loadUserAvatarURLString()?.getOrNull()
+                    val myUserDisplayName = client.loadUserDisplayName().getOrNull() ?: sessionId.value
+                    val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
                     MatrixUser(
                         userId = sessionId,
                         displayName = myUserDisplayName,
