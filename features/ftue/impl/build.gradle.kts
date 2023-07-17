@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.testtags)
     implementation(projects.features.analytics.api)
     implementation(projects.services.analytics.api)
 

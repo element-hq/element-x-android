@@ -23,6 +23,8 @@ appId: ${APP_ID}
 - inputText: ${PASSWORD}
 - pressKey: Enter
 - tapOn: "Continue"
+- runFlow: ../assertions/assertWelcomeScreenDisplayed.yaml
+- tapOn: "Continue"
 - runFlow: ../assertions/assertAnalyticsDisplayed.yaml
 - tapOn: "Not now"
 - runFlow: ../assertions/assertHomeDisplayed.yaml

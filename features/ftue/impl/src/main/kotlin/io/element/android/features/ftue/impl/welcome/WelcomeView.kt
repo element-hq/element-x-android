@@ -45,6 +45,8 @@ import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
@@ -71,6 +73,7 @@ fun WelcomeView(
                 ElementLogoAtom(size = ElementLogoAtomSize.Medium)
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
+                    modifier = Modifier.testTag(TestTags.welcomeScreenTitle),
                     text = stringResource(R.string.screen_welcome_title, applicationName),
                     style = ElementTheme.typography.fontHeadingLgBold,
                     textAlign = TextAlign.Center,
