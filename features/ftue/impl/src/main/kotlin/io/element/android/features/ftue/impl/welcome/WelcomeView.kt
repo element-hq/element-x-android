@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
@@ -70,11 +71,13 @@ fun WelcomeView(
                 Text(
                     text = stringResource(R.string.screen_welcome_title, applicationName),
                     style = ElementTheme.typography.fontHeadingLgBold,
+                    textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(R.string.screen_welcome_subtitle),
                     style = ElementTheme.typography.fontBodyMdRegular,
+                    textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 InfoListItemMolecule(
