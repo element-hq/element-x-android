@@ -17,8 +17,6 @@
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
-import kotlinx.kover.tasks.KoverReportTask
-import org.gradle.api.internal.provider.DefaultProvider
 
 plugins {
     id("io.element.android-compose-library")
