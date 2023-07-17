@@ -31,10 +31,7 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import kotlinx.coroutines.TimeoutCancellationException
 import java.io.Closeable
-import java.util.Date
-import kotlin.time.Duration
 
 interface MatrixClient : Closeable {
     val sessionId: SessionId
