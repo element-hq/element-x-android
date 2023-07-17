@@ -21,14 +21,14 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
-import org.matrix.rustcomponents.sdk.App
-import org.matrix.rustcomponents.sdk.AppState
-import org.matrix.rustcomponents.sdk.AppStateObserver
+import org.matrix.rustcomponents.sdk.SyncService
+import org.matrix.rustcomponents.sdk.SyncServiceState
+import org.matrix.rustcomponents.sdk.SyncServiceStateObserver
 
-fun App.stateFlow(): Flow<AppState> =
+fun SyncService.stateFlow(): Flow<SyncServiceState> =
     mxCallbackFlow {
-        val listener = object : AppStateObserver {
-            override fun onUpdate(state: AppState) {
+        val listener = object : SyncServiceStateObserver {
+            override fun onUpdate(state: SyncServiceState) {
                 trySendBlocking(state)
             }
         }

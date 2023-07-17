@@ -26,24 +26,24 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import org.matrix.rustcomponents.sdk.App
 import org.matrix.rustcomponents.sdk.RoomListServiceState
+import org.matrix.rustcomponents.sdk.SyncServiceInterface
 import timber.log.Timber
 
 class RustSyncService(
-    private val app: App,
+    private val innerSyncService: SyncServiceInterface,
     roomListStateFlow: Flow<RoomListServiceState>,
     sessionCoroutineScope: CoroutineScope
 ) : SyncService {
 
-    override fun startSync() = runCatching {
+    override suspend fun startSync() = runCatching {
         Timber.v("Start sync")
-        app.start()
+        innerSyncService.start()
     }
 
     override fun stopSync() = runCatching {
         Timber.v("Stop sync")
-        app.pause()
+        innerSyncService.pause()
     }
 
     override val syncState: StateFlow<SyncState> =
