@@ -106,7 +106,7 @@ class DefaultFtueStateTests {
         coroutineScope.cancel()
     }
 
-    private fun TestScope.createState(
+    private fun createState(
         coroutineScope: CoroutineScope,
         welcomeState: FakeWelcomeState = FakeWelcomeState(),
         analyticsService: AnalyticsService = FakeAnalyticsService()
