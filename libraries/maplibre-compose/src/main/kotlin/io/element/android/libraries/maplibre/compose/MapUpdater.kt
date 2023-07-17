@@ -71,7 +71,7 @@ internal class MapPropertiesNode(
     override fun onAttached() {
         map.addOnCameraIdleListener {
             cameraPositionState.isMoving = false
-            // setOnCameraMoveListener is only invoked when the camera position
+            // addOnCameraIdleListener is only invoked when the camera position
             // is changed via .animate(). To handle updating state when .move()
             // is used, it's necessary to set the camera's position here as well
             cameraPositionState.rawPosition = map.cameraPosition
