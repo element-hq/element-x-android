@@ -178,11 +178,6 @@
   <string name="screen_share_open_google_maps">"Ouvrir dans Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partager cette position"</string>
-  <string name="screen_welcome_bullet_2">"L’historique des messages pour les salons chiffrés ne sera pas disponible dans cette mise à jour."</string>
-  <string name="screen_welcome_bullet_3">"Nous serions ravis d’avoir votre avis, n’hésitez pas à nous le partager via la page des paramètres."</string>
-  <string name="screen_welcome_button">"C’est parti !"</string>
-  <string name="screen_welcome_subtitle">"Voici ce qu’il faut savoir :"</string>
-  <string name="screen_welcome_title">"Bienvenue sur %1$s !"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Seuil de détection"</string>
   <string name="settings_title_general">"Général"</string>
