@@ -5,10 +5,19 @@
     <item quantity="other">"%1$d membres"</item>
   </plurals>
   <string name="screen_room_details_add_topic_title">"Définir un sujet"</string>
+  <string name="screen_room_details_already_a_member">"Déjà membre"</string>
+  <string name="screen_room_details_already_invited">"Déjà invité(e)"</string>
+  <string name="screen_room_details_edit_room_title">"Modifier le salon"</string>
+  <string name="screen_room_details_edition_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>
+  <string name="screen_room_details_edition_error_title">"Impossible de mettre à jour le salon"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Les messages sont sécurisés par des cadenas numériques. Seuls vous et les destinataires possédez les clés uniques pour les déverrouiller."</string>
   <string name="screen_room_details_encryption_enabled_title">"Chiffrement des messages activé"</string>
   <string name="screen_room_details_invite_people_title">"Inviter des personnes"</string>
+  <string name="screen_room_details_notification_title">"Notifications"</string>
+  <string name="screen_room_details_room_name_label">"Nom du salon"</string>
   <string name="screen_room_details_share_room_title">"Partager le salon"</string>
+  <string name="screen_room_details_updating_room">"Mise à jour du salon…"</string>
+  <string name="screen_room_member_list_pending_header_title">"En attente"</string>
   <string name="screen_dm_details_block_alert_action">"Bloquer"</string>
   <string name="screen_dm_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez annuler cette action à tout moment."</string>
   <string name="screen_dm_details_block_user">"Bloquer l\'utilisateur"</string>

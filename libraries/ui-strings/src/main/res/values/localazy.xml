@@ -140,10 +140,10 @@
   <string name="emoji_picker_category_places">"Travel &amp; Places"</string>
   <string name="emoji_picker_category_symbols">"Symbols"</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
-  <string name="error_failed_loading_map">"Element could not load the map. Please try again later."</string>
+  <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
-  <string name="error_failed_locating_user">"Element could not access your location. Please try again later."</string>
-  <string name="error_missing_location_auth">"Element does not have permission to access your location. You can enable access in Settings > Location"</string>
+  <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
+  <string name="error_missing_location_auth">"%1$s does not have permission to access your location. You can enable access in Settings > Location"</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>

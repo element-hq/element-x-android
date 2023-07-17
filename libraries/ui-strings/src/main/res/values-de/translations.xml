@@ -140,10 +140,9 @@
   <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
   <string name="emoji_picker_category_symbols">"Symbole"</string>
   <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>
-  <string name="error_failed_loading_map">"Element konnte die Karte nicht laden. Bitte versuche es später erneut."</string>
+  <string name="error_failed_loading_map">"%1$s konnte die Karte nicht laden. Bitte versuche es später erneut."</string>
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
-  <string name="error_failed_locating_user">"Element konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut."</string>
-  <string name="error_missing_location_auth">"Element hat keine Berechtigung, auf deinen Standort zuzugreifen. Du kannst den Zugriff unter Einstellungen > Standort aktivieren."</string>
+  <string name="error_failed_locating_user">"%1$s konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut."</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, ein Fehler ist aufgetreten."</string>
   <string name="invite_friends_rich_title">"🔐️ Besuchen Sie mich auf %1$s"</string>
