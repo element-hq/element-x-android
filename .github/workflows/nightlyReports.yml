@@ -29,8 +29,11 @@ jobs:
       - name: ⚙️ Run unit tests, debug and release
         run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
 
-      - name: 📈 Run screenshot tests, generate kover report and verify coverage
-        run: ./gradlew verifyPaparazziDebug koverMergedReport koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+      - name: 📸 Run screenshot tests
+        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
+
+      - name: 📈 Generate kover report and verify coverage
+        run: ./gradlew koverMergedReport koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
       - name: ✅ Upload kover report
         if: always()

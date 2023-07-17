@@ -283,13 +283,6 @@ koverMerged {
     }
 }
 
-// Make Kover depend on Paparazzi
-tasks.whenTaskAdded {
-    if (name.startsWith("koverMerged")) {
-        dependsOn(":tests:uitests:verifyPaparazziDebug")
-    }
-}
-
 // When running on the CI, run only debug test variants
 val ciBuildProperty = "ci-build"
 val isCiBuild = if (project.hasProperty(ciBuildProperty)) {
