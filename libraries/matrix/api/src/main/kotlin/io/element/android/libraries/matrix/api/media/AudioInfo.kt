@@ -21,5 +21,5 @@ import java.time.Duration
 data class AudioInfo(
     val duration: Duration?,
     val size: Long?,
-    val mimeType: String?,
+    val mimetype: String?,
 )

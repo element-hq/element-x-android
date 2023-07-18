@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -76,6 +77,11 @@ fun TimelineItemEventContentView(
             modifier = modifier
         )
         is TimelineItemFileContent -> TimelineItemFileView(
+            content = content,
+            extraPadding = extraPadding,
+            modifier = modifier
+        )
+        is TimelineItemAudioContent -> TimelineItemAudioView(
             content = content,
             extraPadding = extraPadding,
             modifier = modifier

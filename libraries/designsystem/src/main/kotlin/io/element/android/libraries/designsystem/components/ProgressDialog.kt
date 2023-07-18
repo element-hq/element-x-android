@@ -20,14 +20,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -37,21 +40,32 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.ui.strings.CommonStrings
+import timber.log.Timber
 
 @Composable
 fun ProgressDialog(
     modifier: Modifier = Modifier,
     text: String? = null,
     type: ProgressDialogType = ProgressDialogType.Indeterminate,
-    onDismiss: () -> Unit = {},
+    isCancellable: Boolean = false,
+    onDismissRequest: () -> Unit = {},
 ) {
+    DisposableEffect(Unit) {
+        onDispose {
+            Timber.v("OnDispose progressDialog")
+        }
+    }
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = onDismissRequest,
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
     ) {
         ProgressDialogContent(
             modifier = modifier,
             text = text,
+            isCancellable = isCancellable,
+            onCancelClicked = onDismissRequest,
             progressIndicator = {
                 when (type) {
                     is ProgressDialogType.Indeterminate -> {
@@ -81,6 +95,8 @@ sealed interface ProgressDialogType {
 private fun ProgressDialogContent(
     modifier: Modifier = Modifier,
     text: String? = null,
+    isCancellable: Boolean = false,
+    onCancelClicked: () -> Unit = {},
     progressIndicator: @Composable () -> Unit = {
         CircularProgressIndicator(
             color = MaterialTheme.colorScheme.primary
@@ -107,6 +123,17 @@ private fun ProgressDialogContent(
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
+            if (isCancellable) {
+                Spacer(modifier = Modifier.height(24.dp))
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+                    TextButton(onClick = onCancelClicked) {
+                        Text(stringResource(id = CommonStrings.action_cancel))
+                    }
+                }
+            }
         }
     }
 }
@@ -118,6 +145,6 @@ internal fun ProgressDialogPreview() = ElementThemedPreview { ContentToPreview()
 @Composable
 private fun ContentToPreview() {
     DialogPreview {
-        ProgressDialogContent(text = "test dialog content")
+        ProgressDialogContent(text = "test dialog content", isCancellable = true)
     }
 }

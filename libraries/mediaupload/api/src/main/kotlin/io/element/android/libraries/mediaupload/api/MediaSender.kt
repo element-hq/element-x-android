@@ -46,36 +46,43 @@ class MediaSender @Inject constructor(
     }
 
     private suspend fun MatrixRoom.sendMedia(
-        info: MediaUploadInfo,
+        uploadInfo: MediaUploadInfo,
         progressCallback: ProgressCallback?
     ): Result<Unit> {
-        return when (info) {
+        return when (uploadInfo) {
             is MediaUploadInfo.Image -> {
                 sendImage(
-                    file = info.file,
-                    thumbnailFile = info.thumbnailFile,
-                    imageInfo = info.info,
+                    file = uploadInfo.file,
+                    thumbnailFile = uploadInfo.thumbnailFile,
+                    imageInfo = uploadInfo.imageInfo,
                     progressCallback = progressCallback
                 )
             }
 
             is MediaUploadInfo.Video -> {
                 sendVideo(
-                    file = info.file,
-                    thumbnailFile = info.thumbnailFile,
-                    videoInfo = info.info,
+                    file = uploadInfo.file,
+                    thumbnailFile = uploadInfo.thumbnailFile,
+                    videoInfo = uploadInfo.videoInfo,
+                    progressCallback = progressCallback
+                )
+            }
+            is MediaUploadInfo.Audio -> {
+                sendAudio(
+                    file = uploadInfo.file,
+                    audioInfo = uploadInfo.audioInfo,
                     progressCallback = progressCallback
                 )
             }
 
             is MediaUploadInfo.AnyFile -> {
                 sendFile(
-                    file = info.file,
-                    fileInfo = info.info,
+                    file = uploadInfo.file,
+                    fileInfo = uploadInfo.fileInfo,
                     progressCallback = progressCallback
                 )
             }
-            else -> Result.failure(IllegalStateException("Unexpected MediaUploadInfo format: $info"))
+            else -> Result.failure(IllegalStateException("Unexpected MediaUploadInfo format: $uploadInfo"))
         }
     }
 }

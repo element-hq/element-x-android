@@ -20,25 +20,20 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaSource
 
-open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineItemVideoContent> {
-    override val values: Sequence<TimelineItemVideoContent>
+open class TimelineItemAudioContentProvider : PreviewParameterProvider<TimelineItemAudioContent> {
+    override val values: Sequence<TimelineItemAudioContent>
         get() = sequenceOf(
-            aTimelineItemVideoContent(),
-            aTimelineItemVideoContent().copy(aspectRatio = 1.0f),
-            aTimelineItemVideoContent().copy(aspectRatio = 1.5f),
+            aTimelineItemAudioContent("A sound.mp3"),
+            aTimelineItemAudioContent("A bigger name sound.mp3"),
+            aTimelineItemAudioContent("An even bigger bigger bigger bigger bigger bigger bigger sound name which doesn't fit .mp3"),
         )
 }
 
-fun aTimelineItemVideoContent() = TimelineItemVideoContent(
-    body = "Video.mp4",
-    thumbnailSource = null,
-    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
-    aspectRatio = 0.5f,
+fun aTimelineItemAudioContent(fileName: String = "A sound.mp3") = TimelineItemAudioContent(
+    body = fileName,
+    mimeType = MimeTypes.Pdf,
+    formattedFileSize = "100kB",
+    fileExtension = "mp3",
     duration = 100,
-    videoSource = MediaSource(""),
-    height = 300,
-    width = 150,
-    mimeType = MimeTypes.Mp4,
-    formattedFileSize = "14MB",
-    fileExtension = "mp4"
+    audioSource = MediaSource(""),
 )
