@@ -125,10 +125,12 @@ internal fun ElementLogoAtomPreview() {
     ElementPreview {
         Box(
             Modifier
-                .size(170.dp)
-                .background(ElementTheme.colors.bgSubtlePrimary)
-        )
-        ElementLogoAtom(ElementLogoAtomSize.Large)
+                .size(180.dp)
+                .background(ElementTheme.colors.bgSubtlePrimary),
+            contentAlignment = Alignment.Center
+        ) {
+            ElementLogoAtom(ElementLogoAtomSize.Large)
+        }
     }
 }
 
