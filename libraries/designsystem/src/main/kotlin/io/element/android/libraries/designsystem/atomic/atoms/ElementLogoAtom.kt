@@ -53,6 +53,7 @@ import io.element.android.libraries.theme.ElementTheme
 fun ElementLogoAtom(
     size: ElementLogoAtomSize,
     modifier: Modifier = Modifier,
+    darkTheme: Boolean = isSystemInDarkTheme(),
 ) {
     val outerSize = when (size) {
         ElementLogoAtomSize.Large -> 158.dp
@@ -70,19 +71,19 @@ fun ElementLogoAtom(
         ElementLogoAtomSize.Large -> 1.dp
         ElementLogoAtomSize.Medium -> 0.38.dp
     }
-    val blur = if (isSystemInDarkTheme()) {
+    val blur = if (darkTheme) {
         160.dp
     } else {
         24.dp
     }
     //box-shadow: 0px 6.075949668884277px 24.30379867553711px 0px #1B1D2280;
-    val shadowColor = if (isSystemInDarkTheme()) {
+    val shadowColor = if (darkTheme) {
         Color.Black.copy(alpha = 0.4f)
     } else {
         Color(0x401B1D22)
     }
-    val backgroundColor = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.2f) else Color.White.copy(alpha = 0.4f)
-    val borderColor = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.8f) else Color.White.copy(alpha = 0.4f)
+    val backgroundColor = if (darkTheme) Color.White.copy(alpha = 0.2f) else Color.White.copy(alpha = 0.4f)
+    val borderColor = if (darkTheme) Color.White.copy(alpha = 0.8f) else Color.White.copy(alpha = 0.4f)
     Box(
         modifier = modifier
             .size(outerSize)
