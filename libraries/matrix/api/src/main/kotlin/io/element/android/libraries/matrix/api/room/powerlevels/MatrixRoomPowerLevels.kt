@@ -21,16 +21,16 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 
 /**
- * Shortcut for calling [MatrixRoom.canUserInvite] with out own user.
+ * Shortcut for calling [MatrixRoom.canUserInvite] with our own user.
  */
 suspend fun MatrixRoom.canInvite(): Result<Boolean> = canUserInvite(sessionId)
 
 /**
- * Shortcut for calling [MatrixRoom.canUserSendState] with out own user.
+ * Shortcut for calling [MatrixRoom.canUserSendState] with our own user.
  */
 suspend fun MatrixRoom.canSendState(type: StateEventType): Result<Boolean> = canUserSendState(sessionId, type)
 
 /**
- * Shortcut for calling [MatrixRoom.canUserSendMessage] with out own user.
+ * Shortcut for calling [MatrixRoom.canUserSendMessage] with our own user.
  */
 suspend fun MatrixRoom.canSendMessage(type: MessageEventType): Result<Boolean> = canUserSendMessage(sessionId, type)
