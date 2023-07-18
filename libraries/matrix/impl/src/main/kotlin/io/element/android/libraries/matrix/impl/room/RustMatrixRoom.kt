@@ -210,7 +210,7 @@ class RustMatrixRoom(
         val currentRoomNotificationSettings = currentState.roomNotificationSettings()
         _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
         runCatching {
-            roomNotificationSettingsService.getRoomNotificationSettings(roomId).getOrThrow()
+            roomNotificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, innerRoom.activeMembersCount()).getOrThrow()
         }.map {
             _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(it)
         }.onFailure {

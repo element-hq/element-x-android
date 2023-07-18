@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.test.A_ROOM_NOTIFICATION_SETTINGS
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -33,7 +32,7 @@ class FakeNotificationSettingsService : NotificationSettingsService {
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _roomNotificationSettingsStateFlow
 
-    override suspend fun getRoomNotificationSettings(roomId: RoomId): Result<RoomNotificationSettings> {
+    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong): Result<RoomNotificationSettings> {
         return getRoomNotificationSettingsResult
     }
 

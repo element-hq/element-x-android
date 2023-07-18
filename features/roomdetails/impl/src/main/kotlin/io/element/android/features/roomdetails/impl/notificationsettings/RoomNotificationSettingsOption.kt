@@ -22,19 +22,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun RoomNotificationSettingsOption(
@@ -62,7 +61,7 @@ fun RoomNotificationSettingsOption(
         ) {
             Text(
                 text = roomNotificationSettingsItem.title,
-                fontSize = 16.sp,
+                style = ElementTheme.typography.fontBodyLgRegular,
                 color = enabled.toEnabledColor(),
             )
         }

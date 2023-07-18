@@ -26,13 +26,10 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -41,10 +38,12 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.theme.ElementTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -120,13 +119,12 @@ fun RoomNotificationSettingsTopBar(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
-    CenterAlignedTopAppBar(
+    TopAppBar(
         modifier = modifier,
         title = {
             Text(
                 text = stringResource(R.string.screen_room_details_notification_title),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = ElementTheme.typography.aliasScreenTitle,
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
