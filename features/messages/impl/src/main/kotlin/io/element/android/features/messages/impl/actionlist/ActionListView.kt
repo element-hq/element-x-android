@@ -247,8 +247,6 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                     info = AttachmentThumbnailInfo(
                         type = AttachmentThumbnailType.Location,
                         textContent = stringResource(CommonStrings.common_shared_location),
-                        thumbnailSource = null,
-                        blurHash = null,
                     )
                 )
             }
@@ -261,7 +259,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                     info = AttachmentThumbnailInfo(
                         thumbnailSource = event.content.mediaSource,
                         textContent = textContent,
-                        type = AttachmentThumbnailType.File,
+                        type = AttachmentThumbnailType.Image,
                         blurHash = event.content.blurhash,
                     )
                 )
@@ -290,7 +288,6 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                         thumbnailSource = event.content.thumbnailSource,
                         textContent = textContent,
                         type = AttachmentThumbnailType.File,
-                        blurHash = null
                     )
                 )
             }

@@ -95,7 +95,7 @@ sealed interface ProgressDialogType {
 private fun ProgressDialogContent(
     modifier: Modifier = Modifier,
     text: String? = null,
-    isCancellable: Boolean = true,
+    isCancellable: Boolean = false,
     onCancelClicked: () -> Unit = {},
     progressIndicator: @Composable () -> Unit = {
         CircularProgressIndicator(
@@ -145,6 +145,6 @@ internal fun ProgressDialogPreview() = ElementThemedPreview { ContentToPreview()
 @Composable
 private fun ContentToPreview() {
     DialogPreview {
-        ProgressDialogContent(text = "test dialog content")
+        ProgressDialogContent(text = "test dialog content", isCancellable = true)
     }
 }
