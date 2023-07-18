@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

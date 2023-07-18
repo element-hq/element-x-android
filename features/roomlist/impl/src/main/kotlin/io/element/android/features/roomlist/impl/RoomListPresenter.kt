@@ -30,43 +30,30 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
+import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
+import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.coroutine.parallelMap
-import io.element.android.libraries.core.extensions.orEmpty
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 private const val extendedRangeSize = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
-    private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val sessionVerificationService: SessionVerificationService,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val inviteStateDataSource: InviteStateDataSource,
     private val leaveRoomPresenter: LeaveRoomPresenter,
+    private val roomListDataSource: RoomListDataSource,
 ) : Presenter<RoomListState> {
 
     @Composable
@@ -75,21 +62,13 @@ class RoomListPresenter @Inject constructor(
         val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
             mutableStateOf(null)
         }
-        var filter by rememberSaveable { mutableStateOf("") }
-        val roomSummaries by client
-            .roomSummaryDataSource
-            .allRooms()
-            .collectAsState()
-
+        val roomList by roomListDataSource.allRooms.collectAsState()
+        val filteredRoomList by roomListDataSource.filteredRooms.collectAsState()
+        val filter by roomListDataSource.filter.collectAsState()
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
 
-        Timber.v("RoomSummaries size = ${roomSummaries.size}")
-
-        val mappedRoomSummaries: MutableState<ImmutableList<RoomListRoomSummary>> = remember { mutableStateOf(persistentListOf()) }
-        val filteredRoomSummaries: MutableState<ImmutableList<RoomListRoomSummary>> = remember {
-            mutableStateOf(persistentListOf())
-        }
         LaunchedEffect(Unit) {
+            roomListDataSource.launchIn(this)
             initialLoad(matrixUser)
         }
 
@@ -107,12 +86,12 @@ class RoomListPresenter @Inject constructor(
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
-                is RoomListEvents.UpdateFilter -> filter = event.newFilter
+                is RoomListEvents.UpdateFilter -> roomListDataSource.updateFilter(event.newFilter)
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
                 RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
                 RoomListEvents.ToggleSearchResults -> {
                     if (displaySearchResults) {
-                        filter = ""
+                        roomListDataSource.updateFilter("")
                     }
                     displaySearchResults = !displaySearchResults
                 }
@@ -127,22 +106,13 @@ class RoomListPresenter @Inject constructor(
             }
         }
 
-        LaunchedEffect(roomSummaries, filter) {
-            mappedRoomSummaries.value = if (roomSummaries.isEmpty()) {
-                RoomListRoomSummaryPlaceholders.createFakeList(16).toImmutableList()
-            } else {
-                mapRoomSummaries(roomSummaries).toImmutableList()
-            }
-            filteredRoomSummaries.value = updateFilteredRoomSummaries(mappedRoomSummaries.value, filter)
-        }
-
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         return RoomListState(
             matrixUser = matrixUser.value,
-            roomList = mappedRoomSummaries.value,
+            roomList = roomList,
             filter = filter,
-            filteredRoomList = filteredRoomSummaries.value,
+            filteredRoomList = filteredRoomList,
             displayVerificationPrompt = displayVerificationPrompt,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
@@ -152,13 +122,6 @@ class RoomListPresenter @Inject constructor(
             leaveRoomState = leaveRoomState,
             eventSink = ::handleEvents
         )
-    }
-
-    private fun updateFilteredRoomSummaries(mappedRoomSummaries: ImmutableList<RoomListRoomSummary>, filter: String): ImmutableList<RoomListRoomSummary> {
-        return when {
-            filter.isEmpty() -> emptyList()
-            else -> mappedRoomSummaries.filter { it.name.contains(filter, ignoreCase = true) }
-        }.toImmutableList()
     }
 
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
@@ -173,35 +136,5 @@ class RoomListPresenter @Inject constructor(
         val extendedRangeEnd = range.last + midExtendedRangeSize
         val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
         client.roomSummaryDataSource.updateAllRoomsVisibleRange(extendedRange)
-    }
-
-    private suspend fun mapRoomSummaries(
-        roomSummaries: List<RoomSummary>
-    ): List<RoomListRoomSummary> {
-        return roomSummaries.parallelMap { roomSummary ->
-            when (roomSummary) {
-                is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
-                is RoomSummary.Filled -> {
-                    val avatarData = AvatarData(
-                        id = roomSummary.identifier(),
-                        name = roomSummary.details.name,
-                        url = roomSummary.details.avatarURLString,
-                        size = AvatarSize.RoomListItem,
-                    )
-                    val roomIdentifier = roomSummary.identifier()
-                    RoomListRoomSummary(
-                        id = roomSummary.identifier(),
-                        roomId = RoomId(roomIdentifier),
-                        name = roomSummary.details.name,
-                        hasUnread = roomSummary.details.unreadNotificationCount > 0,
-                        timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
-                        lastMessage = roomSummary.details.lastMessage?.let { message ->
-                            roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
-                        }.orEmpty(),
-                        avatarData = avatarData,
-                    )
-                }
-            }
-        }
     }
 }

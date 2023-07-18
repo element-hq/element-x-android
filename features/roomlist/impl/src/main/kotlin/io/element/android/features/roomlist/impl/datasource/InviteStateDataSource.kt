@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl
+package io.element.android.features.roomlist.impl.datasource
 
 import androidx.compose.runtime.Composable
+import io.element.android.features.roomlist.impl.InvitesState
 
 interface InviteStateDataSource {
 

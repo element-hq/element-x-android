@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import io.element.android.features.invitelist.impl.DefaultSeenInvitesStore
 import io.element.android.features.leaveroom.impl.LeaveRoomPresenterImpl
 import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
-import io.element.android.features.roomlist.impl.DefaultInviteStateDataSource
+import io.element.android.features.roomlist.impl.datasource.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
