@@ -50,7 +50,7 @@ class SendLocationNode @AssistedInject constructor(
         SendLocationView(
             state = presenter.present(),
             modifier = modifier,
-            onBackPressed = ::navigateUp,
+            navigateUp = ::navigateUp,
         )
     }
 }

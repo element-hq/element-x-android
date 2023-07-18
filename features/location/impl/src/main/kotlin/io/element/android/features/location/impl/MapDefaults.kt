@@ -58,4 +58,6 @@ object MapDefaults {
         .target(LatLng(49.843, 9.902056))
         .zoom(2.7)
         .build()
+
+    const val DEFAULT_ZOOM = 15.0
 }

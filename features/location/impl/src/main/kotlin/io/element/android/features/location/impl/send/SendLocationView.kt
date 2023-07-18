@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.api.internal.rememberTileServerUrl
+import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.MapDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -69,14 +69,14 @@ import io.element.android.libraries.designsystem.R as DesignSystemR
 fun SendLocationView(
     state: SendLocationState,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
+    navigateUp: () -> Unit = {},
 ) {
     LaunchedEffect(Unit) {
         state.eventSink(SendLocationEvents.RequestPermissions)
     }
 
     when (state.permissionDialog) {
-        SendLocationState.Dialog.None -> {}
+        SendLocationState.Dialog.None -> Unit
         SendLocationState.Dialog.PermissionDenied -> PermissionDeniedDialog(
             onContinue = { state.eventSink(SendLocationEvents.OpenAppSettings) },
             onDismiss = { state.eventSink(SendLocationEvents.DismissDialog) },
@@ -99,7 +99,9 @@ fun SendLocationView(
                 cameraPositionState.cameraMode = CameraMode.NONE
             }
             SendLocationState.Mode.SenderLocation -> {
-                cameraPositionState.position = CameraPosition.Builder().zoom(15.0).build()
+                cameraPositionState.position = CameraPosition.Builder()
+                    .zoom(MapDefaults.DEFAULT_ZOOM)
+                    .build()
                 cameraPositionState.cameraMode = CameraMode.TRACKING
             }
         }
@@ -142,7 +144,7 @@ fun SendLocationView(
                             }
                         )
                     )
-                    onBackPressed()
+                    navigateUp()
                 },
                 leadingContent = {
                     Icon(Icons.Default.LocationOn, null)
@@ -165,7 +167,7 @@ fun SendLocationView(
                     )
                 },
                 navigationIcon = {
-                    BackButton(onClick = onBackPressed)
+                    BackButton(onClick = navigateUp)
                 },
             )
         },
@@ -177,7 +179,7 @@ fun SendLocationView(
             contentAlignment = Alignment.Center
         ) {
             MapboxMap(
-                styleUri = rememberTileServerUrl(),
+                styleUri = rememberTileStyleUrl(),
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
                 uiSettings = MapDefaults.uiSettings,
@@ -191,6 +193,7 @@ fun SendLocationView(
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.align { size, space, _ ->
+                    // Center bottom edge of pin (i.e. its arrow) to center of screen
                     IntOffset(
                         x = (space.width - size.width) / 2,
                         y = (space.height / 2) - size.height,
@@ -219,7 +222,7 @@ fun SendLocationViewPreview(
 ) = ElementPreview {
     SendLocationView(
         state = state,
-        onBackPressed = {},
+        navigateUp = {},
     )
 }
 
@@ -231,8 +234,8 @@ private fun PermissionRationaleDialog(
 ) {
     ConfirmationDialog(
         content = stringResource(CommonStrings.error_missing_location_rationale_android, appName),
-        onSubmitClicked = { onContinue() },
-        onDismiss = { onDismiss() },
+        onSubmitClicked = onContinue,
+        onDismiss = onDismiss,
         submitText = stringResource(CommonStrings.action_continue),
         cancelText = stringResource(CommonStrings.action_cancel),
     )
@@ -246,8 +249,8 @@ private fun PermissionDeniedDialog(
 ) {
     ConfirmationDialog(
         content = stringResource(CommonStrings.error_missing_location_auth_android, appName),
-        onSubmitClicked = { onContinue() },
-        onDismiss = { onDismiss() },
+        onSubmitClicked = onContinue,
+        onDismiss = onDismiss,
         submitText = stringResource(CommonStrings.action_continue),
         cancelText = stringResource(CommonStrings.action_cancel),
     )

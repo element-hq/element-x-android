@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.location.impl.MapDefaults
 import io.element.android.features.location.impl.permissions.PermissionsEvents
 import io.element.android.features.location.impl.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.permissions.PermissionsState
@@ -121,7 +122,7 @@ class SendLocationPresenter @Inject constructor(
                     body = generateBody(geoUri, systemClock.epochMillis()),
                     geoUri = geoUri,
                     description = null,
-                    zoomLevel = 15, // Send default zoom level for now.
+                    zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
                     assetType = AssetType.PIN
                 )
                 analyticsService.capture(
@@ -140,7 +141,7 @@ class SendLocationPresenter @Inject constructor(
                     body = generateBody(geoUri, systemClock.epochMillis()),
                     geoUri = geoUri,
                     description = null,
-                    zoomLevel = 15, // Send default zoom level for now.
+                    zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
                     assetType = AssetType.SENDER
                 )
                 analyticsService.capture(

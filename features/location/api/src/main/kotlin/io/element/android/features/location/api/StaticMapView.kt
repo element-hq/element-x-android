@@ -107,6 +107,7 @@ fun StaticMapView(
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.align { size, space, _ ->
+                    // Center bottom edge of pin (i.e. its arrow) to center of screen
                     IntOffset(
                         x = (space.width - size.width) / 2,
                         y = (space.height / 2) - size.height,
