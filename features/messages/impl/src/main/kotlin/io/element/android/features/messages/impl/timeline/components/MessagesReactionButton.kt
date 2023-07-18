@@ -117,6 +117,7 @@ private fun TextContent(
         .height(reactionEmojiLineHeight.toDp()),
     text = text,
     style = ElementTheme.typography.fontBodyMdRegular,
+    color = MaterialTheme.colorScheme.primary
 )
 
 @Composable
