@@ -31,8 +31,8 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -45,7 +45,8 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, hasMoreToLoadBackwards = true),
     highlightedEventId = null,
     canReply = true,
-    eventSink = {}
+    hasNewItems = false,
+    eventSink = {},
 )
 
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
@@ -127,6 +128,7 @@ internal fun aTimelineItemEvent(
         localSendState = sendState,
         inReplyTo = inReplyTo,
         debugInfo = debugInfo,
+        origin = null
     )
 }
 
@@ -153,13 +155,14 @@ internal fun aTimelineItemDebugInfo(
     model, originalJson, latestEditedJson
 )
 
-fun aGroupedEvents(): TimelineItem.GroupedEvents {
+fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
     val event = aTimelineItemEvent(
         isMine = true,
         content = aTimelineItemStateEventContent(),
         groupPosition = TimelineItemGroupPosition.None
     )
     return TimelineItem.GroupedEvents(
+        id = id.toString(),
         events = listOf(
             event,
             event,
