@@ -48,6 +48,7 @@ fun RoomNotificationSettingsOption(
             .fillMaxWidth()
             .selectable(
                 selected = isSelected,
+                enabled = enabled,
                 onClick = { onOptionSelected(roomNotificationSettingsItem) },
                 role = Role.RadioButton,
             )
