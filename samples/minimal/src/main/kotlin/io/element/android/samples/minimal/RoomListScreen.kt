@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -108,7 +109,9 @@ class RoomListScreen(
 
         DisposableEffect(Unit) {
             Timber.w("Start sync!")
-            matrixClient.syncService().startSync()
+            runBlocking {
+                matrixClient.syncService().startSync()
+            }
             onDispose {
                 Timber.w("Stop sync!")
                 matrixClient.syncService().stopSync()

@@ -29,7 +29,7 @@ class FakeSyncService : SyncService {
         syncStateFlow.value = SyncState.InError
     }
 
-    override fun startSync(): Result<Unit> {
+    override suspend fun startSync(): Result<Unit> {
         syncStateFlow.value = SyncState.Syncing
         return Result.success(Unit)
     }

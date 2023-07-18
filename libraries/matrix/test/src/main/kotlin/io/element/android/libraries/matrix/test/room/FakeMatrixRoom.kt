@@ -63,8 +63,7 @@ class FakeMatrixRoom(
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
-    private var acceptInviteResult = Result.success(Unit)
-    private var rejectInviteResult = Result.success(Unit)
+    private var joinRoomResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
     private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
@@ -101,11 +100,6 @@ class FakeMatrixRoom(
     var sendLocationCount: Int = 0
         private set
 
-    var isInviteAccepted: Boolean = false
-        private set
-
-    var isInviteRejected: Boolean = false
-        private set
 
     var invitedUserId: UserId? = null
         private set
@@ -196,16 +190,11 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun leave(): Result<Unit> =
+        leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
 
-    override suspend fun acceptInvitation(): Result<Unit> {
-        isInviteAccepted = true
-        return acceptInviteResult
-    }
-
-    override suspend fun rejectInvitation(): Result<Unit> {
-        isInviteRejected = true
-        return rejectInviteResult
+    override suspend fun join(): Result<Unit> {
+        return joinRoomResult
     }
 
     override suspend fun inviteUserById(id: UserId): Result<Unit> = simulateLongTask {
@@ -316,12 +305,8 @@ class FakeMatrixRoom(
         userAvatarUrlResult = avatarUrl
     }
 
-    fun givenAcceptInviteResult(result: Result<Unit>) {
-        acceptInviteResult = result
-    }
-
-    fun givenRejectInviteResult(result: Result<Unit>) {
-        rejectInviteResult = result
+    fun givenJoinRoomResult(result: Result<Unit>) {
+        joinRoomResult = result
     }
 
     fun givenInviteUserResult(result: Result<Unit>) {
