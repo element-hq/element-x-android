@@ -59,7 +59,7 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
-        val presenter = aRoomListPresenter()
+        val presenter = createRoomListPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -79,7 +79,7 @@ class RoomListPresenterTests {
             userDisplayName = Result.failure(AN_EXCEPTION),
             userAvatarURLString = Result.failure(AN_EXCEPTION),
         )
-        val presenter = aRoomListPresenter(matrixClient)
+        val presenter = createRoomListPresenter(matrixClient)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -92,7 +92,7 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - should filter room with success`() = runTest {
-        val presenter = aRoomListPresenter()
+        val presenter = createRoomListPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -113,7 +113,7 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient(
             roomSummaryDataSource = roomSummaryDataSource
         )
-        val presenter = aRoomListPresenter(matrixClient)
+        val presenter = createRoomListPresenter(matrixClient)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -136,7 +136,7 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient(
             roomSummaryDataSource = roomSummaryDataSource
         )
-        val presenter = aRoomListPresenter(matrixClient)
+        val presenter = createRoomListPresenter(matrixClient)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -165,7 +165,7 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient(
             roomSummaryDataSource = roomSummaryDataSource
         )
-        val presenter = aRoomListPresenter(matrixClient)
+        val presenter = createRoomListPresenter(matrixClient)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -205,7 +205,7 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient(
             roomSummaryDataSource = roomSummaryDataSource
         )
-        val presenter = aRoomListPresenter(
+        val presenter = createRoomListPresenter(
             client = matrixClient,
             sessionVerificationService = FakeSessionVerificationService().apply {
                 givenIsReady(true)
@@ -227,7 +227,7 @@ class RoomListPresenterTests {
     fun `present - sets invite state`() = runTest {
         val inviteStateFlow = MutableStateFlow(InvitesState.NoInvites)
         val inviteStateDataSource = FakeInviteDataSource(inviteStateFlow)
-        val presenter = aRoomListPresenter(inviteStateDataSource = inviteStateDataSource)
+        val presenter = createRoomListPresenter(inviteStateDataSource = inviteStateDataSource)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -247,7 +247,7 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - show context menu`() = runTest {
-        val presenter = aRoomListPresenter()
+        val presenter = createRoomListPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -265,7 +265,7 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - hide context menu`() = runTest {
-        val presenter = aRoomListPresenter()
+        val presenter = createRoomListPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -288,7 +288,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - leave room calls into leave room presenter`() = runTest {
         val leaveRoomPresenter = LeaveRoomPresenterFake()
-        val presenter = aRoomListPresenter(leaveRoomPresenter = leaveRoomPresenter)
+        val presenter = createRoomListPresenter(leaveRoomPresenter = leaveRoomPresenter)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -299,7 +299,7 @@ class RoomListPresenterTests {
         }
     }
 
-    private fun TestScope.aRoomListPresenter(
+    private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
