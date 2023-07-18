@@ -16,7 +16,6 @@
 
 package io.element.android.appnav.loggedin
 
-import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,14 +31,12 @@ fun LoggedInView(
     state: LoggedInState,
     modifier: Modifier = Modifier
 ) {
-    val activity = LocalContext.current as? Activity
+    val context = LocalContext.current
 
     PermissionsView(
         state = state.permissionsState,
         modifier = modifier,
-        openSystemSettings = {
-            activity?.let { openAppSettingsPage(it) }
-        }
+        openSystemSettings = context::openAppSettingsPage
     )
 }
 

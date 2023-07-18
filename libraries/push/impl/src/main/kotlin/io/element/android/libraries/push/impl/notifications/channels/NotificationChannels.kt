@@ -165,15 +165,15 @@ class NotificationChannels @Inject constructor(
         private fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 
         fun openSystemSettingsForSilentCategory(activity: Activity) {
-            startNotificationChannelSettingsIntent(activity, SILENT_NOTIFICATION_CHANNEL_ID)
+            activity.startNotificationChannelSettingsIntent(SILENT_NOTIFICATION_CHANNEL_ID)
         }
 
         fun openSystemSettingsForNoisyCategory(activity: Activity) {
-            startNotificationChannelSettingsIntent(activity, NOISY_NOTIFICATION_CHANNEL_ID)
+            activity.startNotificationChannelSettingsIntent(NOISY_NOTIFICATION_CHANNEL_ID)
         }
 
         fun openSystemSettingsForCallCategory(activity: Activity) {
-            startNotificationChannelSettingsIntent(activity, CALL_NOTIFICATION_CHANNEL_ID)
+            activity.startNotificationChannelSettingsIntent(CALL_NOTIFICATION_CHANNEL_ID)
         }
     }
 }

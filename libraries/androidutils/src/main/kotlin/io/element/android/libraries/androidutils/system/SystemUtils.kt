@@ -76,9 +76,9 @@ fun Context.getApplicationLabel(packageName: String): String {
 /**
  * Return true it the user has enabled the do not disturb mode.
  */
-fun isDoNotDisturbModeOn(context: Context): Boolean {
+fun Context.isDoNotDisturbModeOn(): Boolean {
     // We cannot use NotificationManagerCompat here.
-    val setting = context.getSystemService<NotificationManager>()!!.currentInterruptionFilter
+    val setting = getSystemService<NotificationManager>()!!.currentInterruptionFilter
 
     return setting == NotificationManager.INTERRUPTION_FILTER_NONE ||
         setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
@@ -92,10 +92,10 @@ fun isDoNotDisturbModeOn(context: Context): Boolean {
  * will return false and the notification privacy will fallback to "LOW_DETAIL".
  */
 @SuppressLint("BatteryLife")
-fun requestDisablingBatteryOptimization(activity: Activity, activityResultLauncher: ActivityResultLauncher<Intent>) {
+fun Context.requestDisablingBatteryOptimization(activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-    intent.data = Uri.parse("package:" + activity.packageName)
+    intent.data = Uri.parse("package:$packageName")
     activityResultLauncher.launch(intent)
 }
 
@@ -106,50 +106,48 @@ fun requestDisablingBatteryOptimization(activity: Activity, activityResultLaunch
 /**
  * Copy a text to the clipboard, and display a Toast when done.
  *
- * @param context the context
+ * @receiver the context
  * @param text the text to copy
  * @param toastMessage content of the toast message as a String resource. Null for no toast
  */
-fun copyToClipboard(
-    context: Context,
+fun Context.copyToClipboard(
     text: CharSequence,
     toastMessage: String? = null
 ) {
-    CopyToClipboardUseCase(context).execute(text)
-    toastMessage?.let { context.toast(it) }
+    CopyToClipboardUseCase(this).execute(text)
+    toastMessage?.let { toast(it) }
 }
 
 /**
  * Shows notification settings for the current app.
  * In android O will directly opens the notification settings, in lower version it will show the App settings
  */
-fun startNotificationSettingsIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
+fun Context.startNotificationSettingsIntent(activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-        intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
     } else {
         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.data = Uri.fromParts("package", context.packageName, null)
+        intent.data = Uri.fromParts("package", packageName, null)
     }
     activityResultLauncher.launch(intent)
 }
 
-fun openAppSettingsPage(
-    activity: Activity,
-    noActivityFoundMessage: String = activity.getString(R.string.error_no_compatible_app_found),
+fun Context.openAppSettingsPage(
+    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     try {
-        activity.startActivity(
+        startActivity(
             Intent().apply {
                 action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                data = Uri.fromParts("package", activity.packageName, null)
+                data = Uri.fromParts("package", packageName, null)
             }
         )
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(noActivityFoundMessage)
+        toast(noActivityFoundMessage)
     }
 }
 
@@ -157,52 +155,49 @@ fun openAppSettingsPage(
  * Shows notification system settings for the given channel id.
  */
 @TargetApi(Build.VERSION_CODES.O)
-fun startNotificationChannelSettingsIntent(activity: Activity, channelID: String) {
+fun Activity.startNotificationChannelSettingsIntent(channelID: String) {
     if (!supportNotificationChannels()) return
     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
-        putExtra(Settings.EXTRA_APP_PACKAGE, activity.packageName)
+        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
         putExtra(Settings.EXTRA_CHANNEL_ID, channelID)
     }
-    activity.startActivity(intent)
+    startActivity(intent)
 }
 
-fun startAddGoogleAccountIntent(
-    context: Context,
+fun Context.startAddGoogleAccountIntent(
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
+    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
     intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(noActivityFoundMessage)
+        toast(noActivityFoundMessage)
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun startInstallFromSourceIntent(
-    context: Context,
+fun Context.startInstallFromSourceIntent(
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
+    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
-        .setData(Uri.parse(String.format("package:%s", context.packageName)))
+        .setData(Uri.parse(String.format("package:%s", packageName)))
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(noActivityFoundMessage)
+        toast(noActivityFoundMessage)
     }
 }
 
-fun startSharePlainTextIntent(
-    context: Context,
+fun Context.startSharePlainTextIntent(
     activityResultLauncher: ActivityResultLauncher<Intent>?,
     chooserTitle: String?,
     text: String,
     subject: String? = null,
     extraTitle: String? = null,
-    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
+    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
@@ -220,17 +215,16 @@ fun startSharePlainTextIntent(
         if (activityResultLauncher != null) {
             activityResultLauncher.launch(intent)
         } else {
-            context.startActivity(intent)
+            startActivity(intent)
         }
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(noActivityFoundMessage)
+        toast(noActivityFoundMessage)
     }
 }
 
-fun startImportTextFromFileIntent(
-    context: Context,
+fun Context.startImportTextFromFileIntent(
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
+    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "text/plain"
@@ -238,7 +232,7 @@ fun startImportTextFromFileIntent(
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(noActivityFoundMessage)
+        toast(noActivityFoundMessage)
     }
 }
 
