@@ -57,7 +57,7 @@ fun ElementLogoAtom(
 ) {
     val blur = if (darkTheme) 160.dp else 24.dp
     //box-shadow: 0px 6.075949668884277px 24.30379867553711px 0px #1B1D2280;
-    val shadowColor = if (darkTheme) Color.Black.copy(alpha = 0.4f) else Color(0x401B1D22)
+    val shadowColor = if (darkTheme) size.shadowColorDark else size.shadowColorLight
     val backgroundColor = if (darkTheme) Color.White.copy(alpha = 0.2f) else Color.White.copy(alpha = 0.4f)
     val borderColor = if (darkTheme) Color.White.copy(alpha = 0.8f) else Color.White.copy(alpha = 0.4f)
     Box(
@@ -72,7 +72,7 @@ fun ElementLogoAtom(
                 .shapeShadow(
                     color = shadowColor,
                     cornerRadius = size.cornerRadius,
-                    blurRadius = 32.dp,
+                    blurRadius = size.shadowRadius,
                     offsetY = 8.dp,
                 )
         )
@@ -96,12 +96,18 @@ sealed class ElementLogoAtomSize(
     val logoSize: Dp,
     val cornerRadius: Dp,
     val borderWidth: Dp,
+    val shadowColorDark: Color,
+    val shadowColorLight: Color,
+    val shadowRadius: Dp,
 ) {
     object Medium : ElementLogoAtomSize(
         outerSize = 120.dp,
         logoSize = 83.5.dp,
         cornerRadius = 33.dp,
         borderWidth = 0.38.dp,
+        shadowColorDark = Color.Black.copy(alpha = 0.4f),
+        shadowColorLight = Color(0x401B1D22),
+        shadowRadius = 32.dp,
     )
 
     object Large : ElementLogoAtomSize(
@@ -109,6 +115,19 @@ sealed class ElementLogoAtomSize(
         logoSize = 110.dp,
         cornerRadius = 44.dp,
         borderWidth = 1.dp,
+        shadowColorDark = Color.Black.copy(alpha = 0.4f),
+        shadowColorLight = Color(0x401B1D22),
+        shadowRadius = 32.dp,
+    )
+
+    object Huge : ElementLogoAtomSize(
+        outerSize = 158.dp,
+        logoSize = 110.dp,
+        cornerRadius = 44.dp,
+        borderWidth = 0.5.dp,
+        shadowColorDark = Color.Black,
+        shadowColorLight = Color(0x801B1D22),
+        shadowRadius = 60.dp,
     )
 }
 
@@ -163,11 +182,17 @@ internal fun ElementLogoAtomLargePreview() {
 }
 
 @Composable
+@DayNightPreviews
+internal fun ElementLogoAtomHugePreview() {
+    ContentToPreview(ElementLogoAtomSize.Huge)
+}
+
+@Composable
 private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize) {
     ElementPreview {
         Box(
             Modifier
-                .size(elementLogoAtomSize.outerSize + 64.dp)
+                .size(elementLogoAtomSize.outerSize + elementLogoAtomSize.shadowRadius * 2)
                 .background(ElementTheme.colors.bgSubtlePrimary),
             contentAlignment = Alignment.Center
         ) {
