@@ -211,7 +211,6 @@ class InviteListPresenterTests {
 
             skipItems(2)
 
-            Truth.assertThat(room.isInviteRejected).isTrue()
             Truth.assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
     }
@@ -225,7 +224,7 @@ class InviteListPresenterTests {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(client)
         val ex = Throwable("Ruh roh!")
-        room.givenRejectInviteResult(Result.failure(ex))
+        room.givenLeaveRoomError(ex)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -242,7 +241,6 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
 
-            Truth.assertThat(room.isInviteRejected).isTrue()
             Truth.assertThat(newState.declinedAction).isEqualTo(Async.Failure<Unit>(ex))
         }
     }
@@ -256,7 +254,7 @@ class InviteListPresenterTests {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(client)
         val ex = Throwable("Ruh roh!")
-        room.givenRejectInviteResult(Result.failure(ex))
+        room.givenLeaveRoomError(ex)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -298,7 +296,6 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
 
-            Truth.assertThat(room.isInviteAccepted).isTrue()
             Truth.assertThat(newState.acceptedAction).isEqualTo(Async.Success(A_ROOM_ID))
             Truth.assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
@@ -313,7 +310,7 @@ class InviteListPresenterTests {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(client)
         val ex = Throwable("Ruh roh!")
-        room.givenAcceptInviteResult(Result.failure(ex))
+        room.givenJoinRoomResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -322,10 +319,7 @@ class InviteListPresenterTests {
             val originalState = awaitItem()
             originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
 
-            val newState = awaitItem()
-
-            Truth.assertThat(room.isInviteAccepted).isTrue()
-            Truth.assertThat(newState.acceptedAction).isEqualTo(Async.Failure<RoomId>(ex))
+            Truth.assertThat(awaitItem().acceptedAction).isEqualTo(Async.Failure<RoomId>(ex))
         }
     }
 
@@ -338,7 +332,7 @@ class InviteListPresenterTests {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(client)
         val ex = Throwable("Ruh roh!")
-        room.givenAcceptInviteResult(Result.failure(ex))
+        room.givenJoinRoomResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
