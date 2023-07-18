@@ -61,6 +61,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
@@ -70,6 +71,7 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
@@ -80,7 +82,7 @@ class RustMatrixClient constructor(
     private val client: Client,
     private val syncService: ClientSyncService,
     private val sessionStore: SessionStore,
-    appCoroutineScope: CoroutineScope,
+    private val appCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val baseDirectory: File,
     baseCacheDirectory: File,
@@ -103,10 +105,20 @@ class RustMatrixClient constructor(
 
     private val notificationService = RustNotificationService(notificationClient)
 
+    private val isLoggingOut = AtomicBoolean(false)
+
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
-            //TODO handle this
-            Timber.v("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
+            Timber.w("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
+            if (isLoggingOut.getAndSet(true).not()) {
+                Timber.v("didReceiveAuthError -> do the cleanup")
+                //TODO handle isSoftLogout parameter.
+                appCoroutineScope.launch {
+                    doLogout(doRequest = false)
+                }
+            } else {
+                Timber.v("didReceiveAuthError -> already cleaning up")
+            }
         }
     }
 
@@ -274,11 +286,15 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout() = withContext(sessionDispatcher) {
-        try {
-            client.logout()
-        } catch (failure: Throwable) {
-            Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+    override suspend fun logout() = doLogout(doRequest = true)
+
+    private suspend fun doLogout(doRequest: Boolean) = withContext(sessionDispatcher) {
+        if (doRequest) {
+            try {
+                client.logout()
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+            }
         }
         close()
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
