@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl
+package io.element.android.features.roomlist.impl.datasource
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
+import io.element.android.features.roomlist.impl.InvitesState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

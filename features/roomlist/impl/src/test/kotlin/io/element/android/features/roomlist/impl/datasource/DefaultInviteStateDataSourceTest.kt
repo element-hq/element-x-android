@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl
+package io.element.android.features.roomlist.impl.datasource
 
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
-import io.element.android.features.roomlist.impl.datasource.DefaultInviteStateDataSource
+import io.element.android.features.roomlist.impl.InvitesState
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
