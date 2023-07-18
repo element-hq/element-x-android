@@ -114,16 +114,6 @@ sealed class ElementLogoAtomSize(
         outerSize = 158.dp,
         logoSize = 110.dp,
         cornerRadius = 44.dp,
-        borderWidth = 1.dp,
-        shadowColorDark = Color.Black.copy(alpha = 0.4f),
-        shadowColorLight = Color(0x401B1D22),
-        shadowRadius = 32.dp,
-    )
-
-    object Huge : ElementLogoAtomSize(
-        outerSize = 158.dp,
-        logoSize = 110.dp,
-        cornerRadius = 44.dp,
         borderWidth = 0.5.dp,
         shadowColorDark = Color.Black,
         shadowColorLight = Color(0x801B1D22),
@@ -179,12 +169,6 @@ internal fun ElementLogoAtomMediumPreview() {
 @DayNightPreviews
 internal fun ElementLogoAtomLargePreview() {
     ContentToPreview(ElementLogoAtomSize.Large)
-}
-
-@Composable
-@DayNightPreviews
-internal fun ElementLogoAtomHugePreview() {
-    ContentToPreview(ElementLogoAtomSize.Huge)
 }
 
 @Composable

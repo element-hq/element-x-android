@@ -94,8 +94,8 @@ private fun OnBoardingContent(modifier: Modifier = Modifier) {
             )
         ) {
             ElementLogoAtom(
-                size = ElementLogoAtomSize.Huge,
-                modifier = Modifier.padding(top = ElementLogoAtomSize.Huge.shadowRadius / 2)
+                size = ElementLogoAtomSize.Large,
+                modifier = Modifier.padding(top = ElementLogoAtomSize.Large.shadowRadius / 2)
             )
         }
         Box(
