@@ -102,6 +102,8 @@ class TimelinePresenterTest {
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitItem()
+            // Wait for timeline items to be populated
+            skipItems(1)
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
@@ -124,6 +126,8 @@ class TimelinePresenterTest {
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitItem()
+            // Wait for timeline items to be populated
+            skipItems(1)
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
@@ -146,6 +150,8 @@ class TimelinePresenterTest {
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitItem()
+            // Wait for timeline items to be populated
+            skipItems(1)
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
