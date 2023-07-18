@@ -109,7 +109,7 @@ class MessagesPresenter @AssistedInject constructor(
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val roomName by produceState(initialValue = room.displayName, key1 = syncUpdateFlow.value){
+        val roomName by produceState(initialValue = room.displayName, key1 = syncUpdateFlow.value) {
             value = room.displayName
         }
         val roomAvatar by produceState(initialValue = room.avatarData(), key1 = syncUpdateFlow.value) {
