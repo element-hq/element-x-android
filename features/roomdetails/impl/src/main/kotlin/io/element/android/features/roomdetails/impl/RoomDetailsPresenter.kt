@@ -32,6 +32,8 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
+import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import javax.inject.Inject
 
@@ -118,6 +120,6 @@ class RoomDetailsPresenter @Inject constructor(
 
     @Composable
     private fun getCanSendStateEvent(membersState: MatrixRoomMembersState, type: StateEventType) = produceState(false, membersState) {
-        value = room.canSendStateEvent(type).getOrElse { false }
+        value = room.canSendState(type).getOrElse { false }
     }
 }

@@ -71,7 +71,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.libraries.matrix.ui.room.canSendEventAsState
+import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -107,7 +107,7 @@ class MessagesPresenter @AssistedInject constructor(
         val retryState = retrySendMenuPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val userHasPermissionToSendMessage by room.canSendEventAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val roomName by produceState(initialValue = room.displayName, key1 = syncUpdateFlow.value){
             value = room.displayName
         }

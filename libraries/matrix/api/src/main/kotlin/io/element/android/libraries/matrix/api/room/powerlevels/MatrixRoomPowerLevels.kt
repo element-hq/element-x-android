@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.ui.room
+package io.element.android.libraries.matrix.api.room.powerlevels
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.produceState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
-import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
+import io.element.android.libraries.matrix.api.room.StateEventType
 
-@Composable
-fun MatrixRoom.canSendMessageAsState(type: MessageEventType, updateKey: Long): State<Boolean> {
-    return produceState(initialValue = true, key1 = updateKey) {
-        value = canSendMessage(type).getOrElse { true }
-    }
-}
+/**
+ * Shortcut for calling [MatrixRoom.canUserInvite] with out own user.
+ */
+suspend fun MatrixRoom.canInvite(): Result<Boolean> = canUserInvite(sessionId)
 
+/**
+ * Shortcut for calling [MatrixRoom.canUserSendState] with out own user.
+ */
+suspend fun MatrixRoom.canSendState(type: StateEventType): Result<Boolean> = canUserSendState(sessionId, type)
+
+/**
+ * Shortcut for calling [MatrixRoom.canUserSendMessage] with out own user.
+ */
+suspend fun MatrixRoom.canSendMessage(type: MessageEventType): Result<Boolean> = canUserSendMessage(sessionId, type)

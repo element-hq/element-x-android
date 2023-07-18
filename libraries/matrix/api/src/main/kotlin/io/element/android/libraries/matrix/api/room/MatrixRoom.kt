@@ -101,11 +101,11 @@ interface MatrixRoom : Closeable {
 
     suspend fun inviteUserById(id: UserId): Result<Unit>
 
-    suspend fun canInvite(): Result<Boolean>
+    suspend fun canUserInvite(userId: UserId): Result<Boolean>
 
-    suspend fun canSendStateEvent(type: StateEventType): Result<Boolean>
+    suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean>
 
-    suspend fun canSendEvent(type: MessageEventType): Result<Boolean>
+    suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean>
 
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
@@ -136,3 +136,5 @@ interface MatrixRoom : Closeable {
         assetType: AssetType? = null,
     ): Result<Unit>
 }
+
+

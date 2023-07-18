@@ -43,7 +43,6 @@ import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.backPaginationStatusFlow
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.libraries.sessionstorage.api.SessionData
-import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -58,7 +57,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
@@ -82,6 +80,7 @@ class RustMatrixRoom(
 
     // Create a dispatcher for all room methods...
     private val roomDispatcher = coroutineDispatchers.io.limitedParallelism(32)
+
     //...except getMember methods as it could quickly fill the roomDispatcher...
     private val roomMembersDispatcher = coroutineDispatchers.io.limitedParallelism(8)
 
@@ -275,21 +274,21 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun canInvite(): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.member(sessionId.value).use(RoomMember::canInvite)
+    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserInvite(userId.value)
         }
     }
 
-    override suspend fun canSendStateEvent(type: StateEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.member(sessionId.value).use { it.canSendState(type.map()) }
+    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendState(userId.value, type.map())
         }
     }
 
-    override suspend fun canSendEvent(type: MessageEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.member(sessionId.value).use { it.canSendMessage(type.map()) }
+    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendMessage(userId.value, type.map())
         }
     }
 
