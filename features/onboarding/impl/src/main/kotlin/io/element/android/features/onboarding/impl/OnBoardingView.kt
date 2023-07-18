@@ -16,7 +16,6 @@
 
 package io.element.android.features.onboarding.impl
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
@@ -33,17 +31,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
+import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -85,10 +83,6 @@ fun OnBoardingView(
 
 @Composable
 private fun OnBoardingContent(modifier: Modifier = Modifier) {
-    // Note: having a night variant of R.drawable.onboarding_icon in the folder `drawable-night` is working
-    // at runtime, but is not in Android Studio Preview. So I prefer to handle this manually.
-    val isLight = ElementTheme.colors.isLight
-    val iconDrawableRes = if (isLight) R.drawable.onboarding_icon_light else R.drawable.onboarding_icon_dark
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -99,14 +93,9 @@ private fun OnBoardingContent(modifier: Modifier = Modifier) {
                 verticalBias = -0.4f
             )
         ) {
-            // Dark and light icon does not have the same size, add padding to the smaller one
-            val imagePadding = if (isLight) 28.dp else 0.dp
-            Image(
-                modifier = Modifier
-                    .size(278.dp)
-                    .padding(imagePadding),
-                painter = painterResource(id = iconDrawableRes),
-                contentDescription = null,
+            ElementLogoAtom(
+                size = ElementLogoAtomSize.Large,
+                modifier = Modifier.padding(top = ElementLogoAtomSize.Large.shadowRadius / 2)
             )
         }
         Box(
@@ -200,17 +189,10 @@ private fun OnBoardingButtons(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun OnBoardingScreenLightPreview(@PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun OnBoardingScreenDarkPreview(@PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: OnBoardingState) {
+internal fun OnBoardingScreenPreview(
+    @PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState
+) = ElementPreview {
     OnBoardingView(state)
 }
