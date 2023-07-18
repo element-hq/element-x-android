@@ -52,4 +52,5 @@ internal fun aMessageEvent(
     localSendState = sendState,
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,
+    origin = null
 )

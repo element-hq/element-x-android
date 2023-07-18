@@ -19,6 +19,8 @@ package io.element.android.libraries.matrix.test.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,6 +37,8 @@ class FakeMatrixTimeline(
 
     var sendReadReceiptCount = 0
         private set
+
+    var sendReadReceiptLatch: CompletableDeferred<Unit>? = null
 
     fun updatePaginationState(update: (MatrixTimeline.PaginationState.() -> MatrixTimeline.PaginationState)) {
         _paginationState.getAndUpdate(update)
@@ -62,13 +66,13 @@ class FakeMatrixTimeline(
         return Result.success(Unit)
     }
 
-
-    override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
-        return Result.success(Unit)
+    override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = simulateLongTask {
+        Result.success(Unit)
     }
 
-    override suspend fun sendReadReceipt(eventId: EventId): Result<Unit> {
+    override suspend fun sendReadReceipt(eventId: EventId): Result<Unit> = simulateLongTask {
         sendReadReceiptCount++
-        return Result.success(Unit)
+        sendReadReceiptLatch?.complete(Unit)
+        Result.success(Unit)
     }
 }
