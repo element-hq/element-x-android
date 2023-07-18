@@ -3,8 +3,7 @@ appId: ${APP_ID}
 # This is the name of one room
 - tapOn: ${ROOM_NAME}
 - takeScreenshot: build/maestro/500-Timeline
-- runFlow: timeline/text.yaml
-- runFlow: timeline/location.yaml
-- hideKeyboard
+- runFlow: messages/text.yaml
+- runFlow: messages/location.yaml
 - back
 - runFlow: ../../assertions/assertHomeDisplayed.yaml

@@ -4,4 +4,5 @@ appId: ${APP_ID}
 - tapOn: "Message"
 - inputText: "Hello world!"
 - tapOn: "Send"
+- hideKeyboard
 - takeScreenshot: build/maestro/511-Timeline

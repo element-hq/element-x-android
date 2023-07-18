@@ -106,18 +106,18 @@ fun ShowLocationView(
             MapboxMap(
                 styleUri = rememberTileStyleUrl(),
                 modifier = Modifier.fillMaxSize(),
-                images = mapOf("pin" to DesignSystemR.drawable.pin).toImmutableMap(),
+                images = mapOf(PIN_ID to DesignSystemR.drawable.pin).toImmutableMap(),
                 cameraPositionState = rememberCameraPositionState {
                     position = CameraPosition.Builder()
                         .target(LatLng(state.location.lat, state.location.lon))
-                        .zoom(15.0)
+                        .zoom(MapDefaults.DEFAULT_ZOOM)
                         .build()
                 },
                 uiSettings = MapDefaults.uiSettings,
                 symbolManagerSettings = MapDefaults.symbolManagerSettings,
             ) {
                 Symbol(
-                    iconId = "pin",
+                    iconId = PIN_ID,
                     state = rememberSymbolState(
                         position = LatLng(state.location.lat, state.location.lon)
                     ),
@@ -145,3 +145,6 @@ private fun ContentToPreview(state: ShowLocationState) {
         onBackPressed = {},
     )
 }
+
+private const val PIN_ID = "pin"
+

@@ -19,11 +19,11 @@ package io.element.android.features.location.impl
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
 import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.show.LocationActions
+import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
@@ -48,13 +48,7 @@ class AndroidLocationActions @Inject constructor(
     }
 
     override fun openSettings() {
-        context.startActivity(
-            Intent().apply {
-                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                data = Uri.Builder().scheme("package").opaquePart(context.packageName).build()
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-        )
+        context.openAppSettingsPage()
     }
 }
 
