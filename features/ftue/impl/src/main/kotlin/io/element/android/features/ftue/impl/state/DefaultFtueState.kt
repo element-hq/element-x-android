@@ -39,6 +39,11 @@ class DefaultFtueState @Inject constructor(
 
     override val shouldDisplayFlow = MutableStateFlow(isAnyStepIncomplete())
 
+    override suspend fun reset() {
+        welcomeScreenState.reset()
+        analyticsService.reset()
+    }
+
     init {
         analyticsService.didAskUserConsent()
             .onEach { updateState() }

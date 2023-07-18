@@ -17,6 +17,7 @@
 package io.element.android.features.ftue.impl.welcome.state
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DefaultPreferences
@@ -27,7 +28,7 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class AndroidWelcomeScreenState @Inject constructor(
     @DefaultPreferences private val sharedPreferences: SharedPreferences,
-): WelcomeScreenState {
+) : WelcomeScreenState {
 
     companion object {
         private const val IS_WELCOME_SCREEN_SHOWN = "is_welcome_screen_shown"
@@ -39,5 +40,11 @@ class AndroidWelcomeScreenState @Inject constructor(
 
     override fun setWelcomeScreenShown() {
         sharedPreferences.edit().putBoolean(IS_WELCOME_SCREEN_SHOWN, true).apply()
+    }
+
+    override fun reset() {
+        sharedPreferences.edit {
+            remove(IS_WELCOME_SCREEN_SHOWN)
+        }
     }
 }

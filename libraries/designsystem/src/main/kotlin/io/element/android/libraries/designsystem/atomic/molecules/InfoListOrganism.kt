@@ -31,6 +31,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.InfoListItemMolecu
 import io.element.android.libraries.designsystem.atomic.atoms.InfoListItemPosition
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -54,7 +55,13 @@ fun InfoListOrganism(
                 else -> InfoListItemPosition.Middle
             }
             InfoListItemMolecule(
-                message = { Text(item.message, style = textStyle) },
+                message = {
+                    Text(
+                        text = item.message,
+                        style = textStyle,
+                        color = ElementTheme.colors.textPrimary,
+                    )
+                },
                 icon = {
                     if (item.iconId != null) {
                         Icon(resourceId = item.iconId, contentDescription = null, tint = iconTint)
