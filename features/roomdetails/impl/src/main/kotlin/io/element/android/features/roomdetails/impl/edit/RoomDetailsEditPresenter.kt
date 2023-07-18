@@ -35,6 +35,7 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -79,9 +80,9 @@ class RoomDetailsEditPresenter @Inject constructor(
         var canChangeAvatar by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
-            canChangeName = room.canSendStateEvent(StateEventType.ROOM_NAME).getOrElse { false }
-            canChangeTopic = room.canSendStateEvent(StateEventType.ROOM_TOPIC).getOrElse { false }
-            canChangeAvatar = room.canSendStateEvent(StateEventType.ROOM_AVATAR).getOrElse { false }
+            canChangeName = room.canSendState(StateEventType.ROOM_NAME).getOrElse { false }
+            canChangeTopic = room.canSendState(StateEventType.ROOM_TOPIC).getOrElse { false }
+            canChangeAvatar = room.canSendState(StateEventType.ROOM_AVATAR).getOrElse { false }
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(

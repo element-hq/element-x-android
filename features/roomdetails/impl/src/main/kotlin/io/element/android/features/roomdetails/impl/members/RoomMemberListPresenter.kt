@@ -22,6 +22,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -32,6 +33,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -52,7 +54,9 @@ class RoomMemberListPresenter @Inject constructor(
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
         val membersState by room.membersStateFlow.collectAsState()
-        val canInvite by getCanInvite(membersState = membersState)
+        val canInvite by produceState(initialValue = false, key1 = membersState) {
+            value = room.canInvite().getOrElse { false }
+        }
 
         LaunchedEffect(Unit) {
             withContext(coroutineDispatchers.io) {
@@ -98,13 +102,5 @@ class RoomMemberListPresenter @Inject constructor(
         )
     }
 
-    @Composable
-    private fun getCanInvite(membersState: MatrixRoomMembersState): State<Boolean> {
-        val canInvite = remember(membersState) { mutableStateOf(false) }
-        LaunchedEffect(membersState) {
-            canInvite.value = room.canInvite().getOrElse { false }
-        }
-        return canInvite
-    }
 }
 

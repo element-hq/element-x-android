@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -31,6 +30,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -202,15 +202,15 @@ class FakeMatrixRoom(
         inviteUserResult
     }
 
-    override suspend fun canInvite(): Result<Boolean> {
+    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
         return canInviteResult
     }
 
-    override suspend fun canSendStateEvent(type: StateEventType): Result<Boolean> {
+    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
         return canSendStateResults[type] ?: Result.failure(IllegalStateException("No fake answer"))
     }
 
-    override suspend fun canSendEvent(type: MessageEventType): Result<Boolean> {
+    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
         return canSendEventResults[type] ?: Result.failure(IllegalStateException("No fake answer"))
     }
 

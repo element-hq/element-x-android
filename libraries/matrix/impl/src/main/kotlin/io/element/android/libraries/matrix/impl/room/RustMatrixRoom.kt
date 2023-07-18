@@ -57,7 +57,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
@@ -200,19 +199,17 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun userDisplayName(userId: UserId): Result<String?> =
-        withContext(roomDispatcher) {
-            runCatching {
-                innerRoom.memberDisplayName(userId.value)
-            }
+    override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.memberDisplayName(userId.value)
         }
+    }
 
-    override suspend fun userAvatarUrl(userId: UserId): Result<String?> =
-        withContext(roomDispatcher) {
-            runCatching {
-                innerRoom.memberAvatarUrl(userId.value)
-            }
+    override suspend fun userAvatarUrl(userId: UserId): Result<String?> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.memberAvatarUrl(userId.value)
         }
+    }
 
     override suspend fun sendMessage(message: String): Result<Unit> = withContext(roomDispatcher) {
         val transactionId = genTransactionId()
@@ -269,21 +266,21 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun canInvite(): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.member(sessionId.value).use(RoomMember::canInvite)
+    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserInvite(userId.value)
         }
     }
 
-    override suspend fun canSendStateEvent(type: StateEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.member(sessionId.value).use { it.canSendState(type.map()) }
+    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendState(userId.value, type.map())
         }
     }
 
-    override suspend fun canSendEvent(type: MessageEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.member(sessionId.value).use { it.canSendMessage(type.map()) }
+    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendMessage(userId.value, type.map())
         }
     }
 
@@ -325,48 +322,42 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> =
-        withContext(roomDispatcher) {
-            runCatching {
-                innerRoom.retrySend(transactionId.value)
-            }
+    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.retrySend(transactionId.value)
         }
+    }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
-        withContext(roomDispatcher) {
-            runCatching {
-                innerRoom.cancelSend(transactionId.value)
-            }
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.cancelSend(transactionId.value)
         }
+    }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> =
-        withContext(roomDispatcher) {
-            runCatching {
-                innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList())
-            }
+    override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList())
         }
+    }
 
-    override suspend fun removeAvatar(): Result<Unit> =
-        withContext(roomDispatcher) {
-            runCatching {
-                innerRoom.removeAvatar()
-            }
+    override suspend fun removeAvatar(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.removeAvatar()
         }
+    }
 
-    override suspend fun setName(name: String): Result<Unit> =
-        withContext(roomDispatcher) {
-            runCatching {
-                innerRoom.setName(name)
-            }
+    override suspend fun setName(name: String): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.setName(name)
         }
+    }
 
-    override suspend fun setTopic(topic: String): Result<Unit> =
-        withContext(roomDispatcher) {
-            runCatching {
-                innerRoom.setTopic(topic)
-            }
+    override suspend fun setTopic(topic: String): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.setTopic(topic)
         }
+    }
 
     private suspend fun fetchMembers() = withContext(roomDispatcher) {
         runCatching {
@@ -411,4 +402,3 @@ private suspend fun sendAttachment(handle: () -> SendAttachmentJoinHandle): Resu
         }
     }
 }
-
