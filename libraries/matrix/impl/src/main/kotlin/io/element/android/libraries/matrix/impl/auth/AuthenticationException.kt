@@ -19,7 +19,7 @@ package io.element.android.libraries.matrix.impl.auth
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.matrix.rustcomponents.sdk.AuthenticationException as RustAuthenticationException
 
-fun Throwable.mapAuthenticationException(): Throwable {
+fun Throwable.mapAuthenticationException(): AuthenticationException {
     return when (this) {
         is RustAuthenticationException.ClientMissing -> AuthenticationException.ClientMissing(this.message!!)
         is RustAuthenticationException.Generic -> AuthenticationException.Generic(this.message!!)
@@ -35,6 +35,6 @@ fun Throwable.mapAuthenticationException(): Throwable {
         is RustAuthenticationException.OidcNotSupported -> AuthenticationException.OidcError("OidcNotSupported", message!!)
          */
 
-        else -> this
+        else -> AuthenticationException.Generic(this.message ?: "Unknown error")
     }
 }

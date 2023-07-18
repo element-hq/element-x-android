@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClient
+import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -45,6 +46,7 @@ import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
 import java.io.File
+import java.util.Date
 import javax.inject.Inject
 import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
 
@@ -94,7 +96,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                 throw IllegalStateException("No session to restore with id $sessionId")
             }
         }.mapFailure { failure ->
-            failure.mapAuthenticationException()
+            failure.mapClientException()
         }
     }
 
@@ -208,4 +210,5 @@ private fun Session.toSessionData() = SessionData(
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl,
     slidingSyncProxy = slidingSyncProxy,
+    loginTimestamp = Date(),
 )

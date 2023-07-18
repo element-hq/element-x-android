@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import java.util.UUID
 
@@ -38,7 +39,7 @@ val A_ROOM_ID_2 = RoomId("!aRoomId2:domain")
 val A_THREAD_ID = ThreadId("\$aThreadId")
 val AN_EVENT_ID = EventId("\$anEventId")
 val AN_EVENT_ID_2 = EventId("\$anEventId2")
-const val A_TRANSACTION_ID = "aTransactionId"
+val A_TRANSACTION_ID = TransactionId("aTransactionId")
 const val A_UNIQUE_ID = "aUniqueId"
 
 const val A_ROOM_NAME = "A room name"

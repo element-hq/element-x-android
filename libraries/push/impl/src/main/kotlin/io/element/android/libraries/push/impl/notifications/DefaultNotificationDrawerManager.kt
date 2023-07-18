@@ -23,18 +23,16 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
-import io.element.android.services.appnavstate.api.AppNavigationState
+import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -59,13 +57,12 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
-    private val matrixAuthenticationService: MatrixAuthenticationService,
+    private val matrixClientProvider: MatrixClientProvider,
 ) : NotificationDrawerManager {
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
     private val notificationState by lazy { createInitialNotificationState() }
-    private var currentAppNavigationState: AppNavigationState? = null
     private val firstThrottler = FirstThrottler(200)
 
     // TODO EAx add a setting per user for this
@@ -74,26 +71,25 @@ class DefaultNotificationDrawerManager @Inject constructor(
     init {
         // Observe application state
         coroutineScope.launch {
-            appNavigationStateService.appNavigationStateFlow
-                .collect { onAppNavigationStateChange(it) }
+            appNavigationStateService.appNavigationState
+                .collect { onAppNavigationStateChange(it.navigationState) }
         }
     }
 
-    private fun onAppNavigationStateChange(appNavigationState: AppNavigationState) {
-        currentAppNavigationState = appNavigationState
-        when (appNavigationState) {
-            AppNavigationState.Root -> {}
-            is AppNavigationState.Session -> {}
-            is AppNavigationState.Space -> {}
-            is AppNavigationState.Room -> {
+    private fun onAppNavigationStateChange(navigationState: NavigationState) {
+        when (navigationState) {
+            NavigationState.Root -> {}
+            is NavigationState.Session -> {}
+            is NavigationState.Space -> {}
+            is NavigationState.Room -> {
                 // Cleanup notification for current room
-                clearMessagesForRoom(appNavigationState.parentSpace.parentSession.sessionId, appNavigationState.roomId)
+                clearMessagesForRoom(navigationState.parentSpace.parentSession.sessionId, navigationState.roomId)
             }
-            is AppNavigationState.Thread -> {
+            is NavigationState.Thread -> {
                 onEnteringThread(
-                    appNavigationState.parentRoom.parentSpace.parentSession.sessionId,
-                    appNavigationState.parentRoom.roomId,
-                    appNavigationState.threadId
+                    navigationState.parentRoom.parentSpace.parentSession.sessionId,
+                    navigationState.parentRoom.roomId,
+                    navigationState.threadId
                 )
             }
         }
@@ -225,7 +221,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private suspend fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
         val eventsToRender = notificationState.updateQueuedEvents(this) { queuedEvents, renderedEvents ->
-            notifiableEventProcessor.process(queuedEvents.rawEvents(), currentAppNavigationState, renderedEvents).also {
+            notifiableEventProcessor.process(queuedEvents.rawEvents(), renderedEvents).also {
                 queuedEvents.clearAndAdd(it.onlyKeptEvents())
             }
         }
@@ -255,11 +251,10 @@ class DefaultNotificationDrawerManager @Inject constructor(
             val currentUser = tryOrNull(
                 onError = { Timber.e(it, "Unable to retrieve info for user ${sessionId.value}") },
                 operation = {
-                    val client = matrixAuthenticationService.restoreSession(sessionId).getOrNull()
-
+                    val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
                     // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-                    val myUserDisplayName = client?.loadUserDisplayName()?.getOrNull() ?: sessionId.value
-                    val userAvatarUrl = client?.loadUserAvatarURLString()?.getOrNull()
+                    val myUserDisplayName = client.loadUserDisplayName().getOrNull() ?: sessionId.value
+                    val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
                     MatrixUser(
                         userId = sessionId,
                         displayName = myUserDisplayName,
@@ -274,9 +269,5 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
             notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents)
         }
-    }
-
-    fun shouldIgnoreMessageEventInRoom(resolvedEvent: NotifiableMessageEvent): Boolean {
-        return resolvedEvent.shouldIgnoreEventInRoom(currentAppNavigationState)
     }
 }

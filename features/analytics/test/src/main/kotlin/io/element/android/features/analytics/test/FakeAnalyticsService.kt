@@ -67,4 +67,8 @@ class FakeAnalyticsService(
 
     override fun trackError(throwable: Throwable) {
     }
+
+    override suspend fun reset() {
+        didAskUserConsentFlow.value = false
+    }
 }

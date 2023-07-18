@@ -18,13 +18,12 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class MessageComposerState(
-    val text: StableCharSequence?,
+    val text: String?,
     val isFullScreen: Boolean,
     val hasFocus: Boolean,
     val mode: MessageComposerMode,
@@ -32,7 +31,7 @@ data class MessageComposerState(
     val attachmentsState: AttachmentsState,
     val eventSink: (MessageComposerEvents) -> Unit
 ) {
-    val isSendButtonVisible: Boolean = text?.charSequence.isNullOrEmpty().not()
+    val isSendButtonVisible: Boolean = text.isNullOrEmpty().not()
 }
 
 @Immutable

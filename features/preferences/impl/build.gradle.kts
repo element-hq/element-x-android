@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.rageshake.api)
     implementation(projects.features.analytics.api)
+    implementation(projects.features.ftue.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.features.logout.api)
     implementation(projects.services.toolbox.api)

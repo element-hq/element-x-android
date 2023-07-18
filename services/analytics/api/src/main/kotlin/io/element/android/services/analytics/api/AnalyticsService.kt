@@ -58,4 +58,9 @@ interface AnalyticsService: AnalyticsTracker, ErrorTracker {
      * To be called when a session is destroyed.
      */
     suspend fun onSignOut()
+
+    /**
+     * Reset the analytics service (will ask for user consent again).
+     */
+    suspend fun reset()
 }

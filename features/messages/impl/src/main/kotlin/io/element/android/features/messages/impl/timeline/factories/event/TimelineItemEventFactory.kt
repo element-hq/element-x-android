@@ -85,6 +85,7 @@ class TimelineItemEventFactory @Inject constructor(
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo(),
             debugInfo = currentTimelineItem.event.debugInfo,
+            origin = currentTimelineItem.event.origin,
         )
     }
 

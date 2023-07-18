@@ -22,8 +22,11 @@ import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * A service that tracks the navigation and foreground states of the app.
+ */
 interface AppNavigationStateService {
-    val appNavigationStateFlow: StateFlow<AppNavigationState>
+    val appNavigationState: StateFlow<AppNavigationState>
 
     fun onNavigateToSession(owner: String, sessionId: SessionId)
     fun onLeavingSession(owner: String)
@@ -37,3 +40,4 @@ interface AppNavigationStateService {
     fun onNavigateToThread(owner: String, threadId: ThreadId)
     fun onLeavingThread(owner: String)
 }
+

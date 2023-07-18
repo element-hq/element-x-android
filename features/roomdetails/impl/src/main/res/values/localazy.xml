@@ -12,7 +12,12 @@
   <string name="screen_room_details_edition_error_title">"Unable to update room"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
   <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
+  <string name="screen_room_details_error_loading_notification_settings">"An error occurred when loading notification settings."</string>
+  <string name="screen_room_details_error_muting">"Failed muting this room, please try again."</string>
+  <string name="screen_room_details_error_unmuting">"Failed unmuting this room, please try again."</string>
   <string name="screen_room_details_invite_people_title">"Invite people"</string>
+  <string name="screen_room_details_notification_mode_custom">"Custom"</string>
+  <string name="screen_room_details_notification_mode_default">"Default"</string>
   <string name="screen_room_details_notification_title">"Notifications"</string>
   <string name="screen_room_details_room_name_label">"Room name"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>

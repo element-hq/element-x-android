@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.textcomposer.MessageComposerMode
 
 open class MessageComposerStateProvider : PreviewParameterProvider<MessageComposerState> {
@@ -28,7 +27,7 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 }
 
 fun aMessageComposerState() = MessageComposerState(
-    text = StableCharSequence(""),
+    text = "",
     isFullScreen = false,
     hasFocus = false,
     mode = MessageComposerMode.Normal(content = ""),

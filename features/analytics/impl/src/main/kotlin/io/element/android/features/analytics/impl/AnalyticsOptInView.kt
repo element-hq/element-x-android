@@ -16,12 +16,11 @@
 
 package io.element.android.features.analytics.impl
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -48,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem
+import io.element.android.libraries.designsystem.atomic.molecules.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -60,6 +61,7 @@ import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun AnalyticsOptInView(
@@ -69,6 +71,16 @@ fun AnalyticsOptInView(
 ) {
     LogCompositions(tag = "Analytics", msg = "Root")
     val eventSink = state.eventSink
+
+    fun onTermsAccepted() {
+        eventSink(AnalyticsOptInEvents.EnableAnalytics(true))
+    }
+
+    fun onTermsDeclined() {
+        eventSink(AnalyticsOptInEvents.EnableAnalytics(false))
+    }
+
+    BackHandler(onBack = ::onTermsDeclined)
     HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
@@ -76,7 +88,13 @@ fun AnalyticsOptInView(
             .imePadding(),
         header = { AnalyticsOptInHeader(state, onClickTerms) },
         content = { AnalyticsOptInContent() },
-        footer = { AnalyticsOptInFooter(eventSink) })
+        footer = {
+            AnalyticsOptInFooter(
+                onTermsAccepted = ::onTermsAccepted,
+                onTermsDeclined = ::onTermsDeclined,
+            )
+        }
+    )
 }
 
 @Composable
@@ -115,6 +133,19 @@ private fun AnalyticsOptInHeader(
 }
 
 @Composable
+private fun CheckIcon(modifier: Modifier = Modifier) {
+    Icon(
+        modifier = modifier
+            .size(20.dp)
+            .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
+            .padding(2.dp),
+        imageVector = Icons.Rounded.Check,
+        contentDescription = null,
+        tint = ElementTheme.colors.textActionAccent,
+    )
+}
+
+@Composable
 private fun AnalyticsOptInContent(
     modifier: Modifier = Modifier,
 ) {
@@ -125,80 +156,45 @@ private fun AnalyticsOptInContent(
             verticalBias = -0.4f
         )
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            AnalyticsOptInContentRow(
-                text = stringResource(id = R.string.screen_analytics_prompt_data_usage),
-                idx = 0
-            )
-            AnalyticsOptInContentRow(
-                text = stringResource(id = R.string.screen_analytics_prompt_third_party_sharing),
-                idx = 1
-            )
-            AnalyticsOptInContentRow(
-                text = stringResource(id = R.string.screen_analytics_prompt_settings),
-                idx = 2
-            )
-        }
-    }
-}
-
-@Composable
-private fun AnalyticsOptInContentRow(
-    text: String,
-    idx: Int,
-    modifier: Modifier = Modifier,
-) {
-    val radius = 14.dp
-    val bgShape = when (idx) {
-        0 -> RoundedCornerShape(topStart = radius, topEnd = radius)
-        2 -> RoundedCornerShape(bottomStart = radius, bottomEnd = radius)
-        else -> RoundedCornerShape(0.dp)
-    }
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = ElementTheme.colors.temporaryColorBgSpecial,
-                shape = bgShape,
-            )
-            .padding(vertical = 12.dp, horizontal = 20.dp),
-    ) {
-        Icon(
-            modifier = Modifier
-                .size(20.dp)
-                .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
-                .padding(2.dp),
-            imageVector = Icons.Rounded.Check,
-            contentDescription = null,
-            tint = ElementTheme.colors.textActionAccent,
-        )
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = text,
-            style = ElementTheme.typography.fontBodyMdMedium,
-            color = MaterialTheme.colorScheme.primary,
+        InfoListOrganism(
+            items = persistentListOf(
+                InfoListItem(
+                    message = stringResource(id = R.string.screen_analytics_prompt_data_usage),
+                    iconComposable = { CheckIcon() },
+                ),
+                InfoListItem(
+                    message = stringResource(id = R.string.screen_analytics_prompt_third_party_sharing),
+                    iconComposable = { CheckIcon() },
+                ),
+                InfoListItem(
+                    message = stringResource(id = R.string.screen_analytics_prompt_settings),
+                    iconComposable = { CheckIcon() },
+                ),
+            ),
+            textStyle = ElementTheme.typography.fontBodyMdMedium,
+            iconTint = ElementTheme.colors.textPrimary,
+            backgroundColor = ElementTheme.colors.temporaryColorBgSpecial
         )
     }
 }
 
 @Composable
 private fun AnalyticsOptInFooter(
-    eventSink: (AnalyticsOptInEvents) -> Unit,
+    onTermsAccepted: () -> Unit,
+    onTermsDeclined: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ButtonColumnMolecule(
         modifier = modifier,
     ) {
         Button(
-            onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
+            onClick = onTermsAccepted,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(text = stringResource(id = CommonStrings.action_ok))
         }
         TextButton(
-            onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
+            onClick = onTermsDeclined,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(text = stringResource(id = CommonStrings.action_not_now))

@@ -17,13 +17,16 @@
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import org.matrix.rustcomponents.sdk.Reaction
+import org.matrix.rustcomponents.sdk.EventItemOrigin as RustEventItemOrigin
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
@@ -34,7 +37,7 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
     fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.use {
         EventTimelineItem(
             eventId = it.eventId()?.let(::EventId),
-            transactionId = it.transactionId(),
+            transactionId = it.transactionId()?.let(::TransactionId),
             isEditable = it.isEditable(),
             isLocal = it.isLocal(),
             isOwn = it.isOwn(),
@@ -46,6 +49,7 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
             timestamp = it.timestamp().toLong(),
             content = contentMapper.map(it.content()),
             debugInfo = it.debugInfo().map(),
+            origin = it.origin()?.map()
         )
     }
 }
@@ -89,4 +93,12 @@ private fun RustEventTimelineItemDebugInfo.map(): TimelineItemDebugInfo {
         originalJson = originalJson,
         latestEditedJson = latestEditJson,
     )
+}
+
+private fun RustEventItemOrigin.map(): TimelineItemEventOrigin {
+    return when (this) {
+        RustEventItemOrigin.LOCAL -> TimelineItemEventOrigin.LOCAL
+        RustEventItemOrigin.SYNC -> TimelineItemEventOrigin.SYNC
+        RustEventItemOrigin.PAGINATION -> TimelineItemEventOrigin.PAGINATION
+    }
 }

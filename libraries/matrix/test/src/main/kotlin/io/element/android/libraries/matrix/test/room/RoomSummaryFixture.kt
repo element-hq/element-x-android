@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
@@ -25,14 +26,17 @@ import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
-import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 
@@ -88,7 +92,7 @@ fun aRoomMessage(
 
 fun anEventTimelineItem(
     eventId: EventId = AN_EVENT_ID,
-    transactionId: String? = null,
+    transactionId: TransactionId? = null,
     isEditable: Boolean = false,
     isLocal: Boolean = false,
     isOwn: Boolean = false,
@@ -114,6 +118,7 @@ fun anEventTimelineItem(
     timestamp = timestamp,
     content = content,
     debugInfo = debugInfo,
+    origin = null,
 )
 
 fun aProfileTimelineDetails(
@@ -138,6 +143,21 @@ fun aProfileChangeMessageContent(
     prevAvatarUrl = prevAvatarUrl,
 )
 
+fun aMessageContent(
+    body: String = "body",
+    inReplyTo: InReplyTo? = null,
+    isEdited: Boolean = false,
+    messageType: MessageType = TextMessageType(
+        body = body,
+        formatted = null
+    )
+) = MessageContent(
+    body = body,
+    inReplyTo = inReplyTo,
+    isEdited = isEdited,
+    type = messageType
+)
+
 fun aTimelineItemDebugInfo(
     model: String = "Rust(Model())",
     originalJson: String? = null,
@@ -145,3 +165,4 @@ fun aTimelineItemDebugInfo(
 ) = TimelineItemDebugInfo(
     model, originalJson, latestEditedJson
 )
+
