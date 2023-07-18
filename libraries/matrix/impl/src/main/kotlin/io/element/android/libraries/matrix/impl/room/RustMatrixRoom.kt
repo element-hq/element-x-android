@@ -43,7 +43,6 @@ import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.backPaginationStatusFlow
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.libraries.sessionstorage.api.SessionData
-import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -82,6 +81,7 @@ class RustMatrixRoom(
 
     // Create a dispatcher for all room methods...
     private val roomDispatcher = coroutineDispatchers.io.limitedParallelism(32)
+
     //...except getMember methods as it could quickly fill the roomDispatcher...
     private val roomMembersDispatcher = coroutineDispatchers.io.limitedParallelism(8)
 
@@ -257,15 +257,9 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun acceptInvitation(): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun join(): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.acceptInvitation()
-        }
-    }
-
-    override suspend fun rejectInvitation(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.rejectInvitation()
+            innerRoom.join()
         }
     }
 

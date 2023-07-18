@@ -22,7 +22,7 @@ interface SyncService {
     /**
      * Tries to start the sync. If already syncing it has no effect.
      */
-    fun startSync(): Result<Unit>
+    suspend fun startSync(): Result<Unit>
 
     /**
      * Tries to stop the sync. If service is not syncing it has no effect.

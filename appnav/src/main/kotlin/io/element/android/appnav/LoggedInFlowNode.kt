@@ -139,7 +139,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                 }
             },
             onResume = {
-                syncService.startSync()
+                lifecycleScope.launch {
+                    syncService.startSync()
+                }
             },
             onPause = {
                 syncService.stopSync()

@@ -17,8 +17,8 @@
 package io.element.android.libraries.matrix.impl.sync
 
 import io.element.android.libraries.matrix.api.sync.SyncState
-import org.matrix.rustcomponents.sdk.AppState
 import org.matrix.rustcomponents.sdk.RoomListServiceState
+import org.matrix.rustcomponents.sdk.SyncServiceState
 
 internal fun RoomListServiceState.toSyncState(): SyncState {
     return when (this) {
@@ -30,10 +30,11 @@ internal fun RoomListServiceState.toSyncState(): SyncState {
     }
 }
 
-internal fun AppState.toSyncState(): SyncState {
+internal fun SyncServiceState.toSyncState(): SyncState {
     return when (this) {
-        AppState.RUNNING -> SyncState.Syncing
-        AppState.TERMINATED -> SyncState.Terminated
-        AppState.ERROR -> SyncState.InError
+        SyncServiceState.IDLE -> SyncState.Idle
+        SyncServiceState.RUNNING -> SyncState.Syncing
+        SyncServiceState.TERMINATED -> SyncState.Terminated
+        SyncServiceState.ERROR -> SyncState.InError
     }
 }

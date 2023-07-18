@@ -181,9 +181,11 @@ class RustMatrixAuthenticationService @Inject constructor(
          */
     }
 
-    private fun createMatrixClient(client: Client): MatrixClient {
+    private suspend fun createMatrixClient(client: Client): MatrixClient {
+        val syncService = client.syncService().finish()
         return RustMatrixClient(
             client = client,
+            syncService = syncService,
             sessionStore = sessionStore,
             appCoroutineScope = appCoroutineScope,
             dispatchers = coroutineDispatchers,

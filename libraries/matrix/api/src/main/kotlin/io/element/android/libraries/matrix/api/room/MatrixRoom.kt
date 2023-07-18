@@ -95,9 +95,7 @@ interface MatrixRoom : Closeable {
 
     suspend fun leave(): Result<Unit>
 
-    suspend fun acceptInvitation(): Result<Unit>
-
-    suspend fun rejectInvitation(): Result<Unit>
+    suspend fun join(): Result<Unit>
 
     suspend fun inviteUserById(id: UserId): Result<Unit>
 

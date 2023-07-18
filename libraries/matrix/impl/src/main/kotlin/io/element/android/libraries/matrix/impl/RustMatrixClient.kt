@@ -73,10 +73,12 @@ import java.io.File
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
+import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient constructor(
     private val client: Client,
+    private val syncService: ClientSyncService,
     private val sessionStore: SessionStore,
     appCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
@@ -86,14 +88,11 @@ class RustMatrixClient constructor(
 ) : MatrixClient {
 
     override val sessionId: UserId = UserId(client.userId())
-    private val app = client.app().use { builder ->
-        builder.finish()
-    }
-    private val roomListService = app.roomListService()
+    private val roomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
-    private val syncService = RustSyncService(app, roomListService.stateFlow(), sessionCoroutineScope)
+    private val rustSyncService = RustSyncService(syncService, roomListService.stateFlow(), sessionCoroutineScope)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -131,7 +130,7 @@ class RustMatrixClient constructor(
 
     init {
         client.setDelegate(clientDelegate)
-        syncService.syncState
+        rustSyncService.syncState
             .onEach { syncState ->
                 if (syncState == SyncState.Syncing) {
                     onSlidingSyncUpdate()
@@ -247,7 +246,7 @@ class RustMatrixClient constructor(
             }
         }
 
-    override fun syncService(): SyncService = syncService
+    override fun syncService(): SyncService = rustSyncService
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
 
@@ -259,7 +258,7 @@ class RustMatrixClient constructor(
         sessionCoroutineScope.cancel()
         client.setDelegate(null)
         verificationService.destroy()
-        app.destroy()
+        syncService.destroy()
         roomListService.destroy()
         notificationClient.destroy()
         client.destroy()
