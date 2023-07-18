@@ -139,7 +139,7 @@ class InviteListPresenter @Inject constructor(
     private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<Async<RoomId>>) = launch {
         suspend {
             client.getRoom(roomId)?.use {
-                it.acceptInvitation().getOrThrow()
+                it.join().getOrThrow()
                 notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
                 analyticsService.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
             }
@@ -150,7 +150,7 @@ class InviteListPresenter @Inject constructor(
     private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<Async<Unit>>) = launch {
         suspend {
             client.getRoom(roomId)?.use {
-                it.rejectInvitation().getOrThrow()
+                it.leave().getOrThrow()
                 notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
             }
             Unit

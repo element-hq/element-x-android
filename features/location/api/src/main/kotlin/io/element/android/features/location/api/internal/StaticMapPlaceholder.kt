@@ -38,7 +38,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -46,17 +45,13 @@ internal fun StaticMapPlaceholder(
     showProgress: Boolean,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    darkMode: Boolean = !ElementTheme.isLightTheme,
     onLoadMapClick: () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            painter = painterResource(
-                id = if (darkMode) R.drawable.blurred_map_dark
-                else R.drawable.blurred_map_light
-            ),
+            painter = painterResource(id = R.drawable.blurred_map),
             contentDescription = contentDescription,
             modifier = modifier,
             contentScale = ContentScale.FillBounds,

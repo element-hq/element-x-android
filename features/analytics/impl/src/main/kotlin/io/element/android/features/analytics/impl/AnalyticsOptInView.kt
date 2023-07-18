@@ -135,7 +135,7 @@ private fun AnalyticsOptInHeader(
 @Composable
 private fun CheckIcon(modifier: Modifier = Modifier) {
     Icon(
-        modifier = Modifier
+        modifier = modifier
             .size(20.dp)
             .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
             .padding(2.dp),

@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.utils.messagesummary
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -50,6 +51,7 @@ class MessageSummaryFormatterImpl @Inject constructor(
             is TimelineItemImageContent -> context.getString(CommonStrings.common_image)
             is TimelineItemVideoContent -> context.getString(CommonStrings.common_video)
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
+            is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
         }
     }
 }

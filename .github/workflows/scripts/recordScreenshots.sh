@@ -58,6 +58,9 @@ if [[ -z ${REPO} ]]; then
   exit 1
 fi
 
+echo "Deleting previous screenshots"
+./gradlew removeOldSnapshots --stacktrace -PpreDexEnable=false --max-workers 4 --warn
+
 echo "Record screenshots"
 ./gradlew recordPaparazziDebug --stacktrace -PpreDexEnable=false --max-workers 4 --warn
 

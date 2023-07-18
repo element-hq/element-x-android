@@ -28,11 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
@@ -52,10 +51,6 @@ fun OnBoardingPage(
     footer: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
-    // Note: having a night variant of R.drawable.onboarding_bg in the folder `drawable-night` is working
-    // at runtime, but is not in Android Studio Preview. So I prefer to handle this manually.
-    val isLight = ElementTheme.colors.isLight
-    val bgDrawableRes = if (isLight) R.drawable.onboarding_bg_light else R.drawable.onboarding_bg_dark
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -64,7 +59,7 @@ fun OnBoardingPage(
         Image(
             modifier = Modifier
                 .fillMaxSize(),
-            painter = painterResource(id = bgDrawableRes),
+            painter = painterResource(id = R.drawable.onboarding_bg),
             contentScale = ContentScale.Crop,
             contentDescription = null,
         )
@@ -92,18 +87,9 @@ fun OnBoardingPage(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun OnBoardingPageLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun OnBoardingPageDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun OnBoardingPagePreview() = ElementPreview {
     OnBoardingPage(
         content = {
             Box(

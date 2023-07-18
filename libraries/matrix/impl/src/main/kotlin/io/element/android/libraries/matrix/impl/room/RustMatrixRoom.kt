@@ -256,15 +256,9 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun acceptInvitation(): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun join(): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.acceptInvitation()
-        }
-    }
-
-    override suspend fun rejectInvitation(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.rejectInvitation()
+            innerRoom.join()
         }
     }
 

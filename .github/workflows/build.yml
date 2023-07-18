@@ -34,10 +34,12 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.6.0
+        uses: gradle/gradle-build-action@v2.6.1
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble debug APK
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
         run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug APKs
         uses: actions/upload-artifact@v3

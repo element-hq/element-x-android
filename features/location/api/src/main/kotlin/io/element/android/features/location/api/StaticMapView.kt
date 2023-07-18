@@ -34,9 +34,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import io.element.android.features.location.api.internal.AttributionPlacement
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
-import io.element.android.features.location.api.internal.buildStaticMapsApiUrl
+import io.element.android.features.location.api.internal.staticMapUrl
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toDp
@@ -64,6 +63,7 @@ fun StaticMapView(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
+        val context = LocalContext.current
         var retryHash by remember { mutableStateOf(0) }
         val painter = rememberAsyncImagePainter(
             model = if (constraints.isZero) {
@@ -72,17 +72,16 @@ fun StaticMapView(
             } else {
                 ImageRequest.Builder(LocalContext.current)
                     .data(
-                        buildStaticMapsApiUrl(
+                        staticMapUrl(
+                            context = context,
                             lat = lat,
                             lon = lon,
-                            desiredZoom = zoom,
+                            zoom = zoom,
                             darkMode = darkMode,
-                            attributionPlacement = AttributionPlacement.BottomLeft,
                             // Size the map based on DP rather than pixels, as otherwise the features and attribution
                             // end up being illegibly tiny on high density displays.
-                            desiredWidth = constraints.maxWidth.toDp().value.toInt(),
-                            desiredHeight = constraints.maxHeight.toDp().value.toInt(),
-                            doubleScale = true,
+                            width = constraints.maxWidth.toDp().value.toInt(),
+                            height = constraints.maxHeight.toDp().value.toInt(),
                         )
                     )
                     .size(width = constraints.maxWidth, height = constraints.maxHeight)
@@ -119,7 +118,6 @@ fun StaticMapView(
                 showProgress = painter.state is AsyncImagePainter.State.Loading,
                 contentDescription = contentDescription,
                 modifier = Modifier.size(width = maxWidth, height = maxHeight),
-                darkMode = darkMode,
                 onLoadMapClick = { retryHash++ }
             )
         }

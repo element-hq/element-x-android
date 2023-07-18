@@ -50,7 +50,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_BOTTOM
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.api.internal.buildTileServerUrl
+import io.element.android.features.location.api.internal.tileStyleUrl
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -102,7 +102,7 @@ fun MapView(
                 isCompassEnabled = false
                 isRotateGesturesEnabled = false
             }
-            map.setStyle(buildTileServerUrl(darkMode = darkMode)) { style ->
+            map.setStyle(tileStyleUrl(context, darkMode)) { style ->
                 mapRefs = MapRefs(
                     map = map,
                     symbolManager = SymbolManager(mapView, map, style).apply {

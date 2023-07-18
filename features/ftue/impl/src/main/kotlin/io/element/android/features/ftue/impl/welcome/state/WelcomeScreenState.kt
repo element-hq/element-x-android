@@ -19,4 +19,5 @@ package io.element.android.features.ftue.impl.welcome.state
 interface WelcomeScreenState {
     fun isWelcomeScreenNeeded(): Boolean
     fun setWelcomeScreenShown()
+    fun reset()
 }

@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Attachment
+import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +48,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
@@ -59,7 +59,9 @@ import io.element.android.features.messages.impl.media.helper.formatFileExtensio
 import io.element.android.features.messages.impl.media.local.exoplayer.ExoPlayerWrapper
 import io.element.android.features.messages.impl.media.local.pdf.PdfViewer
 import io.element.android.features.messages.impl.media.local.pdf.rememberPdfViewerState
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.R
@@ -103,6 +105,7 @@ fun LocalMediaView(
             zoomableState = zoomableState,
             modifier = modifier
         )
+        //TODO handle audio with exoplayer
         else -> MediaFileView(
             localMediaViewState = localMediaViewState,
             uri = localMedia?.uri,
@@ -215,6 +218,7 @@ fun MediaFileView(
     info: MediaInfo?,
     modifier: Modifier = Modifier,
 ) {
+    val isAudio = info?.mimeType.isMimeTypeAudio().orFalse()
     localMediaViewState.isReady = uri != null
     Box(modifier = modifier.padding(horizontal = 8.dp), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -226,12 +230,12 @@ fun MediaFileView(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Attachment,
+                    imageVector = if (isAudio) Icons.Outlined.GraphicEq else Icons.Outlined.Attachment,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier
                         .size(32.dp)
-                        .rotate(-45f),
+                        .rotate(if (isAudio) 0f else -45f),
                 )
             }
             if (info != null) {

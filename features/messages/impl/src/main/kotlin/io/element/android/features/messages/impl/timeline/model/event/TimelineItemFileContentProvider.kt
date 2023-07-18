@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 open class TimelineItemFileContentProvider : PreviewParameterProvider<TimelineItemFileContent> {
     override val values: Sequence<TimelineItemFileContent>
         get() = sequenceOf(
-            aTimelineItemFileContent("A file.pdf"),
+            aTimelineItemFileContent(),
             aTimelineItemFileContent("A bigger name file.pdf"),
             aTimelineItemFileContent("An even bigger bigger bigger bigger bigger bigger bigger file name which doesn't fit .pdf"),
         )
@@ -31,7 +31,7 @@ open class TimelineItemFileContentProvider : PreviewParameterProvider<TimelineIt
 
 fun aTimelineItemFileContent(fileName: String = "A file.pdf") = TimelineItemFileContent(
     body = fileName,
-    thumbnailSource = MediaSource(url = ""),
+    thumbnailSource = null,
     fileSource = MediaSource(url = ""),
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "100kB",

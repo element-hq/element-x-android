@@ -37,8 +37,7 @@ class InviteFriendsUseCase @Inject constructor(
         permalinkResult.fold(
             onSuccess = { permalink ->
                 val appName = buildMeta.applicationName
-                startSharePlainTextIntent(
-                    context = activity,
+                activity.startSharePlainTextIntent(
                     activityResultLauncher = null,
                     chooserTitle = stringProvider.getString(CommonStrings.action_invite_friends),
                     text = stringProvider.getString(CommonStrings.invite_friends_text, appName, permalink),

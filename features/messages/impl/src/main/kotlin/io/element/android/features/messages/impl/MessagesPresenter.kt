@@ -43,6 +43,7 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -111,7 +112,7 @@ class MessagesPresenter @AssistedInject constructor(
         val roomName by produceState(initialValue = room.displayName, key1 = syncUpdateFlow.value){
             value = room.displayName
         }
-        val roomAvatar by produceState(initialValue = room.avatarData(), key1 = syncUpdateFlow.value){
+        val roomAvatar by produceState(initialValue = room.avatarData(), key1 = syncUpdateFlow.value) {
             value = room.avatarData()
         }
         var hasDismissedInviteDialog by rememberSaveable {
@@ -250,28 +251,28 @@ class MessagesPresenter @AssistedInject constructor(
         val textContent = messageSummaryFormatter.format(targetEvent)
         val attachmentThumbnailInfo = when (targetEvent.content) {
             is TimelineItemImageContent -> AttachmentThumbnailInfo(
-                mediaSource = targetEvent.content.mediaSource,
+                thumbnailSource = targetEvent.content.thumbnailSource,
                 textContent = targetEvent.content.body,
                 type = AttachmentThumbnailType.Image,
                 blurHash = targetEvent.content.blurhash,
             )
             is TimelineItemVideoContent -> AttachmentThumbnailInfo(
-                mediaSource = targetEvent.content.thumbnailSource,
+                thumbnailSource = targetEvent.content.thumbnailSource,
                 textContent = targetEvent.content.body,
                 type = AttachmentThumbnailType.Video,
                 blurHash = targetEvent.content.blurHash,
             )
             is TimelineItemFileContent -> AttachmentThumbnailInfo(
-                mediaSource = targetEvent.content.thumbnailSource,
+                thumbnailSource = targetEvent.content.thumbnailSource,
                 textContent = targetEvent.content.body,
                 type = AttachmentThumbnailType.File,
-                blurHash = null,
+            )
+            is TimelineItemAudioContent -> AttachmentThumbnailInfo(
+                textContent = targetEvent.content.body,
+                type = AttachmentThumbnailType.Audio,
             )
             is TimelineItemLocationContent -> AttachmentThumbnailInfo(
-                mediaSource = null,
-                textContent = null,
                 type = AttachmentThumbnailType.Location,
-                blurHash = null,
             )
             is TimelineItemTextBasedContent,
             is TimelineItemRedactedContent,

@@ -14,14 +14,33 @@
  * limitations under the License.
  */
 
+import java.util.Properties
+
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
+fun readLocalProperty(name: String) = Properties().apply {
+    try {
+        load(rootProject.file("local.properties").reader())
+    } catch (ignored: java.io.IOException) {
+    }
+}[name]
+
 android {
     namespace = "io.element.android.features.location.api"
+
+    defaultConfig {
+        resValue(
+            type = "string",
+            name = "maptiler_api_key",
+            value = System.getenv("ELEMENT_ANDROID_MAPTILER_API_KEY")
+                ?: readLocalProperty("services.maptiler.apikey") as? String
+                ?: ""
+        )
+    }
 }
 
 dependencies {

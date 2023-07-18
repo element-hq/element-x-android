@@ -68,8 +68,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
         fun onShareUser() {
             val permalinkResult = PermalinkBuilder.permalinkForUser(inputs.roomMemberId)
             permalinkResult.onSuccess { permalink ->
-                startSharePlainTextIntent(
-                    context = context,
+                context.startSharePlainTextIntent(
                     activityResultLauncher = null,
                     chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
                     text = permalink,

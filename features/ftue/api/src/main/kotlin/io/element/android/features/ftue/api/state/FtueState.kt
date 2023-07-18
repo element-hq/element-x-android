@@ -20,4 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface FtueState {
     val shouldDisplayFlow: StateFlow<Boolean>
+
+    suspend fun reset()
 }

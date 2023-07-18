@@ -75,13 +75,15 @@ fun WelcomeView(
                 Text(
                     modifier = Modifier.testTag(TestTags.welcomeScreenTitle),
                     text = stringResource(R.string.screen_welcome_title, applicationName),
-                    style = ElementTheme.typography.fontHeadingLgBold,
+                    style = ElementTheme.typography.fontHeadingMdBold,
+                    color = ElementTheme.colors.textPrimary,
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(R.string.screen_welcome_subtitle),
                     style = ElementTheme.typography.fontBodyMdRegular,
+                    color = ElementTheme.colors.textPrimary,
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(40.dp))
