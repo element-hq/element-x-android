@@ -76,8 +76,7 @@ class RoomDetailsNode @AssistedInject constructor(
         val permalinkResult = alias?.let { PermalinkBuilder.permalinkForRoomAlias(it) }
             ?: PermalinkBuilder.permalinkForRoomId(room.roomId)
         permalinkResult.onSuccess { permalink ->
-            startSharePlainTextIntent(
-                context = context,
+            context.startSharePlainTextIntent(
                 activityResultLauncher = null,
                 chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
                 text = permalink,
@@ -91,8 +90,7 @@ class RoomDetailsNode @AssistedInject constructor(
     private fun onShareMember(context: Context, member: RoomMember) {
         val permalinkResult = PermalinkBuilder.permalinkForUser(member.userId)
         permalinkResult.onSuccess { permalink ->
-            startSharePlainTextIntent(
-                context = context,
+            context.startSharePlainTextIntent(
                 activityResultLauncher = null,
                 chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
                 text = permalink,

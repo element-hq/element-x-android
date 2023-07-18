@@ -133,7 +133,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             removeSensitiveImageMetadata(compressionResult.file)
             return MediaUploadInfo.Image(
                 file = compressionResult.file,
-                info = imageInfo,
+                imageInfo = imageInfo,
                 thumbnailFile = thumbnailResult.file
             )
         }
@@ -156,7 +156,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             removeSensitiveImageMetadata(file)
             return MediaUploadInfo.Image(
                 file = file,
-                info = imageInfo,
+                imageInfo = imageInfo,
                 thumbnailFile = thumbnailResult.file
             )
         }
@@ -184,7 +184,7 @@ class AndroidMediaPreProcessor @Inject constructor(
         val videoInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo)
         return MediaUploadInfo.Video(
             file = resultFile,
-            info = videoInfo,
+            videoInfo = videoInfo,
             thumbnailFile = thumbnailInfo.file
         )
     }
@@ -196,7 +196,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             val info = AudioInfo(
                 duration = extractDuration(),
                 size = file.length(),
-                mimeType = mimeType,
+                mimetype = mimeType,
             )
 
             MediaUploadInfo.Audio(file, info)

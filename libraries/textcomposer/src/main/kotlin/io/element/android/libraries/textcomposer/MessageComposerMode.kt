@@ -26,15 +26,15 @@ sealed interface MessageComposerMode : Parcelable {
     @Parcelize
     data class Normal(val content: CharSequence?) : MessageComposerMode
 
-    sealed class Special(open val eventId: EventId?, open val defaultContent: CharSequence) :
+    sealed class Special(open val eventId: EventId?, open val defaultContent: String) :
         MessageComposerMode
 
     @Parcelize
-    data class Edit(override val eventId: EventId?, override val defaultContent: CharSequence, val transactionId: TransactionId?) :
+    data class Edit(override val eventId: EventId?, override val defaultContent: String, val transactionId: TransactionId?) :
         Special(eventId, defaultContent)
 
     @Parcelize
-    class Quote(override val eventId: EventId, override val defaultContent: CharSequence) :
+    class Quote(override val eventId: EventId, override val defaultContent: String) :
         Special(eventId, defaultContent)
 
     @Parcelize
@@ -42,7 +42,7 @@ sealed interface MessageComposerMode : Parcelable {
         val senderName: String,
         val attachmentThumbnailInfo: AttachmentThumbnailInfo?,
         override val eventId: EventId,
-        override val defaultContent: CharSequence
+        override val defaultContent: String
     ) : Special(eventId, defaultContent)
 
     val relatedEventId: EventId?

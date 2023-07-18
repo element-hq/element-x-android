@@ -26,7 +26,7 @@ sealed interface MessageComposerEvents {
     data class SendMessage(val message: String) : MessageComposerEvents
     object CloseSpecialMode : MessageComposerEvents
     data class SetMode(val composerMode: MessageComposerMode) : MessageComposerEvents
-    data class UpdateText(val text: CharSequence) : MessageComposerEvents
+    data class UpdateText(val text: String) : MessageComposerEvents
     object AddAttachment : MessageComposerEvents
     object DismissAttachmentMenu : MessageComposerEvents
     sealed interface PickAttachmentSource : MessageComposerEvents {

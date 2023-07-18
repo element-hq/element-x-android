@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Attachment
+import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.VideoCameraBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -44,9 +45,9 @@ fun AttachmentThumbnail(
     thumbnailSize: Long = 32L,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
 ) {
-    if (info.mediaSource != null) {
+    if (info.thumbnailSource != null) {
         val mediaRequestData = MediaRequestData(
-            source = info.mediaSource,
+            source = info.thumbnailSource,
             kind = MediaRequestData.Kind.Thumbnail(thumbnailSize),
         )
         BlurHashAsyncImage(
@@ -65,6 +66,12 @@ fun AttachmentThumbnail(
                 AttachmentThumbnailType.Video -> {
                     Icon(
                         imageVector = Icons.Outlined.VideoCameraBack,
+                        contentDescription = info.textContent,
+                    )
+                }
+                AttachmentThumbnailType.Audio -> {
+                    Icon(
+                        imageVector = Icons.Outlined.GraphicEq,
                         contentDescription = info.textContent,
                     )
                 }
@@ -88,13 +95,13 @@ fun AttachmentThumbnail(
 
 @Parcelize
 enum class AttachmentThumbnailType: Parcelable {
-    Image, Video, File, Location
+    Image, Video, File, Audio, Location
 }
 
 @Parcelize
 data class AttachmentThumbnailInfo(
-    val mediaSource: MediaSource?,
-    val textContent: String?,
-    val type: AttachmentThumbnailType?,
-    val blurHash: String?,
+    val type: AttachmentThumbnailType,
+    val thumbnailSource: MediaSource? = null,
+    val textContent: String? = null,
+    val blurHash: String? = null,
 ): Parcelable

@@ -24,4 +24,5 @@ sealed interface VirtualTimelineItem {
 
     object ReadMarker : VirtualTimelineItem
 
+    object EncryptedHistoryBanner : VirtualTimelineItem
 }

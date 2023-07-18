@@ -41,6 +41,7 @@ import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -221,6 +222,20 @@ class MessagesFlowNode @AssistedInject constructor(
                     ),
                     mediaSource = mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
+                )
+                backstack.push(navTarget)
+            }
+            is TimelineItemAudioContent -> {
+                val mediaSource = event.content.audioSource
+                val navTarget = NavTarget.MediaViewer(
+                    mediaInfo = MediaInfo(
+                        name = event.content.body,
+                        mimeType = event.content.mimeType,
+                        formattedFileSize = event.content.formattedFileSize,
+                        fileExtension = event.content.fileExtension
+                    ),
+                    mediaSource = mediaSource,
+                    thumbnailSource = null,
                 )
                 backstack.push(navTarget)
             }

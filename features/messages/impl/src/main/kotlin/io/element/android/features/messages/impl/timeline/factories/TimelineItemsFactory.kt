@@ -45,7 +45,6 @@ class TimelineItemsFactory @Inject constructor(
     private val virtualItemFactory: TimelineItemVirtualFactory,
     private val timelineItemGrouper: TimelineItemGrouper,
 ) {
-
     private val timelineItems = MutableStateFlow(persistentListOf<TimelineItem>())
     private val timelineItemsCache = arrayListOf<TimelineItem?>()
 

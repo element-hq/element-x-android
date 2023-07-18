@@ -21,6 +21,7 @@ package io.element.android.features.messages.impl.timeline
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
@@ -48,10 +49,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
@@ -64,14 +63,13 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.theme.ElementTheme
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
 @Composable
@@ -100,13 +98,6 @@ fun TimelineView(
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
-    // Send an event to the presenter when the scrolling is finished, with the first visible index at the bottom.
-    val firstVisibleIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
-    val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
-    LaunchedEffect(firstVisibleIndex, isScrollFinished) {
-        if (!isScrollFinished) return@LaunchedEffect
-        state.eventSink(TimelineEvents.OnScrollFinished(firstVisibleIndex))
-    }
 
     Box(modifier = modifier) {
         LazyColumn(
@@ -147,8 +138,8 @@ fun TimelineView(
 
         TimelineScrollHelper(
             lazyListState = lazyListState,
-            timelineItems = state.timelineItems,
-            onScrollFinishedAt = ::onScrollFinishedAt,
+            hasNewItems = state.hasNewItems,
+            onScrollFinishedAt = ::onScrollFinishedAt
         )
     }
 }
@@ -244,63 +235,66 @@ fun TimelineItemRow(
 }
 
 @Composable
-internal fun BoxScope.TimelineScrollHelper(
+private fun BoxScope.TimelineScrollHelper(
     lazyListState: LazyListState,
-    timelineItems: ImmutableList<TimelineItem>,
-    onScrollFinishedAt: (Int) -> Unit = {},
+    hasNewItems: Boolean,
+    onScrollFinishedAt: (Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
-    val shouldAutoScrollToBottom by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 2 } }
-    val showScrollToBottomButton by remember { derivedStateOf { lazyListState.firstVisibleItemIndex > 0 } }
+    val canAutoScroll by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 3 } }
 
-    LaunchedEffect(timelineItems, firstVisibleItemIndex) {
-        if (!isScrollFinished) return@LaunchedEffect
-
-        // Auto-scroll when new timeline items appear
-        if (shouldAutoScrollToBottom) {
+    LaunchedEffect(canAutoScroll, hasNewItems) {
+        val shouldAutoScroll = isScrollFinished && canAutoScroll && hasNewItems
+        if (shouldAutoScroll) {
             coroutineScope.launch {
                 lazyListState.animateScrollToItem(0)
             }
         }
     }
-    LaunchedEffect(isScrollFinished) {
-        if (!isScrollFinished) return@LaunchedEffect
 
-        // Notify the parent composable about the first visible item index when scrolling finishes
-        onScrollFinishedAt(firstVisibleItemIndex)
+    LaunchedEffect(isScrollFinished) {
+        if (isScrollFinished) {
+            // Notify the parent composable about the first visible item index when scrolling finishes
+            onScrollFinishedAt(lazyListState.firstVisibleItemIndex)
+        }
     }
 
-    // Jump to bottom button (display also in previews)
-    AnimatedVisibility(
+    JumpToBottomButton(
+        // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
+        isVisible = !canAutoScroll,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
-        visible = showScrollToBottomButton || LocalInspectionMode.current,
-        enter = scaleIn(),
-        exit = scaleOut(),
+        onClick = {
+            coroutineScope.launch {
+                if (lazyListState.firstVisibleItemIndex > 10) {
+                    lazyListState.scrollToItem(0)
+                } else {
+                    lazyListState.animateScrollToItem(0)
+                }
+            }
+        }
+    )
+}
+
+@Composable
+private fun JumpToBottomButton(
+    isVisible: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = isVisible || LocalInspectionMode.current,
+        enter = scaleIn(animationSpec = tween(100)),
+        exit = scaleOut(animationSpec = tween(100)),
     ) {
         FloatingActionButton(
-            onClick = {
-                coroutineScope.launch {
-                    if (firstVisibleItemIndex > 10) {
-                        lazyListState.scrollToItem(0)
-                    } else {
-                        lazyListState.animateScrollToItem(0)
-                    }
-                }
-            },
+            onClick = onClick,
             elevation = FloatingActionButtonDefaults.elevation(4.dp, 4.dp, 4.dp, 4.dp),
             shape = CircleShape,
-            modifier = Modifier
-                .shadow(
-                    elevation = 4.dp,
-                    shape = CircleShape,
-                    ambientColor = ElementTheme.materialColors.primary,
-                    spotColor = ElementTheme.materialColors.primary,
-                )
-                .size(36.dp),
+            modifier = Modifier.size(36.dp),
             containerColor = ElementTheme.colors.bgSubtleSecondary,
             contentColor = ElementTheme.colors.iconSecondary
         ) {
@@ -313,20 +307,11 @@ internal fun BoxScope.TimelineScrollHelper(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-fun TimelineViewLightPreview(
+fun TimelineViewPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
-) = ElementPreviewLight { ContentToPreview(content) }
-
-@Preview
-@Composable
-fun TimelineViewDarkPreview(
-    @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
-) = ElementPreviewDark { ContentToPreview(content) }
-
-@Composable
-private fun ContentToPreview(content: TimelineItemEventContent) {
+) = ElementPreview {
     val timelineItems = aTimelineItemList(content)
     TimelineView(
         state = aTimelineState(timelineItems),

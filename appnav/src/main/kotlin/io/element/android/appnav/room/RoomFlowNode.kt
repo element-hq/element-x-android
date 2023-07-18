@@ -32,11 +32,11 @@ import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.NodeLifecycleCallback
-import io.element.android.appnav.safeRoot
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.BackstackNode
@@ -92,9 +92,9 @@ class RoomFlowNode @AssistedInject constructor(
             .distinctUntilChanged()
             .onEach { isLoaded ->
                 if (isLoaded) {
-                    backstack.safeRoot(NavTarget.Loaded)
+                    backstack.newRoot(NavTarget.Loaded)
                 } else {
-                    backstack.safeRoot(NavTarget.Loading)
+                    backstack.newRoot(NavTarget.Loading)
                 }
             }.launchIn(lifecycleScope)
     }

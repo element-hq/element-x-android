@@ -56,7 +56,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -85,6 +84,7 @@ import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
@@ -521,28 +521,29 @@ private fun ReplyToContent(
 private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready) =
     when (val type = inReplyTo.content.type) {
         is ImageMessageType -> AttachmentThumbnailInfo(
-            mediaSource = type.info?.thumbnailSource,
+            thumbnailSource = type.info?.thumbnailSource,
             textContent = inReplyTo.content.body,
             type = AttachmentThumbnailType.Image,
             blurHash = type.info?.blurhash,
         )
         is VideoMessageType -> AttachmentThumbnailInfo(
-            mediaSource = type.info?.thumbnailSource,
+            thumbnailSource = type.info?.thumbnailSource,
             textContent = inReplyTo.content.body,
             type = AttachmentThumbnailType.Video,
             blurHash = type.info?.blurhash,
         )
         is FileMessageType -> AttachmentThumbnailInfo(
-            mediaSource = type.info?.thumbnailSource,
+            thumbnailSource = type.info?.thumbnailSource,
             textContent = inReplyTo.content.body,
             type = AttachmentThumbnailType.File,
-            blurHash = null,
         )
         is LocationMessageType -> AttachmentThumbnailInfo(
-            mediaSource = null,
             textContent = inReplyTo.content.body,
             type = AttachmentThumbnailType.Location,
-            blurHash = null,
+        )
+        is AudioMessageType -> AttachmentThumbnailInfo(
+            textContent = inReplyTo.content.body,
+            type = AttachmentThumbnailType.Audio,
         )
         else -> null
     }

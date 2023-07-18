@@ -47,7 +47,7 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.CloseSpecialMode)
     }
 
-    fun onComposerTextChange(text: CharSequence) {
+    fun onComposerTextChange(text: String) {
         state.eventSink(MessageComposerEvents.UpdateText(text))
     }
 
@@ -69,7 +69,7 @@ fun MessageComposerView(
             onAddAttachment = ::onAddAttachment,
             onFocusChanged = ::onFocusChanged,
             composerCanSendMessage = state.isSendButtonVisible,
-            composerText = state.text?.charSequence?.toString(),
+            composerText = state.text,
             modifier = modifier
         )
     }

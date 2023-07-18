@@ -18,23 +18,28 @@ package io.element.android.appnav.di
 
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHolder.SaveInstanceKey"
 
-class MatrixClientsHolder @Inject constructor(private val authenticationService: MatrixAuthenticationService) {
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
+class MatrixClientsHolder @Inject constructor(private val authenticationService: MatrixAuthenticationService) : MatrixClientProvider {
 
     private val sessionIdsToMatrixClient = ConcurrentHashMap<SessionId, MatrixClient>()
-
-    fun add(matrixClient: MatrixClient) {
-        sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
-    }
+    private val restoreMutex = Mutex()
 
     fun removeAll() {
         sessionIdsToMatrixClient.clear()
@@ -44,16 +49,21 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
         sessionIdsToMatrixClient.remove(sessionId)
     }
 
-    fun isEmpty(): Boolean = sessionIdsToMatrixClient.isEmpty()
-
-    fun knowSession(sessionId: SessionId): Boolean = sessionIdsToMatrixClient.containsKey(sessionId)
-
     fun getOrNull(sessionId: SessionId): MatrixClient? {
         return sessionIdsToMatrixClient[sessionId]
     }
 
+    override suspend fun getOrRestore(sessionId: SessionId): Result<MatrixClient> {
+        return restoreMutex.withLock {
+            when (val matrixClient = getOrNull(sessionId)) {
+                null -> restore(sessionId)
+                else -> Result.success(matrixClient)
+            }
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
-    fun restore(state: SavedStateMap?) {
+    fun restoreWithSavedState(state: SavedStateMap?) {
         Timber.d("Restore state")
         if (state == null || sessionIdsToMatrixClient.isNotEmpty()) return Unit.also {
             Timber.w("Restore with non-empty map")
@@ -64,21 +74,25 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
         // Not ideal but should only happens in case of process recreation. This ensure we restore all the active sessions before restoring the node graphs.
         runBlocking {
             sessionIds.forEach { sessionId ->
-                Timber.d("Restore matrix session: $sessionId")
-                authenticationService.restoreSession(sessionId)
-                    .onSuccess { matrixClient ->
-                        add(matrixClient)
-                    }
-                    .onFailure {
-                        Timber.e("Fail to restore session")
-                    }
+                restore(sessionId)
             }
         }
     }
 
-    fun save(state: MutableSavedStateMap) {
+    fun saveIntoSavedState(state: MutableSavedStateMap) {
         val sessionKeys = sessionIdsToMatrixClient.keys.toTypedArray()
         Timber.d("Save matrix session keys = ${sessionKeys.map { it.value }}")
         state[SAVE_INSTANCE_KEY] = sessionKeys
+    }
+
+    private suspend fun restore(sessionId: SessionId): Result<MatrixClient> {
+        Timber.d("Restore matrix session: $sessionId")
+        return authenticationService.restoreSession(sessionId)
+            .onSuccess { matrixClient ->
+                sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
+            }
+            .onFailure {
+                Timber.e("Fail to restore session")
+            }
     }
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_welcome_bullet_1">"Calls, location sharing, search and more will be added later this year."</string>
+  <string name="screen_welcome_bullet_2">"Message history for encrypted rooms won’t be available in this update."</string>
+  <string name="screen_welcome_bullet_3">"We’d love to hear from you, let us know what you think via the settings page."</string>
+  <string name="screen_welcome_button">"Let\'s go!"</string>
+  <string name="screen_welcome_subtitle">"Here’s what you need to know:"</string>
+  <string name="screen_welcome_title">"Welcome to %1$s!"</string>
+</resources>

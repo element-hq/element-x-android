@@ -78,6 +78,10 @@ class DefaultAnalyticsService @Inject constructor(
         analyticsStore.setDidAskUserConsent()
     }
 
+    override suspend fun reset() {
+        analyticsStore.setDidAskUserConsent(false)
+    }
+
     override fun getAnalyticsId(): Flow<String> {
         return analyticsStore.analyticsIdFlow
     }

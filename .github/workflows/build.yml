@@ -34,10 +34,12 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.6.0
+        uses: gradle/gradle-build-action@v2.6.1
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble debug APK
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
         run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug APKs
         uses: actions/upload-artifact@v3
@@ -45,7 +47,7 @@ jobs:
           name: elementx-debug
           path: |
             app/build/outputs/apk/debug/*.apk
-      - uses: rnkdsh/action-upload-diawi@v1.5.0
+      - uses: rnkdsh/action-upload-diawi@v1.5.1
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true

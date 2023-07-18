@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.location.api.Location
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -30,6 +31,7 @@ import io.element.android.features.messages.impl.timeline.util.FileExtensionExtr
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
@@ -99,6 +101,14 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
                 )
             }
+            is AudioMessageType -> TimelineItemAudioContent(
+                body = messageType.body,
+                audioSource = messageType.source,
+                duration = messageType.info?.duration?.toMillis() ?: 0L,
+                mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
+                fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+            )
             is FileMessageType -> TimelineItemFileContent(
                 body = messageType.body,
                 thumbnailSource = messageType.info?.thumbnailSource,
