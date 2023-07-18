@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.matrix.test.A_ROOM_NOTIFICATION_MODE
 import io.element.android.libraries.matrix.test.A_ROOM_NOTIFICATION_SETTINGS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -28,7 +29,10 @@ class FakeNotificationSettingsService : NotificationSettingsService {
     private var _roomNotificationSettingsStateFlow = MutableStateFlow(Unit)
     private val muteRoomResult: Result<Unit> = Result.success(Unit)
     private val unmuteRoomResult: Result<Unit> = Result.success(Unit)
+    private val setRoomNotificationMode: Result<Unit> = Result.success(Unit)
+    private val restoreDefaultRoomNotificationMode: Result<Unit> = Result.success(Unit)
     private val getRoomNotificationSettingsResult: Result<RoomNotificationSettings> = Result.success(A_ROOM_NOTIFICATION_SETTINGS)
+    private val getDefaultRoomNotificationMode: Result<RoomNotificationMode> = Result.success(A_ROOM_NOTIFICATION_MODE)
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _roomNotificationSettingsStateFlow
 
@@ -37,15 +41,15 @@ class FakeNotificationSettingsService : NotificationSettingsService {
     }
 
     override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: ULong): Result<RoomNotificationMode> {
-        TODO("Not yet implemented")
+        return getDefaultRoomNotificationMode
     }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> {
-        TODO("Not yet implemented")
+        return setRoomNotificationMode
     }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> {
-        TODO("Not yet implemented")
+        return restoreDefaultRoomNotificationMode
     }
 
     override suspend fun muteRoom(roomId: RoomId): Result<Unit> {

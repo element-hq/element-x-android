@@ -53,7 +53,8 @@ const val A_HOMESERVER_URL_2 = "matrix-client.org"
 
 val A_HOMESERVER = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswordLogin = true, supportsOidcLogin = false)
 val A_HOMESERVER_OIDC = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswordLogin = false, supportsOidcLogin = true)
-val A_ROOM_NOTIFICATION_SETTINGS = RoomNotificationSettings(mode = RoomNotificationMode.MUTE, isDefault = false)
+val A_ROOM_NOTIFICATION_MODE = RoomNotificationMode.MUTE
+val A_ROOM_NOTIFICATION_SETTINGS = RoomNotificationSettings(mode = A_ROOM_NOTIFICATION_MODE, isDefault = false)
 
 const val AN_AVATAR_URL = "mxc://data"
 
