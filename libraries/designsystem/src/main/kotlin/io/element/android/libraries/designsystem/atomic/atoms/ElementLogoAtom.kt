@@ -62,7 +62,7 @@ fun ElementLogoAtom(
         ElementLogoAtomSize.Large -> 110.dp
         ElementLogoAtomSize.Medium -> 83.5.dp
     }
-    val cornerRadius = when(size) {
+    val cornerRadius = when (size) {
         ElementLogoAtomSize.Large -> 44.dp
         ElementLogoAtomSize.Medium -> 33.dp
     }
@@ -126,7 +126,8 @@ internal fun ElementLogoAtomPreview() {
         Box(
             Modifier
                 .size(170.dp)
-                .background(ElementTheme.colors.bgSubtlePrimary))
+                .background(ElementTheme.colors.bgSubtlePrimary)
+        )
         ElementLogoAtom(ElementLogoAtomSize.Large)
     }
 }
