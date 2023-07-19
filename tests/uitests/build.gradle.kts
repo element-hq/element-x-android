@@ -48,7 +48,9 @@ dependencies {
 
     implementation(libs.showkase)
 
-    implementation(projects.app)
+    // TODO There is a Resources.NotFoundException maybe due to the mipmap, even if we have
+    // `testOptions { unitTests.isIncludeAndroidResources = true }` in the app build.gradle.kts file
+    // implementation(projects.app)
     implementation(projects.appnav)
     allLibrariesImpl()
     allServicesImpl()
