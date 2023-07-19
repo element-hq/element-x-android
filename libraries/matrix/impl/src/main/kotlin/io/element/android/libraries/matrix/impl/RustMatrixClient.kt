@@ -144,7 +144,7 @@ class RustMatrixClient constructor(
         client.setDelegate(clientDelegate)
         rustSyncService.syncState
             .onEach { syncState ->
-                if (syncState == SyncState.Syncing) {
+                if (syncState == SyncState.Running) {
                     onSlidingSyncUpdate()
                 }
             }.launchIn(sessionCoroutineScope)

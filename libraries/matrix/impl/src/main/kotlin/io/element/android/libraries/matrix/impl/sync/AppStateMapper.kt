@@ -24,8 +24,8 @@ internal fun RoomListServiceState.toSyncState(): SyncState {
     return when (this) {
         RoomListServiceState.INIT,
         RoomListServiceState.SETTING_UP -> SyncState.Idle
-        RoomListServiceState.RUNNING -> SyncState.Syncing
-        RoomListServiceState.ERROR -> SyncState.InError
+        RoomListServiceState.RUNNING -> SyncState.Running
+        RoomListServiceState.ERROR -> SyncState.Error
         RoomListServiceState.TERMINATED -> SyncState.Terminated
     }
 }
@@ -33,8 +33,8 @@ internal fun RoomListServiceState.toSyncState(): SyncState {
 internal fun SyncServiceState.toSyncState(): SyncState {
     return when (this) {
         SyncServiceState.IDLE -> SyncState.Idle
-        SyncServiceState.RUNNING -> SyncState.Syncing
+        SyncServiceState.RUNNING -> SyncState.Running
         SyncServiceState.TERMINATED -> SyncState.Terminated
-        SyncServiceState.ERROR -> SyncState.InError
+        SyncServiceState.ERROR -> SyncState.Error
     }
 }

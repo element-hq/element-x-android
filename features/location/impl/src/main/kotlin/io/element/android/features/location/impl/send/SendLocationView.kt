@@ -133,7 +133,10 @@ fun SendLocationView(
                         )
                     )
                 },
-                modifier = Modifier.clickable {
+                modifier = Modifier.clickable(
+                    // target is null when the map hasn't loaded (or api key is wrong) so we disable the button
+                    enabled = cameraPositionState.position.target != null
+                ) {
                     state.eventSink(
                         SendLocationEvents.SendLocation(
                             cameraPosition = SendLocationEvents.SendLocation.CameraPosition(

@@ -21,21 +21,43 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.permissions.PermissionsPresenter
+import io.element.android.features.location.impl.permissions.PermissionsPresenterFake
+import io.element.android.features.location.impl.permissions.PermissionsState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class ShowLocationPresenterTest {
 
+    private val permissionsPresenterFake = PermissionsPresenterFake()
     private val actions = FakeLocationActions()
     private val location = Location(1.23, 4.56, 7.8f)
+    private val presenter = ShowLocationPresenter(
+        permissionsPresenterFactory = object : PermissionsPresenter.Factory {
+            override fun create(permissions: List<String>): PermissionsPresenter = permissionsPresenterFake
+        },
+        actions,
+        location,
+        A_DESCRIPTION,
+    )
 
     @Test
-    fun `emits initial state`() = runTest {
-        val presenter = ShowLocationPresenter(
-            actions,
-            location,
-            A_DESCRIPTION,
-        )
+    fun `emits initial state with no location permission`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.location).isEqualTo(location)
+            Truth.assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
+            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(false)
+            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+        }
+    }
+
+    @Test
+    fun `emits initial state with location permission`() = runTest {
+        permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -43,17 +65,28 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             Truth.assertThat(initialState.location).isEqualTo(location)
             Truth.assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
+            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(true)
+            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+        }
+    }
+
+    @Test
+    fun `emits initial state with partial location permission`() = runTest {
+        permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.SomeGranted))
+
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.location).isEqualTo(location)
+            Truth.assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
+            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(true)
+            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
         }
     }
 
     @Test
     fun `uses action to share location`() = runTest {
-        val presenter = ShowLocationPresenter(
-            actions,
-            location,
-            A_DESCRIPTION,
-        )
-
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -62,6 +95,27 @@ class ShowLocationPresenterTest {
 
             Truth.assertThat(actions.sharedLocation).isEqualTo(location)
             Truth.assertThat(actions.sharedLabel).isEqualTo(A_DESCRIPTION)
+        }
+    }
+
+    @Test
+    fun `centers on user location`() = runTest {
+        permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.AllGranted))
+
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(true)
+            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+
+            initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
+            val trackMyLocationState = awaitItem()
+
+            delay(1)
+
+            Truth.assertThat(trackMyLocationState.hasLocationPermission).isEqualTo(true)
+            Truth.assertThat(trackMyLocationState.isTrackMyLocation).isEqualTo(true)
         }
     }
 

@@ -164,7 +164,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     syncService.syncState,
                     networkMonitor.connectivity
                 ) { syncState, networkStatus ->
-                    syncState == SyncState.InError && networkStatus == NetworkStatus.Online
+                    syncState == SyncState.Error && networkStatus == NetworkStatus.Online
                 }
                     .distinctUntilChanged()
                     .collect { restartSync ->

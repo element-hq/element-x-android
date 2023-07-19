@@ -18,7 +18,7 @@ package io.element.android.libraries.matrix.api.sync
 
 enum class SyncState {
     Idle,
-    Syncing,
-    InError,
+    Running,
+    Error,
     Terminated,
 }
