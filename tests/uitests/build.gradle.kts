@@ -48,6 +48,7 @@ dependencies {
 
     implementation(libs.showkase)
 
+    implementation(projects.app)
     implementation(projects.appnav)
     allLibrariesImpl()
     allServicesImpl()
