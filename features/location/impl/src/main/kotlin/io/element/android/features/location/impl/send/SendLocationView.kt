@@ -20,9 +20,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -113,6 +116,9 @@ fun SendLocationView(
         }
     }
 
+    // BottomSheetScaffold doesn't manage the system insets for sheetContent and the FAB, so we need to do it manually.
+    val navBarPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+
     BottomSheetScaffold(
         sheetContent = {
             Spacer(modifier = Modifier.height(16.dp))
@@ -150,7 +156,7 @@ fun SendLocationView(
                     Icon(Icons.Default.LocationOn, null)
                 },
             )
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(16.dp + navBarPadding))
         },
         modifier = modifier,
         scaffoldState = rememberBottomSheetScaffoldState(
@@ -204,7 +210,7 @@ fun SendLocationView(
                 onClick = { state.eventSink(SendLocationEvents.SwitchToMyLocationMode) },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = 72.dp),
+                    .padding(end = 16.dp, bottom = 72.dp + navBarPadding),
             ) {
                 when (state.mode) {
                     SendLocationState.Mode.PinLocation -> Icon(imageVector = Icons.Default.LocationSearching, contentDescription = null)
