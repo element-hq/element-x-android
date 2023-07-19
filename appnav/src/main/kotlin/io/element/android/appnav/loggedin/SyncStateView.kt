@@ -83,10 +83,10 @@ fun SyncStateView(
 }
 
 private fun SyncState.mustBeVisible() = when (this) {
-    SyncState.Idle -> true
+    SyncState.Idle -> true /* Cold start of the app */
     SyncState.Running -> false
     SyncState.Error -> false /* In this case, the network error banner can be displayed */
-    SyncState.Terminated -> false
+    SyncState.Terminated -> true /* The app is resumed and the sync is started again */
 }
 
 @DayNightPreviews
