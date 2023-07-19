@@ -16,6 +16,7 @@
 
 package io.element.android.features.location.impl
 
+import android.Manifest
 import android.view.Gravity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -60,4 +61,6 @@ object MapDefaults {
         .build()
 
     const val DEFAULT_ZOOM = 15.0
+
+    val permissions = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 }

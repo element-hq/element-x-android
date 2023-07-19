@@ -16,8 +16,6 @@
 
 package io.element.android.features.location.impl.send
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -56,9 +54,7 @@ class SendLocationPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
 ) : Presenter<SendLocationState> {
 
-    private val permissionsPresenter = permissionsPresenterFactory.create(
-        listOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION)
-    )
+    private val permissionsPresenter = permissionsPresenterFactory.create(MapDefaults.permissions)
 
     @Composable
     override fun present(): SendLocationState {

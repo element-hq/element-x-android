@@ -17,13 +17,21 @@
 package io.element.android.features.location.impl.show
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.MapDefaults
+import io.element.android.features.location.impl.permissions.PermissionsPresenter
+import io.element.android.features.location.impl.permissions.PermissionsState
 import io.element.android.libraries.architecture.Presenter
 
 class ShowLocationPresenter @AssistedInject constructor(
+    permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val actions: LocationActions,
     @Assisted private val location: Location,
     @Assisted private val description: String?
@@ -34,15 +42,26 @@ class ShowLocationPresenter @AssistedInject constructor(
         fun create(location: Location, description: String?): ShowLocationPresenter
     }
 
+    private val permissionsPresenter = permissionsPresenterFactory.create(MapDefaults.permissions)
+
     @Composable
     override fun present(): ShowLocationState {
-        return ShowLocationState(
-            location = location,
-            description = description
-        ) {
-            when (it) {
+        val permissionsState: PermissionsState = permissionsPresenter.present()
+        var isTrackMyLocation by remember { mutableStateOf(false) }
+
+        fun handleEvents(event: ShowLocationEvents) {
+            when (event) {
                 ShowLocationEvents.Share -> actions.share(location, description)
+                is ShowLocationEvents.TrackMyLocation -> isTrackMyLocation = event.enabled
             }
         }
+
+        return ShowLocationState(
+            location = location,
+            description = description,
+            hasLocationPermission = permissionsState.isAnyGranted,
+            isTrackMyLocation = isTrackMyLocation,
+            eventSink = ::handleEvents,
+        )
     }
 }

@@ -21,5 +21,7 @@ import io.element.android.features.location.api.Location
 data class ShowLocationState(
     val location: Location,
     val description: String?,
+    val hasLocationPermission: Boolean,
+    val isTrackMyLocation: Boolean,
     val eventSink: (ShowLocationEvents) -> Unit,
 )
