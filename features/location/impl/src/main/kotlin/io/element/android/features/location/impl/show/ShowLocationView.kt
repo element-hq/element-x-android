@@ -23,9 +23,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationSearching
+import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,15 +40,19 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.MapDefaults
+import io.element.android.features.location.impl.send.SendLocationState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.maplibre.compose.CameraMode
+import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason
 import io.element.android.libraries.maplibre.compose.IconAnchor
 import io.element.android.libraries.maplibre.compose.MapboxMap
 import io.element.android.libraries.maplibre.compose.Symbol
@@ -64,7 +71,33 @@ fun ShowLocationView(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
-    Scaffold(modifier,
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.Builder()
+            .target(LatLng(state.location.lat, state.location.lon))
+            .zoom(MapDefaults.DEFAULT_ZOOM)
+            .build()
+    }
+
+    LaunchedEffect(state.isTrackMyLocation) {
+        when (state.isTrackMyLocation) {
+            false -> cameraPositionState.cameraMode = CameraMode.NONE
+            true -> {
+                cameraPositionState.position = CameraPosition.Builder()
+                    .zoom(MapDefaults.DEFAULT_ZOOM)
+                    .build()
+                cameraPositionState.cameraMode = CameraMode.TRACKING
+            }
+        }
+    }
+
+    LaunchedEffect(cameraPositionState.isMoving) {
+        if (cameraPositionState.cameraMoveStartedReason == CameraMoveStartedReason.GESTURE) {
+            state.eventSink(ShowLocationEvents.TrackMyLocation(false))
+        }
+    }
+
+    Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
@@ -82,7 +115,19 @@ fun ShowLocationView(
                     }
                 }
             )
-        }
+        },
+        floatingActionButton = {
+            if (state.hasLocationPermission) {
+                FloatingActionButton(
+                    onClick = { state.eventSink(ShowLocationEvents.TrackMyLocation(true)) },
+                ) {
+                    when (state.isTrackMyLocation) {
+                        false -> Icon(imageVector = Icons.Default.LocationSearching, contentDescription = null)
+                        true -> Icon(imageVector = Icons.Default.MyLocation, contentDescription = null)
+                    }
+                }
+            }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -107,14 +152,12 @@ fun ShowLocationView(
                 styleUri = rememberTileStyleUrl(),
                 modifier = Modifier.fillMaxSize(),
                 images = mapOf(PIN_ID to DesignSystemR.drawable.pin).toImmutableMap(),
-                cameraPositionState = rememberCameraPositionState {
-                    position = CameraPosition.Builder()
-                        .target(LatLng(state.location.lat, state.location.lon))
-                        .zoom(MapDefaults.DEFAULT_ZOOM)
-                        .build()
-                },
+                cameraPositionState = cameraPositionState,
                 uiSettings = MapDefaults.uiSettings,
                 symbolManagerSettings = MapDefaults.symbolManagerSettings,
+                locationSettings = MapDefaults.locationSettings.copy(
+                    locationEnabled = state.hasLocationPermission,
+                ),
             ) {
                 Symbol(
                     iconId = PIN_ID,
