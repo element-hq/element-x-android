@@ -17,6 +17,10 @@
 package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
+import kotlinx.collections.immutable.toPersistentList
+import java.util.Date
 
 open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReaction> {
     override val values: Sequence<AggregatedReaction>
@@ -32,8 +36,21 @@ fun anAggregatedReaction(
     key: String = "👍",
     count: Int = 1,
     isHighlighted: Boolean = false,
-) = AggregatedReaction(
-    key = key,
-    count = count,
-    isHighlighted = isHighlighted,
-)
+): AggregatedReaction {
+    val alice = UserId("@alice:server.org")
+    val senders = buildList {
+        repeat(count) { index ->
+            add(
+                ReactionSender(
+                    senderId = if (isHighlighted && index == 0) alice else UserId("@user$index:server.org"),
+                    timestamp = Date()
+                )
+            )
+        }
+    }
+    return AggregatedReaction(
+        currentUserId = alice,
+        key = key,
+        senders = senders
+    )
+}

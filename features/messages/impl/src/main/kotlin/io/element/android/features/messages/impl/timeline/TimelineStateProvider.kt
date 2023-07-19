@@ -20,6 +20,7 @@ import io.element.android.features.messages.impl.timeline.model.AggregatedReacti
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.anAggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
@@ -33,10 +34,12 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import java.util.Date
 import java.util.UUID
 import kotlin.random.Random
 
@@ -141,7 +144,11 @@ fun aTimelineItemReactions(
         reactions = buildList {
             repeat(count) { index ->
                 val key = emojis[index % emojis.size]
-                add(AggregatedReaction(key = key, count = 1 + index, isHighlighted = isHighlighted))
+                add(anAggregatedReaction(
+                    key = key,
+                    count = index,
+                    isHighlighted = isHighlighted
+                ))
             }
         }.toPersistentList()
     )

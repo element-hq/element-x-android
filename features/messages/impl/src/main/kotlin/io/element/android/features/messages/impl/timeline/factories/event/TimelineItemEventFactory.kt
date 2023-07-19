@@ -27,6 +27,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.user.getCurrentUser
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
@@ -90,14 +91,22 @@ class TimelineItemEventFactory @Inject constructor(
     }
 
     private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {
-        val aggregatedReactions = event.reactions.map {
+        var aggregatedReactions = event.reactions.map { reaction ->
+            // Sort reactions within an aggregation by timestamp descending.
+            // This puts the most recent at the top, useful in cases like the
+            // reaction summary view or getting the most recent reaction.
             AggregatedReaction(
-                key = it.key,
-                count = it.count.toInt(),
-                isHighlighted = it.senderIds.contains(matrixClient.sessionId),
+                key = reaction.key,
+                currentUserId = matrixClient.sessionId,
+                senders = reaction.senders.sortedBy { it.timestamp }
             )
         }
-        aggregatedReactions.sortedByDescending { it.count }
+        // Sort aggregated reactions by count and then timestamp ascending, using
+        // the most recent reaction in the aggregation(hence index 0).
+        // This appends new aggregations on the end of the reaction layout.
+        aggregatedReactions = aggregatedReactions
+            .sortedWith(compareByDescending<AggregatedReaction> { it.count }
+            .thenBy { it.senders[0].timestamp })
         return TimelineItemReactions(aggregatedReactions.toImmutableList())
     }
 

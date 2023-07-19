@@ -16,7 +16,17 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
-data class EventReaction(
-    val key: String,
-    val senders: List<ReactionSender>
+import io.element.android.libraries.matrix.api.core.UserId
+import java.util.Date
+
+/**
+ * The sender of a reaction.
+ *
+ * @property senderId the ID of the user who sent the reaction
+ * @property timestamp the timestamp the reaction was received on the origin homeserver
+ */
+data class ReactionSender(
+    val senderId: UserId,
+    val timestamp: Date
 )
+
