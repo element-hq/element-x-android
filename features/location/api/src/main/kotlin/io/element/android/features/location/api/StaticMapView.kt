@@ -29,12 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
+import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.api.internal.staticMapUrl
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -106,13 +106,7 @@ fun StaticMapView(
                 resourceId = DesignSystemR.drawable.pin,
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.align { size, space, _ ->
-                    // Center bottom edge of pin (i.e. its arrow) to center of screen
-                    IntOffset(
-                        x = (space.width - size.width) / 2,
-                        y = (space.height / 2) - size.height,
-                    )
-                }
+                modifier = Modifier.centerBottomEdge(this),
             )
         } else {
             StaticMapPlaceholder(

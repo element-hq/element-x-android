@@ -43,10 +43,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.MapDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -198,13 +198,7 @@ fun SendLocationView(
                 resourceId = DesignSystemR.drawable.pin,
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.align { size, space, _ ->
-                    // Center bottom edge of pin (i.e. its arrow) to center of screen
-                    IntOffset(
-                        x = (space.width - size.width) / 2,
-                        y = (space.height / 2) - size.height,
-                    )
-                }
+                modifier = Modifier.centerBottomEdge(this),
             )
             FloatingActionButton(
                 onClick = { state.eventSink(SendLocationEvents.SwitchToMyLocationMode) },
