@@ -22,12 +22,12 @@ plugins {
     id("kotlin-parcelize")
 }
 
-fun readLocalProperty(name: String) = Properties().apply {
+fun readLocalProperty(name: String): String? = Properties().apply {
     try {
         load(rootProject.file("local.properties").reader())
     } catch (ignored: java.io.IOException) {
     }
-}[name]
+}.getProperty(name)
 
 android {
     namespace = "io.element.android.features.location.api"
@@ -37,8 +37,22 @@ android {
             type = "string",
             name = "maptiler_api_key",
             value = System.getenv("ELEMENT_ANDROID_MAPTILER_API_KEY")
-                ?: readLocalProperty("services.maptiler.apikey") as? String
+                ?: readLocalProperty("services.maptiler.apikey")
                 ?: ""
+        )
+        resValue(
+            type = "string",
+            name = "maptiler_light_map_id",
+            value = System.getenv("ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID")
+                ?: readLocalProperty("services.maptiler.lightMapId")
+                ?: "basic-v2" // fall back to maptiler's default map.
+        )
+        resValue(
+            type = "string",
+            name = "maptiler_dark_map_id",
+            value = System.getenv("ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID")
+                ?: readLocalProperty("services.maptiler.darkMapId")
+                ?: "basic-v2" // fall back to maptiler's default map.
         )
     }
 }
