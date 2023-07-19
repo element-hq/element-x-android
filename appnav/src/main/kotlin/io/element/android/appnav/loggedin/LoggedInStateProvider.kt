@@ -17,17 +17,22 @@
 package io.element.android.appnav.loggedin
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.permissions.api.createDummyPostNotificationPermissionsState
 
 open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
     override val values: Sequence<LoggedInState>
         get() = sequenceOf(
             aLoggedInState(),
+            aLoggedInState(syncState = SyncState.Idle),
             // Add other state here
         )
 }
 
-fun aLoggedInState() = LoggedInState(
+fun aLoggedInState(
+    syncState: SyncState = SyncState.Running,
+) = LoggedInState(
+    syncState = syncState,
     permissionsState = createDummyPostNotificationPermissionsState(),
     // eventSink = {}
 )

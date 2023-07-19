@@ -20,6 +20,7 @@ import android.Manifest
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -52,6 +53,7 @@ class LoggedInPresenter @Inject constructor(
             pushService.registerWith(matrixClient, pushProvider, distributor)
         }
 
+        val syncState = matrixClient.syncService().syncState.collectAsState()
         val permissionsState = postNotificationPermissionsPresenter.present()
 
         // fun handleEvents(event: LoggedInEvents) {
@@ -60,6 +62,7 @@ class LoggedInPresenter @Inject constructor(
         // }
 
         return LoggedInState(
+            syncState = syncState.value,
             permissionsState = permissionsState,
             // eventSink = ::handleEvents
         )
