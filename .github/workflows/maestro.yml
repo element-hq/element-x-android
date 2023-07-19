@@ -36,6 +36,8 @@ jobs:
           java-version: '17'
       - name: Assemble debug APK
         run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
       - name: Upload debug APKs
         uses: actions/upload-artifact@v3
         with:
