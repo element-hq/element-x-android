@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.backPaginationStatusFlow
+import io.element.android.libraries.matrix.impl.timeline.eventOrigin
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -54,6 +55,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -119,9 +121,11 @@ class RustMatrixRoom(
         roomCoroutineScope.launch(roomDispatcher) {
             innerRoom.timelineDiffFlow { initialList ->
                 _timeline.postItems(initialList)
-            }.onEach {
-                _syncUpdateFlow.value = systemClock.epochMillis()
-                _timeline.postDiff(it)
+            }.onEach { diff ->
+                if (diff.eventOrigin() == EventItemOrigin.SYNC) {
+                    _syncUpdateFlow.value = systemClock.epochMillis()
+                }
+                _timeline.postDiff(diff)
             }.launchIn(this)
 
             innerRoom.backPaginationStatusFlow()
