@@ -36,13 +36,11 @@ object SessionMatrixModule {
     }
 
     @Provides
-    @SingleIn(SessionScope::class)
     fun providesNotificationSettingsService(matrixClient: MatrixClient): NotificationSettingsService {
         return matrixClient.notificationSettingsService()
     }
 
     @Provides
-    @SingleIn(SessionScope::class)
     fun provideRoomMembershipObserver(matrixClient: MatrixClient): RoomMembershipObserver {
         return matrixClient.roomMembershipObserver()
     }

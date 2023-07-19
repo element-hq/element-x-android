@@ -20,21 +20,31 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
+import timber.log.Timber
 
 class RustNotificationSettingsService(
     private val client: Client,
-) : NotificationSettingsService, NotificationSettingsDelegate {
+) : NotificationSettingsService {
 
     private val notificationSettings: NotificationSettings = client.getNotificationSettings()
 
-    private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>()
+    private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>(onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val notificationSettingsChangeFlow: SharedFlow<Unit> = _notificationSettingsChangeFlow.asSharedFlow()
+
+    private var notificationSettingsDelegate = object : NotificationSettingsDelegate {
+        override fun settingsDidChange() {
+            Timber.d("emit ${_notificationSettingsChangeFlow.subscriptionCount.value}")
+            val ok = _notificationSettingsChangeFlow.tryEmit(Unit)
+            Timber.d("emit $ok")
+        }
+    }
 
 //    override val notificationSettingsChangeFlow = callbackFlow {
 //        val delegate = object:NotificationSettingsDelegate {
@@ -50,7 +60,7 @@ class RustNotificationSettingsService(
 //    }.buffer(Channel.UNLIMITED)
 
     init {
-        notificationSettings.setDelegate(this)
+        notificationSettings.setDelegate(notificationSettingsDelegate)
     }
 
     override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong): Result<RoomNotificationSettings> =
@@ -79,8 +89,4 @@ class RustNotificationSettingsService(
         runCatching {
             notificationSettings.unmuteRoom(roomId.value, isEncrypted, membersCount)
         }
-
-    override fun settingsDidChange() {
-        _notificationSettingsChangeFlow.tryEmit(Unit)
-    }
 }

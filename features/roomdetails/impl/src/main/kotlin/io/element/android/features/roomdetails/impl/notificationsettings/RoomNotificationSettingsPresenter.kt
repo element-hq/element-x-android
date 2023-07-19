@@ -30,9 +30,12 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class RoomNotificationSettingsPresenter @Inject constructor(
@@ -73,8 +76,9 @@ class RoomNotificationSettingsPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.observeNotificationSettings() {
-        notificationSettingsService.notificationSettingsChangeFlow.onEach {
-            room.updateRoomNotificationSettings()
+        notificationSettingsService.notificationSettingsChangeFlow.buffer(Channel.UNLIMITED).onEach {
+            //room.updateRoomNotificationSettings()
+            Timber.d("emit is called")
         }.launchIn(this)
     }
 
