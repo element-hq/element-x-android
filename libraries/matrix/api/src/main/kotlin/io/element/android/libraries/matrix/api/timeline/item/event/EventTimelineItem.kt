@@ -42,6 +42,6 @@ data class EventTimelineItem(
     }
     fun hasNotLoadedInReplyTo(): Boolean {
         val details = inReplyTo()
-        return details is InReplyTo.NotLoaded || details is InReplyTo.Error
+        return details is InReplyTo.NotLoaded
     }
 }

@@ -58,7 +58,8 @@ class EventMessageMapper {
                     )
                 }
                 is RepliedToEventDetails.Error -> InReplyTo.Error
-                is RepliedToEventDetails.Pending, is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(inReplyToId!!)
+                is RepliedToEventDetails.Pending -> InReplyTo.Pending
+                is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(inReplyToId!!)
             }
         }
         MessageContent(
