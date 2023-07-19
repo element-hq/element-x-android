@@ -51,7 +51,6 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.permissions.noop)
 
-    implementation(projects.tests.uitests)
     implementation(libs.coil)
 
     implementation(projects.features.ftue.api)
