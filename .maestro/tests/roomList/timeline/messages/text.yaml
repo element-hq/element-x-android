@@ -1,8 +1,0 @@
-appId: ${APP_ID}
----
-- takeScreenshot: build/maestro/510-Timeline
-- tapOn: "Message"
-- inputText: "Hello world!"
-- tapOn: "Send"
-- hideKeyboard
-- takeScreenshot: build/maestro/511-Timeline
