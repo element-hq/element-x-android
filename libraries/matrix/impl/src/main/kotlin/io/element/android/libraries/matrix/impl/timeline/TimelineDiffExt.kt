@@ -28,7 +28,7 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 internal fun TimelineDiff.eventOrigin(): EventItemOrigin? {
     return when (change()) {
         TimelineChange.APPEND -> {
-            append()?.first()?.eventOrigin()
+            append()?.firstOrNull()?.eventOrigin()
         }
         TimelineChange.PUSH_BACK -> {
             pushBack()?.eventOrigin()
@@ -43,7 +43,7 @@ internal fun TimelineDiff.eventOrigin(): EventItemOrigin? {
             insert()?.item?.eventOrigin()
         }
         TimelineChange.RESET -> {
-            reset()?.first()?.eventOrigin()
+            reset()?.firstOrNull()?.eventOrigin()
         }
         else -> null
     }
