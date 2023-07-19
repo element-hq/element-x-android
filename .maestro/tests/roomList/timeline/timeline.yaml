@@ -1,12 +1,9 @@
 appId: ${APP_ID}
 ---
 # This is the name of one room
-# TODO Create a room on a new account
 - tapOn: ${ROOM_NAME}
 - takeScreenshot: build/maestro/500-Timeline
-- tapOn: "Message"
-- inputText: "Hello world!"
-- tapOn: "Send"
-- hideKeyboard
+- runFlow: messages/text.yaml
+- runFlow: messages/location.yaml
 - back
 - runFlow: ../../assertions/assertHomeDisplayed.yaml
