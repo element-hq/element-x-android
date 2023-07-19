@@ -1,0 +1,7 @@
+appId: ${APP_ID}
+---
+- runFlow: tests/init.yaml
+- runFlow: tests/account/login.yaml
+- runFlow: tests/settings/settings.yaml
+- runFlow: tests/roomList/roomList.yaml
+- runFlow: tests/account/logout.yaml

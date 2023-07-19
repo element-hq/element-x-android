@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Nu vom înregistra și nu vom face profiluri cu privire la datele personale."</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Distribuiți date anonime de utilizare pentru a ne ajuta să identificăm probleme."</string>
+  <string name="screen_analytics_prompt_read_terms">"Puteți citi toate condițiile noastre %1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"aici"</string>
+  <string name="screen_analytics_prompt_settings">"Puteți dezactiva această opțiune oricând din setări"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Nu vom partaja datele dvs. cu terțe părți"</string>
+  <string name="screen_analytics_prompt_title">"Ajutați la îmbunătățirea %1$s"</string>
+</resources>

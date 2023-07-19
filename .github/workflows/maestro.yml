@@ -1,0 +1,57 @@
+name: Maestro
+
+# Run this flow only on pull request, and only when the pull request has been approved, to limit our usage of maestro cloud.
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-a-workflow-when-a-pull-request-is-approved
+on:
+  workflow_dispatch:
+  pull_request_review:
+    types: [submitted]
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
+
+jobs:
+  maestro-cloud:
+    name: Maestro test suite
+    runs-on: ubuntu-latest
+    if: github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+    # Allow one per PR.
+    concurrency:
+      group: ${{ format('maestro-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+      - uses: actions/setup-java@v3
+        name: Use JDK 17
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Assemble debug APK
+        run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
+      - name: Upload debug APKs
+        uses: actions/upload-artifact@v3
+        with:
+          name: elementx-debug
+          path: |
+            app/build/outputs/apk/debug/*.apk
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.4.1
+        with:
+          api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+          app-file: app/build/outputs/apk/debug/app-universal-debug.apk
+          env: |
+            USERNAME=maestroelement
+            PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
+            ROOM_NAME=MyRoom
+            INVITEE1_MXID=@maestroelement2:matrix.org
+            INVITEE2_MXID=@maestroelement3:matrix.org
+            APP_ID=io.element.android.x.debug

@@ -1,0 +1,83 @@
+name: Move labelled issues to correct boards and columns
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  move_element_x_issues:
+    name: ElementX issues to ElementX project board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-x-android'
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/43
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_needs_info:
+    name: Move triaged needs info issues on board
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@main
+        id: addItem
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/91
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          labeled: X-Needs-Info
+      - name: Print itemId
+        run: echo ${{ steps.addItem.outputs.itemId }}
+      - uses: kalgurn/update-project-item-status@main
+        if: ${{ steps.addItem.outputs.itemId }}
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/91
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          item-id: ${{ steps.addItem.outputs.itemId }}
+          status: "Needs info"
+
+  ex_plorers:
+    name: Add labelled issues to X-Plorer project
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'Team: Element X Feature')
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/73
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  verticals_feature:
+    name: Add labelled issues to Verticals Feature project
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/57
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  qa:
+    name: Add labelled issues to QA project
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'Team: QA') ||
+      contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/69
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  signoff:
+    name: Add labelled issues to signoff project
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/89
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

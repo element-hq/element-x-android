@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_roomlist_a11y_create_message">"Vytvorte novú konverzáciu alebo miestnosť"</string>
+  <string name="screen_roomlist_main_space_title">"Všetky konverzácie"</string>
+  <string name="session_verification_banner_message">"Vyzerá to tak, že používate nové zariadenie. Overte svoj prístup k zašifrovaným správam pomocou vášho druhého zariadenia."</string>
+  <string name="session_verification_banner_title">"Overte, že ste to vy"</string>
+</resources>

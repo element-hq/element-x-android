@@ -1,0 +1,5 @@
+appId: ${APP_ID}
+---
+- extendedWaitUntil:
+    visible: "Be in your element"
+    timeout: 10_000

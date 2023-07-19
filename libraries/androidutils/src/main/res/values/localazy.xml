@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_no_compatible_app_found">"No compatible app was found to handle this action."</string>
+</resources>

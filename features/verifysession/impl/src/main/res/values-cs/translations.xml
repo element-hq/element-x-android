@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_session_verification_cancelled_subtitle">"Něco není v pořádku. Buď vypršel časový limit požadavku, nebo byl požadavek zamítnut."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Zkontrolujte, zda se níže uvedené emotikony shodují s emotikony zobrazenými na jiné relaci."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Porovnání emotikonů"</string>
+  <string name="screen_session_verification_complete_subtitle">"Vaše nová relace je nyní ověřena. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé ji uvidí jako důvěryhodnou."</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Pro přístup k historii zašifrovaných zpráv prokažte, že jste to vy."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Otevřete existující relaci"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Opakovat ověření"</string>
+  <string name="screen_session_verification_positive_button_initial">"Jsem připraven"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Čekání na shodu"</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Porovnejte jedinečné emotikony a ujistěte se, že jsou zobrazeny ve stejném pořadí."</string>
+  <string name="screen_session_verification_they_dont_match">"Neshodují se"</string>
+  <string name="screen_session_verification_they_match">"Shodují se"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Pro pokračování přijměte požadavek na zahájení ověření v jiné relaci."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Čekání na přijetí žádosti"</string>
+  <string name="screen_session_verification_cancelled_title">"Ověření zrušeno"</string>
+  <string name="screen_session_verification_positive_button_ready">"Začít"</string>
+</resources>

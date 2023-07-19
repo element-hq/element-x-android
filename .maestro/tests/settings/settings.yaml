@@ -1,0 +1,30 @@
+appId: ${APP_ID}
+---
+- tapOn:
+    id: "home_screen-settings"
+- assertVisible: "Settings"
+- takeScreenshot: build/maestro/600-Settings
+- tapOn:
+    text: "Analytics"
+- assertVisible: "Share analytics data"
+- back
+
+- tapOn:
+    text: "Report bug"
+- assertVisible: "Report a bug"
+- back
+
+- tapOn:
+    text: "About"
+- assertVisible: "Copyright"
+- assertVisible: "Acceptable use policy"
+- assertVisible: "Privacy policy"
+- back
+
+- tapOn:
+    text: "Developer options"
+- assertVisible: "Feature flags"
+- back
+
+- back
+- runFlow: ../assertions/assertHomeDisplayed.yaml

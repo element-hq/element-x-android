@@ -1,0 +1,7 @@
+appId: ${APP_ID}
+---
+- clearState
+- launchApp:
+    clearKeychain: true
+- runFlow: ./assertions/assertInitDisplayed.yaml
+- takeScreenshot: build/maestro/000-FirstScreen

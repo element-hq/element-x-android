@@ -1,0 +1,52 @@
+#! /bin/bash
+
+#
+# Copyright (c) 2023 New Vector Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+set -e
+
+if [[ $1 == "--all" ]]; then
+  echo "Note: I will update all the files."
+  allFiles=1
+else
+  echo "Note: I will update only the English files."
+  allFiles=0
+fi
+
+echo "Generating the configuration file for localazy..."
+python3 ./tools/localazy/generateLocalazyConfig.py $allFiles
+
+echo "Deleting all existing localazy.xml files..."
+find . -name 'localazy.xml' -delete
+
+if [[ $allFiles == 1 ]]; then
+  echo "Deleting all existing translations.xml files..."
+  find . -name 'translations.xml' -delete
+fi
+
+echo "Importing the strings..."
+localazy download --config ./tools/localazy/localazy.json
+
+echo "Add new lines to the end of the files..."
+find . -name 'localazy.xml' -print0 -exec bash -c "echo \"\" >> \"{}\"" \; >> /dev/null
+if [[ $allFiles == 1 ]]; then
+  find . -name 'translations.xml' -print0 -exec bash -c "echo \"\" >> \"{}\"" \; >> /dev/null
+fi
+
+echo "Removing the generated config"
+rm ./tools/localazy/localazy.json
+
+echo "Success!"

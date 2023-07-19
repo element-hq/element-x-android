@@ -1,0 +1,77 @@
+name: APK Build
+
+on:
+  workflow_dispatch:
+  pull_request: { }
+  push:
+    branches: [ main, develop ]
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
+
+jobs:
+  debug:
+    name: Build debug APKs
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
+    strategy:
+      fail-fast: false
+    # Allow all jobs on develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}', github.sha) || format('build-debug-{0}', github.ref)  }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+      - name: Use JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/gradle-build-action@v2.6.1
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+      - name: Assemble debug APK
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
+        run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload debug APKs
+        uses: actions/upload-artifact@v3
+        with:
+          name: elementx-debug
+          path: |
+            app/build/outputs/apk/debug/*.apk
+      - uses: rnkdsh/action-upload-diawi@v1.5.1
+        id: diawi
+        # Do not fail the whole build if Diawi upload fails
+        continue-on-error: true
+        env:
+          token: ${{ secrets.DIAWI_TOKEN }}
+        if: ${{ github.event_name == 'pull_request' && env.token != '' }}
+        with:
+          token: ${{ env.token }}
+          file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
+      - name: Add or update PR comment with QR Code to download APK.
+        if: ${{ github.event_name == 'pull_request' && steps.diawi.conclusion == 'success' }}
+        uses: NejcZdovc/comment-pr@v2
+        with:
+          message: |
+            :iphone: Scan the QR code below to install the build (arm64 only) for this PR.
+            ![QR code](${{ steps.diawi.outputs['qrcode'] }})
+            If you can't scan the QR code you can install the build via this link: ${{ steps.diawi.outputs['url'] }}
+          # Enables to identify and update existing Ad-hoc release message on new commit in the PR
+          identifier: "GITHUB_COMMENT_QR_CODE"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Compile release sources
+        run: ./gradlew compileReleaseSources $CI_GRADLE_ARG_PROPERTIES
+      - name: Compile nightly sources
+        run: ./gradlew compileNightlySources $CI_GRADLE_ARG_PROPERTIES
+      - name: Compile samples minimal
+        run: ./gradlew :samples:minimal:assemble $CI_GRADLE_ARG_PROPERTIES

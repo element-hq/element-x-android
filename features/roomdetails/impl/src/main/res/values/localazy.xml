@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"1 person"</item>
+    <item quantity="other">"%1$d people"</item>
+  </plurals>
+  <string name="screen_room_details_add_topic_title">"Add topic"</string>
+  <string name="screen_room_details_already_a_member">"Already a member"</string>
+  <string name="screen_room_details_already_invited">"Already invited"</string>
+  <string name="screen_room_details_edit_room_title">"Edit Room"</string>
+  <string name="screen_room_details_edition_error">"There was an unknown error and the information couldn\'t be changed."</string>
+  <string name="screen_room_details_edition_error_title">"Unable to update room"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
+  <string name="screen_room_details_error_loading_notification_settings">"An error occurred when loading notification settings."</string>
+  <string name="screen_room_details_error_muting">"Failed muting this room, please try again."</string>
+  <string name="screen_room_details_error_unmuting">"Failed unmuting this room, please try again."</string>
+  <string name="screen_room_details_invite_people_title">"Invite people"</string>
+  <string name="screen_room_details_notification_mode_custom">"Custom"</string>
+  <string name="screen_room_details_notification_mode_default">"Default"</string>
+  <string name="screen_room_details_notification_title">"Notifications"</string>
+  <string name="screen_room_details_room_name_label">"Room name"</string>
+  <string name="screen_room_details_share_room_title">"Share room"</string>
+  <string name="screen_room_details_updating_room">"Updating room…"</string>
+  <string name="screen_room_member_list_pending_header_title">"Pending"</string>
+  <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
+  <string name="screen_dm_details_block_alert_action">"Block"</string>
+  <string name="screen_dm_details_block_alert_description">"Blocked users won\'t be able to send you messages and all their messages will be hidden. You can unblock them anytime."</string>
+  <string name="screen_dm_details_block_user">"Block user"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Unblock"</string>
+  <string name="screen_dm_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
+  <string name="screen_dm_details_unblock_user">"Unblock user"</string>
+  <string name="screen_room_details_leave_room_title">"Leave room"</string>
+  <string name="screen_room_details_people_title">"People"</string>
+  <string name="screen_room_details_security_title">"Security"</string>
+  <string name="screen_room_details_topic_title">"Topic"</string>
+</resources>

@@ -1,0 +1,124 @@
+{
+  "modules": [
+    {
+      "name": ":features:rageshake:impl",
+      "includeRegex": [
+        "screen_bug_report_.*"
+      ]
+    },
+    {
+      "name": ":features:rageshake:api",
+      "includeRegex": [
+        "crash_detection_.*",
+        "rageshake_detection_.*"
+      ]
+    },
+    {
+      "name": ":features:logout:api",
+      "includeRegex": [
+        "screen_signout_.*"
+      ]
+    },
+    {
+      "name": ":features:onboarding:impl",
+      "includeRegex": [
+        "screen_onboarding_.*"
+      ]
+    },
+    {
+      "name": ":features:invitelist:impl",
+      "includeRegex": [
+        "screen_invites_.*"
+      ]
+    },
+    {
+      "name": ":features:createroom:impl",
+      "includeRegex": [
+        "screen_create_room_.*",
+        "screen_start_chat_.*"
+      ]
+    },
+    {
+      "name": ":features:verifysession:impl",
+      "includeRegex": [
+        "screen_session_verification_.*"
+      ]
+    },
+    {
+      "name": ":libraries:textcomposer",
+      "includeRegex": [
+        "rich_text_editor_.*"
+      ]
+    },
+    {
+      "name": ":libraries:androidutils",
+      "includeRegex": [
+        "error_no_compatible_app_found"
+      ]
+    },
+    {
+      "name": ":libraries:eventformatter:impl",
+      "includeRegex": [
+        "state_event_.*"
+      ]
+    },
+    {
+      "name": ":libraries:push:impl",
+      "includeRegex": [
+        "push_.*",
+        "notification_.*"
+      ]
+    },
+    {
+      "name": ":features:login:impl",
+      "includeRegex": [
+        "screen_login_.*",
+        "screen_server_confirmation_.*",
+        "screen_change_server_.*",
+        "screen_change_account_provider_.*",
+        "screen_account_provider_.*",
+        "screen_waitlist_.*"
+      ]
+    },
+    {
+      "name": ":features:roomlist:impl",
+      "includeRegex": [
+        "screen_roomlist_.*",
+        "session_verification_banner_.*"
+      ]
+    },
+    {
+      "name": ":features:roomdetails:impl",
+      "includeRegex": [
+        "screen_room_details_.*",
+        "screen_room_member_list_.*",
+        "screen_dm_details_.*"
+      ]
+    },
+    {
+      "name": ":features:messages:impl",
+      "includeRegex": [
+        "screen_room_.*",
+        "screen_dm_details_.*",
+        "room_timeline_state_changes"
+      ],
+      "excludeRegex": [
+        "screen_room_details_.*",
+        "screen_room_member.*",
+        "screen_dm_.*"
+      ]
+    },
+    {
+      "name": ":features:analytics:impl",
+      "includeRegex": [
+        "screen_analytics_prompt.*"
+      ]
+    },
+    {
+      "name": ":features:ftue:impl",
+      "includeRegex": [
+        "screen_welcome_.*"
+      ]
+    }
+  ]
+}
