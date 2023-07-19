@@ -14,27 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.show
+package io.element.android.features.location.impl.permissions
 
-import io.element.android.features.location.api.Location
+import io.element.android.libraries.architecture.Presenter
 
-class FakeLocationActions : LocationActions {
-
-    var sharedLocation: Location? = null
-        private set
-
-    var sharedLabel: String? = null
-        private set
-
-    var openSettingsInvocationsCount = 0
-        private set
-
-    override fun share(location: Location, label: String?) {
-        sharedLocation = location
-        sharedLabel = label
-    }
-
-    override fun openSettings() {
-        openSettingsInvocationsCount++
+interface PermissionsPresenter : Presenter<PermissionsState> {
+    interface Factory {
+        fun create(permissions: List<String>): PermissionsPresenter
     }
 }

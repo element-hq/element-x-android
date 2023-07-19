@@ -17,7 +17,11 @@
 package io.element.android.features.location.api.internal
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import io.element.android.features.location.api.R
+import io.element.android.libraries.theme.ElementTheme
 
 /**
  * Provides the URL to an image that contains a statically-generated map of the given location.
@@ -35,9 +39,24 @@ fun staticMapUrl(
 }
 
 /**
+ * Utility function to remember the tile server URL based on the current theme.
+ */
+@Composable
+fun rememberTileStyleUrl(): String {
+    val context = LocalContext.current
+    val darkMode = !ElementTheme.isLightTheme
+    return remember(darkMode) {
+        tileStyleUrl(
+            context = context,
+            darkMode = darkMode
+        )
+    }
+}
+
+/**
  * Provides the URL to a MapLibre style document, used for rendering dynamic maps.
  */
-fun tileStyleUrl(
+private fun tileStyleUrl(
     context: Context,
     darkMode: Boolean,
 ): String {

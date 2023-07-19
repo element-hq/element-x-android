@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.show
+package io.element.android.features.location.impl
 
 import android.content.Context
 import android.content.Intent
@@ -22,6 +22,8 @@ import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.show.LocationActions
+import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
@@ -29,23 +31,24 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class AndroidLocationActions @Inject constructor(
-    @ApplicationContext private val appContext: Context
+    @ApplicationContext private val context: Context
 ) : LocationActions {
-
-    private var activityContext: Context? = null
-
     override fun share(location: Location, label: String?) {
         runCatching {
             val uri = Uri.parse(buildUrl(location, label))
             val showMapsIntent = Intent(Intent.ACTION_VIEW).setData(uri)
             val chooserIntent = Intent.createChooser(showMapsIntent, null)
             chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            appContext.startActivity(chooserIntent)
+            context.startActivity(chooserIntent)
         }.onSuccess {
             Timber.v("Open location succeed")
         }.onFailure {
             Timber.e(it, "Open location failed")
         }
+    }
+
+    override fun openSettings() {
+        context.openAppSettingsPage()
     }
 }
 

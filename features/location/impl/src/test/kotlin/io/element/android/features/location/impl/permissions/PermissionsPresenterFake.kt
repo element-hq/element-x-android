@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.show
+package io.element.android.features.location.impl.permissions
 
-import io.element.android.features.location.api.Location
+import androidx.compose.runtime.Composable
 
-class FakeLocationActions : LocationActions {
+class PermissionsPresenterFake : PermissionsPresenter {
 
-    var sharedLocation: Location? = null
-        private set
+    val events = mutableListOf<PermissionsEvents>()
 
-    var sharedLabel: String? = null
-        private set
-
-    var openSettingsInvocationsCount = 0
-        private set
-
-    override fun share(location: Location, label: String?) {
-        sharedLocation = location
-        sharedLabel = label
+    private fun handleEvent(event: PermissionsEvents) {
+        events += event
     }
 
-    override fun openSettings() {
-        openSettingsInvocationsCount++
+    private var state = PermissionsState(eventSink = ::handleEvent)
+        set(value) {
+            field = value.copy(eventSink = ::handleEvent)
+        }
+
+    fun givenState(state: PermissionsState) {
+        this.state = state
     }
+
+    @Composable
+    override fun present(): PermissionsState = state
 }

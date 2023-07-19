@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl
+package io.element.android.features.location.impl.permissions
 
-data class SendLocationState(
-    val mode: Mode = Mode.ALocation,
-    val eventSink: (SendLocationEvents) -> Unit = {},
+data class PermissionsState(
+    val permissions: Permissions = Permissions.NoneGranted,
+    val shouldShowRationale: Boolean = false,
+    val eventSink: (PermissionsEvents) -> Unit = {},
 ) {
-    sealed interface Mode {
-        object MyLocation : Mode
-        object ALocation : Mode
+    sealed interface Permissions {
+        object AllGranted : Permissions
+        object SomeGranted : Permissions
+        object NoneGranted : Permissions
     }
+
+    val isAnyGranted: Boolean
+        get() = permissions is Permissions.SomeGranted || permissions is Permissions.AllGranted
 }
