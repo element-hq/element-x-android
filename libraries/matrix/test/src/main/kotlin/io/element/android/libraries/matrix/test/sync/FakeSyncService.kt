@@ -26,11 +26,11 @@ class FakeSyncService : SyncService {
     private val syncStateFlow = MutableStateFlow(SyncState.Idle)
 
     fun simulateError() {
-        syncStateFlow.value = SyncState.InError
+        syncStateFlow.value = SyncState.Error
     }
 
     override suspend fun startSync(): Result<Unit> {
-        syncStateFlow.value = SyncState.Syncing
+        syncStateFlow.value = SyncState.Running
         return Result.success(Unit)
     }
 

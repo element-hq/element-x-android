@@ -30,7 +30,7 @@ open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
 }
 
 fun aLoggedInState(
-    syncState: SyncState = SyncState.Syncing,
+    syncState: SyncState = SyncState.Running,
 ) = LoggedInState(
     syncState = syncState,
     permissionsState = createDummyPostNotificationPermissionsState(),

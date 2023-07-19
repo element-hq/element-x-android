@@ -84,8 +84,8 @@ fun SyncStateView(
 
 private fun SyncState.mustBeVisible() = when (this) {
     SyncState.Idle -> true
-    SyncState.Syncing -> false
-    SyncState.InError -> false /* In this case, the network error banner can be displayed */
+    SyncState.Running -> false
+    SyncState.Error -> false /* In this case, the network error banner can be displayed */
     SyncState.Terminated -> false
 }
 
