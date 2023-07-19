@@ -16,14 +16,19 @@
 
 package io.element.android.appnav.loggedin
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.androidutils.system.openAppSettingsPage
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.permissions.api.PermissionsView
 
 @Composable
@@ -33,25 +38,27 @@ fun LoggedInView(
 ) {
     val context = LocalContext.current
 
-    PermissionsView(
-        state = state.permissionsState,
-        modifier = modifier,
-        openSystemSettings = context::openAppSettingsPage
-    )
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+    ) {
+        SyncStateView(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .align(Alignment.TopCenter),
+            syncState = state.syncState,
+        )
+        PermissionsView(
+            state = state.permissionsState,
+            openSystemSettings = context::openAppSettingsPage
+        )
+    }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-fun LoggedInViewLightPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-fun LoggedInViewDarkPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: LoggedInState) {
+fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) = ElementPreview {
     LoggedInView(
         state = state
     )
