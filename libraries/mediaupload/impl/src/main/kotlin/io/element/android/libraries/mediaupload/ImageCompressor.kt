@@ -91,7 +91,7 @@ class ImageCompressor @Inject constructor(
     ) {
         val (width, height) = when (resizeMode) {
             is ResizeMode.Approximate -> resizeMode.desiredWidth to resizeMode.desiredHeight
-            is ResizeMode.Strict -> (resizeMode.maxWidth / 2) to (resizeMode.maxHeight / 2)
+            is ResizeMode.Strict -> resizeMode.maxWidth / 2 to resizeMode.maxHeight / 2
             is ResizeMode.None -> return
         }
         // Read bounds only

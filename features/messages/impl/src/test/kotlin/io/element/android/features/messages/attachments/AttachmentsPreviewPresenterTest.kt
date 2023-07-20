@@ -86,7 +86,7 @@ class AttachmentsPreviewPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.sendActionState).isEqualTo(SendActionState.Sending.Processing)
             val failureState = awaitItem()
-            assertThat(failureState.sendActionState).isEqualTo((SendActionState.Failure(failure)))
+            assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure))
             assertThat(room.sendMediaCount).isEqualTo(0)
             failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
             val clearedState = awaitItem()

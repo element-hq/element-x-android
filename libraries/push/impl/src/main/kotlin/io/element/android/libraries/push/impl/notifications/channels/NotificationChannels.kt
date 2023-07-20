@@ -162,7 +162,7 @@ class NotificationChannels @Inject constructor(
         private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
 
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
-        private fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
         fun openSystemSettingsForSilentCategory(activity: Activity) {
             activity.startNotificationChannelSettingsIntent(SILENT_NOTIFICATION_CHANNEL_ID)

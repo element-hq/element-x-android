@@ -351,7 +351,7 @@ private fun HtmlMxReply(
     Surface(
         modifier = modifier
             .padding(bottom = 4.dp)
-            .offset(x = -(8.dp)),
+            .offset(x = (-8).dp),
         color = MaterialTheme.colorScheme.background,
         shape = shape,
     ) {

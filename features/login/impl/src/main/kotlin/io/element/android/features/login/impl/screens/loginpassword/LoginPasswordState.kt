@@ -30,7 +30,8 @@ data class LoginPasswordState(
 ) {
     val submitEnabled: Boolean
         get() = loginAction !is Async.Failure &&
-            ((formState.login.isNotEmpty() && formState.password.isNotEmpty()))
+            formState.login.isNotEmpty() &&
+            formState.password.isNotEmpty()
 }
 
 @Parcelize

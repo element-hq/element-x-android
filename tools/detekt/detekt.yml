@@ -16,6 +16,9 @@ style:
     active: true
   UnusedParameter:
     active: true
+  UnnecessaryParentheses:
+    active: true
+    allowForUnclearPrecedence: false
   UnusedImports:
     active: true
   UnusedPrivateProperty:
