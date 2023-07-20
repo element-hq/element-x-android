@@ -143,8 +143,8 @@
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
   <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
-  <string name="error_missing_location_auth_android">"To send a location, allow %1$s to access your location from its settings screen."</string>
-  <string name="error_missing_location_rationale_android">"To send a location, allow %1$s to access your location in the next dialog."</string>
+  <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
+  <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
