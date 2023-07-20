@@ -35,25 +35,25 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
  * A flow layout for reactions that will show a collapse/expand button when the layout wraps over a defined number of rows.
  * It displays an add more button when there are greater than 0 reactions and always displays the reaction and add more button
  * on the same row (moving them both to a new row if necessary).
+ * @param expandButton The expand button
+ * @param addMoreButton The add more button
+ * @param modifier The modifier to apply to this layout
  * @param itemSpacing The horizontal spacing between items
  * @param rowSpacing The vertical spacing between rows
  * @param expanded Whether the layout should display in expanded or collapsed state
  * @param rowsBeforeCollapsible The number of rows before the collapse/expand button is shown
- * @param expandButton The expand button
- * @param addMoreButton The add more button
  * @param reactions The reaction buttons
- * @param modifier The modifier to apply to this layout
  */
 @Composable
 fun TimelineItemReactionsLayout(
+    expandButton: @Composable () -> Unit,
+    addMoreButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     itemSpacing: Dp = 0.dp,
     rowSpacing: Dp = 0.dp,
     expanded: Boolean = false,
     rowsBeforeCollapsible: Int? = 2,
-    expandButton: @Composable () -> Unit,
-    addMoreButton: @Composable () -> Unit,
-    reactions: @Composable () -> Unit
+    reactions: @Composable () -> Unit,
 ) {
     SubcomposeLayout(modifier) { constraints ->
         // Given the placeables and returns a structure representing
@@ -85,7 +85,7 @@ fun TimelineItemReactionsLayout(
         // removing only as many trailing reactions as needed to make space for it.
         fun replaceTrailingItemsWithButtons(rowsIn: List<List<Placeable>>, expandButton: Placeable, addMoreButton: Placeable): List<List<Placeable>> {
             val rows = rowsIn.toMutableList()
-            val lastRow = rows[rows.size - 1]
+            val lastRow = rows.last()
             val buttonsWidth = expandButton.width + itemSpacing.toPx().toInt() + addMoreButton.width
             var rowX = 0
             lastRow.forEachIndexed { i, placeable ->
