@@ -68,7 +68,7 @@ class MessageComposerPresenterTest {
         givenResult(mockk()) // Uri is not available in JVM, so the only way to have a non-null Uri is using Mockk
     }
     private val featureFlagService = FakeFeatureFlagService(
-        mapOf(FeatureFlags.ShowMediaUploadingFlow.key to true)
+        mapOf(FeatureFlags.LocationSharing.key to true)
     )
     private val mediaPreProcessor = FakeMediaPreProcessor()
     private val snackbarDispatcher = SnackbarDispatcher()

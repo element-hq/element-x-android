@@ -74,6 +74,11 @@ class MessageComposerPresenter @Inject constructor(
             mutableStateOf<AttachmentsState>(AttachmentsState.None)
         }
 
+        var canShareLocation = false
+        LaunchedEffect(Unit) {
+            canShareLocation = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
+        }
+
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
             handlePickedMedia(attachmentsState, uri, mimeType)
         }
@@ -140,23 +145,23 @@ class MessageComposerPresenter @Inject constructor(
                         )
                     )
                 }
-                MessageComposerEvents.AddAttachment -> localCoroutineScope.launchIfMediaPickerEnabled {
+                MessageComposerEvents.AddAttachment -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = true
                 }
                 MessageComposerEvents.DismissAttachmentMenu -> showAttachmentSourcePicker = false
-                MessageComposerEvents.PickAttachmentSource.FromGallery -> localCoroutineScope.launchIfMediaPickerEnabled {
+                MessageComposerEvents.PickAttachmentSource.FromGallery -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
                     galleryMediaPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.FromFiles -> localCoroutineScope.launchIfMediaPickerEnabled {
+                MessageComposerEvents.PickAttachmentSource.FromFiles -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
                     filesPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.launchIfMediaPickerEnabled {
+                MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
                     cameraPhotoPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.launchIfMediaPickerEnabled {
+                MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
                     cameraVideoPicker.launch()
                 }
@@ -173,15 +178,10 @@ class MessageComposerPresenter @Inject constructor(
             hasFocus = hasFocus.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
+            canShareLocation = canShareLocation,
             attachmentsState = attachmentsState.value,
             eventSink = ::handleEvents
         )
-    }
-
-    private fun CoroutineScope.launchIfMediaPickerEnabled(action: suspend () -> Unit) = launch {
-        if (featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)) {
-            action()
-        }
     }
 
     private fun CoroutineScope.sendMessage(
