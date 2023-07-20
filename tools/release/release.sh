@@ -223,7 +223,7 @@ printf "Downloading the artifact...\n"
  # Download files
 targetPath="./tmp/Element/${version}"
 
-python3 ./tools/release/download_github_artifacts.py \
+python3 ./tools/github/download_github_artifacts.py \
      --token ${gitHubToken} \
      --artifactUrl ${artifactUrl} \
      --directory ${targetPath} \
