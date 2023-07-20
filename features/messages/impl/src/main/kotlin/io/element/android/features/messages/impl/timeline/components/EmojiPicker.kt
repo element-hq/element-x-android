@@ -41,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.vanniktech.emoji.Emoji
 import com.vanniktech.emoji.google.GoogleEmojiProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -62,7 +61,7 @@ fun EmojiPicker(
     val emojiProvider = remember { GoogleEmojiProvider() }
     val categories = remember { emojiProvider.categories }
     val pagerState = rememberPagerState()
-    Column (modifier) {
+    Column(modifier) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
         ) {
@@ -109,7 +108,8 @@ fun EmojiPicker(
                         Text(
                             text = item.unicode,
                             style = ElementTheme.typography.fontHeadingSmRegular,
-                        )                    }
+                        )
+                    }
                 }
             }
         }

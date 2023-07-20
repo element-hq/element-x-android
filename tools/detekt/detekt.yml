@@ -16,6 +16,8 @@ style:
     active: true
   UnusedParameter:
     active: true
+  UnusedImports:
+    active: true
   UnusedPrivateProperty:
     active: true
   ThrowsCount:

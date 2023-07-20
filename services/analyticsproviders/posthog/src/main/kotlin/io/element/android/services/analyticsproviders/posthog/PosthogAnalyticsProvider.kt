@@ -16,7 +16,6 @@
 
 package io.element.android.services.analyticsproviders.posthog
 
-import com.posthog.android.Options
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
 import com.squareup.anvil.annotations.ContributesMultibinding

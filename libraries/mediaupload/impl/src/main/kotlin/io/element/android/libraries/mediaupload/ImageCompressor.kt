@@ -19,7 +19,6 @@ package io.element.android.libraries.mediaupload
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.androidutils.bitmap.calculateInSampleSize
 import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation

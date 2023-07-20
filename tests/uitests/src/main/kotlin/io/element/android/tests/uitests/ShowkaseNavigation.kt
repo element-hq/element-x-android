@@ -18,7 +18,6 @@ package io.element.android.tests.uitests
 
 import android.app.Activity
 import android.content.Intent
-import com.airbnb.android.showkase.models.Showkase
 import com.airbnb.android.showkase.ui.ShowkaseBrowserActivity
 
 fun openShowkase(activity: Activity) {
