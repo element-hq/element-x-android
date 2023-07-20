@@ -69,6 +69,7 @@ class ThumbnailFactory @Inject constructor(
                     cancellationSignal
                 )
             } else {
+                @Suppress("DEPRECATION")
                 ThumbnailUtils.createImageThumbnail(
                     file.path,
                     MediaStore.Images.Thumbnails.MINI_KIND,
