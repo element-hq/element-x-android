@@ -42,6 +42,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
  * @param expandButton The expand button
  * @param addMoreButton The add more button
  * @param reactions The reaction buttons
+ * @param modifier The modifier to apply to this layout
  */
 @Composable
 fun TimelineItemReactionsLayout(
