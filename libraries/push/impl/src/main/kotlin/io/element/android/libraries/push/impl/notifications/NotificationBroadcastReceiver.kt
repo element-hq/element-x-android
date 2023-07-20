@@ -19,15 +19,12 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.RemoteInput
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.log.notificationLoggerTag
-import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,10 +36,6 @@ private val loggerTag = LoggerTag("NotificationBroadcastReceiver", notificationL
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     @Inject lateinit var defaultNotificationDrawerManager: DefaultNotificationDrawerManager
-
-    //@Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    //@Inject lateinit var analyticsTracker: AnalyticsTracker
-    @Inject lateinit var clock: SystemClock
     @Inject lateinit var actionIds: NotificationActionIds
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -81,6 +74,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun handleJoinRoom(sessionId: SessionId, roomId: RoomId) {
         /*
         activeSessionHolder.getSafeActiveSession()?.let { session ->
@@ -94,10 +88,10 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 }
             }
         }
-
          */
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun handleRejectRoom(sessionId: SessionId, roomId: RoomId) {
         /*
         activeSessionHolder.getSafeActiveSession()?.let { session ->
@@ -109,6 +103,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
          */
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId) {
         /*
         activeSessionHolder.getActiveSession().let { session ->
@@ -123,7 +118,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
          */
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun handleSmartReply(intent: Intent, context: Context) {
+        /*
         val message = getReplyMessage(intent)
         val sessionId = intent.getStringExtra(KEY_SESSION_ID)?.let(::SessionId)
         val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
@@ -134,13 +131,11 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             // Can this happen? should we update notification?
             return
         }
-        /*
         activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)?.let { room ->
                 sendMatrixEvent(message, threadId, session, room, context)
             }
         }
-
          */
     }
 
@@ -234,6 +229,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
      */
 
+    /*
     private fun getReplyMessage(intent: Intent?): String? {
         if (intent != null) {
             val remoteInput = RemoteInput.getResultsFromIntent(intent)
@@ -243,6 +239,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         }
         return null
     }
+     */
 
     companion object {
         const val KEY_SESSION_ID = "sessionID"
