@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class TimelineItemContentFailedToParseMessageFactory @Inject constructor() {
 
-    fun create(failedToParseMessageLike: FailedToParseMessageLikeContent): TimelineItemEventContent {
+    fun create(@Suppress("UNUSED_PARAMETER") failedToParseMessageLike: FailedToParseMessageLikeContent): TimelineItemEventContent {
         return TimelineItemUnknownContent
     }
 }
