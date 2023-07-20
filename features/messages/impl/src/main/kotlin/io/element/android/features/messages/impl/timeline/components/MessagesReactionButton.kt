@@ -117,7 +117,7 @@ private fun TextContent(
         .height(reactionEmojiLineHeight.toDp()),
     text = text,
     style = ElementTheme.typography.fontBodyMdRegular,
-    color = MaterialTheme.colorScheme.primary
+    color = ElementTheme.materialColors.primary
 )
 
 @Composable
@@ -127,7 +127,7 @@ private fun IconContent(
 ) = Icon(
     imageVector = imageVector,
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
-    tint = MaterialTheme.colorScheme.secondary,
+    tint = ElementTheme.materialColors.secondary,
     modifier = modifier
         .size(reactionEmojiLineHeight.toDp())
 )
