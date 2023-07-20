@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.forward
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -40,7 +40,7 @@ class ForwardMessagesPresenterTests {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = aPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -60,7 +60,7 @@ class ForwardMessagesPresenterTests {
     @Test
     fun `present - toggle search active`() = runTest {
         val presenter = aPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -81,7 +81,7 @@ class ForwardMessagesPresenterTests {
         }
         val client = FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         val presenter = aPresenter(client = client)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -96,7 +96,7 @@ class ForwardMessagesPresenterTests {
     @Test
     fun `present - select a room and forward successful`() = runTest {
         val presenter = aPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -123,7 +123,7 @@ class ForwardMessagesPresenterTests {
     fun `present - select a room and forward failed, then clear`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = aPresenter(fakeMatrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -151,7 +151,7 @@ class ForwardMessagesPresenterTests {
     @Test
     fun `present - select and remove a room`() = runTest {
         val presenter = aPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

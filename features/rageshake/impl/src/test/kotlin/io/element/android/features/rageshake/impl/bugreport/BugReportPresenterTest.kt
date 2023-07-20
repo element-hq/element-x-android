@@ -16,7 +16,7 @@
 
 package io.element.android.features.rageshake.impl.bugreport
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -41,7 +41,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -62,7 +62,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -81,7 +81,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -100,7 +100,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -120,7 +120,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -139,7 +139,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -161,7 +161,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -186,7 +186,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -215,7 +215,7 @@ class BugReportPresenterTest {
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
             this,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomlist.impl.datasource
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
@@ -40,7 +40,7 @@ internal class DefaultInviteStateDataSourceTest {
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
@@ -55,7 +55,7 @@ internal class DefaultInviteStateDataSourceTest {
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             skipItems(1)
@@ -72,7 +72,7 @@ internal class DefaultInviteStateDataSourceTest {
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers(useUnconfinedTestDispatcher = true))
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             skipItems(1)
@@ -89,7 +89,7 @@ internal class DefaultInviteStateDataSourceTest {
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers(useUnconfinedTestDispatcher = true))
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             skipItems(1)
@@ -105,7 +105,7 @@ internal class DefaultInviteStateDataSourceTest {
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             // Initially there are no invites

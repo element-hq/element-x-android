@@ -16,7 +16,7 @@
 
 package io.element.android.features.rageshake.impl.preferences
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -34,7 +34,7 @@ class RageshakePreferencesPresenterTest {
             FakeRageShake(isAvailableValue = true),
             FakeRageshakeDataStore(isEnabled = true)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -50,7 +50,7 @@ class RageshakePreferencesPresenterTest {
             FakeRageShake(isAvailableValue = false),
             FakeRageshakeDataStore(isEnabled = true)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -66,7 +66,7 @@ class RageshakePreferencesPresenterTest {
             FakeRageShake(isAvailableValue = true),
             FakeRageshakeDataStore(isEnabled = true)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -85,7 +85,7 @@ class RageshakePreferencesPresenterTest {
             FakeRageShake(isAvailableValue = true),
             FakeRageshakeDataStore(isEnabled = true)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)

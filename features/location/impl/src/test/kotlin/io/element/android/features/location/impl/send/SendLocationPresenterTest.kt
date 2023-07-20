@@ -16,7 +16,7 @@
 
 package io.element.android.features.location.impl.send
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
@@ -69,7 +69,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
 
@@ -96,7 +96,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
 
@@ -123,7 +123,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
@@ -149,7 +149,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
@@ -175,7 +175,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             // Skip initial state
@@ -206,7 +206,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             // Skip initial state
@@ -234,7 +234,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             // Skip initial state
@@ -265,7 +265,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             // Skip initial state
@@ -322,7 +322,7 @@ class SendLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             // Skip initial state
@@ -384,7 +384,7 @@ class SendLocationPresenterTest {
             )
         }
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             // Skip initial state
@@ -431,7 +431,7 @@ class SendLocationPresenterTest {
             )
         }
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             // Skip initial state
@@ -451,7 +451,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `application name is in state`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
             val initialState = awaitItem()

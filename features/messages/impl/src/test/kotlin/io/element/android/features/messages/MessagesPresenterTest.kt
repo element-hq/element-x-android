@@ -17,7 +17,7 @@
 package io.element.android.features.messages
 
 import android.net.Uri
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.collect.Iterables.skip
@@ -81,7 +81,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -95,7 +95,7 @@ class MessagesPresenterTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -116,7 +116,7 @@ class MessagesPresenterTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -133,7 +133,7 @@ class MessagesPresenterTest {
     fun `present - handle action forward`() = runTest {
         val navigator = FakeMessagesNavigator()
         val presenter = createMessagePresenter(navigator = navigator)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -149,7 +149,7 @@ class MessagesPresenterTest {
         val clipboardHelper = FakeClipboardHelper()
         val event = aMessageEvent()
         val presenter = createMessagePresenter(clipboardHelper = clipboardHelper)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -163,7 +163,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -179,7 +179,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to an event with no id does nothing`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -194,7 +194,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to an image media message`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -226,7 +226,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to a video media message`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -259,7 +259,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to a file media message`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -287,7 +287,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action edit`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -305,7 +305,7 @@ class MessagesPresenterTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val matrixRoom = FakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -320,7 +320,7 @@ class MessagesPresenterTest {
     fun `present - handle action report content`() = runTest {
         val navigator = FakeMessagesNavigator()
         val presenter = createMessagePresenter(navigator = navigator)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -334,7 +334,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle dismiss action`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -348,7 +348,7 @@ class MessagesPresenterTest {
     fun `present - handle action show developer info`() = runTest {
         val navigator = FakeMessagesNavigator()
         val presenter = createMessagePresenter(navigator = navigator)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -363,7 +363,7 @@ class MessagesPresenterTest {
     fun `present - shows prompt to reinvite users in DM`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 1L)
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
@@ -388,7 +388,7 @@ class MessagesPresenterTest {
     fun `present - doesn't show reinvite prompt in non-direct room`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = false, activeMemberCount = 1L)
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             
@@ -405,7 +405,7 @@ class MessagesPresenterTest {
     fun `present - doesn't show reinvite prompt if other party is present`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 2L)
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             
@@ -430,7 +430,7 @@ class MessagesPresenterTest {
             )
         )
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -460,7 +460,7 @@ class MessagesPresenterTest {
             )
         )
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -482,7 +482,7 @@ class MessagesPresenterTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
         room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -511,7 +511,7 @@ class MessagesPresenterTest {
         )
         room.givenInviteUserResult(Result.failure(Throwable("Oops!")))
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -531,7 +531,7 @@ class MessagesPresenterTest {
         val matrixRoom = FakeMatrixRoom()
         matrixRoom.givenCanSendEventResult(MessageEventType.ROOM_MESSAGE, Result.success(true))
         val presenter = createMessagePresenter(matrixRoom = matrixRoom)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             
@@ -544,7 +544,7 @@ class MessagesPresenterTest {
         val matrixRoom = FakeMatrixRoom()
         matrixRoom.givenCanSendEventResult(MessageEventType.ROOM_MESSAGE, Result.success(false))
         val presenter = createMessagePresenter(matrixRoom = matrixRoom)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Default value

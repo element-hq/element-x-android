@@ -19,7 +19,7 @@
 package io.element.android.features.messages.media.viewer
 
 import android.net.Uri
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -50,7 +50,7 @@ class MediaViewerPresenterTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
         val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             var state = awaitItem()
@@ -71,7 +71,7 @@ class MediaViewerPresenterTest {
         val mediaActions = FakeLocalMediaActions()
         val snackbarDispatcher = SnackbarDispatcher()
         val presenter = aMediaViewerPresenter(mediaLoader, mediaActions, snackbarDispatcher)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             var state = awaitItem()
@@ -117,7 +117,7 @@ class MediaViewerPresenterTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
         val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             mediaLoader.shouldFail = true

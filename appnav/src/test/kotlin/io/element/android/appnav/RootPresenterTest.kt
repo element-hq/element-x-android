@@ -16,7 +16,7 @@
 
 package io.element.android.appnav
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -38,7 +38,7 @@ class RootPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -54,7 +54,7 @@ class RootPresenterTest {
                 showError("Bad news", "Something bad happened")
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)

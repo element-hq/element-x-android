@@ -17,7 +17,7 @@
 package io.element.android.features.roomdetails.edit
 
 import android.net.Uri
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -82,7 +82,7 @@ class RoomDetailsEditPresenterTest {
         val room = aMatrixRoom(avatarUrl = AN_AVATAR_URL)
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -109,7 +109,7 @@ class RoomDetailsEditPresenterTest {
         }
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Initially false
@@ -135,7 +135,7 @@ class RoomDetailsEditPresenterTest {
         }
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Initially false
@@ -161,7 +161,7 @@ class RoomDetailsEditPresenterTest {
         }
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Initially false
@@ -183,7 +183,7 @@ class RoomDetailsEditPresenterTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -229,7 +229,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -250,7 +250,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -271,7 +271,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -323,7 +323,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -373,7 +373,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -398,7 +398,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -422,7 +422,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -445,7 +445,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -470,7 +470,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -495,7 +495,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -561,7 +561,7 @@ class RoomDetailsEditPresenterTest {
 
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -580,7 +580,7 @@ class RoomDetailsEditPresenterTest {
     private suspend fun saveAndAssertFailure(room: MatrixRoom, event: RoomDetailsEditEvents) {
         val presenter = aRoomDetailsEditPresenter(room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.report
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -36,7 +36,7 @@ class ReportMessagePresenterTests {
     @Test
     fun `presenter - initial state`() = runTest {
         val presenter = aPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -49,7 +49,7 @@ class ReportMessagePresenterTests {
     @Test
     fun `presenter - update reason`() = runTest {
         val presenter = aPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -63,7 +63,7 @@ class ReportMessagePresenterTests {
     @Test
     fun `presenter - toggle block user`() = runTest {
         val presenter = aPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -81,7 +81,7 @@ class ReportMessagePresenterTests {
     fun `presenter - handle successful report and block user`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = aPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -98,7 +98,7 @@ class ReportMessagePresenterTests {
     fun `presenter - handle successful report`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = aPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -115,7 +115,7 @@ class ReportMessagePresenterTests {
             givenReportContentResult(Result.failure(Exception("Failed to report content")))
         }
         val presenter = aPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

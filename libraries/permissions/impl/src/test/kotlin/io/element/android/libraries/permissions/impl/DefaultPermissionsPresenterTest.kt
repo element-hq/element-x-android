@@ -18,7 +18,7 @@
 
 package io.element.android.libraries.permissions.impl
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -41,7 +41,7 @@ class DefaultPermissionsPresenterTest {
             permissionsStore,
             permissionStateProvider
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -64,7 +64,7 @@ class DefaultPermissionsPresenterTest {
             permissionsStore,
             permissionStateProvider
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -84,7 +84,7 @@ class DefaultPermissionsPresenterTest {
             permissionsStore,
             permissionStateProvider
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -113,7 +113,7 @@ class DefaultPermissionsPresenterTest {
             permissionsStore,
             permissionStateProvider
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -142,7 +142,7 @@ class DefaultPermissionsPresenterTest {
             permissionsStore,
             permissionStateProvider
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -164,7 +164,7 @@ class DefaultPermissionsPresenterTest {
             permissionsStore,
             permissionStateProvider
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

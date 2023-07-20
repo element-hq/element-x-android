@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.invite
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -52,7 +52,7 @@ internal class RoomInviteMembersPresenterTest {
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -74,7 +74,7 @@ internal class RoomInviteMembersPresenterTest {
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -95,7 +95,7 @@ internal class RoomInviteMembersPresenterTest {
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -121,7 +121,7 @@ internal class RoomInviteMembersPresenterTest {
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -173,7 +173,7 @@ internal class RoomInviteMembersPresenterTest {
             ),
             coroutineDispatchers = coroutineDispatchers
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -232,7 +232,7 @@ internal class RoomInviteMembersPresenterTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -270,7 +270,7 @@ internal class RoomInviteMembersPresenterTest {
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -298,7 +298,7 @@ internal class RoomInviteMembersPresenterTest {
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -339,7 +339,7 @@ internal class RoomInviteMembersPresenterTest {
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

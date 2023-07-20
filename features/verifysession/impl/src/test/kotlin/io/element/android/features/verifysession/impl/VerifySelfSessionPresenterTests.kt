@@ -16,7 +16,7 @@
 
 package io.element.android.features.verifysession.impl
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
@@ -36,7 +36,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - Initial state is received`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial)
@@ -47,7 +47,7 @@ class VerifySelfSessionPresenterTests {
     fun `present - Handles requestVerification`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createPresenter(service)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             requestVerificationAndAwaitVerifyingState(service)
@@ -58,7 +58,7 @@ class VerifySelfSessionPresenterTests {
     fun `present - Handles startSasVerification`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createPresenter(service)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -77,7 +77,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - Cancelation on initial state does nothing`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -92,7 +92,7 @@ class VerifySelfSessionPresenterTests {
     fun `present - A fail in the flow cancels it`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createPresenter(service)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
@@ -109,7 +109,7 @@ class VerifySelfSessionPresenterTests {
     fun `present - Canceling the flow once it's verifying cancels it`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createPresenter(service)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
@@ -123,7 +123,7 @@ class VerifySelfSessionPresenterTests {
     fun `present - When verifying, if we receive another challenge we ignore it`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createPresenter(service)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             requestVerificationAndAwaitVerifyingState(service)
@@ -136,7 +136,7 @@ class VerifySelfSessionPresenterTests {
     fun `present - Restart after cancelation returns to requesting verification`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createPresenter(service)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
@@ -158,7 +158,7 @@ class VerifySelfSessionPresenterTests {
             givenEmojiList(emojis)
         }
         val presenter = createPresenter(service)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
@@ -172,7 +172,7 @@ class VerifySelfSessionPresenterTests {
     fun `present - When verification is declined, the flow is canceled`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createPresenter(service)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)

@@ -16,7 +16,7 @@
 
 package io.element.android.features.login.impl.screens.loginpassword
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -45,7 +45,7 @@ class LoginPasswordPresenterTest {
             accountProviderDataSource,
             loginUserStory,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -67,7 +67,7 @@ class LoginPasswordPresenterTest {
             loginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -93,7 +93,7 @@ class LoginPasswordPresenterTest {
             loginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             assertThat(loginUserStory.loginFlowIsDone.value).isFalse()
@@ -122,7 +122,7 @@ class LoginPasswordPresenterTest {
             loginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -150,7 +150,7 @@ class LoginPasswordPresenterTest {
             loginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
