@@ -16,9 +16,15 @@ style:
     active: true
   UnusedParameter:
     active: true
+  UnnecessaryInnerClass:
+    active: true
+  UnnecessaryLet:
+    active: true
   UnnecessaryParentheses:
     active: true
     allowForUnclearPrecedence: false
+  UntilInsteadOfRangeTo:
+    active: true
   UnusedImports:
     active: true
   UnusedPrivateProperty:
