@@ -72,16 +72,13 @@ fun StaticMapView(
             } else {
                 ImageRequest.Builder(LocalContext.current)
                     .data(
-                        staticMapUrl(
-                            context = context,
+                        context.staticMapUrl(
                             lat = lat,
                             lon = lon,
                             zoom = zoom,
                             darkMode = darkMode,
-                            // Size the map based on DP rather than pixels, as otherwise the features and attribution
-                            // end up being illegibly tiny on high density displays.
-                            width = constraints.maxWidth.toDp().value.toInt(),
-                            height = constraints.maxHeight.toDp().value.toInt(),
+                            width = constraints.maxWidth,
+                            height = constraints.maxHeight,
                         )
                     )
                     .size(width = constraints.maxWidth, height = constraints.maxHeight)
