@@ -74,9 +74,9 @@ class MessageComposerPresenter @Inject constructor(
             mutableStateOf<AttachmentsState>(AttachmentsState.None)
         }
 
-        var canShareLocation = false
+        val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            canShareLocation = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
+            canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
         }
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
@@ -178,7 +178,7 @@ class MessageComposerPresenter @Inject constructor(
             hasFocus = hasFocus.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
-            canShareLocation = canShareLocation,
+            canShareLocation = canShareLocation.value,
             attachmentsState = attachmentsState.value,
             eventSink = ::handleEvents
         )
