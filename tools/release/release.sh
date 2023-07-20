@@ -86,8 +86,7 @@ then
     printf "Git flow is initialized\n"
 else
     printf "Git flow is not initialized. Initializing...\n"
-    # All default value, just set 'v' for tag prefix
-    git flow init -d -t 'v'
+    ./tools/gitflow/gitflow-init.sh
 fi
 
 printf "OK\n"
