@@ -71,8 +71,7 @@ naming:
   VariableNaming:
     active: true
   TopLevelPropertyNaming:
-    # TODO Enable it
-    active: false
+    active: true
   FunctionNaming:
     active: true
     ignoreAnnotated: ['Composable']
