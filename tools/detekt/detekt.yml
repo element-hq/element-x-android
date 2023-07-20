@@ -145,8 +145,3 @@ Compose:
     active: true
   UnstableCollections:
     active: true
-  ViewModelForwarding:
-    ## TODO Set to true later
-    active: false
-  ViewModelInjection:
-    active: true
