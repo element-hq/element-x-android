@@ -1,0 +1,31 @@
+name: Create release App Bundle
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
+
+jobs:
+  release:
+    name: Create App Bundle
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref == 'refs/head/main' && format('build-release-main-{0}', github.sha) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure gradle
+        uses: gradle/gradle-build-action@v2.6.1
+      - name: Create app bundle
+        run: ./gradlew bundleRelease $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload bundle as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: elementx-app-bundle-unsigned
+          path: |
+            app/build/outputs/bundle/release/app-release.aab
