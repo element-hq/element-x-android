@@ -153,7 +153,7 @@ private fun ContentToPreview() {
             SelectedUsersList(
                 selectedUsers = aMatrixUserList().take(6).toImmutableList(),
                 modifier = Modifier
-                    .width((200 + (i * 20).dp)
+                    .width((200 + i * 20).dp)
                     .border(1.dp, Color.Red)
             )
         }
