@@ -165,6 +165,7 @@ internal fun RetrySendMessageMenuPreviewDark(@PreviewParameter(RetrySendMenuStat
     }
 }
 
+@Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview(state: RetrySendMenuState) {
