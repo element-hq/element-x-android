@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   pull_request: { }
   push:
-    branches: [ main, develop ]
+    branches: [ develop ]
 
 # Enrich gradle.properties for CI/CD
 env:
