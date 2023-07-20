@@ -23,6 +23,7 @@ import javax.inject.Inject
 
 class TimelineItemContentFailedToParseStateFactory @Inject constructor() {
 
+    @Suppress("UNUSED_PARAMETER")
     fun create(failedToParseState: FailedToParseStateContent): TimelineItemEventContent {
         return TimelineItemUnknownContent
     }
