@@ -87,6 +87,7 @@ class MessageComposerPresenterTest {
             assertThat(initialState.text).isEqualTo("")
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal(""))
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
+            assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.attachmentsState).isEqualTo(AttachmentsState.None)
             assertThat(initialState.isSendButtonVisible).isFalse()
         }
