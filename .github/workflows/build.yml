@@ -42,7 +42,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
-        run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew assembleDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug APKs
         uses: actions/upload-artifact@v3
         with:
@@ -72,8 +72,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Compile release sources
-        run: ./gradlew compileReleaseSources $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew compileReleaseSources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources
-        run: ./gradlew compileNightlySources $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew compileNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile samples minimal
         run: ./gradlew :samples:minimal:assemble $CI_GRADLE_ARG_PROPERTIES
