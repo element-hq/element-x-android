@@ -16,20 +16,17 @@
 
 package io.element.android.libraries.push.impl.push
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.push.impl.PushersManager
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
-import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -51,8 +48,7 @@ class DefaultPushHandler @Inject constructor(
     private val defaultPushDataStore: DefaultPushDataStore,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushClientSecret: PushClientSecret,
-    private val actionIds: NotificationActionIds,
-    @ApplicationContext private val context: Context,
+    // private val actionIds: NotificationActionIds,
     private val buildMeta: BuildMeta,
     private val matrixAuthenticationService: MatrixAuthenticationService,
 ) : PushHandler {

@@ -87,7 +87,7 @@ class DefaultBugReporter @Inject constructor(
         // filenames
         private const val LOG_CAT_ERROR_FILENAME = "logcatError.log"
         private const val LOG_CAT_FILENAME = "logcat.log"
-        private const val KEY_REQUESTS_FILENAME = "keyRequests.log"
+        // private const val KEY_REQUESTS_FILENAME = "keyRequests.log"
 
         private const val BUFFER_SIZE = 1024 * 1024 * 50
     }
