@@ -65,7 +65,7 @@ fun TimelineItemReactionsLayout(
 
             measurables.forEach { placeable ->
                 val horizontalSpacing = if (currentRow.isEmpty()) 0 else itemSpacing.toPx().toInt()
-                // If the current view does not fine on this row bump to the next
+                // If the current view does not fit on this row bump to the next
                 if (rowX + placeable.width > constraints.maxWidth) {
                     rows.add(currentRow)
                     currentRow = mutableListOf()
