@@ -34,7 +34,6 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.SendLocationInvocation
 import io.element.android.libraries.textcomposer.MessageComposerMode
-import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -46,7 +45,6 @@ class SendLocationPresenterTest {
     private val fakeAnalyticsService = FakeAnalyticsService()
     private val messageComposerContextFake = MessageComposerContextFake()
     private val fakeLocationActions = FakeLocationActions()
-    private val fakeSystemClock = SystemClock { 0L }
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
     private val sendLocationPresenter: SendLocationPresenter = SendLocationPresenter(
         permissionsPresenterFactory = object : PermissionsPresenter.Factory {
@@ -56,7 +54,6 @@ class SendLocationPresenterTest {
         analyticsService = fakeAnalyticsService,
         messageComposerContext = messageComposerContextFake,
         locationActions = fakeLocationActions,
-        systemClock = fakeSystemClock,
         buildMeta = fakeBuildMeta,
     )
 
@@ -292,7 +289,7 @@ class SendLocationPresenterTest {
             Truth.assertThat(fakeMatrixRoom.sentLocations.size).isEqualTo(1)
             Truth.assertThat(fakeMatrixRoom.sentLocations.last()).isEqualTo(
                 SendLocationInvocation(
-                    body = "Location was shared at geo:3.0,4.0;u=5.0 as of 1970-01-01T00:00:00Z",
+                    body = "Location was shared at geo:3.0,4.0;u=5.0",
                     geoUri = "geo:3.0,4.0;u=5.0",
                     description = null,
                     zoomLevel = 15,
@@ -349,7 +346,7 @@ class SendLocationPresenterTest {
             Truth.assertThat(fakeMatrixRoom.sentLocations.size).isEqualTo(1)
             Truth.assertThat(fakeMatrixRoom.sentLocations.last()).isEqualTo(
                 SendLocationInvocation(
-                    body = "Location was shared at geo:0.0,1.0 as of 1970-01-01T00:00:00Z",
+                    body = "Location was shared at geo:0.0,1.0",
                     geoUri = "geo:0.0,1.0",
                     description = null,
                     zoomLevel = 15,
