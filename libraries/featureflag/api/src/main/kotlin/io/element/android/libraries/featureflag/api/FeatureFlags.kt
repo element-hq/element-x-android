@@ -22,10 +22,6 @@ enum class FeatureFlags(
     override val description: String? = null,
     override val defaultValue: Boolean = true
 ) : Feature {
-    ShowStartChatFlow(
-        key = "feature.showstartchatflow",
-        title = "Show start chat flow",
-    ),
     ShowMediaUploadingFlow(
         key = "feature.showmediauploadingflow",
         title = "Show media uploading flow",

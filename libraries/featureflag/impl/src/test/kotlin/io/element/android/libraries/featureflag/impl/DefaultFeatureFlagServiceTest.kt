@@ -26,14 +26,14 @@ class DefaultFeatureFlagServiceTest {
     @Test
     fun `given service without provider when feature is checked then it returns the default value`() = runTest {
         val featureFlagService = DefaultFeatureFlagService(emptySet())
-        val isFeatureEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.ShowStartChatFlow)
-        assertThat(isFeatureEnabled).isEqualTo(FeatureFlags.ShowStartChatFlow.defaultValue)
+        val isFeatureEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)
+        assertThat(isFeatureEnabled).isEqualTo(FeatureFlags.ShowMediaUploadingFlow.defaultValue)
     }
 
     @Test
     fun `given service without provider when set enabled feature is called then it returns false`() = runTest {
         val featureFlagService = DefaultFeatureFlagService(emptySet())
-        val result = featureFlagService.setFeatureEnabled(FeatureFlags.ShowStartChatFlow, true)
+        val result = featureFlagService.setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, true)
         assertThat(result).isEqualTo(false)
     }
 
@@ -41,7 +41,7 @@ class DefaultFeatureFlagServiceTest {
     fun `given service with a runtime provider when set enabled feature is called then it returns true`() = runTest {
         val featureFlagProvider = FakeRuntimeFeatureFlagProvider(0)
         val featureFlagService = DefaultFeatureFlagService(setOf(featureFlagProvider))
-        val result = featureFlagService.setFeatureEnabled(FeatureFlags.ShowStartChatFlow, true)
+        val result = featureFlagService.setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, true)
         assertThat(result).isEqualTo(true)
     }
 
@@ -49,10 +49,10 @@ class DefaultFeatureFlagServiceTest {
     fun `given service with a runtime provider and feature enabled when feature is checked then it returns the correct value`() = runTest {
         val featureFlagProvider = FakeRuntimeFeatureFlagProvider(0)
         val featureFlagService = DefaultFeatureFlagService(setOf(featureFlagProvider))
-        featureFlagService.setFeatureEnabled(FeatureFlags.ShowStartChatFlow, true)
-        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.ShowStartChatFlow)).isEqualTo(true)
-        featureFlagService.setFeatureEnabled(FeatureFlags.ShowStartChatFlow, false)
-        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.ShowStartChatFlow)).isEqualTo(false)
+        featureFlagService.setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, true)
+        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)).isEqualTo(true)
+        featureFlagService.setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, false)
+        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)).isEqualTo(false)
     }
 
     @Test
@@ -60,8 +60,8 @@ class DefaultFeatureFlagServiceTest {
         val lowPriorityfeatureFlagProvider = FakeRuntimeFeatureFlagProvider(LOW_PRIORITY)
         val highPriorityfeatureFlagProvider = FakeRuntimeFeatureFlagProvider(HIGH_PRIORITY)
         val featureFlagService = DefaultFeatureFlagService(setOf(lowPriorityfeatureFlagProvider, highPriorityfeatureFlagProvider))
-        lowPriorityfeatureFlagProvider.setFeatureEnabled(FeatureFlags.ShowStartChatFlow, false)
-        highPriorityfeatureFlagProvider.setFeatureEnabled(FeatureFlags.ShowStartChatFlow, true)
-        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.ShowStartChatFlow)).isEqualTo(true)
+        lowPriorityfeatureFlagProvider.setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, false)
+        highPriorityfeatureFlagProvider.setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, true)
+        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)).isEqualTo(true)
     }
 }
