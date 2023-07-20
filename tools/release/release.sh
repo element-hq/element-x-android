@@ -80,8 +80,8 @@ if [[ ! -d ${buildToolsPath} ]]; then
 fi
 
 # Check if git flow is enabled
-git flow config >/dev/null 2>&1
-if [[ $? == 0 ]]
+gitFlowDevelop=`git config gitflow.branch.develop`
+if [[ ${gitFlowDevelop} != "" ]]
 then
     printf "Git flow is initialized\n"
 else
