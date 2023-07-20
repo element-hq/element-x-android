@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.timeline.components.retrysendmenu
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -35,7 +35,7 @@ class RetrySendMenuPresenterTests {
 
     @Test
     fun `present - handle event selected`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -48,7 +48,7 @@ class RetrySendMenuPresenterTests {
 
     @Test
     fun `present - handle dismiss`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -63,7 +63,7 @@ class RetrySendMenuPresenterTests {
 
     @Test
     fun `present - handle resend with transactionId`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -79,7 +79,7 @@ class RetrySendMenuPresenterTests {
 
     @Test
     fun `present - handle resend without transactionId`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -96,7 +96,7 @@ class RetrySendMenuPresenterTests {
     @Test
     fun `present - handle resend with error`() = runTest {
         room.givenRetrySendMessageResult(Result.failure(IllegalStateException("An error")))
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -112,7 +112,7 @@ class RetrySendMenuPresenterTests {
 
     @Test
     fun `present - handle remove failed message with transactionId`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -128,7 +128,7 @@ class RetrySendMenuPresenterTests {
 
     @Test
     fun `present - handle remove failed message without transactionId`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -145,7 +145,7 @@ class RetrySendMenuPresenterTests {
     @Test
     fun `present - handle remove failed message with error`() = runTest {
         room.givenRetrySendMessageResult(Result.failure(IllegalStateException("An error")))
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

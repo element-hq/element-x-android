@@ -16,7 +16,7 @@
 
 package io.element.android.features.logout.impl
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -34,7 +34,7 @@ class LogoutPreferencePresenterTest {
         val presenter = DefaultLogoutPreferencePresenter(
             FakeMatrixClient(),
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -47,7 +47,7 @@ class LogoutPreferencePresenterTest {
         val presenter = DefaultLogoutPreferencePresenter(
             FakeMatrixClient(),
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -65,7 +65,7 @@ class LogoutPreferencePresenterTest {
         val presenter = DefaultLogoutPreferencePresenter(
             matrixClient,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

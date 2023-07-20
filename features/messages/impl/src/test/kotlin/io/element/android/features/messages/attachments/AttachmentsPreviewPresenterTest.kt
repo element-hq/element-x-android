@@ -19,7 +19,7 @@
 package io.element.android.features.messages.attachments
 
 import android.net.Uri
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -55,7 +55,7 @@ class AttachmentsPreviewPresenterTest {
             )
         )
         val presenter = anAttachmentsPreviewPresenter(room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -77,7 +77,7 @@ class AttachmentsPreviewPresenterTest {
         val failure = MediaPreProcessor.Failure(null)
         room.givenSendMediaResult(Result.failure(failure))
         val presenter = anAttachmentsPreviewPresenter(room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

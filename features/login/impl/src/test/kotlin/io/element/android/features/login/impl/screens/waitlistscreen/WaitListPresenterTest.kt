@@ -16,7 +16,7 @@
 
 package io.element.android.features.login.impl.screens.waitlistscreen
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -46,7 +46,7 @@ class WaitListPresenterTest {
             authenticationService,
             loginUserStory,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -68,7 +68,7 @@ class WaitListPresenterTest {
             authenticationService,
             loginUserStory,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -97,7 +97,7 @@ class WaitListPresenterTest {
             authenticationService,
             loginUserStory,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             assertThat(loginUserStory.loginFlowIsDone.value).isFalse()

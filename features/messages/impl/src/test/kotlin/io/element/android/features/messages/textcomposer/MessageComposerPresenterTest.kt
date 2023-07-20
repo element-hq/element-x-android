@@ -19,7 +19,7 @@
 package io.element.android.features.messages.textcomposer
 
 import android.net.Uri
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
@@ -78,7 +78,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -94,7 +94,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - toggle fullscreen`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -110,7 +110,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change message`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -128,7 +128,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change mode to edit`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             var state = awaitItem()
@@ -146,7 +146,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change mode to reply`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             var state = awaitItem()
@@ -163,7 +163,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change mode to quote`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             var state = awaitItem()
@@ -180,7 +180,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - send message`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -202,7 +202,7 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -233,7 +233,7 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -264,7 +264,7 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -291,7 +291,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Open attachments menu`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -304,7 +304,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Dismiss attachments menu`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -338,7 +338,7 @@ class MessageComposerPresenterTest {
                 )
             )
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -372,7 +372,7 @@ class MessageComposerPresenterTest {
                 )
             )
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -390,7 +390,7 @@ class MessageComposerPresenterTest {
             givenResult(null) // Simulate a user canceling the flow
             givenMimeType(MimeTypes.Images)
         }
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -410,7 +410,7 @@ class MessageComposerPresenterTest {
             )
         )
         val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -431,7 +431,7 @@ class MessageComposerPresenterTest {
     fun `present - Take photo`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -447,7 +447,7 @@ class MessageComposerPresenterTest {
     fun `present - Record video`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -464,7 +464,7 @@ class MessageComposerPresenterTest {
             givenSendMediaResult(Result.failure(Exception()))
         }
         val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

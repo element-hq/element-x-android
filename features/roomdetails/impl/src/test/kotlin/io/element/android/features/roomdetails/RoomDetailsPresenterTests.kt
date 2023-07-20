@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomdetails
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -60,7 +60,7 @@ class RoomDetailsPresenterTests {
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom()
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -79,7 +79,7 @@ class RoomDetailsPresenterTests {
     fun `present - initial state with no room name`() = runTest {
         val room = aMatrixRoom(name = null)
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -101,7 +101,7 @@ class RoomDetailsPresenterTests {
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -117,7 +117,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(true))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Initially false
@@ -135,7 +135,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             assertThat(awaitItem().canInvite).isFalse()
@@ -148,7 +148,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.failure(Throwable("Whoops")))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             assertThat(awaitItem().canInvite).isFalse()
@@ -164,7 +164,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Initially false
@@ -193,7 +193,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Initially false
@@ -222,7 +222,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -243,7 +243,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Initially false
@@ -264,7 +264,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Initially false, and no further events
@@ -280,7 +280,7 @@ class RoomDetailsPresenterTests {
         }
 
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // The initial state is "hidden" and no further state changes happen
@@ -296,7 +296,7 @@ class RoomDetailsPresenterTests {
         }
 
         val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Ignore the initial state
@@ -314,7 +314,7 @@ class RoomDetailsPresenterTests {
         val leaveRoomPresenter = LeaveRoomPresenterFake()
         val room = aMatrixRoom()
         val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitItem().eventSink(RoomDetailsEvent.LeaveRoom)

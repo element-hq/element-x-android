@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomlist.impl
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
@@ -61,7 +61,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
         val presenter = createRoomListPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -81,7 +81,7 @@ class RoomListPresenterTests {
             userAvatarURLString = Result.failure(AN_EXCEPTION),
         )
         val presenter = createRoomListPresenter(matrixClient)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -94,7 +94,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - should filter room with success`() = runTest {
         val presenter = createRoomListPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -115,7 +115,7 @@ class RoomListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource
         )
         val presenter = createRoomListPresenter(matrixClient)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -138,7 +138,7 @@ class RoomListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource
         )
         val presenter = createRoomListPresenter(matrixClient)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
@@ -167,7 +167,7 @@ class RoomListPresenterTests {
             roomSummaryDataSource = roomSummaryDataSource
         )
         val presenter = createRoomListPresenter(matrixClient)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
@@ -213,7 +213,7 @@ class RoomListPresenterTests {
                 givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
             },
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val eventSink = awaitItem().eventSink
@@ -229,7 +229,7 @@ class RoomListPresenterTests {
         val inviteStateFlow = MutableStateFlow(InvitesState.NoInvites)
         val inviteStateDataSource = FakeInviteDataSource(inviteStateFlow)
         val presenter = createRoomListPresenter(inviteStateDataSource = inviteStateDataSource)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -249,7 +249,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - show context menu`() = runTest {
         val presenter = createRoomListPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -267,7 +267,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - hide context menu`() = runTest {
         val presenter = createRoomListPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -290,7 +290,7 @@ class RoomListPresenterTests {
     fun `present - leave room calls into leave room presenter`() = runTest {
         val leaveRoomPresenter = LeaveRoomPresenterFake()
         val presenter = createRoomListPresenter(leaveRoomPresenter = leaveRoomPresenter)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
