@@ -13,8 +13,7 @@ style:
   FunctionOnlyReturningConstant:
     active: false
   UnusedPrivateMember:
-    # TODO Enable it
-    active: false
+    active: true
   UnusedParameter:
     # TODO Enable it
     active: false
