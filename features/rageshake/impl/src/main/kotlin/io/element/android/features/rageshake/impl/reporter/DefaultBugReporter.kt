@@ -103,7 +103,7 @@ class DefaultBugReporter @Inject constructor(
             .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
      */
 
-    private val LOGCAT_CMD_ERROR = arrayOf(
+    private val logcatCommandError = arrayOf(
         "logcat", // /< Run 'logcat' command
         "-d", // /< Dump the log rather than continue outputting it
         "-v", // formatting
@@ -114,7 +114,7 @@ class DefaultBugReporter @Inject constructor(
             "*:S" // /< Everything else silent, so don't pick it..
     )
 
-    private val LOGCAT_CMD_DEBUG = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
+    private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
 
     /**
      * Send a bug report.
@@ -500,7 +500,7 @@ class DefaultBugReporter @Inject constructor(
         val logcatProc: Process
 
         try {
-            logcatProc = Runtime.getRuntime().exec(if (isErrorLogCat) LOGCAT_CMD_ERROR else LOGCAT_CMD_DEBUG)
+            logcatProc = Runtime.getRuntime().exec(if (isErrorLogCat) logcatCommandError else logcatCommandDebug)
         } catch (e1: IOException) {
             return
         }
