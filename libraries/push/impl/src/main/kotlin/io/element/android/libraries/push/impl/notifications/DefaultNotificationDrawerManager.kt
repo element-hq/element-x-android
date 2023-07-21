@@ -23,17 +23,18 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
-import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
+import io.element.android.services.appnavstate.api.NavigationState
+import io.element.android.services.appnavstate.api.currentSessionId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -76,9 +77,16 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
     }
 
+    private var currentAppNavigationState: NavigationState? = null
+
     private fun onAppNavigationStateChange(navigationState: NavigationState) {
         when (navigationState) {
-            NavigationState.Root -> {}
+            NavigationState.Root -> {
+                currentAppNavigationState?.currentSessionId()?.let { sessionId ->
+                    // User signed out, clear all notifications related to the session.
+                    clearAllEvents(sessionId)
+                }
+            }
             is NavigationState.Session -> {}
             is NavigationState.Space -> {}
             is NavigationState.Room -> {
@@ -93,6 +101,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
                 )
             }
         }
+        currentAppNavigationState = navigationState
     }
 
     private fun createInitialNotificationState(): NotificationState {
@@ -133,9 +142,18 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear all known events and refresh the notification drawer.
      */
-    fun clearAllEvents(sessionId: SessionId) {
+    fun clearAllMessagesEvents(sessionId: SessionId) {
         updateEvents {
             it.clearMessagesForSession(sessionId)
+        }
+    }
+
+    /**
+     * Clear all notifications related to the session and refresh the notification drawer.
+     */
+    fun clearAllEvents(sessionId: SessionId) {
+        updateEvents {
+            it.clearAllForSession(sessionId)
         }
     }
 
