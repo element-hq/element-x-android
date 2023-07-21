@@ -82,11 +82,13 @@ fun PreferencesRootView(
             )
             Divider()
         }
-        PreferenceText(
-            title = stringResource(id = CommonStrings.common_analytics),
-            icon = Icons.Outlined.InsertChart,
-            onClick = onOpenAnalytics,
-        )
+        if (state.showAnalyticsSettings) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.common_analytics),
+                icon = Icons.Outlined.InsertChart,
+                onClick = onOpenAnalytics,
+            )
+        }
         PreferenceText(
             title = stringResource(id = CommonStrings.action_report_bug),
             icon = Icons.Outlined.BugReport,
