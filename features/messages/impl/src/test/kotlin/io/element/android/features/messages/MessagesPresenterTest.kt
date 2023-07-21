@@ -20,7 +20,6 @@ import android.net.Uri
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.collect.Iterables.skip
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.messages.fixtures.aMessageEvent
@@ -46,8 +45,6 @@ import io.element.android.features.messages.utils.messagesummary.FakeMessageSumm
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -102,7 +99,6 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
             assertThat(room.myReactions.count()).isEqualTo(1)
-
             // No crashes when sending a reaction failed
             room.givenToggleReactionResult(Result.failure(IllegalStateException("Failed to send reaction")))
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
@@ -245,7 +241,6 @@ class MessagesPresenterTest {
                 )
             )
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
-            
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply

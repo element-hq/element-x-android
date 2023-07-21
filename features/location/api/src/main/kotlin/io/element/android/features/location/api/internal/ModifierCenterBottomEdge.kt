@@ -29,7 +29,7 @@ fun Modifier.centerBottomEdge(scope: BoxScope): Modifier = with(scope) {
         Modifier.align { size, space, _ ->
             IntOffset(
                 x = (space.width - size.width) / 2,
-                y = (space.height / 2) - size.height,
+                y = space.height / 2 - size.height,
             )
         }
     )

@@ -88,7 +88,7 @@ fun SelectedUsersList(
                 val maxVisibleUsers = rowWidth / userWidthWithSpacing
 
                 // Round down the number of visible users to end with a state where one is half visible
-                val targetFraction = (userWidth / 2) / userWidthWithSpacing
+                val targetFraction = userWidth / 2 / userWidthWithSpacing
                 val targetUsers = floor(maxVisibleUsers - targetFraction) + targetFraction
 
                 // Work out how much extra spacing we need to reduce the number of users that much, then split it evenly amongst the visible users
@@ -153,7 +153,7 @@ private fun ContentToPreview() {
             SelectedUsersList(
                 selectedUsers = aMatrixUserList().take(6).toImmutableList(),
                 modifier = Modifier
-                    .width((200 + (i * 20)).dp)
+                    .width((200 + i * 20).dp)
                     .border(1.dp, Color.Red)
             )
         }

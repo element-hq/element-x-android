@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
-import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
@@ -49,7 +48,6 @@ import javax.inject.Inject
  */
 @SingleIn(AppScope::class)
 class DefaultNotificationDrawerManager @Inject constructor(
-    private val pushDataStore: PushDataStore,
     private val notifiableEventProcessor: NotifiableEventProcessor,
     private val notificationRenderer: NotificationRenderer,
     private val notificationEventPersistence: NotificationEventPersistence,

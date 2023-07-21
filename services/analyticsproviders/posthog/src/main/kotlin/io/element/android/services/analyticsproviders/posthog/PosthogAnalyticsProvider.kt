@@ -16,7 +16,6 @@
 
 package io.element.android.services.analyticsproviders.posthog
 
-import com.posthog.android.Options
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
 import com.squareup.anvil.annotations.ContributesMultibinding
@@ -29,8 +28,8 @@ import io.element.android.services.analyticsproviders.posthog.log.analyticsTag
 import timber.log.Timber
 import javax.inject.Inject
 
-private val REUSE_EXISTING_ID: String? = null
-private val IGNORED_OPTIONS: Options? = null
+// private val REUSE_EXISTING_ID: String? = null
+// private val IGNORED_OPTIONS: Options? = null
 
 @ContributesMultibinding(AppScope::class)
 class PosthogAnalyticsProvider @Inject constructor(
@@ -101,9 +100,11 @@ class PosthogAnalyticsProvider @Inject constructor(
      * We avoid sending nulls as part of the UserProperties as this will reset the values across all devices.
      * The UserProperties event has nullable properties to allow for clients to opt in.
      */
+    /*
     private fun Map<String, Any?>.toPostHogUserProperties(): Properties {
         return Properties().apply {
             putAll(this@toPostHogUserProperties.filter { it.value != null })
         }
     }
+     */
 }

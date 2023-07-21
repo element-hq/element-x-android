@@ -61,7 +61,7 @@ import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 
-private const val chipId = "chip"
+private const val CHIP_ID = "chip"
 
 @Composable
 fun HtmlDocument(
@@ -351,7 +351,7 @@ private fun HtmlMxReply(
     Surface(
         modifier = modifier
             .padding(bottom = 4.dp)
-            .offset(x = -(8.dp)),
+            .offset(x = (-8).dp),
         color = MaterialTheme.colorScheme.background,
         shape = shape,
     ) {
@@ -544,13 +544,13 @@ private fun AnnotatedString.Builder.appendLink(link: Element) {
             pop()
         }
         is PermalinkData.RoomEmailInviteLink -> {
-            appendInlineContent(chipId, link.ownText())
+            appendInlineContent(CHIP_ID, link.ownText())
         }
         is PermalinkData.RoomLink -> {
-            appendInlineContent(chipId, link.ownText())
+            appendInlineContent(CHIP_ID, link.ownText())
         }
         is PermalinkData.UserLink -> {
-            appendInlineContent(chipId, link.ownText())
+            appendInlineContent(CHIP_ID, link.ownText())
         }
     }
 }

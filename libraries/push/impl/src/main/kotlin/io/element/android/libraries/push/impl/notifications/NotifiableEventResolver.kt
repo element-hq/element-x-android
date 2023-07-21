@@ -17,7 +17,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -34,7 +34,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessage
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
-import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
@@ -57,9 +56,6 @@ private val loggerTag = LoggerTag("NotifiableEventResolver", pushLoggerTag)
  */
 class NotifiableEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
-    // private val noticeEventFormatter: NoticeEventFormatter,
-    // private val displayableEventFormatter: DisplayableEventFormatter,
-    private val buildMeta: BuildMeta,
     private val clock: SystemClock,
     private val matrixClientProvider: MatrixClientProvider,
 ) {

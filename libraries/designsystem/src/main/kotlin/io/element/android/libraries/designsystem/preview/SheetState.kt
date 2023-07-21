@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.api.detection
+package io.element.android.libraries.designsystem.preview
 
-import androidx.compose.runtime.Immutable
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 
-@Immutable
-data class RageshakeDetectionState(
-    val takeScreenshot: Boolean,
-    val showDialog: Boolean,
-    val isStarted: Boolean,
-    val preferenceState: RageshakePreferencesState,
-    val eventSink: (RageshakeDetectionEvents) -> Unit
+@OptIn(ExperimentalMaterial3Api::class)
+val sheetStateForPreview = SheetState(
+    skipPartiallyExpanded = true,
+    initialValue = SheetValue.Expanded,
 )

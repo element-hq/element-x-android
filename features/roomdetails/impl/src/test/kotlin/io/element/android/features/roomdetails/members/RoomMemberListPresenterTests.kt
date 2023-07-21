@@ -72,7 +72,7 @@ class RoomMemberListPresenterTests {
             loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
 
             val searchActiveState = awaitItem()
-            Truth.assertThat((searchActiveState.isSearchActive)).isTrue()
+            Truth.assertThat(searchActiveState.isSearchActive).isTrue()
         }
     }
 
@@ -88,7 +88,7 @@ class RoomMemberListPresenterTests {
             val searchActiveState = awaitItem()
             loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("something"))
             val searchQueryUpdatedState = awaitItem()
-            Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("something")
+            Truth.assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("something")
             val searchSearchResultDelivered = awaitItem()
             Truth.assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
         }
@@ -106,9 +106,9 @@ class RoomMemberListPresenterTests {
             val searchActiveState = awaitItem()
             loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("Alice"))
             val searchQueryUpdatedState = awaitItem()
-            Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("Alice")
+            Truth.assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()
-            Truth.assertThat((searchSearchResultDelivered.searchResults)).isInstanceOf(SearchBarResultState.Results::class.java)
+            Truth.assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             Truth.assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.joined.first().displayName)
                 .isEqualTo("Alice")
 

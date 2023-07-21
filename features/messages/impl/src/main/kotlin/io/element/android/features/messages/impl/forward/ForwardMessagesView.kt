@@ -82,6 +82,7 @@ fun ForwardMessagesView(
         return
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onRoomRemoved(roomSummaryDetails: RoomSummaryDetails) {
         // TODO toggle selection when multi-selection is enabled
         state.eventSink(ForwardMessagesEvents.RemoveSelectedRoom)

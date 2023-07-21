@@ -27,8 +27,6 @@ import io.element.android.features.createroom.impl.userlist.FakeUserListPresente
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.features.createroom.impl.userlist.aUserListState
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser

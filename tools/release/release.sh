@@ -16,6 +16,9 @@
 # limitations under the License.
 #
 
+# exit when any command fails
+set -e
+
 printf "\n================================================================================\n"
 printf "|                    Welcome to the release script!                            |\n"
 printf "================================================================================\n"

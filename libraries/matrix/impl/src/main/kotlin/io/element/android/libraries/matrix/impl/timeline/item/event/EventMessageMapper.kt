@@ -45,7 +45,7 @@ class EventMessageMapper {
     fun map(message: Message): MessageContent = message.use {
         val type = it.msgtype().use(this::mapMessageType)
         val inReplyToId = it.inReplyTo()?.eventId?.let(::EventId)
-        val inReplyToEvent: InReplyTo? = (it.inReplyTo()?.event)?.use { details ->
+        val inReplyToEvent: InReplyTo? = it.inReplyTo()?.event?.use { details ->
             when (details) {
                 is RepliedToEventDetails.Ready -> {
                     val senderProfile = details.senderProfile as? ProfileDetails.Ready

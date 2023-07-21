@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import java.util.Date
-import java.util.UUID
 
 class TimelineEncryptedHistoryPostProcessor(
     private val lastLoginTimestamp: Date?,
@@ -70,5 +69,4 @@ class TimelineEncryptedHistoryPostProcessor(
         val timestamp = (item as? MatrixTimelineItem.Event)?.event?.timestamp ?: return false
         return timestamp <= lastLoginTimestamp!!.time
     }
-
 }

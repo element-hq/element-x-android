@@ -44,7 +44,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val extendedRangeSize = 40
+private const val EXTENDED_RANGE_SIZE = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
@@ -130,7 +130,7 @@ class RoomListPresenter @Inject constructor(
 
     private fun updateVisibleRange(range: IntRange) {
         if (range.isEmpty()) return
-        val midExtendedRangeSize = extendedRangeSize / 2
+        val midExtendedRangeSize = EXTENDED_RANGE_SIZE / 2
         val extendedRangeStart = (range.first - midExtendedRangeSize).coerceAtLeast(0)
         // Safe to give bigger size than room list
         val extendedRangeEnd = range.last + midExtendedRangeSize

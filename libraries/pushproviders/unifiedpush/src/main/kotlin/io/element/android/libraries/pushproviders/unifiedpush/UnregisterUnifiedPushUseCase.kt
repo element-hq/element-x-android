@@ -26,7 +26,7 @@ class UnregisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     //private val pushDataStore: PushDataStore,
     private val unifiedPushStore: UnifiedPushStore,
-    private val unifiedPushGatewayResolver: UnifiedPushGatewayResolver,
+    // private val unifiedPushGatewayResolver: UnifiedPushGatewayResolver,
 ) {
 
     suspend fun execute(clientSecret: String /*pushersManager: PushersManager?*/) {

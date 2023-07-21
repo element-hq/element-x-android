@@ -59,7 +59,7 @@ fun Context.isAnimationEnabled(): Boolean {
 }
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
-fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
 /**
  * Return the application label of the provided package. If not found, the package is returned.
