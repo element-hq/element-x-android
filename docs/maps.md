@@ -27,16 +27,21 @@ Place your API key in `local.properties` with the key
 services.maptiler.apikey=abCd3fGhijK1mN0pQr5t
 ```
 
+Optionally you can also place your custom MapTyler style ids for light and dark maps
+in the `local.properties` with the keys `services.maptiler.lightMapId` and
+`services.maptiler.darkMapId`. If you don't specify these, the default MapTiler "basic-v2"
+styles will be used.
+
 ## Making releasable builds with MapTiler
 
 To insert the MapTiler API key when building an APK, set the
 `ELEMENT_ANDROID_MAPTILER_API_KEY` environment variable in your build
-environment. 
+environment.
+If you've added custom styles also set the `ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID`
+and `ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID` environment variables accordingly.
 
 ## Using other map sources or MapTiler styles
 
-If you wish to use an alternative map provider, or custom MapTiler styles,
-you can customise the functions in
-`features/location/api/src/main/kotlin/io/element/android/features/location/api/internal/MapUrls.kt`. 
-We've kept this file small and self contained to minimise the chances of merge
-collisions in forks.
+If you wish to use an alternative map provider, you can provide your own implementations of
+`TileServerStyleUriBuilder` and `StaticMapUrlBuilder` in
+`features/location/api/src/main/kotlin/io/element/android/features/location/api/internal/`.
