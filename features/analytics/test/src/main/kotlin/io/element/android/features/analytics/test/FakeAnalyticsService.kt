@@ -33,7 +33,7 @@ class FakeAnalyticsService(
     private val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
     val capturedEvents = mutableListOf<VectorAnalyticsEvent>()
 
-    override fun getAvailableAnalyticsProviders(): List<AnalyticsProvider> = emptyList()
+    override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
 
     override fun getUserConsent(): Flow<Boolean> = isEnabledFlow
 

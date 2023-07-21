@@ -22,7 +22,10 @@ import io.element.android.services.analyticsproviders.api.trackers.ErrorTracker
 import kotlinx.coroutines.flow.Flow
 
 interface AnalyticsService: AnalyticsTracker, ErrorTracker {
-    fun getAvailableAnalyticsProviders(): List<AnalyticsProvider>
+    /**
+     * Get the available analytics providers.
+     */
+    fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider>
 
     /**
      * Return a Flow of Boolean, true if the user has given their consent.

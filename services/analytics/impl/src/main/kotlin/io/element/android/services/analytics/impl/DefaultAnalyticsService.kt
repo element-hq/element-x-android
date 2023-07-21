@@ -56,8 +56,8 @@ class DefaultAnalyticsService @Inject constructor(
         observeSessions()
     }
 
-    override fun getAvailableAnalyticsProviders(): List<AnalyticsProvider> {
-        return analyticsProviders.sortedBy { it.index }
+    override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> {
+        return analyticsProviders
     }
 
     override fun getUserConsent(): Flow<Boolean> {

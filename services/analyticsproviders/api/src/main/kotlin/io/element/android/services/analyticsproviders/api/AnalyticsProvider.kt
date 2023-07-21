@@ -21,11 +21,6 @@ import io.element.android.services.analyticsproviders.api.trackers.ErrorTracker
 
 interface AnalyticsProvider: AnalyticsTracker, ErrorTracker {
     /**
-     * Allow to sort providers, from lower index to higher index.
-     */
-    val index: Int
-
-    /**
      * User friendly name.
      */
     val name: String
