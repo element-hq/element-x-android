@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import io.element.android.features.location.api.R
 import io.element.android.libraries.theme.ElementTheme
+import kotlin.math.roundToInt
 
 /**
  * Provides the URL to an image that contains a statically-generated map of the given location.
@@ -35,6 +36,7 @@ fun Context.staticMapUrl(
     zoom: Double,
     width: Int,
     height: Int,
+    density: Float,
 ): String = staticMapUrl(
     baseUrl = baseUrl,
     mapId = mapId(darkMode),
@@ -43,7 +45,7 @@ fun Context.staticMapUrl(
     zoom = zoom,
     width = width,
     height = height,
-    retina = resources.configuration.densityDpi >= 320, // Use retina for hdpi and above (retina == 320dpi == xhdpi).
+    density = density,
     apiKey = apiKey,
 )
 
@@ -61,13 +63,43 @@ internal fun staticMapUrl(
     zoom: Double,
     width: Int,
     height: Int,
-    retina: Boolean,
+    density: Float,
     apiKey: String,
 ): String {
-    val width = if (retina) width / 2 else width
-    val height = if (retina) height / 2 else height
-    val scale = if (retina) "@2x" else ""
+    val zoom = zoom.coerceIn(zoomRange)
+
+    // Request @2x density for xhdpi and above (xhdpi == 320dpi == 2x density).
+    val is2x = density >= 2
+
+    // Scale requested width/height according to the reported display density.
+    val (width, height) = coerceToValidWidthHeight(
+        width = (width / density).roundToInt(),
+        height = (height / density).roundToInt(),
+        is2x = is2x,
+    )
+
+    val scale = if (is2x) "@2x" else ""
+
+    // Since Maptiler doesn't support arbitrary dpi scaling, we stick to 2x sized
+    // images even on displays with density higher than 2x, thereby yielding an
+    // image smaller than the available space in pixels.
+    // The resulting image will have to be scaled to fit the available space in order
+    // to keep the perceived content size constant at the expense of sharpness.
     return "${baseUrl}/${mapId}/static/${lon},${lat},${zoom}/${width}x${height}${scale}.webp?key=${apiKey}&attribution=bottomleft"
+}
+
+private fun coerceToValidWidthHeight(width: Int, height: Int, is2x: Boolean): Pair<Int, Int> {
+    val range = if (is2x) widthHeightRange2x else widthHeightRange
+    val aspectRatio = width.coerceAtLeast(1).toDouble() / height.coerceAtLeast(1).toDouble()
+    return if (width >= height) {
+        width.coerceIn(range).let { width ->
+            width to (width / aspectRatio).roundToInt()
+        }
+    } else {
+        height.coerceIn(range).let { height ->
+            (height * aspectRatio).roundToInt() to height
+        }
+    }
 }
 
 /**
@@ -98,6 +130,9 @@ internal fun tileStyleUrl(
 }
 
 private const val MAPTILER_BASE_URL = "https://api.maptiler.com/maps"
+private val widthHeightRange = 1..2048 // API will error if outside 1-2048 range @1x.
+private val widthHeightRange2x = 1..1024 // API will error if outside 1-1024 range @2x.
+private val zoomRange = 0.0..22.0 // API will error if outside 0-22 range.
 
 private fun Context.mapId(darkMode: Boolean) = when (darkMode) {
     true -> getString(R.string.maptiler_dark_map_id)

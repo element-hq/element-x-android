@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -38,7 +39,6 @@ import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.api.internal.staticMapUrl
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
@@ -70,7 +70,7 @@ fun StaticMapView(
                 // Avoid building a URL if any of the size constraints is zero (else it will thrown an exception).
                 null
             } else {
-                ImageRequest.Builder(LocalContext.current)
+                ImageRequest.Builder(context)
                     .data(
                         context.staticMapUrl(
                             lat = lat,
@@ -79,6 +79,7 @@ fun StaticMapView(
                             darkMode = darkMode,
                             width = constraints.maxWidth,
                             height = constraints.maxHeight,
+                            density = LocalDensity.current.density,
                         )
                     )
                     .size(width = constraints.maxWidth, height = constraints.maxHeight)
