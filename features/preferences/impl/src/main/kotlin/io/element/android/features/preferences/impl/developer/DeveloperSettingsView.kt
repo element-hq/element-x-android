@@ -58,7 +58,7 @@ fun DeveloperSettingsView(
         )
         PreferenceCategory(title = "Crash", showDivider = false) {
             PreferenceText(
-                title = "Crash the app 💥!,",
+                title = "Crash the app 💥",
                 onClick = { error("This crash is a test.") }
             )
         }
