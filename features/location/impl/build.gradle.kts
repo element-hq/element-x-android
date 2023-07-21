@@ -14,14 +14,46 @@
  * limitations under the License.
  */
 
+import java.util.Properties
+
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
 }
 
+fun readLocalProperty(name: String): String? = Properties().apply {
+    try {
+        load(rootProject.file("local.properties").reader())
+    } catch (ignored: java.io.IOException) {
+    }
+}.getProperty(name)
+
+fun envOrProp(envName: String, propName: String, default: String = ""): String =
+    System.getenv(envName) ?: readLocalProperty(propName) ?: default
+
 android {
     namespace = "io.element.android.features.location.impl"
+    buildFeatures {
+        buildConfig = true
+    }
+    defaultConfig {
+        buildConfigField(
+            type = "String",
+            name = "MAPTILER_API_KEY",
+            value = "\"${envOrProp("ELEMENT_ANDROID_MAPTILER_API_KEY", "services.maptiler.apikey")}\""
+        )
+        buildConfigField(
+            type = "String",
+            name = "MAPTILER_LIGHT_MAP_ID",
+            value = "\"${envOrProp("ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID", "services.maptiler.lightMapId", "basic-v2")}\""
+        )
+        buildConfigField(
+            type = "String",
+            name = "MAPTILER_DARK_MAP_ID",
+            value = "\"${envOrProp("ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID", "services.maptiler.darkMapId", "basic-v2-dark")}\""
+        )
+    }
 }
 
 anvil {
