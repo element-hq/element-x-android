@@ -18,4 +18,4 @@ package io.element.android.services.analyticsproviders.posthog.log
 
 import io.element.android.libraries.core.log.logger.LoggerTag
 
-val analyticsTag = LoggerTag("Analytics")
+internal val analyticsTag = LoggerTag("Posthog")
