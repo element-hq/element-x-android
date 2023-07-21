@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.actionlist
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -41,7 +41,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = true)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -52,7 +52,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute for message from me redacted`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = true)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -77,7 +77,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute for message from others redacted`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = true)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -102,7 +102,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute for others message`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = true)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -134,7 +134,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute for my message`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = true)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -167,7 +167,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute for a media item`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = true)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -198,7 +198,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute for a state item in debug build`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = true)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -227,7 +227,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute for a state item in non-debuggable build`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = false)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -255,7 +255,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute message in non-debuggable build`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = false)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -287,7 +287,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute message with no actions`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = false)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -314,7 +314,7 @@ class ActionListPresenterTest {
     @Test
     fun `present - compute not sent message`() = runTest {
         val presenter = anActionListPresenter(isBuildDebuggable = false)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

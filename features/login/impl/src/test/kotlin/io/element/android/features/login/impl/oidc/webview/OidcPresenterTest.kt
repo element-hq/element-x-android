@@ -18,7 +18,7 @@
 
 package io.element.android.features.login.impl.oidc.webview
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -38,7 +38,7 @@ class OidcPresenterTest {
             A_OIDC_DATA,
             FakeAuthenticationService(),
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -53,7 +53,7 @@ class OidcPresenterTest {
             A_OIDC_DATA,
             FakeAuthenticationService(),
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -73,7 +73,7 @@ class OidcPresenterTest {
             authenticationService,
         )
         authenticationService.givenOidcCancelError(A_THROWABLE)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -92,7 +92,7 @@ class OidcPresenterTest {
             A_OIDC_DATA,
             FakeAuthenticationService(),
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -110,7 +110,7 @@ class OidcPresenterTest {
             A_OIDC_DATA,
             FakeAuthenticationService(),
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -129,7 +129,7 @@ class OidcPresenterTest {
             authenticationService,
         )
         authenticationService.givenLoginError(A_THROWABLE)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

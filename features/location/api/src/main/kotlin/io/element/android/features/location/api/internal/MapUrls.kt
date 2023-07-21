@@ -35,7 +35,7 @@ fun staticMapUrl(
     height: Int,
     darkMode: Boolean,
 ): String {
-    return "${baseUrl(darkMode)}/static/${lon},${lat},${zoom}/${width}x${height}@2x.webp?key=${context.apiKey}&attribution=bottomleft"
+    return "${context.baseUrl(darkMode)}/static/${lon},${lat},${zoom}/${width}x${height}@2x.webp?key=${context.apiKey}&attribution=bottomleft"
 }
 
 /**
@@ -60,15 +60,15 @@ private fun tileStyleUrl(
     context: Context,
     darkMode: Boolean,
 ): String {
-    return "${baseUrl(darkMode)}/style.json?key=${context.apiKey}"
+    return "${context.baseUrl(darkMode)}/style.json?key=${context.apiKey}"
 }
 
-private fun baseUrl(darkMode: Boolean) =
+private fun Context.baseUrl(darkMode: Boolean) =
     "https://api.maptiler.com/maps/" +
         if (darkMode)
-            "dea61faf-292b-4774-9660-58fcef89a7f3"
+            getString(R.string.maptiler_dark_map_id)
         else
-            "9bc819c8-e627-474a-a348-ec144fe3d810"
+            getString(R.string.maptiler_light_map_id)
 
 private val Context.apiKey: String
     get() = getString(R.string.maptiler_api_key)

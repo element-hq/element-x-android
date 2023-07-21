@@ -16,7 +16,7 @@
 
 package io.element.android.features.preferences.impl.root
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -45,7 +45,7 @@ class PreferencesRootPresenterTest {
             FakeVersionFormatter(),
             SnackbarDispatcher(),
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.timeline
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -42,7 +42,7 @@ class TimelinePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createTimelinePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -55,7 +55,7 @@ class TimelinePresenterTest {
     @Test
     fun `present - load more`() = runTest {
         val presenter = createTimelinePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -74,7 +74,7 @@ class TimelinePresenterTest {
     @Test
     fun `present - set highlighted event`() = runTest {
         val presenter = createTimelinePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -97,7 +97,7 @@ class TimelinePresenterTest {
             )
         )
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
@@ -121,7 +121,7 @@ class TimelinePresenterTest {
             )
         )
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
@@ -145,7 +145,7 @@ class TimelinePresenterTest {
             )
         )
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
@@ -165,7 +165,7 @@ class TimelinePresenterTest {
     fun `present - covers hasNewItems scenarios`() = runTest {
         val timeline = FakeMatrixTimeline()
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

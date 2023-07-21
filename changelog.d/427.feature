@@ -1,1 +1,0 @@
-Room list contextual menu

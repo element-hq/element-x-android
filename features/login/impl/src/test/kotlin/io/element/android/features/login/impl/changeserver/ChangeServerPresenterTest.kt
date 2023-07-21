@@ -16,7 +16,7 @@
 
 package io.element.android.features.login.impl.changeserver
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -36,7 +36,7 @@ class ChangeServerPresenterTest {
             FakeAuthenticationService(),
             AccountProviderDataSource()
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -51,7 +51,7 @@ class ChangeServerPresenterTest {
             authenticationService,
             AccountProviderDataSource()
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -72,7 +72,7 @@ class ChangeServerPresenterTest {
             authenticationService,
             AccountProviderDataSource()
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

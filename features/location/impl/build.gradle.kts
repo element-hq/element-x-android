@@ -45,7 +45,6 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(libs.dagger)
     implementation(projects.anvilannotations)
-    implementation(projects.services.toolbox.api)
     anvil(projects.anvilcodegen)
     ksp(libs.showkase.processor)
 

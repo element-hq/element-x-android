@@ -22,16 +22,8 @@ enum class FeatureFlags(
     override val description: String? = null,
     override val defaultValue: Boolean = true
 ) : Feature {
-    CollapseRoomStateEvents(
-        key = "feature.collapseroomstateevents",
-        title = "Collapse room state events",
-    ),
-    ShowStartChatFlow(
-        key = "feature.showstartchatflow",
-        title = "Show start chat flow",
-    ),
-    ShowMediaUploadingFlow(
-        key = "feature.showmediauploadingflow",
-        title = "Show media uploading flow",
+    LocationSharing(
+        key = "feature.locationsharing",
+        title = "Allow user to share location",
     )
 }

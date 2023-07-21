@@ -17,7 +17,7 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -93,7 +93,7 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - initial state`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -108,7 +108,7 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - create room button is enabled only if the required fields are completed`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -133,7 +133,7 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - state is updated when fields are changed`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -203,7 +203,7 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - trigger create room action`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -221,7 +221,7 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - record analytics when creating room`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -240,7 +240,7 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - trigger create room with upload error and retry`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -265,7 +265,7 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - trigger retry and cancel actions`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomdetails.members
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
@@ -44,7 +44,7 @@ class RoomMemberListPresenterTests {
     @Test
     fun `search is done automatically on start, but is async`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -63,7 +63,7 @@ class RoomMemberListPresenterTests {
     @Test
     fun `open search`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -79,7 +79,7 @@ class RoomMemberListPresenterTests {
     @Test
     fun `search for something which is not found`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -97,7 +97,7 @@ class RoomMemberListPresenterTests {
     @Test
     fun `search for something which is found`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -122,7 +122,7 @@ class RoomMemberListPresenterTests {
                 givenCanInviteResult(Result.success(true))
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -138,7 +138,7 @@ class RoomMemberListPresenterTests {
                 givenCanInviteResult(Result.success(false))
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -154,7 +154,7 @@ class RoomMemberListPresenterTests {
                 givenCanInviteResult(Result.failure(Throwable("Eek")))
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
