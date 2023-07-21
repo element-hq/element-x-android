@@ -34,6 +34,10 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
         get() = sequenceOf(
             aMessagesState(),
+            aMessagesState().copy(
+                roomName = Async.Uninitialized,
+                roomAvatar = Async.Uninitialized,
+            ),
             aMessagesState().copy(hasNetworkConnection = false),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
             aMessagesState().copy(userHasPermissionToSendMessage = false),
@@ -43,8 +47,8 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
 
 fun aMessagesState() = MessagesState(
     roomId = RoomId("!id:domain"),
-    roomName = "Room name",
-    roomAvatar = AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom),
+    roomName = Async.Success("Room name"),
+    roomAvatar = Async.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
     userHasPermissionToSendMessage = true,
     composerState = aMessageComposerState().copy(
         text = "Hello",
