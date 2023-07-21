@@ -35,7 +35,12 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
  * Version when running the current debug build
  * -------10_200
  *
- * So adding 4_000_000 to the current version Code computed here should be fine, we will have:
+ * So adding 4_000_000 to the current version Code computed here should be fine, and since the versionCode
+ * is multiplied by 10 in app/build.gradle.kts#L168:
+ * ```
+ * output.versionCode.set((output.versionCode.get() ?: 0) * 10 + abiCode))
+ * ```
+ * we will have:
  * Release version:
  * ---40_001_020
  * Nightly version:
