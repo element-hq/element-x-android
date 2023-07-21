@@ -26,12 +26,14 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
-import kotlinx.coroutines.CompletableDeferred
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,8 +48,8 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.Date
+import java.util.concurrent.atomic.AtomicBoolean
 
 private const val INITIAL_MAX_SIZE = 50
 
@@ -99,9 +101,10 @@ class RustMatrixTimeline(
             encryptedHistoryPostProcessor.process(items)
         }
 
-    internal suspend fun postItems(items: List<TimelineItem>) {
+    internal suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
         // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
         items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
+            ensureActive()
             timelineDiffProcessor.postItems(it)
         }
         isInit.set(true)

@@ -122,10 +122,12 @@ class RustMatrixRoom(
             innerRoom.timelineDiffFlow { initialList ->
                 _timeline.postItems(initialList)
             }.onEach { diff ->
-                if (diff.eventOrigin() == EventItemOrigin.SYNC) {
-                    _syncUpdateFlow.value = systemClock.epochMillis()
+                diff.use {
+                    if (diff.eventOrigin() == EventItemOrigin.SYNC) {
+                        _syncUpdateFlow.value = systemClock.epochMillis()
+                    }
+                    _timeline.postDiff(diff)
                 }
-                _timeline.postDiff(diff)
             }.launchIn(this)
 
             innerRoom.backPaginationStatusFlow()
