@@ -46,13 +46,13 @@ internal class MapTilerStaticMapUrlBuilder(
         density: Float
     ): String {
         val mapId = if (darkMode) darkMapId else lightMapId
-        val zoom = zoom.coerceIn(zoomRange)
+        val finalZoom = zoom.coerceIn(zoomRange)
 
         // Request @2x density for xhdpi and above (xhdpi == 320dpi == 2x density).
         val is2x = density >= 2
 
         // Scale requested width/height according to the reported display density.
-        val (width, height) = coerceWidthAndHeight(
+        val (finalWidth, finalHeight) = coerceWidthAndHeight(
             width = (width / density).roundToInt(),
             height = (height / density).roundToInt(),
             is2x = is2x,
@@ -65,7 +65,7 @@ internal class MapTilerStaticMapUrlBuilder(
         // image smaller than the available space in pixels.
         // The resulting image will have to be scaled to fit the available space in order
         // to keep the perceived content size constant at the expense of sharpness.
-        return "$MAPTILER_BASE_URL/${mapId}/static/${lon},${lat},${zoom}/${width}x${height}${scale}.webp?key=${apiKey}&attribution=bottomleft"
+        return "$MAPTILER_BASE_URL/${mapId}/static/${lon},${lat},${finalZoom}/${finalWidth}x${finalHeight}${scale}.webp?key=${apiKey}&attribution=bottomleft"
     }
 }
 
@@ -78,12 +78,12 @@ private fun coerceWidthAndHeight(width: Int, height: Int, is2x: Boolean): Pair<I
     val aspectRatio = width.toDouble() / height.toDouble()
     val range = if (is2x) widthHeightRange2x else widthHeightRange
     return if (width >= height) {
-        width.coerceIn(range).let { width ->
-            width to (width / aspectRatio).roundToInt()
+        width.coerceIn(range).let { coercedWidth ->
+            coercedWidth to (coercedWidth / aspectRatio).roundToInt()
         }
     } else {
-        height.coerceIn(range).let { height ->
-            (height * aspectRatio).roundToInt() to height
+        height.coerceIn(range).let { coercedHeight ->
+            (coercedHeight * aspectRatio).roundToInt() to coercedHeight
         }
     }
 }
