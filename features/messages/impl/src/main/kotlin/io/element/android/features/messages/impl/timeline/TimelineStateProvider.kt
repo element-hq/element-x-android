@@ -34,7 +34,6 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -146,7 +145,7 @@ fun aTimelineItemReactions(
                 val key = emojis[index % emojis.size]
                 add(anAggregatedReaction(
                     key = key,
-                    count = index,
+                    count = index + 1,
                     isHighlighted = isHighlighted
                 ))
             }

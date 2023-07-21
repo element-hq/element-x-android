@@ -41,6 +41,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -84,6 +85,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
+    private val reactionSummaryPresenter: ReactionSummaryPresenter,
     private val retrySendMenuPresenter: RetrySendMenuPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -105,6 +107,7 @@ class MessagesPresenter @AssistedInject constructor(
         val timelineState = timelinePresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
+        val reactionSummaryState = reactionSummaryPresenter.present()
         val retryState = retrySendMenuPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
@@ -167,6 +170,7 @@ class MessagesPresenter @AssistedInject constructor(
             timelineState = timelineState,
             actionListState = actionListState,
             customReactionState = customReactionState,
+            reactionSummaryState = reactionSummaryState,
             retrySendMenuState = retryState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,

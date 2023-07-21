@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.groups.canBeDisplayedInBubbleBlock
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
+import io.element.android.features.messages.impl.timeline.model.AggregatedReactionSender
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
@@ -27,7 +28,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
-import io.element.android.libraries.matrix.api.user.getCurrentUser
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
@@ -91,6 +91,7 @@ class TimelineItemEventFactory @Inject constructor(
     }
 
     private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {
+        val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
         var aggregatedReactions = event.reactions.map { reaction ->
             // Sort reactions within an aggregation by timestamp descending.
             // This puts the most recent at the top, useful in cases like the
@@ -98,7 +99,16 @@ class TimelineItemEventFactory @Inject constructor(
             AggregatedReaction(
                 key = reaction.key,
                 currentUserId = matrixClient.sessionId,
-                senders = reaction.senders.sortedBy { it.timestamp }
+                senders = reaction.senders
+                    .sortedBy{ it.timestamp }
+                    .map {
+                        val date = Date(it.timestamp)
+                        AggregatedReactionSender(
+                            senderId = it.senderId,
+                            timestamp = date,
+                            sentTime = timeFormatter.format(date),
+                        )
+                    }
             )
         }
         // Sort aggregated reactions by count and then timestamp ascending, using

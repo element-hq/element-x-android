@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import kotlinx.collections.immutable.toPersistentList
+import java.text.DateFormat
 import java.util.Date
 
 open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReaction> {
@@ -40,10 +41,13 @@ fun anAggregatedReaction(
     val alice = UserId("@alice:server.org")
     val senders = buildList {
         repeat(count) { index ->
+            val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
+            val date = Date()
             add(
-                ReactionSender(
+                AggregatedReactionSender(
                     senderId = if (isHighlighted && index == 0) alice else UserId("@user$index:server.org"),
-                    timestamp = Date()
+                    timestamp = date,
+                    sentTime = timeFormatter.format(date),
                 )
             )
         }

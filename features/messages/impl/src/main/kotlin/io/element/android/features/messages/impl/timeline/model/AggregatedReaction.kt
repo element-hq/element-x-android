@@ -36,7 +36,7 @@ private const val MAX_DISPLAY_CHARS = 16
 data class AggregatedReaction(
     val currentUserId: UserId,
     val key: String,
-    val senders: List<ReactionSender>
+    val senders: List<AggregatedReactionSender>
 ) {
     /**
      * The key to be displayed on screen.

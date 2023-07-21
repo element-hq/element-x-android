@@ -59,6 +59,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -127,6 +129,11 @@ fun MessagesView(
         state.eventSink(MessagesEvents.ToggleReaction(emoji, event.eventId))
     }
 
+    fun onEmojiReactionLongClicked(emoji: String, event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        state.reactionSummaryState.eventSink(ReactionSummaryEvents.ShowReactionSummary(event.eventId, event.reactionsState.reactions, emoji))
+    }
+
     fun onMoreReactionsClicked(event: TimelineItem.Event): Unit =
         state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event.eventId))
 
@@ -159,6 +166,7 @@ fun MessagesView(
                     }
                 },
                 onReactionClicked = ::onEmojiReactionClicked,
+                onReactionLongClicked = ::onEmojiReactionLongClicked,
                 onMoreReactionsClicked = ::onMoreReactionsClicked,
                 onSendLocationClicked = onSendLocationClicked,
                 onSwipeToReply = { targetEvent ->
@@ -193,6 +201,7 @@ fun MessagesView(
         }
     )
 
+    ReactionSummaryView(state = state.reactionSummaryState)
     RetrySendMessageMenu(
         state = state.retrySendMenuState
     )
@@ -245,6 +254,7 @@ fun MessagesViewContent(
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
+    onReactionLongClicked: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
@@ -268,6 +278,7 @@ fun MessagesViewContent(
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = onTimestampClicked,
                 onReactionClicked = onReactionClicked,
+                onReactionLongClicked = onReactionLongClicked,
                 onMoreReactionsClicked = onMoreReactionsClicked,
                 onSwipeToReply = onSwipeToReply,
             )

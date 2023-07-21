@@ -36,6 +36,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -580,6 +581,7 @@ class MessagesPresenterTest {
         val buildMeta = aBuildMeta()
         val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
         val customReactionPresenter = CustomReactionPresenter()
+        val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
         return MessagesPresenter(
             room = matrixRoom,
@@ -587,6 +589,7 @@ class MessagesPresenterTest {
             timelinePresenter = timelinePresenter,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
+            reactionSummaryPresenter = reactionSummaryPresenter,
             retrySendMenuPresenter = retrySendMenuPresenter,
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),

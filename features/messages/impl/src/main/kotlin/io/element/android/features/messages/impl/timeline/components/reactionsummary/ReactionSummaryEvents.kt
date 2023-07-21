@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.timeline.item.event
+package io.element.android.features.messages.impl.timeline.components.reactionsummary
 
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
+import io.element.android.libraries.matrix.api.core.EventId
 
-/**
- * The sender of a reaction.
- *
- * @property senderId the ID of the user who sent the reaction
- * @property timestamp the timestamp the reaction was received on the origin homeserver
- */
-data class ReactionSender(
-    val senderId: UserId,
-    val timestamp: Long
-)
-
+sealed interface ReactionSummaryEvents {
+    object Clear : ReactionSummaryEvents
+    data class ShowReactionSummary(val eventId: EventId, val reactions: List<AggregatedReaction>, val selectedKey: String) : ReactionSummaryEvents
+}

@@ -55,6 +55,7 @@ fun TimelineItemReactions(
     reactionsState: TimelineItemReactions,
     mainAxisAlignment: FlowMainAxisAlignment,
     onReactionClicked: (emoji: String) -> Unit,
+    onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -92,6 +93,7 @@ fun TimelineItemReactions(
         expandableState = expandableState,
         mainAxisAlignment = mainAxisAlignment,
         onReactionClick = onReactionClicked,
+        onReactionLongClick = onReactionLongClicked,
         onMoreReactionsClick = onMoreReactionsClicked,
         onExpandClick = { expanded = true },
         onCollapseClick = { expanded = false }
@@ -110,6 +112,7 @@ private fun TimelineItemReactionsView(
     expandableState: ExpandableState,
     mainAxisAlignment: FlowMainAxisAlignment,
     onReactionClick: (emoji: String) -> Unit,
+    onReactionLongClick: (emoji: String) -> Unit,
     onMoreReactionsClick: () -> Unit,
     onExpandClick: () -> Unit,
     onCollapseClick: () -> Unit,
@@ -124,7 +127,8 @@ private fun TimelineItemReactionsView(
         reactions.forEach { reaction ->
             MessagesReactionButton(
                 content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
-                onClick = { onReactionClick(reaction.key) }
+                onClick = { onReactionClick(reaction.key) },
+                onLongClick = { onReactionLongClick(reaction.key) }
             )
         }
         when (expandableState) {
@@ -191,6 +195,7 @@ private fun ContentToPreview(
         expandableState = expandableState,
         mainAxisAlignment = FlowMainAxisAlignment.Center,
         onReactionClick = {},
+        onReactionLongClick = { },
         onMoreReactionsClick = {},
         onExpandClick = {},
         onCollapseClick = {}

@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.messagecomposer.aMessageCompose
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.architecture.Async
@@ -61,6 +62,11 @@ fun aMessagesState() = MessagesState(
     actionListState = anActionListState(),
     customReactionState = CustomReactionState(
         selectedEventId = null,
+        eventSink = {},
+    ),
+    reactionSummaryState = ReactionSummaryState(
+        target = ReactionSummaryState.Target.None,
+        members = listOf(),
         eventSink = {},
     ),
     hasNetworkConnection = true,
