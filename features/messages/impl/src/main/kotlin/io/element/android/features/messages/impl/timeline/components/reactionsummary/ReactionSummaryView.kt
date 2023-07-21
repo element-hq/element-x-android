@@ -70,6 +70,8 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,7 +102,7 @@ fun ReactionSummaryView(
 @Composable
 private fun SheetContent(
     summary: ReactionSummaryState.Target.Summary,
-    members: List<RoomMember>,
+    members: ImmutableList<RoomMember>,
     modifier: Modifier = Modifier,
 ) {
     val animationScope = rememberCoroutineScope()
@@ -146,7 +148,7 @@ private fun SheetContent(
             }
         }
         HorizontalPager(state = pagerState, pageCount = summary.reactions.size) { page ->
-            LazyColumn(modifier = modifier.fillMaxHeight()) {
+            LazyColumn(modifier = Modifier.fillMaxHeight()) {
                 items(summary.reactions[page].senders) { sender ->
                     val member = members.firstOrNull { it.userId == sender.senderId }
                     val user = MatrixUser(
@@ -195,7 +197,7 @@ fun AggregatedReactionButton(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier,
+            modifier = Modifier,
         ) {
             Text(
                 text = reaction.displayKey,
@@ -205,7 +207,7 @@ fun AggregatedReactionButton(
                 ),
             )
             if (reaction.count > 1) {
-                Spacer(modifier = modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = reaction.count.toString(),
                     color = textColor,
@@ -236,14 +238,14 @@ fun SenderRow(
     ) {
         Avatar(avatarData)
         Column(
-            modifier = modifier.padding(start = 12.dp),
+            modifier = Modifier.padding(start = 12.dp),
         ) {
             Row(
-                modifier = modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(end = 4.dp)
                         .weight(1f),
                     text = name,
@@ -276,5 +278,5 @@ fun SenderRow(
 fun SheetContentPreview(
     @PreviewParameter(ReactionSummaryStateProvider::class) state: ReactionSummaryState
 ) = ElementPreview {
-    SheetContent(summary = state.target as ReactionSummaryState.Target.Summary, members = listOf())
+    SheetContent(summary = state.target as ReactionSummaryState.Target.Summary, members = listOf<RoomMember>().toImmutableList())
 }

@@ -21,16 +21,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.roomMembers
-import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 class ReactionSummaryPresenter @Inject constructor(
@@ -57,7 +52,7 @@ class ReactionSummaryPresenter @Inject constructor(
         }
         return ReactionSummaryState(
             target = target.value,
-            members = membersState.roomMembers().orEmpty(),
+            members = membersState.roomMembers().orEmpty().toImmutableList(),
             eventSink = ::handleEvents
         )
     }

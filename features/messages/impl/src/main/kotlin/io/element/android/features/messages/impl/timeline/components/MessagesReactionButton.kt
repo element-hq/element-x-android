@@ -54,14 +54,13 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 fun MessagesReactionButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: () -> Unit = {},
     content: MessagesReactionsButtonContent,
-    modifier: Modifier = Modifier,
 ) {
     val buttonColor = if (content.isHighlighted) {
         ElementTheme.colors.bgSubtlePrimary

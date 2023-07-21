@@ -48,7 +48,7 @@ data class AggregatedReaction(
     }
 
     /**
-     * The number of users who reacted with this key
+     * The number of users who reacted with this key.
      */
     val count: Int by lazy {
         senders.count()
