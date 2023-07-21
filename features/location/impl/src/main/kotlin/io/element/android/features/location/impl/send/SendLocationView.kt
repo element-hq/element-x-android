@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,6 +48,7 @@ import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.MapDefaults
+import io.element.android.features.location.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
@@ -156,7 +156,11 @@ fun SendLocationView(
                     navigateUp()
                 },
                 leadingContent = {
-                    Icon(Icons.Default.LocationOn, null)
+                    Icon(
+                        resourceId = R.drawable.pin_small,
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                    )
                 },
             )
             Spacer(modifier = Modifier.height(16.dp + navBarPadding))

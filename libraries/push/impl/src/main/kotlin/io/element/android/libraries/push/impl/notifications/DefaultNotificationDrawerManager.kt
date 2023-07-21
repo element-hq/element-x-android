@@ -33,6 +33,7 @@ import io.element.android.libraries.push.api.notifications.NotificationDrawerMan
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
+import io.element.android.services.appnavstate.api.currentSessionId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -74,9 +75,16 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
     }
 
+    private var currentAppNavigationState: NavigationState? = null
+
     private fun onAppNavigationStateChange(navigationState: NavigationState) {
         when (navigationState) {
-            NavigationState.Root -> {}
+            NavigationState.Root -> {
+                currentAppNavigationState?.currentSessionId()?.let { sessionId ->
+                    // User signed out, clear all notifications related to the session.
+                    clearAllEvents(sessionId)
+                }
+            }
             is NavigationState.Session -> {}
             is NavigationState.Space -> {}
             is NavigationState.Room -> {
@@ -91,6 +99,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
                 )
             }
         }
+        currentAppNavigationState = navigationState
     }
 
     private fun createInitialNotificationState(): NotificationState {
@@ -131,9 +140,18 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear all known events and refresh the notification drawer.
      */
-    fun clearAllEvents(sessionId: SessionId) {
+    fun clearAllMessagesEvents(sessionId: SessionId) {
         updateEvents {
             it.clearMessagesForSession(sessionId)
+        }
+    }
+
+    /**
+     * Clear all notifications related to the session and refresh the notification drawer.
+     */
+    fun clearAllEvents(sessionId: SessionId) {
+        updateEvents {
+            it.clearAllForSession(sessionId)
         }
     }
 

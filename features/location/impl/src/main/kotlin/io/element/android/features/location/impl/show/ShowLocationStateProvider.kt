@@ -52,6 +52,13 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
             ),
             ShowLocationState(
                 Location(1.23, 2.34, 4f),
+                description = "For some reason I decided to to write a small essay that wraps at just two lines!",
+                hasLocationPermission = false,
+                isTrackMyLocation = false,
+                eventSink = {},
+            ),
+            ShowLocationState(
+                Location(1.23, 2.34, 4f),
                 description = "For some reason I decided to write a small essay in the location description. " +
                     "It is so long that it will wrap onto more than two lines!",
                 hasLocationPermission = false,

@@ -83,7 +83,7 @@ internal fun AttachmentsBottomSheet(
             onDismissRequest = { isVisible = false }
         ) {
             AttachmentSourcePickerMenu(
-                eventSink = state.eventSink,
+                state = state,
                 onSendLocationClicked = onSendLocationClicked,
             )
         }
@@ -93,7 +93,7 @@ internal fun AttachmentsBottomSheet(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun AttachmentSourcePickerMenu(
-    eventSink: (MessageComposerEvents) -> Unit,
+    state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -102,33 +102,35 @@ internal fun AttachmentSourcePickerMenu(
 //        .navigationBarsPadding() - FIXME after https://issuetracker.google.com/issues/275849044
     ) {
         ListItem(
-            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
+            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
             icon = { Icon(Icons.Default.Collections, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
         )
         ListItem(
-            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
+            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
             icon = { Icon(Icons.Default.AttachFile, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
         )
         ListItem(
-            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
+            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
             icon = { Icon(Icons.Default.PhotoCamera, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
         )
         ListItem(
-            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
+            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
             icon = { Icon(Icons.Default.Videocam, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
         )
-        ListItem(
-            modifier = Modifier.clickable {
-                eventSink(MessageComposerEvents.PickAttachmentSource.Location)
-                onSendLocationClicked()
-            },
-            icon = { Icon(Icons.Default.LocationOn, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
-        )
+        if (state.canShareLocation) {
+            ListItem(
+                modifier = Modifier.clickable {
+                    state.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
+                    onSendLocationClicked()
+                },
+                icon = { Icon(Icons.Default.LocationOn, null) },
+                text = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
+            )
+        }
     }
 }
 
@@ -136,7 +138,9 @@ internal fun AttachmentSourcePickerMenu(
 @Composable
 internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
     AttachmentSourcePickerMenu(
-        eventSink = {},
+        state = aMessageComposerState(
+            canShareLocation = true,
+        ),
         onSendLocationClicked = {},
     )
 }

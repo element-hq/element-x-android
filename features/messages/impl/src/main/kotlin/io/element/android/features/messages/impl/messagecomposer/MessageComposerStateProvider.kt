@@ -26,12 +26,21 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
         )
 }
 
-fun aMessageComposerState() = MessageComposerState(
-    text = "",
-    isFullScreen = false,
-    hasFocus = false,
-    mode = MessageComposerMode.Normal(content = ""),
-    showAttachmentSourcePicker = false,
-    attachmentsState = AttachmentsState.None,
-    eventSink = {}
+fun aMessageComposerState(
+    text: String = "",
+    isFullScreen: Boolean = false,
+    hasFocus: Boolean = false,
+    mode: MessageComposerMode = MessageComposerMode.Normal(content = ""),
+    showAttachmentSourcePicker: Boolean = false,
+    canShareLocation: Boolean = true,
+    attachmentsState: AttachmentsState = AttachmentsState.None,
+) = MessageComposerState(
+    text = text,
+    isFullScreen = isFullScreen,
+    hasFocus = hasFocus,
+    mode = mode,
+    showAttachmentSourcePicker = showAttachmentSourcePicker,
+    canShareLocation = canShareLocation,
+    attachmentsState = attachmentsState,
+    eventSink = {},
 )
