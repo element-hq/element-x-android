@@ -150,7 +150,7 @@ class RustMatrixClient constructor(
             }.launchIn(sessionCoroutineScope)
     }
 
-    override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
+    override suspend fun getRoom(roomId: RoomId): MatrixRoom? = withContext(sessionDispatcher) {
         // Check if already in memory...
         var cachedPairOfRoom = pairOfRoom(roomId)
         if (cachedPairOfRoom == null) {
@@ -158,24 +158,27 @@ class RustMatrixClient constructor(
             roomSummaryDataSource.awaitAllRoomsAreLoaded()
             cachedPairOfRoom = pairOfRoom(roomId)
         }
-        if (cachedPairOfRoom == null) return null
-        val (roomListItem, fullRoom) = cachedPairOfRoom
-        return RustMatrixRoom(
-            sessionId = sessionId,
-            roomListItem = roomListItem,
-            innerRoom = fullRoom,
-            sessionCoroutineScope = sessionCoroutineScope,
-            coroutineDispatchers = dispatchers,
-            systemClock = clock,
-            roomContentForwarder = roomContentForwarder,
-            sessionData = sessionStore.getSession(sessionId.value)!!,
-        )
+        return@withContext if (cachedPairOfRoom == null) {
+            null
+        } else {
+            val (roomListItem, fullRoom) = cachedPairOfRoom
+            RustMatrixRoom(
+                sessionId = sessionId,
+                roomListItem = roomListItem,
+                innerRoom = fullRoom,
+                sessionCoroutineScope = sessionCoroutineScope,
+                coroutineDispatchers = dispatchers,
+                systemClock = clock,
+                roomContentForwarder = roomContentForwarder,
+                sessionData = sessionStore.getSession(sessionId.value)!!,
+            )
+        }
     }
 
-    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? = withContext(sessionDispatcher) {
+    private fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = roomListService.roomOrNull(roomId.value)
         val fullRoom = cachedRoomListItem?.fullRoom()
-        if (cachedRoomListItem == null || fullRoom == null) {
+        return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
             null
         } else {
