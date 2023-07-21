@@ -35,8 +35,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
+import io.element.android.features.location.api.internal.StaticMapUrlBuilder
 import io.element.android.features.location.api.internal.centerBottomEdge
-import io.element.android.features.location.api.internal.staticMapUrl
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -65,6 +65,7 @@ fun StaticMapView(
     ) {
         val context = LocalContext.current
         var retryHash by remember { mutableStateOf(0) }
+        val builder = remember { StaticMapUrlBuilder(context) }
         val painter = rememberAsyncImagePainter(
             model = if (constraints.isZero) {
                 // Avoid building a URL if any of the size constraints is zero (else it will thrown an exception).
@@ -72,7 +73,7 @@ fun StaticMapView(
             } else {
                 ImageRequest.Builder(context)
                     .data(
-                        context.staticMapUrl(
+                        builder.build(
                             lat = lat,
                             lon = lon,
                             zoom = zoom,
