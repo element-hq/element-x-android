@@ -295,7 +295,7 @@ private fun TimelineItemEventRowContent(
         if (event.reactionsState.reactions.isNotEmpty()) {
             TimelineItemReactions(
                 reactionsState = event.reactionsState,
-                mainAxisAlignment = if (event.isMine) FlowMainAxisAlignment.End else FlowMainAxisAlignment.Start,
+                isOutgoing = event.isMine,
                 onReactionClicked = onReactionClicked,
                 onReactionLongClicked = onReactionLongClicked,
                 onMoreReactionsClicked = { onMoreReactionsClicked(event) },

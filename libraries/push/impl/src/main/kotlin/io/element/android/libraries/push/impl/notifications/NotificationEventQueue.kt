@@ -154,6 +154,11 @@ data class NotificationEventQueue constructor(
         queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId }
     }
 
+    fun clearAllForSession(sessionId: SessionId) {
+        Timber.d("clearAllForSession $sessionId")
+        queue.removeAll { it.sessionId == sessionId }
+    }
+
     fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId) {
         Timber.d("clearMessageEventOfRoom $sessionId, $roomId")
         queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId && it.roomId == roomId }
