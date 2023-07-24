@@ -20,6 +20,11 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.push.pushstore.impl"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+    }
 }
 
 anvil {
@@ -43,4 +48,13 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.appnavstate.test)
+
+    androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.test.core)
+    androidTestImplementation(libs.test.junit)
+    androidTestImplementation(libs.test.truth)
+    androidTestImplementation(libs.test.runner)
+    androidTestImplementation(projects.libraries.sessionStorage.test)
+
+    coreLibraryDesugaring(libs.android.desugar)
 }
