@@ -5,7 +5,7 @@
     <item quantity="other">"%1$d changements dans la conversation"</item>
   </plurals>
   <plurals name="screen_room_timeline_more_reactions">
-    <item quantity="one"></item>
+    <item quantity="one">"1 de plus"</item>
     <item quantity="other">"%1$d de plus"</item>
   </plurals>
   <string name="screen_room_attachment_source_camera">"Appareil photo"</string>
