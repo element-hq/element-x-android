@@ -41,11 +41,13 @@ class DefaultUserPushStoreFactory @Inject constructor(
     // We can have only one class accessing a single data store, so keep a cache of them.
     private val cache = mutableMapOf<SessionId, UserPushStore>()
     override fun create(userId: SessionId): UserPushStore {
-        return cache.getOrPut(userId) {
-            UserPushStoreDataStore(
-                context = context,
-                userId = userId
-            )
+        return synchronized(cache) {
+            cache.getOrPut(userId) {
+                UserPushStoreDataStore(
+                    context = context,
+                    userId = userId
+                )
+            }
         }
     }
 
