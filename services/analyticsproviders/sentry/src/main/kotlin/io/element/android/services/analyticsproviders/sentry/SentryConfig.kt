@@ -18,7 +18,7 @@ package io.element.android.services.analyticsproviders.sentry
 
 object SentryConfig {
     const val name = "Sentry"
-    const val dns = "https://f6acc9cfc2024641b28c87ad95e73e66@sentry.tools.element.io/49"
+    const val dns = "https://32f7ff6a6e724f90838b7654042b2e81@sentry.tools.element.io/59"
     const val envDebug = "DEBUG"
     const val envRelease = "RELEASE"
 }
