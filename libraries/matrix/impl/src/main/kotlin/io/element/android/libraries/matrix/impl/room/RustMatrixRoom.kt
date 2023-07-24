@@ -65,6 +65,7 @@ import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
@@ -88,7 +89,7 @@ class RustMatrixRoom(
 
     private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
     private val _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
-    private val isInit = MutableStateFlow(false)
+    private val isInit = AtomicBoolean(false)
     private val _syncUpdateFlow = MutableStateFlow(0L)
     private val _timeline by lazy {
         RustMatrixTimeline(
@@ -107,41 +108,42 @@ class RustMatrixRoom(
     override val timeline: MatrixTimeline = _timeline
 
     override fun open(): Result<Unit> {
-        if (isInit.value) return Result.failure(IllegalStateException("Listener already registered"))
-        val settings = RoomSubscription(
-            requiredState = listOf(
-                RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_TOPIC, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
-            ),
-            timelineLimit = null
-        )
-        roomListItem.subscribe(settings)
-        roomCoroutineScope.launch(roomDispatcher) {
-            innerRoom.timelineDiffFlow { initialList ->
-                _timeline.postItems(initialList)
-            }.onEach { diff ->
-                if (diff.eventOrigin() == EventItemOrigin.SYNC) {
-                    _syncUpdateFlow.value = systemClock.epochMillis()
-                }
-                _timeline.postDiff(diff)
-            }.launchIn(this)
-
-            innerRoom.backPaginationStatusFlow()
-                .onEach {
-                    _timeline.postPaginationStatus(it)
+        return if (isInit.getAndSet(true)) {
+            Result.failure(IllegalStateException("Listener already registered"))
+        } else {
+            val settings = RoomSubscription(
+                requiredState = listOf(
+                    RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
+                    RequiredState(key = EventType.STATE_ROOM_TOPIC, value = ""),
+                    RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
+                    RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
+                ),
+                timelineLimit = null
+            )
+            roomListItem.subscribe(settings)
+            roomCoroutineScope.launch(roomDispatcher) {
+                innerRoom.timelineDiffFlow { initialList ->
+                    _timeline.postItems(initialList)
+                }.onEach { diff ->
+                    if (diff.eventOrigin() == EventItemOrigin.SYNC) {
+                        _syncUpdateFlow.value = systemClock.epochMillis()
+                    }
+                    _timeline.postDiff(diff)
                 }.launchIn(this)
 
-            fetchMembers()
+                innerRoom.backPaginationStatusFlow()
+                    .onEach {
+                        _timeline.postPaginationStatus(it)
+                    }.launchIn(this)
+
+                fetchMembers()
+            }
+            Result.success(Unit)
         }
-        isInit.value = true
-        return Result.success(Unit)
     }
 
     override fun close() {
-        if (isInit.value) {
-            isInit.value = false
+        if (isInit.getAndSet(false)) {
             roomCoroutineScope.cancel()
             roomListItem.unsubscribe()
             innerRoom.destroy()
