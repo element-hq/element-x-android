@@ -56,6 +56,4 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.rageshake.test)
-
-    androidTestImplementation(libs.test.junitext)
 }

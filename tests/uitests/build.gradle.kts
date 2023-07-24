@@ -42,7 +42,6 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.parameter.injector)
     testImplementation(projects.libraries.designsystem)
-    androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)
     kspTest(libs.showkase.processor)
 
