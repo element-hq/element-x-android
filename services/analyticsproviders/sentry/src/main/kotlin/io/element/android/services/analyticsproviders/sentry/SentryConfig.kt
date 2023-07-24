@@ -13,22 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-}
 
-android {
-    namespace = "io.element.android.services.analytics.noop"
-}
+package io.element.android.services.analyticsproviders.sentry
 
-anvil {
-    generateDaggerFactories.set(true)
-}
-
-dependencies {
-    implementation(libs.dagger)
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.di)
-    api(projects.services.analytics.api)
+object SentryConfig {
+    const val name = "Sentry"
+    const val dns = "https://32f7ff6a6e724f90838b7654042b2e81@sentry.tools.element.io/59"
+    const val envDebug = "DEBUG"
+    const val envRelease = "RELEASE"
 }

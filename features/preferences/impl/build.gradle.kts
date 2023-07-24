@@ -47,6 +47,7 @@ dependencies {
     implementation(projects.features.ftue.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.features.logout.api)
+    implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)

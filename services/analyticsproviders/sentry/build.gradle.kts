@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.services.analytics.noop"
+    namespace = "io.element.android.services.analyticsproviders.sentry"
 }
 
 anvil {
@@ -28,7 +28,8 @@ anvil {
 
 dependencies {
     implementation(libs.dagger)
-    implementation(projects.libraries.architecture)
+    implementation(libs.sentry)
+    implementation(projects.libraries.core)
     implementation(projects.libraries.di)
-    api(projects.services.analytics.api)
+    implementation(projects.services.analyticsproviders.api)
 }

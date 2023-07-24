@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,6 +44,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val logoutPresenter: LogoutPreferencePresenter,
     private val matrixClient: MatrixClient,
     private val sessionVerificationService: SessionVerificationService,
+    private val analyticsService: AnalyticsService,
     private val buildType: BuildType,
     private val versionFormatter: VersionFormatter,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -58,6 +60,7 @@ class PreferencesRootPresenter @Inject constructor(
         }
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
+        val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
 
         // Session verification status (unknown, not verified, verified)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
@@ -72,6 +75,7 @@ class PreferencesRootPresenter @Inject constructor(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
             showCompleteVerification = sessionIsNotVerified,
+            showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             snackbarMessage = snackbarMessage,
         )

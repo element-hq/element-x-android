@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.meta.BuildType
@@ -41,6 +42,7 @@ class PreferencesRootPresenterTest {
             logoutPresenter,
             matrixClient,
             FakeSessionVerificationService(),
+            FakeAnalyticsService(),
             BuildType.DEBUG,
             FakeVersionFormatter(),
             SnackbarDispatcher(),
@@ -61,6 +63,7 @@ class PreferencesRootPresenterTest {
                 )
             )
             assertThat(loadedState.showDeveloperSettings).isEqualTo(true)
+            assertThat(loadedState.showAnalyticsSettings).isEqualTo(false)
         }
     }
 }

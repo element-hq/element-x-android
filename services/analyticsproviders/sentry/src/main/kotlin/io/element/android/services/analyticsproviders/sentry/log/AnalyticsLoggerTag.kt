@@ -13,22 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-}
 
-android {
-    namespace = "io.element.android.services.analytics.noop"
-}
+package io.element.android.services.analyticsproviders.sentry.log
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+import io.element.android.libraries.core.log.logger.LoggerTag
 
-dependencies {
-    implementation(libs.dagger)
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.di)
-    api(projects.services.analytics.api)
-}
+internal val analyticsTag = LoggerTag("Sentry")
