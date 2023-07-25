@@ -19,50 +19,64 @@ package io.element.android.features.location.impl.show
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
 
+private const val APP_NAME = "ApplicationName"
+
 class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
     override val values: Sequence<ShowLocationState>
         get() = sequenceOf(
             ShowLocationState(
+                ShowLocationState.Dialog.None,
                 Location(1.23, 2.34, 4f),
                 description = null,
                 hasLocationPermission = false,
                 isTrackMyLocation = false,
+                appName = APP_NAME,
                 eventSink = {},
             ),
             ShowLocationState(
+                ShowLocationState.Dialog.None,
                 Location(1.23, 2.34, 4f),
                 description = null,
                 hasLocationPermission = true,
                 isTrackMyLocation = false,
+                appName = APP_NAME,
                 eventSink = {},
             ),
             ShowLocationState(
+                ShowLocationState.Dialog.None,
                 Location(1.23, 2.34, 4f),
                 description = null,
                 hasLocationPermission = true,
                 isTrackMyLocation = true,
+                appName = APP_NAME,
                 eventSink = {},
             ),
             ShowLocationState(
+                ShowLocationState.Dialog.None,
                 Location(1.23, 2.34, 4f),
                 description = "My favourite place!",
                 hasLocationPermission = false,
                 isTrackMyLocation = false,
+                appName = APP_NAME,
                 eventSink = {},
             ),
             ShowLocationState(
+                ShowLocationState.Dialog.None,
                 Location(1.23, 2.34, 4f),
                 description = "For some reason I decided to to write a small essay that wraps at just two lines!",
                 hasLocationPermission = false,
                 isTrackMyLocation = false,
+                appName = APP_NAME,
                 eventSink = {},
             ),
             ShowLocationState(
+                ShowLocationState.Dialog.None,
                 Location(1.23, 2.34, 4f),
                 description = "For some reason I decided to write a small essay in the location description. " +
                     "It is so long that it will wrap onto more than two lines!",
                 hasLocationPermission = false,
                 isTrackMyLocation = false,
+                appName = APP_NAME,
                 eventSink = {},
             ),
         )

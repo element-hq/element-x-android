@@ -24,6 +24,7 @@ import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.permissions.PermissionsPresenterFake
 import io.element.android.features.location.impl.permissions.PermissionsState
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -31,13 +32,15 @@ import org.junit.Test
 class ShowLocationPresenterTest {
 
     private val permissionsPresenterFake = PermissionsPresenterFake()
-    private val actions = FakeLocationActions()
+    private val fakeLocationActions = FakeLocationActions()
+    private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
     private val location = Location(1.23, 4.56, 7.8f)
     private val presenter = ShowLocationPresenter(
         permissionsPresenterFactory = object : PermissionsPresenter.Factory {
             override fun create(permissions: List<String>): PermissionsPresenter = permissionsPresenterFake
         },
-        actions,
+        fakeLocationActions,
+        fakeBuildMeta,
         location,
         A_DESCRIPTION,
     )
@@ -93,8 +96,8 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(ShowLocationEvents.Share)
 
-            Truth.assertThat(actions.sharedLocation).isEqualTo(location)
-            Truth.assertThat(actions.sharedLabel).isEqualTo(A_DESCRIPTION)
+            Truth.assertThat(fakeLocationActions.sharedLocation).isEqualTo(location)
+            Truth.assertThat(fakeLocationActions.sharedLabel).isEqualTo(A_DESCRIPTION)
         }
     }
 
