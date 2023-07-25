@@ -158,10 +158,7 @@ class RustMatrixClient constructor(
             roomSummaryDataSource.awaitAllRoomsAreLoaded()
             cachedPairOfRoom = pairOfRoom(roomId)
         }
-        return@withContext if (cachedPairOfRoom == null) {
-            null
-        } else {
-            val (roomListItem, fullRoom) = cachedPairOfRoom
+        cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
             RustMatrixRoom(
                 sessionId = sessionId,
                 roomListItem = roomListItem,
