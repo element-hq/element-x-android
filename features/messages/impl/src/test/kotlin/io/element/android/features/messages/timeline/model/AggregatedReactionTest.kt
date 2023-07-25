@@ -16,19 +16,30 @@
 
 package io.element.android.features.messages.timeline.model
 
-import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
+import io.element.android.features.messages.impl.timeline.model.anAggregatedReaction
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class AggregatedReactionTest {
     @Test
     fun `reaction display key is shortened`() {
-        val reaction = AggregatedReaction(
-                key = "1234567890123456790",
-                count = 1,
-                isHighlighted = false
+        val reaction = anAggregatedReaction(
+            key = "1234567890123456790",
+            count = 1
         )
 
         assertEquals("1234567890123456…", reaction.displayKey)
+    }
+
+    @Test
+    fun `reaction count and isHighlighted are computed correctly`() {
+        val reaction = anAggregatedReaction(
+            key = "1234567890123456790",
+            count = 3,
+            isHighlighted = true
+        )
+
+        assertEquals(3, reaction.count)
+        assertEquals(true, reaction.isHighlighted)
     }
 }
