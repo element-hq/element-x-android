@@ -63,7 +63,11 @@ interface MatrixRoom : Closeable {
 
     val timeline: MatrixTimeline
 
-    fun open(): Result<Unit>
+    fun destroy()
+
+    fun subscribeToSync()
+
+    fun unsubscribeFromSync()
 
     suspend fun userDisplayName(userId: UserId): Result<String?>
 
@@ -133,6 +137,8 @@ interface MatrixRoom : Closeable {
         zoomLevel: Int? = null,
         assetType: AssetType? = null,
     ): Result<Unit>
+
+    override fun close() = destroy()
 }
 
 

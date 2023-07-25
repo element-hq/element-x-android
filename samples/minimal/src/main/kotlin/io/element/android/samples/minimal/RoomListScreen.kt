@@ -87,7 +87,6 @@ class RoomListScreen(
             Singleton.appScope.launch {
                 withContext(coroutineDispatchers.io) {
                     matrixClient.getRoom(roomId)!!.use { room ->
-                        room.open()
                         room.timeline.paginateBackwards(20, 50)
                     }
                 }
