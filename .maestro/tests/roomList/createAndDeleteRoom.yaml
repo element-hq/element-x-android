@@ -17,7 +17,7 @@ appId: ${APP_ID}
 - takeScreenshot: build/maestro/320-createAndDeleteRoom
 - tapOn: "aRoomName"
 - tapOn: "Invite people"
-# assert there's 1 memeber and 1 invitee
+# assert there's 1 member and 1 invitee
 - tapOn: "Search for someone"
 - inputText: ${INVITEE2_MXID}
 - tapOn:
@@ -27,7 +27,7 @@ appId: ${APP_ID}
 - tapOn: "Back"
 - tapOn: "aRoomName"
 - tapOn: "People"
-# assert there's 1 memeber and 2 invitees
+# assert there's 1 member and 2 invitees
 - tapOn: "Back"
 - tapOn: "Leave room"
 - tapOn: "Leave"
