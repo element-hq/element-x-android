@@ -119,7 +119,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 )
                 else -> {
                     val message = NotificationCompat.MessagingStyle.Message(
-                        event.body?.annotateForDebug(71),
+                        event.`body?.annotateForDebug(71),
                         event.timestamp,
                         senderPerson
                     ).also { message ->

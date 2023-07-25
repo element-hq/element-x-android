@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 data class InviteNotifiableEvent(
     override val sessionId: SessionId,
     override val roomId: RoomId,
-    override val eventId: EventId,
+    override val eventId: EventId?,
     override val editedEventId: EventId?,
     override val canBeReplaced: Boolean,
     val roomName: String?,

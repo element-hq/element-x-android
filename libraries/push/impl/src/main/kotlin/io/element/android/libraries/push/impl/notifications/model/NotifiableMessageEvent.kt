@@ -29,7 +29,7 @@ import io.element.android.services.appnavstate.api.currentThreadId
 data class NotifiableMessageEvent(
     override val sessionId: SessionId,
     override val roomId: RoomId,
-    override val eventId: EventId,
+    override val eventId: EventId?,
     override val editedEventId: EventId?,
     override val canBeReplaced: Boolean,
     val noisy: Boolean,

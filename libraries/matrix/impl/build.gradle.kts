@@ -29,8 +29,8 @@ anvil {
 }
 
 dependencies {
-    // api(projects.libraries.rustsdk)
-    implementation(libs.matrix.sdk)
+     api(projects.libraries.rustsdk)
+//    implementation(libs.matrix.sdk)
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)

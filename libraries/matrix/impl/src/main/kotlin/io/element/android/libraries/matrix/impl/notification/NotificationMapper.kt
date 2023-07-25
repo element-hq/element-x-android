@@ -21,27 +21,69 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationData
-import org.matrix.rustcomponents.sdk.NotificationItem
+import io.element.android.libraries.matrix.api.notification.NotificationEvent
 import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.NotificationEvent as RustNotificationEvent
+import org.matrix.rustcomponents.sdk.NotificationItem as RustNotificationItem
 
 class NotificationMapper {
+
+    private val notificationEventMapper = NotificationEventMapper()
+
+    fun map(roomId: RoomId, notificationItem: RustNotificationItem): NotificationData {
+        return notificationItem.use { item ->
+            when (val event = item.event) {
+                is RustNotificationEvent.Timeline -> NotificationData.Message(
+                    senderId = UserId(item.event.senderId()),
+                    eventId = item.event.eventId()?.let(::EventId),
+                    roomId = roomId,
+                    senderAvatarUrl = item.senderInfo.avatarUrl,
+                    senderDisplayName = item.senderInfo.displayName,
+                    roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { item.roomInfo.isDirect },
+                    roomDisplayName = item.roomInfo.displayName,
+                    isDirect = item.roomInfo.isDirect,
+                    isEncrypted = item.roomInfo.isEncrypted.orFalse(),
+                    isNoisy = item.isNoisy.orFalse(),
+                    event = item.event.use { notificationEventMapper.map(it)!! }
+                )
+                is RustNotificationEvent.Invite -> NotificationData.Invite(
+                    senderId = UserId(event.senderId()),
+                    roomId = roomId,
+                    senderAvatarUrl = item.senderInfo.avatarUrl,
+                    senderDisplayName = item.senderInfo.displayName,
+                    roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { item.roomInfo.isDirect },
+                    roomDisplayName = item.roomInfo.displayName,
+                    isDirect = item.roomInfo.isDirect,
+                    isEncrypted = item.roomInfo.isEncrypted.orFalse(),
+                    isNoisy = item.isNoisy.orFalse(),
+                )
+            }
+        }
+    }
+}
+
+class NotificationEventMapper {
+
     private val timelineEventMapper = TimelineEventMapper()
 
-    fun map(roomId: RoomId, notificationItem: NotificationItem): NotificationData {
-        return notificationItem.use { item ->
-            NotificationData(
-                senderId = UserId(item.event.senderId()),
-                eventId = EventId(item.event.eventId()),
-                roomId = roomId,
-                senderAvatarUrl = item.senderInfo.avatarUrl,
-                senderDisplayName = item.senderInfo.displayName,
-                roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { item.roomInfo.isDirect },
-                roomDisplayName = item.roomInfo.displayName,
-                isDirect = item.roomInfo.isDirect,
-                isEncrypted = item.roomInfo.isEncrypted.orFalse(),
-                isNoisy = item.isNoisy,
-                event = item.event.use { event -> timelineEventMapper.map(event) }
-            )
+    fun map(notificationEvent: RustNotificationEvent): NotificationEvent? {
+        return when (notificationEvent) {
+            is RustNotificationEvent.Timeline -> timelineEventMapper.map(notificationEvent.event)
+            is RustNotificationEvent.Invite -> null
         }
+    }
+}
+
+private fun RustNotificationEvent.senderId(): String {
+    return when (this) {
+        is RustNotificationEvent.Invite -> senderId
+        is RustNotificationEvent.Timeline -> event.senderId()
+    }
+}
+
+private fun RustNotificationEvent.eventId(): String? {
+    return when (this) {
+        is RustNotificationEvent.Invite -> null
+        is RustNotificationEvent.Timeline -> event.eventId()
     }
 }

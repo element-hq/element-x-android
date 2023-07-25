@@ -30,7 +30,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
@@ -81,8 +83,8 @@ class NotifiableEventResolver @Inject constructor(
     }
 
     private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent? {
-        return when (val content = this.event.content) {
-            is NotificationContent.MessageLike.RoomMessage -> {
+        return when (this) {
+            is NotificationData.Message -> {
                 buildNotifiableMessageEvent(
                     sessionId = userId,
                     roomId = roomId,
@@ -91,7 +93,7 @@ class NotifiableEventResolver @Inject constructor(
                     timestamp = event.timestamp,
                     senderName = senderDisplayName,
                     senderId = senderId.value,
-                    body = descriptionFromMessageContent(content),
+                    body = descriptionFromMessageContent(event.content as NotificationContent.MessageLike.RoomMessage),
                     imageUriString = event.contentUrl,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
@@ -99,27 +101,25 @@ class NotifiableEventResolver @Inject constructor(
                     senderAvatarPath = senderAvatarUrl,
                 )
             }
-            is NotificationContent.StateEvent.RoomMemberContent -> {
-                if (content.membershipState == RoomMembershipState.INVITE) {
-                    InviteNotifiableEvent(
-                        sessionId = userId,
-                        roomId = roomId,
-                        eventId = eventId,
-                        editedEventId = null,
-                        canBeReplaced = true,
-                        roomName = roomDisplayName,
-                        noisy = isNoisy,
-                        timestamp = event.timestamp,
-                        soundName = null,
-                        isRedacted = false,
-                        isUpdated = false,
-                        description = descriptionFromRoomMembershipContent(content, isDirect) ?: return null,
-                        type = null, // TODO check if type is needed anymore
-                        title = null, // TODO check if title is needed anymore
-                    )
-                } else {
-                    null
-                }
+            is NotificationData.Invite -> {
+                InviteNotifiableEvent(
+                    sessionId = userId,
+                    roomId = roomId,
+                    eventId = null,
+                    editedEventId = null,
+                    canBeReplaced = true,
+                    roomName = roomDisplayName,
+                    noisy = isNoisy,
+                    timestamp = System.currentTimeMillis(), // TODO: use actual timestamp
+                    soundName = null,
+                    isRedacted = false,
+                    isUpdated = false,
+                    description = descriptionFromRoomMembershipContent(
+                        NotificationContent.StateEvent.RoomMemberContent(userId.value, RoomMembershipState.INVITE), isDirect
+                    ) ?: return null,
+                    type = null, // TODO check if type is needed anymore
+                    title = null, // TODO check if title is needed anymore
+                )
             }
             else -> null
         }
@@ -178,7 +178,7 @@ class NotifiableEventResolver @Inject constructor(
 private fun buildNotifiableMessageEvent(
     sessionId: SessionId,
     roomId: RoomId,
-    eventId: EventId,
+    eventId: EventId?,
     editedEventId: EventId? = null,
     canBeReplaced: Boolean = false,
     noisy: Boolean,

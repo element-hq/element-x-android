@@ -100,12 +100,12 @@ data class NotificationEventQueue constructor(
                 // Replace the existing notification with the new content
                 replace(replace = edited, with = notifiableEvent)
             }
-            seenEventIds.contains(notifiableEvent.eventId) -> {
+            notifiableEvent.eventId != null && seenEventIds.contains(notifiableEvent.eventId!!) -> {
                 // we've already seen the event, lets skip
                 Timber.d("onNotifiableEventReceived(): skipping event, already seen")
             }
             else -> {
-                seenEventIds.put(notifiableEvent.eventId)
+                notifiableEvent.eventId?.let { seenEventIds.put(it) }
                 queue.add(notifiableEvent)
             }
         }

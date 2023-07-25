@@ -22,19 +22,33 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 
-data class NotificationData(
-    val senderId: UserId,
-    val eventId: EventId,
-    val roomId: RoomId,
-    val senderAvatarUrl: String?,
-    val senderDisplayName: String?,
-    val roomAvatarUrl: String?,
-    val roomDisplayName: String?,
-    val isDirect: Boolean,
-    val isEncrypted: Boolean,
-    val isNoisy: Boolean,
-    val event: NotificationEvent,
-)
+sealed interface NotificationData {
+    data class Message(
+        val senderId: UserId,
+        val eventId: EventId?,
+        val roomId: RoomId,
+        val senderAvatarUrl: String?,
+        val senderDisplayName: String?,
+        val roomAvatarUrl: String?,
+        val roomDisplayName: String?,
+        val isDirect: Boolean,
+        val isEncrypted: Boolean,
+        val isNoisy: Boolean,
+        val event: NotificationEvent,
+    ) : NotificationData
+
+    data class Invite(
+        val senderId: UserId,
+        val roomId: RoomId,
+        val senderAvatarUrl: String?,
+        val senderDisplayName: String?,
+        val roomAvatarUrl: String?,
+        val roomDisplayName: String?,
+        val isDirect: Boolean,
+        val isEncrypted: Boolean,
+        val isNoisy: Boolean,
+    ) : NotificationData
+}
 
 data class NotificationEvent(
     val timestamp: Long,

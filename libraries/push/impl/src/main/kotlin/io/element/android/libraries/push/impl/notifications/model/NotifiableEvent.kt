@@ -27,7 +27,7 @@ import java.io.Serializable
 sealed interface NotifiableEvent : Serializable {
     val sessionId: SessionId
     val roomId: RoomId
-    val eventId: EventId
+    val eventId: EventId?
     val editedEventId: EventId?
     val description: String?
 
