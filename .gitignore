@@ -38,6 +38,7 @@ captures/
 # IntelliJ
 *.iml
 .idea/.name
+.idea/androidTestResultsUserPreferences.xml
 .idea/assetWizardSettings.xml
 .idea/compiler.xml
 .idea/deploymentTargetDropDown.xml
