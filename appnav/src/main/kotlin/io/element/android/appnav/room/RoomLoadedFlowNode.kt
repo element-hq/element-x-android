@@ -20,6 +20,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -161,13 +162,16 @@ class RoomLoadedFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        // Rely on the View Lifecycle instead of the Node Lifecycle,
+        // Rely on the View Lifecycle in addition to the Node Lifecycle,
         // because this node enters 'onDestroy' before his children, so it can leads to
         // using the room in a child node where it's already closed.
         DisposableEffect(Unit) {
-            inputs.room.open()
+            inputs.room.subscribeToSync()
             onDispose {
-                inputs.room.close()
+                inputs.room.unsubscribeFromSync()
+                if (lifecycle.currentState == Lifecycle.State.DESTROYED) {
+                    inputs.room.destroy()
+                }
             }
         }
         Children(
