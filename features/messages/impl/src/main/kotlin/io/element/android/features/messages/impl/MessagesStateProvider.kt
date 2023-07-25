@@ -34,14 +34,14 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
         get() = sequenceOf(
             aMessagesState(),
-            aMessagesState().copy(
-                roomName = Async.Uninitialized,
-                roomAvatar = Async.Uninitialized,
-            ),
             aMessagesState().copy(hasNetworkConnection = false),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
             aMessagesState().copy(userHasPermissionToSendMessage = false),
             aMessagesState().copy(showReinvitePrompt = true),
+            aMessagesState().copy(
+                roomName = Async.Uninitialized,
+                roomAvatar = Async.Uninitialized,
+            ),
         )
 }
 
