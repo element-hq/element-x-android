@@ -65,6 +65,7 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
@@ -132,7 +133,6 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -177,7 +177,6 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -314,7 +313,6 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -328,10 +326,10 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.Dismiss)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+
         }
     }
 
@@ -342,7 +340,6 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -419,9 +416,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            skipItems(1)
+            val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
@@ -448,9 +443,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            skipItems(1)
+            val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
@@ -469,9 +462,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            skipItems(1)
+            val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
@@ -497,9 +488,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            skipItems(1)
+            val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
@@ -532,8 +521,9 @@ class MessagesPresenterTest {
         }.test {
             // Default value
             assertThat(awaitItem().userHasPermissionToSendMessage).isTrue()
-            skipItems(2)
+            skipItems(1)
             assertThat(awaitItem().userHasPermissionToSendMessage).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

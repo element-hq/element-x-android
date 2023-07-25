@@ -295,27 +295,6 @@ fun MessagesViewTopBar(
     onRoomDetailsClicked: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
-    @Composable
-    fun RoomAvatarAndNameRow(
-        roomName: String,
-        roomAvatar: AvatarData,
-        modifier: Modifier = Modifier
-    ) {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Avatar(roomAvatar)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = roomName,
-                style = ElementTheme.typography.fontBodyLgMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-
     TopAppBar(
         modifier = modifier,
         navigationIcon = {
@@ -338,6 +317,27 @@ fun MessagesViewTopBar(
         },
         windowInsets = WindowInsets(0.dp)
     )
+}
+
+@Composable
+fun RoomAvatarAndNameRow(
+    roomName: String,
+    roomAvatar: AvatarData,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Avatar(roomAvatar)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = roomName,
+            style = ElementTheme.typography.fontBodyLgMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
 }
 
 @Composable
