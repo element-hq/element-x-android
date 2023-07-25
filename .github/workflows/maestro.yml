@@ -38,6 +38,8 @@ jobs:
         run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
+          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
+          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
       - name: Upload debug APKs
         uses: actions/upload-artifact@v3
         with:
@@ -47,7 +49,9 @@ jobs:
       - uses: mobile-dev-inc/action-maestro-cloud@v1.4.1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-          app-file: app/build/outputs/apk/debug/app-universal-debug.apk
+          # Doc says (https://github.com/mobile-dev-inc/action-maestro-cloud#android):
+          # app-file should point to an x86 compatible APK file, so upload the x86_64 one (much smaller than the universal APK).
+          app-file: app/build/outputs/apk/debug/app-x86_64-debug.apk
           env: |
             USERNAME=maestroelement
             PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}

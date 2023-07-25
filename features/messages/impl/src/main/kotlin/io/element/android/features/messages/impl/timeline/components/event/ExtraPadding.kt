@@ -65,7 +65,7 @@ fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
 fun ExtraPadding.getStr(fontSize: TextUnit): String {
     if (nbChars == 0) return ""
     val timestampFontSize = ElementTheme.typography.fontBodyXsRegular.fontSize // 11.sp
-    val nbOfSpaces = ((timestampFontSize.value / fontSize.value) * nbChars).toInt() + 1
+    val nbOfSpaces = (timestampFontSize.value / fontSize.value * nbChars).toInt() + 1
     // A space and some unbreakable spaces
     return " " + "\u00A0".repeat(nbOfSpaces)
 }

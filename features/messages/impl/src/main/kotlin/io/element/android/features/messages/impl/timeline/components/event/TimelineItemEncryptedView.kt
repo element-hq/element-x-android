@@ -30,7 +30,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemEncryptedView(
-    content: TimelineItemEncryptedContent,
+    @Suppress("UNUSED_PARAMETER") content: TimelineItemEncryptedContent,
     extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {

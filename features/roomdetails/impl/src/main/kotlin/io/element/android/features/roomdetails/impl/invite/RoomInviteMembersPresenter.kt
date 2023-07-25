@@ -93,7 +93,7 @@ class RoomInviteMembersPresenter @Inject constructor(
         value = if (value.contains(user)) {
             value.filterNot { it == user }
         } else {
-            (value + user)
+            value + user
         }.toImmutableList()
     }
 

@@ -16,7 +16,7 @@
 
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -38,7 +38,7 @@ class ConfirmAccountProviderPresenterTest {
             AccountProviderDataSource(),
             FakeAuthenticationService(),
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -58,7 +58,7 @@ class ConfirmAccountProviderPresenterTest {
             authServer,
         )
         authServer.givenHomeserver(A_HOMESERVER)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -82,7 +82,7 @@ class ConfirmAccountProviderPresenterTest {
             authServer,
         )
         authServer.givenHomeserver(A_HOMESERVER_OIDC)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -105,7 +105,7 @@ class ConfirmAccountProviderPresenterTest {
             AccountProviderDataSource(),
             authServer,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -126,7 +126,7 @@ class ConfirmAccountProviderPresenterTest {
             AccountProviderDataSource(),
             authenticationService,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

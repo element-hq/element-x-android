@@ -82,7 +82,6 @@ class MediaSender @Inject constructor(
                     progressCallback = progressCallback
                 )
             }
-            else -> Result.failure(IllegalStateException("Unexpected MediaUploadInfo format: $uploadInfo"))
         }
     }
 }

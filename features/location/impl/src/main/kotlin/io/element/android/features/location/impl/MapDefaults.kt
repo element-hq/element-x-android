@@ -20,6 +20,7 @@ import android.Manifest
 import android.view.Gravity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.graphics.Color
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import io.element.android.libraries.maplibre.compose.MapLocationSettings
@@ -53,6 +54,13 @@ object MapDefaults {
     val locationSettings: MapLocationSettings
         get() = MapLocationSettings(
             locationEnabled = false,
+            backgroundTintColor = Color.White,
+            foregroundTintColor = Color.Black,
+            backgroundStaleTintColor = Color.White,
+            foregroundStaleTintColor = Color.Black,
+            accuracyColor = Color.Black,
+            pulseEnabled = true,
+            pulseColor = Color.Black,
         )
 
     val centerCameraPosition = CameraPosition.Builder()

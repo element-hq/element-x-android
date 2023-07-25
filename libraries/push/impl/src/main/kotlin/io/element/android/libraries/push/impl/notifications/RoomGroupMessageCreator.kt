@@ -69,7 +69,7 @@ class RoomGroupMessageCreator @Inject constructor(
 
         val lastMessageTimestamp = events.last().timestamp
         val smartReplyErrors = events.filter { it.isSmartReplyError() }
-        val messageCount = (events.size - smartReplyErrors.size)
+        val messageCount = events.size - smartReplyErrors.size
         val meta = RoomNotification.Message.Meta(
             summaryLine = createRoomMessagesGroupSummaryLine(events, roomName, roomIsDirect = !roomIsGroup),
             messageCount = messageCount,

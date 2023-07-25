@@ -90,6 +90,14 @@ allprojects {
     apply {
         plugin("org.owasp.dependencycheck")
     }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        // Warnings are potential errors, so stop ignoring them
+        // This is disabled by default, but the CI will enforce this.
+        // You can override by passing `-PallWarningsAsErrors=true` in the command line
+        // Or add a line with "allWarningsAsErrors=true" in your ~/.gradle/gradle.properties file
+        kotlinOptions.allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
+    }
 }
 
 // To run a sonar analysis:

@@ -124,9 +124,9 @@ public fun MapboxMap(
             ) {
                 MapUpdater(
                     cameraPositionState = currentCameraPositionState,
-                    mapUiSettings = currentUiSettings,
-                    mapLocationSettings = currentMapLocationSettings,
-                    mapSymbolManagerSettings = currentSymbolManagerSettings,
+                    uiSettings = currentUiSettings,
+                    locationSettings = currentMapLocationSettings,
+                    symbolManagerSettings = currentSymbolManagerSettings,
                 )
                 CompositionLocalProvider(
                     LocalCameraPositionState provides cameraPositionState,

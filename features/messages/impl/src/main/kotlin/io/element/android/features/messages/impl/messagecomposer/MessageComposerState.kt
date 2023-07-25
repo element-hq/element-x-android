@@ -28,6 +28,7 @@ data class MessageComposerState(
     val hasFocus: Boolean,
     val mode: MessageComposerMode,
     val showAttachmentSourcePicker: Boolean,
+    val canShareLocation: Boolean,
     val attachmentsState: AttachmentsState,
     val eventSink: (MessageComposerEvents) -> Unit
 ) {

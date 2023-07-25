@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class TimelineItemContentRedactedFactory @Inject constructor() {
 
-    fun create(content: RedactedContent): TimelineItemEventContent {
+    fun create(@Suppress("UNUSED_PARAMETER") content: RedactedContent): TimelineItemEventContent {
         return TimelineItemRedactedContent
     }
 }

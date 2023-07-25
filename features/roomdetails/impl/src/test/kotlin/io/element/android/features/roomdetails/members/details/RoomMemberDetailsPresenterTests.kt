@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomdetails.members.details
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
@@ -45,7 +45,7 @@ class RoomMemberDetailsPresenterTests {
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
         val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -69,7 +69,7 @@ class RoomMemberDetailsPresenterTests {
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
         val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -89,7 +89,7 @@ class RoomMemberDetailsPresenterTests {
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
         val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -105,7 +105,7 @@ class RoomMemberDetailsPresenterTests {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
         val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -126,7 +126,7 @@ class RoomMemberDetailsPresenterTests {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
         val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -147,7 +147,7 @@ class RoomMemberDetailsPresenterTests {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenIgnoreUserResult(Result.failure(A_THROWABLE))
         val presenter = RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -166,7 +166,7 @@ class RoomMemberDetailsPresenterTests {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
         val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

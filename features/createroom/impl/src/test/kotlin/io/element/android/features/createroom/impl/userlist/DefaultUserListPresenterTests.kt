@@ -16,7 +16,7 @@
 
 package io.element.android.features.createroom.impl.userlist
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -41,7 +41,7 @@ class DefaultUserListPresenterTests {
                 userRepository,
                 UserListDataStore(),
             )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -62,7 +62,7 @@ class DefaultUserListPresenterTests {
                 userRepository,
                 UserListDataStore(),
             )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -83,7 +83,7 @@ class DefaultUserListPresenterTests {
                 userRepository,
                 UserListDataStore(),
             )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -119,7 +119,7 @@ class DefaultUserListPresenterTests {
                 userRepository,
                 UserListDataStore(),
             )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -158,7 +158,7 @@ class DefaultUserListPresenterTests {
                 userRepository,
                 UserListDataStore(),
             )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
@@ -183,7 +183,7 @@ class DefaultUserListPresenterTests {
                 userRepository,
                 UserListDataStore(),
             )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)

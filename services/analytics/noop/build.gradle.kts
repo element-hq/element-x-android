@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.services.analytics.impl"
+    namespace = "io.element.android.services.analytics.noop"
 }
 
 anvil {
@@ -28,6 +28,7 @@ anvil {
 
 dependencies {
     implementation(libs.dagger)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
     api(projects.services.analytics.api)
 }

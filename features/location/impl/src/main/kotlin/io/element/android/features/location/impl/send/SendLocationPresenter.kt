@@ -36,12 +36,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class SendLocationPresenter @Inject constructor(
@@ -50,7 +45,6 @@ class SendLocationPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContext,
     private val locationActions: LocationActions,
-    private val systemClock: SystemClock,
     private val buildMeta: BuildMeta,
 ) : Presenter<SendLocationState> {
 
@@ -115,7 +109,7 @@ class SendLocationPresenter @Inject constructor(
             SendLocationState.Mode.PinLocation -> {
                 val geoUri = event.cameraPosition.toGeoUri()
                 room.sendLocation(
-                    body = generateBody(geoUri, systemClock.epochMillis()),
+                    body = generateBody(geoUri),
                     geoUri = geoUri,
                     description = null,
                     zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
@@ -134,7 +128,7 @@ class SendLocationPresenter @Inject constructor(
             SendLocationState.Mode.SenderLocation -> {
                 val geoUri = event.toGeoUri()
                 room.sendLocation(
-                    body = generateBody(geoUri, systemClock.epochMillis()),
+                    body = generateBody(geoUri),
                     geoUri = geoUri,
                     description = null,
                     zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
@@ -158,7 +152,4 @@ private fun SendLocationEvents.SendLocation.toGeoUri(): String = location?.toGeo
 
 private fun SendLocationEvents.SendLocation.CameraPosition.toGeoUri(): String = "geo:$lat,$lon"
 
-private fun generateBody(uri: String, epochMillis: Long): String {
-    val timestamp = ZonedDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)
-    return "Location was shared at $uri as of $timestamp"
-}
+private fun generateBody(uri: String): String = "Location was shared at $uri"

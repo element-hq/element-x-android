@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.ImageInfo as RustImageInfo
 
 fun RustImageInfo.map(): ImageInfo = ImageInfo(

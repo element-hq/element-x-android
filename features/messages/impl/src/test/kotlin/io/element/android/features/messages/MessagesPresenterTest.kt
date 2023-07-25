@@ -17,10 +17,9 @@
 package io.element.android.features.messages
 
 import android.net.Uri
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.collect.Iterables.skip
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.messages.fixtures.aMessageEvent
@@ -46,8 +45,6 @@ import io.element.android.features.messages.utils.messagesummary.FakeMessageSumm
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -81,10 +78,10 @@ class MessagesPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
         }
@@ -95,14 +92,13 @@ class MessagesPresenterTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
             assertThat(room.myReactions.count()).isEqualTo(1)
-
             // No crashes when sending a reaction failed
             room.givenToggleReactionResult(Result.failure(IllegalStateException("Failed to send reaction")))
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
@@ -116,10 +112,10 @@ class MessagesPresenterTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
             assertThat(room.myReactions.count()).isEqualTo(1)
@@ -133,10 +129,10 @@ class MessagesPresenterTest {
     fun `present - handle action forward`() = runTest {
         val navigator = FakeMessagesNavigator()
         val presenter = createMessagePresenter(navigator = navigator)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -149,10 +145,10 @@ class MessagesPresenterTest {
         val clipboardHelper = FakeClipboardHelper()
         val event = aMessageEvent()
         val presenter = createMessagePresenter(clipboardHelper = clipboardHelper)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Copy, event))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -163,13 +159,12 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent()))
-            
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -179,10 +174,10 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to an event with no id does nothing`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -194,10 +189,10 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to an image media message`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemImageContent(
@@ -214,7 +209,6 @@ class MessagesPresenterTest {
                 )
             )
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
-            
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
@@ -226,10 +220,10 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to a video media message`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemVideoContent(
@@ -247,7 +241,6 @@ class MessagesPresenterTest {
                 )
             )
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
-            
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
@@ -259,10 +252,10 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to a file media message`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemFileContent(
@@ -275,7 +268,6 @@ class MessagesPresenterTest {
                 )
             )
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
-            
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
@@ -287,13 +279,12 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action edit`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent()))
-            
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Edit::class.java)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -305,10 +296,10 @@ class MessagesPresenterTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val matrixRoom = FakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
             assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
@@ -320,10 +311,10 @@ class MessagesPresenterTest {
     fun `present - handle action report content`() = runTest {
         val navigator = FakeMessagesNavigator()
         val presenter = createMessagePresenter(navigator = navigator)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -334,10 +325,10 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle dismiss action`() = runTest {
         val presenter = createMessagePresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.Dismiss)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -348,10 +339,10 @@ class MessagesPresenterTest {
     fun `present - handle action show developer info`() = runTest {
         val navigator = FakeMessagesNavigator()
         val presenter = createMessagePresenter(navigator = navigator)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -363,20 +354,17 @@ class MessagesPresenterTest {
     fun `present - shows prompt to reinvite users in DM`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 1L)
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
+            skipItems(1)
             val initialState = awaitItem()
-
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
-
             // When the input field is focused we show the alert
             initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isTrue()
-
             // If it's dismissed then we stop showing the alert
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
             val dismissedState = awaitItem()
@@ -388,13 +376,12 @@ class MessagesPresenterTest {
     fun `present - doesn't show reinvite prompt in non-direct room`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = false, activeMemberCount = 1L)
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-
             initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
@@ -405,13 +392,12 @@ class MessagesPresenterTest {
     fun `present - doesn't show reinvite prompt if other party is present`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 2L)
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-
             initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
@@ -430,17 +416,16 @@ class MessagesPresenterTest {
             )
         )
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             skipItems(1)
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
-            
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
-
             val newState = awaitItem()
             assertThat(newState.inviteProgress.isSuccess()).isTrue()
             assertThat(room.invitedUserId).isEqualTo(A_SESSION_ID_2)
@@ -460,17 +445,16 @@ class MessagesPresenterTest {
             )
         )
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             skipItems(1)
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
-            
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
-
             val newState = awaitItem()
             assertThat(newState.inviteProgress.isSuccess()).isTrue()
             assertThat(room.invitedUserId).isEqualTo(A_SESSION_ID_2)
@@ -482,17 +466,16 @@ class MessagesPresenterTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
         room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             skipItems(1)
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
-            
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
-
             val newState = awaitItem()
             assertThat(newState.inviteProgress.isFailure()).isTrue()
         }
@@ -511,16 +494,16 @@ class MessagesPresenterTest {
         )
         room.givenInviteUserResult(Result.failure(Throwable("Oops!")))
         val presenter = createMessagePresenter(matrixRoom = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             skipItems(1)
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
-
             val newState = awaitItem()
             assertThat(newState.inviteProgress.isFailure()).isTrue()
         }
@@ -531,10 +514,10 @@ class MessagesPresenterTest {
         val matrixRoom = FakeMatrixRoom()
         matrixRoom.givenCanSendEventResult(MessageEventType.ROOM_MESSAGE, Result.success(true))
         val presenter = createMessagePresenter(matrixRoom = matrixRoom)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            
+            skipItems(1)
             assertThat(awaitItem().userHasPermissionToSendMessage).isTrue()
         }
     }
@@ -544,12 +527,12 @@ class MessagesPresenterTest {
         val matrixRoom = FakeMatrixRoom()
         matrixRoom.givenCanSendEventResult(MessageEventType.ROOM_MESSAGE, Result.success(false))
         val presenter = createMessagePresenter(matrixRoom = matrixRoom)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Default value
             assertThat(awaitItem().userHasPermissionToSendMessage).isTrue()
-            skipItems(1)
+            skipItems(2)
             assertThat(awaitItem().userHasPermissionToSendMessage).isFalse()
         }
     }

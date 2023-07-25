@@ -40,9 +40,6 @@ import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
-import io.element.android.libraries.matrix.impl.timeline.backPaginationStatusFlow
-import io.element.android.libraries.matrix.impl.timeline.eventOrigin
-import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -51,11 +48,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -88,7 +81,6 @@ class RustMatrixRoom(
 
     private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
     private val _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
-    private val isInit = MutableStateFlow(false)
     private val _syncUpdateFlow = MutableStateFlow(0L)
     private val _timeline by lazy {
         RustMatrixTimeline(
@@ -97,6 +89,7 @@ class RustMatrixRoom(
             roomCoroutineScope = roomCoroutineScope,
             dispatcher = roomDispatcher,
             lastLoginTimestamp = sessionData.loginTimestamp,
+            onNewSyncedEvent = { _syncUpdateFlow.value = systemClock.epochMillis() }
         )
     }
 
@@ -106,8 +99,7 @@ class RustMatrixRoom(
 
     override val timeline: MatrixTimeline = _timeline
 
-    override fun open(): Result<Unit> {
-        if (isInit.value) return Result.failure(IllegalStateException("Listener already registered"))
+    override fun subscribeToSync() {
         val settings = RoomSubscription(
             requiredState = listOf(
                 RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
@@ -118,37 +110,16 @@ class RustMatrixRoom(
             timelineLimit = null
         )
         roomListItem.subscribe(settings)
-        roomCoroutineScope.launch(roomDispatcher) {
-            innerRoom.timelineDiffFlow { initialList ->
-                _timeline.postItems(initialList)
-            }.onEach { diff ->
-                diff.use {
-                    if (diff.eventOrigin() == EventItemOrigin.SYNC) {
-                        _syncUpdateFlow.value = systemClock.epochMillis()
-                    }
-                    _timeline.postDiff(diff)
-                }
-            }.launchIn(this)
-
-            innerRoom.backPaginationStatusFlow()
-                .onEach {
-                    _timeline.postPaginationStatus(it)
-                }.launchIn(this)
-
-            fetchMembers()
-        }
-        isInit.value = true
-        return Result.success(Unit)
     }
 
-    override fun close() {
-        if (isInit.value) {
-            isInit.value = false
-            roomCoroutineScope.cancel()
-            roomListItem.unsubscribe()
-            innerRoom.destroy()
-            roomListItem.destroy()
-        }
+    override fun unsubscribeFromSync() {
+        roomListItem.unsubscribe()
+    }
+
+    override fun destroy() {
+        roomCoroutineScope.cancel()
+        innerRoom.destroy()
+        roomListItem.destroy()
     }
 
     override val name: String?
@@ -362,12 +333,6 @@ class RustMatrixRoom(
     override suspend fun setTopic(topic: String): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.setTopic(topic)
-        }
-    }
-
-    private suspend fun fetchMembers() = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.fetchMembers()
         }
     }
 

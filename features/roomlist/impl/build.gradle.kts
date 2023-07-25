@@ -71,6 +71,4 @@ dependencies {
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.fake)
-
-    androidTestImplementation(libs.test.junitext)
 }

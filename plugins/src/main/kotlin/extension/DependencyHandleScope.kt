@@ -103,8 +103,12 @@ fun DependencyHandlerScope.allLibrariesImpl() {
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
+    // For analytics configuration, either use noop, or use the impl, with at least one analyticsproviders implementation
+    // implementation(project(":services:analytics:noop"))
     implementation(project(":services:analytics:impl"))
     implementation(project(":services:analyticsproviders:posthog"))
+    implementation(project(":services:analyticsproviders:sentry"))
+
     implementation(project(":services:apperror:impl"))
     implementation(project(":services:appnavstate:impl"))
     implementation(project(":services:toolbox:impl"))

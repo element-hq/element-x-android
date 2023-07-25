@@ -16,7 +16,7 @@
 
 package io.element.android.features.invitelist.impl
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
@@ -55,7 +55,7 @@ class InviteListPresenterTests {
         val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -76,7 +76,7 @@ class InviteListPresenterTests {
         val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val withInviteState = awaitItem()
@@ -102,7 +102,7 @@ class InviteListPresenterTests {
         val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val withInviteState = awaitItem()
@@ -131,7 +131,7 @@ class InviteListPresenterTests {
             FakeAnalyticsService(),
             FakeNotificationDrawerManager()
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -152,7 +152,7 @@ class InviteListPresenterTests {
         val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -173,7 +173,7 @@ class InviteListPresenterTests {
         val presenter = createPresenter(
             FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -199,7 +199,7 @@ class InviteListPresenterTests {
         val presenter = createPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -227,7 +227,7 @@ class InviteListPresenterTests {
         room.givenLeaveRoomError(ex)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -257,7 +257,7 @@ class InviteListPresenterTests {
         room.givenLeaveRoomError(ex)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -288,7 +288,7 @@ class InviteListPresenterTests {
         val presenter = createPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
         client.givenGetRoomResult(A_ROOM_ID, room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -313,7 +313,7 @@ class InviteListPresenterTests {
         room.givenJoinRoomResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -335,7 +335,7 @@ class InviteListPresenterTests {
         room.givenJoinRoomResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val originalState = awaitItem()
@@ -362,7 +362,7 @@ class InviteListPresenterTests {
             FakeAnalyticsService(),
             FakeNotificationDrawerManager()
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitItem()
@@ -400,7 +400,7 @@ class InviteListPresenterTests {
             FakeAnalyticsService(),
             FakeNotificationDrawerManager()
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitItem()

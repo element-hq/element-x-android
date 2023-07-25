@@ -13,14 +13,22 @@ style:
   FunctionOnlyReturningConstant:
     active: false
   UnusedPrivateMember:
-    # TODO Enable it
-    active: false
+    active: true
   UnusedParameter:
-    # TODO Enable it
-    active: false
+    active: true
+  UnnecessaryInnerClass:
+    active: true
+  UnnecessaryLet:
+    active: true
+  UnnecessaryParentheses:
+    active: true
+    allowForUnclearPrecedence: false
+  UntilInsteadOfRangeTo:
+    active: true
+  UnusedImports:
+    active: true
   UnusedPrivateProperty:
-    # TODO Enable it
-    active: false
+    active: true
   ThrowsCount:
     active: false
   LoopWithTooManyJumpStatements:
@@ -72,11 +80,9 @@ complexity:
 
 naming:
   VariableNaming:
-    # TODO Enable it
-    active: false
+    active: true
   TopLevelPropertyNaming:
-    # TODO Enable it
-    active: false
+    active: true
   FunctionNaming:
     active: true
     ignoreAnnotated: ['Composable']
@@ -149,9 +155,4 @@ Compose:
   RememberMissing:
     active: true
   UnstableCollections:
-    active: true
-  ViewModelForwarding:
-    ## TODO Set to true later
-    active: false
-  ViewModelInjection:
     active: true

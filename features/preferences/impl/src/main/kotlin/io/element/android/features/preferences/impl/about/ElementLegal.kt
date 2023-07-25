@@ -19,17 +19,17 @@ package io.element.android.features.preferences.impl.about
 import androidx.annotation.StringRes
 import io.element.android.libraries.ui.strings.CommonStrings
 
-private const val CopyrightUrl = "https://element.io/copyright"
-private const val UsePolicyUrl = "https://element.io/acceptable-use-policy-terms"
-private const val PrivacyUrl = "https://element.io/privacy"
+private const val COPYRIGHT_URL = "https://element.io/copyright"
+private const val USE_POLICY_URL = "https://element.io/acceptable-use-policy-terms"
+private const val PRIVACY_URL = "https://element.io/privacy"
 
 sealed class ElementLegal(
     @StringRes val titleRes: Int,
     val url: String,
 ) {
-    object Copyright : ElementLegal(CommonStrings.common_copyright, CopyrightUrl)
-    object AcceptableUsePolicy : ElementLegal(CommonStrings.common_acceptable_use_policy, UsePolicyUrl)
-    object PrivacyPolicy : ElementLegal(CommonStrings.common_privacy_policy, PrivacyUrl)
+    object Copyright : ElementLegal(CommonStrings.common_copyright, COPYRIGHT_URL)
+    object AcceptableUsePolicy : ElementLegal(CommonStrings.common_acceptable_use_policy, USE_POLICY_URL)
+    object PrivacyPolicy : ElementLegal(CommonStrings.common_privacy_policy, PRIVACY_URL)
 }
 
 fun getAllLegals(): List<ElementLegal> {

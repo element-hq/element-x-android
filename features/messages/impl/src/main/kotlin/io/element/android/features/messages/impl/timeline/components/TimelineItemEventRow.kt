@@ -59,7 +59,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -291,7 +290,7 @@ private fun TimelineItemEventRowContent(
         if (event.reactionsState.reactions.isNotEmpty()) {
             TimelineItemReactions(
                 reactionsState = event.reactionsState,
-                mainAxisAlignment = if (event.isMine) FlowMainAxisAlignment.End else FlowMainAxisAlignment.Start,
+                isOutgoing = event.isMine,
                 onReactionClicked = onReactionClicked,
                 onMoreReactionsClicked = { onMoreReactionsClicked(event) },
                 modifier = Modifier
