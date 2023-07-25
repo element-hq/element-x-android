@@ -544,14 +544,24 @@ private fun AnnotatedString.Builder.appendLink(link: Element) {
             pop()
         }
         is PermalinkData.RoomEmailInviteLink -> {
-            appendInlineContent(CHIP_ID, link.ownText())
+            safeAppendInlineContent(CHIP_ID, link.ownText())
         }
         is PermalinkData.RoomLink -> {
-            appendInlineContent(CHIP_ID, link.ownText())
+            safeAppendInlineContent(CHIP_ID, link.ownText())
         }
         is PermalinkData.UserLink -> {
-            appendInlineContent(CHIP_ID, link.ownText())
+            safeAppendInlineContent(CHIP_ID, link.ownText())
         }
+    }
+}
+
+fun AnnotatedString.Builder.safeAppendInlineContent(chipId: String, ownText: String) {
+    if (ownText.isEmpty()) {
+        // alternateText cannot be empty and default parameter value is private,
+        // so just omit the second param here.
+        appendInlineContent(chipId)
+    } else {
+        appendInlineContent(chipId, ownText)
     }
 }
 
