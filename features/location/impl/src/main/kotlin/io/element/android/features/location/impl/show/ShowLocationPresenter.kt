@@ -27,10 +27,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.impl.MapDefaults
-import io.element.android.features.location.impl.permissions.PermissionsEvents
-import io.element.android.features.location.impl.permissions.PermissionsPresenter
-import io.element.android.features.location.impl.permissions.PermissionsState
+import io.element.android.features.location.impl.common.MapDefaults
+import io.element.android.features.location.impl.common.actions.LocationActions
+import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
+import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 

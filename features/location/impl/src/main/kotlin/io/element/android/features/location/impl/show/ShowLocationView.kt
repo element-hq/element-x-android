@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
-import io.element.android.features.location.impl.MapDefaults
+import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight

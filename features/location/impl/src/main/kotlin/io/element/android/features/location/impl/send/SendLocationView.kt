@@ -47,7 +47,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
-import io.element.android.features.location.impl.MapDefaults
+import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog

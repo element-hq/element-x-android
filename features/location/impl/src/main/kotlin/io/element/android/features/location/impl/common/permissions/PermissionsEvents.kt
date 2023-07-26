@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.permissions
+package io.element.android.features.location.impl.common.permissions
 
-import io.element.android.libraries.architecture.Presenter
-
-interface PermissionsPresenter : Presenter<PermissionsState> {
-    interface Factory {
-        fun create(permissions: List<String>): PermissionsPresenter
-    }
+sealed interface PermissionsEvents {
+    object RequestPermissions : PermissionsEvents
 }

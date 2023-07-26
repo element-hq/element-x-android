@@ -21,9 +21,10 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.impl.permissions.PermissionsPresenter
+import io.element.android.features.location.impl.common.actions.FakeLocationActions
+import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.permissions.PermissionsPresenterFake
-import io.element.android.features.location.impl.permissions.PermissionsState
+import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest

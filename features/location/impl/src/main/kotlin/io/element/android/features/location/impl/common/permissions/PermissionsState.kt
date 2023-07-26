@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.permissions
+package io.element.android.features.location.impl.common.permissions
 
-import androidx.compose.runtime.Composable
-
-class PermissionsPresenterFake : PermissionsPresenter {
-
-    val events = mutableListOf<PermissionsEvents>()
-
-    private fun handleEvent(event: PermissionsEvents) {
-        events += event
+data class PermissionsState(
+    val permissions: Permissions = Permissions.NoneGranted,
+    val shouldShowRationale: Boolean = false,
+    val eventSink: (PermissionsEvents) -> Unit = {},
+) {
+    sealed interface Permissions {
+        object AllGranted : Permissions
+        object SomeGranted : Permissions
+        object NoneGranted : Permissions
     }
 
-    private var state = PermissionsState(eventSink = ::handleEvent)
-        set(value) {
-            field = value.copy(eventSink = ::handleEvent)
-        }
-
-    fun givenState(state: PermissionsState) {
-        this.state = state
-    }
-
-    @Composable
-    override fun present(): PermissionsState = state
+    val isAnyGranted: Boolean
+        get() = permissions is Permissions.SomeGranted || permissions is Permissions.AllGranted
 }

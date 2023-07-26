@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.show
+package io.element.android.features.location.impl.common.actions
 
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.common.actions.LocationActions
 
 class FakeLocationActions : LocationActions {
 
