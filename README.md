@@ -41,7 +41,7 @@ We're doing this as a way to share code between platforms and while we've seen p
 
 ## Status
 
-This project is in work in progress. The app does not cover yet all functionalities we expect.
+This project is in work in progress. The app does not cover yet all functionalities we expect. The list of supported features can be found in [this issue](https://github.com/vector-im/element-x-android/issues/911).
 
 ## Contributing
 
