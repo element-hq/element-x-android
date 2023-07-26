@@ -30,8 +30,23 @@ The application is a total rewrite of [Element-Android](https://github.com/vecto
 
 Here are some early screenshots of the application:
 
-|<img src=./docs/images/screen1.png width=280 />|<img src=./docs/images/screen2.png width=280 />|<img src=./docs/images/screen3.png width=280 />|<img src=./docs/images/screen4.png width=280 />|
+<!--
+Commands run before taking the screenshots:
+adb shell settings put system time_12_24 24
+adb shell am broadcast -a com.android.systemui.demo -e command enter
+adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1337
+adb shell am broadcast -a com.android.systemui.demo -e command network -e mobile show -e level 4
+adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4
+adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
+adb shell am broadcast -a com.android.systemui.demo -e command battery -e plugged false -e level 100
+
+And to exit demo mode:
+adb shell am broadcast -a com.android.systemui.demo -e command exit
+-->
+
+|<img src=./docs/images-lfs/screen_1_light.png width=280 />|<img src=./docs/images-lfs/screen_2_light.png width=280 />|<img src=./docs/images-lfs/screen_3_light.png width=280 />|<img src=./docs/images-lfs/screen_4_light.png width=280 />|
 |-|-|-|-|
+|<img src=./docs/images-lfs/screen_1_dark.png width=280 />|<img src=./docs/images-lfs/screen_2_dark.png width=280 />|<img src=./docs/images-lfs/screen_3_dark.png width=280 />|<img src=./docs/images-lfs/screen_4_dark.png width=280 />|
 
 ## Rust SDK
 
