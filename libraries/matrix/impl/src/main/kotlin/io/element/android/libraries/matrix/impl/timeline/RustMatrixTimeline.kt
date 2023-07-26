@@ -102,7 +102,7 @@ class RustMatrixTimeline(
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
 
-        val rustTaskHandleBag = TaskHandleBag()
+        val taskHandleBag = TaskHandleBag()
         roomCoroutineScope.launch(dispatcher) {
             innerRoom.timelineDiffFlow { initialList ->
                 postItems(initialList)
@@ -118,9 +118,9 @@ class RustMatrixTimeline(
                     postPaginationStatus(it)
                 }.launchIn(this)
 
-            rustTaskHandleBag += fetchMembers().getOrNull()
+            taskHandleBag += fetchMembers().getOrNull()
         }.invokeOnCompletion {
-            rustTaskHandleBag.dispose()
+            taskHandleBag.dispose()
         }
     }
 
