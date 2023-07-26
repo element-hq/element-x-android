@@ -36,7 +36,7 @@ style:
   SerialVersionUIDInSerializableClass:
     active: false
   ProtectedMemberInFinalClass:
-    active: false
+    active: true
   UseCheckOrError:
     active: true
 
