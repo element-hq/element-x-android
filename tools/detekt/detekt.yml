@@ -8,6 +8,14 @@ style:
     includeElvis: true
   DataClassShouldBeImmutable:
     active: true
+  EqualsNullCall:
+    active: true
+  EqualsOnSignatureLine:
+    active: true
+  ExplicitCollectionElementAccessMethod:
+    active: true
+  ExplicitItLambdaParameter:
+    active: true
   MaxLineLength:
     # Default is 120
     maxLineLength: 160
@@ -65,6 +73,34 @@ empty-blocks:
 potential-bugs:
   ImplicitDefaultLocale:
     active: true
+  CastNullableToNonNullableType:
+    active: true
+  CastToNullableType:
+    active: true
+  Deprecation:
+    active: true
+  DontDowncastCollectionTypes:
+    active: true
+  ElseCaseInsteadOfExhaustiveWhen:
+    active: true
+  ExitOutsideMain:
+    active: true
+  ImplicitUnitReturnType:
+    active: true
+    allowExplicitReturnType: false
+  MissingPackageDeclaration:
+    active: true
+    excludes: ['**/*.kts']
+  NullCheckOnMutableProperty:
+    active: true
+  NullableToStringCall:
+    active: true
+  PropertyUsedBeforeDeclaration:
+    active: true
+  UnconditionalJumpStatementInLoop:
+    active: true
+  UnnecessaryNotNullCheck:
+    active: true
 
 exceptions:
   TooGenericExceptionCaught:
@@ -76,6 +112,8 @@ exceptions:
   TooGenericExceptionThrown:
     active: true
   InstanceOfCheckForException:
+    active: true
+  ObjectExtendsThrowable:
     active: true
 
 complexity:
@@ -102,10 +140,20 @@ naming:
   FunctionNaming:
     active: true
     ignoreAnnotated: ['Composable']
+  LambdaParameterNaming:
+    active: true
+  NonBooleanPropertyPrefixedWithIs:
+    active: true
+  VariableMaxLength:
+    active: true
 
 performance:
   SpreadOperator:
     active: false
+  CouldBeSequence:
+    active: true
+  UnnecessaryPartOfBinaryExpression:
+    active: true
 
 # Note: all rules for `comments` are disabled by default, but I put them here to be aware of their existence
 comments:
