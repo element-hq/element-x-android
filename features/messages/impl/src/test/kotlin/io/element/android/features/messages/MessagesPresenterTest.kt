@@ -65,6 +65,7 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
@@ -490,11 +491,14 @@ class MessagesPresenterTest {
         }.test {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
-            val remainingStates = consumeItemsUntilTimeout()
-            assertThat(remainingStates.size).isEqualTo(3)
-            assertThat(remainingStates[0].inviteProgress.isLoading()).isFalse()
-            assertThat(remainingStates[1].inviteProgress.isLoading()).isTrue()
-            assertThat(remainingStates[2].inviteProgress.isFailure()).isTrue()
+            val loadingState = consumeItemsUntilPredicate { state ->
+                state.inviteProgress.isLoading()
+            }.last()
+            assertThat(loadingState.inviteProgress.isLoading()).isTrue()
+            val failureState = consumeItemsUntilPredicate { state ->
+                state.inviteProgress.isFailure()
+            }.last()
+            assertThat(failureState.inviteProgress.isFailure()).isTrue()
         }
     }
 

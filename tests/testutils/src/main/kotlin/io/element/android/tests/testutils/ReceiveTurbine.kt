@@ -24,17 +24,32 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * Consume all items until timeout is reached waiting for an event.
+ * Consume all items until timeout is reached waiting for an event or we receive terminal event.
  * The timeout is applied for each event.
  * @return the list of consumed items.
  */
 suspend fun <T : Any> ReceiveTurbine<T>.consumeItemsUntilTimeout(timeout: Duration = 100.milliseconds): List<T> {
+    return consumeItemsUntilPredicate(timeout) { false }
+}
+
+/**
+ * Consume items until predicate is true, or timeout is reached waiting for an event, or we receive terminal event.
+ * The timeout is applied for each event.
+ * @return the list of consumed items.
+ */
+suspend fun <T : Any> ReceiveTurbine<T>.consumeItemsUntilPredicate(
+    timeout: Duration = 100.milliseconds,
+    predicate: (T) -> Boolean,
+): List<T> {
     val items = ArrayList<T>()
     tryOrNull {
         while (true) {
             when (val event = withTurbineTimeout(timeout) { awaitEvent() }) {
                 is Event.Item<T> -> {
                     items.add(event.value)
+                    if (predicate(event.value)) {
+                        break
+                    }
                 }
                 else -> break
             }
