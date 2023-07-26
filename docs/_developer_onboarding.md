@@ -313,7 +313,7 @@ suffix `Presenter`,states MUST have a suffix `State`, etc. Also we want to have 
 
 ### Push
 
-**Note** Firebase Push is not yet implemented on the project.
+**Note** Firebase is implemented, but Unified Push is not yet fully implemented on the project, so this is not possible to choose this push provider in the app at the moment.
 
 Please see the dedicated [documentation](notifications.md) for more details.
 
