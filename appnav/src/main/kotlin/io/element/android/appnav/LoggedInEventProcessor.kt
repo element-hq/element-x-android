@@ -58,7 +58,8 @@ class LoggedInEventProcessor @Inject constructor(
                 .filter { it }
                 .onEach {
                     displayMessage(CommonStrings.common_verification_complete)
-                }.launchIn(this)
+                }
+                .launchIn(this)
         }
     }
 

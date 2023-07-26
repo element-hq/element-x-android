@@ -137,7 +137,8 @@ object PermalinkParser {
             .parameterList
             .filter {
                 it.mParameter == "via"
-            }.map {
+            }
+            .map {
                 URLDecoder.decode(it.mValue, "UTF-8")
             }
     }

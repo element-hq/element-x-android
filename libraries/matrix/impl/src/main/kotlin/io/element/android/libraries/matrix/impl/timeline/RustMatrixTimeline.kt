@@ -113,7 +113,8 @@ class RustMatrixTimeline(
             innerRoom.backPaginationStatusFlow()
                 .onEach {
                     postPaginationStatus(it)
-                }.launchIn(this)
+                }
+                .launchIn(this)
 
             fetchMembers()
         }

@@ -1,6 +1,9 @@
 # Default rules: https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml
 
 style:
+  CascadingCallWrapping:
+    active: true
+    includeElvis: true
   MaxLineLength:
     # Default is 120
     maxLineLength: 160

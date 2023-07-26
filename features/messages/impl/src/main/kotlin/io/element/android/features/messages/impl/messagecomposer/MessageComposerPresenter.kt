@@ -268,7 +268,8 @@ class MessageComposerPresenter @Inject constructor(
         mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback)
             .onSuccess {
                 attachmentState.value = AttachmentsState.None
-            }.onFailure {
+            }
+            .onFailure {
                 val snackbarMessage = SnackbarMessage(sendAttachmentError(it))
                 snackbarDispatcher.post(snackbarMessage)
                 attachmentState.value = AttachmentsState.None

@@ -103,14 +103,17 @@ class MediaViewerPresenter @AssistedInject constructor(
         )
             .onSuccess {
                 mediaFile.value = it
-            }.mapCatching { mediaFile ->
+            }
+            .mapCatching { mediaFile ->
                 localMediaFactory.createFromMediaFile(
                     mediaFile = mediaFile,
                     mediaInfo = inputs.mediaInfo
                 )
-            }.onSuccess {
+            }
+            .onSuccess {
                 localMedia.value = Async.Success(it)
-            }.onFailure {
+            }
+            .onFailure {
                 localMedia.value = Async.Failure(it)
             }
     }

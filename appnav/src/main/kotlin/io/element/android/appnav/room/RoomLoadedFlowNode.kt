@@ -115,7 +115,8 @@ class RoomLoadedFlowNode @AssistedInject constructor(
         room.updateMembers()
             .onFailure {
                 Timber.e(it, "Fail to fetch members for room ${room.roomId}")
-            }.onSuccess {
+            }
+            .onSuccess {
                 Timber.v("Success fetching members for room ${room.roomId}")
             }
     }

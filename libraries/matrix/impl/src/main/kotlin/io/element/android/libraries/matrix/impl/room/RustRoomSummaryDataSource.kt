@@ -64,7 +64,8 @@ internal class RustRoomSummaryDataSource(
                 .map { it.toRoomSummaryDataSourceLoadingState() }
                 .onEach {
                     allRoomsLoadingState.value = it
-                }.launchIn(this)
+                }
+                .launchIn(this)
 
             launch {
                 // Wait until running, as invites is only available after that
