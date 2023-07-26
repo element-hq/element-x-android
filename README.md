@@ -56,7 +56,7 @@ Makes sure to select the `app` configuration when building (as we also have samp
 
 When you are experiencing an issue on Element X Android, please first search in [GitHub issues](https://github.com/vector-im/element-x-android/issues)
 and then in [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org).
-If after your research you still have a question, ask at [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by shaking your phone or going to the application settings. This is especially recommended when you encounter a crash.
+If after your research you still have a question, ask at [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting from the application settings. This is especially recommended when you encounter a crash.
 
 ## Copyright & License
 
