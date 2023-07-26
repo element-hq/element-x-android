@@ -40,6 +40,15 @@ style:
   UseCheckOrError:
     active: true
 
+coroutines:
+  GlobalCoroutineUsage:
+    # Keep false for now.
+    active: false
+  SuspendFunSwallowedCancellation:
+    active: true
+  SuspendFunWithCoroutineScopeReceiver:
+    active: true
+
 empty-blocks:
   EmptyFunctionBlock:
     active: false
