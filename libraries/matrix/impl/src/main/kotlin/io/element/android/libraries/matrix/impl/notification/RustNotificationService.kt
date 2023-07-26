@@ -21,14 +21,16 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.use
 
 class RustNotificationService(
-    private val sessionId: SessionId,
+    sessionId: SessionId,
     private val notificationClient: NotificationClient,
+    clock: SystemClock,
 ) : NotificationService {
-    private val notificationMapper: NotificationMapper = NotificationMapper(sessionId)
+    private val notificationMapper: NotificationMapper = NotificationMapper(sessionId, clock)
 
     override fun getNotification(
         userId: SessionId,

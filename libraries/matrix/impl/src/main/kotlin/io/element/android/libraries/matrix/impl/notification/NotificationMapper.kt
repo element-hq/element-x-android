@@ -23,12 +23,14 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import org.matrix.rustcomponents.sdk.NotificationEvent
 import org.matrix.rustcomponents.sdk.NotificationItem
 import org.matrix.rustcomponents.sdk.use
 
 class NotificationMapper(
     private val sessionId: SessionId,
+    private val clock: SystemClock,
 ) {
     private val notificationContentMapper = NotificationContentMapper(sessionId)
 
@@ -48,7 +50,7 @@ class NotificationMapper(
                 isDirect = item.roomInfo.isDirect,
                 isEncrypted = item.roomInfo.isEncrypted.orFalse(),
                 isNoisy = item.isNoisy.orFalse(),
-                timestamp = item.timestamp() ?: System.currentTimeMillis(),
+                timestamp = item.timestamp() ?: clock.epochMillis(),
                 content = item.event.use(notificationContentMapper::map),
                 contentUrl = null,
             )
