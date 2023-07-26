@@ -58,7 +58,7 @@ exceptions:
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
   TooGenericExceptionThrown:
-    active: false
+    active: true
   InstanceOfCheckForException:
     active: true
 
