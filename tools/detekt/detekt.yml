@@ -56,14 +56,37 @@ style:
     active: true
   OptionalUnit:
     active: true
+  PreferToOverPairSyntax:
+    active: true
+  RedundantExplicitType:
+    active: true
+  TrailingWhitespace:
+    active: true
+  TrimMultilineRawString:
+    active: true
+    trimmingMethods:
+      - 'trimIndent'
+      - 'trimMargin'
   UnderscoresInNumericLiterals:
     active: true
     acceptableLength: 4
     allowNonStandardGrouping: false
+  UnnecessaryAnnotationUseSiteTarget:
+    active: true
+  UnnecessaryBackticks:
+    active: true
+  UnnecessaryBracesAroundTrailingLambda:
+    active: true
   UseDataClass:
     active: true
     allowVars: false
+  UseEmptyCounterpart:
+    active: true
+  UseIfEmptyOrIfBlank:
+    active: true
   UseLet:
+    active: true
+  UseSumOfInsteadOfFlatMapSize:
     active: true
 
 coroutines:
