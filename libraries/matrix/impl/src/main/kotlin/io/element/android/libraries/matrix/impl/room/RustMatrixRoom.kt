@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -168,7 +169,7 @@ class RustMatrixRoom(
         val currentMembers = currentState.roomMembers()
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         runCatching {
-            innerRoom.members().map(RoomMemberMapper::map)
+            innerRoom.members().parallelMap(RoomMemberMapper::map)
         }.map {
             _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
         }.onFailure {
