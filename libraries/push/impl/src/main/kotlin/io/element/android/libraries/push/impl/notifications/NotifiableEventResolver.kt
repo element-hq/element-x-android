@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -81,18 +82,18 @@ class NotifiableEventResolver @Inject constructor(
     }
 
     private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent? {
-        return when (val content = this.event.content) {
+        return when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 buildNotifiableMessageEvent(
                     sessionId = userId,
+                    senderId = content.senderId,
                     roomId = roomId,
                     eventId = eventId,
                     noisy = isNoisy,
-                    timestamp = event.timestamp,
+                    timestamp = this.timestamp,
                     senderName = senderDisplayName,
-                    senderId = senderId.value,
                     body = descriptionFromMessageContent(content),
-                    imageUriString = event.contentUrl,
+                    imageUriString = this.contentUrl,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
                     roomAvatarPath = roomAvatarUrl,
@@ -109,7 +110,7 @@ class NotifiableEventResolver @Inject constructor(
                         canBeReplaced = true,
                         roomName = roomDisplayName,
                         noisy = isNoisy,
-                        timestamp = event.timestamp,
+                        timestamp = this.timestamp,
                         soundName = null,
                         isRedacted = false,
                         isUpdated = false,
@@ -177,6 +178,7 @@ class NotifiableEventResolver @Inject constructor(
 @Suppress("LongParameterList")
 private fun buildNotifiableMessageEvent(
     sessionId: SessionId,
+    senderId: UserId,
     roomId: RoomId,
     eventId: EventId,
     editedEventId: EventId? = null,
@@ -184,7 +186,6 @@ private fun buildNotifiableMessageEvent(
     noisy: Boolean,
     timestamp: Long,
     senderName: String?,
-    senderId: String?,
     body: String?,
     // We cannot use Uri? type here, as that could trigger a
     // NotSerializableException when persisting this to storage
@@ -202,6 +203,7 @@ private fun buildNotifiableMessageEvent(
     isUpdated: Boolean = false
 ) = NotifiableMessageEvent(
     sessionId = sessionId,
+    senderId = senderId,
     roomId = roomId,
     eventId = eventId,
     editedEventId = editedEventId,
@@ -209,7 +211,6 @@ private fun buildNotifiableMessageEvent(
     noisy = noisy,
     timestamp = timestamp,
     senderName = senderName,
-    senderId = senderId,
     body = body,
     imageUriString = imageUriString,
     threadId = threadId,

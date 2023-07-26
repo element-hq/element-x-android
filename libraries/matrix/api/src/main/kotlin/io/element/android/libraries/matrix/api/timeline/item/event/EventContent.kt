@@ -44,7 +44,7 @@ sealed interface InReplyTo {
     /** The event details are available. */
     data class Ready(
         val eventId: EventId,
-        val content: MessageContent,
+        val content: EventContent,
         val senderId: UserId,
         val senderDisplayName: String?,
         val senderAvatarUrl: String?,

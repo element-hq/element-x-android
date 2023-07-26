@@ -108,7 +108,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 Person.Builder()
                     .setName(event.senderName?.annotateForDebug(70))
                     .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath))
-                    .setKey(event.senderId)
+                    .setKey(event.senderId.value)
                     .build()
             }
             when {
