@@ -39,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
@@ -118,10 +119,16 @@ internal fun RoomMemberHeaderSection(
         }
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
-            Text(userName, style = ElementTheme.typography.fontHeadingLgBold)
+            Text(text = userName, style = ElementTheme.typography.fontHeadingLgBold)
             Spacer(modifier = Modifier.height(6.dp))
         }
-        Text(userId, style = ElementTheme.typography.fontBodyLgRegular, color = MaterialTheme.colorScheme.secondary)
+        Text(
+            text = userId,
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            textAlign = TextAlign.Center,
+        )
         Spacer(Modifier.height(40.dp))
     }
 }
