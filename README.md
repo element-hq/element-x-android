@@ -43,9 +43,11 @@ This project is in work in progress. The app does not cover yet all functionalit
 
 ## Contributing
 
-Please see our [contribution guide](CONTRIBUTING.md).
+Want to get actively involved in the project? You're more than welcome! A good way to start is to check the issues that are labelled with the [good first issue](https://github.com/vector-im/element-x-android/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label. Let us know by commenting the issue that you're starting working on it.
 
-Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-x-android:matrix.org).
+But first make sure to read our [contribution guide](CONTRIBUTING.md) first.
+
+You can also come chat with the community in the Matrix [room](https://matrix.to/#/#element-x-android:matrix.org) dedicated to the project.
 
 ## Build instructions
 
