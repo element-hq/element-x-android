@@ -6,6 +6,8 @@ style:
   CascadingCallWrapping:
     active: true
     includeElvis: true
+  DataClassShouldBeImmutable:
+    active: true
   MaxLineLength:
     # Default is 120
     maxLineLength: 160
