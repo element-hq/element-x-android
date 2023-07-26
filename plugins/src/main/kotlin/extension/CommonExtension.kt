@@ -23,7 +23,7 @@ import org.gradle.api.Project
 import java.io.File
 import org.gradle.accessors.dm.LibrariesForLibs
 
-fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
+fun CommonExtension<*, *, *, *, *>.androidConfig(project: Project) {
     defaultConfig {
         compileSdk = Versions.compileSdk
         minSdk = Versions.minSdk
@@ -48,7 +48,7 @@ fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
     }
 }
 
-fun CommonExtension<*, *, *, *>.composeConfig(libs: LibrariesForLibs) {
+fun CommonExtension<*, *, *, *, *>.composeConfig(libs: LibrariesForLibs) {
 
     buildFeatures {
         compose = true
