@@ -8,7 +8,7 @@
 
 # element-x-android
 
-ElementX Android is a [Matrix](https://matrix.org/) Android Client provided by [Element](https://element.io/). This app is currently in a pre-alpha release stage with only basic functionality.
+Element X Android is a [Matrix](https://matrix.org/) Android Client provided by [Element](https://element.io/). This app is currently in a pre-alpha release stage with only basic functionality.
 
 The application is a total rewrite of [Element-Android](https://github.com/vector-im/element-android) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 6+. The UI layer is written using Jetpack compose.
 
@@ -33,7 +33,7 @@ Here are some early screenshots of the application:
 
 ## Rust SDK
 
-ElementX leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer that the final client can directly import and use.
+Element X leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer that the final client can directly import and use.
 
 We're doing this as a way to share code between platforms and while we've seen promising results it's still in the experimental stage and bound to change.
 
@@ -54,7 +54,7 @@ Makes sure to select the `app` configuration when building (as we also have samp
 
 ## Support
 
-When you are experiencing an issue on ElementX Android, please first search in [GitHub issues](https://github.com/vector-im/element-x-android/issues)
+When you are experiencing an issue on Element X Android, please first search in [GitHub issues](https://github.com/vector-im/element-x-android/issues)
 and then in [#element-android:matrix.org](https://matrix.to/#/#element-android:matrix.org).
 If after your research you still have a question, ask at [#element-android:matrix.org](https://matrix.to/#/#element-android:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by shaking your phone or going to the application settings. This is especially recommended when you encounter a crash.
 
