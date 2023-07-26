@@ -236,7 +236,7 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
             Lifecycle.Event.ON_DESTROY -> {
                 //handled in onDispose
             }
-            else -> throw IllegalStateException()
+            Lifecycle.Event.ON_ANY -> Unit
         }
         previousState.value = event
     }

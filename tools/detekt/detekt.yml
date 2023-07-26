@@ -38,7 +38,7 @@ style:
   ProtectedMemberInFinalClass:
     active: false
   UseCheckOrError:
-    active: false
+    active: true
 
 empty-blocks:
   EmptyFunctionBlock:
