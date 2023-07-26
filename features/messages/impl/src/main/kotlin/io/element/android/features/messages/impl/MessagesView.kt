@@ -125,8 +125,9 @@ fun MessagesView(
         state.eventSink(MessagesEvents.ToggleReaction(emoji, event.eventId))
     }
 
-    fun onMoreReactionsClicked(event: TimelineItem.Event): Unit =
+    fun onMoreReactionsClicked(event: TimelineItem.Event) {
         state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event.eventId))
+    }
 
     Scaffold(
         modifier = modifier,

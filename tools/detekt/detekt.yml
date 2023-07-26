@@ -54,6 +54,8 @@ style:
     active: true
   UseCheckOrError:
     active: true
+  OptionalUnit:
+    active: true
 
 coroutines:
   GlobalCoroutineUsage:

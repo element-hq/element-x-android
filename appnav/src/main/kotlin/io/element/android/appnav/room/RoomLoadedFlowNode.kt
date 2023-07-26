@@ -75,8 +75,8 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     }
 
     interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(identifier: String, room: MatrixRoom) = Unit
-        fun onFlowReleased(identifier: String, room: MatrixRoom) = Unit
+        fun onFlowCreated(identifier: String, room: MatrixRoom)
+        fun onFlowReleased(identifier: String, room: MatrixRoom)
     }
 
     data class Inputs(

@@ -100,13 +100,13 @@ class LoggedInFlowNode @AssistedInject constructor(
 ) {
 
     interface Callback : Plugin {
-        fun onOpenBugReport() = Unit
+        fun onOpenBugReport()
     }
 
     interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(identifier: String, client: MatrixClient) = Unit
+        fun onFlowCreated(identifier: String, client: MatrixClient)
 
-        fun onFlowReleased(identifier: String, client: MatrixClient) = Unit
+        fun onFlowReleased(identifier: String, client: MatrixClient)
     }
 
     data class Inputs(
