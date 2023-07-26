@@ -12,6 +12,8 @@ Element X Android is a [Matrix](https://matrix.org/) Android Client provided by 
 
 The application is a total rewrite of [Element-Android](https://github.com/vector-im/element-android) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 6+. The UI layer is written using Jetpack compose.
 
+## Table of contents
+
 <!--- TOC -->
 
 * [Screenshots](#screenshots)
