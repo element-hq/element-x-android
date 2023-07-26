@@ -13,6 +13,7 @@
   * [Kotlin](#kotlin)
   * [Changelog](#changelog)
   * [Code quality](#code-quality)
+    * [detekt](#detekt)
     * [ktlint](#ktlint)
     * [knit](#knit)
     * [lint](#lint)
@@ -103,6 +104,12 @@ Make sure the following commands execute without any error:
 </pre>
 
 Some separate commands can also be run, see below.
+
+#### detekt
+
+<pre>
+./gradlew detekt
+</pre>
 
 #### ktlint
 
