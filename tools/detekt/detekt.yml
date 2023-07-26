@@ -60,6 +60,9 @@ style:
     active: true
     acceptableLength: 4
     allowNonStandardGrouping: false
+  UseDataClass:
+    active: true
+    allowVars: false
 
 coroutines:
   GlobalCoroutineUsage:

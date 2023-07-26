@@ -28,10 +28,12 @@ import timber.log.Timber
 @Composable
 fun LogCompositions(tag: String, msg: String) {
     if (BuildConfig.DEBUG) {
-        val ref = remember { Ref(0) }
+        val ref = remember { Ref() }
         SideEffect { ref.value++ }
         Timber.tag(tag).d("Compositions: $msg ${ref.value}")
     }
 }
 
-class Ref(var value: Int)
+private class Ref {
+    var value: Int = 0
+}
