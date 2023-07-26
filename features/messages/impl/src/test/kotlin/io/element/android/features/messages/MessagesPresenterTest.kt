@@ -490,11 +490,11 @@ class MessagesPresenterTest {
         }.test {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
-            skipItems(1)
-            val loadingState = awaitItem()
-            assertThat(loadingState.inviteProgress.isLoading()).isTrue()
-            val newState = awaitItem()
-            assertThat(newState.inviteProgress.isFailure()).isTrue()
+            val remainingStates = consumeItemsUntilTimeout()
+            assertThat(remainingStates.size).isEqualTo(3)
+            assertThat(remainingStates[0].inviteProgress.isLoading()).isFalse()
+            assertThat(remainingStates[1].inviteProgress.isLoading()).isTrue()
+            assertThat(remainingStates[2].inviteProgress.isFailure()).isTrue()
         }
     }
 
