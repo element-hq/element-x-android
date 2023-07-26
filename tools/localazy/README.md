@@ -16,6 +16,8 @@ Localazy is used to host the source strings and their translations.
 
 ## Localazy project
 
+[![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element)
+
 To add new strings, or to translate existing strings, go the the Localazy project: [https://localazy.com/p/element](https://localazy.com/p/element). Please follow the key naming rules (see below).
 
 Never edit manually the files `localazy.xml` or `translations.xml`!.
