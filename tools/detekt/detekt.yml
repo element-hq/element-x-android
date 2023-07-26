@@ -9,7 +9,7 @@ style:
   ReturnCount:
     active: false
   UnnecessaryAbstractClass:
-    active: false
+    active: true
   FunctionOnlyReturningConstant:
     active: false
   UnusedPrivateMember:
@@ -32,7 +32,7 @@ style:
   ThrowsCount:
     active: false
   LoopWithTooManyJumpStatements:
-    active: false
+    active: true
   SerialVersionUIDInSerializableClass:
     active: false
   ProtectedMemberInFinalClass:
@@ -44,7 +44,7 @@ empty-blocks:
   EmptyFunctionBlock:
     active: false
   EmptySecondaryConstructor:
-    active: false
+    active: true
 
 potential-bugs:
   ImplicitDefaultLocale:
