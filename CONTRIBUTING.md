@@ -50,7 +50,7 @@ Note: please make sure that the configuration is `app` and not `samples.minimal`
 
 ## Strings
 
-The strings of the project are managed externally using [https://localazy.com](https://localazy.com) and shared with ElementX iOS.
+The strings of the project are managed externally using [https://localazy.com](https://localazy.com) and shared with Element X iOS.
 
 ### I want to add new strings to the project
 
@@ -64,7 +64,7 @@ Please note that the Localazy project is not open yet for external contributions
 
 To help translating, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
 
-- If you want to fix an issue with an English string, please open an issue on the github project of ElementX (Android or iOS). Only the core team can modify or add English strings.
+- If you want to fix an issue with an English string, please open an issue on the github project of Element X (Android or iOS). Only the core team can modify or add English strings.
 - If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
 
 More informations can be found [in this README.md](./tools/localazy/README.md).
