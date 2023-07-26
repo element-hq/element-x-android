@@ -74,9 +74,9 @@ complexity:
   NestedBlockDepth:
     active: false
   ComplexCondition:
-    active: false
+    active: true
   LargeClass:
-    active: false
+    active: true
 
 naming:
   VariableNaming:
