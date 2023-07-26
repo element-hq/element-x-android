@@ -17,7 +17,6 @@
 package io.element.android.features.location.impl.common.actions
 
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.impl.common.actions.LocationActions
 
 class FakeLocationActions : LocationActions {
 

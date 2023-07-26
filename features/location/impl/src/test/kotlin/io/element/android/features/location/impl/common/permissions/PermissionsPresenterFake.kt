@@ -17,9 +17,6 @@
 package io.element.android.features.location.impl.common.permissions
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
-import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
-import io.element.android.features.location.impl.common.permissions.PermissionsState
 
 class PermissionsPresenterFake : PermissionsPresenter {
 
