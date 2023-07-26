@@ -166,7 +166,7 @@ private fun AttachmentsPreviewBottomActions(
 
 @Preview
 @Composable
-fun AttachmentsPreviewViewDarkPreview(@PreviewParameter(AttachmentsPreviewStateProvider::class) state: AttachmentsPreviewState) =
+internal fun AttachmentsPreviewViewDarkPreview(@PreviewParameter(AttachmentsPreviewStateProvider::class) state: AttachmentsPreviewState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

@@ -149,7 +149,7 @@ Compose:
   PreviewNaming:
     active: true
   PreviewPublic:
-    active: false
+    active: true
     # You can optionally disable that only previews with @PreviewParameter are flagged
     previewPublicOnlyIfParams: false
   RememberMissing:

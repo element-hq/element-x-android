@@ -50,12 +50,12 @@ fun AboutView(
 
 @Preview
 @Composable
-fun AboutViewLightPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) =
+internal fun AboutViewLightPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun AboutViewDarkPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) =
+internal fun AboutViewDarkPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

@@ -415,7 +415,7 @@ private fun BoxScope.SendButton(
 
 @DayNightPreviews
 @Composable
-fun TextComposerSimplePreview() = ElementPreview {
+internal fun TextComposerSimplePreview() = ElementPreview {
     Column {
         TextComposer(
             onSendMessage = {},
@@ -446,7 +446,7 @@ fun TextComposerSimplePreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TextComposerEditPreview() = ElementPreview {
+internal fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
         onSendMessage = {},
         onComposerTextChange = {},
@@ -459,7 +459,7 @@ fun TextComposerEditPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TextComposerReplyPreview() = ElementPreview {
+internal fun TextComposerReplyPreview() = ElementPreview {
     Column {
         TextComposer(
             onSendMessage = {},

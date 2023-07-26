@@ -123,12 +123,12 @@ private fun LoadingRoomTopBar(
 
 @Preview
 @Composable
-fun LoadingRoomNodeViewLightPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
+internal fun LoadingRoomNodeViewLightPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun LoadingRoomNodeViewDarkPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
+internal fun LoadingRoomNodeViewDarkPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

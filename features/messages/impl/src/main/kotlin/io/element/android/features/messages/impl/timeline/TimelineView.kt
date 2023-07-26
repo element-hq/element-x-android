@@ -310,7 +310,7 @@ private fun JumpToBottomButton(
 
 @DayNightPreviews
 @Composable
-fun TimelineViewPreview(
+internal fun TimelineViewPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
 ) = ElementPreview {
     val timelineItems = aTimelineItemList(content)

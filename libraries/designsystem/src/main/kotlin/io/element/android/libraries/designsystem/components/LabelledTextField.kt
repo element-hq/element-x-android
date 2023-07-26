@@ -65,11 +65,11 @@ fun LabelledTextField(
 
 @Preview
 @Composable
-fun LabelledTextFieldLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun LabelledTextFieldLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun LabelledTextFieldDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun LabelledTextFieldDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

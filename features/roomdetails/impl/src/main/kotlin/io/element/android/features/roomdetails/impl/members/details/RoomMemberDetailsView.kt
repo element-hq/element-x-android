@@ -146,12 +146,12 @@ internal fun SendMessageSection(onSendMessage: () -> Unit, modifier: Modifier = 
 
 @LargeHeightPreview
 @Composable
-fun RoomMemberDetailsViewLightPreview(@PreviewParameter(RoomMemberDetailsStateProvider::class) state: RoomMemberDetailsState) =
+internal fun RoomMemberDetailsViewLightPreview(@PreviewParameter(RoomMemberDetailsStateProvider::class) state: RoomMemberDetailsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @LargeHeightPreview
 @Composable
-fun RoomMemberDetailsViewDarkPreview(@PreviewParameter(RoomMemberDetailsStateProvider::class) state: RoomMemberDetailsState) =
+internal fun RoomMemberDetailsViewDarkPreview(@PreviewParameter(RoomMemberDetailsStateProvider::class) state: RoomMemberDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

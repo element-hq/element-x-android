@@ -176,11 +176,11 @@ fun BugReportView(
 
 @Preview
 @Composable
-fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewLight { ContentToPreview(state) }
+internal fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun BugReportViewDarkPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewDark { ContentToPreview(state) }
+internal fun BugReportViewDarkPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
 private fun ContentToPreview(state: BugReportState) {

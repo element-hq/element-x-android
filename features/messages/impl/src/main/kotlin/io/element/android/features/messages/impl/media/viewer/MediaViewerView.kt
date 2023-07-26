@@ -255,7 +255,7 @@ private fun ErrorView(
 
 @Preview
 @Composable
-fun MediaViewerViewDarkPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) =
+internal fun MediaViewerViewDarkPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
