@@ -171,7 +171,18 @@ For instance, when updating the image `src` of an ImageView, please also conside
 
 ### Jetpack Compose
 
-When adding or editing `@Composable`, make sure that you create a `@Preview` function, with suffix `Preview`. This will also create a UI test automatically.
+When adding or editing `@Composable`, make sure that you create an internal function annotated with `@DayNightPreviews`, with a name suffixed by `Preview`, and having `ElementPreview` as the root composable.
+
+Example:
+```kotlin
+@DayNightPreviews
+@Composable
+internal fun PinIconPreview() = ElementPreview {
+    PinIcon()
+}
+```
+
+This will allow to preview the composable in both light and dark mode in Android Studio. This will also automatically add UI tests. The GitHub action [Record screenshots](https://github.com/vector-im/element-x-android/actions/workflows/recordScreenshots.yml) has to be run to record the new screenshots. The PR reviewer can trigger this for you if you're not part of the core team. 
 
 ### Authors
 
