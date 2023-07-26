@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -84,7 +85,7 @@ fun aNotifiableMessageEvent(
     noisy = false,
     timestamp = 0,
     senderName = "sender-name",
-    senderId = "sending-id",
+    senderId = UserId("@sending-id:domain.com"),
     body = "message-body",
     roomId = roomId,
     threadId = threadId,

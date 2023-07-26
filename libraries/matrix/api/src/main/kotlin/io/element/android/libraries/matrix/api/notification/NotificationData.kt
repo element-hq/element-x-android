@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 
 data class NotificationData(
-    val senderId: UserId,
     val eventId: EventId,
     val roomId: RoomId,
     val senderAvatarUrl: String?,
@@ -33,14 +32,10 @@ data class NotificationData(
     val isDirect: Boolean,
     val isEncrypted: Boolean,
     val isNoisy: Boolean,
-    val event: NotificationEvent,
-)
-
-data class NotificationEvent(
     val timestamp: Long,
     val content: NotificationContent,
     // For images for instance
-    val contentUrl: String?
+    val contentUrl: String?,
 )
 
 sealed interface NotificationContent {
@@ -61,6 +56,7 @@ sealed interface NotificationContent {
         ) : MessageLike
         object RoomEncrypted : MessageLike
         data class RoomMessage(
+            val senderId: UserId,
             val messageType: MessageType
         ) : MessageLike
         object RoomRedaction : MessageLike

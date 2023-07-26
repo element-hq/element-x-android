@@ -517,42 +517,46 @@ private fun ReplyToContent(
     }
 }
 
-private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready) =
-    when (val type = inReplyTo.content.type) {
+private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): AttachmentThumbnailInfo? {
+    val messageContent = inReplyTo.content as? MessageContent ?: return null
+    return when (val type = messageContent.type) {
         is ImageMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource,
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.Image,
             blurHash = type.info?.blurhash,
         )
         is VideoMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource,
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.Video,
             blurHash = type.info?.blurhash,
         )
         is FileMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource,
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.File,
         )
         is LocationMessageType -> AttachmentThumbnailInfo(
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.Location,
         )
         is AudioMessageType -> AttachmentThumbnailInfo(
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.Audio,
         )
         else -> null
     }
+}
 
 @Composable
-private fun textForInReplyTo(inReplyTo: InReplyTo.Ready) =
-    when (inReplyTo.content.type) {
+private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
+    val messageContent = inReplyTo.content as? MessageContent ?: return ""
+    return when (messageContent.type) {
         is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
-        else -> inReplyTo.content.body
+        else -> messageContent.body
     }
+}
 
 @Preview
 @Composable

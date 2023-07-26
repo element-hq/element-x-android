@@ -42,6 +42,8 @@ import org.matrix.rustcomponents.sdk.MessageType as RustMessageType
 
 class EventMessageMapper {
 
+    private val timelineEventContentMapper by lazy { TimelineEventContentMapper() }
+
     fun map(message: Message): MessageContent = message.use {
         val type = it.msgtype().use(this::mapMessageType)
         val inReplyToId = it.inReplyTo()?.eventId?.let(::EventId)
@@ -51,7 +53,7 @@ class EventMessageMapper {
                     val senderProfile = details.senderProfile as? ProfileDetails.Ready
                     InReplyTo.Ready(
                         eventId = inReplyToId!!,
-                        content = map(details.message),
+                        content = timelineEventContentMapper.map(details.content),
                         senderId = UserId(details.sender),
                         senderDisplayName = senderProfile?.displayName,
                         senderAvatarUrl = senderProfile?.avatarUrl,
