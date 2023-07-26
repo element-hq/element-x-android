@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelin
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
+import io.element.android.libraries.matrix.impl.util.TaskHandleBag
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -47,6 +48,7 @@ import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
@@ -100,6 +102,8 @@ class RustMatrixTimeline(
 
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
+
+        val rustTaskHandleBag = TaskHandleBag()
         roomCoroutineScope.launch(dispatcher) {
             innerRoom.timelineDiffFlow { initialList ->
                 postItems(initialList)
@@ -115,7 +119,9 @@ class RustMatrixTimeline(
                     postPaginationStatus(it)
                 }.launchIn(this)
 
-            fetchMembers()
+            rustTaskHandleBag += fetchMembers().getOrNull()
+        }.invokeOnCompletion {
+            rustTaskHandleBag.dispose()
         }
     }
 
