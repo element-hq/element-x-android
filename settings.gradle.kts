@@ -29,6 +29,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // To have immediate access to Rust SDK versions
+        maven {
+            url = URI("https://s01.oss.sonatype.org/content/repositories/releases")
+        }
         maven {
             url = URI("https://www.jitpack.io")
             content {
