@@ -60,7 +60,7 @@ exceptions:
   TooGenericExceptionThrown:
     active: false
   InstanceOfCheckForException:
-    active: false
+    active: true
 
 complexity:
   TooManyFunctions:
