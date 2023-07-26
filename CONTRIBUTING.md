@@ -99,7 +99,7 @@ See https://github.com/twisted/towncrier#news-fragments if you need more details
 Make sure the following commands execute without any error:
 
 <pre>
-./gradlew check
+./tools/quality/check.sh
 </pre>
 
 Some separate commands can also be run, see below.
