@@ -203,7 +203,7 @@ fun MessagesView(
 }
 
 @Composable
-fun ReinviteDialog(state: MessagesState) {
+private fun ReinviteDialog(state: MessagesState) {
     if (state.showReinvitePrompt) {
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_room_invite_again_alert_title),
@@ -240,7 +240,7 @@ private fun AttachmentStateView(
 }
 
 @Composable
-fun MessagesViewContent(
+private fun MessagesViewContent(
     state: MessagesState,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
@@ -288,7 +288,7 @@ fun MessagesViewContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MessagesViewTopBar(
+private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
     modifier: Modifier = Modifier,
@@ -320,7 +320,7 @@ fun MessagesViewTopBar(
 }
 
 @Composable
-fun RoomAvatarAndNameRow(
+private fun RoomAvatarAndNameRow(
     roomName: String,
     roomAvatar: AvatarData,
     modifier: Modifier = Modifier
@@ -341,7 +341,7 @@ fun RoomAvatarAndNameRow(
 }
 
 @Composable
-fun CantSendMessageBanner(
+private fun CantSendMessageBanner(
     modifier: Modifier = Modifier,
 ) {
     Row(
