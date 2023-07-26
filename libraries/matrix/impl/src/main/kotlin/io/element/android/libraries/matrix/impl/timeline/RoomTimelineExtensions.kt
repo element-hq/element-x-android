@@ -16,28 +16,45 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
+import io.element.android.libraries.matrix.impl.util.destroyAll
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.callbackFlow
 import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.BackPaginationStatusListener
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomTimelineListenerResult
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
+import timber.log.Timber
 
 internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<TimelineDiff> =
-    mxCallbackFlow {
+    callbackFlow {
+        val roomId = id()
+        Timber.d("Open timelineDiffFlow for room $roomId")
         val listener = object : TimelineListener {
             override fun onUpdate(diff: TimelineDiff) {
                 trySendBlocking(diff)
             }
         }
-        val result = addTimelineListener(listener)
-        onInitialList(result.items)
-        result.itemsStream
+        var result: RoomTimelineListenerResult? = null
+        try {
+            result = addTimelineListener(listener)
+            onInitialList(result.items)
+        } catch (exception: Exception) {
+            Timber.d(exception, "Catch failure in timelineDiffFlow of room $roomId")
+        }
+        awaitClose {
+            Timber.d("Close timelineDiffFlow for room $roomId")
+            result?.itemsStream?.cancel()
+            result?.itemsStream?.destroy()
+            result?.items?.destroyAll()
+        }
     }.buffer(Channel.UNLIMITED)
 
 internal fun Room.backPaginationStatusFlow(): Flow<BackPaginationStatus> =

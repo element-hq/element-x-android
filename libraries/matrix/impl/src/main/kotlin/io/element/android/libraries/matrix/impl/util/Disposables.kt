@@ -13,22 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.ksp)
-}
 
-android {
-    namespace = "io.element.android.tests.testutils"
+package io.element.android.libraries.matrix.impl.util
 
-    buildFeatures {
-        buildConfig = true
-    }
-}
+import org.matrix.rustcomponents.sdk.Disposable
 
-dependencies {
-    implementation(libs.test.junit)
-    implementation(libs.coroutines.test)
-    implementation(projects.libraries.core)
-    implementation(libs.test.turbine)
-}
+/**
+ * Call destroy on all elements of the iterable.
+ */
+internal fun Iterable<Disposable>.destroyAll() = forEach { it.destroy() }
