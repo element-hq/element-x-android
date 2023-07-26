@@ -100,15 +100,15 @@ class DefaultPushHandler @Inject constructor(
             }
 
             val clientSecret = pushData.clientSecret
-            val userId = if (clientSecret == null) {
-                // Should not happen. In this case, restore default session
-                null
-            } else {
-                // Get userId from client secret
-                pushClientSecret.getUserIdFromSecret(clientSecret)
-            } ?: run {
-                matrixAuthenticationService.getLatestSessionId()
-            }
+            // clientSecret should not be null. If this happens, restore default session
+            val userId = clientSecret
+                ?.let {
+                    // Get userId from client secret
+                    pushClientSecret.getUserIdFromSecret(clientSecret)
+                }
+                ?: run {
+                    matrixAuthenticationService.getLatestSessionId()
+                }
 
             if (userId == null) {
                 Timber.w("Unable to get a session")
