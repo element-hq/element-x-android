@@ -48,7 +48,6 @@ import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
