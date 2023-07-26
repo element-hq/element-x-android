@@ -56,7 +56,7 @@ exceptions:
   SwallowedException:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
-    active: false
+    active: true
   TooGenericExceptionThrown:
     active: false
   InstanceOfCheckForException:
