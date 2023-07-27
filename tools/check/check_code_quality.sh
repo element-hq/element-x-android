@@ -38,7 +38,7 @@ else
 fi
 
 echo
-echo "Search for forbidden patterns in code..."
+echo "Search for forbidden patterns in Kotlin source files..."
 
 # list all Kotlin folders of the project.
 allKotlinDirs=`find . -type d |grep -v build |grep -v \.git |grep -v \.gradle |grep kotlin$`
@@ -47,9 +47,20 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt $all
 
 resultForbiddenStringInCode=$?
 
-if [[ ${resultForbiddenStringInCode} -eq 0 ]]; then
-   echo "MAIN OK"
+echo
+echo "Search for forbidden patterns in XML resource files..."
+
+# list all res folders of the project.
+allResDirs=`find . -type d |grep -v build |grep -v \.git |grep -v \.gradle |grep /res$`
+
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_xml.txt $allResDirs
+
+resultForbiddenStringInXml=$?
+
+if [[ ${resultForbiddenStringInCode} -eq 0 ]] \
+   && [[ ${resultForbiddenStringInXml} -eq 0 ]]; then
+   echo "OK"
 else
-   echo "❌ MAIN ERROR"
+   echo "❌ ERROR, please check the logs above."
    exit 1
 fi
