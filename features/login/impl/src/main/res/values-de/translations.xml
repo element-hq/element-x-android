@@ -3,13 +3,13 @@
   <string name="screen_account_provider_change">"Kontoanbieter wechseln"</string>
   <string name="screen_account_provider_continue">"Weiter"</string>
   <string name="screen_account_provider_form_hint">"Adresse des Homeservers"</string>
-  <string name="screen_account_provider_form_notice">"Geben Sie einen Suchbegriff oder eine Domainadresse ein."</string>
+  <string name="screen_account_provider_form_notice">"Gib einen Suchbegriff oder eine Domainadresse ein."</string>
   <string name="screen_account_provider_form_subtitle">"Suche nach einem Unternehmen, einer Community oder einem privaten Server."</string>
-  <string name="screen_account_provider_form_title">"Finde einen Accountanbieter"</string>
+  <string name="screen_account_provider_form_title">"Finde einen Kontoanbieter"</string>
   <string name="screen_account_provider_signin_subtitle">"Hier werden deine Konversationen stattfinden — genauso wie du einen E-Mail-Anbieter verwenden würdest, um deine E-Mails aufzubewahren."</string>
   <string name="screen_account_provider_signin_title">"Du bist dabei dich bei %s anzumelden"</string>
   <string name="screen_account_provider_signup_subtitle">"Hier werden deine Konversationen stattfinden — genauso wie du einen E-Mail-Anbieter verwenden würdest, um deine E-Mails aufzubewahren."</string>
-  <string name="screen_account_provider_signup_title">"Du bist dabei einen Account auf %s zu erstellen"</string>
+  <string name="screen_account_provider_signup_title">"Du bist dabei ein Konto auf %s zu erstellen"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org ist ein offenes Netzwerk für sichere, dezentralisierte Kommunikation."</string>
   <string name="screen_change_account_provider_other">"Andere"</string>
   <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Arbeitskonto."</string>
@@ -31,7 +31,7 @@
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix ist ein offenes Netzwerk für sichere, dezentrale Kommunikation"</string>
   <string name="screen_server_confirmation_message_register">"Hier werden deine Konversationen stattfinden — genau so wie du einen E-Mail-Anbieter verwenden würdest, um deine E-Mails aufzubewahren."</string>
   <string name="screen_server_confirmation_title_login">"Du bist dabei dich bei %1$s anzumelden"</string>
-  <string name="screen_server_confirmation_title_register">"Du bist dabei einen Account auf %1$s zu erstellen"</string>
+  <string name="screen_server_confirmation_title_register">"Du bist dabei ein Konto auf %1$s zu erstellen"</string>
   <string name="screen_waitlist_message">"Im Moment besteht eine hohe Nachfrage nach %1$s auf %2$s. Besuche die App in ein paar Tagen wieder und versuche es erneut.
 
 Vielen Dank für deine Geduld!"</string>
