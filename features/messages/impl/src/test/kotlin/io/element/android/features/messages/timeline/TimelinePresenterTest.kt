@@ -41,8 +41,6 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.util.Date
 
 class TimelinePresenterTest {

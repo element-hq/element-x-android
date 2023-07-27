@@ -18,8 +18,6 @@ package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
-import kotlinx.collections.immutable.toPersistentList
 import java.text.DateFormat
 import java.util.Date
 
