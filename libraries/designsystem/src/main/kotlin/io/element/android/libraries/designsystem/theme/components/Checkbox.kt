@@ -26,6 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.theme.ElementTheme
+
+// Designs in https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&mode=design&t=qb99xBP5mwwCtGkN-1
 
 @Composable
 fun Checkbox(
@@ -33,7 +36,7 @@ fun Checkbox(
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    colors: CheckboxColors = CheckboxDefaults.colors(),
+    colors: CheckboxColors = compoundCheckBoxColors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     androidx.compose.material3.Checkbox(
@@ -43,6 +46,16 @@ fun Checkbox(
         enabled = enabled,
         colors = colors,
         interactionSource = interactionSource,
+    )
+}
+
+@Composable
+internal fun compoundCheckBoxColors(): CheckboxColors {
+    return CheckboxDefaults.colors(
+        uncheckedColor = ElementTheme.colors.borderInteractivePrimary,
+        disabledUncheckedColor = ElementTheme.colors.borderDisabled,
+        disabledCheckedColor = ElementTheme.colors.iconDisabled,
+        disabledIndeterminateColor = ElementTheme.colors.iconDisabled,
     )
 }
 
