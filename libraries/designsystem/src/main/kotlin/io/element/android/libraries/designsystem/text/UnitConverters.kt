@@ -52,3 +52,11 @@ fun Dp.toPx(): Float = with(LocalDensity.current) { toPx() }
  */
 @Composable
 fun Dp.roundToPx(): Int = with(LocalDensity.current) { roundToPx() }
+
+/**
+ * Return the maximum value between the receiver value and the value with fonScale applied.
+ */
+@Composable
+fun Dp.scaleMax(): Dp = with(LocalDensity.current) {
+    return this@scaleMax * fontScale.coerceAtMost(1f)
+}
