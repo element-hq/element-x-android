@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
 import androidx.compose.material3.Switch as Material3Switch
@@ -74,7 +75,7 @@ internal fun compoundSwitchColors() = SwitchDefaults.colors(
 @Composable
 internal fun SwitchPreview() {
     var checked by remember { mutableStateOf(false) }
-    ElementPreview {
+    ElementThemedPreview {
         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 Switch(checked = checked, onCheckedChange = { checked = !checked })
