@@ -19,8 +19,6 @@ package io.element.android.features.messages.impl.timeline.components.reactionsu
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.RoomMember
-import kotlinx.collections.immutable.toImmutableList
 
 open class ReactionSummaryStateProvider : PreviewParameterProvider<ReactionSummaryState> {
     override val values: Sequence<ReactionSummaryState>

@@ -18,7 +18,6 @@ package io.element.android.features.messages.impl.timeline.model
 
 import io.element.android.libraries.core.extensions.ellipsize
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 
 /**
  * Length at which we ellipsize a reaction key for display
