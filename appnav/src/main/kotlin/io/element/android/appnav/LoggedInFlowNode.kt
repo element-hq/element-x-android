@@ -138,12 +138,12 @@ class LoggedInFlowNode @AssistedInject constructor(
                     backstack.push(NavTarget.Ftue)
                 }
             },
-            onResume = {
+            onStart = {
                 lifecycleScope.launch {
                     syncService.startSync()
                 }
             },
-            onPause = {
+            onStop = {
                 syncService.stopSync()
             },
             onDestroy = {
