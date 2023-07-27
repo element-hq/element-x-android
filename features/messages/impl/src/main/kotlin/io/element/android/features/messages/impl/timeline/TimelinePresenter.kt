@@ -42,8 +42,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-private const val backPaginationEventLimit = 20
-private const val backPaginationPageSize = 50
+private const val BACK_PAGINATION_EVENT_LIMIT = 20
+private const val BACK_PAGINATION_PAGE_SIZE = 50
 
 class TimelinePresenter @Inject constructor(
     private val timelineItemsFactory: TimelineItemsFactory,
@@ -164,6 +164,6 @@ class TimelinePresenter @Inject constructor(
     }
 
     private fun CoroutineScope.paginateBackwards() = launch {
-        timeline.paginateBackwards(backPaginationEventLimit, backPaginationPageSize)
+        timeline.paginateBackwards(BACK_PAGINATION_EVENT_LIMIT, BACK_PAGINATION_PAGE_SIZE)
     }
 }

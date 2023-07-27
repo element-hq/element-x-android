@@ -43,13 +43,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -66,10 +64,12 @@ import io.element.android.features.messages.impl.timeline.components.retrysendme
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -144,8 +144,8 @@ fun MessagesView(
             Column {
                 ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
                 MessagesViewTopBar(
-                    roomTitle = state.roomName,
-                    roomAvatar = state.roomAvatar,
+                    roomName = state.roomName.dataOrNull(),
+                    roomAvatar = state.roomAvatar.dataOrNull(),
                     onBackPressed = onBackPressed,
                     onRoomDetailsClicked = onRoomDetailsClicked,
                 )
@@ -212,7 +212,7 @@ fun MessagesView(
 }
 
 @Composable
-fun ReinviteDialog(state: MessagesState) {
+private fun ReinviteDialog(state: MessagesState) {
     if (state.showReinvitePrompt) {
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_room_invite_again_alert_title),
@@ -249,7 +249,7 @@ private fun AttachmentStateView(
 }
 
 @Composable
-fun MessagesViewContent(
+private fun MessagesViewContent(
     state: MessagesState,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
@@ -299,9 +299,9 @@ fun MessagesViewContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MessagesViewTopBar(
-    roomTitle: String,
-    roomAvatar: AvatarData,
+private fun MessagesViewTopBar(
+    roomName: String?,
+    roomAvatar: AvatarData?,
     modifier: Modifier = Modifier,
     onRoomDetailsClicked: () -> Unit = {},
     onBackPressed: () -> Unit = {},
@@ -312,17 +312,17 @@ fun MessagesViewTopBar(
             BackButton(onClick = onBackPressed)
         },
         title = {
-            Row(
-                modifier = Modifier.clickable { onRoomDetailsClicked() },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Avatar(roomAvatar)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = roomTitle,
-                    style = ElementTheme.typography.fontBodyLgMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+            val titleModifier = Modifier.clickable { onRoomDetailsClicked() }
+            if (roomName != null && roomAvatar != null) {
+                RoomAvatarAndNameRow(
+                    roomName = roomName,
+                    roomAvatar = roomAvatar,
+                    modifier = titleModifier
+                )
+            } else {
+                IconTitlePlaceholdersRowMolecule(
+                    iconSize = AvatarSize.TimelineRoom.dp,
+                    modifier = titleModifier
                 )
             }
         },
@@ -331,7 +331,28 @@ fun MessagesViewTopBar(
 }
 
 @Composable
-fun CantSendMessageBanner(
+private fun RoomAvatarAndNameRow(
+    roomName: String,
+    roomAvatar: AvatarData,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Avatar(roomAvatar)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = roomName,
+            style = ElementTheme.typography.fontBodyLgMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun CantSendMessageBanner(
     modifier: Modifier = Modifier,
 ) {
     Row(

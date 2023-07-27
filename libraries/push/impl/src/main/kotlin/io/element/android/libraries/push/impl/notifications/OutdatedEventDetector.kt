@@ -28,7 +28,7 @@ class OutdatedEventDetector @Inject constructor(
      * Used to clean up notifications if a displayed message has been read on an
      * other device.
      */
-    fun isMessageOutdated(notifiableEvent: NotifiableEvent): Boolean {
+    fun isMessageOutdated(@Suppress("UNUSED_PARAMETER") notifiableEvent: NotifiableEvent): Boolean {
         /* TODO EAx
         val session = activeSessionDataSource.currentValue?.orNull() ?: return false
 

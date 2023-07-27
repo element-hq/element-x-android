@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -50,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.leaveroom.api.LeaveRoomView
@@ -237,7 +237,13 @@ internal fun RoomHeaderSection(
         Text(roomName, style = ElementTheme.typography.fontHeadingLgBold)
         if (roomAlias != null) {
             Spacer(modifier = Modifier.height(6.dp))
-            Text(roomAlias, style = ElementTheme.typography.fontBodyLgRegular, color = MaterialTheme.colorScheme.secondary)
+            Text(
+                text = roomAlias,
+                style = ElementTheme.typography.fontBodyLgRegular,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                textAlign = TextAlign.Center,
+            )
         }
         Spacer(Modifier.height(32.dp))
     }

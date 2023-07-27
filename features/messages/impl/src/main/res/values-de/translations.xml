@@ -20,6 +20,6 @@
   <string name="screen_room_reactions_show_more">"Mehr anzeigen"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Erneut senden"</string>
   <string name="screen_room_retry_send_menu_title">"Ihre Nachricht konnte nicht gesendet werden"</string>
-  <string name="screen_room_error_failed_processing_media">"Fehler bei der Verarbeitung von Medien zum Hochladen, bitte versuchen Sie es erneut."</string>
+  <string name="screen_room_error_failed_processing_media">"Fehler bei der Verarbeitung von Medien zum Hochladen, bitte versuche es erneut."</string>
   <string name="screen_room_retry_send_menu_remove_action">"Entfernen"</string>
 </resources>

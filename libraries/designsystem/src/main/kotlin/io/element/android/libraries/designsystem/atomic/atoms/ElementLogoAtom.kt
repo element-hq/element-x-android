@@ -138,7 +138,7 @@ fun Modifier.shapeShadow(
                 val paint = Paint()
                 val frameworkPaint = paint.asFrameworkPaint()
                 if (blurRadius != 0.dp) {
-                    frameworkPaint.maskFilter = (BlurMaskFilter(blurRadius.toPx(), BlurMaskFilter.Blur.NORMAL))
+                    frameworkPaint.maskFilter = BlurMaskFilter(blurRadius.toPx(), BlurMaskFilter.Blur.NORMAL)
                 }
                 frameworkPaint.color = color.toArgb()
 

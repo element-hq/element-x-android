@@ -16,8 +16,8 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
-import io.element.android.libraries.matrix.api.auth.OidcConfig
 // TODO Oidc
+// import io.element.android.libraries.matrix.api.auth.OidcConfig
 // import org.matrix.rustcomponents.sdk.OidcClientMetadata
 
 /*

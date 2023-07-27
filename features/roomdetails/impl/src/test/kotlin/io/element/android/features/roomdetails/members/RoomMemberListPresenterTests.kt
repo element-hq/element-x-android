@@ -52,7 +52,6 @@ class RoomMemberListPresenterTests {
             Truth.assertThat(initialState.searchQuery).isEmpty()
             Truth.assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
             Truth.assertThat(initialState.isSearchActive).isFalse()
-
             val loadedState = awaitItem()
             Truth.assertThat(loadedState.roomMembers).isInstanceOf(Async.Success::class.java)
             Truth.assertThat((loadedState.roomMembers as Async.Success).data.invited).isEqualTo(listOf(aVictor(), aWalter()))
@@ -66,13 +65,11 @@ class RoomMemberListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            skipItems(1)
             val loadedState = awaitItem()
-
             loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
-
             val searchActiveState = awaitItem()
-            Truth.assertThat((searchActiveState.isSearchActive)).isTrue()
+            Truth.assertThat(searchActiveState.isSearchActive).isTrue()
         }
     }
 
@@ -82,13 +79,13 @@ class RoomMemberListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            skipItems(1)
             val loadedState = awaitItem()
             loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
             val searchActiveState = awaitItem()
-            loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("something"))
+            searchActiveState.eventSink(RoomMemberListEvents.UpdateSearchQuery("something"))
             val searchQueryUpdatedState = awaitItem()
-            Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("something")
+            Truth.assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("something")
             val searchSearchResultDelivered = awaitItem()
             Truth.assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
         }
@@ -100,18 +97,17 @@ class RoomMemberListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            skipItems(1)
             val loadedState = awaitItem()
             loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
             val searchActiveState = awaitItem()
-            loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("Alice"))
+            searchActiveState.eventSink(RoomMemberListEvents.UpdateSearchQuery("Alice"))
             val searchQueryUpdatedState = awaitItem()
-            Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("Alice")
+            Truth.assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()
-            Truth.assertThat((searchSearchResultDelivered.searchResults)).isInstanceOf(SearchBarResultState.Results::class.java)
+            Truth.assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             Truth.assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.joined.first().displayName)
                 .isEqualTo("Alice")
-
         }
     }
 

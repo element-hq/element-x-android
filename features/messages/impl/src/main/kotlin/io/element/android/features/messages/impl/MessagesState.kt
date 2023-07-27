@@ -31,8 +31,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 @Immutable
 data class MessagesState(
     val roomId: RoomId,
-    val roomName: String,
-    val roomAvatar: AvatarData,
+    val roomName: Async<String>,
+    val roomAvatar: Async<AvatarData>,
     val userHasPermissionToSendMessage: Boolean,
     val composerState: MessageComposerState,
     val timelineState: TimelineState,

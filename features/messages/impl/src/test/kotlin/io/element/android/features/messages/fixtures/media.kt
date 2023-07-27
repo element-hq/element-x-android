@@ -21,7 +21,6 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.local.anImageInfo
-import io.element.android.libraries.core.mimetype.MimeTypes
 
 fun aLocalMedia(
     uri: Uri,

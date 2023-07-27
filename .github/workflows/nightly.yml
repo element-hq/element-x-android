@@ -31,9 +31,9 @@ jobs:
           sed 's/CHANGES\.md/CHANGES_NIGHTLY\.md/' towncrier.toml.bak > towncrier.toml
           rm towncrier.toml.bak
           yes n | towncrier build --version nightly
-      - name: Build and upload Nightly bundle
+      - name: Build and upload Nightly application
         run: |
-          ./gradlew bundleNightly appDistributionUploadNightly $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew assembleNightly appDistributionUploadNightly $CI_GRADLE_ARG_PROPERTIES
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
@@ -45,11 +45,7 @@ jobs:
       - name: Additionally upload Nightly APK to browserstack for testing
         continue-on-error: true # don't block anything by this upload failing (for now)
         run: |
-          ./gradlew assembleNightly $CI_GRADLE_ARG_PROPERTIES
           curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_PASSWORD" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@app/build/outputs/apk/nightly/app-universal-nightly.apk" -F "custom_id=element-x-android-nightly"
         env:
-          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
-          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
-          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
           BROWSERSTACK_USERNAME: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_USERNAME }}
           BROWSERSTACK_PASSWORD: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_ACCESS_KEY }}

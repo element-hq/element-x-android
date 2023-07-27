@@ -48,7 +48,7 @@ class VectorFileLogger(
         }
 
         private const val SIZE_20MB = 20 * 1024 * 1024
-        private const val SIZE_50MB = 50 * 1024 * 1024
+        // private const val SIZE_50MB = 50 * 1024 * 1024
     }
 
     /*

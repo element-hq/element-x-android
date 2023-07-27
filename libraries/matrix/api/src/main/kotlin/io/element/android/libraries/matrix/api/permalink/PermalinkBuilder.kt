@@ -25,7 +25,6 @@ object PermalinkBuilder {
 
     private const val ROOM_PATH = "room/"
     private const val USER_PATH = "user/"
-    private const val GROUP_PATH = "group/"
 
     private val permalinkBaseUrl get() = (MatrixConfiguration.clientPermalinkBaseUrl ?: MatrixConfiguration.matrixToPermalinkBaseUrl).also {
         var baseUrl = it

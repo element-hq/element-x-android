@@ -95,6 +95,7 @@ fun TimelineView(
 
     val lazyListState = rememberLazyListState()
 
+    @Suppress("UNUSED_PARAMETER")
     fun inReplyToClicked(eventId: EventId) {
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }

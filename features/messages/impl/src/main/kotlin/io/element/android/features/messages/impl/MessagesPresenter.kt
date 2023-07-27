@@ -24,7 +24,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -77,6 +76,7 @@ import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MessagesPresenter @AssistedInject constructor(
@@ -112,11 +112,13 @@ class MessagesPresenter @AssistedInject constructor(
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val roomName by produceState(initialValue = room.displayName, key1 = syncUpdateFlow.value) {
-            value = room.displayName
-        }
-        val roomAvatar by produceState(initialValue = room.avatarData(), key1 = syncUpdateFlow.value) {
-            value = room.avatarData()
+        var roomName: Async<String> by remember { mutableStateOf(Async.Uninitialized) }
+        var roomAvatar: Async<AvatarData> by remember { mutableStateOf(Async.Uninitialized) }
+        LaunchedEffect(syncUpdateFlow.value) {
+            withContext(dispatchers.io) {
+                roomName = Async.Success(room.displayName)
+                roomAvatar = Async.Success(room.avatarData())
+            }
         }
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)

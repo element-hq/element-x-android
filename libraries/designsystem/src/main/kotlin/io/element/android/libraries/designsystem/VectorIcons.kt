@@ -25,4 +25,6 @@ object VectorIcons {
     val DoorOpen = R.drawable.ic_door_open_24
     val DeveloperMode = R.drawable.ic_developer_mode
     val ReportContent = R.drawable.ic_report_content
+    val Groups = R.drawable.ic_groups
+    val Share = R.drawable.ic_share
 }

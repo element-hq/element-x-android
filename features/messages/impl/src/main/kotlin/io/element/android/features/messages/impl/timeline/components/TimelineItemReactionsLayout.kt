@@ -91,7 +91,7 @@ fun TimelineItemReactionsLayout(
             lastRow.forEachIndexed { i, placeable ->
                 val horizontalSpacing = if (i == 0) 0 else itemSpacing.toPx().toInt()
                 rowX += placeable.width + horizontalSpacing
-                if (rowX > (constraints.maxWidth - (buttonsWidth + horizontalSpacing))) {
+                if (rowX > constraints.maxWidth - (buttonsWidth + horizontalSpacing)) {
                     val lastRowWithButton = lastRow.take(i) + listOf(expandButton, addMoreButton)
                     rows[rows.size - 1] = lastRowWithButton
                     return rows

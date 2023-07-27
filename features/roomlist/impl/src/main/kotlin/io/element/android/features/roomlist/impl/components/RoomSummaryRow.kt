@@ -155,7 +155,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
 @Composable
 private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
     // Last Message
-    val attributedLastMessage = (room.lastMessage as? AnnotatedString)
+    val attributedLastMessage = room.lastMessage as? AnnotatedString
         ?: AnnotatedString(room.lastMessage.orEmpty().toString())
     Text(
         modifier = Modifier
@@ -186,10 +186,10 @@ class PercentRectangleSizeShape(private val percent: Float) : Shape {
         val halfPercent = percent / 2f
         val path = Path().apply {
             val rect = Rect(
-                0f,
-                size.height * halfPercent,
-                size.width,
-                size.height - (size.height * halfPercent)
+                left = 0f,
+                top = size.height * halfPercent,
+                right = size.width,
+                bottom = size.height * (1 - halfPercent)
             )
             addRect(rect)
             close()

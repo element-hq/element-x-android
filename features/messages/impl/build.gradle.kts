@@ -78,6 +78,5 @@ dependencies {
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(libs.test.mockk)
 
-    androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)
 }

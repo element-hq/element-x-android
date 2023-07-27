@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.currentRoomId
@@ -32,10 +33,10 @@ data class NotifiableMessageEvent(
     override val eventId: EventId,
     override val editedEventId: EventId?,
     override val canBeReplaced: Boolean,
+    val senderId: UserId,
     val noisy: Boolean,
     val timestamp: Long,
     val senderName: String?,
-    val senderId: String?,
     val body: String?,
     // We cannot use Uri? type here, as that could trigger a
     // NotSerializableException when persisting this to storage

@@ -100,7 +100,6 @@ class FakeMatrixRoom(
     private val _sentLocations = mutableListOf<SendLocationInvocation>()
     val sentLocations: List<SendLocationInvocation> = _sentLocations
 
-
     var invitedUserId: UserId? = null
         private set
 
@@ -128,9 +127,11 @@ class FakeMatrixRoom(
 
     override val timeline: MatrixTimeline = matrixTimeline
 
-    override fun open(): Result<Unit> {
-        return Result.success(Unit)
-    }
+    override fun subscribeToSync() = Unit
+
+    override fun unsubscribeFromSync() = Unit
+
+    override fun destroy() = Unit
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = simulateLongTask {
         userDisplayNameResult
@@ -282,8 +283,6 @@ class FakeMatrixRoom(
         _sentLocations.add(SendLocationInvocation(body, geoUri, description, zoomLevel, assetType))
         return sendLocationResult
     }
-
-    override fun close() = Unit
 
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable

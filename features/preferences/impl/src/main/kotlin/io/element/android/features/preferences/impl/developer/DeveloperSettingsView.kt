@@ -56,6 +56,12 @@ fun DeveloperSettingsView(
         RageshakePreferencesView(
             state = state.rageshakeState,
         )
+        PreferenceCategory(title = "Crash", showDivider = false) {
+            PreferenceText(
+                title = "Crash the app 💥",
+                onClick = { error("This crash is a test.") }
+            )
+        }
         val cache = state.cacheSize
         PreferenceCategory(title = "Cache", showDivider = false) {
             PreferenceText(

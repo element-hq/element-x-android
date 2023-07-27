@@ -29,16 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
+import io.element.android.features.location.api.internal.StaticMapUrlBuilder
 import io.element.android.features.location.api.internal.centerBottomEdge
-import io.element.android.features.location.api.internal.staticMapUrl
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
@@ -65,23 +65,22 @@ fun StaticMapView(
     ) {
         val context = LocalContext.current
         var retryHash by remember { mutableStateOf(0) }
+        val builder = remember { StaticMapUrlBuilder(context) }
         val painter = rememberAsyncImagePainter(
             model = if (constraints.isZero) {
                 // Avoid building a URL if any of the size constraints is zero (else it will thrown an exception).
                 null
             } else {
-                ImageRequest.Builder(LocalContext.current)
+                ImageRequest.Builder(context)
                     .data(
-                        staticMapUrl(
-                            context = context,
+                        builder.build(
                             lat = lat,
                             lon = lon,
                             zoom = zoom,
                             darkMode = darkMode,
-                            // Size the map based on DP rather than pixels, as otherwise the features and attribution
-                            // end up being illegibly tiny on high density displays.
-                            width = constraints.maxWidth.toDp().value.toInt(),
-                            height = constraints.maxHeight.toDp().value.toInt(),
+                            width = constraints.maxWidth,
+                            height = constraints.maxHeight,
+                            density = LocalDensity.current.density,
                         )
                     )
                     .size(width = constraints.maxWidth, height = constraints.maxHeight)

@@ -21,13 +21,16 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.use
 
 class RustNotificationService(
+    sessionId: SessionId,
     private val notificationClient: NotificationClient,
+    clock: SystemClock,
 ) : NotificationService {
-    private val notificationMapper: NotificationMapper = NotificationMapper()
+    private val notificationMapper: NotificationMapper = NotificationMapper(sessionId, clock)
 
     override fun getNotification(
         userId: SessionId,
@@ -36,9 +39,9 @@ class RustNotificationService(
         filterByPushRules: Boolean,
     ): Result<NotificationData?> {
         return runCatching {
-            val item = notificationClient.getNotification(roomId.value, eventId.value)
+            val item = notificationClient.getNotificationWithSlidingSync(roomId.value, eventId.value)
             item?.use {
-                notificationMapper.map(roomId, it)
+                notificationMapper.map(eventId, roomId, it)
             }
         }
     }

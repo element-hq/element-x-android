@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -55,7 +56,6 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.designsystem.R as DrawableR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -162,12 +162,12 @@ fun CreateRoomActionButtonsList(
 ) {
     Column(modifier = modifier) {
         CreateRoomActionButton(
-            iconRes = DrawableR.drawable.ic_groups,
+            iconRes = VectorIcons.Groups,
             text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
-            iconRes = DrawableR.drawable.ic_share,
+            iconRes = VectorIcons.Share,
             text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
             onClick = onInvitePeopleClicked,
         )

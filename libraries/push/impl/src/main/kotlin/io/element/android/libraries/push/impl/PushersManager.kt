@@ -103,33 +103,6 @@ class PushersManager @Inject constructor(
         return "{\"cs\":\"$secretForUser\"}"
     }
 
-    suspend fun registerEmailForPush(email: String) {
-        TODO()
-        /*
-        val currentSession = activeSessionHolder.getActiveSession()
-        val appName = appNameProvider.getAppName()
-        currentSession.pushersService().addEmailPusher(
-            email = email,
-            lang = localeProvider.current().language,
-            emailBranding = appName,
-            appDisplayName = appName,
-            deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE"
-        )
-        */
-    }
-
-    fun getPusherForCurrentSession() {}/*: Pusher? {
-        val session = activeSessionHolder.getSafeActiveSession() ?: return null
-        val deviceId = session.sessionParams.deviceId
-        return session.pushersService().getPushers().firstOrNull { it.deviceId == deviceId }
-    }
-    */
-
-    suspend fun unregisterEmailPusher(email: String) {
-        // val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        // currentSession.pushersService().removeEmailPusher(email)
-    }
-
     override suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
         matrixClient.pushersService().unsetHttpPusher()
     }

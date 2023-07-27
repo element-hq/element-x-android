@@ -36,6 +36,10 @@ dependencyResolutionManagement {
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
             }
         }
+        // To have immediate access to Rust SDK versions
+        maven {
+            url = URI("https://s01.oss.sonatype.org/content/repositories/releases")
+        }
         flatDir {
             dirs("libraries/matrix/libs")
         }
