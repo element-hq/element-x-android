@@ -48,12 +48,12 @@ fun Checkbox(
     colors: CheckboxColors = if (hasError) compoundErrorCheckBoxColors() else compoundCheckBoxColors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
-    var indeterminate by remember { mutableStateOf(indeterminate) }
+    var indeterminateState by remember { mutableStateOf(indeterminate) }
     androidx.compose.material3.TriStateCheckbox(
-        state = if (!checked && indeterminate) ToggleableState.Indeterminate else ToggleableState(checked),
+        state = if (!checked && indeterminateState) ToggleableState.Indeterminate else ToggleableState(checked),
         onClick = if (onCheckedChange != null) {
             {
-                indeterminate = false
+                indeterminateState = false
                 onCheckedChange(!checked)
             }
         } else {
