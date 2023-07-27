@@ -127,6 +127,7 @@ class RustMatrixTimeline(
     }
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
+        initLatch.await()
         runCatching {
             innerRoom.fetchMembers()
         }
