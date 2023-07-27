@@ -25,7 +25,7 @@
     <!-- Resource -->
     <issue id="MissingTranslation" severity="ignore" />
     <issue id="TypographyEllipsis" severity="error" />
-    <issue id="ImpliedQuantity" severity="warning" />
+    <issue id="ImpliedQuantity" severity="error" />
     <issue id="MissingQuantity" severity="warning" />
     <issue id="UnusedQuantity" severity="error" />
     <issue id="IconXmlAndPng" severity="error" />
