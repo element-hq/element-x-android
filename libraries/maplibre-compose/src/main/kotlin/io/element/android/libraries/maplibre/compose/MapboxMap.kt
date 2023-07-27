@@ -236,7 +236,7 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
             Lifecycle.Event.ON_DESTROY -> {
                 //handled in onDispose
             }
-            Lifecycle.Event.ON_ANY -> Unit
+            Lifecycle.Event.ON_ANY -> error("ON_ANY should never be used")
         }
         previousState.value = event
     }
