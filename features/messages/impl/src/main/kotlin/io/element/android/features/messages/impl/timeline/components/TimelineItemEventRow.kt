@@ -479,7 +479,7 @@ private fun ReplyToContent(
     val paddings = if (attachmentThumbnailInfo != null) {
         PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
     } else {
-        PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 4.dp)
+        PaddingValues(horizontal = 12.dp, vertical = 4.dp)
     }
     Row(
         modifier
