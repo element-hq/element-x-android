@@ -250,6 +250,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun canUserRedact(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserRedact(userId.value)
+        }
+    }
+
     override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
         return runCatching {
             innerRoom.canUserSendState(userId.value, type.map())

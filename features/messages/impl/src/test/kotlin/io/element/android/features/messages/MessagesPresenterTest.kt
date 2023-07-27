@@ -44,8 +44,11 @@ import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -83,9 +86,16 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = consumeItemsUntilTimeout().last()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
+            assertThat(initialState.roomName).isEqualTo(Async.Success(""))
+            assertThat(initialState.roomAvatar).isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", size = AvatarSize.TimelineRoom)))
+            assertThat(initialState.userHasPermissionToSendMessage).isTrue()
+            assertThat(initialState.userHasPermissionToRedact).isFalse()
+            assertThat(initialState.hasNetworkConnection).isTrue()
+            assertThat(initialState.snackbarMessage).isNull()
+            assertThat(initialState.inviteProgress).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.showReinvitePrompt).isFalse()
         }
     }
 
@@ -528,6 +538,18 @@ class MessagesPresenterTest {
             skipItems(1)
             assertThat(awaitItem().userHasPermissionToSendMessage).isFalse()
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - permission to redact`() = runTest {
+        val matrixRoom = FakeMatrixRoom(canRedact = true)
+        val presenter = createMessagePresenter(matrixRoom = matrixRoom)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = consumeItemsUntilTimeout().last()
+            assertThat(initialState.userHasPermissionToRedact).isTrue()
         }
     }
 

@@ -54,7 +54,11 @@ class ActionListPresenter @Inject constructor(
         fun handleEvents(event: ActionListEvents) {
             when (event) {
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
-                is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(event.event, target)
+                is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(
+                    timelineItem = event.event,
+                    userCanRedact = event.canRedact,
+                    target = target,
+                )
             }
         }
 
@@ -65,7 +69,11 @@ class ActionListPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.Event, target: MutableState<ActionListState.Target>) = launch {
+    private fun CoroutineScope.computeForMessage(
+        timelineItem: TimelineItem.Event,
+        userCanRedact: Boolean,
+        target: MutableState<ActionListState.Target>
+    ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
         val actions =
             when (timelineItem.content) {
@@ -102,7 +110,7 @@ class ActionListPresenter @Inject constructor(
                     if (!timelineItem.isMine) {
                         add(TimelineItemAction.ReportContent)
                     }
-                    if (timelineItem.isMine) {
+                    if (timelineItem.isMine || userCanRedact) {
                         add(TimelineItemAction.Redact)
                     }
                 }
