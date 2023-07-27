@@ -60,3 +60,11 @@ fun Dp.roundToPx(): Int = with(LocalDensity.current) { roundToPx() }
 fun Dp.scaleMax(): Dp = with(LocalDensity.current) {
     return this@scaleMax * fontScale.coerceAtMost(1f)
 }
+
+/**
+ * Return the minimum value between the receiver value and the value with fonScale applied.
+ */
+@Composable
+fun Dp.scaleMin(): Dp = with(LocalDensity.current) {
+    return this@scaleMin * fontScale.coerceAtLeast(1f)
+}
