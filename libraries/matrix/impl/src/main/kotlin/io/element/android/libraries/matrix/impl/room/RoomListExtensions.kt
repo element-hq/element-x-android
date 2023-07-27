@@ -46,11 +46,11 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
         result.stateStream
     }.buffer(Channel.UNLIMITED)
 
-fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<RoomListEntriesUpdate> =
+fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<List<RoomListEntriesUpdate>> =
     mxCallbackFlow {
         val listener = object : RoomListEntriesListener {
-            override fun onUpdate(roomEntriesUpdate: RoomListEntriesUpdate) {
-                trySendBlocking(roomEntriesUpdate)
+            override fun onUpdate(roomEntriesUpdates: List<RoomListEntriesUpdate>) {
+                trySendBlocking(roomEntriesUpdates)
             }
         }
         val result = entries(listener)

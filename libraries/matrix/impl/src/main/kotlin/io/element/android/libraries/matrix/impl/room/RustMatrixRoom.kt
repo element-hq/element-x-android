@@ -364,13 +364,16 @@ class RustMatrixRoom(
             )
         }
     }
-}
 
-//TODO handle cancellation, need refactoring of how we are catching errors
-private suspend fun sendAttachment(handle: () -> SendAttachmentJoinHandle): Result<Unit> {
-    return runCatching {
-        handle().use {
-            it.join()
+    //TODO handle cancellation, need refactoring of how we are catching errors
+    private suspend fun sendAttachment(handle: () -> SendAttachmentJoinHandle): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            handle().use {
+                it.join()
+            }
         }
     }
+
 }
+
+
