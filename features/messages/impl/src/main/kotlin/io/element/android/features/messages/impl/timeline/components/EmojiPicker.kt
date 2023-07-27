@@ -66,7 +66,11 @@ fun EmojiPicker(
 
     val emojiProvider = remember { GoogleEmojiProvider() }
     val categories = remember { emojiProvider.categories }
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f,
+        pageCount = { emojiProvider.categories.size }
+    )
     Column(modifier) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -88,7 +92,6 @@ fun EmojiPicker(
         }
 
         HorizontalPager(
-            pageCount = categories.size,
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
         ) { index ->

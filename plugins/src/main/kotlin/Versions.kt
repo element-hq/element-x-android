@@ -61,7 +61,7 @@ private const val versionPatch = 4
 object Versions {
     val versionCode = 4_000_000 + versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
     val versionName = "$versionMajor.$versionMinor.$versionPatch"
-    const val compileSdk = 33
+    const val compileSdk = 34
     const val targetSdk = 33
     const val minSdk = 23
     val javaCompileVersion = JavaVersion.VERSION_17
