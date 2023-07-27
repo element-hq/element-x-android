@@ -313,7 +313,7 @@ suffix `Presenter`,states MUST have a suffix `State`, etc. Also we want to have 
 
 ### Push
 
-**Note** Firebase Push is not yet implemented on the project.
+**Note** Firebase is implemented, but Unified Push is not yet fully implemented on the project, so this is not possible to choose this push provider in the app at the moment.
 
 Please see the dedicated [documentation](notifications.md) for more details.
 
@@ -342,8 +342,7 @@ We have 3 tests frameworks in place, and this should be sufficient to guarantee 
   file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewProvider to provide
   different states. See for instance the
   file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStateProvider.kt)
-    - Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the
-      class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
+- Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
 
 **Note** For now we want to avoid using class mocking (with library such as *mockk*), because this should be not necessary. We prefer to create Fake
 implementation of our interfaces. Mocking can be used to mock Android framework classes though, such as `Bitmap` for instance.
