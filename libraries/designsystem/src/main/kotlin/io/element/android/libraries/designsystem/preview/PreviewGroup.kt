@@ -26,6 +26,7 @@ object PreviewGroup {
     const val Dividers = "Dividers"
     const val FABs = "Floating Action Buttons"
     const val Icons = "Icons"
+    const val Lists = "Lists"
     const val Menus = "Menus"
     const val Preferences = "Preferences"
     const val Progress = "Progress Indicators"
