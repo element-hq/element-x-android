@@ -34,18 +34,18 @@ open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReact
 }
 
 fun anAggregatedReaction(
+    userId: UserId = UserId("@alice:server.org"),
     key: String = "👍",
     count: Int = 1,
     isHighlighted: Boolean = false,
 ): AggregatedReaction {
-    val alice = UserId("@alice:server.org")
     val senders = buildList {
         repeat(count) { index ->
             val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
             val date = Date()
             add(
                 AggregatedReactionSender(
-                    senderId = if (isHighlighted && index == 0) alice else UserId("@user$index:server.org"),
+                    senderId = if (isHighlighted && index == 0) userId else UserId("@user$index:server.org"),
                     timestamp = date,
                     sentTime = timeFormatter.format(date),
                 )
@@ -53,7 +53,7 @@ fun anAggregatedReaction(
         }
     }
     return AggregatedReaction(
-        currentUserId = alice,
+        currentUserId = userId,
         key = key,
         senders = senders
     )

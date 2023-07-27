@@ -185,13 +185,15 @@ internal fun TimelineItemReactionsLayoutPreview() = ElementPreview {
                 content = MessagesReactionsButtonContent.Text(
                     text = stringResource(id = R.string.screen_room_timeline_less_reactions)
                 ),
-                onClick = { },
+                onClick = {},
+                onLongClick = {}
             )
         },
         addMoreButton = {
             MessagesReactionButton(
                 content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-                onClick = {}
+                onClick = {},
+                onLongClick = {}
             )
         },
         reactions = {
@@ -200,7 +202,8 @@ internal fun TimelineItemReactionsLayoutPreview() = ElementPreview {
                     content = MessagesReactionsButtonContent.Reaction(
                         it
                     ),
-                    onClick = {}
+                    onClick = {},
+                    onLongClick = {}
                 )
             }
         }

@@ -67,8 +67,7 @@ fun aMessagesState() = MessagesState(
         eventSink = {},
     ),
     reactionSummaryState = ReactionSummaryState(
-        target = ReactionSummaryState.Target.None,
-        members = listOf<RoomMember>().toImmutableList(),
+        target = null,
         eventSink = {},
     ),
     hasNetworkConnection = true,

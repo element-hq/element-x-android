@@ -18,11 +18,13 @@ package io.element.android.features.messages.impl.timeline.model
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import java.util.Date
 
 data class AggregatedReactionSender(
     val senderId: UserId,
     val timestamp: Date,
-    val sentTime: String
+    val sentTime: String,
+    val user: MatrixUser? = null
 )
 

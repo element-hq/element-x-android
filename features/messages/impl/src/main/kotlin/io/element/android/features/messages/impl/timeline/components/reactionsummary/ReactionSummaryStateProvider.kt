@@ -34,12 +34,11 @@ open class ReactionSummaryStateProvider : PreviewParameterProvider<ReactionSumma
 fun anActionListState(): ReactionSummaryState {
     val reactions = aTimelineItemReactions(8, true).reactions
     return ReactionSummaryState(
-        target = ReactionSummaryState.Target.Summary(
+        target = ReactionSummaryState.Summary(
             reactions = reactions,
             selectedKey = reactions[0].key,
             selectedEventId = EventId("$1234"),
         ),
-        members = listOf<RoomMember>().toImmutableList(),
         eventSink = {}
     )
 }

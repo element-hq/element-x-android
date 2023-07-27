@@ -89,12 +89,14 @@ private fun TimelineItemReactionsView(
                 text = stringResource(id = if (expanded) R.string.screen_room_reactions_show_less else R.string.screen_room_reactions_show_more)
             ),
             onClick = onToggleExpandClick,
+            onLongClick = {}
         )
     },
     addMoreButton = {
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-            onClick = onMoreReactionsClick
+            onClick = onMoreReactionsClick,
+            onLongClick = {}
         )
     },
     reactions = {

@@ -86,14 +86,13 @@ fun ReactionSummaryView(
         state.eventSink(ReactionSummaryEvents.Clear)
     }
 
-    val summary = state.target as? ReactionSummaryState.Target.Summary
-    if (summary != null) {
+    if (state.target != null) {
         ModalBottomSheet(
             onDismissRequest = ::onDismiss,
             sheetState = sheetState,
             modifier = modifier
         ) {
-            SheetContent(summary = summary, members = state.members)
+            SheetContent(summary = state.target)
         }
     }
 }
@@ -101,8 +100,7 @@ fun ReactionSummaryView(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SheetContent(
-    summary: ReactionSummaryState.Target.Summary,
-    members: ImmutableList<RoomMember>,
+    summary: ReactionSummaryState.Summary,
     modifier: Modifier = Modifier,
 ) {
     val animationScope = rememberCoroutineScope()
@@ -150,12 +148,9 @@ private fun SheetContent(
         HorizontalPager(state = pagerState, pageCount = summary.reactions.size) { page ->
             LazyColumn(modifier = Modifier.fillMaxHeight()) {
                 items(summary.reactions[page].senders) { sender ->
-                    val member = members.firstOrNull { it.userId == sender.senderId }
-                    val user = MatrixUser(
-                        userId = sender.senderId,
-                        displayName = member?.displayName,
-                        avatarUrl = member?.avatarUrl
-                    )
+
+                    val user = sender.user ?: MatrixUser(userId = sender.senderId)
+
                     SenderRow(
                         avatarData = user.getAvatarData(AvatarSize.UserListItem),
                         name = user.displayName ?: user.userId.value,
@@ -278,5 +273,5 @@ fun SenderRow(
 fun SheetContentPreview(
     @PreviewParameter(ReactionSummaryStateProvider::class) state: ReactionSummaryState
 ) = ElementPreview {
-    SheetContent(summary = state.target as ReactionSummaryState.Target.Summary, members = listOf<RoomMember>().toImmutableList())
+    SheetContent(summary = state.target as ReactionSummaryState.Summary)
 }

@@ -57,10 +57,10 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun MessagesReactionButton(
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    onLongClick: () -> Unit = {},
+    onLongClick: () -> Unit,
     content: MessagesReactionsButtonContent,
+    modifier: Modifier = Modifier,
 ) {
     val buttonColor = if (content.isHighlighted) {
         ElementTheme.colors.bgSubtlePrimary
@@ -168,7 +168,8 @@ private fun ReactionContent(
 internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) = ElementPreview {
     MessagesReactionButton(
         content = MessagesReactionsButtonContent.Reaction(reaction),
-        onClick = {}
+        onClick = {},
+        onLongClick = {}
     )
 }
 
@@ -178,11 +179,13 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
     Row {
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-            onClick = {}
+            onClick = {},
+            onLongClick = {}
         )
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Text("12 more"),
-            onClick = {}
+            onClick = {},
+            onLongClick = {}
         )
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Reaction(
@@ -190,7 +193,8 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
                     key = "A very long reaction with many characters that should be truncated"
                 )
             ),
-            onClick = {}
+            onClick = {},
+            onLongClick = {}
         )
     }
 }

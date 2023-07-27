@@ -22,17 +22,13 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
 data class ReactionSummaryState(
-    val target: Target,
-    val members: ImmutableList<RoomMember>,
+    val target: Summary?,
     val eventSink: (ReactionSummaryEvents) -> Unit
 ){
-    sealed interface Target {
-        object None : Target
-        data class Summary(
-            val reactions: List<AggregatedReaction>,
-            val selectedKey: String,
-            val selectedEventId: EventId
-        ) : Target
-    }
+    data class Summary(
+        val reactions: List<AggregatedReaction>,
+        val selectedKey: String,
+        val selectedEventId: EventId
+    )
 }
 
