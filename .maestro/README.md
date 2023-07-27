@@ -18,7 +18,7 @@ To setup, please refer at [https://maestro.mobile.dev](https://maestro.mobile.de
 
 From root dir of the project
 
-*Note: Since Element X does not allow account creation nor room creation, we have to use an existing account with an existing room to run maestro test suite. So to run locally, please replace `user` and `123` with your test matrix.org account credentials, and `my room` with one of a room this account has join. Note that the test will send messages to this room.*
+*Note: Since Element X does not allow account creation, we have to use an existing account to run maestro test suite. So to run locally, please replace `user` and `123` with your test matrix.org account credentials, and `my room` with one of a room this account has joined. Note that the test will send messages to this room.*
 
 ```shell
 maestro test \
