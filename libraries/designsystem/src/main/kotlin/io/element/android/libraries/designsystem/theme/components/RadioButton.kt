@@ -26,6 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.theme.ElementTheme
+
+// Designs in https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=425%3A24202&mode=design&t=qb99xBP5mwwCtGkN-1
 
 @Composable
 fun RadioButton(
@@ -33,7 +36,7 @@ fun RadioButton(
     onClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    colors: RadioButtonColors = RadioButtonDefaults.colors(),
+    colors: RadioButtonColors = compoundRadioButtonColors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     androidx.compose.material3.RadioButton(
@@ -43,6 +46,15 @@ fun RadioButton(
         enabled = enabled,
         colors = colors,
         interactionSource = interactionSource,
+    )
+}
+
+@Composable
+internal fun compoundRadioButtonColors(): RadioButtonColors {
+    return RadioButtonDefaults.colors(
+        unselectedColor = ElementTheme.colors.borderInteractivePrimary,
+        disabledUnselectedColor = ElementTheme.colors.borderDisabled,
+        disabledSelectedColor = ElementTheme.colors.iconDisabled,
     )
 }
 
