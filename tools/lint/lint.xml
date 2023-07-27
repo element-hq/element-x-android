@@ -25,7 +25,7 @@
     <!-- Resource -->
     <issue id="MissingTranslation" severity="ignore" />
     <issue id="TypographyEllipsis" severity="error" />
-    <issue id="ImpliedQuantity" severity="warning" />
+    <issue id="ImpliedQuantity" severity="error" />
     <issue id="MissingQuantity" severity="warning" />
     <issue id="UnusedQuantity" severity="error" />
     <issue id="IconXmlAndPng" severity="error" />
@@ -43,24 +43,11 @@
         <ignore path="**/src/debug/**" />
     </issue>
 
-    <issue id="UnusedResources" severity="warning">
+    <issue id="UnusedResources" severity="error">
         <!-- Ignore unused strings resource from localazy -->
         <ignore path="**/localazy.xml" />
         <!-- Ignore unused resource in debug build type -->
         <ignore path="**/src/debug/**" />
-
-        <!-- Following resources are for F-Droid variant only, so ignore for GPlay -->
-        <ignore regexp="settings_troubleshoot_test_service_boot_*" />
-        <ignore regexp="settings_troubleshoot_test_bg_restricted_*" />
-        <ignore regexp="settings_troubleshoot_test_battery_*" />
-
-        <!-- Following resources are for GPlay variant only, so ignore for F-Droid -->
-        <ignore regexp="settings_troubleshoot_test_play_services_" />
-        <ignore regexp="settings_troubleshoot_test_push_loop_" />
-        <ignore regexp="settings_troubleshoot_test_token_registration_" />
-        <ignore regexp="settings_troubleshoot_test_fcm_" />
-        <ignore regexp="no_valid_google_play_services_apk" />
-        <ignore regexp="sas_error_unknown" />
     </issue>
 
     <!-- UX -->
@@ -81,7 +68,6 @@
     <issue id="DisableBaselineAlignment" severity="error" />
     <issue id="ScrollViewSize" severity="error" />
     <issue id="NegativeMargin" severity="error" />
-    <issue id="UseCompatTextViewDrawableXml" severity="error" />
 
     <!-- RTL -->
     <issue id="RtlEnabled" severity="error" />
