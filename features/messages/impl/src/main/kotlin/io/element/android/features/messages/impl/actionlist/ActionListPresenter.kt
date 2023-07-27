@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
+import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.collections.immutable.toImmutableList
@@ -48,7 +49,10 @@ class ActionListPresenter @Inject constructor(
         }
 
         val displayEmojiReactions by remember {
-            derivedStateOf { (target.value as? ActionListState.Target.Success)?.event?.isRemote == true }
+            derivedStateOf {
+                val event = (target.value as? ActionListState.Target.Success)?.event
+                event?.isRemote == true && event.content.canReact()
+            }
         }
 
         fun handleEvents(event: ActionListEvents) {
