@@ -145,7 +145,7 @@ Then you can launch the build script from the matrix-rust-components-kotlin repo
 - `-m` Option to select the gradle module to build. Default is sdk.
 - `-t` Option to to select an android target to build against. Default will build for all targets.
 
-So for example to build the sdk against aarch64-linux-android target and copy the generated aar to ElementX project:
+So for example to build the sdk against aarch64-linux-android target and copy the generated aar to Element X project:
 
 ```shell
 ./scripts/build.sh -p [YOUR MATRIX RUST SDK PATH] -t aarch64-linux-android -o [YOUR element-x-android PATH]/libraries/rustsdk/matrix-rust-sdk.aar

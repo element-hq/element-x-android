@@ -13,7 +13,7 @@
 ## Overview
 
 - Screenshot tests are tests which record the content of a rendered screen and verify subsequent runs to check if the screen renders differently.
-- ElementX uses [Paparazzi](https://github.com/cashapp/paparazzi) to render, record and verify Composable. All Composable Preview will be use to make screenshot test, thanks to the usage of [Showkase](https://github.com/airbnb/Showkase).
+- Element X uses [Paparazzi](https://github.com/cashapp/paparazzi) to render, record and verify Composable. All Composable Preview will be use to make screenshot test, thanks to the usage of [Showkase](https://github.com/airbnb/Showkase).
 - The screenshot verification occurs on every pull request as part of the `tests.yml` workflow.
 
 ## Setup

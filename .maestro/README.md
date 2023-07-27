@@ -18,7 +18,7 @@ To setup, please refer at [https://maestro.mobile.dev](https://maestro.mobile.de
 
 From root dir of the project
 
-*Note: Since ElementX does not allow account creation nor room creation, we have to use an existing account with an existing room to run maestro test suite. So to run locally, please replace `user` and `123` with your test matrix.org account credentials, and `my room` with one of a room this account has join. Note that the test will send messages to this room.*
+*Note: Since Element X does not allow account creation nor room creation, we have to use an existing account with an existing room to run maestro test suite. So to run locally, please replace `user` and `123` with your test matrix.org account credentials, and `my room` with one of a room this account has join. Note that the test will send messages to this room.*
 
 ```shell
 maestro test \
@@ -39,7 +39,7 @@ Test result will be printed on the console, and screenshots will be generated at
 
 Tests are yaml files. Generally each yaml file should leave the app in the same screen than at the beginning.
 
-Start the ElementX app and run this command to help writing test.
+Start the Element X app and run this command to help writing test.
 
 ```shell
 maestro studio
