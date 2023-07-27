@@ -49,8 +49,8 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
 fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<List<RoomListEntriesUpdate>> =
     mxCallbackFlow {
         val listener = object : RoomListEntriesListener {
-            override fun onUpdate(roomEntriesUpdates: List<RoomListEntriesUpdate>) {
-                trySendBlocking(roomEntriesUpdates)
+            override fun onUpdate(roomEntriesUpdate: List<RoomListEntriesUpdate>) {
+                trySendBlocking(roomEntriesUpdate)
             }
         }
         val result = entries(listener)
