@@ -96,6 +96,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                     data = kind.msg.map()
                 )
             }
+            else -> UnknownContent
         }
     }
 }

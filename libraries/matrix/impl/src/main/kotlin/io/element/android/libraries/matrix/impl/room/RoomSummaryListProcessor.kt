@@ -50,12 +50,14 @@ class RoomSummaryListProcessor(
         initLatch.complete(Unit)
     }
 
-    suspend fun postUpdate(update: RoomListEntriesUpdate) {
+    suspend fun postUpdate(updates: List<RoomListEntriesUpdate>) {
         // Makes sure to process first entries before update.
         initLatch.await()
         updateRoomSummaries {
-            Timber.v("Update rooms from postUpdate ($update) on ${Thread.currentThread()}")
-            applyUpdate(update)
+            Timber.v("Update rooms from postUpdates (with ${updates.size} items) on ${Thread.currentThread()}")
+            updates.forEach { update ->
+                applyUpdate(update)
+            }
         }
     }
 
