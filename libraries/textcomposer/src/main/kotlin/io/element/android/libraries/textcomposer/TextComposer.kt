@@ -49,6 +49,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -114,8 +115,8 @@ fun TextComposer(
         Spacer(modifier = Modifier.width(12.dp))
         val roundCornerSmall = 20.dp.applyScaleUp()
         val roundCornerLarge = 28.dp.applyScaleUp()
+        var lineCount by remember { mutableIntStateOf(0) }
 
-        var lineCount by remember { mutableStateOf(0) }
         val roundedCornerSize = remember(lineCount, composerMode) {
             if (lineCount > 1 || composerMode is MessageComposerMode.Special) {
                 roundCornerSmall

@@ -15,6 +15,7 @@
  */
 
 @file:OptIn(ExperimentalMaterialApi::class)
+@file:Suppress("UsingMaterialAndMaterial3Libraries")
 
 package io.element.android.libraries.matrix.ui.components
 

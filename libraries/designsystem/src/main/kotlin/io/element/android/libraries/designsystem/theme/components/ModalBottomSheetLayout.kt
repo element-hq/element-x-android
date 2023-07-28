@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+// This is actually expected, as we should remove this component soon and use ModalBottomSheet instead
+@file:Suppress("UsingMaterialAndMaterial3Libraries")
+
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.background
