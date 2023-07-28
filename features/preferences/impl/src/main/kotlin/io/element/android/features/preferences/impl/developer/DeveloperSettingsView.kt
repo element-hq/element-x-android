@@ -96,12 +96,12 @@ fun FeatureListContent(
 
 @Preview
 @Composable
-fun DeveloperSettingsViewLightPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
+internal fun DeveloperSettingsViewLightPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun DeveloperSettingsViewDarkPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
+internal fun DeveloperSettingsViewDarkPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

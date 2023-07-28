@@ -328,12 +328,12 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
 
 @LargeHeightPreview
 @Composable
-fun RoomDetailsLightPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
+internal fun RoomDetailsLightPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @LargeHeightPreview
 @Composable
-fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
+internal fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

@@ -70,7 +70,7 @@ fun InfoListItemMolecule(
 
 @DayNightPreviews
 @Composable
-fun InfoListItemMoleculePreview() {
+internal fun InfoListItemMoleculePreview() {
     ElementPreview {
         val color = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray
         Column(

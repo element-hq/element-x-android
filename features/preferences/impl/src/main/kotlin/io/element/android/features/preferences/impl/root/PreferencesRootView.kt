@@ -129,12 +129,12 @@ fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
 
 @LargeHeightPreview
 @Composable
-fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
+internal fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewLight { ContentToPreview(matrixUser) }
 
 @LargeHeightPreview
 @Composable
-fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
+internal fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }
 
 @Composable

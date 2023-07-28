@@ -72,7 +72,3 @@ fun String.ellipsize(length: Int): String {
 
     return "${this.take(length)}…"
 }
-
-inline fun <reified R> Any?.takeAs(): R? {
-    return takeIf { it is R } as R?
-}

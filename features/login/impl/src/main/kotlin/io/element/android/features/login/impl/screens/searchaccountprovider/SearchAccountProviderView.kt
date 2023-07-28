@@ -211,12 +211,12 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
 
 @Preview
 @Composable
-fun SearchAccountProviderViewLightPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) =
+internal fun SearchAccountProviderViewLightPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun SearchAccountProviderViewDarkPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) =
+internal fun SearchAccountProviderViewDarkPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

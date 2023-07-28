@@ -75,8 +75,8 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     }
 
     interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(identifier: String, room: MatrixRoom) = Unit
-        fun onFlowReleased(identifier: String, room: MatrixRoom) = Unit
+        fun onFlowCreated(identifier: String, room: MatrixRoom)
+        fun onFlowReleased(identifier: String, room: MatrixRoom)
     }
 
     data class Inputs(
@@ -115,7 +115,8 @@ class RoomLoadedFlowNode @AssistedInject constructor(
         room.updateMembers()
             .onFailure {
                 Timber.e(it, "Fail to fetch members for room ${room.roomId}")
-            }.onSuccess {
+            }
+            .onSuccess {
                 Timber.v("Success fetching members for room ${room.roomId}")
             }
     }

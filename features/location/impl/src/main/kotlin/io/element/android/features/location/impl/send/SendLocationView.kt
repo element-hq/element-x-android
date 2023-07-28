@@ -224,7 +224,7 @@ fun SendLocationView(
 
 @DayNightPreviews
 @Composable
-fun SendLocationViewPreview(
+internal fun SendLocationViewPreview(
     @PreviewParameter(SendLocationStateProvider::class) state: SendLocationState
 ) = ElementPreview {
     SendLocationView(

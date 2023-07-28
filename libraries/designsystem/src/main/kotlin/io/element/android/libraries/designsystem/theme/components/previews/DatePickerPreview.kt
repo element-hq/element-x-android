@@ -44,7 +44,7 @@ internal fun DatePickerPreviewDark() {
 @Composable
 private fun ContentToPreview() {
     val state = rememberDatePickerState(
-        initialSelectedDateMillis = 1672578000000L,
+        initialSelectedDateMillis = 1_672_578_000_000L,
     )
     AlertDialogContent(
         buttons = { /*TODO*/ },

@@ -27,7 +27,7 @@ import java.util.Date
 
 class TimelineEncryptedHistoryPostProcessorTest {
 
-    private val defaultLastLoginTimestamp = Date(1689061264L)
+    private val defaultLastLoginTimestamp = Date(1_689_061_264L)
 
     @Test
     fun `given an unencrypted room, nothing is done`() {

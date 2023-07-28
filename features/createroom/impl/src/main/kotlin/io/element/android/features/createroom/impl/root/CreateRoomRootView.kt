@@ -205,12 +205,12 @@ fun CreateRoomActionButton(
 
 @Preview
 @Composable
-fun CreateRoomRootViewLightPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) =
+internal fun CreateRoomRootViewLightPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun CreateRoomRootViewDarkPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) =
+internal fun CreateRoomRootViewDarkPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

@@ -91,12 +91,12 @@ fun GroupHeaderView(
 
 @Preview
 @Composable
-fun GroupHeaderViewLightPreview() =
+internal fun GroupHeaderViewLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun GroupHeaderViewDarkPreview() =
+internal fun GroupHeaderViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @Composable

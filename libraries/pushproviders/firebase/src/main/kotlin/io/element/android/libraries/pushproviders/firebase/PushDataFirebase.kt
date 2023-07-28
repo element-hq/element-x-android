@@ -36,7 +36,7 @@ import io.element.android.libraries.pushproviders.api.PushData
 data class PushDataFirebase(
     val eventId: String?,
     val roomId: String?,
-    var unread: Int?,
+    val unread: Int?,
     val clientSecret: String?
 )
 

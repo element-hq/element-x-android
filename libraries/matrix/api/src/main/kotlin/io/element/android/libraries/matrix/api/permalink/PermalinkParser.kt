@@ -95,9 +95,9 @@ object PermalinkParser {
         return if (signUrl.isNullOrEmpty().not() && email.isNullOrEmpty().not()) {
             try {
                 val signValidUri = Uri.parse(signUrl)
-                val identityServerHost = signValidUri.authority ?: throw IllegalArgumentException()
-                val token = signValidUri.getQueryParameter("token") ?: throw IllegalArgumentException()
-                val privateKey = signValidUri.getQueryParameter("private_key") ?: throw IllegalArgumentException()
+                val identityServerHost = signValidUri.authority ?: throw IllegalArgumentException("missing `authority`")
+                val token = signValidUri.getQueryParameter("token") ?: throw IllegalArgumentException("missing `token`")
+                val privateKey = signValidUri.getQueryParameter("private_key") ?: throw IllegalArgumentException("missing `private_key`")
                 PermalinkData.RoomEmailInviteLink(
                     roomId = identifier,
                     email = email!!,
@@ -137,7 +137,8 @@ object PermalinkParser {
             .parameterList
             .filter {
                 it.mParameter == "via"
-            }.map {
+            }
+            .map {
                 URLDecoder.decode(it.mValue, "UTF-8")
             }
     }

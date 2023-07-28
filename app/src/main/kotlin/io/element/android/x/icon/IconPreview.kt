@@ -28,7 +28,7 @@ import io.element.android.x.R
 
 @Preview
 @Composable
-fun IconPreview(
+internal fun IconPreview(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -39,7 +39,7 @@ fun IconPreview(
 
 @Preview
 @Composable
-fun RoundIconPreview(
+internal fun RoundIconPreview(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.clip(shape = CircleShape)) {
