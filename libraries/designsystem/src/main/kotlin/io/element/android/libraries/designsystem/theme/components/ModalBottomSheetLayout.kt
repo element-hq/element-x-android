@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -111,7 +112,7 @@ private fun ContentToPreview() {
     ModalBottomSheetLayout(
         modifier = Modifier.height(140.dp),
         displayHandle = true,
-        sheetState = ModalBottomSheetState(ModalBottomSheetValue.Expanded),
+        sheetState = ModalBottomSheetState(ModalBottomSheetValue.Expanded, density = LocalDensity.current),
         sheetContent = {
             Text(text = "Sheet Content", modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)

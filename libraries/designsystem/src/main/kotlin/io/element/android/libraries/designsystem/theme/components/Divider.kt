@@ -35,7 +35,7 @@ fun Divider(
     thickness: Dp = ElementDividerDefaults.thickness,
     color: Color = DividerDefaults.color,
 ) {
-    androidx.compose.material3.Divider(
+    androidx.compose.material3.HorizontalDivider(
         modifier = modifier,
         thickness = thickness,
         color = color,

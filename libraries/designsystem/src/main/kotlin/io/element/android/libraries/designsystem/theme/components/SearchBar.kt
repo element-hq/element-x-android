@@ -62,7 +62,7 @@ fun <T> SearchBar(
     showBackButton: Boolean = true,
     resultState: SearchBarResultState<T> = SearchBarResultState.NotSearching(),
     shape: Shape = SearchBarDefaults.inputFieldShape,
-    tonalElevation: Dp = SearchBarDefaults.Elevation,
+    tonalElevation: Dp = SearchBarDefaults.TonalElevation,
     windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     inactiveColors: SearchBarColors = ElementSearchBarDefaults.inactiveColors(),

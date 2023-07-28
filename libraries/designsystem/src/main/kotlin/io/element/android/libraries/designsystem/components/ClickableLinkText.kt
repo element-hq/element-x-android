@@ -109,7 +109,7 @@ private fun ContentToPreview() {
         linkAnnotationTag = "",
         onClick = {},
         onLongClick = {},
-        interactionSource = MutableInteractionSource(),
+        interactionSource = remember { MutableInteractionSource() },
     )
 }
 

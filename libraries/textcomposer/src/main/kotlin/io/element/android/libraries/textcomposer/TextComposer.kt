@@ -288,7 +288,7 @@ private fun EditingModeView(
                 .clickable(
                     enabled = true,
                     onClick = onResetComposerMode,
-                    interactionSource = MutableInteractionSource(),
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
                 ),
         )
@@ -351,7 +351,7 @@ private fun ReplyToModeView(
                 .clickable(
                     enabled = true,
                     onClick = onResetComposerMode,
-                    interactionSource = MutableInteractionSource(),
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
                 ),
         )
@@ -390,7 +390,7 @@ private fun BoxScope.SendButton(
     composerMode: MessageComposerMode,
     modifier: Modifier = Modifier,
 ) {
-    val interactionSource = MutableInteractionSource()
+    val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
             .clip(CircleShape)
