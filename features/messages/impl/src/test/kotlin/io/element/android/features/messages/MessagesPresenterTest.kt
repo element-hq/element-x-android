@@ -548,8 +548,9 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilTimeout().last()
+            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedact }.last()
             assertThat(initialState.userHasPermissionToRedact).isTrue()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
