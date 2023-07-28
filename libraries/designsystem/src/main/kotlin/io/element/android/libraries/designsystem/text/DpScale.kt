@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.WithFontScale
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
@@ -49,71 +50,77 @@ fun Dp.applyScaleUp(): Dp = with(LocalDensity.current) {
     return this@applyScaleUp * fontScale.coerceAtLeast(1f)
 }
 
-@Preview(fontScale = 0.75f)
+@Preview
 @Composable
-fun DpScalePreview_0_75f() = ElementPreviewLight {
-    val fontSizeInDp = 16.dp
-    Column(
-        modifier = Modifier.padding(4.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp)
-    ) {
-        Text(
-            text = "A text should have a size of 16.sp",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.toSp())
-        )
-        Text(
-            text = "A text should have the same size (applyScaleUp)",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleUp().toSp())
-        )
-        Text(
-            text = "A text should be smaller (applyScaleDown)",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleDown().toSp())
-        )
+fun DpScalePreview_0_75f() = WithFontScale(0.75f) {
+    ElementPreviewLight {
+        val fontSizeInDp = 16.dp
+        Column(
+            modifier = Modifier.padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = "Text with size of 16.sp",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.toSp())
+            )
+            Text(
+                text = "Text with the same size (applyScaleUp)",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleUp().toSp())
+            )
+            Text(
+                text = "Text with a smaller size (applyScaleDown)",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleDown().toSp())
+            )
+        }
     }
 }
 
-@Preview(fontScale = 1.0f)
+@Preview
 @Composable
-fun DpScalePreview_1_0f() = ElementPreviewLight {
-    val fontSizeInDp = 16.dp
-    Column(
-        modifier = Modifier.padding(4.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp)
-    ) {
-        Text(
-            text = "A text with a size of 16.sp",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.toSp())
-        )
-        Text(
-            text = "A text with the same size (applyScaleUp)",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleUp().toSp())
-        )
-        Text(
-            text = "A text with the same size (applyScaleDown)",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleDown().toSp())
-        )
+fun DpScalePreview_1_0f() = WithFontScale(1f) {
+    ElementPreviewLight {
+        val fontSizeInDp = 16.dp
+        Column(
+            modifier = Modifier.padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = "Text with size of 16.sp",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.toSp())
+            )
+            Text(
+                text = "Text with the same size (applyScaleUp)",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleUp().toSp())
+            )
+            Text(
+                text = "Text with the same size (applyScaleDown)",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleDown().toSp())
+            )
+        }
     }
 }
 
-@Preview(fontScale = 1.5f)
+@Preview
 @Composable
-fun DpScalePreview_1_5f() = ElementPreviewLight {
-    val fontSizeInDp = 16.dp
-    Column(
-        modifier = Modifier.padding(4.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp)
-    ) {
-        Text(
-            text = "A text with a size of 16.sp",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.toSp())
-        )
-        Text(
-            text = "A text with a bigger size (applyScaleUp)",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleUp().toSp())
-        )
-        Text(
-            text = "A text with the same size (applyScaleDown)",
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleDown().toSp())
-        )
+fun DpScalePreview_1_5f() = WithFontScale(1.5f) {
+    ElementPreviewLight {
+        val fontSizeInDp = 16.dp
+        Column(
+            modifier = Modifier.padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = "Text with size of 16.sp",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.toSp())
+            )
+            Text(
+                text = "Text with a bigger size (applyScaleUp)",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleUp().toSp())
+            )
+            Text(
+                text = "Text with the same size (applyScaleDown)",
+                style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSizeInDp.applyScaleDown().toSp())
+            )
+        }
     }
 }
