@@ -39,6 +39,7 @@ import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.compound.forceLineHeight
 import timber.log.Timber
 
 @Composable
