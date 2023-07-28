@@ -16,7 +16,7 @@ jobs:
   tests:
     name: Runs unit tests
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'merge_group' || (github.event_name == 'merge_group' && github.event.merge_group.base_ref != 'refs/heads/develop') }}
+    if: ${{ github.event.merge_group.base_ref != 'refs/heads/develop' }}
 
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:

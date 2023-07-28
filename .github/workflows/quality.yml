@@ -16,7 +16,7 @@ jobs:
   checkScript:
     name: Search for forbidden patterns
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'merge_group' || (github.event_name == 'merge_group' && github.event.merge_group.base_ref != 'refs/heads/develop') }}
+    if: ${{ github.event.merge_group.base_ref != 'refs/heads/develop' }}
     steps:
       - uses: actions/checkout@v3
       - name: Run code quality check suite
@@ -25,7 +25,7 @@ jobs:
   check:
     name: Project Check Suite
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'merge_group' || (github.event_name == 'merge_group' && github.event.merge_group.base_ref != 'refs/heads/develop') }}
+    if: ${{ github.event.merge_group.base_ref != 'refs/heads/develop' }}
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('check-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-develop-{0}', github.sha) || format('check-{0}', github.ref) }}

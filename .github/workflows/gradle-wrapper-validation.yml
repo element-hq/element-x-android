@@ -8,7 +8,7 @@ on:
 jobs:
   validation:
     name: "Validation"
-    if: ${{ github.event_name != 'merge_group' || (github.event_name == 'merge_group' && github.event.merge_group.base_ref != 'refs/heads/develop') }}
+    if: ${{ github.event.merge_group.base_ref != 'refs/heads/develop' }}
     runs-on: ubuntu-latest
     # No concurrency required, this is a prerequisite to other actions and should run every time.
     steps:
