@@ -112,8 +112,6 @@ fun ListItem(
     )
 }
 
-// region: no content at the sides
-
 internal class ListItemPreviewSimple {
     @Preview(name = "List item (3 lines) - Simple", group = PreviewGroup.Lists)
     @Composable
@@ -289,10 +287,12 @@ internal class ListItemPreviewDisabled {
     )
 }
 
+@Suppress("ModifierMissing")
 private object PreviewItems {
 
     @Composable
     fun ThreeLinesListItemPreview(
+        modifier: Modifier = Modifier,
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
     ) {
@@ -302,12 +302,14 @@ private object PreviewItems {
                 supportingContent = PreviewItems.text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
+                modifier = modifier,
             )
         }
     }
 
     @Composable
     fun TwoLinesListItemPreview(
+        modifier: Modifier = Modifier,
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
     ) {
@@ -317,12 +319,14 @@ private object PreviewItems {
                 supportingContent = PreviewItems.textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
+                modifier = modifier,
             )
         }
     }
 
     @Composable
     fun OneLineListItemPreview(
+        modifier: Modifier = Modifier,
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
         enabled: Boolean = true,
@@ -335,6 +339,7 @@ private object PreviewItems {
                 trailingContent = trailingContent,
                 enabled = enabled,
                 hasError = hasError,
+                modifier = modifier,
             )
         }
     }
