@@ -17,13 +17,11 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -226,22 +224,28 @@ internal fun RoomHeaderSection(
     roomAlias: String?,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(modifier = Modifier.size(70.dp)) {
-            Avatar(
-                avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Avatar(
+            avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
+            modifier = Modifier.size(70.dp)
+        )
         Spacer(modifier = Modifier.height(24.dp))
-        Text(roomName, style = ElementTheme.typography.fontHeadingLgBold)
+        Text(
+            text = roomName,
+            style = ElementTheme.typography.fontHeadingLgBold,
+            textAlign = TextAlign.Center,
+        )
         if (roomAlias != null) {
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = roomAlias,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 textAlign = TextAlign.Center,
             )
         }
