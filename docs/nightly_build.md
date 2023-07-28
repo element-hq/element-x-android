@@ -10,11 +10,11 @@
 
 ## Configuration
 
-The nightly build will contain what's on develop, in release mode, for the main variant. It is signed using a dedicated signature, and has a dedicated appId (`io.element.android.x.nightly`), so it can be installed along with the production version of ElementX Android. The only other difference compared to ElementX Android is a different app name. We do not want to change the app name since it will also affect some strings in the app, and we do want to do that. (TODO today, the app name is changed.)
+The nightly build will contain what's on develop, in release mode, for the main variant. It is signed using a dedicated signature, and has a dedicated appId (`io.element.android.x.nightly`), so it can be installed along with the production version of Element X Android. The only other difference compared to ElementX Android is a different app name. We do not want to change the app name since it will also affect some strings in the app, and we do want to do that. (TODO today, the app name is changed.)
 
 Nightly builds are built and released to Firebase every days, and automatically.
 
-This is recommended to exclusively use this app, with your main account, instead of ElementX Android, and fallback to ElementX Android just in case of regression, to discover as soon as possible any regression, and report it to the team. To avoid double notification, you may want to disable the notification from the Element Android production version. Just open Element Android, navigate to `Settings/Notifications` and uncheck `Enable notifications for this session` (TODO Not supported yet).
+This is recommended to exclusively use this app, with your main account, instead of Element X Android, and fallback to ElementX Android just in case of regression, to discover as soon as possible any regression, and report it to the team. To avoid double notification, you may want to disable the notification from the Element Android production version. Just open Element Android, navigate to `Settings/Notifications` and uncheck `Enable notifications for this session` (TODO Not supported yet).
 
 *Note:* Due to a limitation of Firebase, the nightly build is the universal build, which means that the size of the APK is a bit bigger, but this should not have any other side effect.
 
