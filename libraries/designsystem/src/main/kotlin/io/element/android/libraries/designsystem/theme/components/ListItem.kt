@@ -112,180 +112,180 @@ fun ListItem(
     )
 }
 
-internal class ListItemPreviewSimple {
-    @Preview(name = "List item (3 lines) - Simple", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview()
+// region: Simple list item
+@Preview(name = "List item (3 lines) - Simple", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesSimplePreview() = PreviewItems.ThreeLinesListItemPreview()
 
-    @Preview(name = "List item (2 lines) - Simple", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview()
+@Preview(name = "List item (2 lines) - Simple", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesSimplePreview() = PreviewItems.TwoLinesListItemPreview()
 
-    @Preview(name = "List item (1 line) - Simple", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview()  = PreviewItems.OneLineListItemPreview()
-}
+@Preview(name = "List item (1 line) - Simple", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineSimplePreview()  = PreviewItems.OneLineListItemPreview()
+// endregion
 
-internal class ListItemPreviewTrailingCheckbox {
-    @Preview(name = "List item (3 lines) - Trailing Checkbox", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(trailingContent = PreviewItems.checkbox())
+// region: Trailing Checkbox
+@Preview(name = "List item (3 lines) - Trailing Checkbox", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesTrailingCheckBoxPreview() = PreviewItems.ThreeLinesListItemPreview(trailingContent = PreviewItems.checkbox())
 
-    @Preview(name = "List item (2 lines) - Trailing Checkbox", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(trailingContent = PreviewItems.checkbox())
+@Preview(name = "List item (2 lines) - Trailing Checkbox", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesTrailingCheckBoxPreview() = PreviewItems.TwoLinesListItemPreview(trailingContent = PreviewItems.checkbox())
 
-    @Preview(name = "List item (1 line) - Trailing Checkbox", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(trailingContent = PreviewItems.checkbox())
-}
+@Preview(name = "List item (1 line) - Trailing Checkbox", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineTrailingCheckBoxPreview() = PreviewItems.OneLineListItemPreview(trailingContent = PreviewItems.checkbox())
+// endregion
 
-internal class ListItemPreviewTrailingRadioButton {
-    @Preview(name = "List item (3 lines) - Trailing RadioButton", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(trailingContent = PreviewItems.radioButton())
+// region: Trailing RadioButton
+@Preview(name = "List item (3 lines) - Trailing RadioButton", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesTrailingRadioButtonPreview() = PreviewItems.ThreeLinesListItemPreview(trailingContent = PreviewItems.radioButton())
 
-    @Preview(name = "List item (2 lines) - Trailing RadioButton", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(trailingContent = PreviewItems.radioButton())
+@Preview(name = "List item (2 lines) - Trailing RadioButton", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesTrailingRadioButtonPreview() = PreviewItems.TwoLinesListItemPreview(trailingContent = PreviewItems.radioButton())
 
-    @Preview(name = "List item (1 line) - Trailing RadioButton", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(trailingContent = PreviewItems.radioButton())
-}
+@Preview(name = "List item (1 line) - Trailing RadioButton", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineTrailingRadioButtonPreview() = PreviewItems.OneLineListItemPreview(trailingContent = PreviewItems.radioButton())
+// endregion
 
-internal class ListItemPreviewTrailingSwitch {
-    @Preview(name = "List item (3 lines) - Trailing Switch", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(trailingContent = PreviewItems.switch())
+// region: Trailing Switch
+@Preview(name = "List item (3 lines) - Trailing Switch", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesTrailingSwitchPreview() = PreviewItems.ThreeLinesListItemPreview(trailingContent = PreviewItems.switch())
 
-    @Preview(name = "List item (2 lines) - Trailing Switch", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(trailingContent = PreviewItems.switch())
+@Preview(name = "List item (2 lines) - Trailing Switch", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesTrailingSwitchPreview() = PreviewItems.TwoLinesListItemPreview(trailingContent = PreviewItems.switch())
 
-    @Preview(name = "List item (1 line) - Trailing Switch", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(trailingContent = PreviewItems.switch())
-}
+@Preview(name = "List item (1 line) - Trailing Switch", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineTrailingSwitchPreview() = PreviewItems.OneLineListItemPreview(trailingContent = PreviewItems.switch())
+// endregion
 
-internal class ListItemPreviewTrailingIcon {
-    @Preview(name = "List item (3 lines) - Trailing Icon", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(trailingContent = PreviewItems.icon())
+// region: Trailing Icon
+@Preview(name = "List item (3 lines) - Trailing Icon", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesTrailingIconPreview() = PreviewItems.ThreeLinesListItemPreview(trailingContent = PreviewItems.icon())
 
-    @Preview(name = "List item (2 lines) - Trailing Icon", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(trailingContent = PreviewItems.icon())
+@Preview(name = "List item (2 lines) - Trailing Icon", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesTrailingIconPreview() = PreviewItems.TwoLinesListItemPreview(trailingContent = PreviewItems.icon())
 
-    @Preview(name = "List item (1 line) - Trailing Icon", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(trailingContent = PreviewItems.icon())
-}
+@Preview(name = "List item (1 line) - Trailing Icon", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineTrailingIconPreview() = PreviewItems.OneLineListItemPreview(trailingContent = PreviewItems.icon())
+// endregion
 
-internal class ListItemPreviewLeadingCheckbox {
-    @Preview(name = "List item (3 lines) - Leading Checkbox", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(leadingContent = PreviewItems.checkbox())
+// region: Leading Checkbox
+@Preview(name = "List item (3 lines) - Leading Checkbox", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesLeadingCheckboxPreview() = PreviewItems.ThreeLinesListItemPreview(leadingContent = PreviewItems.checkbox())
 
-    @Preview(name = "List item (2 lines) - Leading Checkbox", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(leadingContent = PreviewItems.checkbox())
+@Preview(name = "List item (2 lines) - Leading Checkbox", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesLeadingCheckboxPreview() = PreviewItems.TwoLinesListItemPreview(leadingContent = PreviewItems.checkbox())
 
-    @Preview(name = "List item (1 line) - Leading Checkbox", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(leadingContent = PreviewItems.checkbox())
-}
+@Preview(name = "List item (1 line) - Leading Checkbox", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineLeadingCheckboxPreview() = PreviewItems.OneLineListItemPreview(leadingContent = PreviewItems.checkbox())
+// endregion
 
-internal class ListItemPreviewLeadingRadioButton {
-    @Preview(name = "List item (3 lines) - Leading RadioButton", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(leadingContent = PreviewItems.radioButton())
+// region: Leading RadioButton
+@Preview(name = "List item (3 lines) - Leading RadioButton", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesLeadingRadioButtonPreview() = PreviewItems.ThreeLinesListItemPreview(leadingContent = PreviewItems.radioButton())
 
-    @Preview(name = "List item (2 lines) - Leading RadioButton", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(leadingContent = PreviewItems.radioButton())
+@Preview(name = "List item (2 lines) - Leading RadioButton", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesLeadingRadioButtonPreview() = PreviewItems.TwoLinesListItemPreview(leadingContent = PreviewItems.radioButton())
 
-    @Preview(name = "List item (1 line) - Leading RadioButton", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(leadingContent = PreviewItems.radioButton())
-}
+@Preview(name = "List item (1 line) - Leading RadioButton", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineLeadingRadioButtonPreview() = PreviewItems.OneLineListItemPreview(leadingContent = PreviewItems.radioButton())
+// endregion
 
-internal class ListItemPreviewLeadingSwitch {
-    @Preview(name = "List item (3 lines) - Leading Switch", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(leadingContent = PreviewItems.switch())
+// region: Leading Switch
+@Preview(name = "List item (3 lines) - Leading Switch", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesLeadingSwitchPreview() = PreviewItems.ThreeLinesListItemPreview(leadingContent = PreviewItems.switch())
 
-    @Preview(name = "List item (2 lines) - Leading Switch", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(leadingContent = PreviewItems.switch())
+@Preview(name = "List item (2 lines) - Leading Switch", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesLeadingSwitchPreview() = PreviewItems.TwoLinesListItemPreview(leadingContent = PreviewItems.switch())
 
-    @Preview(name = "List item (1 line) - Leading Switch", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(leadingContent = PreviewItems.switch())
-}
+@Preview(name = "List item (1 line) - Leading Switch", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineLeadingSwitchPreview() = PreviewItems.OneLineListItemPreview(leadingContent = PreviewItems.switch())
+// endregion
 
-internal class ListItemPreviewLeadingIcon {
-    @Preview(name = "List item (3 lines) - Leading Icon", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(leadingContent = PreviewItems.icon())
+// region: Leading Icon
+@Preview(name = "List item (3 lines) - Leading Icon", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesLeadingIconPreview() = PreviewItems.ThreeLinesListItemPreview(leadingContent = PreviewItems.icon())
 
-    @Preview(name = "List item (2 lines) - Leading Icon", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(leadingContent = PreviewItems.icon())
+@Preview(name = "List item (2 lines) - Leading Icon", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesLeadingIconPreview() = PreviewItems.TwoLinesListItemPreview(leadingContent = PreviewItems.icon())
 
-    @Preview(name = "List item (1 line) - Leading Icon", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(leadingContent = PreviewItems.icon())
-}
+@Preview(name = "List item (1 line) - Leading Icon", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineLeadingIconPreview() = PreviewItems.OneLineListItemPreview(leadingContent = PreviewItems.icon())
+// endregion
 
-internal class ListItemPreviewBothIcons {
-    @Preview(name = "List item (3 lines) - Both Icons", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemThreeLinesPreview() = PreviewItems.ThreeLinesListItemPreview(
-        leadingContent = PreviewItems.icon(),
-        trailingContent = PreviewItems.icon()
-    )
+// region: Both Icons
+@Preview(name = "List item (3 lines) - Both Icons", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemThreeLinesBothIconsPreview() = PreviewItems.ThreeLinesListItemPreview(
+    leadingContent = PreviewItems.icon(),
+    trailingContent = PreviewItems.icon()
+)
 
-    @Preview(name = "List item (2 lines) - Both Icons", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemTwoLinesPreview() = PreviewItems.TwoLinesListItemPreview(
-        leadingContent = PreviewItems.icon(),
-        trailingContent = PreviewItems.icon()
-    )
+@Preview(name = "List item (2 lines) - Both Icons", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemTwoLinesBothIconsPreview() = PreviewItems.TwoLinesListItemPreview(
+    leadingContent = PreviewItems.icon(),
+    trailingContent = PreviewItems.icon()
+)
 
-    @Preview(name = "List item (1 line) - Both Icons", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemSingleLinePreview() = PreviewItems.OneLineListItemPreview(
-        leadingContent = PreviewItems.icon(),
-        trailingContent = PreviewItems.icon()
-    )
-}
+@Preview(name = "List item (1 line) - Both Icons", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemSingleLineBothIconsPreview() = PreviewItems.OneLineListItemPreview(
+    leadingContent = PreviewItems.icon(),
+    trailingContent = PreviewItems.icon()
+)
+// endregion
 
-internal class ListItemPreviewError {
-    @Preview(name = "List item - Error", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemErrorPreview() = PreviewItems.OneLineListItemPreview(hasError = true)
+// region: Error state
+@Preview(name = "List item - Error", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemErrorPreview() = PreviewItems.OneLineListItemPreview(hasError = true)
 
-    @Preview(name = "List item - Error & Icon", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemErrorWithIconPreview() = PreviewItems.OneLineListItemPreview(
-        hasError = true,
-        leadingContent = PreviewItems.icon(),
-    )
-}
+@Preview(name = "List item - Error & Icon", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemErrorWithIconPreview() = PreviewItems.OneLineListItemPreview(
+    hasError = true,
+    leadingContent = PreviewItems.icon(),
+)
+// endregion
 
-internal class ListItemPreviewDisabled {
-    @Preview(name = "List item - Disabled", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemErrorPreview() = PreviewItems.OneLineListItemPreview(enabled = false)
+// region: Disabled state
+@Preview(name = "List item - Disabled", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemDisabledPreview() = PreviewItems.OneLineListItemPreview(enabled = false)
 
-    @Preview(name = "List item - Disabled & Icon", group = PreviewGroup.Lists)
-    @Composable
-    internal fun ListItemErrorWithIconPreview() = PreviewItems.OneLineListItemPreview(
-        enabled = false,
-        leadingContent = PreviewItems.icon(),
-    )
-}
+@Preview(name = "List item - Disabled & Icon", group = PreviewGroup.Lists)
+@Composable
+internal fun ListItemDisabledWithIconPreview() = PreviewItems.OneLineListItemPreview(
+    enabled = false,
+    leadingContent = PreviewItems.icon(),
+)
+// endregion
 
 @Suppress("ModifierMissing")
 private object PreviewItems {
