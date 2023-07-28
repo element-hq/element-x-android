@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.text.scaleMax
+import io.element.android.libraries.designsystem.text.applyScaleDown
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
@@ -118,8 +118,8 @@ private fun DefaultRoomListTopBar(
             else
                 ElementTheme.typography.fontHeadingLgBold.copy(
                     // Due to a limitation of MediumTopAppBar, and to avoid the text to be truncated,
-                    // limit the size to 28.dp instead of 28.sp
-                    fontSize = 28.dp.scaleMax().toSp()
+                    // ensure that the font size will never be bigger than 28.dp.
+                    fontSize = 28.dp.applyScaleDown().toSp()
                 )
             Text(
                 style = fontStyle,
