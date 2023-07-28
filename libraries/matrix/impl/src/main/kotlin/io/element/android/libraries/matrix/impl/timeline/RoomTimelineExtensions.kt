@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
+import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.destroyAll
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
@@ -35,14 +37,14 @@ import timber.log.Timber
 
 internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<TimelineDiff> =
     callbackFlow {
-        val roomId = id()
-        Timber.d("Open timelineDiffFlow for room $roomId")
         val listener = object : TimelineListener {
             override fun onUpdate(diff: TimelineDiff) {
                 trySendBlocking(diff)
             }
         }
         var result: RoomTimelineListenerResult? = null
+        val roomId = tryOrNull { id() }
+        Timber.d("Open timelineDiffFlow for room $roomId")
         try {
             result = addTimelineListener(listener)
             onInitialList(result.items)
@@ -51,8 +53,7 @@ internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -
         }
         awaitClose {
             Timber.d("Close timelineDiffFlow for room $roomId")
-            result?.itemsStream?.cancel()
-            result?.itemsStream?.destroy()
+            result?.itemsStream?.cancelAndDestroy()
             result?.items?.destroyAll()
         }
     }.buffer(Channel.UNLIMITED)
@@ -64,5 +65,7 @@ internal fun Room.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
                 trySendBlocking(status)
             }
         }
-        subscribeToBackPaginationStatus(listener)
+        tryOrNull {
+            subscribeToBackPaginationStatus(listener)
+        }
     }.buffer(Channel.UNLIMITED)

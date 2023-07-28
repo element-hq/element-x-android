@@ -28,9 +28,13 @@ class TaskHandleBag(private val tokens: MutableSet<TaskHandle> = CopyOnWriteArra
 
     fun dispose() {
         tokens.forEach {
-            it.cancel()
-            it.destroy()
+            it.cancelAndDestroy()
         }
         tokens.clear()
     }
+}
+
+fun TaskHandle.cancelAndDestroy() {
+    cancel()
+    destroy()
 }
