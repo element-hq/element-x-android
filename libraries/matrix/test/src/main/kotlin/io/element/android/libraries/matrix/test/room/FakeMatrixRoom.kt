@@ -56,6 +56,7 @@ class FakeMatrixRoom(
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
+    canRedact: Boolean = false,
 ) : MatrixRoom {
 
     private var ignoreResult: Result<Unit> = Result.success(Unit)
@@ -66,6 +67,7 @@ class FakeMatrixRoom(
     private var joinRoomResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
+    private var canRedactResult = Result.success(canRedact)
     private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
     private val canSendEventResults = mutableMapOf<MessageEventType, Result<Boolean>>()
     private var sendMediaResult = Result.success(Unit)
@@ -205,6 +207,10 @@ class FakeMatrixRoom(
 
     override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
         return canInviteResult
+    }
+
+    override suspend fun canUserRedact(userId: UserId): Result<Boolean> {
+        return canRedactResult
     }
 
     override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {

@@ -71,6 +71,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.room.canRedactAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
@@ -109,6 +110,7 @@ class MessagesPresenter @AssistedInject constructor(
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToRedact by room.canRedactAsState(updateKey = syncUpdateFlow.value)
         var roomName: Async<String> by remember { mutableStateOf(Async.Uninitialized) }
         var roomAvatar: Async<AvatarData> by remember { mutableStateOf(Async.Uninitialized) }
         LaunchedEffect(syncUpdateFlow.value) {
@@ -165,6 +167,7 @@ class MessagesPresenter @AssistedInject constructor(
             roomName = roomName,
             roomAvatar = roomAvatar,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
+            userHasPermissionToRedact = userHasPermissionToRedact,
             composerState = composerState,
             timelineState = timelineState,
             actionListState = actionListState,

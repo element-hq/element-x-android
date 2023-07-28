@@ -115,7 +115,7 @@ fun MessagesView(
     fun onMessageLongClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageLongClicked= ${event.id}")
         localView.hideKeyboard()
-        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event))
+        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event, state.userHasPermissionToRedact))
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
