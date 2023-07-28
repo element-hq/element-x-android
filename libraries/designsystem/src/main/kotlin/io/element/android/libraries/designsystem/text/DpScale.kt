@@ -31,7 +31,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
 /**
- * Return the maximum value between the receiver value and the value with fonScale applied.
+ * Return the maximum value between the receiver value and the value with fontScale applied.
  * So if fontScale is >= 1f, the same value is returned, and if fontScale is < 1f, so returned value
  * will be smaller.
  */
@@ -41,7 +41,7 @@ fun Dp.applyScaleDown(): Dp = with(LocalDensity.current) {
 }
 
 /**
- * Return the minimum value between the receiver value and the value with fonScale applied.
+ * Return the minimum value between the receiver value and the value with fontScale applied.
  * So if fontScale is <= 1f, the same value is returned, and if fontScale is > 1f, so returned value
  * will be bigger.
  */
