@@ -169,7 +169,12 @@ fun TextComposer(
                             singleLine = false,
                             visualTransformation = VisualTransformation.None,
                             shape = roundedCorners,
-                            contentPadding = PaddingValues(top = 10.dp.applyScaleUp(), bottom = 10.dp.applyScaleUp(), start = 12.dp.applyScaleUp(), end = 42.dp.applyScaleUp()),
+                            contentPadding = PaddingValues(
+                                top = 10.dp.applyScaleUp(),
+                                bottom = 10.dp.applyScaleUp(),
+                                start = 12.dp.applyScaleUp(),
+                                end = 42.dp.applyScaleUp(),
+                            ),
                             interactionSource = remember { MutableInteractionSource() },
                             placeholder = {
                                 Text(stringResource(CommonStrings.common_message), style = defaultTypography)
