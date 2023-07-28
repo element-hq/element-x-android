@@ -22,6 +22,9 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.util.Date
 
@@ -30,7 +33,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     private val defaultLastLoginTimestamp = Date(1689061264L)
 
     @Test
-    fun `given an unencrypted room, nothing is done`() {
+    fun `given an unencrypted room, nothing is done`() = runTest {
         val processor = createPostProcessor(isRoomEncrypted = false)
         val items = listOf(
             MatrixTimelineItem.Event(0L, anEventTimelineItem())
@@ -39,7 +42,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     }
 
     @Test
-    fun `given a null lastLoginTimestamp, nothing is done`() {
+    fun `given a null lastLoginTimestamp, nothing is done`() = runTest {
         val processor = createPostProcessor(lastLoginTimestamp = null)
         val items = listOf(
             MatrixTimelineItem.Event(0L, anEventTimelineItem())
@@ -48,14 +51,14 @@ class TimelineEncryptedHistoryPostProcessorTest {
     }
 
     @Test
-    fun `given an empty list, nothing is done`() {
+    fun `given an empty list, nothing is done`() = runTest {
         val processor = createPostProcessor()
         val items = emptyList<MatrixTimelineItem>()
         assertThat(processor.process(items)).isSameInstanceAs(items)
     }
 
     @Test
-    fun `given a list with no items before lastLoginTimestamp, nothing is done`() {
+    fun `given a list with no items before lastLoginTimestamp, nothing is done`() = runTest {
         val processor = createPostProcessor()
         val items = listOf(
             MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
@@ -64,7 +67,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     }
 
     @Test
-    fun `given a list with an item with equal timestamp as lastLoginTimestamp, it's replaced`() {
+    fun `given a list with an item with equal timestamp as lastLoginTimestamp, it's replaced`() = runTest {
         val processor = createPostProcessor()
         val items = listOf(
             MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time))
@@ -74,7 +77,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     }
 
     @Test
-    fun `given a list with an item with a lower timestamp than lastLoginTimestamp, it's replaced`() {
+    fun `given a list with an item with a lower timestamp than lastLoginTimestamp, it's replaced`() = runTest {
         val processor = createPostProcessor()
         val items = listOf(
             MatrixTimelineItem.Event(0L, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1))
@@ -85,7 +88,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     }
 
     @Test
-    fun `given a list with several with lower or equal timestamps than lastLoginTimestamp, they're replaced and the user can't back paginate`() {
+    fun `given a list with several with lower or equal timestamps than lastLoginTimestamp, they're replaced and the user can't back paginate`() = runTest {
         val paginationStateFlow = MutableStateFlow(MatrixTimeline.PaginationState(hasMoreToLoadBackwards = true, isBackPaginating = false))
         val processor = createPostProcessor(paginationStateFlow = paginationStateFlow)
         val items = listOf(
@@ -102,7 +105,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
         assertThat(paginationStateFlow.value).isEqualTo(MatrixTimeline.PaginationState(hasMoreToLoadBackwards = false, isBackPaginating = false))
     }
 
-    private fun createPostProcessor(
+    private fun TestScope.createPostProcessor(
         lastLoginTimestamp: Date? = defaultLastLoginTimestamp,
         isRoomEncrypted: Boolean = true,
         paginationStateFlow: MutableStateFlow<MatrixTimeline.PaginationState> =
@@ -111,5 +114,6 @@ class TimelineEncryptedHistoryPostProcessorTest {
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = isRoomEncrypted,
         paginationStateFlow = paginationStateFlow,
+        dispatcher = StandardTestDispatcher(testScheduler)
     )
 }
