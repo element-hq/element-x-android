@@ -43,7 +43,7 @@ internal val defaultHeadlineSmall = TextStyle(
     lineHeight = 32.sp,
     fontSize = 24.sp,
     letterSpacing = 0.em,
-)
+).forceLineHeight()
 
 // 22px (Material) vs 20px, it's the closest one
 @ShowkaseTypography(name = "M3 Title Large", group = "Compound")
@@ -85,18 +85,18 @@ internal val compoundTypography = Typography(
     // displayLarge = , 57px (Material) size. We have no equivalent
     // displayMedium = , 45px (Material) size. We have no equivalent
     // displaySmall = , 36px (Material) size. We have no equivalent
-    headlineLarge = compoundHeadingXlRegular.forceLineHeight(),
-    headlineMedium = compoundHeadingLgRegular.forceLineHeight(),
-    headlineSmall = defaultHeadlineSmall.forceLineHeight(),
-    titleLarge = compoundHeadingMdRegular.forceLineHeight(),
-    titleMedium = compoundBodyLgMedium.forceLineHeight(),
-    titleSmall = compoundBodyMdMedium.forceLineHeight(),
-    bodyLarge = compoundBodyLgRegular.forceLineHeight(),
-    bodyMedium = compoundBodyMdRegular.forceLineHeight(),
-    bodySmall = compoundBodySmRegular.forceLineHeight(),
-    labelLarge = compoundBodyMdMedium_LabelLarge.forceLineHeight(),
-    labelMedium = compoundBodySmMedium.forceLineHeight(),
-    labelSmall = compoundBodyXsMedium.forceLineHeight(),
+    headlineLarge = compoundHeadingXlRegular,
+    headlineMedium = compoundHeadingLgRegular,
+    headlineSmall = defaultHeadlineSmall,
+    titleLarge = compoundHeadingMdRegular,
+    titleMedium = compoundBodyLgMedium,
+    titleSmall = compoundBodyMdMedium,
+    bodyLarge = compoundBodyLgRegular,
+    bodyMedium = compoundBodyMdRegular,
+    bodySmall = compoundBodySmRegular,
+    labelLarge = compoundBodyMdMedium_LabelLarge,
+    labelMedium = compoundBodySmMedium,
+    labelSmall = compoundBodyXsMedium,
 )
 
 fun TextStyle.forceLineHeight() = copy(
