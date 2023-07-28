@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.compound.forceLineHeight
 
 @Composable
 fun ListItem(

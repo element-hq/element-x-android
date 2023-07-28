@@ -87,16 +87,21 @@ internal val compoundTypography = Typography(
     // displayLarge = , 57px (Material) size. We have no equivalent
     // displayMedium = , 45px (Material) size. We have no equivalent
     // displaySmall = , 36px (Material) size. We have no equivalent
-    headlineLarge = compoundHeadingXlRegular,
-    headlineMedium = compoundHeadingLgRegular,
-    headlineSmall = defaultHeadlineSmall,
-    titleLarge = compoundHeadingMdRegular,
-    titleMedium = compoundBodyLgMedium,
-    titleSmall = compoundBodyMdMedium,
-    bodyLarge = compoundBodyLgRegular,
-    bodyMedium = compoundBodyMdRegular,
-    bodySmall = compoundBodySmRegular,
-    labelLarge = compoundBodyMdMedium_LabelLarge,
-    labelMedium = compoundBodySmMedium,
-    labelSmall = compoundBodyXsMedium,
+    headlineLarge = compoundHeadingXlRegular.forceLineHeight(),
+    headlineMedium = compoundHeadingLgRegular.forceLineHeight(),
+    headlineSmall = defaultHeadlineSmall.forceLineHeight(),
+    titleLarge = compoundHeadingMdRegular.forceLineHeight(),
+    titleMedium = compoundBodyLgMedium.forceLineHeight(),
+    titleSmall = compoundBodyMdMedium.forceLineHeight(),
+    bodyLarge = compoundBodyLgRegular.forceLineHeight(),
+    bodyMedium = compoundBodyMdRegular.forceLineHeight(),
+    bodySmall = compoundBodySmRegular.forceLineHeight(),
+    labelLarge = compoundBodyMdMedium_LabelLarge.forceLineHeight(),
+    labelMedium = compoundBodySmMedium.forceLineHeight(),
+    labelSmall = compoundBodyXsMedium.forceLineHeight(),
+)
+
+fun TextStyle.forceLineHeight() = copy(
+    platformStyle = PlatformTextStyle(includeFontPadding = false),
+    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
 )
