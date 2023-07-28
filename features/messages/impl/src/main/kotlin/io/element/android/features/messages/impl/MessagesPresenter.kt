@@ -122,17 +122,12 @@ class MessagesPresenter @AssistedInject constructor(
         }
 
         val inviteProgress = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
-
-        val showReinvitePrompt by remember(
-            hasDismissedInviteDialog,
-            composerState.hasFocus,
-            syncUpdateFlow,
-        ) {
-            derivedStateOf {
-                !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
+        var showReinvitePrompt by remember { mutableStateOf(false) }
+        LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow) {
+            withContext(dispatchers.io) {
+                showReinvitePrompt = !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
             }
         }
-
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
