@@ -19,36 +19,19 @@ package io.element.android.libraries.designsystem.text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 
 /**
- * Convert Dp to Sp, regarding current density.
- * Can be used for instance to use Dp unit for text.
+ * Return the maximum value between the receiver value and the value with fonScale applied.
  */
 @Composable
-fun Dp.toSp(): TextUnit = with(LocalDensity.current) { toSp() }
+fun Dp.scaleMax(): Dp = with(LocalDensity.current) {
+    return this@scaleMax * fontScale.coerceAtMost(1f)
+}
 
 /**
- * Convert Sp to Dp, regarding current density.
- * Can be used for instance to use Sp unit for size.
+ * Return the minimum value between the receiver value and the value with fonScale applied.
  */
 @Composable
-fun TextUnit.toDp(): Dp = with(LocalDensity.current) { toDp() }
-
-/**
- * Convert Px value to Dp, regarding current density.
- */
-@Composable
-fun Int.toDp(): Dp = with(LocalDensity.current) { toDp() }
-
-/**
- * Convert Dp value to pixels, regarding current density.
- */
-@Composable
-fun Dp.toPx(): Float = with(LocalDensity.current) { toPx() }
-
-/**
- * Convert Dp value to pixels, regarding current density.
- */
-@Composable
-fun Dp.roundToPx(): Int = with(LocalDensity.current) { roundToPx() }
+fun Dp.scaleMin(): Dp = with(LocalDensity.current) {
+    return this@scaleMin * fontScale.coerceAtLeast(1f)
+}
