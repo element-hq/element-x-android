@@ -13,24 +13,14 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon --warn
 
 jobs:
-  checkScript:
-    name: Search for forbidden patterns
-    runs-on: ubuntu-latest
-    # Don't run in the merge queue again if the branch is up to date with `develop`
-    if: github.event.merge_group.base_ref != 'refs/heads/develop'
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run code quality check suite
-        run: ./tools/check/check_code_quality.sh
-
-  check:
+  sonar:
     name: Project Check Suite
     runs-on: ubuntu-latest
     # Don't run in the merge queue again if the branch is up to date with `develop`
     if: github.event.merge_group.base_ref != 'refs/heads/develop'
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('check-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-develop-{0}', github.sha) || format('check-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('sonar-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('sonar-develop-{0}', github.sha) || format('sonar-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
@@ -47,15 +37,6 @@ jobs:
         uses: gradle/gradle-build-action@v2.7.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-      - name: Run code quality check suite
-        run: ./gradlew runQualityChecks $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: linting-report
-          path: |
-            */build/reports/**/*.*
       - name: 🔊 Publish results to Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -68,12 +49,3 @@ jobs:
           npm install --save-dev @babel/core
           npm install --save-dev @babel/plugin-transform-flow-strip-types
           yarn add danger-plugin-lint-report --dev
-      - name: Danger lint
-        if: always()
-        uses: danger/danger-js@11.2.7
-        with:
-          args: "--dangerfile ./tools/danger/dangerfile-lint.js"
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
-          # Fallback for forks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
