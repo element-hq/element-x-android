@@ -17,28 +17,26 @@
 package io.element.android.libraries.matrix.api.tracing
 
 data class TracingConfiguration(
-    val overrides: Map<Target, LogLevel> = emptyMap()
+    val overrides: Map<Target, LogLevel> = emptyMap(),
 ) {
 
     // Order should matters
-    private val targets: MutableMap<Target, LogLevel> = mutableMapOf(
-        Target.Common to LogLevel.Warn,
-        Target.Hyper to LogLevel.Warn,
-        Target.Sled to LogLevel.Warn,
-        Target.MatrixSdk.Root to LogLevel.Warn,
-        Target.MatrixSdk.Sled to LogLevel.Warn,
-        Target.MatrixSdk.Crypto to LogLevel.Debug,
-        Target.MatrixSdk.HttpClient to LogLevel.Debug,
-        Target.MatrixSdk.SlidingSync to LogLevel.Trace,
-        Target.MatrixSdk.BaseSlidingSync to LogLevel.Trace,
+    private val targetsToLogLevel: MutableMap<Target, LogLevel> = mutableMapOf(
+        Target.COMMON to LogLevel.Info,
+        Target.HYPER to LogLevel.Warn,
+        Target.MATRIX_SDK_CRYPTO to LogLevel.Debug,
+        Target.MATRIX_SDK_HTTP_CLIENT to LogLevel.Debug,
+        Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.Trace,
+        Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.Trace,
+        Target.MATRIX_SDK_UI_TIMELINE to LogLevel.Info,
     )
 
     val filter: String
         get() {
             overrides.forEach { (target, logLevel) ->
-                targets[target] = logLevel
+                targetsToLogLevel[target] = logLevel
             }
-            return targets.map {
+            return targetsToLogLevel.map {
                 if (it.key.filter.isEmpty()) {
                     it.value.filter
                 } else {
@@ -48,20 +46,16 @@ data class TracingConfiguration(
         }
 }
 
-sealed class Target(open val filter: String) {
-    object Common : Target("")
-    object Hyper : Target("hyper")
-    object Sled : Target("sled")
-    sealed class MatrixSdk(override val filter: String) : Target(filter) {
-        object Root : MatrixSdk("matrix_sdk")
-        object Sled : MatrixSdk("matrix_sdk_sled")
-        object Crypto: MatrixSdk("matrix_sdk_crypto")
-        object FFI : MatrixSdk("matrix_sdk_ffi")
-        object HttpClient : MatrixSdk("matrix_sdk::http_client")
-        object UniffiAPI : MatrixSdk("matrix_sdk_ffi::uniffi_api")
-        object SlidingSync : MatrixSdk("matrix_sdk::sliding_sync")
-        object BaseSlidingSync : MatrixSdk("matrix_sdk_base::sliding_sync")
-    }
+enum class Target(open val filter: String) {
+    COMMON(""),
+    HYPER("hyper"),
+    MATRIX_SDK_FFI("matrix_sdk_ffi"),
+    MATRIX_SDK_UNIFFI_API("matrix_sdk_ffi::uniffi_api"),
+    MATRIX_SDK_CRYPTO("matrix_sdk_crypto"),
+    MATRIX_SDK_HTTP_CLIENT("matrix_sdk::http_client"),
+    MATRIX_SDK_SLIDING_SYNC("matrix_sdk::sliding_sync"),
+    MATRIX_SDK_BASE_SLIDING_SYNC("matrix_sdk_base::sliding_sync"),
+    MATRIX_SDK_UI_TIMELINE("matrix_sdk_ui::timeline"),
 }
 
 sealed class LogLevel(val filter: String) {
@@ -73,8 +67,16 @@ sealed class LogLevel(val filter: String) {
 }
 
 object TracingConfigurations {
-    val release = TracingConfiguration(overrides = mapOf(Target.Common to LogLevel.Info))
-    val debug = TracingConfiguration(overrides = mapOf(Target.Common to LogLevel.Info))
+    val release = TracingConfiguration(overrides = mapOf(Target.COMMON to LogLevel.Info))
+    val debug = TracingConfiguration(overrides = mapOf(Target.COMMON to LogLevel.Info))
 
+    /**
+     *  Use this method to create a custom configuration where all targets will have the same log level.
+     */
+    fun custom(logLevel: LogLevel) = TracingConfiguration(overrides = Target.values().associateWith { logLevel })
+
+    /**
+     * Use this method to override the log level of specific targets.
+     */
     fun custom(overrides: Map<Target, LogLevel>) = TracingConfiguration(overrides)
 }
