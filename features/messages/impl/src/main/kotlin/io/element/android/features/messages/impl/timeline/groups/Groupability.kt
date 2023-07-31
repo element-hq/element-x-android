@@ -33,6 +33,8 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.PollEndContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
@@ -74,6 +76,8 @@ internal fun MatrixTimelineItem.Event.canBeDisplayedInBubbleBlock(): Boolean {
         is MessageContent,
         RedactedContent,
         is StickerContent,
+        is PollContent,
+        is PollEndContent,
         is UnableToDecryptContent -> true
         is FailedToParseStateContent,
         is ProfileChangeContent,
