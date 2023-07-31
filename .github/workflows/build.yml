@@ -16,6 +16,7 @@ jobs:
   debug:
     name: Build debug APKs
     runs-on: ubuntu-latest
+    # Skip for `main` and the merge queue if the branch is up to date with `develop`
     if: github.ref != 'refs/heads/main' && github.event.merge_group.base_ref != 'refs/heads/develop'
     strategy:
       fail-fast: false

@@ -16,6 +16,7 @@ jobs:
   checkScript:
     name: Search for forbidden patterns
     runs-on: ubuntu-latest
+    # Don't run in the merge queue again if the branch is up to date with `develop`
     if: github.event.merge_group.base_ref != 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v3
@@ -25,6 +26,7 @@ jobs:
   check:
     name: Project Check Suite
     runs-on: ubuntu-latest
+    # Don't run in the merge queue again if the branch is up to date with `develop`
     if: github.event.merge_group.base_ref != 'refs/heads/develop'
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
