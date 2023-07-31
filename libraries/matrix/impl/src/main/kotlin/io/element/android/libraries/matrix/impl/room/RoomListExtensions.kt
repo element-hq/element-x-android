@@ -22,6 +22,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.catch
 import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
@@ -41,15 +42,15 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
                 trySendBlocking(state)
             }
         }
-        tryOrNull {
-            val result = loadingState(listener)
-            try {
-                send(result.state)
-            } catch (exception: Exception) {
-                Timber.d("loadingStateFlow() initialState failed.")
-            }
-            result.stateStream
+        val result = loadingState(listener)
+        try {
+            send(result.state)
+        } catch (exception: Exception) {
+            Timber.d("loadingStateFlow() initialState failed.")
         }
+        result.stateStream
+    }.catch {
+        Timber.d(it, "loadingStateFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
 fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<List<RoomListEntriesUpdate>> =
@@ -59,15 +60,15 @@ fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): 
                 trySendBlocking(roomEntriesUpdate)
             }
         }
-        tryOrNull {
-            val result = entries(listener)
-            try {
-                onInitialList(result.entries)
-            } catch (exception: Exception) {
-                Timber.d(exception, "entriesFlow() onInitialList failed.")
-            }
-            result.entriesStream
+        val result = entries(listener)
+        try {
+            onInitialList(result.entries)
+        } catch (exception: Exception) {
+            Timber.d("entriesFlow() onInitialList failed.")
         }
+        result.entriesStream
+    }.catch {
+        Timber.d(it, "entriesFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
 fun RoomListService.stateFlow(): Flow<RoomListServiceState> =

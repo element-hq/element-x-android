@@ -23,8 +23,8 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 
 internal fun <T> mxCallbackFlow(block: suspend ProducerScope<T>.() -> TaskHandle?) =
     callbackFlow {
-        val token: TaskHandle? = block(this)
+        val taskHandle: TaskHandle? = block(this)
         awaitClose {
-            token?.cancelAndDestroy()
+            taskHandle?.cancelAndDestroy()
         }
     }
