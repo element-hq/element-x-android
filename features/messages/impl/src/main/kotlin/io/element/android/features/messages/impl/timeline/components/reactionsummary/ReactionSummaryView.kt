@@ -107,7 +107,7 @@ private fun SheetContent(
             summary.reactions.indexOfFirst { it.key == selectedReactionKey }
         }
     }
-    val pagerState = rememberPagerState(initialPage = selectedReactionIndex)
+    val pagerState = rememberPagerState(initialPage = selectedReactionIndex, pageCount = { summary.reactions.size })
     val reactionListState = rememberLazyListState()
 
     LaunchedEffect(pagerState.currentPage) {
@@ -123,7 +123,8 @@ private fun SheetContent(
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        LazyRow(state = reactionListState,
+        LazyRow(
+            state = reactionListState,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 12.dp)
         ) {
@@ -140,7 +141,7 @@ private fun SheetContent(
                 )
             }
         }
-        HorizontalPager(state = pagerState, pageCount = summary.reactions.size) { page ->
+        HorizontalPager(state = pagerState) { page ->
             LazyColumn(modifier = Modifier.fillMaxHeight()) {
                 items(summary.reactions[page].senders) { sender ->
 
