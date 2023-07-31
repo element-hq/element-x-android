@@ -110,13 +110,11 @@ private fun SheetContent(
     val pagerState = rememberPagerState(initialPage = selectedReactionIndex)
     val reactionListState = rememberLazyListState()
 
-    LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }.collect { page ->
-            selectedReactionKey = summary.reactions[page].key
-            val visibleInfo =  reactionListState.layoutInfo.visibleItemsInfo
-            if (selectedReactionIndex <= visibleInfo.first().index || selectedReactionIndex >= visibleInfo.last().index) {
-                reactionListState.animateScrollToItem(selectedReactionIndex)
-            }
+    LaunchedEffect(pagerState.currentPage) {
+        selectedReactionKey = summary.reactions[pagerState.currentPage].key
+        val visibleInfo =  reactionListState.layoutInfo.visibleItemsInfo
+        if (selectedReactionIndex <= visibleInfo.first().index || selectedReactionIndex >= visibleInfo.last().index) {
+            reactionListState.animateScrollToItem(selectedReactionIndex)
         }
     }
 
