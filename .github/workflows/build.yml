@@ -16,7 +16,7 @@ jobs:
   debug:
     name: Build debug APKs
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
+    if: github.ref != 'refs/heads/main' && ${{ github.event_name != 'merge_group' || (github.event_name == 'merge_group' && github.event.merge_group.base_ref != 'refs/heads/develop') }}
     strategy:
       fail-fast: false
     # Allow all jobs on develop. Just one per PR.
