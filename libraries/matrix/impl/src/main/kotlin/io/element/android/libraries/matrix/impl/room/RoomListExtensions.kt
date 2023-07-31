@@ -16,11 +16,13 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.catch
 import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
@@ -41,8 +43,14 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
             }
         }
         val result = loadingState(listener)
-        send(result.state)
+        try {
+            send(result.state)
+        } catch (exception: Exception) {
+            Timber.d("loadingStateFlow() initialState failed.")
+        }
         result.stateStream
+    }.catch {
+        Timber.d(it, "loadingStateFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
 fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<List<RoomListEntriesUpdate>> =
@@ -53,8 +61,26 @@ fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): 
             }
         }
         val result = entries(listener)
-        onInitialList(result.entries)
+        try {
+            onInitialList(result.entries)
+        } catch (exception: Exception) {
+            Timber.d("entriesFlow() onInitialList failed.")
+        }
         result.entriesStream
+    }.catch {
+        Timber.d(it, "entriesFlow() failed")
+    }.buffer(Channel.UNLIMITED)
+
+fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
+    mxCallbackFlow {
+        val listener = object : RoomListServiceStateListener {
+            override fun onUpdate(state: RoomListServiceState) {
+                trySendBlocking(state)
+            }
+        }
+        tryOrNull {
+            state(listener)
+        }
     }.buffer(Channel.UNLIMITED)
 
 fun RoomListService.roomOrNull(roomId: String): RoomListItem? {
@@ -65,13 +91,3 @@ fun RoomListService.roomOrNull(roomId: String): RoomListItem? {
         return null
     }
 }
-
-fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
-    mxCallbackFlow {
-        val listener = object : RoomListServiceStateListener {
-            override fun onUpdate(state: RoomListServiceState) {
-                trySendBlocking(state)
-            }
-        }
-        state(listener)
-    }.buffer(Channel.UNLIMITED)

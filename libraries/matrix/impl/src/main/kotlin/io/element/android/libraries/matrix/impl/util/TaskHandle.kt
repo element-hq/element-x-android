@@ -19,18 +19,22 @@ package io.element.android.libraries.matrix.impl.util
 import org.matrix.rustcomponents.sdk.TaskHandle
 import java.util.concurrent.CopyOnWriteArraySet
 
-class TaskHandleBag(private val tokens: MutableSet<TaskHandle> = CopyOnWriteArraySet()) : Set<TaskHandle> by tokens {
+fun TaskHandle.cancelAndDestroy() {
+    cancel()
+    destroy()
+}
+
+class TaskHandleBag(private val taskHandles: MutableSet<TaskHandle> = CopyOnWriteArraySet()) : Set<TaskHandle> by taskHandles {
 
     operator fun plusAssign(taskHandle: TaskHandle?) {
         if (taskHandle == null) return
-        tokens += taskHandle
+        taskHandles += taskHandle
     }
 
     fun dispose() {
-        tokens.forEach {
-            it.cancel()
-            it.destroy()
+        taskHandles.forEach {
+            it.cancelAndDestroy()
         }
-        tokens.clear()
+        taskHandles.clear()
     }
 }
