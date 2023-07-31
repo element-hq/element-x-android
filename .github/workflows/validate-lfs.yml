@@ -5,6 +5,7 @@ on: [pull_request, merge_group]
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event.merge_group.base_ref != 'refs/heads/develop'
     name: Validate
     steps:
       - uses: nschloe/action-cached-lfs-checkout@v1.2.1

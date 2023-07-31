@@ -5,7 +5,7 @@ on: [pull_request, merge_group]
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.merge_group.base_ref != 'refs/heads/develop' }}
+    if: github.event.merge_group.base_ref != 'refs/heads/develop'
     name: Danger main check
     steps:
       - uses: actions/checkout@v3
