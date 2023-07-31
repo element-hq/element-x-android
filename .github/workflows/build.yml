@@ -2,7 +2,8 @@ name: APK Build
 
 on:
   workflow_dispatch:
-  pull_request: { }
+  pull_request:
+  merge_group:
   push:
     branches: [ develop ]
 
