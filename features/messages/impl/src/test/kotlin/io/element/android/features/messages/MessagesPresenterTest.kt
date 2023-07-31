@@ -372,11 +372,15 @@ class MessagesPresenterTest {
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
             initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
-            val focusedState = awaitItem()
+            val focusedState = consumeItemsUntilPredicate { state ->
+                state.showReinvitePrompt
+            }.last()
             assertThat(focusedState.showReinvitePrompt).isTrue()
             // If it's dismissed then we stop showing the alert
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
-            val dismissedState = awaitItem()
+            val dismissedState = consumeItemsUntilPredicate { state ->
+                !state.showReinvitePrompt
+            }.last()
             assertThat(dismissedState.showReinvitePrompt).isFalse()
         }
     }

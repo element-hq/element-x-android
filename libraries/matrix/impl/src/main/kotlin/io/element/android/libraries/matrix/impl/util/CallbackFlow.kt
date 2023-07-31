@@ -21,11 +21,10 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import org.matrix.rustcomponents.sdk.TaskHandle
 
-internal fun <T> mxCallbackFlow(block: suspend ProducerScope<T>.() -> TaskHandle) =
+internal fun <T> mxCallbackFlow(block: suspend ProducerScope<T>.() -> TaskHandle?) =
     callbackFlow {
-        val token: TaskHandle = block(this)
+        val taskHandle: TaskHandle? = block(this)
         awaitClose {
-            token.cancel()
-            token.destroy()
+            taskHandle?.cancelAndDestroy()
         }
     }

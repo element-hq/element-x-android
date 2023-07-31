@@ -52,7 +52,7 @@ fun Dp.applyScaleUp(): Dp = with(LocalDensity.current) {
 
 @Preview
 @Composable
-fun DpScalePreview_0_75f() = WithFontScale(0.75f) {
+internal fun DpScalePreview_0_75f() = WithFontScale(0.75f) {
     ElementPreviewLight {
         val fontSizeInDp = 16.dp
         Column(
@@ -77,7 +77,7 @@ fun DpScalePreview_0_75f() = WithFontScale(0.75f) {
 
 @Preview
 @Composable
-fun DpScalePreview_1_0f() = WithFontScale(1f) {
+internal fun DpScalePreview_1_0f() = WithFontScale(1f) {
     ElementPreviewLight {
         val fontSizeInDp = 16.dp
         Column(
@@ -102,7 +102,7 @@ fun DpScalePreview_1_0f() = WithFontScale(1f) {
 
 @Preview
 @Composable
-fun DpScalePreview_1_5f() = WithFontScale(1.5f) {
+internal fun DpScalePreview_1_5f() = WithFontScale(1.5f) {
     ElementPreviewLight {
         val fontSizeInDp = 16.dp
         Column(

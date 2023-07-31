@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.sync
 
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.trySendBlocking
@@ -32,5 +33,7 @@ fun SyncService.stateFlow(): Flow<SyncServiceState> =
                 trySendBlocking(state)
             }
         }
-        state(listener)
+        tryOrNull {
+            state(listener)
+        }
     }.buffer(Channel.UNLIMITED)
