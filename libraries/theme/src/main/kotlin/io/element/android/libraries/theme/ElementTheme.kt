@@ -74,7 +74,7 @@ object ElementTheme {
     val materialTypography: Typography
         @Composable
         @ReadOnlyComposable
-        get()= MaterialTheme.typography
+        get() = MaterialTheme.typography
 
     /**
      * Returns whether the theme version used is the light or the dark one.
