@@ -16,11 +16,11 @@
 
 package io.element.android.libraries.core.data
 
-inline fun <A> tryOrNull(noinline onError: ((Throwable) -> Unit)? = null, operation: () -> A): A? {
+inline fun <A> tryOrNull(onError: ((Throwable) -> Unit) = { }, operation: () -> A): A? {
     return try {
         operation()
     } catch (any: Throwable) {
-        onError?.invoke(any)
+        onError.invoke(any)
         null
     }
 }
