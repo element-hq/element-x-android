@@ -16,7 +16,7 @@ jobs:
   debug:
     name: Build debug APKs
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
+    if: github.ref != 'refs/heads/main' && github.event.merge_group.base_ref != 'refs/heads/develop'
     strategy:
       fail-fast: false
     # Allow all jobs on develop. Just one per PR.
@@ -24,6 +24,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}', github.sha) || format('build-debug-{0}', github.ref)  }}
       cancel-in-progress: true
     steps:
+      - run: echo ${{ github.event.merge_group.base_ref }}
       - uses: actions/checkout@v3
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
