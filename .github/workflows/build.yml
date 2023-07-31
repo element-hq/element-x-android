@@ -14,18 +14,19 @@ env:
 
 jobs:
   debug:
-    name: Build debug APKs
+    name: Build APKs
     runs-on: ubuntu-latest
     # Skip for `main` and the merge queue if the branch is up to date with `develop`
     if: github.ref != 'refs/heads/main' && github.event.merge_group.base_ref != 'refs/heads/develop'
     strategy:
+      matrix:
+        variant: [debug, release, nightly, samples]
       fail-fast: false
     # Allow all jobs on develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}', github.sha) || format('build-debug-{0}', github.ref)  }}
+      group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{1}', github.sha) || format('build-{0}-{1}', matrix.variant, github.ref)  }}
       cancel-in-progress: true
     steps:
-      - run: echo ${{ github.event.merge_group.base_ref }}
       - uses: actions/checkout@v3
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
@@ -41,12 +42,14 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble debug APK
+        if: ${{ matrix.variant == 'debug' }}
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
         run: ./gradlew assembleDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload debug APKs
+      - name: Upload APK APKs
+        if: ${{ matrix.variant == 'debug' }}
         uses: actions/upload-artifact@v3
         with:
           name: elementx-debug
@@ -58,12 +61,12 @@ jobs:
         continue-on-error: true
         env:
           token: ${{ secrets.DIAWI_TOKEN }}
-        if: ${{ github.event_name == 'pull_request' && env.token != '' }}
+        if: ${{ matrix.variant == 'debug' && github.event_name == 'pull_request' && env.token != '' }}
         with:
           token: ${{ env.token }}
           file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
       - name: Add or update PR comment with QR Code to download APK.
-        if: ${{ github.event_name == 'pull_request' && steps.diawi.conclusion == 'success' }}
+        if: ${{ matrix.variant == 'debug' && github.event_name == 'pull_request' && steps.diawi.conclusion == 'success' }}
         uses: NejcZdovc/comment-pr@v2
         with:
           message: |
@@ -75,8 +78,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Compile release sources
+        if: ${{ matrix.variant == 'release' }}
         run: ./gradlew compileReleaseSources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources
+        if: ${{ matrix.variant == 'nightly' }}
         run: ./gradlew compileNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile samples minimal
+        if: ${{ matrix.variant == 'samples' }}
         run: ./gradlew :samples:minimal:assemble $CI_GRADLE_ARG_PROPERTIES
