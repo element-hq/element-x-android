@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.EventItemOrigin as RustEventItemOrigin
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
@@ -81,8 +82,12 @@ private fun List<Reaction>?.map(): List<EventReaction> {
     return this?.map {
         EventReaction(
             key = it.key,
-            count = it.count.toLong(),
-            senderIds = it.senders.map { sender -> UserId(sender.senderId) }
+            senders = it.senders.map { sender ->
+                ReactionSender(
+                    senderId = UserId(sender.senderId),
+                    timestamp = sender.timestamp.toLong()
+                )
+            }
         )
     } ?: emptyList()
 }

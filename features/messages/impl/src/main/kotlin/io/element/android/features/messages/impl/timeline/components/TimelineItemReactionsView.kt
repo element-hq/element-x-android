@@ -42,6 +42,7 @@ fun TimelineItemReactions(
     reactionsState: TimelineItemReactions,
     isOutgoing: Boolean,
     onReactionClicked: (emoji: String) -> Unit,
+    onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -61,6 +62,7 @@ fun TimelineItemReactions(
             reactions = reactionsState.reactions,
             expanded = expanded,
             onReactionClick = onReactionClicked,
+            onReactionLongClick = onReactionLongClicked,
             onMoreReactionsClick = onMoreReactionsClicked,
             onToggleExpandClick = { expanded = !expanded },
         )
@@ -72,6 +74,7 @@ private fun TimelineItemReactionsView(
     reactions: ImmutableList<AggregatedReaction>,
     expanded: Boolean,
     onReactionClick: (emoji: String) -> Unit,
+    onReactionLongClick: (emoji: String) -> Unit,
     onMoreReactionsClick: () -> Unit,
     onToggleExpandClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -86,19 +89,22 @@ private fun TimelineItemReactionsView(
                 text = stringResource(id = if (expanded) R.string.screen_room_reactions_show_less else R.string.screen_room_reactions_show_more)
             ),
             onClick = onToggleExpandClick,
+            onLongClick = {}
         )
     },
     addMoreButton = {
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-            onClick = onMoreReactionsClick
+            onClick = onMoreReactionsClick,
+            onLongClick = {}
         )
     },
     reactions = {
         reactions.forEach { reaction ->
             MessagesReactionButton(
                 content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
-                onClick = { onReactionClick(reaction.key) }
+                onClick = { onReactionClick(reaction.key) },
+                onLongClick = { onReactionLongClick(reaction.key) }
             )
         }
     }
@@ -148,6 +154,7 @@ private fun ContentToPreview(
         ),
         isOutgoing = isOutgoing,
         onReactionClicked = {},
+        onReactionLongClicked = {},
         onMoreReactionsClicked = {},
     )
 }

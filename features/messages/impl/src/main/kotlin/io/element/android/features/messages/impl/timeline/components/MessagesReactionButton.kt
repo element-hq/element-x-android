@@ -17,9 +17,10 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -54,8 +55,10 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 fun MessagesReactionButton(
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     content: MessagesReactionsButtonContent,
     modifier: Modifier = Modifier,
 ) {
@@ -82,7 +85,10 @@ fun MessagesReactionButton(
             .padding(vertical = 2.dp, horizontal = 2.dp)
             // Clip click indicator inside the outer border
             .clip(RoundedCornerShape(corner = CornerSize(12.dp)))
-            .clickable(onClick = onClick)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            )
             // Inner border, to highlight when selected
             .border(BorderStroke(1.dp, borderColor), RoundedCornerShape(corner = CornerSize(12.dp)))
             .background(buttonColor, RoundedCornerShape(corner = CornerSize(12.dp)))
@@ -162,7 +168,8 @@ private fun ReactionContent(
 internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) = ElementPreview {
     MessagesReactionButton(
         content = MessagesReactionsButtonContent.Reaction(reaction),
-        onClick = {}
+        onClick = {},
+        onLongClick = {}
     )
 }
 
@@ -172,11 +179,13 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
     Row {
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-            onClick = {}
+            onClick = {},
+            onLongClick = {}
         )
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Text("12 more"),
-            onClick = {}
+            onClick = {},
+            onLongClick = {}
         )
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Reaction(
@@ -184,7 +193,8 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
                     key = "A very long reaction with many characters that should be truncated"
                 )
             ),
-            onClick = {}
+            onClick = {},
+            onLongClick = {}
         )
     }
 }

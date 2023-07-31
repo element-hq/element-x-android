@@ -112,6 +112,7 @@ fun TimelineItemEventRow(
     inReplyToClick: (EventId) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
+    onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
     modifier: Modifier = Modifier
@@ -169,6 +170,7 @@ fun TimelineItemEventRow(
                         inReplyToClicked = ::inReplyToClicked,
                         onUserDataClicked = ::onUserDataClicked,
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                        onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
                     )
                 }
@@ -184,6 +186,7 @@ fun TimelineItemEventRow(
                 inReplyToClicked = ::inReplyToClicked,
                 onUserDataClicked = ::onUserDataClicked,
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
             )
         }
@@ -224,6 +227,7 @@ private fun TimelineItemEventRowContent(
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
     onReactionClicked: (emoji: String) -> Unit,
+    onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -292,6 +296,7 @@ private fun TimelineItemEventRowContent(
                 reactionsState = event.reactionsState,
                 isOutgoing = event.isMine,
                 onReactionClicked = onReactionClicked,
+                onReactionLongClicked = onReactionLongClicked,
                 onMoreReactionsClicked = { onMoreReactionsClicked(event) },
                 modifier = Modifier
                     .constrainAs(reactions) {
@@ -588,6 +593,7 @@ private fun ContentToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
@@ -607,6 +613,7 @@ private fun ContentToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
@@ -653,6 +660,7 @@ private fun ContentToPreviewWithReply() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
@@ -673,6 +681,7 @@ private fun ContentToPreviewWithReply() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
@@ -729,6 +738,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                     onUserDataClick = {},
                     inReplyToClick = {},
                     onReactionClick = { _, _ -> },
+                    onReactionLongClick = { _, _ -> },
                     onMoreReactionsClick = {},
                     onTimestampClicked = {},
                     onSwipeToReply = {},
@@ -768,6 +778,7 @@ private fun ContentWithManyReactionsToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onSwipeToReply = {},
                 onTimestampClicked = {},

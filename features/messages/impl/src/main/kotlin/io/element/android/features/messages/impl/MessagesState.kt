@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -38,6 +39,7 @@ data class MessagesState(
     val timelineState: TimelineState,
     val actionListState: ActionListState,
     val customReactionState: CustomReactionState,
+    val reactionSummaryState: ReactionSummaryState,
     val retrySendMenuState: RetrySendMenuState,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,

@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.timeline.item.event
+package io.element.android.features.messages.impl.timeline.model
 
-data class EventReaction(
-    val key: String,
-    val senders: List<ReactionSender>
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import java.util.Date
+
+data class AggregatedReactionSender(
+    val senderId: UserId,
+    val timestamp: Date,
+    val sentTime: String,
+    val user: MatrixUser? = null
 )

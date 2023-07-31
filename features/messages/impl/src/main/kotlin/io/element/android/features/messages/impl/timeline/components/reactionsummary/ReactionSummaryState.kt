@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.timeline.item.event
+package io.element.android.features.messages.impl.timeline.components.reactionsummary
 
-data class EventReaction(
-    val key: String,
-    val senders: List<ReactionSender>
-)
+import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
+import io.element.android.libraries.matrix.api.core.EventId
+
+data class ReactionSummaryState(
+    val target: Summary?,
+    val eventSink: (ReactionSummaryEvents) -> Unit
+){
+    data class Summary(
+        val reactions: List<AggregatedReaction>,
+        val selectedKey: String,
+        val selectedEventId: EventId
+    )
+}
+
