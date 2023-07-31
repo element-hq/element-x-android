@@ -43,15 +43,16 @@ suspend fun <T : Any> ReceiveTurbine<T>.consumeItemsUntilPredicate(
 ): List<T> {
     val items = ArrayList<T>()
     tryOrNull {
-        while (true) {
+        var foundItemOrFinished = false
+        while (!foundItemOrFinished) {
             when (val event = withTurbineTimeout(timeout) { awaitEvent() }) {
                 is Event.Item<T> -> {
                     items.add(event.value)
                     if (predicate(event.value)) {
-                        break
+                        foundItemOrFinished = true
                     }
                 }
-                else -> break
+                Event.Complete, is Event.Error -> foundItemOrFinished = true
             }
         }
     }
