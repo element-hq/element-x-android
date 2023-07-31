@@ -51,13 +51,11 @@ fun Checkbox(
     var indeterminateState by remember { mutableStateOf(indeterminate) }
     androidx.compose.material3.TriStateCheckbox(
         state = if (!checked && indeterminateState) ToggleableState.Indeterminate else ToggleableState(checked),
-        onClick = if (onCheckedChange != null) {
+        onClick = onCheckedChange?.let {
             {
                 indeterminateState = false
                 onCheckedChange(!checked)
             }
-        } else {
-            null
         },
         modifier = modifier,
         enabled = enabled,
