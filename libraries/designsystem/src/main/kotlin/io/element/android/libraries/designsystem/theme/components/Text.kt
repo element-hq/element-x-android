@@ -178,8 +178,3 @@ private fun ContentToPreview() {
         }
     }
 }
-
-fun TextStyle.forceLineHeight() = copy(
-    platformStyle = PlatformTextStyle(includeFontPadding = false),
-    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
-)
