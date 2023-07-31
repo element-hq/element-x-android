@@ -21,12 +21,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.libraries.matrix.api.core.EventId
 
 open class ReactionSummaryStateProvider : PreviewParameterProvider<ReactionSummaryState> {
-    override val values: Sequence<ReactionSummaryState>
-        get() {
-            return sequenceOf(
-                anActionListState()
-            )
-        }
+    override val values = sequenceOf(anActionListState())
 }
 
 fun anActionListState(): ReactionSummaryState {

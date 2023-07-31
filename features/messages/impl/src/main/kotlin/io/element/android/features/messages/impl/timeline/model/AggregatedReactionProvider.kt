@@ -40,7 +40,7 @@ fun anAggregatedReaction(
     val senders = buildList {
         repeat(count) { index ->
             val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
-            val date = Date()
+            val date = Date(1_689_061_264L)
             add(
                 AggregatedReactionSender(
                     senderId = if (isHighlighted && index == 0) userId else UserId("@user$index:server.org"),

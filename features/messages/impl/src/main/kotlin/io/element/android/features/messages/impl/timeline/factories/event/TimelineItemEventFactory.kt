@@ -115,8 +115,10 @@ class TimelineItemEventFactory @Inject constructor(
         // the most recent reaction in the aggregation(hence index 0).
         // This appends new aggregations on the end of the reaction layout.
         aggregatedReactions = aggregatedReactions
-            .sortedWith(compareByDescending<AggregatedReaction> { it.count }
-            .thenBy { it.senders[0].timestamp })
+            .sortedWith(
+                compareByDescending<AggregatedReaction> { it.count }
+                    .thenBy { it.senders[0].timestamp }
+            )
         return TimelineItemReactions(aggregatedReactions.toImmutableList())
     }
 
