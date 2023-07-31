@@ -81,6 +81,7 @@ class RustMatrixTimeline(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = matrixRoom.isEncrypted,
         paginationStateFlow = _paginationState,
+        dispatcher = dispatcher,
     )
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
