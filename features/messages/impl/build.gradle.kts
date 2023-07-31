@@ -52,7 +52,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.datetime)
     implementation(libs.accompanist.flowlayout)
-    implementation(libs.androidx.recyclerview)
     implementation(libs.jsoup)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.constraintlayout.compose)
