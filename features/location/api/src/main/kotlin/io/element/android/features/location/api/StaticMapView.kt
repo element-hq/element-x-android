@@ -120,7 +120,7 @@ fun StaticMapView(
 
 @DayNightPreviews
 @Composable
-fun StaticMapViewPreview() = ElementPreview {
+internal fun StaticMapViewPreview() = ElementPreview {
     StaticMapView(
         lat = 0.0,
         lon = 0.0,

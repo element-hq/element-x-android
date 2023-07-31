@@ -405,7 +405,7 @@ private fun EmojiButton(
 
 @DayNightPreviews
 @Composable
-fun SheetContentPreview(
+internal fun SheetContentPreview(
     @PreviewParameter(ActionListStateProvider::class) state: ActionListState
 ) = ElementPreview {
     SheetContent(

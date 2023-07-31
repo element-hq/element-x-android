@@ -112,7 +112,7 @@ private fun TimelineItemReactionsView(
 
 @DayNightPreviews
 @Composable
-fun TimelineItemReactionsViewPreview() = ElementPreview {
+internal fun TimelineItemReactionsViewPreview() = ElementPreview {
     ContentToPreview(
         reactions = aTimelineItemReactions(count = 1).reactions
     )
@@ -120,7 +120,7 @@ fun TimelineItemReactionsViewPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TimelineItemReactionsViewFewPreview() = ElementPreview {
+internal fun TimelineItemReactionsViewFewPreview() = ElementPreview {
     ContentToPreview(
         reactions = aTimelineItemReactions(count = 3).reactions
     )
@@ -128,7 +128,7 @@ fun TimelineItemReactionsViewFewPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
+internal fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
     ContentToPreview(
         reactions = aTimelineItemReactions(count = 18).reactions
     )
@@ -136,7 +136,7 @@ fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TimelineItemReactionsViewOutgoingPreview() = ElementPreview {
+internal fun TimelineItemReactionsViewOutgoingPreview() = ElementPreview {
     ContentToPreview(
         reactions = aTimelineItemReactions(count = 18).reactions,
         isOutgoing = true

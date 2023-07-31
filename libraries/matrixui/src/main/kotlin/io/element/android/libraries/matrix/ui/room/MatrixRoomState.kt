@@ -21,12 +21,20 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.powerlevels.canRedact
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
 
 @Composable
 fun MatrixRoom.canSendMessageAsState(type: MessageEventType, updateKey: Long): State<Boolean> {
     return produceState(initialValue = true, key1 = updateKey) {
         value = canSendMessage(type).getOrElse { true }
+    }
+}
+
+@Composable
+fun MatrixRoom.canRedactAsState(updateKey: Long): State<Boolean> {
+    return produceState(initialValue = false, key1 = updateKey) {
+        value = canRedact().getOrElse { false }
     }
 }
 

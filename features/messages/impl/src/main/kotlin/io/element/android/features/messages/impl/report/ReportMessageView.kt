@@ -168,12 +168,12 @@ fun ReportMessageView(
 
 @Preview
 @Composable
-fun ReportMessageViewLightPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
+internal fun ReportMessageViewLightPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun ReportMessageViewDarkPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
+internal fun ReportMessageViewDarkPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

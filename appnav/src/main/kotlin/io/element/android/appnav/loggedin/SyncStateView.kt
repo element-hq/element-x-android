@@ -91,7 +91,7 @@ private fun SyncState.mustBeVisible() = when (this) {
 
 @DayNightPreviews
 @Composable
-fun SyncStateViewPreview() = ElementPreview {
+internal fun SyncStateViewPreview() = ElementPreview {
     // Add a box to see the shadow
     Box(modifier = Modifier.padding(24.dp)) {
         SyncStateView(

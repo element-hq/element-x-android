@@ -64,7 +64,8 @@ internal class RustRoomSummaryDataSource(
                 .map { it.toRoomSummaryDataSourceLoadingState() }
                 .onEach {
                     allRoomsLoadingState.value = it
-                }.launchIn(this)
+                }
+                .launchIn(this)
 
             launch {
                 // Wait until running, as invites is only available after that
@@ -112,7 +113,7 @@ private fun RoomListLoadingState.toRoomSummaryDataSourceLoadingState(): RoomSumm
     }
 }
 
-private fun RoomList.observeEntriesWithProcessor(processor: RoomSummaryListProcessor): Flow<RoomListEntriesUpdate> {
+private fun RoomList.observeEntriesWithProcessor(processor: RoomSummaryListProcessor): Flow<List<RoomListEntriesUpdate>> {
     return entriesFlow { roomListEntries ->
         processor.postEntries(roomListEntries)
     }.onEach { update ->

@@ -93,7 +93,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                 client.restoreSession(sessionData.toSession())
                 createMatrixClient(client)
             } else {
-                throw IllegalStateException("No session to restore with id $sessionId")
+                error("No session to restore with id $sessionId")
             }
         }.mapFailure { failure ->
             failure.mapClientException()

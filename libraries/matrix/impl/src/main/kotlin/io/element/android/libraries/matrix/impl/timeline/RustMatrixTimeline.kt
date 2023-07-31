@@ -118,7 +118,8 @@ class RustMatrixTimeline(
             innerRoom.backPaginationStatusFlow()
                 .onEach {
                     postPaginationStatus(it)
-                }.launchIn(this)
+                }
+                .launchIn(this)
 
             taskHandleBag += fetchMembers().getOrNull()
         }.invokeOnCompletion {
@@ -127,6 +128,7 @@ class RustMatrixTimeline(
     }
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
+        initLatch.await()
         runCatching {
             innerRoom.fetchMembers()
         }

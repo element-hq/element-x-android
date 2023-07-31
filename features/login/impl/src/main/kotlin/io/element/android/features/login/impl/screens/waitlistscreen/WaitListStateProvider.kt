@@ -25,7 +25,7 @@ open class WaitListStateProvider : PreviewParameterProvider<WaitListState> {
         get() = sequenceOf(
             aWaitListState(loginAction = Async.Uninitialized),
             aWaitListState(loginAction = Async.Loading()),
-            aWaitListState(loginAction = Async.Failure(Throwable())),
+            aWaitListState(loginAction = Async.Failure(Throwable("error"))),
             aWaitListState(loginAction = Async.Failure(Throwable(message = "IO_ELEMENT_X_WAIT_LIST"))),
             aWaitListState(loginAction = Async.Success(SessionId("@alice:element.io"))),
             // Add other state here

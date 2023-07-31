@@ -30,7 +30,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
             anAttachmentsPreviewState(),
             anAttachmentsPreviewState(mediaInfo = aFileInfo()),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(0.5f)),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException())),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"))),
         )
 }
 

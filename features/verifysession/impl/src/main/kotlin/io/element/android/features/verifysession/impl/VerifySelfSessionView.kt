@@ -242,12 +242,12 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
 
 @Preview
 @Composable
-fun VerifySelfSessionViewLightPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
+internal fun VerifySelfSessionViewLightPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun VerifySelfSessionViewDarkPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
+internal fun VerifySelfSessionViewDarkPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

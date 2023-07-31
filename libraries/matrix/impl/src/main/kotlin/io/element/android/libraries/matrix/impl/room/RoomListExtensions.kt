@@ -25,7 +25,6 @@ import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
-import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListLoadingStateListener
@@ -46,10 +45,10 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
         result.stateStream
     }.buffer(Channel.UNLIMITED)
 
-fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<RoomListEntriesUpdate> =
+fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<List<RoomListEntriesUpdate>> =
     mxCallbackFlow {
         val listener = object : RoomListEntriesListener {
-            override fun onUpdate(roomEntriesUpdate: RoomListEntriesUpdate) {
+            override fun onUpdate(roomEntriesUpdate: List<RoomListEntriesUpdate>) {
                 trySendBlocking(roomEntriesUpdate)
             }
         }
@@ -61,7 +60,7 @@ fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): 
 fun RoomListService.roomOrNull(roomId: String): RoomListItem? {
     return try {
         room(roomId)
-    } catch (exception: RoomListException) {
+    } catch (exception: Exception) {
         Timber.d(exception, "Failed finding room with id=$roomId.")
         return null
     }

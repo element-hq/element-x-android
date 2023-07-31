@@ -147,7 +147,8 @@ class RustMatrixClient constructor(
                 if (syncState == SyncState.Running) {
                     onSlidingSyncUpdate()
                 }
-            }.launchIn(sessionCoroutineScope)
+            }
+            .launchIn(sessionCoroutineScope)
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? = withContext(sessionDispatcher) {
@@ -227,7 +228,8 @@ class RustMatrixClient constructor(
                 roomSummaryDataSource.allRooms()
                     .filter { roomSummaries ->
                         roomSummaries.map { it.identifier() }.contains(roomId.value)
-                    }.first()
+                    }
+                    .first()
             }
             roomId
         }

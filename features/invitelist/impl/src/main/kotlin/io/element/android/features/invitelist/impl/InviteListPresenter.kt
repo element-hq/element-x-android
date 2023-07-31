@@ -152,8 +152,7 @@ class InviteListPresenter @Inject constructor(
             client.getRoom(roomId)?.use {
                 it.leave().getOrThrow()
                 notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
-            }
-            Unit
+            }.let { }
         }.runCatchingUpdatingState(declinedAction)
     }
 

@@ -102,7 +102,7 @@ private fun InitialsAvatar(
 
 @Preview(group = PreviewGroup.Avatars)
 @Composable
-fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
+internal fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
     ElementThemedPreview {
         Row(
             verticalAlignment = Alignment.CenterVertically,

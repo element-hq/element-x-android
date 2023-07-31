@@ -44,14 +44,14 @@ import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
+import io.element.android.features.ftue.api.FtueEntryPoint
+import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
-import io.element.android.features.ftue.api.FtueEntryPoint
-import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -100,13 +100,13 @@ class LoggedInFlowNode @AssistedInject constructor(
 ) {
 
     interface Callback : Plugin {
-        fun onOpenBugReport() = Unit
+        fun onOpenBugReport()
     }
 
     interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(identifier: String, client: MatrixClient) = Unit
+        fun onFlowCreated(identifier: String, client: MatrixClient)
 
-        fun onFlowReleased(identifier: String, client: MatrixClient) = Unit
+        fun onFlowReleased(identifier: String, client: MatrixClient)
     }
 
     data class Inputs(
@@ -305,7 +305,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                         override fun onFtueFlowFinished() {
                             backstack.pop()
                         }
-                    }).build()
+                    })
+                    .build()
             }
         }
     }

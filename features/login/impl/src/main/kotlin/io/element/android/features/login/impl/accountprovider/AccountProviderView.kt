@@ -114,12 +114,12 @@ fun AccountProviderView(
 
 @Preview
 @Composable
-fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
+internal fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewLight { ContentToPreview(item) }
 
 @Preview
 @Composable
-fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
+internal fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewDark { ContentToPreview(item) }
 
 @Composable
