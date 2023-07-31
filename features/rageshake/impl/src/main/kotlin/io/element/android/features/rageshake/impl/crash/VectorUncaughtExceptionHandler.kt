@@ -62,9 +62,9 @@ class VectorUncaughtExceptionHandler(
                 totalSize = info.totalMemory()
                 usedSize = totalSize - freeSize
             }
-            append("usedSize   " + usedSize / 1048576L + " MB\n")
-            append("freeSize   " + freeSize / 1048576L + " MB\n")
-            append("totalSize   " + totalSize / 1048576L + " MB\n")
+            append("usedSize   " + usedSize / 1_048_576L + " MB\n")
+            append("freeSize   " + freeSize / 1_048_576L + " MB\n")
+            append("totalSize   " + totalSize / 1_048_576L + " MB\n")
             append("Thread: ")
             append(thread.name)
             append(", Exception: ")

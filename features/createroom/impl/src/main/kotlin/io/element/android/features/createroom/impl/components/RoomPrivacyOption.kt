@@ -93,11 +93,11 @@ fun RoomPrivacyOption(
 
 @Preview
 @Composable
-fun RoomPrivacyOptionLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RoomPrivacyOptionLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun RoomPrivacyOptionDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RoomPrivacyOptionDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

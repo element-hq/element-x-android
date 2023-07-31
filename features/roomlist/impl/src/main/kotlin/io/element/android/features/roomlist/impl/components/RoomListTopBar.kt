@@ -43,6 +43,8 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.applyScaleDown
+import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
@@ -114,7 +116,11 @@ private fun DefaultRoomListTopBar(
             val fontStyle = if (scrollBehavior.state.collapsedFraction > 0.5)
                 ElementTheme.typography.aliasScreenTitle
             else
-                ElementTheme.typography.fontHeadingLgBold
+                ElementTheme.typography.fontHeadingLgBold.copy(
+                    // Due to a limitation of MediumTopAppBar, and to avoid the text to be truncated,
+                    // ensure that the font size will never be bigger than 28.dp.
+                    fontSize = 28.dp.applyScaleDown().toSp()
+                )
             Text(
                 style = fontStyle,
                 text = stringResource(id = R.string.screen_roomlist_main_space_title)

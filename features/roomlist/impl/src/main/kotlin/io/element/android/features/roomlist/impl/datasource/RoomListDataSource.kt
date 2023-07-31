@@ -73,7 +73,8 @@ class RoomListDataSource @Inject constructor(
         }
             .onEach {
                 _filteredRooms.value = it
-            }.launchIn(coroutineScope)
+            }
+            .launchIn(coroutineScope)
     }
 
     fun updateFilter(filterValue: String) {

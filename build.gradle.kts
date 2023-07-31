@@ -56,7 +56,7 @@ allprojects {
         // activate all available (even unstable) rules.
         allRules = true
         // point to your custom config defining rules to run, overwriting default behavior
-        config = files("$rootDir/tools/detekt/detekt.yml")
+        config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
         detektPlugins("io.nlopez.compose.rules:detekt:0.1.12")

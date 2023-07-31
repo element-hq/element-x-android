@@ -41,7 +41,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 }
             ),
             aCreateRoomRootState().copy(
-                startDmAction = Async.Failure(Throwable()),
+                startDmAction = Async.Failure(Throwable("error")),
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
                         searchQuery = it.userId.value,

@@ -143,12 +143,12 @@ fun ConfirmAccountProviderView(
 
 @Preview
 @Composable
-fun ConfirmAccountProviderViewLightPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) =
+internal fun ConfirmAccountProviderViewLightPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun ConfirmAccountProviderViewDarkPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) =
+internal fun ConfirmAccountProviderViewDarkPreview(@PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

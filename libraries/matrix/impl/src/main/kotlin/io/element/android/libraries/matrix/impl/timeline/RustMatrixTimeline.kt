@@ -118,7 +118,8 @@ class RustMatrixTimeline(
             innerRoom.backPaginationStatusFlow()
                 .onEach {
                     postPaginationStatus(it)
-                }.launchIn(this)
+                }
+                .launchIn(this)
 
             taskHandleBag += fetchMembers().getOrNull()
         }.invokeOnCompletion {

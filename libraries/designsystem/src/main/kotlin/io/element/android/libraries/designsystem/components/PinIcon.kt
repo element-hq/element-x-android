@@ -51,6 +51,6 @@ fun PinIcon(
 
 @DayNightPreviews
 @Composable
-fun PinIconPreview() = ElementPreview {
+internal fun PinIconPreview() = ElementPreview {
     PinIcon()
 }

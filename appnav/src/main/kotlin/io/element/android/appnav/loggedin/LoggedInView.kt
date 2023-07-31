@@ -58,7 +58,7 @@ fun LoggedInView(
 
 @DayNightPreviews
 @Composable
-fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) = ElementPreview {
+internal fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) = ElementPreview {
     LoggedInView(
         state = state
     )
