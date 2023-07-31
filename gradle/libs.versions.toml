@@ -49,7 +49,7 @@ telephoto = "0.4.0"
 
 # DI
 dagger = "2.47"
-anvil = "2.4.6"
+anvil = "2.4.7-1-8"
 
 # Auto service
 autoservice = "1.1.1"
