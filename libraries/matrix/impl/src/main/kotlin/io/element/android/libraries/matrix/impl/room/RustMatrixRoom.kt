@@ -140,7 +140,7 @@ class RustMatrixRoom(
 
     override val avatarUrl: String?
         get() {
-            return innerRoom.avatarUrl()
+            return roomListItem.avatarUrl() ?: innerRoom.avatarUrl()
         }
 
     override val isEncrypted: Boolean
