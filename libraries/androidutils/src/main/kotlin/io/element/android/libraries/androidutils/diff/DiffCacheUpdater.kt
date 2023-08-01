@@ -23,20 +23,22 @@ import kotlin.system.measureTimeMillis
 
 /**
  * Class in charge of updating a [MutableDiffCache] according to the cache invalidation rules provided by the [DiffCacheInvalidator].
+ * @param ListItem the type of the items in the list
+ * @param CachedItem the type of the items in the cache
  * @param diffCache the cache to update
  * @param detectMoves true if DiffUtil should try to detect moved items, false otherwise
  * @param cacheInvalidator the invalidator to use to update the cache
  * @param areItemsTheSame the function to use to compare items
  */
-class DiffCacheUpdater<T, U>(
-    private val diffCache: MutableDiffCache<U>,
+class DiffCacheUpdater<ListItem, CachedItem>(
+    private val diffCache: MutableDiffCache<CachedItem>,
     private val detectMoves: Boolean = false,
-    private val cacheInvalidator: DiffCacheInvalidator<U> = DefaultDiffCacheInvalidator(),
-    private val areItemsTheSame: (oldItem: T?, newItem: T?) -> Boolean,
+    private val cacheInvalidator: DiffCacheInvalidator<CachedItem> = DefaultDiffCacheInvalidator(),
+    private val areItemsTheSame: (oldItem: ListItem?, newItem: ListItem?) -> Boolean,
 ) {
 
     private val lock = Object()
-    private var prevOriginalList: List<T> = emptyList()
+    private var prevOriginalList: List<ListItem> = emptyList()
 
     private val listUpdateCallback = object : ListUpdateCallback {
         override fun onInserted(position: Int, count: Int) {
@@ -56,7 +58,7 @@ class DiffCacheUpdater<T, U>(
         }
     }
 
-    fun updateWith(newOriginalList: List<T>) = synchronized(lock) {
+    fun updateWith(newOriginalList: List<ListItem>) = synchronized(lock) {
         val timeToDiff = measureTimeMillis {
             val diffCallback = DefaultDiffCallback(prevOriginalList, newOriginalList, areItemsTheSame)
             val diffResult = DiffUtil.calculateDiff(diffCallback, detectMoves)
