@@ -47,68 +47,74 @@ fun TimelineItemReactions(
     modifier: Modifier = Modifier,
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
-
-    // In LTR languages we want an incoming message's reactions to be LRT and outgoing to be RTL.
-    // For RTL languages it should be the opposite.
-    val reactionsLayoutDirection = if (!isOutgoing) LocalLayoutDirection.current
-    else if (LocalLayoutDirection.current == LayoutDirection.Ltr)
-        LayoutDirection.Rtl
-    else
-        LayoutDirection.Ltr
-
-    CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
         TimelineItemReactionsView(
             modifier = modifier,
             reactions = reactionsState.reactions,
             expanded = expanded,
+            isOutgoing = isOutgoing,
             onReactionClick = onReactionClicked,
             onReactionLongClick = onReactionLongClicked,
             onMoreReactionsClick = onMoreReactionsClicked,
             onToggleExpandClick = { expanded = !expanded },
         )
-    }
 }
 
 @Composable
 private fun TimelineItemReactionsView(
     reactions: ImmutableList<AggregatedReaction>,
+    isOutgoing: Boolean,
     expanded: Boolean,
     onReactionClick: (emoji: String) -> Unit,
     onReactionLongClick: (emoji: String) -> Unit,
     onMoreReactionsClick: () -> Unit,
     onToggleExpandClick: () -> Unit,
     modifier: Modifier = Modifier
-) = TimelineItemReactionsLayout(
-    modifier = modifier,
-    itemSpacing = 4.dp,
-    rowSpacing = 4.dp,
-    expanded = expanded,
-    expandButton = {
-        MessagesReactionButton(
-            content = MessagesReactionsButtonContent.Text(
-                text = stringResource(id = if (expanded) R.string.screen_room_reactions_show_less else R.string.screen_room_reactions_show_more)
-            ),
-            onClick = onToggleExpandClick,
-            onLongClick = {}
+) {
+    // In LTR languages we want an incoming message's reactions to be LRT and outgoing to be RTL.
+    // For RTL languages it should be the opposite.
+    val currentLayout = LocalLayoutDirection.current
+    val reactionsLayoutDirection = if (!isOutgoing) currentLayout
+    else if (currentLayout == LayoutDirection.Ltr)
+        LayoutDirection.Rtl
+    else
+        LayoutDirection.Ltr
+
+    return CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
+        TimelineItemReactionsLayout(
+            modifier = modifier,
+            itemSpacing = 4.dp,
+            rowSpacing = 4.dp,
+            expanded = expanded,
+            expandButton = {
+                MessagesReactionButton(
+                    content = MessagesReactionsButtonContent.Text(
+                        text = stringResource(id = if (expanded) R.string.screen_room_reactions_show_less else R.string.screen_room_reactions_show_more)
+                    ),
+                    onClick = onToggleExpandClick,
+                    onLongClick = {}
+                )
+            },
+            addMoreButton = {
+                MessagesReactionButton(
+                    content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+                    onClick = onMoreReactionsClick,
+                    onLongClick = {}
+                )
+            },
+            reactions = {
+                reactions.forEach { reaction ->
+                    CompositionLocalProvider(LocalLayoutDirection provides currentLayout) {
+                        MessagesReactionButton(
+                            content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
+                            onClick = { onReactionClick(reaction.key) },
+                            onLongClick = { onReactionLongClick(reaction.key) }
+                        )
+                    }
+                }
+            }
         )
-    },
-    addMoreButton = {
-        MessagesReactionButton(
-            content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-            onClick = onMoreReactionsClick,
-            onLongClick = {}
-        )
-    },
-    reactions = {
-        reactions.forEach { reaction ->
-            MessagesReactionButton(
-                content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
-                onClick = { onReactionClick(reaction.key) },
-                onLongClick = { onReactionLongClick(reaction.key) }
-            )
-        }
     }
-)
+}
 
 @DayNightPreviews
 @Composable
