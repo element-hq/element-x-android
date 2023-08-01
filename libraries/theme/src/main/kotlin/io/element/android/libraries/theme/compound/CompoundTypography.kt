@@ -43,7 +43,9 @@ internal val defaultHeadlineSmall = TextStyle(
     lineHeight = 32.sp,
     fontSize = 24.sp,
     letterSpacing = 0.em,
-).forceLineHeight()
+    platformStyle = PlatformTextStyle(includeFontPadding = false),
+    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
+)
 
 // 22px (Material) vs 20px, it's the closest one
 @ShowkaseTypography(name = "M3 Title Large", group = "Compound")
@@ -97,9 +99,4 @@ internal val compoundTypography = Typography(
     labelLarge = compoundBodyMdMedium_LabelLarge,
     labelMedium = compoundBodySmMedium,
     labelSmall = compoundBodyXsMedium,
-)
-
-fun TextStyle.forceLineHeight() = copy(
-    platformStyle = PlatformTextStyle(includeFontPadding = false),
-    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
 )
