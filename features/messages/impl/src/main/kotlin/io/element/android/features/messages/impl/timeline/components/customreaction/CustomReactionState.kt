@@ -17,9 +17,10 @@
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
 import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.collections.immutable.ImmutableSet
 
 data class CustomReactionState(
     val selectedEventId: EventId?,
-    val selectedEmoji: Set<String>,
+    val selectedEmoji: ImmutableSet<String>,
     val eventSink: (CustomReactionEvents) -> Unit,
 )

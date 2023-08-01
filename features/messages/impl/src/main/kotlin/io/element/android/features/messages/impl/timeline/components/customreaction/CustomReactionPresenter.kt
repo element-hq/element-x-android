@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 
 class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionState> {
@@ -37,7 +38,7 @@ class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionSt
             }
         }
 
-        val selectedEmoji = selectedEvent?.reactionsState?.reactions?.mapNotNull { if(it.isHighlighted) it.key else null }.orEmpty().toSet()
+        val selectedEmoji = selectedEvent?.reactionsState?.reactions?.mapNotNull { if(it.isHighlighted) it.key else null }.orEmpty().toImmutableSet()
         return CustomReactionState(selectedEventId = selectedEvent?.eventId, selectedEmoji = selectedEmoji, eventSink = ::handleEvents)
     }
 }
