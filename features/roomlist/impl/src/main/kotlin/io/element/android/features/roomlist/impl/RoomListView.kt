@@ -52,7 +52,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -207,7 +207,7 @@ fun RoomListContent(
                         onLongClick = onRoomLongClicked,
                     )
                     if (index != state.roomList.lastIndex) {
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
             }

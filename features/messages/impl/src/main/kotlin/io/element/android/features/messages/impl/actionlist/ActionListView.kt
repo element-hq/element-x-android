@@ -74,7 +74,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toSp
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
@@ -177,7 +177,7 @@ private fun SheetContent(
                             .padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.height(14.dp))
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 if (state.displayEmojiReactions) {
@@ -188,7 +188,7 @@ private fun SheetContent(
                             onCustomReactionClicked = onCustomReactionClicked,
                             modifier = Modifier.fillMaxWidth(),
                         )
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 items(

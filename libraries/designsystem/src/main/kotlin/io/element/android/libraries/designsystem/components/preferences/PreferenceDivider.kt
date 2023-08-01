@@ -21,14 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun PreferenceDivider(
     modifier: Modifier = Modifier,
 ) {
-    Divider(
+    HorizontalDivider(
         modifier = modifier,
         color = ElementTheme.colors.borderDisabled,
     )
