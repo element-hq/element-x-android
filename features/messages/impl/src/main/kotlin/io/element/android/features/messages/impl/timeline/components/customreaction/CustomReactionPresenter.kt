@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.core.EventId
 import javax.inject.Inject
 
 class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionState> {
