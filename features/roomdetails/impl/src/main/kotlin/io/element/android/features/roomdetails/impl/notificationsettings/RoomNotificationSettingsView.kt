@@ -66,13 +66,6 @@ fun RoomNotificationSettingsView(
                 .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-//            PreferenceSwitch(
-//                isChecked = state.formState.sendLogs,
-//                onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
-//                enabled = isFormEnabled,
-//                title = stringResource(id = R.string.screen_bug_report_include_logs),
-//                subtitle = stringResource(id = R.string.screen_bug_report_logs_description),
-//            )
             val subtitle = when(state.defaultRoomNotificationMode) {
                 RoomNotificationMode.ALL_MESSAGES -> "All messages"
                 RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> "Mentions and keywords"
@@ -85,7 +78,7 @@ fun RoomNotificationSettingsView(
                 PreferenceSwitch(
                     isChecked = state.roomNotificationSettings?.isDefault.orTrue(),
                     onCheckedChange = {
-                        state.eventSink(RoomNotificationSettingsEvents.DefaultNotificationModeSelected)
+                        state.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(it))
                     },
                     title = "Match default setting",
                     subtitle = subtitle,

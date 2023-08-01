@@ -20,5 +20,5 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 sealed interface RoomNotificationSettingsEvents {
     data class RoomNotificationModeChanged(val mode: RoomNotificationMode) : RoomNotificationSettingsEvents
-    object DefaultNotificationModeSelected: RoomNotificationSettingsEvents
+    data class SetNotificationMode(val isDefault: Boolean): RoomNotificationSettingsEvents
 }

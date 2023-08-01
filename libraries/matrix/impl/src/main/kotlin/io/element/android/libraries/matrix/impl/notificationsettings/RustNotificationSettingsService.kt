@@ -35,29 +35,14 @@ class RustNotificationSettingsService(
 
     private val notificationSettings: NotificationSettings = client.getNotificationSettings()
 
-    private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>(onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val notificationSettingsChangeFlow: SharedFlow<Unit> = _notificationSettingsChangeFlow.asSharedFlow()
 
     private var notificationSettingsDelegate = object : NotificationSettingsDelegate {
         override fun settingsDidChange() {
-            Timber.d("emit ${_notificationSettingsChangeFlow.subscriptionCount.value}")
-            val ok = _notificationSettingsChangeFlow.tryEmit(Unit)
-            Timber.d("emit $ok")
+            _notificationSettingsChangeFlow.tryEmit(Unit)
         }
     }
-
-//    override val notificationSettingsChangeFlow = callbackFlow {
-//        val delegate = object:NotificationSettingsDelegate {
-//            override fun notificationSettingsDidChange() {
-//                trySendBlocking(Unit)
-//            }
-//        }
-//        send(Unit)
-//        notificationSettings.setDelegate(delegate)
-//        awaitClose {
-//         //   notificationSettings.setDelegate(null)
-//        }
-//    }.buffer(Channel.UNLIMITED)
 
     init {
         notificationSettings.setDelegate(notificationSettingsDelegate)
