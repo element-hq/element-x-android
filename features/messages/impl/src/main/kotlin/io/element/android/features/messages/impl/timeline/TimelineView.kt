@@ -47,7 +47,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -141,7 +140,6 @@ fun TimelineView(
         }
 
         TimelineScrollHelper(
-            itemCount = state.timelineItems.size,
             lazyListState = lazyListState,
             hasNewItems = state.hasNewItems,
             onScrollFinishedAt = ::onScrollFinishedAt
@@ -244,7 +242,6 @@ fun TimelineItemRow(
 
 @Composable
 private fun BoxScope.TimelineScrollHelper(
-    itemCount: Int,
     lazyListState: LazyListState,
     hasNewItems: Boolean,
     onScrollFinishedAt: (Int) -> Unit,
@@ -252,13 +249,6 @@ private fun BoxScope.TimelineScrollHelper(
     val coroutineScope = rememberCoroutineScope()
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
     val canAutoScroll by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 3 } }
-    var initialItemsLoaded by rememberSaveable { mutableStateOf(false) }
-    if (!initialItemsLoaded && itemCount > 0) {
-        initialItemsLoaded = true
-        LaunchedEffect(Unit) {
-            onScrollFinishedAt(lazyListState.firstVisibleItemIndex)
-        }
-    }
 
     LaunchedEffect(canAutoScroll, hasNewItems) {
         val shouldAutoScroll = isScrollFinished && canAutoScroll && hasNewItems

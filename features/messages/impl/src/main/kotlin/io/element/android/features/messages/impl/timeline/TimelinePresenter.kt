@@ -91,6 +91,16 @@ class TimelinePresenter @Inject constructor(
         }
 
         LaunchedEffect(timelineItems.size) {
+            // We just loaded the initial items, we should send a read receipt
+            if (prevMostRecentItemId.value == null && timelineItems.isNotEmpty()) {
+                appScope.sendReadReceiptIfNeeded(
+                    firstVisibleIndex = 0,
+                    timelineItems = timelineItems,
+                    lastReadReceiptIndex = lastReadReceiptIndex,
+                    lastReadReceiptId = lastReadReceiptId
+                )
+            }
+
             computeHasNewItems(timelineItems, prevMostRecentItemId, hasNewItems)
         }
 
