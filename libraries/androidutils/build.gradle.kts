@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.activity.activity)
+    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.browser)

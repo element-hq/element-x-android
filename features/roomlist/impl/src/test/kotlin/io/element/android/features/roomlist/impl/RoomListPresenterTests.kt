@@ -50,6 +50,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
@@ -118,13 +119,12 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = consumeItemsUntilPredicate { state -> state.roomList.size == 16 }.last()
             // Room list is loaded with 16 placeholders
             Truth.assertThat(initialState.roomList.size).isEqualTo(16)
             Truth.assertThat(initialState.roomList.all { it.isPlaceholder }).isTrue()
             roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
-            val withRoomState = awaitItem()
+            val withRoomState = consumeItemsUntilPredicate { state -> state.roomList.size == 1 }.last()
             Truth.assertThat(withRoomState.roomList.size).isEqualTo(1)
             Truth.assertThat(withRoomState.roomList.first())
                 .isEqualTo(aRoomListRoomSummary)
@@ -142,21 +142,19 @@ class RoomListPresenterTests {
             presenter.present()
         }.test {
             roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
-            skipItems(1)
-            val loadedState = awaitItem()
+            val loadedState = consumeItemsUntilPredicate { state -> state.roomList.size == 1 }.last()
             // Test filtering with result
             loadedState.eventSink.invoke(RoomListEvents.UpdateFilter(A_ROOM_NAME.substring(0, 3)))
-            skipItems(1) // Filter update
-            val withNotFilteredRoomState = awaitItem()
-            Truth.assertThat(withNotFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
-            Truth.assertThat(withNotFilteredRoomState.filteredRoomList.size).isEqualTo(1)
-            Truth.assertThat(withNotFilteredRoomState.filteredRoomList.first())
+            val withFilteredRoomState = consumeItemsUntilPredicate { state -> state.filteredRoomList.size == 1 }.last()
+            Truth.assertThat(withFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
+            Truth.assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
+            Truth.assertThat(withFilteredRoomState.filteredRoomList.first())
                 .isEqualTo(aRoomListRoomSummary)
             // Test filtering without result
-            withNotFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
-            skipItems(1) // Filter update
-            Truth.assertThat(awaitItem().filter).isEqualTo("tada")
-            Truth.assertThat(awaitItem().filteredRoomList).isEmpty()
+            withFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
+            val withNotFilteredRoomState = consumeItemsUntilPredicate { state -> state.filteredRoomList.size == 0 }.last()
+            Truth.assertThat(withNotFilteredRoomState.filter).isEqualTo("tada")
+            Truth.assertThat(withNotFilteredRoomState.filteredRoomList).isEmpty()
         }
     }
 
