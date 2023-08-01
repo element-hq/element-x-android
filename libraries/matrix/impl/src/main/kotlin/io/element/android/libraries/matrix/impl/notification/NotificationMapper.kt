@@ -20,6 +20,7 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -39,6 +40,8 @@ class NotificationMapper(
         roomId: RoomId,
         notificationItem: NotificationItem
     ): NotificationData {
+        notificationItem.event.use { (it as NotificationEvent.Timeline).event }
+        val senderId = UserId(notificationItem.senderInfo.senderId)
         return notificationItem.use { item ->
             NotificationData(
                 eventId = eventId,
@@ -50,8 +53,8 @@ class NotificationMapper(
                 isDirect = item.roomInfo.isDirect,
                 isEncrypted = item.roomInfo.isEncrypted.orFalse(),
                 isNoisy = item.isNoisy.orFalse(),
-                timestamp = item.timestamp() ?: clock.epochMillis(),
-                content = item.event.use(notificationContentMapper::map),
+                timestamp = item.timestamp(clock),
+                content = item.event.use { notificationContentMapper.map(senderId, it) },
                 contentUrl = null,
             )
         }
@@ -63,9 +66,9 @@ class NotificationContentMapper(
 ) {
     private val timelineEventToNotificationContentMapper = TimelineEventToNotificationContentMapper()
 
-    fun map(notificationEvent: NotificationEvent): NotificationContent =
+    fun map(senderId: UserId, notificationEvent: NotificationEvent): NotificationContent =
         when (notificationEvent) {
-            is NotificationEvent.Timeline -> timelineEventToNotificationContentMapper.map(notificationEvent.event)
+            is NotificationEvent.Timeline -> timelineEventToNotificationContentMapper.map(senderId, notificationEvent.event)
             is NotificationEvent.Invite -> NotificationContent.StateEvent.RoomMemberContent(
                 userId = sessionId.value,
                 membershipState = RoomMembershipState.INVITE,
@@ -73,6 +76,8 @@ class NotificationContentMapper(
         }
 }
 
-private fun NotificationItem.timestamp(): Long? {
-    return (this.event as? NotificationEvent.Timeline)?.event?.timestamp()?.toLong()
+private fun NotificationItem.timestamp(clock: SystemClock): Long {
+    // FIXME we can't get the timestamp from the notification item anymore, so we need to fake it
+//    return (this.event as? NotificationEvent.Timeline)?.event?.timestamp()?.toLong()
+    return clock.epochMillis()
 }
