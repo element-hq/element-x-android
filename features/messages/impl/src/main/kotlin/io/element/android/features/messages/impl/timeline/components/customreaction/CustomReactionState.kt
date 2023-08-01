@@ -20,5 +20,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 
 data class CustomReactionState(
     val selectedEventId: EventId?,
+    val selectedEmoji: Set<String>,
     val eventSink: (CustomReactionEvents) -> Unit,
 )

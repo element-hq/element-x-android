@@ -68,6 +68,7 @@ fun aMessagesState() = MessagesState(
     customReactionState = CustomReactionState(
         selectedEventId = null,
         eventSink = {},
+        selectedEmoji = setOf(),
     ),
     reactionSummaryState = ReactionSummaryState(
         target = null,
