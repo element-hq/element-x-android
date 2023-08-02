@@ -113,6 +113,7 @@ sealed class MessagesReactionsButtonContent {
 }
 
 private val reactionEmojiLineHeight = 20.sp
+private val addEmojiSize = 16.dp
 
 @Composable
 private fun TextContent(
@@ -135,7 +136,8 @@ private fun IconContent(
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
     tint = ElementTheme.materialColors.secondary,
     modifier = modifier
-        .size(reactionEmojiLineHeight.toDp())
+        .size(addEmojiSize)
+
 )
 
 @Composable
@@ -175,13 +177,18 @@ internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionP
 
 @DayNightPreviews
 @Composable
+internal fun MessagesAddReactionButtonPreview() = ElementPreview {
+    MessagesReactionButton(
+        content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+        onClick = {},
+        onLongClick = {}
+    )
+}
+
+@DayNightPreviews
+@Composable
 internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
     Row {
-        MessagesReactionButton(
-            content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-            onClick = {},
-            onLongClick = {}
-        )
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Text("12 more"),
             onClick = {},
