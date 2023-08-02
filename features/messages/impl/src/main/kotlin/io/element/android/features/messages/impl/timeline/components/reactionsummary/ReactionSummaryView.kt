@@ -51,6 +51,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -177,10 +178,12 @@ fun AggregatedReactionButton(
         MaterialTheme.colorScheme.primary
     }
 
+    val roundedCornerShape = RoundedCornerShape(corner = CornerSize(percent = 50))
     Surface(
         modifier = modifier
+            .background(buttonColor, roundedCornerShape)
+            .clip(roundedCornerShape)
             .clickable(onClick = onClick)
-            .background(buttonColor, RoundedCornerShape(corner = CornerSize(percent = 50)))
             .padding(vertical = 8.dp, horizontal = 12.dp),
         color = buttonColor
     ) {
