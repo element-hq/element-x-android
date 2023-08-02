@@ -40,7 +40,6 @@ class NotificationMapper(
         roomId: RoomId,
         notificationItem: NotificationItem
     ): NotificationData {
-        notificationItem.event.use { (it as NotificationEvent.Timeline).event }
         val senderId = UserId(notificationItem.senderInfo.senderId)
         return notificationItem.use { item ->
             NotificationData(
