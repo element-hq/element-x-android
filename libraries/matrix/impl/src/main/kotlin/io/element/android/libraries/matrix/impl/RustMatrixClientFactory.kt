@@ -24,6 +24,7 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
@@ -40,20 +41,21 @@ class RustMatrixClientFactory @Inject constructor(
     private val clock: SystemClock,
 ) {
 
-    suspend fun create(sessionData: SessionData): RustMatrixClient {
+    suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val client = ClientBuilder()
             .basePath(baseDirectory.absolutePath)
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .userAgent(userAgentProvider.provide())
-            // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
+            // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
             .use { it.build() }
 
         client.restoreSession(sessionData.toSession())
 
         val syncService = client.syncService().finish()
-        return RustMatrixClient(
+
+        RustMatrixClient(
             client = client,
             syncService = syncService,
             sessionStore = sessionStore,
