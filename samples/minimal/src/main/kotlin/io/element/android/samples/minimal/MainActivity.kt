@@ -26,11 +26,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
 import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.services.toolbox.impl.systemclock.DefaultSystemClock
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -39,15 +40,22 @@ class MainActivity : ComponentActivity() {
 
     private val matrixAuthenticationService: MatrixAuthenticationService by lazy {
         val baseDirectory = File(applicationContext.filesDir, "sessions")
-
+        val userAgentProvider = SimpleUserAgentProvider("MinimalSample")
+        val sessionStore = InMemorySessionStore()
         RustMatrixAuthenticationService(
-            context = applicationContext,
             baseDirectory = baseDirectory,
-            appCoroutineScope = Singleton.appScope,
             coroutineDispatchers = Singleton.coroutineDispatchers,
-            sessionStore = InMemorySessionStore(),
-            clock = DefaultSystemClock(),
-            userAgentProvider = SimpleUserAgentProvider("MinimalSample")
+            sessionStore = sessionStore,
+            userAgentProvider = userAgentProvider,
+            rustMatrixClientFactory = RustMatrixClientFactory(
+                context = applicationContext,
+                baseDirectory = baseDirectory,
+                appCoroutineScope = Singleton.appScope,
+                coroutineDispatchers = Singleton.coroutineDispatchers,
+                sessionStore = sessionStore,
+                userAgentProvider = userAgentProvider,
+                clock = DefaultSystemClock()
+            )
         )
     }
 
