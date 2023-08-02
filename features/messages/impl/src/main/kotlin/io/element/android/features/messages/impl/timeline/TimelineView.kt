@@ -140,6 +140,7 @@ fun TimelineView(
         }
 
         TimelineScrollHelper(
+            isTimelineEmpty = state.timelineItems.isEmpty(),
             lazyListState = lazyListState,
             hasNewItems = state.hasNewItems,
             onScrollFinishedAt = ::onScrollFinishedAt
@@ -242,6 +243,7 @@ fun TimelineItemRow(
 
 @Composable
 private fun BoxScope.TimelineScrollHelper(
+    isTimelineEmpty: Boolean,
     lazyListState: LazyListState,
     hasNewItems: Boolean,
     onScrollFinishedAt: (Int) -> Unit,
@@ -259,8 +261,8 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    LaunchedEffect(isScrollFinished) {
-        if (isScrollFinished) {
+    LaunchedEffect(isScrollFinished, isTimelineEmpty) {
+        if (isScrollFinished && !isTimelineEmpty) {
             // Notify the parent composable about the first visible item index when scrolling finishes
             onScrollFinishedAt(lazyListState.firstVisibleItemIndex)
         }
