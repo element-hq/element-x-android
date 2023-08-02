@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
+// TODO Oidc
+// import org.matrix.rustcomponents.sdk.OidcAuthenticationUrl
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -28,21 +30,15 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.impl.RustMatrixClient
+import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Client
-import org.matrix.rustcomponents.sdk.ClientBuilder
-// TODO Oidc
-// import org.matrix.rustcomponents.sdk.OidcAuthenticationUrl
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
 import java.io.File
@@ -55,11 +51,10 @@ import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthentication
 class RustMatrixAuthenticationService @Inject constructor(
     @ApplicationContext private val context: Context,
     private val baseDirectory: File,
-    private val appCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
-    private val clock: SystemClock,
     private val userAgentProvider: UserAgentProvider,
+    private val rustMatrixClientFactory: RustMatrixClientFactory,
 ) : MatrixAuthenticationService {
 
     private val authService: RustAuthenticationService = RustAuthenticationService(
@@ -84,14 +79,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         runCatching {
             val sessionData = sessionStore.getSession(sessionId.value)
             if (sessionData != null) {
-                val client = ClientBuilder()
-                    .basePath(baseDirectory.absolutePath)
-                    .homeserverUrl(sessionData.homeserverUrl)
-                    .username(sessionData.userId)
-                    .userAgent(userAgentProvider.provide())
-                    .use { it.build() }
-                client.restoreSession(sessionData.toSession())
-                createMatrixClient(client)
+                rustMatrixClientFactory.create(sessionData)
             } else {
                 error("No session to restore with id $sessionId")
             }
@@ -181,29 +169,7 @@ class RustMatrixAuthenticationService @Inject constructor(
          */
     }
 
-    private suspend fun createMatrixClient(client: Client): MatrixClient {
-        val syncService = client.syncService().finish()
-        return RustMatrixClient(
-            client = client,
-            syncService = syncService,
-            sessionStore = sessionStore,
-            appCoroutineScope = appCoroutineScope,
-            dispatchers = coroutineDispatchers,
-            baseDirectory = baseDirectory,
-            baseCacheDirectory = context.cacheDir,
-            clock = clock,
-        )
-    }
 }
-
-private fun SessionData.toSession() = Session(
-    accessToken = accessToken,
-    refreshToken = refreshToken,
-    userId = userId,
-    deviceId = deviceId,
-    homeserverUrl = homeserverUrl,
-    slidingSyncProxy = slidingSyncProxy,
-)
 
 private fun Session.toSessionData() = SessionData(
     userId = userId,
