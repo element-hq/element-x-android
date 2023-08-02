@@ -45,7 +45,7 @@ dependencycheck = "8.3.1"
 dependencyanalysis = "1.20.0"
 stem = "2.3.0"
 sqldelight = "1.5.5"
-telephoto = "0.4.0"
+telephoto = "0.5.0"
 
 # DI
 dagger = "2.47"
