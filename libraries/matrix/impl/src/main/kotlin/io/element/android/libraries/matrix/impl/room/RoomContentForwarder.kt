@@ -80,6 +80,6 @@ class RoomContentForwarder(
     }
 
     private object NoOpTimelineListener : TimelineListener {
-        override fun onUpdate(diff: TimelineDiff) = Unit
+        override fun onUpdate(diff: List<TimelineDiff>) = Unit
     }
 }
