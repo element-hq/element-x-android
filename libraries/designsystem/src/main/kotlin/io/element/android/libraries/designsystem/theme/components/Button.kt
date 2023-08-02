@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -124,7 +125,7 @@ fun CompoundButton(
 
     androidx.compose.material3.Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.heightIn(min = minHeight),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -153,14 +154,13 @@ fun CompoundButton(
             }
             else -> Unit
         }
-        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = title,
             style = textStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(horizontal = 8.dp),
         )
-        Spacer(modifier = Modifier.width(8.dp))
     }
 }
 
