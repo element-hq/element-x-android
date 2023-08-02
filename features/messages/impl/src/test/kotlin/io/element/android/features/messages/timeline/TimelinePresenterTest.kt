@@ -119,7 +119,7 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - on scroll finished will not send read receipt no event is before the index`() = runTest {
+    fun `present - on scroll finished will not send read receipt if no event is before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
                 MatrixTimelineItem.Event(0, anEventTimelineItem())
