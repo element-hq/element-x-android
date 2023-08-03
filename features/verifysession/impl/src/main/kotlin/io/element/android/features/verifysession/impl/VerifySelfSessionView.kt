@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -44,15 +43,16 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
+import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.CompoundButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.sync.Mutex
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
 @Composable
@@ -75,6 +75,7 @@ fun VerifySelfSessionView(
     val buttonsVisible by remember(verificationFlowStep) {
         derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
+    Mutex()
     HeaderFooterPage(
         modifier = modifier,
         header = {
@@ -219,23 +220,22 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
     ButtonColumnMolecule(
         modifier = Modifier.padding(bottom = 20.dp)
     ) {
-        ButtonWithProgress(
-            text = positiveButtonTitle?.let { stringResource(it) },
-            showProgress = isVerifying,
-            modifier = Modifier.fillMaxWidth(),
-            onClick = { positiveButtonEvent?.let { eventSink(it) } }
-        )
+        if (positiveButtonTitle != null) {
+            CompoundButton(
+                title = stringResource(positiveButtonTitle),
+                showProgress = isVerifying,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { positiveButtonEvent?.let { eventSink(it) } }
+            )
+        }
         if (negativeButtonTitle != null) {
-            TextButton(
+            CompoundButton(
+                title = stringResource(negativeButtonTitle),
+                buttonStyle = ButtonStyle.Text,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = negativeButtonCallback,
                 enabled = negativeButtonEnabled,
-            ) {
-                Text(
-                    text = stringResource(negativeButtonTitle),
-                    style = ElementTheme.typography.aliasButtonText,
-                )
-            }
+            )
         }
     }
 }

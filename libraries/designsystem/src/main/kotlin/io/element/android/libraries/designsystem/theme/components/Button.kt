@@ -123,7 +123,11 @@ fun CompoundButton(
     }
 
     androidx.compose.material3.Button(
-        onClick = onClick,
+        onClick = {
+            if (!showProgress) {
+                onClick()
+            }
+        },
         modifier = modifier.heightIn(min = minHeight),
         enabled = enabled,
         shape = shape,
@@ -218,19 +222,6 @@ object ElementButtonDefaults {
     @Composable
     fun buttonColors(): ButtonColors = ButtonDefaults.buttonColors()
 
-}
-
-@Preview(group = PreviewGroup.Buttons)
-@Composable
-internal fun ButtonPreview() = ElementThemedPreview {
-    Column {
-        Button(onClick = {}, enabled = true) {
-            Text(text = "Click me! - Enabled")
-        }
-        Button(onClick = {}, enabled = false) {
-            Text(text = "Click me! - Disabled")
-        }
-    }
 }
 
 @Preview(group = PreviewGroup.Buttons)

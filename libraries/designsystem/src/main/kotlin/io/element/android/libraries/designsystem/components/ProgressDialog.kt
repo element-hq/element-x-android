@@ -38,9 +38,10 @@ import androidx.compose.ui.window.DialogProperties
 import io.element.android.libraries.designsystem.components.dialogs.DialogPreview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.CompoundButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
@@ -129,9 +130,11 @@ private fun ProgressDialogContent(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomEnd
                 ) {
-                    TextButton(onClick = onCancelClicked) {
-                        Text(stringResource(id = CommonStrings.action_cancel))
-                    }
+                    CompoundButton(
+                        title = stringResource(id = CommonStrings.action_cancel),
+                        buttonStyle = ButtonStyle.Text,
+                        onClick = onCancelClicked,
+                    )
                 }
             }
         }

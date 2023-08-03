@@ -57,11 +57,11 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.ButtonStyle
+import io.element.android.libraries.designsystem.theme.components.CompoundButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
@@ -194,16 +194,12 @@ fun ConfigureRoomToolbar(
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
-            TextButton(
-                modifier = Modifier.padding(horizontal = 8.dp),
+            CompoundButton(
+                title = stringResource(CommonStrings.action_create),
+                buttonStyle = ButtonStyle.Text,
                 enabled = isNextActionEnabled,
                 onClick = onNextPressed,
-            ) {
-                Text(
-                    text = stringResource(CommonStrings.action_create),
-                    style = ElementTheme.typography.aliasButtonText,
-                )
-            }
+            )
         }
     )
 }

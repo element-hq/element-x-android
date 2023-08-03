@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CompoundButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -48,9 +48,10 @@ fun AsyncFailure(
         Text(text = throwable.message ?: stringResource(id = CommonStrings.error_unknown))
         if (onRetry != null) {
             Spacer(modifier = Modifier.height(24.dp))
-            Button(onClick = onRetry) {
-                Text(text = stringResource(id = CommonStrings.action_retry))
-            }
+            CompoundButton(
+                title = stringResource(id = CommonStrings.action_retry),
+                onClick = onRetry
+            )
         }
     }
 }
