@@ -26,7 +26,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 
 /**
  * Debug tool to add a vertical and a horizontal ruler on top of the content.
@@ -77,7 +77,7 @@ internal fun WithRulerDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     WithRulers(xRulersOffset = 20.dp, yRulersOffset = 15.dp) {
-        CompoundButton(
+        Button(
             title = "A Button with rulers on it!",
             buttonStyle = ButtonStyle.Outlined,
             buttonSize = ButtonSize.Medium,

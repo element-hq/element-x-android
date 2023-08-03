@@ -53,7 +53,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -123,7 +123,7 @@ fun ForwardMessagesView(
                     BackButton(onClick = { onBackButton(state) })
                 },
                 actions = {
-                    CompoundButton(
+                    Button(
                         title = stringResource(CommonStrings.action_send),
                         buttonStyle = ButtonStyle.Text,
                         enabled = state.selectedRooms.isNotEmpty(),

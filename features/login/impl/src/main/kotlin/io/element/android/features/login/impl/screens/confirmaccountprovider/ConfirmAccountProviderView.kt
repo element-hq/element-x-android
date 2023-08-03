@@ -39,8 +39,8 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -86,7 +86,7 @@ fun ConfirmAccountProviderView(
         },
         footer = {
             ButtonColumnMolecule {
-                CompoundButton(
+                Button(
                     title = stringResource(id = R.string.screen_account_provider_continue),
                     showProgress = isLoading,
                     onClick = { eventSink.invoke(ConfirmAccountProviderEvents.Continue) },
@@ -95,7 +95,7 @@ fun ConfirmAccountProviderView(
                         .fillMaxWidth()
                         .testTag(TestTags.loginContinue)
                 )
-                CompoundButton(
+                Button(
                     title = stringResource(id = R.string.screen_account_provider_change),
                     onClick = onChange,
                     enabled = true,

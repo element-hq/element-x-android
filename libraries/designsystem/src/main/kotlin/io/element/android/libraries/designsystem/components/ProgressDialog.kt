@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
@@ -130,7 +130,7 @@ private fun ProgressDialogContent(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomEnd
                 ) {
-                    CompoundButton(
+                    Button(
                         title = stringResource(id = CommonStrings.action_cancel),
                         buttonStyle = ButtonStyle.Text,
                         onClick = onCancelClicked,

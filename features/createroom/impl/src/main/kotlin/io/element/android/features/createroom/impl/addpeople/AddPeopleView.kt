@@ -37,7 +37,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -103,7 +103,7 @@ fun AddPeopleViewTopBar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip
-            CompoundButton(
+            Button(
                 title = stringResource(id = textActionResId),
                 buttonStyle = ButtonStyle.Text,
                 onClick = onNextPressed,

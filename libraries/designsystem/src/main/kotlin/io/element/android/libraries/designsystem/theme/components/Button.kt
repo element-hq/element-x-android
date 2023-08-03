@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -33,9 +32,7 @@ import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -44,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -59,7 +55,7 @@ import io.element.android.libraries.theme.ElementTheme
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&mode=design&t=U03tOFZz5FSLVUMa-1
 
 @Composable
-fun CompoundButton(
+fun Button(
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -189,7 +185,7 @@ enum class ButtonStyle {
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun FilledButtonMediumPreview() {
-    CompoundButtonCombinationPreview(
+    ButtonCombinationPreview(
         buttonStyle = ButtonStyle.Filled,
         buttonSize = ButtonSize.Medium,
     )
@@ -198,7 +194,7 @@ internal fun FilledButtonMediumPreview() {
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun FilledButtonLargePreview() {
-    CompoundButtonCombinationPreview(
+    ButtonCombinationPreview(
         buttonStyle = ButtonStyle.Filled,
         buttonSize = ButtonSize.Large,
     )
@@ -207,7 +203,7 @@ internal fun FilledButtonLargePreview() {
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun OutlinedButtonMediumPreview() {
-    CompoundButtonCombinationPreview(
+    ButtonCombinationPreview(
         buttonStyle = ButtonStyle.Outlined,
         buttonSize = ButtonSize.Medium,
     )
@@ -216,7 +212,7 @@ internal fun OutlinedButtonMediumPreview() {
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun OutlinedButtonLargePreview() {
-    CompoundButtonCombinationPreview(
+    ButtonCombinationPreview(
         buttonStyle = ButtonStyle.Outlined,
         buttonSize = ButtonSize.Large,
     )
@@ -225,7 +221,7 @@ internal fun OutlinedButtonLargePreview() {
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun TextButtonMediumPreview() {
-    CompoundButtonCombinationPreview(
+    ButtonCombinationPreview(
         buttonStyle = ButtonStyle.Text,
         buttonSize = ButtonSize.Medium,
     )
@@ -234,14 +230,14 @@ internal fun TextButtonMediumPreview() {
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun TextButtonLargePreview() {
-    CompoundButtonCombinationPreview(
+    ButtonCombinationPreview(
         buttonStyle = ButtonStyle.Text,
         buttonSize = ButtonSize.Large,
     )
 }
 
 @Composable
-private fun CompoundButtonCombinationPreview(
+private fun ButtonCombinationPreview(
     buttonStyle: ButtonStyle,
     buttonSize: ButtonSize,
     modifier: Modifier = Modifier,
@@ -252,14 +248,14 @@ private fun CompoundButtonCombinationPreview(
             modifier = Modifier.padding(16.dp).width(IntrinsicSize.Max),
         ) {
             // Normal
-            CompoundButtonRowPreview(
+            ButtonRowPreview(
                 modifier = Modifier.then(modifier),
                 buttonStyle = buttonStyle,
                 buttonSize = buttonSize,
             )
 
             // With icon
-            CompoundButtonRowPreview(
+            ButtonRowPreview(
                 modifier = Modifier.then(modifier),
                 leadingIcon = IconSource.Vector(Icons.Outlined.Share),
                 buttonStyle = buttonStyle,
@@ -267,7 +263,7 @@ private fun CompoundButtonCombinationPreview(
             )
 
             // With progress
-            CompoundButtonRowPreview(
+            ButtonRowPreview(
                 modifier = Modifier.then(modifier),
                 showProgress = true,
                 buttonStyle = buttonStyle,
@@ -278,7 +274,7 @@ private fun CompoundButtonCombinationPreview(
 }
 
 @Composable
-private fun CompoundButtonRowPreview(
+private fun ButtonRowPreview(
     buttonStyle: ButtonStyle,
     buttonSize: ButtonSize,
     modifier: Modifier = Modifier,
@@ -286,7 +282,7 @@ private fun CompoundButtonRowPreview(
     showProgress: Boolean = false,
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
-        CompoundButton(
+        Button(
             title = "A button",
             showProgress = showProgress,
             onClick = {},
@@ -295,7 +291,7 @@ private fun CompoundButtonRowPreview(
             leadingIcon = leadingIcon,
             modifier = Modifier.then(modifier),
         )
-        CompoundButton(
+        Button(
             title = "A button",
             showProgress = showProgress,
             enabled = false,

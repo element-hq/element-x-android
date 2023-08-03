@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 
 @Composable
 fun ButtonColumnMolecule(
@@ -58,8 +58,8 @@ internal fun ButtonColumnMoleculeDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     ButtonColumnMolecule {
-        CompoundButton(title = "Button", onClick = {}, modifier = Modifier.fillMaxWidth())
-        CompoundButton(title = "OutlinedButton", buttonStyle = ButtonStyle.Outlined, onClick = {}, modifier = Modifier.fillMaxWidth())
-        CompoundButton(title = "TextButton", buttonStyle = ButtonStyle.Text, onClick = {}, modifier = Modifier.fillMaxWidth())
+        Button(title = "Button", onClick = {}, modifier = Modifier.fillMaxWidth())
+        Button(title = "OutlinedButton", buttonStyle = ButtonStyle.Outlined, onClick = {}, modifier = Modifier.fillMaxWidth())
+        Button(title = "TextButton", buttonStyle = ButtonStyle.Text, onClick = {}, modifier = Modifier.fillMaxWidth())
     }
 }

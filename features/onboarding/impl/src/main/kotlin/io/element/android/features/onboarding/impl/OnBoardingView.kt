@@ -41,7 +41,7 @@ import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
@@ -140,14 +140,14 @@ private fun OnBoardingButtons(
             CommonStrings.action_continue
         }
         if (state.canLoginWithQrCode) {
-            CompoundButton(
+            Button(
                 title = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
                 leadingIcon = IconSource.Vector(Icons.Default.QrCode),
                 onClick = onSignInWithQrCode,
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        CompoundButton(
+        Button(
             title = stringResource(id = signInButtonStringRes),
             onClick = onSignIn,
             modifier = Modifier
@@ -155,7 +155,7 @@ private fun OnBoardingButtons(
                 .testTag(TestTags.onBoardingSignIn)
         )
         if (state.canCreateAccount) {
-            CompoundButton(
+            Button(
                 title = stringResource(id = R.string.screen_onboarding_sign_up),
                 buttonStyle = ButtonStyle.Outlined,
                 onClick = onCreateAccount,

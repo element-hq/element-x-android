@@ -47,7 +47,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.theme.ElementTheme
@@ -221,7 +221,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         modifier = Modifier.padding(bottom = 20.dp)
     ) {
         if (positiveButtonTitle != null) {
-            CompoundButton(
+            Button(
                 title = stringResource(positiveButtonTitle),
                 showProgress = isVerifying,
                 modifier = Modifier.fillMaxWidth(),
@@ -229,7 +229,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             )
         }
         if (negativeButtonTitle != null) {
-            CompoundButton(
+            Button(
                 title = stringResource(negativeButtonTitle),
                 buttonStyle = ButtonStyle.Text,
                 modifier = Modifier.fillMaxWidth(),

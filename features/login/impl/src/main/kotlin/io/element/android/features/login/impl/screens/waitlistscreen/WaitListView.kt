@@ -52,7 +52,7 @@ import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.theme.ElementTheme
@@ -139,7 +139,7 @@ private fun WaitListContent(
     ) {
         if (state.loginAction !is Async.Success) {
             ElementTheme(darkTheme = true) {
-                CompoundButton(
+                Button(
                     title = stringResource(CommonStrings.action_cancel),
                     onClick = onCancelClicked,
                 )
@@ -198,7 +198,7 @@ private fun WaitListContent(
         }
         if (state.loginAction is Async.Success) {
             ElementTheme(darkTheme = true) {
-                CompoundButton(
+                Button(
                     title = stringResource(id = CommonStrings.action_continue),
                     onClick = { state.eventSink.invoke(WaitListEvents.Continue) },
                     modifier = Modifier

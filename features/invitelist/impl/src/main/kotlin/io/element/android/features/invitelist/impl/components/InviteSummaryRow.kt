@@ -50,7 +50,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -131,7 +131,7 @@ internal fun DefaultInviteSummaryRow(
 
             // CTAs
             Row(Modifier.padding(top = 12.dp)) {
-                CompoundButton(
+                Button(
                     title = stringResource(CommonStrings.action_decline),
                     onClick = onDeclineClicked,
                     modifier = Modifier.weight(1f),
@@ -141,7 +141,7 @@ internal fun DefaultInviteSummaryRow(
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                CompoundButton(
+                Button(
                     title = stringResource(CommonStrings.action_accept),
                     onClick = onAcceptClicked,
                     modifier = Modifier.weight(1f),

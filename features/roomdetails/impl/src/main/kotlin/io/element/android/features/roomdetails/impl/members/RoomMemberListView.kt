@@ -48,7 +48,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -211,7 +211,7 @@ private fun RoomMemberListTopBar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             if (canInvite) {
-                CompoundButton(
+                Button(
                     title = stringResource(CommonStrings.action_invite),
                     buttonStyle = ButtonStyle.Text,
                     onClick = onInvitePressed,

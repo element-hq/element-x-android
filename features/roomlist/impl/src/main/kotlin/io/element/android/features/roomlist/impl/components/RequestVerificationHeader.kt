@@ -37,7 +37,7 @@ import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -81,7 +81,7 @@ internal fun RequestVerificationHeader(
                     style = ElementTheme.typography.fontBodyMdRegular,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                CompoundButton(
+                Button(
                     title = stringResource(CommonStrings.action_continue),
                     buttonSize = ButtonSize.Medium,
                     modifier = Modifier.fillMaxWidth(),

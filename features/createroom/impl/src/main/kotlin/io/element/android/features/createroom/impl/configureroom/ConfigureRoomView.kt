@@ -59,7 +59,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -194,7 +194,7 @@ fun ConfigureRoomToolbar(
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
-            CompoundButton(
+            Button(
                 title = stringResource(CommonStrings.action_create),
                 buttonStyle = ButtonStyle.Text,
                 enabled = isNextActionEnabled,

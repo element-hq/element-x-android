@@ -55,7 +55,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
@@ -188,12 +188,12 @@ private fun AnalyticsOptInFooter(
     ButtonColumnMolecule(
         modifier = modifier,
     ) {
-        CompoundButton(
+        Button(
             title = stringResource(id = CommonStrings.action_ok),
             onClick = onTermsAccepted,
             modifier = Modifier.fillMaxWidth(),
         )
-        CompoundButton(
+        Button(
             title = stringResource(id = CommonStrings.action_not_now),
             buttonStyle = ButtonStyle.Text,
             buttonSize = ButtonSize.Medium,

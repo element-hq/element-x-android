@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CompoundButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import kotlin.math.max
@@ -73,14 +73,14 @@ internal fun SimpleAlertDialogContent(
                 if (thirdButtonText != null) {
                     // If there is a 3rd item it should be at the end of the dialog
                     // Having this 3rd action is discouraged, see https://m3.material.io/components/dialogs/guidelines#e13b68f5-e367-4275-ad6f-c552ee8e358f
-                    CompoundButton(
+                    Button(
                         title = thirdButtonText,
                         buttonStyle = ButtonStyle.Text,
                         buttonSize = ButtonSize.Medium,
                         onClick = onThirdButtonClicked,
                     )
                 }
-                CompoundButton(
+                Button(
                     title = cancelText,
                     buttonStyle = ButtonStyle.Text,
                     buttonSize = ButtonSize.Medium,
@@ -88,14 +88,14 @@ internal fun SimpleAlertDialogContent(
                 )
                 if (submitText != null) {
                     if (emphasizeSubmitButton) {
-                        CompoundButton(
+                        Button(
                             title = submitText,
                             buttonStyle = ButtonStyle.Text,
                             buttonSize = ButtonSize.Medium,
                             onClick = onSubmitClicked,
                         )
                     } else {
-                        CompoundButton(
+                        Button(
                             title = submitText,
                             buttonStyle = ButtonStyle.Filled,
                             buttonSize = ButtonSize.Medium,
