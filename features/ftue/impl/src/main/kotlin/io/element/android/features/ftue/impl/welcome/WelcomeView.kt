@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CompoundButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -97,9 +98,11 @@ fun WelcomeView(
             }
         },
         footer = {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onContinueClicked) {
-                Text(text = stringResource(CommonStrings.action_continue))
-            }
+            CompoundButton(
+                title = stringResource(CommonStrings.action_continue),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onContinueClicked
+            )
             Spacer(modifier = Modifier.height(32.dp))
         }
     )

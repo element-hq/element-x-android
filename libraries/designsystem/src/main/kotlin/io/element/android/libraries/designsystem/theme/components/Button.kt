@@ -64,7 +64,7 @@ fun CompoundButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    buttonSize: ButtonSize = ButtonSize.Medium,
+    buttonSize: ButtonSize = ButtonSize.Large,
     buttonStyle: ButtonStyle = ButtonStyle.Filled,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
