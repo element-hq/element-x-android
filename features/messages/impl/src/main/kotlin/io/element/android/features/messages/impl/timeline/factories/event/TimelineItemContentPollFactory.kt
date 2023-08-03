@@ -17,13 +17,17 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import javax.inject.Inject
 
 class TimelineItemContentPollFactory @Inject constructor() {
 
-    fun create(@Suppress("UNUSED_PARAMETER") content: PollContent): TimelineItemEventContent {
-        return TimelineItemUnknownContent
+    fun create(content: PollContent): TimelineItemEventContent {
+        return TimelineItemPollContent(
+            question = content.question,
+            answers = content.answers,
+            votes = content.votes,
+        )
     }
 }

@@ -100,7 +100,9 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                     kind = kind.kind.map(),
                     maxSelections = kind.maxSelections,
                     answers = kind.answers.map { answer -> answer.map() },
-                    votes = kind.votes,
+                    votes = kind.votes.mapValues { vote ->
+                        vote.value.map { userId -> UserId(userId) }
+                    },
                     endTime = kind.endTime,
                 )
             }

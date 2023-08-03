@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.element.android.libraries.matrix.api.poll
 
-enum class PollKind {
-    /** Voters should see results as soon as they have voted. */
-    Disclosed,
+package io.element.android.features.messages.impl.timeline.model.event
 
-    /** Results should be only revealed when the poll is ended. */
-    Undisclosed
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.poll.PollAnswer
+
+data class TimelineItemPollContent(
+    val question: String,
+    val answers: List<PollAnswer>,
+    val votes: Map<String, List<UserId>>,
+) : TimelineItemEventContent {
+    override val type: String = "TimelineItemPollContent"
 }

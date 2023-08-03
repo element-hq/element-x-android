@@ -76,7 +76,7 @@ data class PollContent(
     val kind: PollKind,
     val maxSelections: ULong,
     val answers: List<PollAnswer>,
-    val votes: Map<String, List<String>>,
+    val votes: Map<String, List<UserId>>,
     val endTime: ULong?
 ) : EventContent
 

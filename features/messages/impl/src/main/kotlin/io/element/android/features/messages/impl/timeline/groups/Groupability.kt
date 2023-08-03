@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRoomMembershipContent
@@ -57,6 +58,7 @@ internal fun TimelineItem.Event.canBeGrouped(): Boolean {
         is TimelineItemVideoContent,
         is TimelineItemAudioContent,
         is TimelineItemLocationContent,
+        is TimelineItemPollContent,
         TimelineItemRedactedContent,
         TimelineItemUnknownContent -> false
         is TimelineItemProfileChangeContent,
