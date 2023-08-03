@@ -186,44 +186,6 @@ enum class ButtonStyle {
     Filled, Outlined, Text
 }
 
-@Composable
-fun Button(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    shape: Shape = ElementButtonDefaults.shape,
-    colors: ButtonColors = ElementButtonDefaults.buttonColors(),
-    elevation: ButtonElevation? = ElementButtonDefaults.buttonElevation(),
-    border: BorderStroke? = null,
-    contentPadding: PaddingValues = ElementButtonDefaults.ContentPadding,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable RowScope.() -> Unit
-) {
-    androidx.compose.material3.Button(
-        onClick = onClick,
-        modifier = modifier,
-        enabled = enabled,
-        shape = shape,
-        colors = colors,
-        elevation = elevation,
-        border = border,
-        contentPadding = contentPadding,
-        interactionSource = interactionSource,
-        content = content,
-    )
-}
-
-object ElementButtonDefaults {
-    val ContentPadding = PaddingValues(horizontal = 24.dp, vertical = 14.dp)
-    val shape: Shape @Composable get() = ButtonDefaults.shape
-    @Composable
-    fun buttonElevation(): ButtonElevation = ButtonDefaults.buttonElevation()
-
-    @Composable
-    fun buttonColors(): ButtonColors = ButtonDefaults.buttonColors()
-
-}
-
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun FilledButtonMediumPreview() {
