@@ -19,15 +19,13 @@ package io.element.android.x.initializer
 import android.content.Context
 import androidx.startup.Initializer
 import io.element.android.features.rageshake.impl.logs.VectorFileLogger
-import io.element.android.x.BuildConfig
+import io.element.android.libraries.matrix.impl.tracing.RustTracingTree
 import timber.log.Timber
 
 class TimberInitializer : Initializer<Unit> {
 
     override fun create(context: Context) {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+        Timber.plant(RustTracingTree())
         Timber.plant(VectorFileLogger(context))
     }
 

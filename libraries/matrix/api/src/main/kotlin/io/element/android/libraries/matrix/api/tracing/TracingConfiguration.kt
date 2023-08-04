@@ -48,6 +48,7 @@ data class TracingConfiguration(
 
 enum class Target(open val filter: String) {
     COMMON(""),
+    ELEMENT("elementx"),
     HYPER("hyper"),
     MATRIX_SDK_FFI("matrix_sdk_ffi"),
     MATRIX_SDK_UNIFFI_API("matrix_sdk_ffi::uniffi_api"),
@@ -67,8 +68,18 @@ sealed class LogLevel(val filter: String) {
 }
 
 object TracingConfigurations {
-    val release = TracingConfiguration(overrides = mapOf(Target.COMMON to LogLevel.Info))
-    val debug = TracingConfiguration(overrides = mapOf(Target.COMMON to LogLevel.Info))
+    val release = TracingConfiguration(
+        overrides = mapOf(
+            Target.COMMON to LogLevel.Info,
+            Target.ELEMENT to LogLevel.Debug
+        )
+    )
+    val debug = TracingConfiguration(
+        overrides = mapOf(
+            Target.COMMON to LogLevel.Info,
+            Target.ELEMENT to LogLevel.Trace
+        )
+    )
 
     /**
      *  Use this method to create a custom configuration where all targets will have the same log level.

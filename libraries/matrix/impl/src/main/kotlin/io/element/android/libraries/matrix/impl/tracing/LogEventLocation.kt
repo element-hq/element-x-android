@@ -17,26 +17,24 @@
 package io.element.android.libraries.matrix.impl.tracing
 
 /**
- * This class is used to provide file, line, column and target information to the Rust SDK [org.matrix.rustcomponents.sdk.logEvent] method.
+ * This class is used to provide file, line, column information to the Rust SDK [org.matrix.rustcomponents.sdk.logEvent] method.
  * The data is extracted from a [StackTraceElement] instance.
  */
-data class RustLogEvent(
+data class LogEventLocation(
     val file: String,
     val line: UInt,
     val column: UInt,
-    val target: String,
 ) {
 
     companion object {
         /**
-         * Create a [RustLogEvent] from a [StackTraceElement].
+         * Create a [LogEventLocation] from a [StackTraceElement].
          */
-        fun from(stackTraceElement: StackTraceElement): RustLogEvent {
-            return RustLogEvent(
+        fun from(stackTraceElement: StackTraceElement): LogEventLocation {
+            return LogEventLocation(
                 file = stackTraceElement.fileName,
                 line = stackTraceElement.lineNumber.toUInt(),
                 column = 0u,
-                target = stackTraceElement.className,
             )
         }
     }

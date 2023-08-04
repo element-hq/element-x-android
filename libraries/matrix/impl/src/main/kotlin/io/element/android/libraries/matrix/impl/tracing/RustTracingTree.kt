@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.tracing
 
 import android.util.Log
+import io.element.android.libraries.matrix.api.tracing.Target
 import org.matrix.rustcomponents.sdk.LogLevel
 import org.matrix.rustcomponents.sdk.logEvent
 import timber.log.Timber
@@ -28,30 +29,34 @@ private val fqcnIgnore = listOf(
     Timber::class.java.name,
     Timber.Forest::class.java.name,
     Timber.Tree::class.java.name,
-    Timber.DebugTree::class.java.name,
     RustTracingTree::class.java.name,
 )
 
 /**
- * A Timber tree that logs to the Rust SDK.
- * It will extract the file, line, column and target information from the first stack trace element that is not in the [fqcnIgnore] list.
+ * A Timber tree that passes logs to the Rust SDK.
  */
 class RustTracingTree : Timber.Tree() {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        val logEvent = Throwable().stackTrace
-            .first { it.className !in fqcnIgnore }
-            .let(RustLogEvent::from)
-
+        val location = getLogEventLocationFromStackTrace()
         val logLevel = priority.toLogLevel()
         logEvent(
-            file = logEvent.file,
-            line = logEvent.line,
-            column = logEvent.column,
+            file = location.file,
+            line = location.line,
+            column = location.column,
             level = logLevel,
-            target = logEvent.target,
-            message = message
+            target = Target.ELEMENT.filter,
+            message = message,
         )
+    }
+
+    /**
+     * Extract the [LogEventLocation] from the stack trace.
+     */
+    private fun getLogEventLocationFromStackTrace(): LogEventLocation {
+        return Throwable().stackTrace
+            .first { it.className !in fqcnIgnore }
+            .let(LogEventLocation::from)
     }
 }
 

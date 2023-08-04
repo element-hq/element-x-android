@@ -37,12 +37,12 @@ class RustSyncService(
 ) : SyncService {
 
     override suspend fun startSync() = runCatching {
-        Timber.v("Start sync")
+        Timber.i("Start sync")
         innerSyncService.start()
     }
 
     override fun stopSync() = runCatching {
-        Timber.v("Stop sync")
+        Timber.i("Stop sync")
         innerSyncService.pause()
     }
 
@@ -50,7 +50,7 @@ class RustSyncService(
         roomListStateFlow
             .map(RoomListServiceState::toSyncState)
             .onEach { state ->
-                Timber.v("Sync state=$state")
+                Timber.i("Sync state=$state")
             }
             .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)
