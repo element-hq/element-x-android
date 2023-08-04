@@ -18,6 +18,8 @@ package io.element.android.features.roomlist.impl.datasource
 
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
+import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
+import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
@@ -36,6 +38,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -50,15 +54,17 @@ class RoomListDataSource @Inject constructor(
     private val _allRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
     private val _filteredRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
 
+    private val lock = Mutex()
+    private val diffCache = MutableListDiffCache<RoomListRoomSummary>()
+    private val diffCacheUpdater = DiffCacheUpdater<RoomSummary, RoomListRoomSummary>(diffCache = diffCache, detectMoves = true) { old, new ->
+        old?.identifier() == new?.identifier()
+    }
+
     fun launchIn(coroutineScope: CoroutineScope) {
         roomSummaryDataSource
             .allRooms()
             .onEach { roomSummaries ->
-                _allRooms.value = if (roomSummaries.isEmpty()) {
-                    RoomListRoomSummaryPlaceholders.createFakeList(16)
-                } else {
-                    mapRoomSummaries(roomSummaries)
-                }.toImmutableList()
+                replaceWith(roomSummaries)
             }
             .launchIn(coroutineScope)
 
@@ -85,33 +91,63 @@ class RoomListDataSource @Inject constructor(
     val allRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
     val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
 
-    private suspend fun mapRoomSummaries(
-        roomSummaries: List<RoomSummary>
-    ): List<RoomListRoomSummary> = withContext(coroutineDispatchers.computation) {
-        roomSummaries.map { roomSummary ->
-            when (roomSummary) {
-                is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
-                is RoomSummary.Filled -> {
-                    val avatarData = AvatarData(
-                        id = roomSummary.identifier(),
-                        name = roomSummary.details.name,
-                        url = roomSummary.details.avatarURLString,
-                        size = AvatarSize.RoomListItem,
-                    )
-                    val roomIdentifier = roomSummary.identifier()
-                    RoomListRoomSummary(
-                        id = roomSummary.identifier(),
-                        roomId = RoomId(roomIdentifier),
-                        name = roomSummary.details.name,
-                        hasUnread = roomSummary.details.unreadNotificationCount > 0,
-                        timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
-                        lastMessage = roomSummary.details.lastMessage?.let { message ->
-                            roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
-                        }.orEmpty(),
-                        avatarData = avatarData,
-                    )
+    private suspend fun replaceWith(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
+        lock.withLock {
+            diffCacheUpdater.updateWith(roomSummaries)
+            buildAndEmitAllRooms(roomSummaries)
+        }
+    }
+
+    private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>) {
+        if (diffCache.isEmpty()) {
+            _allRooms.emit(
+                RoomListRoomSummaryPlaceholders.createFakeList(16).toImmutableList()
+            )
+        } else {
+            val roomListRoomSummaries = ArrayList<RoomListRoomSummary>()
+            for (index in diffCache.indices()) {
+                val cacheItem = diffCache.get(index)
+                if (cacheItem == null) {
+                    buildAndCacheItem(roomSummaries, index)?.also { timelineItemState ->
+                        roomListRoomSummaries.add(timelineItemState)
+                    }
+                } else {
+                    roomListRoomSummaries.add(cacheItem)
                 }
             }
+            _allRooms.emit(roomListRoomSummaries.toImmutableList())
         }
+    }
+
+    private fun buildAndCacheItem(
+        roomSummaries: List<RoomSummary>,
+        index: Int
+    ): RoomListRoomSummary? {
+        val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
+            is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
+            is RoomSummary.Filled -> {
+                val avatarData = AvatarData(
+                    id = roomSummary.identifier(),
+                    name = roomSummary.details.name,
+                    url = roomSummary.details.avatarURLString,
+                    size = AvatarSize.RoomListItem,
+                )
+                val roomIdentifier = roomSummary.identifier()
+                RoomListRoomSummary(
+                    id = roomSummary.identifier(),
+                    roomId = RoomId(roomIdentifier),
+                    name = roomSummary.details.name,
+                    hasUnread = roomSummary.details.unreadNotificationCount > 0,
+                    timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
+                    lastMessage = roomSummary.details.lastMessage?.let { message ->
+                        roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
+                    }.orEmpty(),
+                    avatarData = avatarData,
+                )
+            }
+            null -> null
+        }
+        diffCache[index] = roomListRoomSummary
+        return roomListRoomSummary
     }
 }

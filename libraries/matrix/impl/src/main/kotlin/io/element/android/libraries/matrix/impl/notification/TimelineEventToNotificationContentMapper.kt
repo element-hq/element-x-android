@@ -31,7 +31,9 @@ class TimelineEventToNotificationContentMapper @Inject constructor() {
 
     fun map(timelineEvent: TimelineEvent): NotificationContent {
         return timelineEvent.use {
-            it.eventType().toContent(senderId = UserId(timelineEvent.senderId()))
+            timelineEvent.eventType().use { eventType ->
+                eventType.toContent(senderId = UserId(timelineEvent.senderId()))
+            }
         }
     }
 }
@@ -73,7 +75,7 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
 
 private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationContent.MessageLike {
     return use {
-        when (it) {
+        when (this) {
             MessageLikeEventContent.CallAnswer -> NotificationContent.MessageLike.CallAnswer
             MessageLikeEventContent.CallCandidates -> NotificationContent.MessageLike.CallCandidates
             MessageLikeEventContent.CallHangup -> NotificationContent.MessageLike.CallHangup
@@ -85,10 +87,10 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             MessageLikeEventContent.KeyVerificationMac -> NotificationContent.MessageLike.KeyVerificationMac
             MessageLikeEventContent.KeyVerificationReady -> NotificationContent.MessageLike.KeyVerificationReady
             MessageLikeEventContent.KeyVerificationStart -> NotificationContent.MessageLike.KeyVerificationStart
-            is MessageLikeEventContent.ReactionContent -> NotificationContent.MessageLike.ReactionContent(it.relatedEventId)
+            is MessageLikeEventContent.ReactionContent -> NotificationContent.MessageLike.ReactionContent(relatedEventId)
             MessageLikeEventContent.RoomEncrypted -> NotificationContent.MessageLike.RoomEncrypted
             is MessageLikeEventContent.RoomMessage -> {
-                NotificationContent.MessageLike.RoomMessage(senderId, EventMessageMapper().mapMessageType(it.messageType))
+                NotificationContent.MessageLike.RoomMessage(senderId, EventMessageMapper().mapMessageType(messageType))
             }
             MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction
             MessageLikeEventContent.Sticker -> NotificationContent.MessageLike.Sticker

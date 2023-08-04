@@ -35,10 +35,10 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
 
-internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<TimelineDiff> =
+internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
     callbackFlow {
         val listener = object : TimelineListener {
-            override fun onUpdate(diff: TimelineDiff) {
+            override fun onUpdate(diff: List<TimelineDiff>) {
                 trySendBlocking(diff)
             }
         }

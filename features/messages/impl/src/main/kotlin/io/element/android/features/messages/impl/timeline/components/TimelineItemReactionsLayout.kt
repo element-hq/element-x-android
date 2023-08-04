@@ -58,12 +58,12 @@ fun TimelineItemReactionsLayout(
     SubcomposeLayout(modifier) { constraints ->
         // Given the placeables and returns a structure representing
         // how they should wrap on to multiple rows given the constraints max width.
-        fun calculateRows(measurables: List<Placeable>): List<List<Placeable>> {
+        fun calculateRows(placeables: List<Placeable>): List<List<Placeable>> {
             val rows = mutableListOf<List<Placeable>>()
             var currentRow = mutableListOf<Placeable>()
             var rowX = 0
 
-            measurables.forEach { placeable ->
+            placeables.forEach { placeable ->
                 val horizontalSpacing = if (currentRow.isEmpty()) 0 else itemSpacing.toPx().toInt()
                 // If the current view does not fit on this row bump to the next
                 if (rowX + placeable.width > constraints.maxWidth) {
@@ -146,12 +146,18 @@ fun TimelineItemReactionsLayout(
             }
         }
 
-        val reactionsPlaceables = subcompose(0, reactions).map { it.measure(constraints) }
+        var reactionsPlaceables = subcompose(0, reactions).map { it.measure(constraints) }
         if (reactionsPlaceables.isEmpty()) {
             return@SubcomposeLayout layoutRows(listOf())
         }
-        val addMorePlaceable = subcompose(1, addMoreButton).first().measure(constraints)
-        val expandPlaceable = subcompose(2, expandButton).first().measure(constraints)
+        var expandPlaceable = subcompose(1, expandButton).first().measure(constraints)
+        // Enforce all reaction buttons have the same height
+        val maxHeight = (reactionsPlaceables + listOf(expandPlaceable)).maxOf { it.height }
+        val newConstrains = constraints.copy(minHeight = maxHeight)
+        reactionsPlaceables = subcompose(2, reactions).map { it.measure(newConstrains) }
+        expandPlaceable = subcompose(3, expandButton).first().measure(newConstrains)
+        val addMorePlaceable = subcompose(4, addMoreButton).first().measure(newConstrains)
+
 
         // Calculate the layout of the rows with the reactions button and add more button
         val reactionsAndAddMore = calculateRows(reactionsPlaceables + listOf(addMorePlaceable))

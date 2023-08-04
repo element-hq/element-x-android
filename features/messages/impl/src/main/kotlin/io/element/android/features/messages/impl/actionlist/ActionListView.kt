@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
@@ -342,7 +343,7 @@ internal fun EmojiReactionsRow(
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier.padding(horizontal = 28.dp, vertical = 16.dp)
+        modifier = modifier.padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
         // TODO use most recently used emojis here when available from the Rust SDK
         val defaultEmojis = sequenceOf(
@@ -352,21 +353,25 @@ internal fun EmojiReactionsRow(
             val isHighlighted = highlightedEmojis.contains(emoji)
             EmojiButton(emoji, isHighlighted, onEmojiReactionClicked)
         }
-
-        Icon(
-            imageVector = Icons.Outlined.AddReaction,
-            contentDescription = "Emojis",
-            tint = MaterialTheme.colorScheme.secondary,
+        Box(
             modifier = Modifier
-                .size(24.dp)
-                .align(Alignment.CenterVertically)
-                .clickable(
-                    enabled = true,
-                    onClick = onCustomReactionClicked,
-                    indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
-                    interactionSource = remember { MutableInteractionSource() }
-                )
-        )
+                .size(48.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.AddReaction,
+                contentDescription = "Emojis",
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable(
+                        enabled = true,
+                        onClick = onCustomReactionClicked,
+                        indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+            )
+        }
     }
 }
 
@@ -385,12 +390,13 @@ private fun EmojiButton(
     Box(
         modifier = modifier
             .size(48.dp)
-            .background(backgroundColor, RoundedCornerShape(24.dp)),
+            .background(backgroundColor, CircleShape),
+
         contentAlignment = Alignment.Center
     ) {
         Text(
             emoji,
-            fontSize = 28.dp.toSp(),
+            fontSize = 24.dp.toSp(),
             color = Color.White,
             modifier = Modifier
                 .clickable(

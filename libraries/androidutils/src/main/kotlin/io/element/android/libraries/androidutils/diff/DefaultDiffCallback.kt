@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.diff
+package io.element.android.libraries.androidutils.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 
-internal class MatrixTimelineItemsDiffCallback(
-    private val oldList: List<MatrixTimelineItem>,
-    private val newList: List<MatrixTimelineItem>
+/**
+ *  Default implementation of [DiffUtil.Callback] that uses [areItemsTheSame] to compare items.
+ */
+internal class DefaultDiffCallback<T>(
+    private val oldList: List<T>,
+    private val newList: List<T>,
+    private val areItemsTheSame: (oldItem: T?, newItem: T?) -> Boolean,
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
@@ -35,11 +38,7 @@ internal class MatrixTimelineItemsDiffCallback(
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = oldList.getOrNull(oldItemPosition)
         val newItem = newList.getOrNull(newItemPosition)
-        return if (oldItem is MatrixTimelineItem.Event && newItem is MatrixTimelineItem.Event) {
-            oldItem.uniqueId == newItem.uniqueId
-        } else {
-            false
-        }
+        return areItemsTheSame(oldItem, newItem)
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
