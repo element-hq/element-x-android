@@ -26,6 +26,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.Visibility
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -34,6 +35,7 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun PollOptionView(
+    showResults: Boolean,
     answer: PollAnswer,
     votes: Int,
     progress: Float,
@@ -75,6 +77,7 @@ fun PollOptionView(
                 start.linkTo(answerText.end)
                 end.linkTo(parent.end)
                 bottom.linkTo(answerText.bottom)
+                visibility = if (showResults) Visibility.Visible else Visibility.Gone
             },
             text = "$votes votes", // Fixme hardcoded string
             style = ElementTheme.typography.fontBodySmRegular,
@@ -88,6 +91,7 @@ fun PollOptionView(
                     top.linkTo(answerText.bottom, margin = 10.dp)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
+                    visibility = if (showResults) Visibility.Visible else Visibility.Gone
 
                 },
             strokeCap = StrokeCap.Round,

@@ -36,6 +36,7 @@ fun TimelineItemPollView(
     modifier: Modifier = Modifier,
 ) {
     ActivePollContentView(
+        content.kind,
         content.question,
         content.answers,
         content.votes,

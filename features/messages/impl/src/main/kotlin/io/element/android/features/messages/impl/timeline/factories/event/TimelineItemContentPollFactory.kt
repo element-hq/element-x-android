@@ -25,6 +25,7 @@ class TimelineItemContentPollFactory @Inject constructor() {
 
     fun create(content: PollContent): TimelineItemEventContent {
         return TimelineItemPollContent(
+            kind = content.kind,
             question = content.question,
             answers = content.answers,
             votes = content.votes,
