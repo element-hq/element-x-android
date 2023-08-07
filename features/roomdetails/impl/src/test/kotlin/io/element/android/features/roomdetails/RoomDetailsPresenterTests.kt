@@ -29,6 +29,7 @@ import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.RoomTopicState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -40,6 +41,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -47,19 +49,27 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
-    private fun aRoomDetailsPresenter(room: MatrixRoom, leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake()): RoomDetailsPresenter {
+    private fun aRoomDetailsPresenter(room: MatrixRoom, leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake(), dispatchers: CoroutineDispatchers): RoomDetailsPresenter {
+        val matrixClient = FakeMatrixClient()
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMemberId)
+                return RoomMemberDetailsPresenter(matrixClient, room, roomMemberId)
             }
         }
-        return RoomDetailsPresenter(room, roomMemberDetailsPresenterFactory, leaveRoomPresenter)
+        return RoomDetailsPresenter(
+            matrixClient,
+            room,
+            matrixClient.notificationSettingsService(),
+            roomMemberDetailsPresenterFactory,
+            leaveRoomPresenter,
+            dispatchers
+        )
     }
 
     @Test
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom()
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -78,7 +88,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - initial state with no room name`() = runTest {
         val room = aMatrixRoom(name = null)
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -100,7 +110,7 @@ class RoomDetailsPresenterTests {
             val roomMembers = listOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -116,7 +126,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenCanInviteResult(Result.success(true))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -134,7 +144,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -147,7 +157,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenCanInviteResult(Result.failure(Throwable("Whoops")))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -163,7 +173,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.failure(Throwable("Whelp")))
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -192,7 +202,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -221,7 +231,7 @@ class RoomDetailsPresenterTests {
 
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -242,7 +252,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -263,7 +273,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(false))
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -279,7 +289,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
 
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -295,7 +305,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
 
-        val presenter = aRoomDetailsPresenter(room)
+        val presenter = aRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -313,7 +323,7 @@ class RoomDetailsPresenterTests {
     fun `present - leave room event is passed on to leave room presenter`() = runTest {
         val leaveRoomPresenter = LeaveRoomPresenterFake()
         val room = aMatrixRoom()
-        val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter)
+        val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
