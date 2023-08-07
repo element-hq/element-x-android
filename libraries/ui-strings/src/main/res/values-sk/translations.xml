@@ -183,8 +183,6 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Ďalšie nastavenia"</string>
   <string name="screen_notification_settings_calls_label">"Audio a video hovory"</string>
   <string name="screen_notification_settings_direct_chats">"Priame konverzácie"</string>
-  <string name="screen_notification_settings_edit_screen_direct_section_header">"Pri priamych rozhovoroch ma upozorniť na"</string>
-  <string name="screen_notification_settings_edit_screen_group_section_header">"Pri skupinových rozhovoroch ma upozorniť na"</string>
   <string name="screen_notification_settings_enable_notifications">"Povoliť oznámenia na tomto zariadení"</string>
   <string name="screen_notification_settings_group_chats">"Skupinové rozhovory"</string>
   <string name="screen_notification_settings_mentions_section_title">"Zmienky"</string>

@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -67,14 +68,14 @@ fun RoomNotificationSettingsView(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             val subtitle = when(state.defaultRoomNotificationMode) {
-                RoomNotificationMode.ALL_MESSAGES -> "All messages"
-                RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> "Mentions and keywords"
-                RoomNotificationMode.MUTE -> "Mute"
+                RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_room_notification_settings_mode_all_messages)
+                RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = R.string.screen_room_notification_settings_mode_mentions_and_keywords)
+                RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
                 null -> ""
             }
 
 
-            PreferenceCategory(title = "Notify me in this chat for") {
+            PreferenceCategory(title = stringResource(id = R.string.screen_room_notification_settings_custom_settings_title)) {
                 PreferenceSwitch(
                     isChecked = state.roomNotificationSettings?.isDefault.orTrue(),
                     onCheckedChange = {
@@ -86,8 +87,8 @@ fun RoomNotificationSettingsView(
                 )
 
                 PreferenceText(
-                    title = "Allow custom setting",
-                    subtitle = "Turning this on will override yout default setting",
+                    title = stringResource(id = R.string.screen_room_notification_settings_allow_custom),
+                    subtitle = stringResource(id = R.string.screen_room_notification_settings_allow_custom_footnote),
                     enabled = state.roomNotificationSettings != null && !state.roomNotificationSettings.isDefault,
                 )
 
