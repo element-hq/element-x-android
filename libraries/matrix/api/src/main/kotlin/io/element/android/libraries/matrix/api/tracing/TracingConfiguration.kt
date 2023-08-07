@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,77 +17,7 @@
 package io.element.android.libraries.matrix.api.tracing
 
 data class TracingConfiguration(
-    val overrides: Map<Target, LogLevel> = emptyMap(),
-) {
-
-    // Order should matters
-    private val targetsToLogLevel: MutableMap<Target, LogLevel> = mutableMapOf(
-        Target.COMMON to LogLevel.Info,
-        Target.HYPER to LogLevel.Warn,
-        Target.MATRIX_SDK_CRYPTO to LogLevel.Debug,
-        Target.MATRIX_SDK_HTTP_CLIENT to LogLevel.Debug,
-        Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.Trace,
-        Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.Trace,
-        Target.MATRIX_SDK_UI_TIMELINE to LogLevel.Info,
-    )
-
-    val filter: String
-        get() {
-            overrides.forEach { (target, logLevel) ->
-                targetsToLogLevel[target] = logLevel
-            }
-            return targetsToLogLevel.map {
-                if (it.key.filter.isEmpty()) {
-                    it.value.filter
-                } else {
-                    "${it.key.filter}=${it.value.filter}"
-                }
-            }.joinToString(separator = ",")
-        }
-}
-
-enum class Target(open val filter: String) {
-    COMMON(""),
-    ELEMENT("elementx"),
-    HYPER("hyper"),
-    MATRIX_SDK_FFI("matrix_sdk_ffi"),
-    MATRIX_SDK_UNIFFI_API("matrix_sdk_ffi::uniffi_api"),
-    MATRIX_SDK_CRYPTO("matrix_sdk_crypto"),
-    MATRIX_SDK_HTTP_CLIENT("matrix_sdk::http_client"),
-    MATRIX_SDK_SLIDING_SYNC("matrix_sdk::sliding_sync"),
-    MATRIX_SDK_BASE_SLIDING_SYNC("matrix_sdk_base::sliding_sync"),
-    MATRIX_SDK_UI_TIMELINE("matrix_sdk_ui::timeline"),
-}
-
-sealed class LogLevel(val filter: String) {
-    object Warn : LogLevel("warn")
-    object Trace : LogLevel("trace")
-    object Info : LogLevel("info")
-    object Debug : LogLevel("debug")
-    object Error : LogLevel("error")
-}
-
-object TracingConfigurations {
-    val release = TracingConfiguration(
-        overrides = mapOf(
-            Target.COMMON to LogLevel.Info,
-            Target.ELEMENT to LogLevel.Debug
-        )
-    )
-    val debug = TracingConfiguration(
-        overrides = mapOf(
-            Target.COMMON to LogLevel.Info,
-            Target.ELEMENT to LogLevel.Trace
-        )
-    )
-
-    /**
-     *  Use this method to create a custom configuration where all targets will have the same log level.
-     */
-    fun custom(logLevel: LogLevel) = TracingConfiguration(overrides = Target.values().associateWith { logLevel })
-
-    /**
-     * Use this method to override the log level of specific targets.
-     */
-    fun custom(overrides: Map<Target, LogLevel>) = TracingConfiguration(overrides)
-}
+    val filterConfiguration: TracingFilterConfiguration,
+    val writesToLogcat: Boolean,
+    val writesToFilesConfiguration: WriteToFilesConfiguration,
+)

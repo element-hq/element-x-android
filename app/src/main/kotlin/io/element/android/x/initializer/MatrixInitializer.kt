@@ -18,18 +18,35 @@ package io.element.android.x.initializer
 
 import android.content.Context
 import androidx.startup.Initializer
-import io.element.android.libraries.matrix.impl.tracing.setupTracing
-import io.element.android.libraries.matrix.api.tracing.TracingConfigurations
+import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
+import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
+import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import io.element.android.x.BuildConfig
+import io.element.android.x.di.AppBindings
+import java.io.File
 
 class MatrixInitializer : Initializer<Unit> {
 
     override fun create(context: Context) {
-        if (BuildConfig.DEBUG) {
-            setupTracing(TracingConfigurations.debug)
+        val tracingService = context.bindings<AppBindings>().tracingService()
+        val tracingConfiguration = if (false && BuildConfig.DEBUG) {
+            TracingConfiguration(
+                filterConfiguration = TracingFilterConfigurations.debug,
+                writesToLogcat = true,
+                writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
+            )
         } else {
-            setupTracing(TracingConfigurations.release)
+            TracingConfiguration(
+                filterConfiguration = TracingFilterConfigurations.release,
+                writesToLogcat = false,
+                writesToFilesConfiguration = WriteToFilesConfiguration.Enabled(
+                    directory = File(context.cacheDir, "logs").absolutePath,
+                    filenamePrefix = "logs"
+                )
+            )
         }
+        tracingService.setupTracing(tracingConfiguration)
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = listOf(TimberInitializer::class.java)

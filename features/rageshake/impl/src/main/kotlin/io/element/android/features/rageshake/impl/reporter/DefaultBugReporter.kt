@@ -27,10 +27,10 @@ import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.api.reporter.ReportType
 import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
 import io.element.android.features.rageshake.impl.R
-import io.element.android.features.rageshake.impl.logs.VectorFileLogger
 import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.toOnOff
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -158,9 +158,8 @@ class DefaultBugReporter @Inject constructor(
 
             val gzippedFiles = ArrayList<File>()
 
-            val vectorFileLogger = VectorFileLogger.getFromTimber()
-            if (withDevicesLogs && vectorFileLogger != null) {
-                val files = vectorFileLogger.getLogFiles()
+            if (withDevicesLogs) {
+                val files = getLogFiles()
                 files.mapNotNullTo(gzippedFiles) { f ->
                     if (!mIsCancelled) {
                         compressFile(f)
@@ -456,6 +455,15 @@ class DefaultBugReporter @Inject constructor(
                 else -> R.string.bug_report_app_name
             }
         )
+    }
+
+    private fun getLogFiles(): List<File> {
+        return tryOrNull(
+            onError = { Timber.e(it, "## getLogFiles() failed") }
+        ) {
+            val logDirectory = File(context.cacheDir, "logs")
+            logDirectory.listFiles()?.toList()
+        }.orEmpty()
     }
 
     // ==============================================================================================================

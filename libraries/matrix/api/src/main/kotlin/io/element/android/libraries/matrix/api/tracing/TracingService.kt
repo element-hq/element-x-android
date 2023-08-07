@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.tracing
+package io.element.android.libraries.matrix.api.tracing
 
-import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import timber.log.Timber
 
-fun setupTracing(tracingConfiguration: TracingConfiguration) {
-    val filter = tracingConfiguration.filter
-    Timber.v("Tracing config filter = $filter")
-    org.matrix.rustcomponents.sdk.setupTracing(filter)
+interface TracingService {
+    fun setupTracing(tracingConfiguration: TracingConfiguration)
+    fun createTracingTree(): Timber.Tree
 }

@@ -18,15 +18,15 @@ package io.element.android.x.initializer
 
 import android.content.Context
 import androidx.startup.Initializer
-import io.element.android.features.rageshake.impl.logs.VectorFileLogger
-import io.element.android.libraries.matrix.impl.tracing.RustTracingTree
+import io.element.android.libraries.architecture.bindings
+import io.element.android.x.di.AppBindings
 import timber.log.Timber
 
 class TimberInitializer : Initializer<Unit> {
 
     override fun create(context: Context) {
-        Timber.plant(RustTracingTree())
-        Timber.plant(VectorFileLogger(context))
+        val tracingService = context.bindings<AppBindings>().tracingService()
+        Timber.plant(tracingService.createTracingTree())
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
