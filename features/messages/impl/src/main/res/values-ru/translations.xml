@@ -5,6 +5,11 @@
     <item quantity="few">"%1$d изменения в комнате"</item>
     <item quantity="many">"%1$d изменений в комнате"</item>
   </plurals>
+  <plurals name="screen_room_timeline_more_reactions">
+    <item quantity="one">"одно"</item>
+    <item quantity="few">"%1$d"</item>
+    <item quantity="many">"более %1$d"</item>
+  </plurals>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
   <string name="screen_room_attachment_source_camera_photo">"Сделать фото"</string>
   <string name="screen_room_attachment_source_camera_video">"Записать видео"</string>
