@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.components.dialogs
+package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,25 +22,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
 import kotlin.math.max
 
@@ -55,12 +57,6 @@ internal fun SimpleAlertDialogContent(
     onSubmitClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
-    shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = AlertDialogDefaults.containerColor,
-    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
-    textContentColor: Color = AlertDialogDefaults.textContentColor,
-    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
     icon: @Composable (() -> Unit)? = null,
 ) {
     AlertDialogContent(
@@ -93,26 +89,26 @@ internal fun SimpleAlertDialogContent(
             }
         },
         modifier = modifier,
-        title = {
-            if (title != null) {
+        title = title?.let { titleText ->
+            @Composable {
                 Text(
-                    text = title,
-                    style = ElementTheme.typography.fontHeadingSmRegular,
+                    text = titleText,
+                    style = ElementTheme.typography.fontHeadingSmMedium,
                 )
             }
         },
         text = {
             Text(
                 text = content,
-                style = ElementTheme.typography.fontBodyMdRegular,
+                style = ElementTheme.materialTypography.bodyMedium,
             )
         },
-        shape = shape,
-        containerColor = containerColor,
-        iconContentColor = iconContentColor,
-        titleContentColor = titleContentColor,
-        textContentColor = textContentColor,
-        tonalElevation = tonalElevation,
+        shape = DialogContentDefaults.shape,
+        containerColor = DialogContentDefaults.containerColor,
+        iconContentColor = DialogContentDefaults.iconContentColor,
+        titleContentColor = DialogContentDefaults.titleContentColor,
+        textContentColor = DialogContentDefaults.textContentColor,
+        tonalElevation = 0.dp,
         icon = icon,
         // Note that a button content color is provided here from the dialog's token, but in
         // most cases, TextButtons should be used for dismiss and confirm buttons.
@@ -122,6 +118,9 @@ internal fun SimpleAlertDialogContent(
     )
 }
 
+/**
+ * Copy of M3's `AlertDialogContent` so we can use it for previews.
+ */
 @Composable
 internal fun AlertDialogContent(
     buttons: @Composable () -> Unit,
@@ -144,13 +143,13 @@ internal fun AlertDialogContent(
         tonalElevation = tonalElevation,
     ) {
         Column(
-            modifier = Modifier.padding(DialogPadding)
+            modifier = Modifier.padding(DialogContentDefaults.externalPadding)
         ) {
             icon?.let {
                 CompositionLocalProvider(LocalContentColor provides iconContentColor) {
                     Box(
                         Modifier
-                            .padding(IconPadding)
+                            .padding(DialogContentDefaults.iconPadding)
                             .align(Alignment.CenterHorizontally)
                     ) {
                         icon()
@@ -164,7 +163,7 @@ internal fun AlertDialogContent(
                         Box(
                             // Align the title to the center when an icon is present.
                             Modifier
-                                .padding(TitlePadding)
+                                .padding(DialogContentDefaults.titlePadding)
                                 .align(
                                     if (icon == null) {
                                         Alignment.Start
@@ -186,7 +185,7 @@ internal fun AlertDialogContent(
                         Box(
                             Modifier
                                 .weight(weight = 1f, fill = false)
-                                .padding(TextPadding)
+                                .padding(DialogContentDefaults.textPadding)
                                 .align(Alignment.Start)
                         ) {
                             text()
@@ -210,7 +209,7 @@ internal fun AlertDialogContent(
  * customization.
  */
 @Composable
-internal fun AlertDialogFlowRow(
+private fun AlertDialogFlowRow(
     mainAxisSpacing: Dp,
     crossAxisSpacing: Dp,
     content: @Composable () -> Unit
@@ -237,7 +236,8 @@ internal fun AlertDialogFlowRow(
             if (sequences.isNotEmpty()) {
                 crossAxisSpace += crossAxisSpacing.roundToPx()
             }
-            sequences += currentSequence.toList()
+            // Ensures that confirming actions appear above dismissive actions.
+            sequences.add(0, currentSequence.toList())
             crossAxisSizes += currentCrossAxisSize
             crossAxisPositions += crossAxisSpace
 
@@ -281,12 +281,11 @@ internal fun AlertDialogFlowRow(
                     placeables[j].width +
                         if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
                 }
-                val arrangement = Arrangement.Bottom
-                // TODO(soboleva): rtl support
-                // Handle vertical direction
+                val arrangement = Arrangement.End
                 val mainAxisPositions = IntArray(childrenMainAxisSizes.size) { 0 }
                 with(arrangement) {
-                    arrange(mainAxisLayoutSize, childrenMainAxisSizes, mainAxisPositions)
+                    arrange(mainAxisLayoutSize, childrenMainAxisSizes,
+                        layoutDirection, mainAxisPositions)
                 }
                 placeables.forEachIndexed { j, placeable ->
                     placeable.place(
@@ -311,14 +310,87 @@ internal fun DialogPreview(content: @Composable () -> Unit) {
     }
 }
 
-// Paddings for each of the dialog's parts.
-private val DialogPadding = PaddingValues(all = 24.dp)
-private val IconPadding = PaddingValues(bottom = 16.dp)
-private val TitlePadding = PaddingValues(bottom = 16.dp)
-private val TextPadding = PaddingValues(bottom = 24.dp)
+internal object DialogContentDefaults {
+    val shape = RoundedCornerShape(12.dp)
+    val externalPadding = PaddingValues(all = 24.dp)
+    val titlePadding = PaddingValues(bottom = 16.dp)
+    val iconPadding = PaddingValues(bottom = 8.dp)
+    val textPadding = PaddingValues(bottom = 16.dp)
 
+    val containerColor: Color
+        @Composable
+        @ReadOnlyComposable
+        get()= ElementTheme.colors.bgCanvasDefault
+
+    val textContentColor: Color
+        @Composable
+        @ReadOnlyComposable
+        get()= ElementTheme.materialColors.onSurfaceVariant
+
+    val titleContentColor: Color
+        @Composable
+        @ReadOnlyComposable
+        get()= ElementTheme.materialColors.onSurface
+
+    val iconContentColor: Color
+        @Composable
+        @ReadOnlyComposable
+        get()= ElementTheme.materialColors.primary
+}
+
+// Paddings for each of the dialog's parts. Taken from M3 source code.
 internal val ButtonsMainAxisSpacing = 8.dp
 internal val ButtonsCrossAxisSpacing = 12.dp
 
 internal val DialogMinWidth = 280.dp
 internal val DialogMaxWidth = 560.dp
+
+@Preview(group = PreviewGroup.Dialogs, name = "Dialog with title, icon and ok button")
+@Composable
+@Suppress("MaxLineLength")
+internal fun DialogWithTitleIconAndOkButtonPreview() {
+    ElementThemedPreview(showBackground = false) {
+        DialogPreview {
+            SimpleAlertDialogContent(
+                icon = {
+                    Icon(imageVector = Icons.Default.Notifications, contentDescription = null)
+                },
+                title = "Dialog Title",
+                content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
+                cancelText = "OK",
+                onCancelClicked = {},
+            )
+        }
+    }
+}
+
+@Preview(group = PreviewGroup.Dialogs, name = "Dialog with title and ok button")
+@Composable
+@Suppress("MaxLineLength")
+internal fun DialogWithTitleAndOkButtonPreview() {
+    ElementThemedPreview(showBackground = false) {
+        DialogPreview {
+            SimpleAlertDialogContent(
+                title = "Dialog Title",
+                content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
+                cancelText = "OK",
+                onCancelClicked = {},
+            )
+        }
+    }
+}
+
+@Preview(group = PreviewGroup.Dialogs, name = "Dialog with only message and ok button")
+@Composable
+@Suppress("MaxLineLength")
+internal fun DialogWithOnlyMessageAndOkButtonPreview() {
+    ElementThemedPreview(showBackground = false) {
+        DialogPreview {
+            SimpleAlertDialogContent(
+                content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
+                cancelText = "OK",
+                onCancelClicked = {},
+            )
+        }
+    }
+}
