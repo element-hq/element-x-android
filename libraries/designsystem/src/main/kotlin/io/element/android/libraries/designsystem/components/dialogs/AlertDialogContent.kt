@@ -90,14 +90,14 @@ internal fun SimpleAlertDialogContent(
                     if (emphasizeSubmitButton) {
                         Button(
                             title = submitText,
-                            buttonStyle = ButtonStyle.Text,
+                            buttonStyle = ButtonStyle.Filled,
                             buttonSize = ButtonSize.Medium,
                             onClick = onSubmitClicked,
                         )
                     } else {
                         Button(
                             title = submitText,
-                            buttonStyle = ButtonStyle.Filled,
+                            buttonStyle = ButtonStyle.Text,
                             buttonSize = ButtonSize.Medium,
                             onClick = onSubmitClicked,
                         )
