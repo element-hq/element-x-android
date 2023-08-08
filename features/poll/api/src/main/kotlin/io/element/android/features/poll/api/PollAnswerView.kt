@@ -30,19 +30,17 @@ import androidx.constraintlayout.compose.Visibility
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun PollOptionView(
+fun PollAnswerView(
     showResults: Boolean,
-    answer: PollAnswer,
-    votes: Int,
-    progress: Float,
-    onClick: () -> Unit
+    answerItem: PollAnswerItem,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ConstraintLayout(
-        Modifier
+        modifier
             .wrapContentHeight()
             .fillMaxWidth()
             .selectable(
@@ -70,7 +68,7 @@ fun PollOptionView(
                 end.linkTo(votesText.start)
                 bottom.linkTo(progressBar.top)
             },
-            text = answer.text,
+            text = answerItem.answer.text,
         )
         Text(
             modifier = Modifier.constrainAs(votesText) {
@@ -79,11 +77,12 @@ fun PollOptionView(
                 bottom.linkTo(answerText.bottom)
                 visibility = if (showResults) Visibility.Visible else Visibility.Gone
             },
-            text = "$votes votes", // Fixme hardcoded string
+            text = "${answerItem.votesCount} votes", // Fixme hardcoded string
             style = ElementTheme.typography.fontBodySmRegular,
+            color = ElementTheme.colors.textSecondary,
         )
         LinearProgressIndicator(
-            progress = progress,
+            progress = answerItem.progress,
             modifier = Modifier
                 .constrainAs(progressBar) {
                     start.linkTo(answerText.start)

@@ -16,15 +16,18 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import androidx.compose.runtime.MutableState
+import io.element.android.features.poll.api.PollAnswerItem
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.poll.PollAnswer
-import io.element.android.libraries.matrix.api.poll.PollKind
 
 data class TimelineItemPollContent(
-    val kind: PollKind,
     val question: String,
-    val answers: List<PollAnswer>,
+    val answers: List<PollAnswerItem>,
     val votes: Map<String, List<UserId>>,
+    val isDisclosed: MutableState<Async<Boolean>>,
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemPollContent"
 }
+
+
