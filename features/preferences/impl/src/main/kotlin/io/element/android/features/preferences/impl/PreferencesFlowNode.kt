@@ -33,6 +33,7 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
+import io.element.android.features.preferences.impl.notifications.NotificationsSettingsNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -65,6 +66,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         object About : NavTarget
+
+        @Parcelize
+        object NotificationsSettings : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -91,8 +95,8 @@ class PreferencesFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.DeveloperSettings)
                     }
 
-                    override fun onOpenNotificationSettings() {
-                        TODO("Not yet implemented")
+                    override fun onOpenNotificationsSettings() {
+                        backstack.push(NavTarget.NotificationsSettings)
                     }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
@@ -105,6 +109,9 @@ class PreferencesFlowNode @AssistedInject constructor(
             }
             NavTarget.AnalyticsSettings -> {
                 createNode<AnalyticsSettingsNode>(buildContext)
+            }
+            NavTarget.NotificationsSettings -> {
+                createNode<NotificationsSettingsNode>(buildContext)
             }
         }
     }
