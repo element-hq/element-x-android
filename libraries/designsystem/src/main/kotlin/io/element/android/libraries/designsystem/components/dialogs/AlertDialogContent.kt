@@ -89,7 +89,7 @@ internal fun SimpleAlertDialogContent(
                     Button(
                         title = submitText,
                         buttonStyle = if (emphasizeSubmitButton) ButtonStyle.Filled else ButtonStyle.Text,
-                        buttonSize = if (emphasizeSubmitButton) ButtonSize.Medium else ButtonSize.Large,
+                        buttonSize = ButtonSize.Medium,
                         onClick = onSubmitClicked,
                     )
                 }
