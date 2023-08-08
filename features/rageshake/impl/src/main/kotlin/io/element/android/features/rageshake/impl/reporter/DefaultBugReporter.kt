@@ -18,6 +18,7 @@ package io.element.android.features.rageshake.impl.reporter
 
 import android.content.Context
 import android.os.Build
+import android.text.format.DateUtils.DAY_IN_MILLIS
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
@@ -38,7 +39,10 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -65,6 +69,8 @@ class DefaultBugReporter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
+    private val coroutineScope: CoroutineScope,
+    private val systemClock: SystemClock,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val okHttpClient: Provider<OkHttpClient>,
     private val userAgentProvider: UserAgentProvider,
@@ -87,6 +93,7 @@ class DefaultBugReporter @Inject constructor(
         // filenames
         private const val LOG_CAT_ERROR_FILENAME = "logcatError.log"
         private const val LOG_CAT_FILENAME = "logcat.log"
+        private const val LOG_DIRECTORY_NAME = "logs"
         // private const val KEY_REQUESTS_FILENAME = "keyRequests.log"
 
         private const val BUFFER_SIZE = 1024 * 1024 * 50
@@ -167,6 +174,7 @@ class DefaultBugReporter @Inject constructor(
                         null
                     }
                 }
+                files.deleteAllExceptMostRecent()
             }
 
             if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
@@ -457,13 +465,52 @@ class DefaultBugReporter @Inject constructor(
         )
     }
 
+    override fun logDirectory(): File {
+        return File(context.cacheDir, LOG_DIRECTORY_NAME)
+    }
+
+    override fun cleanLogDirectoryIfNeeded() {
+        coroutineScope.launch(coroutineDispatchers.io) {
+            // delete the log files older than 1 day, except the most recent one
+            deleteOldLogFiles(systemClock.epochMillis() - DAY_IN_MILLIS)
+        }
+    }
+
+    /**
+     * @return the files on the log directory.
+     */
     private fun getLogFiles(): List<File> {
         return tryOrNull(
             onError = { Timber.e(it, "## getLogFiles() failed") }
         ) {
-            val logDirectory = File(context.cacheDir, "logs")
+            val logDirectory = logDirectory()
             logDirectory.listFiles()?.toList()
         }.orEmpty()
+    }
+
+    /**
+     * Delete the log files older than the given time except the most recent one.
+     * @param time the time in ms
+     */
+    private fun deleteOldLogFiles(time: Long) {
+        val logFiles = getLogFiles()
+        val oldLogFiles = logFiles.filter { it.lastModified() < time }
+        oldLogFiles.deleteAllExceptMostRecent()
+    }
+
+    /**
+     * Delete all the log files except the most recent one.
+     *
+     */
+    private fun List<File>.deleteAllExceptMostRecent() {
+        if (size > 1) {
+            val mostRecentFile = maxByOrNull { it.lastModified() }
+            forEach { file ->
+                if (file != mostRecentFile) {
+                    file.safeDelete()
+                }
+            }
+        }
     }
 
     // ==============================================================================================================

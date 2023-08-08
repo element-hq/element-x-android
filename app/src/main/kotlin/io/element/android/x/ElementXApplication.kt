@@ -24,8 +24,7 @@ import io.element.android.x.di.DaggerAppComponent
 import io.element.android.x.info.logApplicationInfo
 import io.element.android.x.initializer.CrashInitializer
 import io.element.android.x.initializer.EmojiInitializer
-import io.element.android.x.initializer.MatrixInitializer
-import io.element.android.x.initializer.TimberInitializer
+import io.element.android.x.initializer.TracingInitializer
 
 class ElementXApplication : Application(), DaggerComponentOwner {
 
@@ -39,8 +38,7 @@ class ElementXApplication : Application(), DaggerComponentOwner {
         appComponent = DaggerAppComponent.factory().create(applicationContext)
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
-            initializeComponent(TimberInitializer::class.java)
-            initializeComponent(MatrixInitializer::class.java)
+            initializeComponent(TracingInitializer::class.java)
             initializeComponent(EmojiInitializer::class.java)
         }
         logApplicationInfo()

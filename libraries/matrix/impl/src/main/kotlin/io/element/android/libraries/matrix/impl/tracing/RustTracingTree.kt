@@ -54,7 +54,7 @@ internal class RustTracingTree : Timber.Tree() {
      * Extract the [LogEventLocation] from the stack trace.
      */
     private fun getLogEventLocationFromStackTrace(): LogEventLocation {
-        return Throwable().stackTrace
+        return Throwable(null, null).stackTrace
             .first { it.className !in fqcnIgnore }
             .let(LogEventLocation::from)
     }

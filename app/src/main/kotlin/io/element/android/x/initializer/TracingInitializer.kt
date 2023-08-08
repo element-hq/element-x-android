@@ -24,30 +24,34 @@ import io.element.android.libraries.matrix.api.tracing.TracingFilterConfiguratio
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import io.element.android.x.BuildConfig
 import io.element.android.x.di.AppBindings
-import java.io.File
+import timber.log.Timber
 
-class MatrixInitializer : Initializer<Unit> {
+class TracingInitializer : Initializer<Unit> {
 
     override fun create(context: Context) {
-        val tracingService = context.bindings<AppBindings>().tracingService()
-        val tracingConfiguration = if (false && BuildConfig.DEBUG) {
+        val appBindings = context.bindings<AppBindings>()
+        val tracingService = appBindings.tracingService()
+        val bugReporter = appBindings.bugReporter()
+        Timber.plant(tracingService.createTracingTree())
+        val tracingConfiguration = if (BuildConfig.DEBUG) {
             TracingConfiguration(
                 filterConfiguration = TracingFilterConfigurations.debug,
-                writesToLogcat = true,
+                writesToStdout = false,
                 writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
             )
         } else {
             TracingConfiguration(
                 filterConfiguration = TracingFilterConfigurations.release,
-                writesToLogcat = false,
+                writesToStdout = false,
                 writesToFilesConfiguration = WriteToFilesConfiguration.Enabled(
-                    directory = File(context.cacheDir, "logs").absolutePath,
+                    directory = bugReporter.logDirectory().absolutePath,
                     filenamePrefix = "logs"
                 )
             )
         }
+        bugReporter.cleanLogDirectoryIfNeeded()
         tracingService.setupTracing(tracingConfiguration)
     }
 
-    override fun dependencies(): List<Class<out Initializer<*>>> = listOf(TimberInitializer::class.java)
+    override fun dependencies(): List<Class<out Initializer<*>>> = mutableListOf()
 }
