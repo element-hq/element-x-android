@@ -129,9 +129,10 @@ private fun ProgressDialogContent(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomEnd
                 ) {
-                    TextButton(onClick = onCancelClicked) {
-                        Text(stringResource(id = CommonStrings.action_cancel))
-                    }
+                    TextButton(
+                        text = stringResource(id = CommonStrings.action_cancel),
+                        onClick = onCancelClicked,
+                    )
                 }
             }
         }

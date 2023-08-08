@@ -48,8 +48,8 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
@@ -149,14 +149,13 @@ fun BugReportView(
             // Submit
             PreferenceRow {
                 Button(
+                    text = stringResource(id = CommonStrings.action_send),
                     onClick = { eventSink(BugReportEvents.SendBugReport) },
                     enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp, bottom = 16.dp)
-                ) {
-                    Text(text = stringResource(id = CommonStrings.action_send))
-                }
+                )
             }
         }
 
