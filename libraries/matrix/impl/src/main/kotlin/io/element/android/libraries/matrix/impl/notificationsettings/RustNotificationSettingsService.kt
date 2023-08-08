@@ -25,15 +25,13 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
-import timber.log.Timber
 
 class RustNotificationSettingsService(
-    private val client: Client,
+    private val notificationSettings: NotificationSettings
 ) : NotificationSettingsService {
-
-    private val notificationSettings: NotificationSettings = client.getNotificationSettings()
 
     private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val notificationSettingsChangeFlow: SharedFlow<Unit> = _notificationSettingsChangeFlow.asSharedFlow()

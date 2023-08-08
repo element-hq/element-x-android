@@ -17,7 +17,10 @@
 package io.element.android.features.roomdetails.impl.notificationsettings
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -33,15 +36,15 @@ fun roomNotificationSettingsItems(): ImmutableList<RoomNotificationSettingsItem>
             when (it) {
                 RoomNotificationMode.ALL_MESSAGES -> RoomNotificationSettingsItem(
                     mode = it,
-                    title = "All messages",
+                    title = stringResource(R.string.screen_room_notification_settings_mode_all_messages),
                 )
                 RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> RoomNotificationSettingsItem(
                     mode = it,
-                    title = "Mentions and keywords",
+                    title = stringResource(R.string.screen_room_notification_settings_mode_mentions_and_keywords),
                 )
                 RoomNotificationMode.MUTE -> RoomNotificationSettingsItem(
                     mode = it,
-                    title = "Mute",
+                    title = stringResource(CommonStrings.common_mute),
                 )
             }
         }
