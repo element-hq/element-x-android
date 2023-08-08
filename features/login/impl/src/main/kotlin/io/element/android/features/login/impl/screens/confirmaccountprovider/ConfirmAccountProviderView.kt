@@ -87,7 +87,7 @@ fun ConfirmAccountProviderView(
         footer = {
             ButtonColumnMolecule {
                 Button(
-                    title = stringResource(id = R.string.screen_account_provider_continue),
+                    text = stringResource(id = R.string.screen_account_provider_continue),
                     showProgress = isLoading,
                     onClick = { eventSink.invoke(ConfirmAccountProviderEvents.Continue) },
                     enabled = state.submitEnabled || isLoading,
@@ -96,7 +96,7 @@ fun ConfirmAccountProviderView(
                         .testTag(TestTags.loginContinue)
                 )
                 TextButton(
-                    title = stringResource(id = R.string.screen_account_provider_change),
+                    text = stringResource(id = R.string.screen_account_provider_change),
                     onClick = onChange,
                     enabled = true,
                     modifier = Modifier

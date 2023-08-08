@@ -128,7 +128,7 @@ fun RoomInviteMembersTopBar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             TextButton(
-                title = stringResource(CommonStrings.action_send),
+                text = stringResource(CommonStrings.action_send),
                 onClick = onSendPressed,
                 enabled = canSend,
             )

@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 internal fun MenuPreview() {
     ElementThemedPreview {
         var isExpanded by remember { mutableStateOf(false) }
-        Button(title = "Toggle", onClick = { isExpanded = !isExpanded })
+        Button(text = "Toggle", onClick = { isExpanded = !isExpanded })
         DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
             for (i in 0..5) {
                 val leadingIcon: @Composable (() -> Unit)? = if (i in 2..3) {

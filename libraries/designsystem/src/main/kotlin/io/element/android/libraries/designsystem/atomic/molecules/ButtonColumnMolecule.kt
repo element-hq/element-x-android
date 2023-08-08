@@ -59,8 +59,8 @@ internal fun ButtonColumnMoleculeDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     ButtonColumnMolecule {
-        Button(title = "Button", onClick = {}, modifier = Modifier.fillMaxWidth())
-        OutlinedButton(title = "OutlinedButton", onClick = {}, modifier = Modifier.fillMaxWidth())
-        TextButton(title = "TextButton", onClick = {}, modifier = Modifier.fillMaxWidth())
+        Button(text = "Button", onClick = {}, modifier = Modifier.fillMaxWidth())
+        OutlinedButton(text = "OutlinedButton", onClick = {}, modifier = Modifier.fillMaxWidth())
+        TextButton(text = "TextButton", onClick = {}, modifier = Modifier.fillMaxWidth())
     }
 }

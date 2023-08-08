@@ -151,7 +151,7 @@ fun ReportMessageView(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                title = stringResource(CommonStrings.action_send),
+                text = stringResource(CommonStrings.action_send),
                 enabled = state.reason.isNotBlank() && !isSending,
                 showProgress = isSending,
                 onClick = {

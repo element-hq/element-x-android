@@ -114,7 +114,7 @@ fun RoomDetailsEditView(
                 navigationIcon = { BackButton(onClick = onBackPressed) },
                 actions = {
                     TextButton(
-                        title = stringResource(CommonStrings.action_save),
+                        text = stringResource(CommonStrings.action_save),
                         enabled = state.saveButtonEnabled,
                         onClick = {
                             focusManager.clearFocus()

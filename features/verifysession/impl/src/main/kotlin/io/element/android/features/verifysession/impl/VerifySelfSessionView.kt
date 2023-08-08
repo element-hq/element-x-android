@@ -222,7 +222,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
     ) {
         if (positiveButtonTitle != null) {
             Button(
-                title = stringResource(positiveButtonTitle),
+                text = stringResource(positiveButtonTitle),
                 showProgress = isVerifying,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { positiveButtonEvent?.let { eventSink(it) } }
@@ -230,7 +230,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         }
         if (negativeButtonTitle != null) {
             TextButton(
-                title = stringResource(negativeButtonTitle),
+                text = stringResource(negativeButtonTitle),
                 modifier = Modifier.fillMaxWidth(),
                 onClick = negativeButtonCallback,
                 enabled = negativeButtonEnabled,

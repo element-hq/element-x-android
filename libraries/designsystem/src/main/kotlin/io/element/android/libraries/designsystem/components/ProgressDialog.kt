@@ -130,7 +130,7 @@ private fun ProgressDialogContent(
                     contentAlignment = Alignment.BottomEnd
                 ) {
                     TextButton(
-                        title = stringResource(id = CommonStrings.action_cancel),
+                        text = stringResource(id = CommonStrings.action_cancel),
                         onClick = onCancelClicked,
                     )
                 }

@@ -49,7 +49,7 @@ fun AsyncFailure(
         if (onRetry != null) {
             Spacer(modifier = Modifier.height(24.dp))
             Button(
-                title = stringResource(id = CommonStrings.action_retry),
+                text = stringResource(id = CommonStrings.action_retry),
                 onClick = onRetry
             )
         }

@@ -103,7 +103,7 @@ fun AddPeopleViewTopBar(
         actions = {
             val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip
             TextButton(
-                title = stringResource(id = textActionResId),
+                text = stringResource(id = textActionResId),
                 onClick = onNextPressed,
             )
         }

@@ -82,7 +82,7 @@ internal fun RequestVerificationHeader(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
-                    title = stringResource(CommonStrings.action_continue),
+                    text = stringResource(CommonStrings.action_continue),
                     buttonSize = ButtonSize.Medium,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = onVerifyClicked,

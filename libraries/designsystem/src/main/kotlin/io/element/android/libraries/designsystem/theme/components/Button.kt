@@ -56,41 +56,74 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun Button(
-    title: String,
+    text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     buttonSize: ButtonSize = ButtonSize.Large,
-    buttonStyle: ButtonStyle = ButtonStyle.Filled,
+    showProgress: Boolean = false,
+    leadingIcon: IconSource? = null,
+) = ButtonInternal(text, onClick, modifier, enabled, buttonSize, ButtonStyle.Filled, showProgress, leadingIcon)
+
+@Composable
+fun OutlinedButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    buttonSize: ButtonSize = ButtonSize.Large,
+    showProgress: Boolean = false,
+    leadingIcon: IconSource? = null,
+) = ButtonInternal(text, onClick, modifier, enabled, buttonSize, ButtonStyle.Outlined, showProgress, leadingIcon)
+
+@Composable
+fun TextButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    buttonSize: ButtonSize = ButtonSize.Large,
+    showProgress: Boolean = false,
+    leadingIcon: IconSource? = null,
+) = ButtonInternal(text, onClick, modifier, enabled, buttonSize, ButtonStyle.Text, showProgress, leadingIcon)
+
+@Composable
+private fun ButtonInternal(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    size: ButtonSize = ButtonSize.Large,
+    style: ButtonStyle,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
 ) {
-    val minHeight = when (buttonSize) {
+    val minHeight = when (size) {
         ButtonSize.Medium -> 40.dp
         ButtonSize.Large -> 48.dp
     }
 
-    val paddingValues = when (buttonSize) {
+    val paddingValues = when (size) {
         ButtonSize.Medium -> {
-            when (buttonStyle) {
+            when (style) {
                 ButtonStyle.Text -> PaddingValues(horizontal = 12.dp, vertical = 10.dp)
                 else -> PaddingValues(horizontal = 16.dp, vertical = 10.dp)
             }
         }
         ButtonSize.Large -> {
-            when (buttonStyle) {
+            when (style) {
                 ButtonStyle.Text -> PaddingValues(horizontal = 16.dp, vertical = 13.dp)
                 else -> PaddingValues(horizontal = 24.dp, vertical = 13.dp)
             }
         }
     }
 
-    val shape = when (buttonStyle) {
+    val shape = when (style) {
         ButtonStyle.Filled, ButtonStyle.Outlined -> RoundedCornerShape(percent = 50)
         ButtonStyle.Text -> RectangleShape
     }
 
-    val colors = when (buttonStyle) {
+    val colors = when (style) {
         ButtonStyle.Filled -> ButtonDefaults.buttonColors(
             containerColor = ElementTheme.materialColors.primary,
             contentColor = ElementTheme.materialColors.onPrimary,
@@ -105,7 +138,7 @@ fun Button(
         )
     }
 
-    val border = when (buttonStyle) {
+    val border = when (style) {
         ButtonStyle.Filled, ButtonStyle.Text -> null
         ButtonStyle.Outlined -> BorderStroke(
             width = 1.dp,
@@ -113,7 +146,7 @@ fun Button(
         )
     }
 
-    val textStyle = when (buttonSize) {
+    val textStyle = when (size) {
         ButtonSize.Medium -> MaterialTheme.typography.labelLarge
         ButtonSize.Large -> ElementTheme.typography.fontBodyLgMedium
     }
@@ -154,7 +187,7 @@ fun Button(
             else -> Unit
         }
         Text(
-            text = title,
+            text = text,
             style = textStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -162,28 +195,6 @@ fun Button(
         )
     }
 }
-
-@Composable
-fun OutlinedButton(
-    title: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    buttonSize: ButtonSize = ButtonSize.Large,
-    showProgress: Boolean = false,
-    leadingIcon: IconSource? = null,
-) = Button(title, onClick, modifier, enabled, buttonSize, ButtonStyle.Outlined, showProgress, leadingIcon)
-
-@Composable
-fun TextButton(
-    title: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    buttonSize: ButtonSize = ButtonSize.Large,
-    showProgress: Boolean = false,
-    leadingIcon: IconSource? = null,
-) = Button(title, onClick, modifier, enabled, buttonSize, ButtonStyle.Text, showProgress, leadingIcon)
 
 sealed interface IconSource {
     data class Resource(val id: Int) : IconSource
@@ -200,7 +211,7 @@ enum class ButtonSize {
     Medium, Large
 }
 
-enum class ButtonStyle {
+private enum class ButtonStyle {
     Filled, Outlined, Text
 }
 
@@ -267,7 +278,9 @@ private fun ButtonCombinationPreview(
     ElementThemedPreview {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(16.dp).width(IntrinsicSize.Max),
+            modifier = Modifier
+                .padding(16.dp)
+                .width(IntrinsicSize.Max),
         ) {
             // Normal
             ButtonRowPreview(
@@ -304,22 +317,22 @@ private fun ButtonRowPreview(
     showProgress: Boolean = false,
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
-        Button(
-            title = "A button",
+        ButtonInternal(
+            text = "A button",
             showProgress = showProgress,
             onClick = {},
-            buttonStyle = buttonStyle,
-            buttonSize = buttonSize,
+            style = buttonStyle,
+            size = buttonSize,
             leadingIcon = leadingIcon,
             modifier = Modifier.then(modifier),
         )
-        Button(
-            title = "A button",
+        ButtonInternal(
+            text = "A button",
             showProgress = showProgress,
             enabled = false,
             onClick = {},
-            buttonStyle = buttonStyle,
-            buttonSize = buttonSize,
+            style = buttonStyle,
+            size = buttonSize,
             leadingIcon = leadingIcon,
             modifier = Modifier.then(modifier),
         )

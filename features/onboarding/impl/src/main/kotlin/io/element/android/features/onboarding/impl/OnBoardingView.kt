@@ -40,9 +40,9 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -141,23 +141,22 @@ private fun OnBoardingButtons(
         }
         if (state.canLoginWithQrCode) {
             Button(
-                title = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
+                text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
                 leadingIcon = IconSource.Vector(Icons.Default.QrCode),
                 onClick = onSignInWithQrCode,
                 modifier = Modifier.fillMaxWidth()
             )
         }
         Button(
-            title = stringResource(id = signInButtonStringRes),
+            text = stringResource(id = signInButtonStringRes),
             onClick = onSignIn,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(TestTags.onBoardingSignIn)
         )
         if (state.canCreateAccount) {
-            Button(
-                title = stringResource(id = R.string.screen_onboarding_sign_up),
-                buttonStyle = ButtonStyle.Outlined,
+            OutlinedButton(
+                text = stringResource(id = R.string.screen_onboarding_sign_up),
                 onClick = onCreateAccount,
                 enabled = true,
                 modifier = Modifier

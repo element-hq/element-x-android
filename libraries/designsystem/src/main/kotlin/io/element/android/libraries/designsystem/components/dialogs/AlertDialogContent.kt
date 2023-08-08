@@ -38,7 +38,6 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -75,20 +74,19 @@ internal fun SimpleAlertDialogContent(
                     // If there is a 3rd item it should be at the end of the dialog
                     // Having this 3rd action is discouraged, see https://m3.material.io/components/dialogs/guidelines#e13b68f5-e367-4275-ad6f-c552ee8e358f
                     TextButton(
-                        title = thirdButtonText,
+                        text = thirdButtonText,
                         buttonSize = ButtonSize.Medium,
                         onClick = onThirdButtonClicked,
                     )
                 }
                 TextButton(
-                    title = cancelText,
+                    text = cancelText,
                     buttonSize = ButtonSize.Medium,
                     onClick = onCancelClicked,
                 )
                 if (submitText != null) {
                     Button(
-                        title = submitText,
-                        buttonStyle = if (emphasizeSubmitButton) ButtonStyle.Filled else ButtonStyle.Text,
+                        text = submitText,
                         buttonSize = ButtonSize.Medium,
                         onClick = onSubmitClicked,
                     )

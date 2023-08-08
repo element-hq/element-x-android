@@ -132,7 +132,7 @@ internal fun DefaultInviteSummaryRow(
             // CTAs
             Row(Modifier.padding(top = 12.dp)) {
                 OutlinedButton(
-                    title = stringResource(CommonStrings.action_decline),
+                    text = stringResource(CommonStrings.action_decline),
                     onClick = onDeclineClicked,
                     modifier = Modifier.weight(1f),
                     buttonSize = ButtonSize.Medium,
@@ -141,7 +141,7 @@ internal fun DefaultInviteSummaryRow(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(
-                    title = stringResource(CommonStrings.action_accept),
+                    text = stringResource(CommonStrings.action_accept),
                     onClick = onAcceptClicked,
                     modifier = Modifier.weight(1f),
                     buttonSize = ButtonSize.Medium,

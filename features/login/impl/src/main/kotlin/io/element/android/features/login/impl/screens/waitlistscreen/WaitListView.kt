@@ -141,7 +141,7 @@ private fun WaitListContent(
         if (state.loginAction !is Async.Success) {
             ElementTheme(darkTheme = true) {
                 TextButton(
-                    title = stringResource(CommonStrings.action_cancel),
+                    text = stringResource(CommonStrings.action_cancel),
                     onClick = onCancelClicked,
                 )
             }
@@ -200,7 +200,7 @@ private fun WaitListContent(
         if (state.loginAction is Async.Success) {
             ElementTheme(darkTheme = true) {
                 Button(
-                    title = stringResource(id = CommonStrings.action_continue),
+                    text = stringResource(id = CommonStrings.action_continue),
                     onClick = { state.eventSink.invoke(WaitListEvents.Continue) },
                     modifier = Modifier
                         .fillMaxWidth()

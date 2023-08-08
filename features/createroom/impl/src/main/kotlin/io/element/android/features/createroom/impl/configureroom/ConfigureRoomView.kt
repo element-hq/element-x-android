@@ -194,7 +194,7 @@ fun ConfigureRoomToolbar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             TextButton(
-                title = stringResource(CommonStrings.action_create),
+                text = stringResource(CommonStrings.action_create),
                 enabled = isNextActionEnabled,
                 onClick = onNextPressed,
             )

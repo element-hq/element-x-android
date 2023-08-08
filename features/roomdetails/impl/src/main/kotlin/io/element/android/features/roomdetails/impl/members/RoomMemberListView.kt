@@ -211,7 +211,7 @@ private fun RoomMemberListTopBar(
         actions = {
             if (canInvite) {
                 TextButton(
-                    title = stringResource(CommonStrings.action_invite),
+                    text = stringResource(CommonStrings.action_invite),
                     onClick = onInvitePressed,
                 )
             }

@@ -98,7 +98,7 @@ fun WelcomeView(
         },
         footer = {
             Button(
-                title = stringResource(CommonStrings.action_continue),
+                text = stringResource(CommonStrings.action_continue),
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onContinueClicked
             )

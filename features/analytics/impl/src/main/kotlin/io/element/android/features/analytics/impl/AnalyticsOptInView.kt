@@ -189,12 +189,12 @@ private fun AnalyticsOptInFooter(
         modifier = modifier,
     ) {
         Button(
-            title = stringResource(id = CommonStrings.action_ok),
+            text = stringResource(id = CommonStrings.action_ok),
             onClick = onTermsAccepted,
             modifier = Modifier.fillMaxWidth(),
         )
         TextButton(
-            title = stringResource(id = CommonStrings.action_not_now),
+            text = stringResource(id = CommonStrings.action_not_now),
             buttonSize = ButtonSize.Medium,
             onClick = onTermsDeclined,
             modifier = Modifier.fillMaxWidth(),

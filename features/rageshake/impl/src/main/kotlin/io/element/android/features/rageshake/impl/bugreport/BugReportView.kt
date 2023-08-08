@@ -149,7 +149,7 @@ fun BugReportView(
             // Submit
             PreferenceRow {
                 Button(
-                    title = stringResource(id = CommonStrings.action_send),
+                    text = stringResource(id = CommonStrings.action_send),
                     onClick = { eventSink(BugReportEvents.SendBugReport) },
                     enabled = state.submitEnabled,
                     modifier = Modifier

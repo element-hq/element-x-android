@@ -53,7 +53,7 @@ internal fun ButtonRowMoleculeDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     ButtonRowMolecule {
-        TextButton(title = "Button 1", onClick = {})
-        TextButton(title = "Button 2", onClick = {})
+        TextButton(text = "Button 1", onClick = {})
+        TextButton(text = "Button 2", onClick = {})
     }
 }

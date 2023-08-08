@@ -142,7 +142,7 @@ fun LoginPasswordView(
             Spacer(modifier = Modifier.weight(1f))
             // Submit
             Button(
-                title = stringResource(R.string.screen_login_submit),
+                text = stringResource(R.string.screen_login_submit),
                 showProgress = isLoading,
                 onClick = ::submit,
                 enabled = state.submitEnabled || isLoading,
