@@ -24,6 +24,11 @@ class NotificationsSettingsPresenter @Inject constructor() : Presenter<Notificat
 
     @Composable
     override fun present(): NotificationsSettingsState {
-        return NotificationsSettingsState()
+        return NotificationsSettingsState(
+            isEnabled = true,
+            hasSystemPermission = true,
+            notifyMeOnRoom = true,
+            acceptCalls = true
+        )
     }
 }

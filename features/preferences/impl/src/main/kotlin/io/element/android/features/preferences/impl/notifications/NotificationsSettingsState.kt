@@ -16,6 +16,10 @@
 
 package io.element.android.features.preferences.impl.notifications
 
-class NotificationsSettingsState {
-
-}
+data class NotificationsSettingsState(
+    val hasSystemPermission: Boolean,
+    val isEnabled: Boolean,
+    val notifyMeOnRoom: Boolean,
+    val acceptCalls: Boolean
+//    val eventSink: (AnalyticsOptInEvents) -> Unit,
+)

@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.analytics.api.preferences
+package io.element.android.features.preferences.impl.notifications
 
-import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-data class AnalyticsPreferencesState(
-    val applicationName: String,
-    val isEnabled: Boolean,
+open class NotificationsSettingsStateProvider : PreviewParameterProvider<NotificationsSettingsState> {
+    override val values: Sequence<NotificationsSettingsState>
+        get() = sequenceOf(
+            aNotificationsSettingsState(),
+        )
+}
+
+fun aNotificationsSettingsState() = NotificationsSettingsState(
+    isEnabled = true,
+    hasSystemPermission = false,
+    notifyMeOnRoom = true,
+    acceptCalls = true
 )
