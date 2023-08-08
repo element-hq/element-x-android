@@ -53,6 +53,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.theme.ElementTheme
@@ -141,6 +142,7 @@ private fun WaitListContent(
             ElementTheme(darkTheme = true) {
                 Button(
                     title = stringResource(CommonStrings.action_cancel),
+                    buttonStyle = ButtonStyle.Text,
                     onClick = onCancelClicked,
                 )
             }
