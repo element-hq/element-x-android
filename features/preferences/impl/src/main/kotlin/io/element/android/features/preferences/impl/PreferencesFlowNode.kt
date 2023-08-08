@@ -90,6 +90,10 @@ class PreferencesFlowNode @AssistedInject constructor(
                     override fun onOpenDeveloperSettings() {
                         backstack.push(NavTarget.DeveloperSettings)
                     }
+
+                    override fun onOpenNotificationSettings() {
+                        TODO("Not yet implemented")
+                    }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
             }
