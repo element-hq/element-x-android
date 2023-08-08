@@ -63,7 +63,7 @@ fun Button(
     buttonSize: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
-) = ButtonInternal(text, onClick, modifier, enabled, buttonSize, ButtonStyle.Filled, showProgress, leadingIcon)
+) = ButtonInternal(text, onClick, ButtonStyle.Filled, modifier, enabled, buttonSize, showProgress, leadingIcon)
 
 @Composable
 fun OutlinedButton(
@@ -74,7 +74,7 @@ fun OutlinedButton(
     buttonSize: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
-) = ButtonInternal(text, onClick, modifier, enabled, buttonSize, ButtonStyle.Outlined, showProgress, leadingIcon)
+) = ButtonInternal(text, onClick, ButtonStyle.Outlined, modifier, enabled, buttonSize, showProgress, leadingIcon)
 
 @Composable
 fun TextButton(
@@ -85,16 +85,16 @@ fun TextButton(
     buttonSize: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
-) = ButtonInternal(text, onClick, modifier, enabled, buttonSize, ButtonStyle.Text, showProgress, leadingIcon)
+) = ButtonInternal(text, onClick, ButtonStyle.Text, modifier, enabled, buttonSize, showProgress, leadingIcon)
 
 @Composable
 private fun ButtonInternal(
     text: String,
     onClick: () -> Unit,
+    style: ButtonStyle,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     size: ButtonSize = ButtonSize.Large,
-    style: ButtonStyle,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
 ) {
