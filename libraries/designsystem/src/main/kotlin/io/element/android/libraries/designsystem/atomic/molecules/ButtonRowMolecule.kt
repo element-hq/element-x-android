@@ -25,8 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
+import io.element.android.libraries.designsystem.theme.components.TextButton
 
 @Composable
 fun ButtonRowMolecule(
@@ -54,7 +53,7 @@ internal fun ButtonRowMoleculeDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     ButtonRowMolecule {
-        Button(title = "Button 1", buttonStyle = ButtonStyle.Text, onClick = {})
-        Button(title = "Button 2", buttonStyle = ButtonStyle.Text, onClick = {})
+        TextButton(title = "Button 1", onClick = {})
+        TextButton(title = "Button 2", onClick = {})
     }
 }

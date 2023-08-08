@@ -69,11 +69,10 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
@@ -114,9 +113,8 @@ fun RoomDetailsEditView(
                 },
                 navigationIcon = { BackButton(onClick = onBackPressed) },
                 actions = {
-                    Button(
+                    TextButton(
                         title = stringResource(CommonStrings.action_save),
-                        buttonStyle = ButtonStyle.Text,
                         enabled = state.saveButtonEnabled,
                         onClick = {
                             focusManager.clearFocus()

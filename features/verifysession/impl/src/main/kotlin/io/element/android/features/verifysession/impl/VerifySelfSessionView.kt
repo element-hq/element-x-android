@@ -45,10 +45,10 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -229,9 +229,8 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             )
         }
         if (negativeButtonTitle != null) {
-            Button(
+            TextButton(
                 title = stringResource(negativeButtonTitle),
-                buttonStyle = ButtonStyle.Text,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = negativeButtonCallback,
                 enabled = negativeButtonEnabled,

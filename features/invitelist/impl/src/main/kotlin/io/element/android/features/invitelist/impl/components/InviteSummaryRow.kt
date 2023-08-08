@@ -48,9 +48,9 @@ import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAto
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -131,12 +131,11 @@ internal fun DefaultInviteSummaryRow(
 
             // CTAs
             Row(Modifier.padding(top = 12.dp)) {
-                Button(
+                OutlinedButton(
                     title = stringResource(CommonStrings.action_decline),
                     onClick = onDeclineClicked,
                     modifier = Modifier.weight(1f),
                     buttonSize = ButtonSize.Medium,
-                    buttonStyle = ButtonStyle.Outlined,
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))

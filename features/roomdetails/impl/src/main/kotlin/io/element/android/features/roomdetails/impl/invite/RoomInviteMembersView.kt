@@ -38,13 +38,12 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.CheckableUnresolvedUserRow
@@ -128,9 +127,8 @@ fun RoomInviteMembersTopBar(
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
-            Button(
+            TextButton(
                 title = stringResource(CommonStrings.action_send),
-                buttonStyle = ButtonStyle.Text,
                 onClick = onSendPressed,
                 enabled = canSend,
             )

@@ -53,11 +53,11 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.theme.ElementTheme
@@ -193,9 +193,8 @@ private fun AnalyticsOptInFooter(
             onClick = onTermsAccepted,
             modifier = Modifier.fillMaxWidth(),
         )
-        Button(
+        TextButton(
             title = stringResource(id = CommonStrings.action_not_now),
-            buttonStyle = ButtonStyle.Text,
             buttonSize = ButtonSize.Medium,
             onClick = onTermsDeclined,
             modifier = Modifier.fillMaxWidth(),

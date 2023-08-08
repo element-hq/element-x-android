@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -95,11 +95,10 @@ fun ConfirmAccountProviderView(
                         .fillMaxWidth()
                         .testTag(TestTags.loginContinue)
                 )
-                Button(
+                TextButton(
                     title = stringResource(id = R.string.screen_account_provider_change),
                     onClick = onChange,
                     enabled = true,
-                    buttonStyle = ButtonStyle.Text,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.loginChangeServer)

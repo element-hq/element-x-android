@@ -52,14 +52,13 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogD
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomName
@@ -123,9 +122,8 @@ fun ForwardMessagesView(
                     BackButton(onClick = { onBackButton(state) })
                 },
                 actions = {
-                    Button(
+                    TextButton(
                         title = stringResource(CommonStrings.action_send),
-                        buttonStyle = ButtonStyle.Text,
                         enabled = state.selectedRooms.isNotEmpty(),
                         onClick = { state.eventSink(ForwardMessagesEvents.ForwardEvent) }
                     )

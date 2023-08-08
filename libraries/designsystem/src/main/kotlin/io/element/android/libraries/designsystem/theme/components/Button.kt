@@ -163,6 +163,28 @@ fun Button(
     }
 }
 
+@Composable
+fun OutlinedButton(
+    title: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    buttonSize: ButtonSize = ButtonSize.Large,
+    showProgress: Boolean = false,
+    leadingIcon: IconSource? = null,
+) = Button(title, onClick, modifier, enabled, buttonSize, ButtonStyle.Outlined, showProgress, leadingIcon)
+
+@Composable
+fun TextButton(
+    title: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    buttonSize: ButtonSize = ButtonSize.Large,
+    showProgress: Boolean = false,
+    leadingIcon: IconSource? = null,
+) = Button(title, onClick, modifier, enabled, buttonSize, ButtonStyle.Text, showProgress, leadingIcon)
+
 sealed interface IconSource {
     data class Resource(val id: Int) : IconSource
     data class Vector(val vector: ImageVector) : IconSource

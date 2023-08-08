@@ -51,10 +51,10 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonStyle
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -140,9 +140,8 @@ private fun WaitListContent(
     ) {
         if (state.loginAction !is Async.Success) {
             ElementTheme(darkTheme = true) {
-                Button(
+                TextButton(
                     title = stringResource(CommonStrings.action_cancel),
-                    buttonStyle = ButtonStyle.Text,
                     onClick = onCancelClicked,
                 )
             }
