@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -35,7 +35,7 @@ import java.io.Closeable
 
 interface MatrixClient : Closeable {
     val sessionId: SessionId
-    val roomSummaryDataSource: RoomSummaryDataSource
+    val roomListService: RoomListService
     val mediaLoader: MatrixMediaLoader
     suspend fun getRoom(roomId: RoomId): MatrixRoom?
     suspend fun findDM(userId: UserId): MatrixRoom?

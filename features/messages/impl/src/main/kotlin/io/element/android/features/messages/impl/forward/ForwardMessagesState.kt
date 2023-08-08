@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.forward
 
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.ImmutableList
 
 data class ForwardMessagesState(

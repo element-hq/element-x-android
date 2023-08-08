@@ -63,7 +63,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings

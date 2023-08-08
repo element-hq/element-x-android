@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.room
+package io.element.android.libraries.matrix.api.roomlist
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 
 sealed interface RoomSummary {

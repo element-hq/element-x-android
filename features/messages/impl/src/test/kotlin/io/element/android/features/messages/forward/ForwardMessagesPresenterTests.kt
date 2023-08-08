@@ -24,7 +24,7 @@ import io.element.android.features.messages.impl.forward.ForwardMessagesEvents
 import io.element.android.features.messages.impl.forward.ForwardMessagesPresenter
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
