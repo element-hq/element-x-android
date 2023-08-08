@@ -47,7 +47,9 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
@@ -100,6 +102,7 @@ class MessageComposerPresenter @Inject constructor(
         val text: MutableState<String> = rememberSaveable {
             mutableStateOf("")
         }
+        val ongoingSendAttachment = remember { mutableStateOf<Uri?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
@@ -112,7 +115,13 @@ class MessageComposerPresenter @Inject constructor(
 
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
-                is AttachmentsState.Sending.Processing -> localCoroutineScope.sendAttachment(attachmentStateValue.attachments.first(), attachmentsState)
+                is AttachmentsState.Sending.Processing -> {
+                    localCoroutineScope.sendAttachment(
+                        attachmentStateValue.attachments.first(),
+                        attachmentsState,
+                        ongoingSendAttachment,
+                    )
+                }
                 else -> Unit
             }
         }
@@ -169,6 +178,11 @@ class MessageComposerPresenter @Inject constructor(
                     showAttachmentSourcePicker = false
                     // Navigation to the location picker screen is done at the view layer
                 }
+                is MessageComposerEvents.CancelSendAttachment -> {
+                    ongoingSendAttachment.value?.let {
+                        mediaSender.cancel(it)
+                    }
+                }
             }
         }
 
@@ -212,13 +226,15 @@ class MessageComposerPresenter @Inject constructor(
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
         attachmentState: MutableState<AttachmentsState>,
-    ) = launch {
-        when (attachment) {
-            is Attachment.Media -> {
+        ongoingSendAttachment: MutableState<Uri?>,
+    ) = when (attachment) {
+        is Attachment.Media -> {
+            launch {
                 sendMedia(
                     uri = attachment.localMedia.uri,
                     mimeType = attachment.localMedia.info.mimeType,
-                    attachmentState = attachmentState
+                    attachmentState = attachmentState,
+                    ongoingSendAttachment = ongoingSendAttachment,
                 )
             }
         }
@@ -259,20 +275,24 @@ class MessageComposerPresenter @Inject constructor(
         uri: Uri,
         mimeType: String,
         attachmentState: MutableState<AttachmentsState>,
-    ) {
-        val progressCallback = object : ProgressCallback {
-            override fun onProgress(current: Long, total: Long) {
-                attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total.toFloat())
+        ongoingSendAttachment: MutableState<Uri?>,
+    ) = runCatching {
+            val progressCallback = object : ProgressCallback {
+                override fun onProgress(current: Long, total: Long) {
+                    attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total.toFloat())
+                }
+            }
+            ongoingSendAttachment.value = uri
+            mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback).getOrThrow()
+        }
+        .onSuccess {
+            attachmentState.value = AttachmentsState.None
+        }
+        .onFailure { cause ->
+            attachmentState.value = AttachmentsState.None
+            if (cause !is CancellationException) {
+                val snackbarMessage = SnackbarMessage(sendAttachmentError(cause))
+                snackbarDispatcher.post(snackbarMessage)
             }
         }
-        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback)
-            .onSuccess {
-                attachmentState.value = AttachmentsState.None
-            }
-            .onFailure {
-                val snackbarMessage = SnackbarMessage(sendAttachmentError(it))
-                snackbarDispatcher.post(snackbarMessage)
-                attachmentState.value = AttachmentsState.None
-            }
-    }
 }

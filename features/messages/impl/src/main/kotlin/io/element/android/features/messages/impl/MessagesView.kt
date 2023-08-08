@@ -53,6 +53,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
@@ -100,7 +101,11 @@ fun MessagesView(
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
 
-    AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
+    AttachmentStateView(
+        state = state.composerState.attachmentsState,
+        onPreviewAttachments = onPreviewAttachments,
+        onCancel = { state.composerState.eventSink(MessageComposerEvents.CancelSendAttachment) },
+    )
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
@@ -229,7 +234,8 @@ private fun ReinviteDialog(state: MessagesState) {
 @Composable
 private fun AttachmentStateView(
     state: AttachmentsState,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit
+    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
+    onCancel: () -> Unit,
 ) {
     when (state) {
         AttachmentsState.None -> Unit
@@ -242,7 +248,9 @@ private fun AttachmentStateView(
                     is AttachmentsState.Sending.Uploading -> ProgressDialogType.Determinate(state.progress)
                     is AttachmentsState.Sending.Processing -> ProgressDialogType.Indeterminate
                 },
-                text = stringResource(id = CommonStrings.common_sending)
+                text = stringResource(id = CommonStrings.common_sending),
+                isCancellable = true,
+                onDismissRequest = onCancel,
             )
         }
     }

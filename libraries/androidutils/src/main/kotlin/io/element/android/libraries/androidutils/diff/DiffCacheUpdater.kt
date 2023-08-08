@@ -58,8 +58,7 @@ class DiffCacheUpdater<ListItem, CachedItem>(
         }
     }
 
-    fun updateWith(newOriginalList: List<ListItem>) = synchronized(lock) {
-        val timeToDiff = measureTimeMillis {
+    fun updateWith(newOriginalList: List<ListItem>) = synchronized(lock) { val timeToDiff = measureTimeMillis {
             val diffCallback = DefaultDiffCallback(prevOriginalList, newOriginalList, areItemsTheSame)
             val diffResult = DiffUtil.calculateDiff(diffCallback, detectMoves)
             prevOriginalList = newOriginalList

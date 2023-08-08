@@ -18,14 +18,26 @@ package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
 import io.element.android.libraries.core.extensions.flatMap
+import io.element.android.libraries.core.extensions.flatMapCatching
+import io.element.android.libraries.core.result.onCancellation
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
 
 class MediaSender @Inject constructor(
     private val preProcessor: MediaPreProcessor,
     private val room: MatrixRoom,
 ) {
+
+    private val ongoingUploads = ConcurrentHashMap<Uri, MediaUploadToken>()
 
     suspend fun sendMedia(
         uri: Uri,
@@ -33,6 +45,7 @@ class MediaSender @Inject constructor(
         compressIfPossible: Boolean,
         progressCallback: ProgressCallback? = null
     ): Result<Unit> {
+        ongoingUploads[uri] = MediaUploadToken(coroutineContext, null)
         return preProcessor
             .process(
                 uri = uri,
@@ -40,16 +53,23 @@ class MediaSender @Inject constructor(
                 deleteOriginal = true,
                 compressIfPossible = compressIfPossible
             )
-            .flatMap { info ->
-                room.sendMedia(info, progressCallback)
+            .flatMapCatching { info ->
+                room.sendMedia(uri, info, progressCallback)
+            }.onFailure {
+                ongoingUploads.remove(uri)
             }
     }
 
+    fun cancel(uri: Uri) {
+        ongoingUploads.remove(uri)?.cancel()
+    }
+
     private suspend fun MatrixRoom.sendMedia(
+        originalUri: Uri,
         uploadInfo: MediaUploadInfo,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
     ): Result<Unit> {
-        return when (uploadInfo) {
+        val handler = when (uploadInfo) {
             is MediaUploadInfo.Image -> {
                 sendImage(
                     file = uploadInfo.file,
@@ -83,5 +103,20 @@ class MediaSender @Inject constructor(
                 )
             }
         }
+
+        return handler
+            .flatMapCatching { uploadHandler ->
+                ongoingUploads[originalUri] = MediaUploadToken(coroutineContext, uploadHandler)
+                uploadHandler.await()
+            }.onSuccess {
+                ongoingUploads.remove(originalUri)
+            }
+    }
+}
+
+data class MediaUploadToken(private val context: CoroutineContext, private val uploadHandler: MediaUploadHandler?) {
+    fun cancel() {
+        uploadHandler?.cancel()
+        context.cancel()
     }
 }

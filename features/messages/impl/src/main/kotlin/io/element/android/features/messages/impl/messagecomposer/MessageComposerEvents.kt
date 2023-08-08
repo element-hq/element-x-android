@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
+import android.net.Uri
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.textcomposer.MessageComposerMode
 
@@ -36,4 +37,5 @@ sealed interface MessageComposerEvents {
         object VideoFromCamera : PickAttachmentSource
         object Location : PickAttachmentSource
     }
+    object CancelSendAttachment : MessageComposerEvents
 }

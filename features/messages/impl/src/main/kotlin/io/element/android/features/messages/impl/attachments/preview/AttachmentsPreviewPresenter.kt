@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.attachments.preview
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +29,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.mediaupload.api.MediaSender
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -50,10 +52,15 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             mutableStateOf<SendActionState>(SendActionState.Idle)
         }
 
+        val ongoingSendAttachment = remember { mutableStateOf<Uri?>(null) }
+
         fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
             when (attachmentsPreviewEvents) {
-                AttachmentsPreviewEvents.SendAttachment -> coroutineScope.sendAttachment(attachment, sendActionState)
-                AttachmentsPreviewEvents.ClearSendState -> sendActionState.value = SendActionState.Idle
+                AttachmentsPreviewEvents.SendAttachment -> coroutineScope.sendAttachment(attachment, sendActionState, ongoingSendAttachment)
+                AttachmentsPreviewEvents.ClearSendState -> {
+                    ongoingSendAttachment.value?.let { mediaSender.cancel(it) }
+                    sendActionState.value = SendActionState.Idle
+                }
             }
         }
 
@@ -67,12 +74,14 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
         sendActionState: MutableState<SendActionState>,
+        ongoingSendAttachment: MutableState<Uri?>,
     ) = launch {
         when (attachment) {
             is Attachment.Media -> {
                 sendMedia(
                     mediaAttachment = attachment,
-                    sendActionState = sendActionState
+                    sendActionState = sendActionState,
+                    ongoingSendAttachment = ongoingSendAttachment,
                 )
             }
         }
@@ -81,7 +90,9 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private suspend fun sendMedia(
         mediaAttachment: Attachment.Media,
         sendActionState: MutableState<SendActionState>,
-    ) {
+        ongoingSendAttachment: MutableState<Uri?>,
+    ) = runCatching {
+        ongoingSendAttachment.value = mediaAttachment.localMedia.uri
         val progressCallback = object : ProgressCallback {
             override fun onProgress(current: Long, total: Long) {
                 sendActionState.value = SendActionState.Sending.Uploading(current.toFloat() / total.toFloat())
@@ -93,13 +104,19 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             mimeType = mediaAttachment.localMedia.info.mimeType,
             compressIfPossible = mediaAttachment.compressIfPossible,
             progressCallback = progressCallback
-        ).fold(
-            onSuccess = {
-                sendActionState.value = SendActionState.Done
-            },
-            onFailure = {
-                sendActionState.value = SendActionState.Failure(it)
+        ).getOrThrow()
+    }.fold(
+        onSuccess = {
+            ongoingSendAttachment.value = null
+            sendActionState.value = SendActionState.Done
+        },
+        onFailure = { error ->
+            ongoingSendAttachment.value = null
+            if (error is CancellationException) {
+                throw error
+            } else {
+                sendActionState.value = SendActionState.Failure(error)
             }
-        )
-    }
+        }
+    )
 }
