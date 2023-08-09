@@ -71,14 +71,12 @@ class LoggedInPresenter @Inject constructor(
             mutableStateOf(false)
         }
         LaunchedEffect(roomListState, networkStatus) {
-            showSyncSpinner = if (networkStatus == NetworkStatus.Offline) {
-                false
-            } else {
-                if (roomListState != RoomListService.State.Running) {
+            showSyncSpinner = when {
+                networkStatus == NetworkStatus.Offline -> false
+                roomListState == RoomListService.State.Running -> false
+                else -> {
                     delay(DELAY_BEFORE_SHOWING_SYNC_SPINNER_IN_MILLIS)
                     true
-                } else {
-                    false
                 }
             }
         }
