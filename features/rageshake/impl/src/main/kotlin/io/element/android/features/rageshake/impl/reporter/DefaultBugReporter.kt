@@ -540,6 +540,10 @@ class DefaultBugReporter @Inject constructor(
             Timber.e(error, "## saveLogCat() : fail to write logcat OOM")
         } catch (e: Exception) {
             Timber.e(e, "## saveLogCat() : fail to write logcat")
+        } finally {
+            if (logCatErrFile.exists()) {
+                logCatErrFile.safeDelete()
+            }
         }
 
         return null
