@@ -35,7 +35,6 @@ internal fun SlidingSyncNotSupportedDialog(
         submitText = stringResource(CommonStrings.action_learn_more),
         onSubmitClicked = onLearnMoreClicked,
         onCancelClicked = onDismiss,
-        emphasizeSubmitButton = true,
         title = stringResource(CommonStrings.dialog_title_error),
         content = stringResource(R.string.screen_change_server_error_no_sliding_sync_message),
     )
