@@ -47,8 +47,8 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -111,9 +111,9 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - load 1 room with success`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
+        val roomListService = FakeRoomListService()
         val matrixClient = FakeMatrixClient(
-            roomSummaryDataSource = roomSummaryDataSource
+            roomListService = roomListService
         )
         val presenter = createRoomListPresenter(matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -123,7 +123,7 @@ class RoomListPresenterTests {
             // Room list is loaded with 16 placeholders
             Truth.assertThat(initialState.roomList.size).isEqualTo(16)
             Truth.assertThat(initialState.roomList.all { it.isPlaceholder }).isTrue()
-            roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
+            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
             val withRoomState = consumeItemsUntilPredicate { state -> state.roomList.size == 1 }.last()
             Truth.assertThat(withRoomState.roomList.size).isEqualTo(1)
             Truth.assertThat(withRoomState.roomList.first())
@@ -133,15 +133,15 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - load 1 room with success and filter rooms`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
+        val roomListService = FakeRoomListService()
         val matrixClient = FakeMatrixClient(
-            roomSummaryDataSource = roomSummaryDataSource
+            roomListService = roomListService
         )
         val presenter = createRoomListPresenter(matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
+            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
             val loadedState = consumeItemsUntilPredicate { state -> state.roomList.size == 1 }.last()
             // Test filtering with result
             loadedState.eventSink.invoke(RoomListEvents.UpdateFilter(A_ROOM_NAME.substring(0, 3)))
@@ -160,39 +160,39 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - update visible range`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
+        val roomListService = FakeRoomListService()
         val matrixClient = FakeMatrixClient(
-            roomSummaryDataSource = roomSummaryDataSource
+            roomListService = roomListService
         )
         val presenter = createRoomListPresenter(matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            roomSummaryDataSource.postAllRooms(listOf(aRoomSummaryFilled()))
+            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
             val loadedState = awaitItem()
             // check initial value
-            Truth.assertThat(roomSummaryDataSource.latestSlidingSyncRange).isNull()
+            Truth.assertThat(roomListService.latestSlidingSyncRange).isNull()
             // Test empty range
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(1, 0)))
-            Truth.assertThat(roomSummaryDataSource.latestSlidingSyncRange).isNull()
+            Truth.assertThat(roomListService.latestSlidingSyncRange).isNull()
             // Update visible range and check that range is transmitted to the SDK after computation
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 0)))
-            Truth.assertThat(roomSummaryDataSource.latestSlidingSyncRange)
+            Truth.assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(0, 20))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 1)))
-            Truth.assertThat(roomSummaryDataSource.latestSlidingSyncRange)
+            Truth.assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(0, 21))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(19, 29)))
-            Truth.assertThat(roomSummaryDataSource.latestSlidingSyncRange)
+            Truth.assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(0, 49))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(49, 59)))
-            Truth.assertThat(roomSummaryDataSource.latestSlidingSyncRange)
+            Truth.assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(29, 79))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 159)))
-            Truth.assertThat(roomSummaryDataSource.latestSlidingSyncRange)
+            Truth.assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(129, 179))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 259)))
-            Truth.assertThat(roomSummaryDataSource.latestSlidingSyncRange)
+            Truth.assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(129, 279))
             cancelAndIgnoreRemainingEvents()
         }
@@ -200,9 +200,9 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
+        val roomListService = FakeRoomListService()
         val matrixClient = FakeMatrixClient(
-            roomSummaryDataSource = roomSummaryDataSource
+            roomListService = roomListService
         )
         val presenter = createRoomListPresenter(
             client = matrixClient,
@@ -317,7 +317,7 @@ class RoomListPresenterTests {
         inviteStateDataSource = inviteStateDataSource,
         leaveRoomPresenter = leaveRoomPresenter,
         roomListDataSource = RoomListDataSource(
-            client.roomSummaryDataSource,
+            client.roomListService,
             lastMessageTimestampFormatter,
             roomLastMessageFormatter,
             coroutineDispatchers = testCoroutineDispatchers()

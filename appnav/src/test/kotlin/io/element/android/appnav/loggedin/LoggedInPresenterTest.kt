@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -27,6 +29,8 @@ import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -49,6 +53,10 @@ class LoggedInPresenterTest {
                 override fun create(permission: String): PermissionsPresenter {
                     return NoopPermissionsPresenter()
                 }
+            },
+            networkMonitor = object : NetworkMonitor {
+                override val connectivity: StateFlow<NetworkStatus>
+                    get() = MutableStateFlow(NetworkStatus.Online)
             },
             pushService = object : PushService {
                 override fun notificationStyleChanged() {
