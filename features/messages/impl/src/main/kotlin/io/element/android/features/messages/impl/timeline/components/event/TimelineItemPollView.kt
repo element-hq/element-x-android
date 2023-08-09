@@ -16,12 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
 import io.element.android.features.poll.api.ActivePollContentView
@@ -49,10 +46,8 @@ fun TimelineItemPollView(
 @Composable
 internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollContentProvider::class) content: TimelineItemPollContent) =
     ElementPreview {
-        Box(modifier = Modifier.width(275.dp)) {
-            TimelineItemPollView(
-                content = content,
-                onAnswerSelected = {},
-            )
-        }
+        TimelineItemPollView(
+            content = content,
+            onAnswerSelected = {},
+        )
     }

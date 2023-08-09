@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.Visibility
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -96,4 +98,24 @@ fun PollAnswerView(
             strokeCap = StrokeCap.Round,
         )
     }
+}
+
+@DayNightPreviews
+@Composable
+internal fun PollAnswerViewNoResultsPreview() = ElementPreview {
+    PollAnswerView(
+        showResults = false,
+        answerItem = aPollAnswerItem(),
+        onClick = { },
+    )
+}
+
+@DayNightPreviews
+@Composable
+internal fun PollAnswerViewWithResultPreview() = ElementPreview {
+    PollAnswerView(
+        showResults = true,
+        answerItem = aPollAnswerItem(),
+        onClick = { }
+    )
 }

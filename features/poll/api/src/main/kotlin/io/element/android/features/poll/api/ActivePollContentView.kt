@@ -25,6 +25,8 @@ import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.poll.PollAnswer
@@ -60,4 +62,26 @@ fun ActivePollContentView(
             )
         }
     }
+}
+
+@DayNightPreviews
+@Composable
+internal fun ActivePollContentNoResultsPreview() = ElementPreview {
+    ActivePollContentView(
+        question = "What type of food should we have at the party?",
+        answers = aPollAnswerItemList(),
+        isDisclosed = false,
+        onAnswerSelected = { },
+    )
+}
+
+@DayNightPreviews
+@Composable
+internal fun ActivePollContentWithResultsPreview() = ElementPreview {
+    ActivePollContentView(
+        question = "What type of food should we have at the party?",
+        answers = aPollAnswerItemList(),
+        isDisclosed = true,
+        onAnswerSelected = { },
+    )
 }
