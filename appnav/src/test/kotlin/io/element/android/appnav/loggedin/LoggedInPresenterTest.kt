@@ -20,17 +20,18 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -46,18 +47,33 @@ class LoggedInPresenterTest {
         }
     }
 
-    private fun createPresenter(): LoggedInPresenter {
+    @Test
+    fun `present - show sync spinner`() = runTest {
+        val roomListService = FakeRoomListService()
+        val presenter = createPresenter(roomListService, NetworkStatus.Online)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.showSyncSpinner).isFalse()
+            consumeItemsUntilPredicate { it.showSyncSpinner }
+            roomListService.postState(RoomListService.State.Running)
+            consumeItemsUntilPredicate { !it.showSyncSpinner }
+        }
+    }
+
+    private fun createPresenter(
+        roomListService: RoomListService = FakeRoomListService(),
+        networkStatus: NetworkStatus = NetworkStatus.Offline
+    ): LoggedInPresenter {
         return LoggedInPresenter(
-            matrixClient = FakeMatrixClient(),
+            matrixClient = FakeMatrixClient(roomListService = roomListService),
             permissionsPresenterFactory = object : PermissionsPresenter.Factory {
                 override fun create(permission: String): PermissionsPresenter {
                     return NoopPermissionsPresenter()
                 }
             },
-            networkMonitor = object : NetworkMonitor {
-                override val connectivity: StateFlow<NetworkStatus>
-                    get() = MutableStateFlow(NetworkStatus.Online)
-            },
+            networkMonitor = FakeNetworkMonitor(networkStatus),
             pushService = object : PushService {
                 override fun notificationStyleChanged() {
                 }
