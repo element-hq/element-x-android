@@ -22,5 +22,10 @@ import timber.log.Timber
 fun setupTracing(tracingConfiguration: TracingConfiguration) {
     val filter = tracingConfiguration.filter
     Timber.v("Tracing config filter = $filter")
-    org.matrix.rustcomponents.sdk.setupTracing(filter)
+    val rustTracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
+        filter = filter,
+        writeToStdoutOrSystem = true,
+        writeToFiles = null,
+    )
+    org.matrix.rustcomponents.sdk.setupTracing(rustTracingConfiguration)
 }
