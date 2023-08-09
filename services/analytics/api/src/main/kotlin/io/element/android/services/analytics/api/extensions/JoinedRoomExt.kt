@@ -34,9 +34,9 @@ fun Long?.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
 
 fun MatrixRoom.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger?): JoinedRoom {
     return JoinedRoom(
-            isDM = this.isDirect.orFalse(),
-            isSpace = MatrixPatterns.isSpaceId(this.roomId.value),
-            roomSize = this.joinedMemberCount.toAnalyticsRoomSize(),
-            trigger = trigger
+        isDM = this.isDirect.orFalse(),
+        isSpace = MatrixPatterns.isSpaceId(this.roomId.value),
+        roomSize = this.joinedMemberCount.toAnalyticsRoomSize(),
+        trigger = trigger
     )
 }

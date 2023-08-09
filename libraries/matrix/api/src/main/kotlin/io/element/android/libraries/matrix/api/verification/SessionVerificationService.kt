@@ -23,7 +23,7 @@ interface SessionVerificationService {
     /**
      * State of the current verification flow ([VerificationFlowState.Initial] if not started).
      */
-    val verificationFlowState : StateFlow<VerificationFlowState>
+    val verificationFlowState: StateFlow<VerificationFlowState>
 
     /**
      * The internal service that checks verification can only run after the initial sync.

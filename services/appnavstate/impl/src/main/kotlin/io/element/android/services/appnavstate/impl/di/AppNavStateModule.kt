@@ -35,5 +35,4 @@ object AppNavStateModule {
         @ApplicationContext context: Context
     ): AppForegroundStateService =
         AppInitializer.getInstance(context).initializeComponent(AppForegroundStateServiceInitializer::class.java)
-
 }

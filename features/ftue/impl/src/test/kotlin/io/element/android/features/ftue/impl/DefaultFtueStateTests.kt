@@ -110,5 +110,4 @@ class DefaultFtueStateTests {
         welcomeState: FakeWelcomeState = FakeWelcomeState(),
         analyticsService: AnalyticsService = FakeAnalyticsService()
     ) = DefaultFtueState(coroutineScope, analyticsService, welcomeState)
-
 }

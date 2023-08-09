@@ -22,7 +22,9 @@ import com.airbnb.android.showkase.ui.ShowkaseBrowserActivity
 
 fun openShowkase(activity: Activity) {
     val intent = Intent(activity, ShowkaseBrowserActivity::class.java)
-    intent.putExtra("SHOWKASE_ROOT_MODULE",
-        "io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModule")
+    intent.putExtra(
+        "SHOWKASE_ROOT_MODULE",
+        "io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModule"
+    )
     activity.startActivity(intent)
 }

@@ -25,7 +25,6 @@ import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
@@ -36,6 +35,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.tests.testutils.awaitWithLatch
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
@@ -215,8 +215,8 @@ class TimelinePresenterTest {
                     senders = listOf(alice, charlie)
                 ),
                 EventReaction(
-                key = "👍",
-                senders = listOf(alice, bob)
+                    key = "👍",
+                    senders = listOf(alice, bob)
                 ),
                 EventReaction(
                     key = "🐶",

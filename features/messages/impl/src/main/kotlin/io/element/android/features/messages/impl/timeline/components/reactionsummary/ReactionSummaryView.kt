@@ -112,7 +112,7 @@ private fun SheetContent(
 
     LaunchedEffect(pagerState.currentPage) {
         selectedReactionKey = summary.reactions[pagerState.currentPage].key
-        val visibleInfo =  reactionListState.layoutInfo.visibleItemsInfo
+        val visibleInfo = reactionListState.layoutInfo.visibleItemsInfo
         if (selectedReactionIndex <= visibleInfo.first().index || selectedReactionIndex >= visibleInfo.last().index) {
             reactionListState.animateScrollToItem(selectedReactionIndex)
         }

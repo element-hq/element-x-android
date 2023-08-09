@@ -83,6 +83,7 @@ class MessagesNode @AssistedInject constructor(
     private fun onUserDataClicked(userId: UserId) {
         callback?.onUserDataClicked(userId)
     }
+
     override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         callback?.onShowEventDebugInfoClicked(eventId, debugInfo)
     }

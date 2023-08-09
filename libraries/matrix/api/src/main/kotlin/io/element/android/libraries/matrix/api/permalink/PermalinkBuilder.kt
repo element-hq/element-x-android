@@ -26,15 +26,16 @@ object PermalinkBuilder {
     private const val ROOM_PATH = "room/"
     private const val USER_PATH = "user/"
 
-    private val permalinkBaseUrl get() = (MatrixConfiguration.clientPermalinkBaseUrl ?: MatrixConfiguration.matrixToPermalinkBaseUrl).also {
-        var baseUrl = it
-        if (!baseUrl.endsWith("/")) {
-            baseUrl += "/"
+    private val permalinkBaseUrl
+        get() = (MatrixConfiguration.clientPermalinkBaseUrl ?: MatrixConfiguration.matrixToPermalinkBaseUrl).also {
+            var baseUrl = it
+            if (!baseUrl.endsWith("/")) {
+                baseUrl += "/"
+            }
+            if (!baseUrl.endsWith("/#/")) {
+                baseUrl += "/#/"
+            }
         }
-        if (!baseUrl.endsWith("/#/")) {
-            baseUrl += "/#/"
-        }
-    }
 
     fun permalinkForUser(userId: UserId): Result<String> {
         return if (MatrixPatterns.isUserId(userId.value)) {

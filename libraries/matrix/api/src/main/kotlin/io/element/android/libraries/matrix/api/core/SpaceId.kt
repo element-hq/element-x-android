@@ -25,8 +25,8 @@ value class SpaceId(val value: String) : Serializable {
         if (BuildConfig.DEBUG && !MatrixPatterns.isSpaceId(value)) {
             error(
                 "`$value` is not a valid space id.\n" +
-                "Space ids are the same as room ids.\n" +
-                "Example space id: `!space_id:domain`."
+                    "Space ids are the same as room ids.\n" +
+                    "Example space id: `!space_id:domain`."
             )
         }
     }

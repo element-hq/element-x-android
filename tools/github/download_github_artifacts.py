@@ -16,7 +16,6 @@
 #
 
 import argparse
-import hashlib
 import json
 import os
 # Run `pip3 install requests` if not installed yet
@@ -86,8 +85,8 @@ if args.verbose:
     print("gitHubRepoOwner: %s, gitHubRepo: %s, artifactId: %s" % (gitHubRepoOwner, gitHubRepo, artifactId))
 
 headers = {
-   'Authorization': "Bearer %s" % args.token,
-   'Accept': 'application/vnd.github+json'
+    'Authorization': "Bearer %s" % args.token,
+    'Accept': 'application/vnd.github+json'
 }
 base_url = "https://api.github.com/repos/%s/%s/actions/artifacts/%s" % (gitHubRepoOwner, gitHubRepo, artifactId)
 

@@ -3,28 +3,28 @@
 <!--- TOC -->
 
 * [Introduction](#introduction)
-  * [Quick introduction to Matrix](#quick-introduction-to-matrix)
-    * [Matrix data](#matrix-data)
-      * [Room](#room)
-      * [Event](#event)
-    * [Sync](#sync)
-  * [Rust SDK](#rust-sdk)
-    * [Matrix Rust Component Kotlin](#matrix-rust-component-kotlin)
-    * [Build the SDK locally](#build-the-sdk-locally)
-  * [The Android project](#the-android-project)
-  * [Application](#application)
-    * [Jetpack Compose](#jetpack-compose)
-    * [Global architecture](#global-architecture)
-    * [Template and naming](#template-and-naming)
-  * [Push](#push)
-  * [Dependencies management](#dependencies-management)
-  * [Test](#test)
-  * [Code coverage](#code-coverage)
-  * [Other points](#other-points)
-    * [Logging](#logging)
-    * [Translations](#translations)
-    * [Rageshake](#rageshake)
-  * [Tips](#tips)
+    * [Quick introduction to Matrix](#quick-introduction-to-matrix)
+        * [Matrix data](#matrix-data)
+            * [Room](#room)
+            * [Event](#event)
+        * [Sync](#sync)
+    * [Rust SDK](#rust-sdk)
+        * [Matrix Rust Component Kotlin](#matrix-rust-component-kotlin)
+        * [Build the SDK locally](#build-the-sdk-locally)
+    * [The Android project](#the-android-project)
+    * [Application](#application)
+        * [Jetpack Compose](#jetpack-compose)
+        * [Global architecture](#global-architecture)
+        * [Template and naming](#template-and-naming)
+    * [Push](#push)
+    * [Dependencies management](#dependencies-management)
+    * [Test](#test)
+    * [Code coverage](#code-coverage)
+    * [Other points](#other-points)
+        * [Logging](#logging)
+        * [Translations](#translations)
+        * [Rageshake](#rageshake)
+    * [Tips](#tips)
 * [Happy coding!](#happy-coding)
 
 <!--- END -->
@@ -103,7 +103,7 @@ From these kotlin bindings we can generate native libs (.so files) and kotlin cl
 #### Matrix Rust Component Kotlin
 
 To use these bindings in an android project, we need to wrap this up into an android library (as the form of an .aar file).  
-This is the goal of https://github.com/matrix-org/matrix-rust-components-kotlin. 
+This is the goal of https://github.com/matrix-org/matrix-rust-components-kotlin.
 This repository is used for distributing kotlin releases of the Matrix Rust SDK.
 It'll provide the corresponding aar and also publish them on maven.
 
@@ -124,14 +124,20 @@ For this, you first need to ensure to setup :
 
 - rust environment (check https://rust-lang.github.io/rustup/ if needed)
 - cargo-ndk < 2.12.0
+
 ```shell
 cargo install cargo-ndk --version 2.11.0
 ```
+
 - android targets
+
 ```shell
 rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
 ```
-- checkout both [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk) and [matrix-rust-components-kotlin](https://github.com/matrix-org/matrix-rust-components-kotlin) repositories
+
+- checkout both [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk)
+  and [matrix-rust-components-kotlin](https://github.com/matrix-org/matrix-rust-components-kotlin) repositories
+
 ```shell
 git clone git@github.com:matrix-org/matrix-rust-sdk.git
 git clone git@github.com:matrix-org/matrix-rust-components-kotlin.git
@@ -186,6 +192,7 @@ Here is the current simplified module dependency graph:
 
 <!-- Note: a full graph can be generated using `./tools/docs/generateModuleGraph.sh`. -->
 <!-- Note: doc can be found at https://mermaid.js.org/syntax/flowchart.html#graph -->
+
 ```mermaid
 flowchart TD
     subgraph Application
@@ -271,7 +278,7 @@ Here are the main points:
 
 #### Template and naming
 
-This documentation provides you with the steps to install and use the AS plugin for generating modules in your project. 
+This documentation provides you with the steps to install and use the AS plugin for generating modules in your project.
 The plugin and templates will help you quickly create new features with a standardized structure.
 
 A. Installation
@@ -281,13 +288,13 @@ Follow these steps to install and configure the plugin and templates:
 1. Install the AS plugin for generating modules :
    [Generate Module from Template](https://plugins.jetbrains.com/plugin/13586-generate-module-from-template)
 2. Import file templates in AS :
-   - Navigate to File/Manage IDE Settings/Import Settings
-   - Pick the `tools/templates/file_templates.zip` files
-   - Click on OK
-3. Configure generate-module-from-template plugin : 
-   - Navigate to AS/Settings/Tools/Module Template Settings
-   - Click on + / Import From File
-   - Pick the `tools/templates/FeatureModule.json`
+    - Navigate to File/Manage IDE Settings/Import Settings
+    - Pick the `tools/templates/file_templates.zip` files
+    - Click on OK
+3. Configure generate-module-from-template plugin :
+    - Navigate to AS/Settings/Tools/Module Template Settings
+    - Click on + / Import From File
+    - Pick the `tools/templates/FeatureModule.json`
 
 Everything should be ready to use.
 
@@ -304,16 +311,16 @@ Example for a new feature called RoomDetails:
 5. The modules api/impl should be created under `features/roomdetails` directory.
 6. Sync project with Gradle so the modules are recognized (no need to add them to settings.gradle).
 7. You can now add more Presentation classes (Events, State, StateProvider, View, Presenter) in the impl module with the `Template Presentation Classes`.
-   To use it, just right click on the package where you want to generate classes, and click on `Template Presentation Classes`. 
+   To use it, just right click on the package where you want to generate classes, and click on `Template Presentation Classes`.
    Fill the text field with the base name of the classes, ie `RootRoomDetails` in the `root` package.
-   
 
 Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a
 suffix `Presenter`,states MUST have a suffix `State`, etc. Also we want to have a common naming along all the modules.
 
 ### Push
 
-**Note** Firebase is implemented, but Unified Push is not yet fully implemented on the project, so this is not possible to choose this push provider in the app at the moment.
+**Note** Firebase is implemented, but Unified Push is not yet fully implemented on the project, so this is not possible to choose this push provider in the app
+at the moment.
 
 Please see the dedicated [documentation](notifications.md) for more details.
 
@@ -330,7 +337,8 @@ We are using [Gradle version catalog](https://docs.gradle.org/current/userguide/
 All the dependencies (including android artifact, gradle plugin, etc.) should be declared in [../gradle/libs.versions.toml](libs.versions.toml) file.
 Some dependency, mainly because they are not shared can be declared in `build.gradle.kts` files.
 
-[Renovate](https://github.com/apps/renovate) is set up on the project. This tool will automatically create Pull Request to upgrade our dependencies one by one. A [dependency dashboard issue](https://github.com/vector-im/element-x-android/issues/150) is maintained by the tool and allow to perform some actions.
+[Renovate](https://github.com/apps/renovate) is set up on the project. This tool will automatically create Pull Request to upgrade our dependencies one by one.
+A [dependency dashboard issue](https://github.com/vector-im/element-x-android/issues/150) is maintained by the tool and allow to perform some actions.
 
 ### Test
 
@@ -342,7 +350,8 @@ We have 3 tests frameworks in place, and this should be sufficient to guarantee 
   file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewProvider to provide
   different states. See for instance the
   file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStateProvider.kt)
-- Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
+- Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the
+  class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
 
 **Note** For now we want to avoid using class mocking (with library such as *mockk*), because this should be not necessary. We prefer to create Fake
 implementation of our interfaces. Mocking can be used to mock Android framework classes though, such as `Bitmap` for instance.
@@ -391,7 +400,6 @@ because automatic tag (= class name) will not be available on the release versio
 Also generally it is recommended to provide the `Throwable` to the Timber log functions.
 
 Last point, note that `Timber.v` function may have no effect on some devices. Prefer using `Timber.d` and up.
-
 
 #### Translations
 

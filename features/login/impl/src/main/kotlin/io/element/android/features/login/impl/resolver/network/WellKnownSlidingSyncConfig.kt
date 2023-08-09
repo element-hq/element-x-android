@@ -21,6 +21,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WellKnownSlidingSyncConfig(
-        @SerialName("url")
-        val url: String? = null,
+    @SerialName("url")
+    val url: String? = null,
 )

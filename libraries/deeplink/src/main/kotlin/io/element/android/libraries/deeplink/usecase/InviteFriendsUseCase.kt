@@ -21,11 +21,11 @@ import io.element.android.libraries.androidutils.system.startSharePlainTextInten
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
-import io.element.android.libraries.ui.strings.CommonStrings
 
 class InviteFriendsUseCase @Inject constructor(
     private val stringProvider: StringProvider,

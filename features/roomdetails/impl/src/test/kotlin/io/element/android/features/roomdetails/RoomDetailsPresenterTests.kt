@@ -207,6 +207,7 @@ class RoomDetailsPresenterTests {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
     @Test
     fun `present - initial state when in a DM with no topic`() = runTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)

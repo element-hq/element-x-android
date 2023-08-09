@@ -91,7 +91,7 @@ class TimelinePresenter @Inject constructor(
         }
 
         LaunchedEffect(timelineItems.size) {
-             computeHasNewItems(timelineItems, prevMostRecentItemId, hasNewItems)
+            computeHasNewItems(timelineItems, prevMostRecentItemId, hasNewItems)
         }
 
         LaunchedEffect(Unit) {

@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -94,13 +94,13 @@ fun aRoomDetailsState(
     unreadNotificationCount: Int = 0,
     inviter: RoomMember? = null,
 ) = RoomSummaryDetails(
-        roomId = roomId,
-        name = name,
-        canonicalAlias = canonicalAlias,
-        isDirect = isDirect,
-        avatarURLString = avatarURLString,
-        lastMessage = lastMessage,
-        lastMessageTimestamp = lastMessageTimestamp,
-        unreadNotificationCount = unreadNotificationCount,
-        inviter = inviter,
-    )
+    roomId = roomId,
+    name = name,
+    canonicalAlias = canonicalAlias,
+    isDirect = isDirect,
+    avatarURLString = avatarURLString,
+    lastMessage = lastMessage,
+    lastMessageTimestamp = lastMessageTimestamp,
+    unreadNotificationCount = unreadNotificationCount,
+    inviter = inviter,
+)

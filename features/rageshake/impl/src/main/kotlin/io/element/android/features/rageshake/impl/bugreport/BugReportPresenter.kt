@@ -23,12 +23,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.api.reporter.ReportType
-import io.element.android.features.rageshake.api.crash.CrashDataStore
-import io.element.android.features.rageshake.impl.logs.VectorFileLogger
 import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
+import io.element.android.features.rageshake.impl.logs.VectorFileLogger
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope

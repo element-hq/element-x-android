@@ -13,7 +13,8 @@
 ## Overview
 
 - Screenshot tests are tests which record the content of a rendered screen and verify subsequent runs to check if the screen renders differently.
-- Element X uses [Paparazzi](https://github.com/cashapp/paparazzi) to render, record and verify Composable. All Composable Preview will be use to make screenshot test, thanks to the usage of [Showkase](https://github.com/airbnb/Showkase).
+- Element X uses [Paparazzi](https://github.com/cashapp/paparazzi) to render, record and verify Composable. All Composable Preview will be use to make
+  screenshot test, thanks to the usage of [Showkase](https://github.com/airbnb/Showkase).
 - The screenshot verification occurs on every pull request as part of the `tests.yml` workflow.
 
 ## Setup
@@ -30,9 +31,12 @@ If installed correctly, `git push` and `git pull` will now include LFS content.
 
 ## Recording
 
-Recording of screenshots is done by triggering the GitHub action [Record screenshots](https://github.com/vector-im/element-x-android/actions/workflows/recordScreenshots.yml), to avoid differences of generated binary files (png images) depending on developers' environment.
+Recording of screenshots is done by triggering the GitHub
+action [Record screenshots](https://github.com/vector-im/element-x-android/actions/workflows/recordScreenshots.yml), to avoid differences of generated binary
+files (png images) depending on developers' environment.
 
-So basically, you will create a branch, do some commits with your work on it, then push your branch, trigger the GitHub action to record the screenshots (only if you think preview may have changed), and finally create a pull request. The GitHub action will record the screenshots and commit the changes to the branch.
+So basically, you will create a branch, do some commits with your work on it, then push your branch, trigger the GitHub action to record the screenshots (only
+if you think preview may have changed), and finally create a pull request. The GitHub action will record the screenshots and commit the changes to the branch.
 
 You can still record the screenshots locally, but please do not commit the changes.
 
@@ -58,7 +62,8 @@ Paparazzi will generate images in `:tests:uitests/src/test/snapshots`, which wil
 ./gradlew verifyPaparazziDebug
 ```
 
-In the case of failure, Paparazzi will generate images in `:tests:uitests/out/failure`. The images will show the expected and actual screenshots along with a delta of the two images.
+In the case of failure, Paparazzi will generate images in `:tests:uitests/out/failure`. The images will show the expected and actual screenshots along with a
+delta of the two images.
 
 ## Contributing
 

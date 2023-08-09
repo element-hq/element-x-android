@@ -36,7 +36,8 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
 
 fun anAttachmentsPreviewState(
     mediaInfo: MediaInfo = anImageInfo(),
-    sendActionState: SendActionState = SendActionState.Idle) = AttachmentsPreviewState(
+    sendActionState: SendActionState = SendActionState.Idle
+) = AttachmentsPreviewState(
     attachment = Attachment.Media(
         localMedia = LocalMedia("file://path".toUri(), mediaInfo),
         compressIfPossible = true

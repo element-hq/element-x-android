@@ -126,7 +126,9 @@ internal fun RoomMemberHeaderSection(
             text = userId,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(40.dp))

@@ -15,6 +15,7 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
     <application>
         <!-- Firebase components -->
         <meta-data

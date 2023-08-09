@@ -1,5 +1,5 @@
 <!-- Please read [CONTRIBUTING.md](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
- 
+
 ## Type of change
 
 - [ ] Feature

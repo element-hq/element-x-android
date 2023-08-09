@@ -15,7 +15,6 @@
  */
 package io.element.android.libraries.push.impl.pushgateway
 
-
 import retrofit2.http.Body
 import retrofit2.http.POST
 

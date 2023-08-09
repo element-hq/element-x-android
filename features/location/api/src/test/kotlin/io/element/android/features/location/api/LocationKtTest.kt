@@ -39,46 +39,58 @@ internal class LocationKtTest {
 
     @Test
     fun `parseGeoUri - returns location for valid urls`() {
-        assertThat(Location.fromGeoUri("geo:1.234,5.678")).isEqualTo(Location(
-            lat = 1.234,
-            lon = 5.678,
-            accuracy = 0f,
-        ))
+        assertThat(Location.fromGeoUri("geo:1.234,5.678")).isEqualTo(
+            Location(
+                lat = 1.234,
+                lon = 5.678,
+                accuracy = 0f,
+            )
+        )
 
-        assertThat(Location.fromGeoUri("geo:1,5")).isEqualTo(Location(
-            lat = 1.0,
-            lon = 5.0,
-            accuracy = 0f,
-        ))
+        assertThat(Location.fromGeoUri("geo:1,5")).isEqualTo(
+            Location(
+                lat = 1.0,
+                lon = 5.0,
+                accuracy = 0f,
+            )
+        )
 
-        assertThat(Location.fromGeoUri("geo:1.234,5.678;u=3000")).isEqualTo(Location(
-            lat = 1.234,
-            lon = 5.678,
-            accuracy = 3000f,
-        ))
+        assertThat(Location.fromGeoUri("geo:1.234,5.678;u=3000")).isEqualTo(
+            Location(
+                lat = 1.234,
+                lon = 5.678,
+                accuracy = 3000f,
+            )
+        )
 
-        assertThat(Location.fromGeoUri("geo:1,5;u=3000")).isEqualTo(Location(
-            lat = 1.0,
-            lon = 5.0,
-            accuracy = 3000f,
-        ))
+        assertThat(Location.fromGeoUri("geo:1,5;u=3000")).isEqualTo(
+            Location(
+                lat = 1.0,
+                lon = 5.0,
+                accuracy = 3000f,
+            )
+        )
 
-        assertThat(Location.fromGeoUri("geo:-1.234,-5.678;u=9.10")).isEqualTo(Location(
-            lat = -1.234,
-            lon = -5.678,
-            accuracy = 9.10f,
-        ))
+        assertThat(Location.fromGeoUri("geo:-1.234,-5.678;u=9.10")).isEqualTo(
+            Location(
+                lat = -1.234,
+                lon = -5.678,
+                accuracy = 9.10f,
+            )
+        )
 
-        assertThat(Location.fromGeoUri("geo:-1,-5;u=9.10")).isEqualTo(Location(
-            lat = -1.0,
-            lon = -5.0,
-            accuracy = 9.10f,
-        ))
+        assertThat(Location.fromGeoUri("geo:-1,-5;u=9.10")).isEqualTo(
+            Location(
+                lat = -1.0,
+                lon = -5.0,
+                accuracy = 9.10f,
+            )
+        )
     }
 
     @Test
     fun `encode geoUri - returns geoUri from a Location`() {
-        assertThat(Location(1.0,2.0,3.0f).toGeoUri())
+        assertThat(Location(1.0, 2.0, 3.0f).toGeoUri())
             .isEqualTo("geo:1.0,2.0;u=3.0")
     }
 }

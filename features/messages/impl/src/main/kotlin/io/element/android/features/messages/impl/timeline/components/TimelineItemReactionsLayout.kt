@@ -158,7 +158,6 @@ fun TimelineItemReactionsLayout(
         expandPlaceable = subcompose(3, expandButton).first().measure(newConstrains)
         val addMorePlaceable = subcompose(4, addMoreButton).first().measure(newConstrains)
 
-
         // Calculate the layout of the rows with the reactions button and add more button
         val reactionsAndAddMore = calculateRows(reactionsPlaceables + listOf(addMorePlaceable))
         // If we have extended beyond the defined number of rows we are showing the expand/collapse ui

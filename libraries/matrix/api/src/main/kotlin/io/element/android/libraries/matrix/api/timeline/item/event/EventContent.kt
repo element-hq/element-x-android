@@ -35,7 +35,6 @@ data class MessageContent(
     val type: MessageType?
 ) : EventContent
 
-
 sealed interface InReplyTo {
     /** The event details are not loaded yet. We can fetch them. */
     data class NotLoaded(val eventId: EventId) : InReplyTo

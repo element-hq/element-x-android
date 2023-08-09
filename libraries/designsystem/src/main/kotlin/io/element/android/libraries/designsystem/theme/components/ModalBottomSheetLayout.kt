@@ -70,7 +70,8 @@ fun ModalBottomSheetLayout(
     androidx.compose.material.ModalBottomSheetLayout(
         sheetContent = {
             Column(
-                Modifier.fillMaxWidth()
+                Modifier
+                    .fillMaxWidth()
                     .applyIf(useSystemPadding, ifTrue = {
                         navigationBarsPadding()
                     })
@@ -117,9 +118,11 @@ private fun ContentToPreview() {
         displayHandle = true,
         sheetState = ModalBottomSheetState(ModalBottomSheetValue.Expanded, density = LocalDensity.current),
         sheetContent = {
-            Text(text = "Sheet Content", modifier = Modifier
+            Text(
+                text = "Sheet Content", modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
-                .background(color = Color.Green))
+                .background(color = Color.Green)
+            )
         }
     ) {
         Text(text = "Content", modifier = Modifier.background(color = Color.Red))

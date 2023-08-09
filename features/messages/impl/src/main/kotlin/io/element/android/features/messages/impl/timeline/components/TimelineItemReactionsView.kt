@@ -47,16 +47,16 @@ fun TimelineItemReactions(
     modifier: Modifier = Modifier,
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
-        TimelineItemReactionsView(
-            modifier = modifier,
-            reactions = reactionsState.reactions,
-            expanded = expanded,
-            isOutgoing = isOutgoing,
-            onReactionClick = onReactionClicked,
-            onReactionLongClick = onReactionLongClicked,
-            onMoreReactionsClick = onMoreReactionsClicked,
-            onToggleExpandClick = { expanded = !expanded },
-        )
+    TimelineItemReactionsView(
+        modifier = modifier,
+        reactions = reactionsState.reactions,
+        expanded = expanded,
+        isOutgoing = isOutgoing,
+        onReactionClick = onReactionClicked,
+        onReactionLongClick = onReactionLongClicked,
+        onMoreReactionsClick = onMoreReactionsClicked,
+        onToggleExpandClick = { expanded = !expanded },
+    )
 }
 
 @Composable

@@ -122,5 +122,4 @@ class ShowLocationPresenterTest {
     companion object {
         private const val A_DESCRIPTION = "My happy place"
     }
-
 }

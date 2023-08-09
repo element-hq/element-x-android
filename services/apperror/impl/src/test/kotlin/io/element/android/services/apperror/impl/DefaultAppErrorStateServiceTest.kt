@@ -68,5 +68,4 @@ internal class DefaultAppErrorStateServiceTest {
             assertThat(awaitItem()).isInstanceOf(AppErrorState.NoError::class.java)
         }
     }
-
 }

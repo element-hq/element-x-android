@@ -48,5 +48,4 @@ class RoomMemberListDataSource @Inject constructor(
         }
         filteredMembers
     }
-
 }

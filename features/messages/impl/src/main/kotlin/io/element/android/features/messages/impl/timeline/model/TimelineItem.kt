@@ -86,5 +86,4 @@ sealed interface TimelineItem {
         val id: String,
         val events: ImmutableList<Event>,
     ) : TimelineItem
-
 }

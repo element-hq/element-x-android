@@ -19,7 +19,7 @@ package io.element.android.services.analyticsproviders.api
 import io.element.android.services.analyticsproviders.api.trackers.AnalyticsTracker
 import io.element.android.services.analyticsproviders.api.trackers.ErrorTracker
 
-interface AnalyticsProvider: AnalyticsTracker, ErrorTracker {
+interface AnalyticsProvider : AnalyticsTracker, ErrorTracker {
     /**
      * User friendly name.
      */

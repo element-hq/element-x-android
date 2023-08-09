@@ -15,6 +15,7 @@
  */
 
 @file:Suppress("all")
+
 package io.element.android.libraries.theme.compound.generated
 
 import androidx.compose.runtime.Stable
@@ -23,18 +24,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
-
-
 // Do not edit directly
 // Generated on Tue, 27 Jun 2023 11:49:05 GMT
 
-
-
-
-
 /**
-  * This class holds all the semantic tokens of the Compound theme.
-  */
+ * This class holds all the semantic tokens of the Compound theme.
+ */
 @Stable
 class SemanticColors(
     bgActionPrimaryDisabled: Color,
@@ -93,162 +88,214 @@ class SemanticColors(
 ) {
     var isLight by mutableStateOf(isLight)
         private set
+
     /** Background colour for primary actions. State: Disabled. */
     var bgActionPrimaryDisabled by mutableStateOf(bgActionPrimaryDisabled)
         private set
+
     /** Background colour for primary actions. State: Hover. */
     var bgActionPrimaryHovered by mutableStateOf(bgActionPrimaryHovered)
         private set
+
     /** Background colour for primary actions. State: Pressed. */
     var bgActionPrimaryPressed by mutableStateOf(bgActionPrimaryPressed)
         private set
+
     /** Background colour for primary actions. State: Rest. */
     var bgActionPrimaryRest by mutableStateOf(bgActionPrimaryRest)
         private set
+
     /** Background colour for secondary actions. State: Hover. */
     var bgActionSecondaryHovered by mutableStateOf(bgActionSecondaryHovered)
         private set
+
     /** Background colour for secondary actions. State: Pressed. */
     var bgActionSecondaryPressed by mutableStateOf(bgActionSecondaryPressed)
         private set
+
     /** Background colour for secondary actions. State: Rest. */
     var bgActionSecondaryRest by mutableStateOf(bgActionSecondaryRest)
         private set
+
     /** Default global background for the user interface.
-Elevation: Default (Level 0) */
+    Elevation: Default (Level 0) */
     var bgCanvasDefault by mutableStateOf(bgCanvasDefault)
         private set
+
     /** Default background for disabled elements. There's no minimum contrast requirement. */
     var bgCanvasDisabled by mutableStateOf(bgCanvasDisabled)
         private set
+
     /** High-contrast background color for critical state. State: Hover. */
     var bgCriticalHovered by mutableStateOf(bgCriticalHovered)
         private set
+
     /** High-contrast background color for critical state. State: Rest. */
     var bgCriticalPrimary by mutableStateOf(bgCriticalPrimary)
         private set
+
     /** Default subtle critical surfaces. State: Rest. */
     var bgCriticalSubtle by mutableStateOf(bgCriticalSubtle)
         private set
+
     /** Default subtle critical surfaces. State: Hover. */
     var bgCriticalSubtleHovered by mutableStateOf(bgCriticalSubtleHovered)
         private set
+
     /** Subtle background colour for informational elements. State: Rest. */
     var bgInfoSubtle by mutableStateOf(bgInfoSubtle)
         private set
+
     /** Medium contrast surfaces.
-Elevation: Default (Level 2). */
+    Elevation: Default (Level 2). */
     var bgSubtlePrimary by mutableStateOf(bgSubtlePrimary)
         private set
+
     /** Low contrast surfaces.
-Elevation: Default (Level 1). */
+    Elevation: Default (Level 1). */
     var bgSubtleSecondary by mutableStateOf(bgSubtleSecondary)
         private set
+
     /** Subtle background colour for success state elements. State: Rest. */
     var bgSuccessSubtle by mutableStateOf(bgSuccessSubtle)
         private set
+
     /** High-contrast border for critical state. State: Hover. */
     var borderCriticalHovered by mutableStateOf(borderCriticalHovered)
         private set
+
     /** High-contrast border for critical state. State: Rest. */
     var borderCriticalPrimary by mutableStateOf(borderCriticalPrimary)
         private set
+
     /** Subtle border colour for critical state elements. */
     var borderCriticalSubtle by mutableStateOf(borderCriticalSubtle)
         private set
+
     /** Used for borders of disabled elements. There's no minimum contrast requirement. */
     var borderDisabled by mutableStateOf(borderDisabled)
         private set
+
     /** Used for the focus state outline. */
     var borderFocused by mutableStateOf(borderFocused)
         private set
+
     /** Subtle border colour for informational elements. */
     var borderInfoSubtle by mutableStateOf(borderInfoSubtle)
         private set
+
     /** Default contrast for accessible interactive element borders. State: Hover. */
     var borderInteractiveHovered by mutableStateOf(borderInteractiveHovered)
         private set
+
     /** Default contrast for accessible interactive element borders. State: Rest. */
     var borderInteractivePrimary by mutableStateOf(borderInteractivePrimary)
         private set
+
     /** ⚠️ Lowest contrast for non-accessible interactive element borders, <3:1. Only use for non-essential borders. Do not rely exclusively on them. State: Rest. */
     var borderInteractiveSecondary by mutableStateOf(borderInteractiveSecondary)
         private set
+
     /** Subtle border colour for success state elements. */
     var borderSuccessSubtle by mutableStateOf(borderSuccessSubtle)
         private set
+
     /** Lowest contrast accessible accent icons. */
     var iconAccentTertiary by mutableStateOf(iconAccentTertiary)
         private set
+
     /** High-contrast icon for critical state. State: Rest. */
     var iconCriticalPrimary by mutableStateOf(iconCriticalPrimary)
         private set
+
     /** Use for icons in disabled elements. There's no minimum contrast requirement. */
     var iconDisabled by mutableStateOf(iconDisabled)
         private set
+
     /** High-contrast icon for informational elements. */
     var iconInfoPrimary by mutableStateOf(iconInfoPrimary)
         private set
+
     /** Highest contrast icon color on top of high-contrast solid backgrounds like primary, accent, or destructive actions. */
     var iconOnSolidPrimary by mutableStateOf(iconOnSolidPrimary)
         private set
+
     /** Highest contrast icons. */
     var iconPrimary by mutableStateOf(iconPrimary)
         private set
+
     /** Translucent version of primary icon. Refer to it for intended use. */
     var iconPrimaryAlpha by mutableStateOf(iconPrimaryAlpha)
         private set
+
     /** ⚠️ Lowest contrast non-accessible icons, <3:1. Only use for non-essential icons. Do not rely exclusively on them. */
     var iconQuaternary by mutableStateOf(iconQuaternary)
         private set
+
     /** Translucent version of quaternary icon. Refer to it for intended use. */
     var iconQuaternaryAlpha by mutableStateOf(iconQuaternaryAlpha)
         private set
+
     /** Lower contrast icons. */
     var iconSecondary by mutableStateOf(iconSecondary)
         private set
+
     /** Translucent version of secondary icon. Refer to it for intended use. */
     var iconSecondaryAlpha by mutableStateOf(iconSecondaryAlpha)
         private set
+
     /** High-contrast icon for success state elements. */
     var iconSuccessPrimary by mutableStateOf(iconSuccessPrimary)
         private set
+
     /** Lowest contrast accessible icons. */
     var iconTertiary by mutableStateOf(iconTertiary)
         private set
+
     /** Translucent version of tertiary icon. Refer to it for intended use. */
     var iconTertiaryAlpha by mutableStateOf(iconTertiaryAlpha)
         private set
+
     /** Accent text colour for plain actions. */
     var textActionAccent by mutableStateOf(textActionAccent)
         private set
+
     /** Default text colour for plain actions. */
     var textActionPrimary by mutableStateOf(textActionPrimary)
         private set
+
     /** Text colour for destructive plain actions. */
     var textCriticalPrimary by mutableStateOf(textCriticalPrimary)
         private set
+
     /** Use for regular text in disabled elements. There's no minimum contrast requirement. */
     var textDisabled by mutableStateOf(textDisabled)
         private set
+
     /** Accent text colour for informational elements. */
     var textInfoPrimary by mutableStateOf(textInfoPrimary)
         private set
+
     /** Text colour for external links. */
     var textLinkExternal by mutableStateOf(textLinkExternal)
         private set
+
     /** For use as text color on top of high-contrast solid backgrounds like primary, accent, or destructive actions. */
     var textOnSolidPrimary by mutableStateOf(textOnSolidPrimary)
         private set
+
     /** Use for placeholder text. Placeholder text should be non-essential. Do not rely exclusively on it. */
     var textPlaceholder by mutableStateOf(textPlaceholder)
         private set
+
     /** Highest contrast text. */
     var textPrimary by mutableStateOf(textPrimary)
         private set
+
     /** Lowest contrast text. */
     var textSecondary by mutableStateOf(textSecondary)
         private set
+
     /** Accent text colour for success state elements. */
     var textSuccessPrimary by mutableStateOf(textSuccessPrimary)
         private set

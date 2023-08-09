@@ -22,6 +22,9 @@ import androidx.compose.runtime.Immutable
 import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_API_ANIMATION
 import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE
 import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION
+import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason.Companion.fromInt
+import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason.NO_MOVEMENT_YET
+import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason.UNKNOWN
 
 /**
  * Enumerates the different reasons why the map camera started to move.

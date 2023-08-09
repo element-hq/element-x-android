@@ -23,10 +23,9 @@ sealed interface InviteListEvents {
     data class AcceptInvite(val invite: InviteListInviteSummary) : InviteListEvents
     data class DeclineInvite(val invite: InviteListInviteSummary) : InviteListEvents
 
-    object ConfirmDeclineInvite: InviteListEvents
-    object CancelDeclineInvite: InviteListEvents
+    object ConfirmDeclineInvite : InviteListEvents
+    object CancelDeclineInvite : InviteListEvents
 
-    object DismissAcceptError: InviteListEvents
-    object DismissDeclineError: InviteListEvents
-
+    object DismissAcceptError : InviteListEvents
+    object DismissDeclineError : InviteListEvents
 }

@@ -7,9 +7,9 @@
 * [Run the test](#run-the-test)
 * [Stop Synapse](#stop-synapse)
 * [Troubleshoot](#troubleshoot)
-  * [Android Emulator does cannot reach the homeserver](#android-emulator-does-cannot-reach-the-homeserver)
-  * [Tests partially run but some fail with "Unable to contact localhost:8080"](#tests-partially-run-but-some-fail-with-"unable-to-contact-localhost:8080")
-  * [virtualenv command fails](#virtualenv-command-fails)
+    * [Android Emulator does cannot reach the homeserver](#android-emulator-does-cannot-reach-the-homeserver)
+    * [Tests partially run but some fail with "Unable to contact localhost:8080"](#tests-partially-run-but-some-fail-with-"unable-to-contact-localhost:8080")
+    * [virtualenv command fails](#virtualenv-command-fails)
 
 <!--- END -->
 
@@ -17,9 +17,11 @@ Integration tests are useful to ensure that the code works well for any use case
 
 They can also be used as sample on how to use the Matrix SDK.
 
-In a ideal world, every API of the SDK should be covered by integration tests. For the moment, we have test mainly for the Crypto part, which is the tricky part. But it covers quite a lot of features: accounts creation, login to existing account, send encrypted messages, keys backup, verification, etc.
+In a ideal world, every API of the SDK should be covered by integration tests. For the moment, we have test mainly for the Crypto part, which is the tricky
+part. But it covers quite a lot of features: accounts creation, login to existing account, send encrypted messages, keys backup, verification, etc.
 
-The Matrix SDK is able to open multiple sessions, for the same user, of for different users. This way we can test communication between several sessions on a single device.
+The Matrix SDK is able to open multiple sessions, for the same user, of for different users. This way we can test communication between several sessions on a
+single device.
 
 ## Pre requirements
 
@@ -42,7 +44,9 @@ python3 -m pip install virtualenv
 ```bash
 git clone -b develop https://github.com/matrix-org/synapse.git
 ```
+
 or
+
 ```bash
 git clone -b develop git@github.com:matrix-org/synapse.git
 ```
@@ -67,11 +71,13 @@ pip install matrix-synapse
 
 On your first run, you will want to stop the demo and edit the config to correct the `public_baseurl` to http://10.0.2.2:8080 and restart the server.
 
-You should now have 3 running federated Synapse instances 🎉, at http://127.0.0.1:8080/, http://127.0.0.1:8081/ and  http://127.0.0.1:8082/, which should display a "It Works! Synapse is running" message.
+You should now have 3 running federated Synapse instances 🎉, at http://127.0.0.1:8080/, http://127.0.0.1:8081/ and  http://127.0.0.1:8082/, which should display
+a "It Works! Synapse is running" message.
 
 ## Run the test
 
-It's recommended to run tests using an Android Emulator and not a real device. First reason for that is that the tests will use http://10.0.2.2:8080 to connect to Synapse, which run locally on your machine.
+It's recommended to run tests using an Android Emulator and not a real device. First reason for that is that the tests will use http://10.0.2.2:8080 to connect
+to Synapse, which run locally on your machine.
 
 You can run all the tests in the `androidTest` folders.
 
@@ -118,14 +124,19 @@ After changing this you will need to restart synapse using `demo/stop.sh` and `d
 ### virtualenv command fails
 
 You can try using
+
 ```bash
 python3 -m venv env
 ```
+
 or
+
 ```bash
 python3 -m virtualenv env
 ```
+
 instead of
+
 ```bash
 virtualenv -p python3 env
 ```

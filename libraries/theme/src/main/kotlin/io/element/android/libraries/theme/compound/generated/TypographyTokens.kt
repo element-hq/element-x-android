@@ -3,14 +3,13 @@
 // Do not edit directly
 // Generated on Fri, 28 Jul 2023 10:11:16 GMT
 
-
-
 @file:Suppress("all")
+
 package io.element.android.libraries.theme.compound.generated
 
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.PlatformTextStyle

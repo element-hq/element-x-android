@@ -100,7 +100,7 @@ class TimelineItemEventFactory @Inject constructor(
                 key = reaction.key,
                 currentUserId = matrixClient.sessionId,
                 senders = reaction.senders
-                    .sortedByDescending{ it.timestamp }
+                    .sortedByDescending { it.timestamp }
                     .map {
                         val date = Date(it.timestamp)
                         AggregatedReactionSender(

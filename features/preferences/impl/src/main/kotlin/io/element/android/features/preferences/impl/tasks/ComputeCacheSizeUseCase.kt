@@ -18,8 +18,8 @@ package io.element.android.features.preferences.impl.tasks
 
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
+import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope

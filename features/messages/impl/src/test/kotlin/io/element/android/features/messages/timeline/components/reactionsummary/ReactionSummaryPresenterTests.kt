@@ -35,7 +35,7 @@ import org.junit.Test
 
 class ReactionSummaryPresenterTests {
     private val aggregatedReaction = anAggregatedReaction(userId = A_USER_ID, key = "👍", isHighlighted = true)
-    private val roomMember = aRoomMember(userId = A_USER_ID,  avatarUrl = AN_AVATAR_URL, displayName = A_USER_NAME)
+    private val roomMember = aRoomMember(userId = A_USER_ID, avatarUrl = AN_AVATAR_URL, displayName = A_USER_NAME)
     private val summaryEvent = ReactionSummaryEvents.ShowReactionSummary(AN_EVENT_ID, listOf(aggregatedReaction), aggregatedReaction.key)
     private val room = FakeMatrixRoom().apply {
         givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
@@ -76,5 +76,4 @@ class ReactionSummaryPresenterTests {
             assertThat(reactions?.first()?.senders?.first()?.user?.displayName).isEqualTo(A_USER_NAME)
         }
     }
-
 }

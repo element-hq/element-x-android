@@ -19,7 +19,7 @@ package io.element.android.services.analyticsproviders.posthog.extensions
 import im.vector.app.features.analytics.plan.Interaction
 
 fun Interaction.Name.toAnalyticsInteraction(interactionType: Interaction.InteractionType = Interaction.InteractionType.Touch) =
-        Interaction(
-                name = this,
-                interactionType = interactionType
-        )
+    Interaction(
+        name = this,
+        interactionType = interactionType
+    )

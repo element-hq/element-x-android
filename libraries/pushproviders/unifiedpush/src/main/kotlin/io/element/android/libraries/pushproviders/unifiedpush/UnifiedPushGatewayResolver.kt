@@ -28,10 +28,14 @@ class UnifiedPushGatewayResolver @Inject constructor(
     private val retrofitFactory: RetrofitFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
-    suspend fun getGateway(endpoint: String): String? {
+    suspend fun getGateway(endpoint: String): String {
         val gateway = UnifiedPushConfig.default_push_gateway_http_url
         val url = URL(endpoint)
-        val port = if (url.port != -1) { ":${url.port}" } else { "" }
+        val port = if (url.port != -1) {
+            ":${url.port}"
+        } else {
+            ""
+        }
         val customBase = "${url.protocol}://${url.host}${port}"
         val customUrl = "$customBase/_matrix/push/v1/notify"
         Timber.i("Testing $customUrl")

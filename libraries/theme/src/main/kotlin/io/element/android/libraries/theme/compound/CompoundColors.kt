@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.theme.compound
 
+import io.element.android.libraries.theme.compound.generated.SemanticColors
 import io.element.android.libraries.theme.compound.generated.internal.DarkDesignTokens
 import io.element.android.libraries.theme.compound.generated.internal.LightDesignTokens
-import io.element.android.libraries.theme.compound.generated.SemanticColors
 
 internal val compoundColorsLight = SemanticColors(
     textPrimary = LightDesignTokens.colorGray1400,
@@ -90,7 +90,7 @@ internal val compoundColorsDark = SemanticColors(
     textOnSolidPrimary = DarkDesignTokens.colorThemeBg,
     bgSubtlePrimary = DarkDesignTokens.colorGray400,
     // The value DarkDesignTokens.colorBgSubtleSecondaryLevel0 is defined to colorThemeBg, this is not correct, so override the value here until this is fixed,
-    bgSubtleSecondary =  DarkDesignTokens.colorGray300, // DarkDesignTokens.colorBgSubtleSecondaryLevel0
+    bgSubtleSecondary = DarkDesignTokens.colorGray300, // DarkDesignTokens.colorBgSubtleSecondaryLevel0
     bgCanvasDefault = DarkDesignTokens.colorBgCanvasDefaultLevel1,
     bgCanvasDisabled = DarkDesignTokens.colorGray200,
     bgActionPrimaryRest = DarkDesignTokens.colorGray1400,

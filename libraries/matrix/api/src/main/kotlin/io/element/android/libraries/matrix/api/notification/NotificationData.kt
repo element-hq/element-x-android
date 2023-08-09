@@ -54,11 +54,13 @@ sealed interface NotificationContent {
         data class ReactionContent(
             val relatedEventId: String
         ) : MessageLike
+
         object RoomEncrypted : MessageLike
         data class RoomMessage(
             val senderId: UserId,
             val messageType: MessageType
         ) : MessageLike
+
         object RoomRedaction : MessageLike
         object Sticker : MessageLike
     }
@@ -79,6 +81,7 @@ sealed interface NotificationContent {
             val userId: String,
             val membershipState: RoomMembershipState
         ) : StateEvent
+
         object RoomName : StateEvent
         object RoomPinnedEvents : StateEvent
         object RoomPowerLevels : StateEvent
@@ -89,5 +92,4 @@ sealed interface NotificationContent {
         object SpaceChild : StateEvent
         object SpaceParent : StateEvent
     }
-
 }

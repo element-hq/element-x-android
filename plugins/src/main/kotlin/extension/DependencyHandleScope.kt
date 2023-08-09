@@ -17,9 +17,9 @@
 package extension
 
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.logging.Logger
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
-import org.gradle.api.logging.Logger
 import java.io.File
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)

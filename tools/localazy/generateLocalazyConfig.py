@@ -9,10 +9,12 @@ with open('./tools/localazy/config.json', 'r') as f:
 
 allFiles = sys.argv[1] == "1"
 
+
 # Convert a module name to a path
 # Ex: ":features:verifysession:impl" => "features/verifysession/impl"
 def convertModuleToPath(name):
     return name[1:].replace(":", "/")
+
 
 # Regex that will be excluded from the Android project, you may add items here if necessary.
 regexToAlwaysExclude = [

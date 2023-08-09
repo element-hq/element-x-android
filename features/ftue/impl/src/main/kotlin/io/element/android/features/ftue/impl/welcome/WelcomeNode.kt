@@ -50,5 +50,4 @@ class WelcomeNode @AssistedInject constructor(
             modifier = modifier
         )
     }
-
 }

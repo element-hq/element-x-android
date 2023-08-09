@@ -165,7 +165,6 @@ class RustMatrixAuthenticationService @Inject constructor(
         }
          */
     }
-
 }
 
 private fun Session.toSessionData() = SessionData(

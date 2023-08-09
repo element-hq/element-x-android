@@ -27,6 +27,7 @@ sealed class ChangeServerError : Throwable() {
         @Composable
         fun message(): String = stringResource(messageId)
     }
+
     object SlidingSyncAlert : ChangeServerError()
 
     companion object {

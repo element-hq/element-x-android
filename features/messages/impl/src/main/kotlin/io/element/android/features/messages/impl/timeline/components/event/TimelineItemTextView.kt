@@ -41,8 +41,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.theme.LinkColor
 import io.element.android.libraries.designsystem.text.toAnnotatedString
+import io.element.android.libraries.theme.LinkColor
 
 @Composable
 fun TimelineItemTextView(

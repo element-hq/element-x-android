@@ -22,6 +22,6 @@ data class TimelineItemTextContent(
     override val body: String,
     override val htmlDocument: Document?,
     override val isEdited: Boolean,
-) : TimelineItemTextBasedContent{
+) : TimelineItemTextBasedContent {
     override val type: String = "TimelineItemTextContent"
 }

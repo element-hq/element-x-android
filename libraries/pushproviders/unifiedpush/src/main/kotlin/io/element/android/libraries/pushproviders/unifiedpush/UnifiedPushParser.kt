@@ -18,7 +18,6 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.pushproviders.api.PushData
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 

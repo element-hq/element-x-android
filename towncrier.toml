@@ -1,31 +1,31 @@
 [tool.towncrier]
-    directory = "changelog.d"
-    filename = "CHANGES.md"
-    name = "Changes in Element X"
-    template = "tools/towncrier/template.md"
-    issue_format = "[#{issue}](https://github.com/vector-im/element-x-android/issues/{issue})"
+directory = "changelog.d"
+filename = "CHANGES.md"
+name = "Changes in Element X"
+template = "tools/towncrier/template.md"
+issue_format = "[#{issue}](https://github.com/vector-im/element-x-android/issues/{issue})"
 
-    [[tool.towncrier.type]]
-        directory = "feature"
-        name = "Features ✨"
-        showcontent = true
+[[tool.towncrier.type]]
+directory = "feature"
+name = "Features ✨"
+showcontent = true
 
-    [[tool.towncrier.type]]
-        directory = "bugfix"
-        name = "Bugfixes 🐛"
-        showcontent = true
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bugfixes 🐛"
+showcontent = true
 
-    [[tool.towncrier.type]]
-        directory = "wip"
-        name = "In development 🚧"
-        showcontent = true
+[[tool.towncrier.type]]
+directory = "wip"
+name = "In development 🚧"
+showcontent = true
 
-    [[tool.towncrier.type]]
-        directory = "doc"
-        name = "Improved Documentation 📚"
-        showcontent = true
+[[tool.towncrier.type]]
+directory = "doc"
+name = "Improved Documentation 📚"
+showcontent = true
 
-    [[tool.towncrier.type]]
-        directory = "misc"
-        name = "Other changes"
-        showcontent = true
+[[tool.towncrier.type]]
+directory = "misc"
+name = "Other changes"
+showcontent = true

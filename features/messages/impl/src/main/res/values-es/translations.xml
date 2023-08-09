@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d cambio en la sala"</item>
-    <item quantity="other">"%1$d cambios en la sala"</item>
-  </plurals>
-  <string name="screen_room_retry_send_menu_remove_action">"Eliminar"</string>
+    <plurals name="room_timeline_state_changes">
+        <item quantity="one">"%1$d cambio en la sala"</item>
+        <item quantity="other">"%1$d cambios en la sala"</item>
+    </plurals>
+    <string name="screen_room_retry_send_menu_remove_action">"Eliminar"</string>
 </resources>

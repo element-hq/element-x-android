@@ -36,5 +36,4 @@ class FakeUserRepository : UserRepository {
     suspend fun emitResult(result: List<UserSearchResult>) {
         flow.emit(result)
     }
-
 }

@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 data class ReactionSummaryState(
     val target: Summary?,
     val eventSink: (ReactionSummaryEvents) -> Unit
-){
+) {
     data class Summary(
         val reactions: List<AggregatedReaction>,
         val selectedKey: String,

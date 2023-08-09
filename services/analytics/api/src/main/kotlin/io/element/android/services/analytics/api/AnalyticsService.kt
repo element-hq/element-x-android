@@ -21,7 +21,7 @@ import io.element.android.services.analyticsproviders.api.trackers.AnalyticsTrac
 import io.element.android.services.analyticsproviders.api.trackers.ErrorTracker
 import kotlinx.coroutines.flow.Flow
 
-interface AnalyticsService: AnalyticsTracker, ErrorTracker {
+interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     /**
      * Get the available analytics providers.
      */

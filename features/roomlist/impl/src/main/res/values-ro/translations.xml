@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_roomlist_a11y_create_message">"Creați o conversație sau o cameră nouă"</string>
-  <string name="screen_roomlist_main_space_title">"Toate conversatiile"</string>
-  <string name="session_verification_banner_message">"Se pare că folosiți un dispozitiv nou. Verificați-vă identitatea pentru acces la mesajele dumneavoastră criptate."</string>
-  <string name="session_verification_banner_title">"Accesați istoricul mesajelor"</string>
+    <string name="screen_roomlist_a11y_create_message">"Creați o conversație sau o cameră nouă"</string>
+    <string name="screen_roomlist_main_space_title">"Toate conversatiile"</string>
+    <string name="session_verification_banner_message">"Se pare că folosiți un dispozitiv nou. Verificați-vă identitatea pentru acces la mesajele dumneavoastră criptate."</string>
+    <string name="session_verification_banner_title">"Accesați istoricul mesajelor"</string>
 </resources>

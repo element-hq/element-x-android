@@ -25,5 +25,4 @@ sealed interface AppErrorState {
         val body: String,
         val dismiss: () -> Unit,
     ) : AppErrorState
-
 }

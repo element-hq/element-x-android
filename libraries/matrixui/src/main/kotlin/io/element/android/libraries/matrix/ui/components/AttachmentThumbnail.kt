@@ -94,7 +94,7 @@ fun AttachmentThumbnail(
 }
 
 @Parcelize
-enum class AttachmentThumbnailType: Parcelable {
+enum class AttachmentThumbnailType : Parcelable {
     Image, Video, File, Audio, Location
 }
 
@@ -104,4 +104,4 @@ data class AttachmentThumbnailInfo(
     val thumbnailSource: MediaSource? = null,
     val textContent: String? = null,
     val blurHash: String? = null,
-): Parcelable
+) : Parcelable

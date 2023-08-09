@@ -34,8 +34,8 @@ import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.designsystem.utils.LocalSnackbarDispatcher
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.x.di.AppBindings
 import io.element.android.x.intent.SafeUriHandler
 import timber.log.Timber

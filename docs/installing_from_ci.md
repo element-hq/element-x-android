@@ -2,11 +2,11 @@
 
 <!--- TOC -->
 
-  * [Installing from GitHub](#installing-from-github)
+* [Installing from GitHub](#installing-from-github)
     * [Create a GitHub token](#create-a-github-token)
-  * [Provide artifact URL](#provide-artifact-url)
-  * [Next steps](#next-steps)
-  * [Future improvement](#future-improvement)
+* [Provide artifact URL](#provide-artifact-url)
+* [Next steps](#next-steps)
+* [Future improvement](#future-improvement)
 
 <!--- END -->
 
@@ -46,4 +46,5 @@ Files will be added to the folder `./tmp/DebugApks`. Feel free to cleanup this f
 
 ### Future improvement
 
-The script could ask the user for a Pull Request number and Gplay/Fdroid choice like it was done with Buildkite script. Using GitHub API may be possible to do that.
+The script could ask the user for a Pull Request number and Gplay/Fdroid choice like it was done with Buildkite script. Using GitHub API may be possible to do
+that.

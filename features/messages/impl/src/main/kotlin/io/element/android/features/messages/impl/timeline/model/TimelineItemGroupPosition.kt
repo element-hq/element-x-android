@@ -17,6 +17,10 @@
 package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition.First
+import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition.Last
+import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition.Middle
+import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition.None
 
 /**
  * Attribute for a TimelineItem, used to render successive events from the same sender differently.

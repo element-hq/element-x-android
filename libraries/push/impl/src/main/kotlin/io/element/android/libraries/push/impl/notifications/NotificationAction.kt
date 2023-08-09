@@ -17,9 +17,9 @@
 package io.element.android.libraries.push.impl.notifications
 
 data class NotificationAction(
-        val shouldNotify: Boolean,
-        val highlight: Boolean,
-        val soundName: String?
+    val shouldNotify: Boolean,
+    val highlight: Boolean,
+    val soundName: String?
 )
 
 /*

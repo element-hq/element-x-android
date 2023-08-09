@@ -32,33 +32,16 @@ import okio.ByteString;
 // simplified version of MultipartBody (OkHttp 3.6.0)
 public class BugReporterMultipartBody extends RequestBody {
 
-    /**
-     * Listener
-     */
-    public interface WriteListener {
-        /**
-         * Upload listener
-         *
-         * @param totalWritten  total written bytes
-         * @param contentLength content length
-         */
-        void onWrite(long totalWritten, long contentLength);
-    }
-
     private static final MediaType FORM = MediaType.parse("multipart/form-data");
-
     private static final byte[] COLONSPACE = {':', ' '};
     private static final byte[] CRLF = {'\r', '\n'};
     private static final byte[] DASHDASH = {'-', '-'};
-
     private final ByteString mBoundary;
     private final MediaType mContentType;
     private final List<Part> mParts;
     private long mContentLength = -1L;
-
     // listener
     private WriteListener mWriteListener;
-
     //
     private List<Long> mContentLengthSize = null;
 
@@ -66,6 +49,28 @@ public class BugReporterMultipartBody extends RequestBody {
         mBoundary = boundary;
         mContentType = MediaType.parse(FORM + "; boundary=" + boundary.utf8());
         mParts = Util.toImmutableList(parts);
+    }
+
+    private static void appendQuotedString(StringBuilder target, String key) {
+        target.append('"');
+        for (int i = 0, len = key.length(); i < len; i++) {
+            char ch = key.charAt(i);
+            switch (ch) {
+                case '\n':
+                    target.append("%0A");
+                    break;
+                case '\r':
+                    target.append("%0D");
+                    break;
+                case '"':
+                    target.append("%22");
+                    break;
+                default:
+                    target.append(ch);
+                    break;
+            }
+        }
+        target.append('"');
     }
 
     @Override
@@ -187,29 +192,28 @@ public class BugReporterMultipartBody extends RequestBody {
         return byteCount;
     }
 
-    private static void appendQuotedString(StringBuilder target, String key) {
-        target.append('"');
-        for (int i = 0, len = key.length(); i < len; i++) {
-            char ch = key.charAt(i);
-            switch (ch) {
-                case '\n':
-                    target.append("%0A");
-                    break;
-                case '\r':
-                    target.append("%0D");
-                    break;
-                case '"':
-                    target.append("%22");
-                    break;
-                default:
-                    target.append(ch);
-                    break;
-            }
-        }
-        target.append('"');
+    /**
+     * Listener
+     */
+    public interface WriteListener {
+        /**
+         * Upload listener
+         *
+         * @param totalWritten  total written bytes
+         * @param contentLength content length
+         */
+        void onWrite(long totalWritten, long contentLength);
     }
 
     public static final class Part {
+        final Headers headers;
+        final RequestBody body;
+
+        private Part(Headers headers, RequestBody body) {
+            this.headers = headers;
+            this.body = body;
+        }
+
         public static Part create(Headers headers, RequestBody body) {
             if (body == null) {
                 throw new NullPointerException("body == null");
@@ -240,14 +244,6 @@ public class BugReporterMultipartBody extends RequestBody {
             }
 
             return create(Headers.of("Content-Disposition", disposition.toString()), body);
-        }
-
-        final Headers headers;
-        final RequestBody body;
-
-        private Part(Headers headers, RequestBody body) {
-            this.headers = headers;
-            this.body = body;
         }
     }
 

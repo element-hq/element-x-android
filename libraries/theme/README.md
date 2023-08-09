@@ -1,6 +1,7 @@
 # Theme Module
 
-This module contains the theme tokens for the application, including those auto-generated from [Compound](https://github.com/vector-im/compound-design-tokens) and its mappings.
+This module contains the theme tokens for the application, including those auto-generated from [Compound](https://github.com/vector-im/compound-design-tokens)
+and its mappings.
 
 ## Usage
 
@@ -14,4 +15,5 @@ All tokens can be accessed through the `ElementTheme` object, which contains the
 
 ## Adding new tokens
 
-All new tokens **should** come from Compound and added to the `compound.generated` package. To map the literal tokens to the semantic ones, you'll have to update both `compoundColorsLight` and `compoundColorsDark` in `CompoundColors.kt`.
+All new tokens **should** come from Compound and added to the `compound.generated` package. To map the literal tokens to the semantic ones, you'll have to
+update both `compoundColorsLight` and `compoundColorsDark` in `CompoundColors.kt`.

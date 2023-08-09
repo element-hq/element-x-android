@@ -12,6 +12,6 @@ We do not forget all translators, for their work of translating Element into man
 
 Feel free to add your name below, when you contribute to the project!
 
-Name      | Matrix ID                   | GitHub
-----------|-----------------------------|--------------------------------------
-name      | @name:matrix.org            | [githubID](https://github.com/githubID)
+ Name | Matrix ID        | GitHub                                  
+------|------------------|-----------------------------------------
+ name | @name:matrix.org | [githubID](https://github.com/githubID) 
