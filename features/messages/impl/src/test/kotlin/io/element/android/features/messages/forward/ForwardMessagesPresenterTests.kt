@@ -28,8 +28,8 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
+import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
@@ -76,10 +76,10 @@ class ForwardMessagesPresenterTests {
 
     @Test
     fun `present - update query`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource().apply {
+        val roomListService = FakeRoomListService().apply {
             postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetail())))
         }
-        val client = FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
+        val client = FakeMatrixClient(roomListService = roomListService)
         val presenter = aPresenter(client = client)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -166,11 +166,10 @@ class ForwardMessagesPresenterTests {
         }
     }
 
-        private fun CoroutineScope.aPresenter(
+    private fun CoroutineScope.aPresenter(
         eventId: EventId = AN_EVENT_ID,
         fakeMatrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
         coroutineScope: CoroutineScope = this,
         client: FakeMatrixClient = FakeMatrixClient(),
     ) = ForwardMessagesPresenter(eventId.value, fakeMatrixRoom, coroutineScope, client)
-
 }

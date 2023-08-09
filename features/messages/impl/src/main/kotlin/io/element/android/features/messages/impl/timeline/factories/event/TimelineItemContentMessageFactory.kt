@@ -132,7 +132,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
     }
 
     private fun aspectRatioOf(width: Long?, height: Long?): Float? {
-        return if (height != null && width != null && height > 0 && width > 0) {
+        return if (height != null && width != null) {
             width.toFloat() / height.toFloat()
         } else {
             null
