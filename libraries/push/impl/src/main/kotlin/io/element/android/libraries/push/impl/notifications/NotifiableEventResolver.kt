@@ -75,7 +75,6 @@ class NotifiableEventResolver @Inject constructor(
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
         return notificationData?.asNotifiableEvent(sessionId)
-            ?: fallbackNotifiableEvent(sessionId, roomId, eventId)
     }
 
     private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent? {
@@ -116,10 +115,10 @@ class NotifiableEventResolver @Inject constructor(
                         title = null, // TODO check if title is needed anymore
                     )
                 } else {
-                    null
+                    fallbackNotifiableEvent(userId, roomId, eventId)
                 }
             }
-            else -> null
+            else -> fallbackNotifiableEvent(userId, roomId, eventId)
         }
     }
 
