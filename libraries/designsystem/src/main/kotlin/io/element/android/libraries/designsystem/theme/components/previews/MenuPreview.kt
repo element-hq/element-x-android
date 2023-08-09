@@ -32,16 +32,13 @@ import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Text
 
 @Preview(group = PreviewGroup.Menus)
 @Composable
 internal fun MenuPreview() {
     ElementThemedPreview {
         var isExpanded by remember { mutableStateOf(false) }
-        Button(onClick = { isExpanded = !isExpanded }) {
-            Text("Toggle")
-        }
+        Button(text = "Toggle", onClick = { isExpanded = !isExpanded })
         DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
             for (i in 0..5) {
                 val leadingIcon: @Composable (() -> Unit)? = if (i in 2..3) {

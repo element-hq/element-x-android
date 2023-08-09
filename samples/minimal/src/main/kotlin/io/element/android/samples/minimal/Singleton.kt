@@ -17,19 +17,24 @@
 package io.element.android.samples.minimal
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.impl.tracing.setupTracing
-import io.element.android.libraries.matrix.api.tracing.TracingConfigurations
+import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
+import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
+import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
+import io.element.android.libraries.matrix.impl.tracing.RustTracingService
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
-import timber.log.Timber
 
 object Singleton {
 
     init {
-        Timber.plant(Timber.DebugTree())
-        setupTracing(TracingConfigurations.debug)
+        val tracingConfiguration = TracingConfiguration(
+            filterConfiguration = TracingFilterConfigurations.debug,
+            writesToLogcat = true,
+            writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
+        )
+        RustTracingService().setupTracing(tracingConfiguration)
     }
 
     val appScope = MainScope() + CoroutineName("Minimal Scope")

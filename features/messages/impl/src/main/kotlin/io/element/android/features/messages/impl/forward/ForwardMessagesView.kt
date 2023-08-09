@@ -123,11 +123,10 @@ fun ForwardMessagesView(
                 },
                 actions = {
                     TextButton(
+                        text = stringResource(CommonStrings.action_send),
                         enabled = state.selectedRooms.isNotEmpty(),
                         onClick = { state.eventSink(ForwardMessagesEvents.ForwardEvent) }
-                    ) {
-                        Text(text = stringResource(CommonStrings.action_send))
-                    }
+                    )
                 }
             )
         }

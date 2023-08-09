@@ -36,11 +36,10 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
@@ -87,7 +86,7 @@ fun ConfirmAccountProviderView(
         },
         footer = {
             ButtonColumnMolecule {
-                ButtonWithProgress(
+                Button(
                     text = stringResource(id = R.string.screen_account_provider_continue),
                     showProgress = isLoading,
                     onClick = { eventSink.invoke(ConfirmAccountProviderEvents.Continue) },
@@ -97,14 +96,13 @@ fun ConfirmAccountProviderView(
                         .testTag(TestTags.loginContinue)
                 )
                 TextButton(
+                    text = stringResource(id = R.string.screen_account_provider_change),
                     onClick = onChange,
                     enabled = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.loginChangeServer)
-                ) {
-                    Text(text = stringResource(id = R.string.screen_account_provider_change))
-                }
+                )
             }
         }
     ) {

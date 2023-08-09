@@ -18,7 +18,7 @@ package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,10 +28,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RetryDialog(
     content: String,
@@ -48,44 +47,22 @@ fun RetryDialog(
     textContentColor: Color = AlertDialogDefaults.textContentColor,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
-    AlertDialog(
-        modifier = modifier,
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = title,
-                style = ElementTheme.typography.fontHeadingSmRegular,
-            )
-        },
-        text = {
-            Text(
-                text = content,
-                style = ElementTheme.typography.fontBodyMdRegular,
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = onRetry) {
-                Text(
-                    text = retryText,
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(
-                    text = dismissText,
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                )
-            }
-        },
-        shape = shape,
-        containerColor = containerColor,
-        iconContentColor = iconContentColor,
-        titleContentColor = titleContentColor,
-        textContentColor = textContentColor,
-        tonalElevation = tonalElevation,
-    )
+    AlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
+        RetryDialogContent(
+            title = title,
+            content = content,
+            retryText = retryText,
+            dismissText = dismissText,
+            onRetry = onRetry,
+            onDismiss = onDismiss,
+            shape = shape,
+            containerColor = containerColor,
+            iconContentColor = iconContentColor,
+            titleContentColor = titleContentColor,
+            textContentColor = textContentColor,
+            tonalElevation = tonalElevation,
+        )
+    }
 }
 
 @Composable

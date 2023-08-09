@@ -27,7 +27,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -38,7 +37,10 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.theme.ElementTheme
 import kotlin.math.max
 
@@ -53,7 +55,6 @@ internal fun SimpleAlertDialogContent(
     onSubmitClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
-    emphasizeSubmitButton: Boolean = false,
     shape: Shape = AlertDialogDefaults.shape,
     containerColor: Color = AlertDialogDefaults.containerColor,
     iconContentColor: Color = AlertDialogDefaults.iconContentColor,
@@ -71,30 +72,23 @@ internal fun SimpleAlertDialogContent(
                 if (thirdButtonText != null) {
                     // If there is a 3rd item it should be at the end of the dialog
                     // Having this 3rd action is discouraged, see https://m3.material.io/components/dialogs/guidelines#e13b68f5-e367-4275-ad6f-c552ee8e358f
-                    TextButton(onClick = onThirdButtonClicked) {
-                        Text(
-                            text = thirdButtonText,
-                            style = ElementTheme.typography.fontBodyMdRegular,
-                        )
-                    }
-                }
-                TextButton(onClick = onCancelClicked) {
-                    Text(
-                        text = cancelText,
-                        style = ElementTheme.typography.fontBodyMdRegular,
+                    TextButton(
+                        text = thirdButtonText,
+                        buttonSize = ButtonSize.Medium,
+                        onClick = onThirdButtonClicked,
                     )
                 }
+                TextButton(
+                    text = cancelText,
+                    buttonSize = ButtonSize.Medium,
+                    onClick = onCancelClicked,
+                )
                 if (submitText != null) {
-                    TextButton(onClick = onSubmitClicked) {
-                        Text(
-                            text = submitText,
-                            style = if (emphasizeSubmitButton) {
-                                ElementTheme.typography.fontBodyMdMedium
-                            } else {
-                                ElementTheme.typography.fontBodyMdRegular
-                            }
-                        )
-                    }
+                    Button(
+                        text = submitText,
+                        buttonSize = ButtonSize.Medium,
+                        onClick = onSubmitClicked,
+                    )
                 }
             }
         },
