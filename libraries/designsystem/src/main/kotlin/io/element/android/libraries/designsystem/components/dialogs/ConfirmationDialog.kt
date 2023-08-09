@@ -86,15 +86,17 @@ private fun ConfirmationDialogContent(
 @Preview(group = PreviewGroup.Dialogs)
 @Composable
 internal fun ConfirmationDialogPreview() =
-    ElementThemedPreview {
+    ElementThemedPreview(showBackground = false) {
         DialogPreview {
             ConfirmationDialogContent(
                 content = "Content",
                 title = "Title",
                 submitText = "OK",
                 cancelText = "Cancel",
+                thirdButtonText = "Disable",
                 onSubmitClicked = {},
                 onCancelClicked = {},
+                onThirdButtonClicked = {},
             )
         }
     }
