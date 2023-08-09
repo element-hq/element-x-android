@@ -18,6 +18,6 @@ package io.element.android.libraries.matrix.api.tracing
 
 data class TracingConfiguration(
     val filterConfiguration: TracingFilterConfiguration,
-    val writesToStdout: Boolean,
+    val writesToLogcat: Boolean,
     val writesToFilesConfiguration: WriteToFilesConfiguration,
 )

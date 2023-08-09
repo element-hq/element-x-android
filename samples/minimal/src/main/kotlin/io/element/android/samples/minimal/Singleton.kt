@@ -31,7 +31,7 @@ object Singleton {
     init {
         val tracingConfiguration = TracingConfiguration(
             filterConfiguration = TracingFilterConfigurations.debug,
-            writesToStdout = true,
+            writesToLogcat = true,
             writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
         )
         RustTracingService().setupTracing(tracingConfiguration)

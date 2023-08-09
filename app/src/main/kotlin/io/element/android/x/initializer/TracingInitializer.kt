@@ -36,13 +36,13 @@ class TracingInitializer : Initializer<Unit> {
         val tracingConfiguration = if (BuildConfig.DEBUG) {
             TracingConfiguration(
                 filterConfiguration = TracingFilterConfigurations.debug,
-                writesToStdout = false,
+                writesToLogcat = true,
                 writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
             )
         } else {
             TracingConfiguration(
                 filterConfiguration = TracingFilterConfigurations.release,
-                writesToStdout = false,
+                writesToLogcat = false,
                 writesToFilesConfiguration = WriteToFilesConfiguration.Enabled(
                     directory = bugReporter.logDirectory().absolutePath,
                     filenamePrefix = "logs"

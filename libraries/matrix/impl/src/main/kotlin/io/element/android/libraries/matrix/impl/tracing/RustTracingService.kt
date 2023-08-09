@@ -32,7 +32,7 @@ class RustTracingService @Inject constructor() : TracingService {
         val filter = tracingConfiguration.filterConfiguration
         val rustTracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
             filter = tracingConfiguration.filterConfiguration.filter,
-            writeToStdout = tracingConfiguration.writesToStdout,
+            writeToStdoutOrSystem  = tracingConfiguration.writesToLogcat,
             writeToFiles = when (val writeToFilesConfiguration = tracingConfiguration.writesToFilesConfiguration) {
                 is WriteToFilesConfiguration.Disabled -> null
                 is WriteToFilesConfiguration.Enabled -> TracingFileConfiguration(
