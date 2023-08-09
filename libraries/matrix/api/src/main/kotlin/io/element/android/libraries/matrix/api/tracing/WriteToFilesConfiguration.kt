@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.libraries.matrix.api.tracing
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.features.rageshake.api.reporter.BugReporter
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.matrix.api.tracing.TracingService
-
-@ContributesTo(AppScope::class)
-interface AppBindings {
-    fun mainDaggerComponentOwner(): MainDaggerComponentsOwner
-    fun snackbarDispatcher(): SnackbarDispatcher
-    fun tracingService(): TracingService
-    fun bugReporter(): BugReporter
+sealed class WriteToFilesConfiguration {
+    object Disabled : WriteToFilesConfiguration()
+    data class Enabled(val directory: String, val filenamePrefix: String) : WriteToFilesConfiguration()
 }

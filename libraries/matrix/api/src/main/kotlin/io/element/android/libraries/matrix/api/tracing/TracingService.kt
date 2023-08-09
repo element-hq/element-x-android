@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.x.initializer
+package io.element.android.libraries.matrix.api.tracing
 
-import android.content.Context
-import androidx.startup.Initializer
-import io.element.android.features.rageshake.impl.logs.VectorFileLogger
-import io.element.android.x.BuildConfig
 import timber.log.Timber
 
-class TimberInitializer : Initializer<Unit> {
-
-    override fun create(context: Context) {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-        Timber.plant(VectorFileLogger(context))
-    }
-
-    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
+interface TracingService {
+    fun setupTracing(tracingConfiguration: TracingConfiguration)
+    fun createTimberTree(): Timber.Tree
 }
