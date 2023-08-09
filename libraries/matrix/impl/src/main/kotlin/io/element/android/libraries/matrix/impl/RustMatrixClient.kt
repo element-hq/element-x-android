@@ -100,7 +100,7 @@ class RustMatrixClient constructor(
         dispatchers = dispatchers,
     )
     private val notificationClient = client.notificationClient().use { builder ->
-        builder.finish()
+        builder.filterByPushRules().finish()
     }
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
