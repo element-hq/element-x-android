@@ -34,6 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
+@Suppress("DestructuringDeclarationWithTooManyEntries") // This is necessary to declare the constraints ids
 @Composable
 fun PollAnswerView(
     showResults: Boolean,

@@ -21,6 +21,8 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentMessageFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollEndFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentProfileChangeFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRedactedFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRoomMembershipFactory
@@ -42,13 +44,17 @@ import kotlinx.coroutines.test.TestScope
 
 internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
     val timelineEventFormatter = aTimelineEventFormatter()
+    val matrixClient = FakeMatrixClient()
+    val dispatchers = testCoroutineDispatchers()
     return TimelineItemsFactory(
-        dispatchers = testCoroutineDispatchers(),
+        dispatchers = dispatchers,
         eventItemFactory = TimelineItemEventFactory(
             contentFactory = TimelineItemContentFactory(
                 messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter(), FileExtensionExtractorWithoutValidation()),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
+                pollFactory = TimelineItemContentPollFactory(matrixClient, dispatchers, this),
+                pollEndFactory = TimelineItemContentPollEndFactory(),
                 utdFactory = TimelineItemContentUTDFactory(),
                 roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
                 profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
@@ -56,7 +62,7 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
                 failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory()
             ),
-            matrixClient = FakeMatrixClient(),
+            matrixClient = matrixClient,
         ),
         virtualItemFactory = TimelineItemVirtualFactory(
             daySeparatorFactory = TimelineItemDaySeparatorFactory(

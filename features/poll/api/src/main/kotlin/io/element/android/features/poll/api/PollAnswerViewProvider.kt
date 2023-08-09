@@ -17,8 +17,9 @@
 package io.element.android.features.poll.api
 
 import io.element.android.libraries.matrix.api.poll.PollAnswer
+import kotlinx.collections.immutable.persistentListOf
 
-fun aPollAnswerItemList() = listOf(
+fun aPollAnswerItemList() = persistentListOf(
     aPollAnswerItem(
         answer = PollAnswer("option_1", "Italian \uD83C\uDDEE\uD83C\uDDF9"),
         votesCount = 2,

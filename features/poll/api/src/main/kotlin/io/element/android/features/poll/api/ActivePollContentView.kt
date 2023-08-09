@@ -31,11 +31,12 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun ActivePollContentView(
     question: String,
-    answers: List<PollAnswerItem>,
+    answers: ImmutableList<PollAnswerItem>,
     isDisclosed: Boolean,
     onAnswerSelected: (PollAnswer) -> Unit,
     modifier: Modifier = Modifier,

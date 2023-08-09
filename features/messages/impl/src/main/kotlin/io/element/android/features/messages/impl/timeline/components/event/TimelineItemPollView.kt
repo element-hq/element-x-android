@@ -26,6 +26,7 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.matrix.api.poll.PollAnswer
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun TimelineItemPollView(
@@ -35,7 +36,7 @@ fun TimelineItemPollView(
 ) {
     ActivePollContentView(
         question = content.question,
-        answers = content.answers,
+        answers = content.answers.toImmutableList(),
         isDisclosed = content.isDisclosed.value.dataOrNull().orFalse(),
         onAnswerSelected = onAnswerSelected,
         modifier = modifier,
