@@ -72,7 +72,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -165,7 +164,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                 ) { syncState, networkStatus ->
                     Pair(syncState, networkStatus)
                 }
-                    .distinctUntilChanged()
                     .collect { (syncState, networkStatus) ->
                         Timber.d("Sync state: $syncState, network status: $networkStatus")
                         if (syncState != SyncState.Running && networkStatus == NetworkStatus.Online) {
