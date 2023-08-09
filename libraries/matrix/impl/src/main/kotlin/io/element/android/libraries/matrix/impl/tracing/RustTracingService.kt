@@ -45,7 +45,7 @@ class RustTracingService @Inject constructor() : TracingService {
         Timber.v("Tracing config filter = $filter")
     }
 
-    override fun createTracingTree(): Timber.Tree {
+    override fun createTimberTree(): Timber.Tree {
         return RustTracingTree()
     }
 }

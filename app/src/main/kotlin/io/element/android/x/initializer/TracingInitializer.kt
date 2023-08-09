@@ -32,7 +32,7 @@ class TracingInitializer : Initializer<Unit> {
         val appBindings = context.bindings<AppBindings>()
         val tracingService = appBindings.tracingService()
         val bugReporter = appBindings.bugReporter()
-        Timber.plant(tracingService.createTracingTree())
+        Timber.plant(tracingService.createTimberTree())
         val tracingConfiguration = if (BuildConfig.DEBUG) {
             TracingConfiguration(
                 filterConfiguration = TracingFilterConfigurations.debug,
