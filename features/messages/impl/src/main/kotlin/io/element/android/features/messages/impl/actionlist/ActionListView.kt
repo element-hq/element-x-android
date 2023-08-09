@@ -237,7 +237,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     val textContent = remember(event.content) { formatter.format(event) }
 
     when (event.content) {
-        is TimelineItemPollContent, // Todo Poll
+        is TimelineItemPollContent, // TODO Polls: handle summary
         is TimelineItemTextBasedContent,
         is TimelineItemStateContent,
         is TimelineItemEncryptedContent,
