@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.room
+package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.core.coroutine.parallelMap
-import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex

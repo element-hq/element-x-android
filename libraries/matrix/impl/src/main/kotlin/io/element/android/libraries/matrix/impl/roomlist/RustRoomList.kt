@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.forward
+package io.element.android.libraries.matrix.impl.roomlist
 
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomList
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import kotlinx.coroutines.flow.StateFlow
 
-sealed interface ForwardMessagesEvents {
-    data class SetSelectedRoom(val room: RoomSummaryDetails) : ForwardMessagesEvents
-    // TODO remove to restore multi-selection
-    object RemoveSelectedRoom : ForwardMessagesEvents
-    object ToggleSearchActive : ForwardMessagesEvents
-    data class UpdateQuery(val query: String) : ForwardMessagesEvents
-    object ForwardEvent : ForwardMessagesEvents
-    object ClearError : ForwardMessagesEvents
-}
+/**
+ * Simple implementation of [RoomList] where state flows are provided through constructor.
+ */
+class RustRoomList(
+    override val summaries: StateFlow<List<RoomSummary>>,
+    override val loadingState: StateFlow<RoomList.LoadingState>
+) : RoomList

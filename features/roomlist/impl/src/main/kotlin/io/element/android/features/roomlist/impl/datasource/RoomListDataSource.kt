@@ -27,8 +27,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummary
-import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomListDataSource @Inject constructor(
-    private val roomSummaryDataSource: RoomSummaryDataSource,
+    private val roomListService: RoomListService,
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -61,8 +61,9 @@ class RoomListDataSource @Inject constructor(
     }
 
     fun launchIn(coroutineScope: CoroutineScope) {
-        roomSummaryDataSource
+        roomListService
             .allRooms()
+            .summaries
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
             }

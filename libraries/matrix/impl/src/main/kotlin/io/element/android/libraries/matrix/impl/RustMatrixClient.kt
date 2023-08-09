@@ -32,8 +32,8 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
-import io.element.android.libraries.matrix.api.room.awaitAllRoomsAreLoaded
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -45,9 +45,8 @@ import io.element.android.libraries.matrix.impl.notification.RustNotificationSer
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
-import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
-import io.element.android.libraries.matrix.impl.room.roomOrNull
-import io.element.android.libraries.matrix.impl.room.stateFlow
+import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
+import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
@@ -90,11 +89,11 @@ class RustMatrixClient constructor(
 ) : MatrixClient {
 
     override val sessionId: UserId = UserId(client.userId())
-    private val roomListService = syncService.roomListService()
+    private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
-    private val rustSyncService = RustSyncService(syncService, roomListService.stateFlow(), sessionCoroutineScope)
+    private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -122,15 +121,15 @@ class RustMatrixClient constructor(
         }
     }
 
-    private val rustRoomSummaryDataSource: RustRoomSummaryDataSource =
-        RustRoomSummaryDataSource(
-            roomListService = roomListService,
+    private val rustRoomListService: RoomListService =
+        RustRoomListService(
+            innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
             dispatcher = sessionDispatcher,
         )
 
-    override val roomSummaryDataSource: RoomSummaryDataSource
-        get() = rustRoomSummaryDataSource
+    override val roomListService: RoomListService
+        get() = rustRoomListService
 
     private val rustMediaLoader = RustMediaLoader(baseCacheDirectory, dispatchers, client)
     override val mediaLoader: MatrixMediaLoader
@@ -138,7 +137,7 @@ class RustMatrixClient constructor(
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
-    private val roomContentForwarder = RoomContentForwarder(roomListService)
+    private val roomContentForwarder = RoomContentForwarder(innerRoomListService)
 
     init {
         client.setDelegate(clientDelegate)
@@ -156,7 +155,7 @@ class RustMatrixClient constructor(
         var cachedPairOfRoom = pairOfRoom(roomId)
         if (cachedPairOfRoom == null) {
             //... otherwise, lets wait for the SS to load all rooms and check again.
-            roomSummaryDataSource.awaitAllRoomsAreLoaded()
+            roomListService.allRooms().awaitLoaded()
             cachedPairOfRoom = pairOfRoom(roomId)
         }
         cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
@@ -174,7 +173,7 @@ class RustMatrixClient constructor(
     }
 
     private fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
-        val cachedRoomListItem = roomListService.roomOrNull(roomId.value)
+        val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
         val fullRoom = cachedRoomListItem?.fullRoom()
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
@@ -225,7 +224,7 @@ class RustMatrixClient constructor(
 
             // Wait to receive the room back from the sync
             withTimeout(30_000L) {
-                roomSummaryDataSource.allRooms()
+                roomListService.allRooms().summaries
                     .filter { roomSummaries ->
                         roomSummaries.map { it.identifier() }.contains(roomId.value)
                     }
@@ -273,7 +272,7 @@ class RustMatrixClient constructor(
         client.setDelegate(null)
         verificationService.destroy()
         syncService.destroy()
-        roomListService.destroy()
+        innerRoomListService.destroy()
         notificationClient.destroy()
         client.destroy()
     }

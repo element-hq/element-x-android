@@ -23,7 +23,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 
 @Module
@@ -40,8 +40,8 @@ object SessionMatrixModule {
     }
 
     @Provides
-    fun provideRoomSummaryDataSource(matrixClient: MatrixClient): RoomSummaryDataSource {
-        return matrixClient.roomSummaryDataSource
+    fun providesRoomListService(matrixClient: MatrixClient): RoomListService {
+        return matrixClient.roomListService
     }
 
     @Provides

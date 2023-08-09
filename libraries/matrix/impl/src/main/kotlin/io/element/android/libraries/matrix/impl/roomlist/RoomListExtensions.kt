@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.room
+package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow

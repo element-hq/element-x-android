@@ -30,7 +30,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -44,8 +44,9 @@ class DefaultInviteStateDataSource @Inject constructor(
     @Composable
     override fun inviteState(): InvitesState {
         val invites by client
-            .roomSummaryDataSource
-            .inviteRooms()
+            .roomListService
+            .invites()
+            .summaries
             .collectAsState()
 
         val seenInvites by seenInvitesStore

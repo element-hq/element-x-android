@@ -69,10 +69,13 @@ import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 @ContributesNode(AppScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -123,7 +126,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
-
         lifecycle.subscribe(
             onCreate = {
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.matrixClient) }
@@ -138,12 +140,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                     backstack.push(NavTarget.Ftue)
                 }
             },
-            onStart = {
-                lifecycleScope.launch {
-                    syncService.startSync()
-                }
-            },
             onStop = {
+                //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                 syncService.stopSync()
             },
             onDestroy = {
@@ -153,22 +151,24 @@ class LoggedInFlowNode @AssistedInject constructor(
                 loggedInFlowProcessor.stopObserving()
             }
         )
-
         observeSyncStateAndNetworkStatus()
     }
 
+    @OptIn(FlowPreview::class)
     private fun observeSyncStateAndNetworkStatus() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 combine(
-                    syncService.syncState,
+                    // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
+                    syncService.syncState.debounce(100),
                     networkMonitor.connectivity
                 ) { syncState, networkStatus ->
-                    syncState == SyncState.Error && networkStatus == NetworkStatus.Online
+                    Pair(syncState, networkStatus)
                 }
                     .distinctUntilChanged()
-                    .collect { restartSync ->
-                        if (restartSync) {
+                    .collect { (syncState, networkStatus) ->
+                        Timber.d("Sync state: $syncState, network status: $networkStatus")
+                        if (syncState != SyncState.Running && networkStatus == NetworkStatus.Online) {
                             syncService.startSync()
                         }
                     }
@@ -351,3 +351,4 @@ class LoggedInFlowNode @AssistedInject constructor(
         backstack.push(NavTarget.InviteList)
     }
 }
+
