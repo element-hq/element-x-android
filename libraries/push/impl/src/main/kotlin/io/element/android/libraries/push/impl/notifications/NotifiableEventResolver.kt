@@ -69,9 +69,6 @@ class NotifiableEventResolver @Inject constructor(
             userId = sessionId,
             roomId = roomId,
             eventId = eventId,
-            // FIXME should be true in the future, but right now it's broken
-            //  (https://github.com/vector-im/element-x-android/issues/640#issuecomment-1612913658)
-            filterByPushRules = false,
         ).onFailure {
             Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
         }.getOrNull()
