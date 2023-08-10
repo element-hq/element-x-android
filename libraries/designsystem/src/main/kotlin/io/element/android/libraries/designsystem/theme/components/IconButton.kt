@@ -22,8 +22,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,13 +36,12 @@ import io.element.android.libraries.theme.ElementTheme
 fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isPrimary: Boolean = true,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit
 ) {
     val colors = IconButtonDefaults.iconButtonColors(
-        contentColor = if (isPrimary) ElementTheme.colors.iconPrimary else ElementTheme.colors.iconSecondary,
+        contentColor = LocalContentColor.current,
         disabledContentColor = ElementTheme.colors.iconDisabled,
     )
     androidx.compose.material3.IconButton(
@@ -62,20 +62,24 @@ internal fun IconButtonPreview() =
 @Composable
 private fun ContentToPreview() {
     Column {
-        Row {
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = "")
-            }
-            IconButton(enabled = false, onClick = {}) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+        CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconPrimary) {
+            Row {
+                IconButton(onClick = {}) {
+                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                }
+                IconButton(enabled = false, onClick = {}) {
+                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                }
             }
         }
-        Row {
-            IconButton(onClick = {}, isPrimary = false) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = "")
-            }
-            IconButton(isPrimary = false, enabled = false, onClick = {}) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+        CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconSecondary) {
+            Row {
+                IconButton(onClick = {}) {
+                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                }
+                IconButton(enabled = false, onClick = {}) {
+                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                }
             }
         }
     }
