@@ -32,6 +32,8 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
 
+// Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=1182%3A48861&mode=design&t=Shlcvznm1oUyqGC2-1
+
 @Composable
 fun IconButton(
     onClick: () -> Unit,
