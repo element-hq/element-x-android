@@ -25,6 +25,7 @@ android {
 dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.uiStrings)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(projects.libraries.matrix.api)

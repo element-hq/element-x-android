@@ -22,6 +22,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -33,6 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.LinearProgress
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.R
 
 @Suppress("DestructuringDeclarationWithTooManyEntries") // This is necessary to declare the constraints ids
 @Composable
@@ -80,7 +82,11 @@ fun PollAnswerView(
                 bottom.linkTo(answerText.bottom)
                 visibility = if (showResults) Visibility.Visible else Visibility.Gone
             },
-            text = "${answerItem.votesCount} votes", // Fixme hardcoded string
+            text = pluralStringResource(
+                id = R.plurals.common_poll_votes_count,
+                count = answerItem.votesCount,
+                answerItem.votesCount
+            ),
             style = ElementTheme.typography.fontBodySmRegular,
             color = ElementTheme.colors.textSecondary,
         )
