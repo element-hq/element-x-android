@@ -46,6 +46,8 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
 import kotlin.math.max
 
+// Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=911%3A343492&mode=design&t=jeyd1bXKOOx8y10r-1
+
 @Composable
 internal fun SimpleAlertDialogContent(
     content: String,
