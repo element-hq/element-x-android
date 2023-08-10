@@ -34,7 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.LinearProgress
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonPlurals
 
 @Suppress("DestructuringDeclarationWithTooManyEntries") // This is necessary to declare the constraints ids
 @Composable
@@ -83,7 +83,7 @@ fun PollAnswerView(
                 visibility = if (showResults) Visibility.Visible else Visibility.Gone
             },
             text = pluralStringResource(
-                id = R.plurals.common_poll_votes_count,
+                id = CommonPlurals.common_poll_votes_count,
                 count = answerItem.votesCount,
                 answerItem.votesCount
             ),
