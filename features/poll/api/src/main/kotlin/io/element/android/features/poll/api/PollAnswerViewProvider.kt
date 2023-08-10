@@ -22,18 +22,18 @@ import kotlinx.collections.immutable.persistentListOf
 fun aPollAnswerItemList() = persistentListOf(
     aPollAnswerItem(
         answer = PollAnswer("option_1", "Italian \uD83C\uDDEE\uD83C\uDDF9"),
-        votesCount = 2,
-        progress = 0.2f
-    ),
-    aPollAnswerItem(
-        answer = PollAnswer("option_2", "Chinese \uD83C\uDDE8\uD83C\uDDF3"),
         votesCount = 5,
         progress = 0.5f
     ),
     aPollAnswerItem(
+        answer = PollAnswer("option_2", "Chinese \uD83C\uDDE8\uD83C\uDDF3"),
+        votesCount = 0,
+        progress = 0f
+    ),
+    aPollAnswerItem(
         answer = PollAnswer("option_3", "Brazilian \uD83C\uDDE7\uD83C\uDDF7"),
-        votesCount = 3,
-        progress = 0.3f
+        votesCount = 1,
+        progress = 0.1f
     ),
     aPollAnswerItem(),
 )
@@ -43,6 +43,6 @@ fun aPollAnswerItem(
         "option_4",
         "French \uD83C\uDDEB\uD83C\uDDF7 But make it a very very very long option then this should just keep expanding"
     ),
-    votesCount: Int = 2,
-    progress: Float = 0.2f,
+    votesCount: Int = 4,
+    progress: Float = 0.4f,
 ) = PollAnswerItem(answer, votesCount, progress)
