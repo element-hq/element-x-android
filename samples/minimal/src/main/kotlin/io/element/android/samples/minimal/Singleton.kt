@@ -17,6 +17,8 @@
 package io.element.android.samples.minimal
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
@@ -28,13 +30,28 @@ import kotlinx.coroutines.plus
 
 object Singleton {
 
+    private val buildMeta = BuildMeta(
+        isDebuggable = true,
+        buildType = BuildType.DEBUG,
+        applicationName = "EAX-Minimal",
+        applicationId = "io.element.android.samples.minimal",
+        lowPrivacyLoggingEnabled = false,
+        versionName = "0.1.0",
+        versionCode = 1,
+        gitRevision = "TODO", // BuildConfig.GIT_REVISION,
+        gitRevisionDate = "TODO", //  BuildConfig.GIT_REVISION_DATE,
+        gitBranchName = "TODO", //  BuildConfig.GIT_BRANCH_NAME,
+        flavorDescription = "TODO", //  BuildConfig.FLAVOR_DESCRIPTION,
+        flavorShortDescription = "TODO", //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
+    )
+
     init {
         val tracingConfiguration = TracingConfiguration(
             filterConfiguration = TracingFilterConfigurations.debug,
             writesToLogcat = true,
             writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
         )
-        RustTracingService().setupTracing(tracingConfiguration)
+        RustTracingService(buildMeta).setupTracing(tracingConfiguration)
     }
 
     val appScope = MainScope() + CoroutineName("Minimal Scope")

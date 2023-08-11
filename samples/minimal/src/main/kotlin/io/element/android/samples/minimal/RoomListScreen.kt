@@ -113,7 +113,9 @@ class RoomListScreen(
             }
             onDispose {
                 Timber.w("Stop sync!")
-                matrixClient.syncService().stopSync()
+                runBlocking {
+                    matrixClient.syncService().stopSync()
+                }
             }
         }
     }
