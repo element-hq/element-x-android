@@ -69,6 +69,14 @@ object ElementTheme {
     val typography: TypographyTokens = TypographyTokens
 
     /**
+     * Material 3 [Typography] tokens. In Figma, these have the `M3 Typography/` prefix.
+     */
+    val materialTypography: Typography
+        @Composable
+        @ReadOnlyComposable
+        get()= MaterialTheme.typography
+
+    /**
      * Returns whether the theme version used is the light or the dark one.
      */
     val isLightTheme: Boolean

@@ -17,17 +17,15 @@
 package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.components.DialogPreview
+import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,12 +38,6 @@ fun RetryDialog(
     dismissText: String = RetryDialogDefaults.dismissText,
     onRetry: () -> Unit = {},
     onDismiss: () -> Unit = {},
-    shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = AlertDialogDefaults.containerColor,
-    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
-    textContentColor: Color = AlertDialogDefaults.textContentColor,
-    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     AlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
         RetryDialogContent(
@@ -55,12 +47,6 @@ fun RetryDialog(
             dismissText = dismissText,
             onRetry = onRetry,
             onDismiss = onDismiss,
-            shape = shape,
-            containerColor = containerColor,
-            iconContentColor = iconContentColor,
-            titleContentColor = titleContentColor,
-            textContentColor = textContentColor,
-            tonalElevation = tonalElevation,
         )
     }
 }
@@ -74,12 +60,6 @@ private fun RetryDialogContent(
     dismissText: String = RetryDialogDefaults.dismissText,
     onRetry: () -> Unit = {},
     onDismiss: () -> Unit = {},
-    shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = AlertDialogDefaults.containerColor,
-    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
-    textContentColor: Color = AlertDialogDefaults.textContentColor,
-    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     SimpleAlertDialogContent(
         modifier = modifier,
@@ -89,12 +69,6 @@ private fun RetryDialogContent(
         onSubmitClicked = onRetry,
         cancelText = dismissText,
         onCancelClicked = onDismiss,
-        shape = shape,
-        containerColor = containerColor,
-        iconContentColor = iconContentColor,
-        titleContentColor = titleContentColor,
-        textContentColor = textContentColor,
-        tonalElevation = tonalElevation,
     )
 }
 
@@ -106,13 +80,12 @@ object RetryDialogDefaults {
 
 @Preview(group = PreviewGroup.Dialogs)
 @Composable
-internal fun RetryDialogPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
-    DialogPreview {
-        RetryDialogContent(
-            content = "Content",
-        )
+internal fun RetryDialogPreview() {
+    ElementThemedPreview(showBackground = false) {
+        DialogPreview {
+            RetryDialogContent(
+                content = "Content",
+            )
+        }
     }
 }

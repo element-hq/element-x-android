@@ -103,7 +103,7 @@ private fun ButtonInternal(
         ButtonSize.Large -> 48.dp
     }
 
-    val paddingValues = when (size) {
+    val contentPadding = when (size) {
         ButtonSize.Medium -> {
             when (style) {
                 ButtonStyle.Text -> PaddingValues(horizontal = 12.dp, vertical = 10.dp)
@@ -151,6 +151,11 @@ private fun ButtonInternal(
         ButtonSize.Large -> ElementTheme.typography.fontBodyLgMedium
     }
 
+    val internalPadding = when {
+        style == ButtonStyle.Text -> if (leadingIcon != null) PaddingValues(start = 8.dp) else PaddingValues(0.dp)
+        else -> PaddingValues(horizontal = 8.dp)
+    }
+
     androidx.compose.material3.Button(
         onClick = {
             if (!showProgress) {
@@ -163,7 +168,7 @@ private fun ButtonInternal(
         colors = colors,
         elevation = null,
         border = border,
-        contentPadding = paddingValues,
+        contentPadding = contentPadding,
         interactionSource = remember { MutableInteractionSource() },
     ) {
         when {
@@ -191,7 +196,7 @@ private fun ButtonInternal(
             style = textStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier.padding(internalPadding),
         )
     }
 }
