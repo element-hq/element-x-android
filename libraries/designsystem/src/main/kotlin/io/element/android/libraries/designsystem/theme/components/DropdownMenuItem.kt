@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
-import androidx.compose.material3.MenuItemColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -46,15 +45,6 @@ fun DropdownMenuItem(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
-    colors: MenuItemColors = MenuDefaults.itemColors(
-        textColor = ElementTheme.colors.textPrimary,
-        leadingIconColor = ElementTheme.colors.iconPrimary,
-        trailingIconColor = ElementTheme.colors.iconSecondary,
-        disabledTextColor = ElementTheme.colors.textDisabled,
-        disabledLeadingIconColor = ElementTheme.colors.iconDisabled,
-        disabledTrailingIconColor = ElementTheme.colors.iconDisabled,
-    ),
-    contentPadding: PaddingValues = PaddingValues(all = 12.dp), // used to ensure vertical padding
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     androidx.compose.material3.DropdownMenuItem(
@@ -68,10 +58,24 @@ fun DropdownMenuItem(
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         enabled = enabled,
-        colors = colors,
-        contentPadding = contentPadding,
+        colors = DropDownMenuItemDefaults.colors(),
+        contentPadding = DropDownMenuItemDefaults.contentPadding,
         interactionSource = interactionSource
     )
+}
+
+internal object DropDownMenuItemDefaults {
+    @Composable
+    fun colors() = MenuDefaults.itemColors(
+        textColor = ElementTheme.colors.textPrimary,
+        leadingIconColor = ElementTheme.colors.iconPrimary,
+        trailingIconColor = ElementTheme.colors.iconSecondary,
+        disabledTextColor = ElementTheme.colors.textDisabled,
+        disabledLeadingIconColor = ElementTheme.colors.iconDisabled,
+        disabledTrailingIconColor = ElementTheme.colors.iconDisabled,
+    )
+
+    val contentPadding = PaddingValues(all = 12.dp)
 }
 
 @Preview(group = PreviewGroup.Menus)
