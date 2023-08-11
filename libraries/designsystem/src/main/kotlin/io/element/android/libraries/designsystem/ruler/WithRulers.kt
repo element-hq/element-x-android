@@ -78,7 +78,7 @@ private fun ContentToPreview() {
     WithRulers(xRulersOffset = 20.dp, yRulersOffset = 15.dp) {
         OutlinedButton(
             text = "A Button with rulers on it!",
-            buttonSize = ButtonSize.Medium,
+            size = ButtonSize.Medium,
             onClick = {},
         )
     }
