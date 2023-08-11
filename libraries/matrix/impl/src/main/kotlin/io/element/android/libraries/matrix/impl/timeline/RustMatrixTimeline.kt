@@ -32,7 +32,6 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +42,6 @@ import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackPaginationStatus
@@ -109,11 +107,11 @@ class RustMatrixTimeline(
         roomCoroutineScope.launch(dispatcher) {
             innerRoom.timelineDiffFlow { initialList ->
                 postItems(initialList)
-            }.onEach { diff ->
-                if (diff.eventOrigin() == EventItemOrigin.SYNC) {
+            }.onEach { diffs ->
+                if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
                     onNewSyncedEvent()
                 }
-                postDiff(diff)
+                postDiffs(diffs)
             }.launchIn(this)
 
             innerRoom.backPaginationStatusFlow()
@@ -135,11 +133,10 @@ class RustMatrixTimeline(
         }
     }
 
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.sample(50)
-        .mapLatest { items ->
-            encryptedHistoryPostProcessor.process(items)
-        }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
+        encryptedHistoryPostProcessor.process(items)
+    }
 
     private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
         // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
@@ -151,9 +148,9 @@ class RustMatrixTimeline(
         initLatch.complete(Unit)
     }
 
-    private suspend fun postDiff(timelineDiff: TimelineDiff) {
+    private suspend fun postDiffs(diffs: List<TimelineDiff>) {
         initLatch.await()
-        timelineDiffProcessor.postDiff(timelineDiff)
+        timelineDiffProcessor.postDiffs(diffs)
     }
 
     private fun postPaginationStatus(status: BackPaginationStatus) {

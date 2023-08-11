@@ -17,17 +17,15 @@
 package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.components.DialogPreview
+import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,12 +36,6 @@ fun ErrorDialog(
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
     onDismiss: () -> Unit = {},
-    shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = AlertDialogDefaults.containerColor,
-    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
-    textContentColor: Color = AlertDialogDefaults.textContentColor,
-    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     AlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
         ErrorDialogContent(
@@ -51,12 +43,6 @@ fun ErrorDialog(
             content = content,
             submitText = submitText,
             onSubmitText = onDismiss,
-            shape = shape,
-            containerColor = containerColor,
-            iconContentColor = iconContentColor,
-            titleContentColor = titleContentColor,
-            textContentColor = textContentColor,
-            tonalElevation = tonalElevation,
         )
     }
 }
@@ -68,12 +54,6 @@ private fun ErrorDialogContent(
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
     onSubmitText: () -> Unit = {},
-    shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = AlertDialogDefaults.containerColor,
-    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
-    textContentColor: Color = AlertDialogDefaults.textContentColor,
-    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     SimpleAlertDialogContent(
         modifier = modifier,
@@ -81,12 +61,6 @@ private fun ErrorDialogContent(
         content = content,
         cancelText = submitText,
         onCancelClicked = onSubmitText,
-        shape = shape,
-        containerColor = containerColor,
-        iconContentColor = iconContentColor,
-        titleContentColor = titleContentColor,
-        textContentColor = textContentColor,
-        tonalElevation = tonalElevation,
     )
 }
 
@@ -98,7 +72,7 @@ object ErrorDialogDefaults {
 @Preview(group = PreviewGroup.Dialogs)
 @Composable
 internal fun ErrorDialogPreview() {
-    ElementThemedPreview {
+    ElementThemedPreview(showBackground = false) {
         DialogPreview {
             ErrorDialogContent(
                 content = "Content",

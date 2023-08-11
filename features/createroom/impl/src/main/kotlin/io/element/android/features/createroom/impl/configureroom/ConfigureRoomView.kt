@@ -57,7 +57,6 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -195,15 +194,10 @@ fun ConfigureRoomToolbar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             TextButton(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                text = stringResource(CommonStrings.action_create),
                 enabled = isNextActionEnabled,
                 onClick = onNextPressed,
-            ) {
-                Text(
-                    text = stringResource(CommonStrings.action_create),
-                    style = ElementTheme.typography.aliasButtonText,
-                )
-            }
+            )
         }
     )
 }

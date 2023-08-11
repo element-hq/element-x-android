@@ -20,6 +20,7 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.ForwardEventException
+import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Room
@@ -80,6 +81,6 @@ class RoomContentForwarder(
     }
 
     private object NoOpTimelineListener : TimelineListener {
-        override fun onUpdate(diff: TimelineDiff) = Unit
+        override fun onUpdate(diff: List<TimelineDiff>) = Unit
     }
 }

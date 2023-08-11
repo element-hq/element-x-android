@@ -17,20 +17,15 @@
 package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.utils.BooleanProvider
+import io.element.android.libraries.designsystem.theme.components.DialogPreview
+import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,16 +39,8 @@ fun ConfirmationDialog(
     submitText: String = stringResource(id = CommonStrings.action_ok),
     cancelText: String = stringResource(id = CommonStrings.action_cancel),
     thirdButtonText: String? = null,
-    emphasizeSubmitButton: Boolean = false,
     onCancelClicked: () -> Unit = onDismiss,
     onThirdButtonClicked: () -> Unit = {},
-    shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = AlertDialogDefaults.containerColor,
-    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    // According to the design team, `primary` should be used here instead of the default `onSurface`
-    titleContentColor: Color = MaterialTheme.colorScheme.primary,
-    textContentColor: Color = AlertDialogDefaults.textContentColor,
-    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     AlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
         ConfirmationDialogContent(
@@ -65,13 +52,6 @@ fun ConfirmationDialog(
             onSubmitClicked = onSubmitClicked,
             onCancelClicked = onCancelClicked,
             onThirdButtonClicked = onThirdButtonClicked,
-            shape = shape,
-            containerColor = containerColor,
-            iconContentColor = iconContentColor,
-            titleContentColor = titleContentColor,
-            textContentColor = textContentColor,
-            tonalElevation = tonalElevation,
-            emphasizeSubmitButton = emphasizeSubmitButton,
         )
     }
 }
@@ -87,13 +67,6 @@ private fun ConfirmationDialogContent(
     title: String? = null,
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
-    emphasizeSubmitButton: Boolean = false,
-    shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = AlertDialogDefaults.containerColor,
-    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
-    textContentColor: Color = AlertDialogDefaults.textContentColor,
-    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
     icon: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
@@ -106,21 +79,14 @@ private fun ConfirmationDialogContent(
         onCancelClicked = onCancelClicked,
         thirdButtonText = thirdButtonText,
         onThirdButtonClicked = onThirdButtonClicked,
-        emphasizeSubmitButton = emphasizeSubmitButton,
-        shape = shape,
-        containerColor = containerColor,
-        iconContentColor = iconContentColor,
-        titleContentColor = titleContentColor,
-        textContentColor = textContentColor,
-        tonalElevation = tonalElevation,
         icon = icon,
     )
 }
 
 @Preview(group = PreviewGroup.Dialogs)
 @Composable
-internal fun ConfirmationDialogPreview(@PreviewParameter(BooleanProvider::class) emphasizeSubmitButton: Boolean) =
-    ElementThemedPreview {
+internal fun ConfirmationDialogPreview() =
+    ElementThemedPreview(showBackground = false) {
         DialogPreview {
             ConfirmationDialogContent(
                 content = "Content",
@@ -130,7 +96,7 @@ internal fun ConfirmationDialogPreview(@PreviewParameter(BooleanProvider::class)
                 thirdButtonText = "Disable",
                 onSubmitClicked = {},
                 onCancelClicked = {},
-                emphasizeSubmitButton = emphasizeSubmitButton,
+                onThirdButtonClicked = {},
             )
         }
     }

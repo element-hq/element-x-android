@@ -39,7 +39,6 @@ import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -155,12 +154,8 @@ private fun AttachmentsPreviewBottomActions(
     ButtonRowMolecule(
         modifier = modifier,
     ) {
-        TextButton(onClick = onCancelClicked) {
-            Text(stringResource(id = CommonStrings.action_cancel))
-        }
-        TextButton(onClick = onSendClicked) {
-            Text(stringResource(id = CommonStrings.action_send))
-        }
+        TextButton(stringResource(id = CommonStrings.action_cancel), onClick = onCancelClicked)
+        TextButton(stringResource(id = CommonStrings.action_send), onClick = onSendClicked)
     }
 }
 

@@ -68,7 +68,7 @@ class RoomListScreen(
         inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
         leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
-            roomSummaryDataSource = matrixClient.roomSummaryDataSource,
+            roomListService = matrixClient.roomListService,
             lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
             roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
                 sp = stringProvider,

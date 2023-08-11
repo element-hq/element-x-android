@@ -38,19 +38,18 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun SyncStateView(
-    syncState: SyncState,
+    isVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
     val animationSpec = spring<Float>(stiffness = 500F)
     AnimatedVisibility(
         modifier = modifier,
-        visible = syncState.mustBeVisible(),
+        visible = isVisible,
         enter = fadeIn(animationSpec = animationSpec),
         exit = fadeOut(animationSpec = animationSpec),
     ) {
@@ -60,15 +59,15 @@ fun SyncStateView(
         ) {
             Row(
                 modifier = Modifier
-                    .background(color = ElementTheme.colors.bgSubtleSecondary)
-                    .padding(horizontal = 24.dp, vertical = 10.dp),
+                        .background(color = ElementTheme.colors.bgSubtleSecondary)
+                        .padding(horizontal = 24.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier
-                        .progressSemantics()
-                        .size(12.dp),
+                            .progressSemantics()
+                            .size(12.dp),
                     color = ElementTheme.colors.textPrimary,
                     strokeWidth = 1.5.dp,
                 )
@@ -82,20 +81,13 @@ fun SyncStateView(
     }
 }
 
-private fun SyncState.mustBeVisible() = when (this) {
-    SyncState.Idle -> true /* Cold start of the app */
-    SyncState.Running -> false
-    SyncState.Error -> false /* In this case, the network error banner can be displayed */
-    SyncState.Terminated -> true /* The app is resumed and the sync is started again */
-}
-
 @DayNightPreviews
 @Composable
 internal fun SyncStateViewPreview() = ElementPreview {
     // Add a box to see the shadow
     Box(modifier = Modifier.padding(24.dp)) {
         SyncStateView(
-            syncState = SyncState.Idle
+            isVisible = true
         )
     }
 }

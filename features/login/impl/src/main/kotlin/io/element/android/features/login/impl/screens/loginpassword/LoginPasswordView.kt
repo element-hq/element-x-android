@@ -60,11 +60,11 @@ import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
@@ -141,7 +141,7 @@ fun LoginPasswordView(
             // Flexible spacing to keep the submit button at the bottom
             Spacer(modifier = Modifier.weight(1f))
             // Submit
-            ButtonWithProgress(
+            Button(
                 text = stringResource(R.string.screen_login_submit),
                 showProgress = isLoading,
                 onClick = ::submit,

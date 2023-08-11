@@ -29,7 +29,7 @@ import org.matrix.rustcomponents.sdk.NotificationItem
 import org.matrix.rustcomponents.sdk.use
 
 class NotificationMapper(
-    private val sessionId: SessionId,
+    sessionId: SessionId,
     private val clock: SystemClock,
 ) {
     private val notificationContentMapper = NotificationContentMapper(sessionId)
@@ -51,16 +51,14 @@ class NotificationMapper(
                 isEncrypted = item.roomInfo.isEncrypted.orFalse(),
                 isNoisy = item.isNoisy.orFalse(),
                 timestamp = item.timestamp() ?: clock.epochMillis(),
-                content = item.event.use(notificationContentMapper::map),
+                content = item.event.use { notificationContentMapper.map(it) },
                 contentUrl = null,
             )
         }
     }
 }
 
-class NotificationContentMapper(
-    private val sessionId: SessionId,
-) {
+class NotificationContentMapper(private val sessionId: SessionId) {
     private val timelineEventToNotificationContentMapper = TimelineEventToNotificationContentMapper()
 
     fun map(notificationEvent: NotificationEvent): NotificationContent =

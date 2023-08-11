@@ -63,7 +63,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -123,11 +123,10 @@ fun ForwardMessagesView(
                 },
                 actions = {
                     TextButton(
+                        text = stringResource(CommonStrings.action_send),
                         enabled = state.selectedRooms.isNotEmpty(),
                         onClick = { state.eventSink(ForwardMessagesEvents.ForwardEvent) }
-                    ) {
-                        Text(text = stringResource(CommonStrings.action_send))
-                    }
+                    )
                 }
             )
         }

@@ -6,7 +6,7 @@
 android_gradle_plugin = "8.0.2"
 kotlin = "1.8.22"
 ksp = "1.8.22-1.0.11"
-molecule = "1.1.0"
+molecule = "1.2.0"
 
 # AndroidX
 material = "1.9.0"
@@ -45,7 +45,7 @@ dependencycheck = "8.3.1"
 dependencyanalysis = "1.20.0"
 stem = "2.3.0"
 sqldelight = "1.5.5"
-telephoto = "0.4.0"
+telephoto = "0.5.0"
 
 # DI
 dagger = "2.47"
@@ -65,7 +65,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.2.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.2.2"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -145,7 +145,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.37"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.41"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
@@ -163,7 +163,7 @@ maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.0"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
-sentry = "io.sentry:sentry-android:6.27.0"
+sentry = "io.sentry:sentry-android:6.28.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:42b2faa417c1e95f430bf8f6e379adba25ad5ef8"
 
 # Di
@@ -196,7 +196,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ktlint = "org.jlleitschuh.gradle.ktlint:11.5.0"
+ktlint = "org.jlleitschuh.gradle.ktlint:11.5.1"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyanalysis" }

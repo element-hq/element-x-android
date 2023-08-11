@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAbsoluteAlignment
@@ -52,7 +51,6 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -141,18 +139,10 @@ private fun WaitListContent(
             .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         if (state.loginAction !is Async.Success) {
-            TextButton(
-                onClick = onCancelClicked,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black,
-                    disabledContainerColor = Color.White,
-                    disabledContentColor = Color.Black,
-                ),
-            ) {
-                Text(
+            ElementTheme(darkTheme = true) {
+                TextButton(
                     text = stringResource(CommonStrings.action_cancel),
-                    style = ElementTheme.typography.aliasButtonText,
+                    onClick = onCancelClicked,
                 )
             }
         }
@@ -208,22 +198,14 @@ private fun WaitListContent(
             }
         }
         if (state.loginAction is Async.Success) {
-            Button(
-                onClick = { state.eventSink.invoke(WaitListEvents.Continue) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black,
-                    disabledContainerColor = Color.White,
-                    disabledContentColor = Color.Black,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 8.dp)
-            ) {
-                Text(
+            ElementTheme(darkTheme = true) {
+                Button(
                     text = stringResource(id = CommonStrings.action_continue),
-                    style = ElementTheme.typography.aliasButtonText,
+                    onClick = { state.eventSink.invoke(WaitListEvents.Continue) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 8.dp),
                 )
             }
         }

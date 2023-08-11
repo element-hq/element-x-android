@@ -140,7 +140,7 @@ class RustMatrixRoom(
 
     override val avatarUrl: String?
         get() {
-            return innerRoom.avatarUrl()
+            return roomListItem.avatarUrl() ?: innerRoom.avatarUrl()
         }
 
     override val isEncrypted: Boolean
@@ -372,14 +372,13 @@ class RustMatrixRoom(
     }
 
     //TODO handle cancellation, need refactoring of how we are catching errors
-    private suspend fun sendAttachment(handle: () -> SendAttachmentJoinHandle): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+    private suspend fun sendAttachment(handle: () -> SendAttachmentJoinHandle): Result<Unit> {
+        return runCatching {
             handle().use {
                 it.join()
             }
         }
     }
-
 }
 
 
