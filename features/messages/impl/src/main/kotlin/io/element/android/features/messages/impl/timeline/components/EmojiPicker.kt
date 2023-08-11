@@ -51,13 +51,15 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EmojiPicker(
     onEmojiSelected: (Emoji) -> Unit,
-    selectedEmojis: Set<String>,
+    selectedEmojis: ImmutableSet<String>,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -144,6 +146,6 @@ private fun ContentToPreview() {
     EmojiPicker(
         onEmojiSelected = {},
         modifier = Modifier.fillMaxWidth(),
-        selectedEmojis = setOf("😀", "😄", "😃")
+        selectedEmojis = persistentSetOf("😀", "😄", "😃")
     )
 }

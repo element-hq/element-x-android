@@ -49,7 +49,7 @@ class CustomReactionPresenterTests {
     }
 
     @Test
-    fun `present - handle selectxed emojis`() = runTest {
+    fun `present - handle selected emojis`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
