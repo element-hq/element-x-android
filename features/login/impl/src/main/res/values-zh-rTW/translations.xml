@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_continue">"繼續"</string>
+  <string name="screen_account_provider_signin_title">"您即將登入%s"</string>
+  <string name="screen_account_provider_signup_title">"您即將在 %s 建立帳號"</string>
+  <string name="screen_change_account_provider_other">"其他"</string>
+  <string name="screen_login_title">"歡迎回來！"</string>
+  <string name="screen_server_confirmation_title_login">"您即將登入 %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"您即將在 %1$s 建立帳號"</string>
+  <string name="screen_waitlist_message_success">"歡迎使用 %1$s！"</string>
+  <string name="screen_change_server_submit">"繼續"</string>
+  <string name="screen_change_server_title">"選擇您的伺服器"</string>
+  <string name="screen_login_password_hint">"密碼"</string>
+  <string name="screen_login_submit">"繼續"</string>
+  <string name="screen_login_username_hint">"使用者名稱"</string>
+</resources>

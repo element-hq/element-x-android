@@ -95,6 +95,9 @@
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>
+  <string name="common_poll_final_votes">"Final votes: %1$s"</string>
+  <string name="common_poll_total_votes">"Total votes: %1$s"</string>
+  <string name="common_poll_undisclosed_text">"Results will show after the poll has ended"</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
   <string name="common_reactions">"Reactions"</string>
   <string name="common_refreshing">"Refreshing…"</string>
@@ -159,7 +162,7 @@
     <item quantity="other">"%1$d members"</item>
   </plurals>
   <plurals name="common_poll_votes_count">
-    <item quantity="one">"1 vote"</item>
+    <item quantity="one">"%d vote"</item>
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
@@ -178,6 +181,9 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
   <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
   <string name="screen_notification_settings_direct_chats">"Direct chats"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"On direct chats, notify me for"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"On group chats, notify me for"</string>
   <string name="screen_notification_settings_enable_notifications">"Enable notifications on this device"</string>
   <string name="screen_notification_settings_group_chats">"Group chats"</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
