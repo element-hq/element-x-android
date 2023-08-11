@@ -27,7 +27,7 @@ interface SyncService {
     /**
      * Tries to stop the sync. If service is not syncing it has no effect.
      */
-    fun stopSync(): Result<Unit>
+    suspend fun stopSync(): Result<Unit>
 
     /**
      * Flow of [SyncState]. Will be updated as soon as the current [SyncState] changes.

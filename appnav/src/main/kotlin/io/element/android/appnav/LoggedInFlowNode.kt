@@ -141,7 +141,9 @@ class LoggedInFlowNode @AssistedInject constructor(
             },
             onStop = {
                 //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
-                syncService.stopSync()
+                coroutineScope.launch {
+                    syncService.stopSync()
+                }
             },
             onDestroy = {
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.matrixClient) }
