@@ -17,6 +17,8 @@
 package io.element.android.libraries.designsystem.utils
 
 import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -25,7 +27,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.libraries.designsystem.theme.components.ButtonVisuals
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.Snackbar
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -63,6 +69,19 @@ val LocalSnackbarDispatcher = compositionLocalOf<SnackbarDispatcher> { SnackbarD
 @Composable
 fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> {
     return snackbarMessage.collectAsState(initial = null)
+}
+
+@Composable
+fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
+    androidx.compose.material3.SnackbarHost(hostState, modifier) { data ->
+        Snackbar(
+            message = data.visuals.message,
+            action = data.visuals.actionLabel?.let { ButtonVisuals.Text(it, data::performAction) },
+            dismissAction = if (data.visuals.withDismissAction) {
+                ButtonVisuals.Icon(IconSource.Vector(Icons.Default.Close), data::dismiss)
+            } else null,
+        )
+    }
 }
 
 @Composable
