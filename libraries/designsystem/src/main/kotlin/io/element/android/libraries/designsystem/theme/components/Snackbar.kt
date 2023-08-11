@@ -125,7 +125,7 @@ sealed interface ButtonVisuals {
 }
 
 
-@Preview(PreviewGroup.Snackbars)
+@Preview(name = "Snackbar", group = PreviewGroup.Snackbars)
 @Composable
 fun SnackbarPreview() {
     ElementThemedPreview {
@@ -133,7 +133,7 @@ fun SnackbarPreview() {
     }
 }
 
-@Preview(PreviewGroup.Snackbars)
+@Preview(name = "Snackbar with action", group = PreviewGroup.Snackbars)
 @Composable
 fun SnackbarWithActionPreview() {
     ElementThemedPreview {
@@ -141,7 +141,7 @@ fun SnackbarWithActionPreview() {
     }
 }
 
-@Preview(PreviewGroup.Snackbars)
+@Preview(name = "Snackbar with action and close button", group = PreviewGroup.Snackbars)
 @Composable
 fun SnackbarWithActionAndCloseButtonPreview() {
     ElementThemedPreview {
@@ -153,7 +153,7 @@ fun SnackbarWithActionAndCloseButtonPreview() {
     }
 }
 
-@Preview(PreviewGroup.Snackbars)
+@Preview(name = "Snackbar with action on new line", group = PreviewGroup.Snackbars)
 @Composable
 fun SnackbarWithActionOnNewLinePreview() {
     ElementThemedPreview {
@@ -161,7 +161,7 @@ fun SnackbarWithActionOnNewLinePreview() {
     }
 }
 
-@Preview(PreviewGroup.Snackbars)
+@Preview(name = "Snackbar with action and close button on new line", group = PreviewGroup.Snackbars)
 @Composable
 fun SnackbarWithActionOnNewLineAndCloseButtonPreview() {
     ElementThemedPreview {
