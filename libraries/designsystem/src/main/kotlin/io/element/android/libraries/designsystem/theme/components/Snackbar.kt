@@ -19,7 +19,6 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.button.ButtonVisuals
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
@@ -96,34 +96,6 @@ private fun actionContentColor(): Color {
         SnackBarLabelColorDark
     }
 }
-
-sealed interface ButtonVisuals {
-
-    companion object {
-
-    }
-
-    val action: () -> Unit
-
-    @Composable
-    fun Composable()
-
-    data class Text(val text: String, override val action: () -> Unit) : ButtonVisuals {
-        @Composable
-        override fun Composable() {
-            TextButton(text = text, onClick = action)
-        }
-    }
-    data class Icon(val iconSource: IconSource, override val action: () -> Unit) : ButtonVisuals {
-        @Composable
-        override fun Composable() {
-            IconButton(onClick = action) {
-                Icon(iconSource.getPainter(), iconSource.contentDescription)
-            }
-        }
-    }
-}
-
 
 @Preview(name = "Snackbar", group = PreviewGroup.Snackbars)
 @Composable
