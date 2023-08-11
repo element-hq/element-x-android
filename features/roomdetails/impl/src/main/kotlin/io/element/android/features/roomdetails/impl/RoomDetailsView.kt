@@ -67,7 +67,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
-import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -195,7 +194,7 @@ internal fun RoomDetailsTopBar(
                     onDismissRequest = { showMenu = false },
                 ) {
                     DropdownMenuItem(
-                        text = { DropdownMenuItemText(stringResource(id = CommonStrings.action_edit)) },
+                        text = { Text(stringResource(id = CommonStrings.action_edit)) },
                         onClick = {
                             // Explicitly close the menu before handling the action, as otherwise it stays open during the
                             // transition and renders really badly.
