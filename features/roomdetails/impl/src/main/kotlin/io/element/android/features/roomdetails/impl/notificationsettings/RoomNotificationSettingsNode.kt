@@ -51,7 +51,7 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
         RoomNotificationSettingsView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() },
+            onBackPressed = this::navigateUp,
         )
     }
 }

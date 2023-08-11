@@ -306,7 +306,11 @@ internal fun TopicSection(
 @Composable
 internal fun NotificationSection(state: RoomDetailsState, openRoomNotificationSettings: () -> Unit, modifier: Modifier = Modifier) {
     state.roomNotificationSettings?.let {
-        val subtitle = if (it.isDefault) "Default" else "Custom"
+        val subtitle = if (it.isDefault) {
+            stringResource(R.string.screen_room_details_notification_mode_default)
+        } else {
+            stringResource(R.string.screen_room_details_notification_mode_custom)
+        }
         PreferenceCategory(modifier = modifier) {
             PreferenceText(
                 title = stringResource(R.string.screen_room_details_notification_title),

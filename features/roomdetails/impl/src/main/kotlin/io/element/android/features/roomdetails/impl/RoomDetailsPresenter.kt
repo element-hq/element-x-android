@@ -60,9 +60,9 @@ class RoomDetailsPresenter @Inject constructor(
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         LaunchedEffect(Unit) {
-            room.updateMembers()
             room.updateRoomNotificationSettings()
             observeNotificationSettings()
+            room.updateMembers()
         }
 
         val membersState by room.membersStateFlow.collectAsState()

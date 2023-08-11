@@ -26,10 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
@@ -78,13 +77,9 @@ fun RoomNotificationSettingsOption(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-fun RoomPrivacyOptionLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun RoomPrivacyOptionDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun RoomPrivacyOptionLightPreview() = ElementPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
