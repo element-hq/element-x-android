@@ -99,7 +99,7 @@ private fun actionContentColor(): Color {
 
 @Preview(name = "Snackbar", group = PreviewGroup.Snackbars)
 @Composable
-fun SnackbarPreview() {
+internal fun SnackbarPreview() {
     ElementThemedPreview {
         Snackbar(message = "Snackbar supporting text")
     }
@@ -107,7 +107,7 @@ fun SnackbarPreview() {
 
 @Preview(name = "Snackbar with action", group = PreviewGroup.Snackbars)
 @Composable
-fun SnackbarWithActionPreview() {
+internal fun SnackbarWithActionPreview() {
     ElementThemedPreview {
         Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Label", {}))
     }
@@ -115,7 +115,7 @@ fun SnackbarWithActionPreview() {
 
 @Preview(name = "Snackbar with action and close button", group = PreviewGroup.Snackbars)
 @Composable
-fun SnackbarWithActionAndCloseButtonPreview() {
+internal fun SnackbarWithActionAndCloseButtonPreview() {
     ElementThemedPreview {
         Snackbar(
             message = "Snackbar supporting text",
@@ -127,7 +127,7 @@ fun SnackbarWithActionAndCloseButtonPreview() {
 
 @Preview(name = "Snackbar with action on new line", group = PreviewGroup.Snackbars)
 @Composable
-fun SnackbarWithActionOnNewLinePreview() {
+internal fun SnackbarWithActionOnNewLinePreview() {
     ElementThemedPreview {
         Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Label", {}), actionOnNewLine = true)
     }
@@ -135,7 +135,7 @@ fun SnackbarWithActionOnNewLinePreview() {
 
 @Preview(name = "Snackbar with action and close button on new line", group = PreviewGroup.Snackbars)
 @Composable
-fun SnackbarWithActionOnNewLineAndCloseButtonPreview() {
+internal fun SnackbarWithActionOnNewLineAndCloseButtonPreview() {
     ElementThemedPreview {
         Snackbar(
             message = "Snackbar supporting text",
