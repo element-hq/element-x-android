@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_onboarding_sign_in_manually">"Вход в систему вручную"</string>
-  <string name="screen_onboarding_sign_in_with_qr_code">"Войти с помощью QR-кода"</string>
-  <string name="screen_onboarding_sign_up">"Создать учетную запись"</string>
-  <string name="screen_onboarding_subtitle">"Безопасное общение и совместная работа"</string>
-  <string name="screen_onboarding_welcome_message">"Добро пожаловать в самый быстрый Element. Преимущество в скорости и простоте."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Добро пожаловать в %1$s. Supercharged — это скорость и простота."</string>
-  <string name="screen_onboarding_welcome_title">"Будь в своей стихии"</string>
+    <string name="screen_onboarding_sign_in_manually">"Вход в систему вручную"</string>
+    <string name="screen_onboarding_sign_in_with_qr_code">"Войти с помощью QR-кода"</string>
+    <string name="screen_onboarding_sign_up">"Создать учетную запись"</string>
+    <string name="screen_onboarding_subtitle">"Безопасное общение и совместная работа"</string>
+    <string name="screen_onboarding_welcome_message">"Добро пожаловать в самый быстрый Element. Преимущество в скорости и простоте."</string>
+    <string name="screen_onboarding_welcome_subtitle">"Добро пожаловать в %1$s. Supercharged — это скорость и простота."</string>
+    <string name="screen_onboarding_welcome_title">"Будь в своей стихии"</string>
 </resources>

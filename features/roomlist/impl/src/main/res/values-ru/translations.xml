@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_roomlist_a11y_create_message">"Создайте новую беседу или комнату"</string>
-  <string name="screen_roomlist_empty_message">"Начните переписку с отправки сообщения."</string>
-  <string name="screen_roomlist_empty_title">"Пока нет доступных чатов."</string>
-  <string name="screen_roomlist_main_space_title">"Все чаты"</string>
-  <string name="session_verification_banner_message">"Похоже, вы используете новое устройство. Чтобы получить доступ к зашифрованным сообщениям в дальнейшем, проверьте их на другом устройстве."</string>
-  <string name="session_verification_banner_title">"Подтвердите, что это вы"</string>
+    <string name="screen_roomlist_a11y_create_message">"Создайте новую беседу или комнату"</string>
+    <string name="screen_roomlist_empty_message">"Начните переписку с отправки сообщения."</string>
+    <string name="screen_roomlist_empty_title">"Пока нет доступных чатов."</string>
+    <string name="screen_roomlist_main_space_title">"Все чаты"</string>
+    <string name="session_verification_banner_message">"Похоже, вы используете новое устройство. Чтобы получить доступ к зашифрованным сообщениям в дальнейшем, проверьте их на другом устройстве."</string>
+    <string name="session_verification_banner_title">"Подтвердите, что это вы"</string>
 </resources>

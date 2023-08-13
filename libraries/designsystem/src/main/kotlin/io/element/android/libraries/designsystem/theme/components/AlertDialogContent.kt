@@ -286,8 +286,10 @@ private fun AlertDialogFlowRow(
                 val arrangement = Arrangement.End
                 val mainAxisPositions = IntArray(childrenMainAxisSizes.size) { 0 }
                 with(arrangement) {
-                    arrange(mainAxisLayoutSize, childrenMainAxisSizes,
-                        layoutDirection, mainAxisPositions)
+                    arrange(
+                        mainAxisLayoutSize, childrenMainAxisSizes,
+                        layoutDirection, mainAxisPositions
+                    )
                 }
                 placeables.forEachIndexed { j, placeable ->
                     placeable.place(
@@ -322,22 +324,22 @@ internal object DialogContentDefaults {
     val containerColor: Color
         @Composable
         @ReadOnlyComposable
-        get()= ElementTheme.colors.bgCanvasDefault
+        get() = ElementTheme.colors.bgCanvasDefault
 
     val textContentColor: Color
         @Composable
         @ReadOnlyComposable
-        get()= ElementTheme.materialColors.onSurfaceVariant
+        get() = ElementTheme.materialColors.onSurfaceVariant
 
     val titleContentColor: Color
         @Composable
         @ReadOnlyComposable
-        get()= ElementTheme.materialColors.onSurface
+        get() = ElementTheme.materialColors.onSurface
 
     val iconContentColor: Color
         @Composable
         @ReadOnlyComposable
-        get()= ElementTheme.materialColors.primary
+        get() = ElementTheme.materialColors.primary
 }
 
 // Paddings for each of the dialog's parts. Taken from M3 source code.

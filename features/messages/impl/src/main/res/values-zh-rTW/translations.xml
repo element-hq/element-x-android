@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="room_timeline_state_changes">
-    <item quantity="other">"%1$d 個聊天室變更"</item>
-  </plurals>
-  <plurals name="screen_room_timeline_more_reactions">
-    <item quantity="other">"還有 %1$d 個"</item>
-  </plurals>
-  <string name="screen_room_attachment_source_camera">"照相機"</string>
-  <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
-  <string name="screen_room_attachment_source_camera_video">"錄影"</string>
-  <string name="screen_room_attachment_source_files">"附件"</string>
-  <string name="screen_room_attachment_source_location">"位置"</string>
-  <string name="screen_room_invite_again_alert_title">"此聊天室只有您一個人"</string>
-  <string name="screen_room_message_copied">"訊息已複製"</string>
-  <string name="screen_room_no_permission_to_post">"您沒有權限在此聊天室傳送訊息"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"全域設定"</string>
-  <string name="screen_room_notification_settings_default_setting_title">"預設"</string>
-  <string name="screen_room_notification_settings_error_restoring_default">"無法重設為預設模式，請再試一次。"</string>
-  <string name="screen_room_notification_settings_error_setting_mode">"無法設定模式，請再試一次。"</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"所有訊息"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"只限提及與關鍵字"</string>
-  <string name="screen_room_retry_send_menu_send_again_action">"重傳"</string>
-  <string name="screen_room_retry_send_menu_title">"無法傳送您的訊息"</string>
-  <string name="screen_room_retry_send_menu_remove_action">"移除"</string>
+    <plurals name="room_timeline_state_changes">
+        <item quantity="other">"%1$d 個聊天室變更"</item>
+    </plurals>
+    <plurals name="screen_room_timeline_more_reactions">
+        <item quantity="other">"還有 %1$d 個"</item>
+    </plurals>
+    <string name="screen_room_attachment_source_camera">"照相機"</string>
+    <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
+    <string name="screen_room_attachment_source_camera_video">"錄影"</string>
+    <string name="screen_room_attachment_source_files">"附件"</string>
+    <string name="screen_room_attachment_source_location">"位置"</string>
+    <string name="screen_room_invite_again_alert_title">"此聊天室只有您一個人"</string>
+    <string name="screen_room_message_copied">"訊息已複製"</string>
+    <string name="screen_room_no_permission_to_post">"您沒有權限在此聊天室傳送訊息"</string>
+    <string name="screen_room_notification_settings_default_setting_footnote_content_link">"全域設定"</string>
+    <string name="screen_room_notification_settings_default_setting_title">"預設"</string>
+    <string name="screen_room_notification_settings_error_restoring_default">"無法重設為預設模式，請再試一次。"</string>
+    <string name="screen_room_notification_settings_error_setting_mode">"無法設定模式，請再試一次。"</string>
+    <string name="screen_room_notification_settings_mode_all_messages">"所有訊息"</string>
+    <string name="screen_room_notification_settings_mode_mentions_and_keywords">"只限提及與關鍵字"</string>
+    <string name="screen_room_retry_send_menu_send_again_action">"重傳"</string>
+    <string name="screen_room_retry_send_menu_title">"無法傳送您的訊息"</string>
+    <string name="screen_room_retry_send_menu_remove_action">"移除"</string>
 </resources>

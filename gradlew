@@ -122,6 +122,7 @@ app_path = $0
 while
 APP_HOME = ${app_path % "${app_path##*/}"}
 #
+
 leaves a
 trailing /; empty if
 no leading
@@ -159,10 +160,10 @@ warn() {
 
 die() {
     echo
-    echo
+            echo
     "$*"
     echo
-    exit
+            exit
     1
 }
 
