@@ -45,15 +45,14 @@ import kotlinx.coroutines.test.TestScope
 internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
     val timelineEventFormatter = aTimelineEventFormatter()
     val matrixClient = FakeMatrixClient()
-    val dispatchers = testCoroutineDispatchers()
     return TimelineItemsFactory(
-        dispatchers = dispatchers,
+        dispatchers = testCoroutineDispatchers(),
         eventItemFactory = TimelineItemEventFactory(
             contentFactory = TimelineItemContentFactory(
                 messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter(), FileExtensionExtractorWithoutValidation()),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
-                pollFactory = TimelineItemContentPollFactory(matrixClient, dispatchers, this),
+                pollFactory = TimelineItemContentPollFactory(matrixClient),
                 pollEndFactory = TimelineItemContentPollEndFactory(),
                 utdFactory = TimelineItemContentUTDFactory(),
                 roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),

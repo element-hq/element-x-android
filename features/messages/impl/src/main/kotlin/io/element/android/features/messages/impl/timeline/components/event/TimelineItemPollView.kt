@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
 import io.element.android.features.poll.api.ActivePollContentView
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.matrix.api.poll.PollAnswer
@@ -36,8 +35,8 @@ fun TimelineItemPollView(
 ) {
     ActivePollContentView(
         question = content.question,
-        answers = content.answers.toImmutableList(),
-        isDisclosed = content.isDisclosed.value.dataOrNull().orFalse(),
+        answerItems = content.answerItems.toImmutableList(),
+        pollKind = content.pollKind,
         onAnswerSelected = onAnswerSelected,
         modifier = modifier,
     )

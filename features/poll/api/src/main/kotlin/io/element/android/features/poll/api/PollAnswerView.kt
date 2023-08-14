@@ -39,7 +39,6 @@ import io.element.android.libraries.ui.strings.CommonPlurals
 @Suppress("DestructuringDeclarationWithTooManyEntries") // This is necessary to declare the constraints ids
 @Composable
 fun PollAnswerView(
-    showResults: Boolean,
     answerItem: PollAnswerItem,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -49,7 +48,7 @@ fun PollAnswerView(
             .wrapContentHeight()
             .fillMaxWidth()
             .selectable(
-                selected = false,
+                selected = answerItem.isSelected,
                 onClick = onClick,
                 role = Role.RadioButton,
             )
@@ -62,7 +61,7 @@ fun PollAnswerView(
                 start.linkTo(parent.start)
                 end.linkTo(answerText.start)
             },
-            selected = false,
+            selected = answerItem.isSelected,
             onClick = null // null recommended for accessibility with screenreaders
         )
         Text(
@@ -80,7 +79,7 @@ fun PollAnswerView(
                 start.linkTo(answerText.end)
                 end.linkTo(parent.end)
                 bottom.linkTo(answerText.bottom)
-                visibility = if (showResults) Visibility.Visible else Visibility.Gone
+                visibility = if (answerItem.isDisclosed) Visibility.Visible else Visibility.Gone
             },
             text = pluralStringResource(
                 id = CommonPlurals.common_poll_votes_count,
@@ -99,7 +98,7 @@ fun PollAnswerView(
                     top.linkTo(answerText.bottom, margin = 10.dp)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
-                    visibility = if (showResults) Visibility.Visible else Visibility.Gone
+                    visibility = if (answerItem.isDisclosed) Visibility.Visible else Visibility.Gone
 
                 },
             strokeCap = StrokeCap.Round,
@@ -111,7 +110,6 @@ fun PollAnswerView(
 @Composable
 internal fun PollAnswerViewNoResultsPreview() = ElementPreview {
     PollAnswerView(
-        showResults = false,
         answerItem = aPollAnswerItem(),
         onClick = { },
     )
@@ -121,8 +119,7 @@ internal fun PollAnswerViewNoResultsPreview() = ElementPreview {
 @Composable
 internal fun PollAnswerViewWithResultPreview() = ElementPreview {
     PollAnswerView(
-        showResults = true,
-        answerItem = aPollAnswerItem(),
+        answerItem = aPollAnswerItem(isDisclosed = true),
         onClick = { }
     )
 }
