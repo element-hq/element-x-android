@@ -49,9 +49,11 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 @SingleIn(RoomScope::class)
@@ -102,7 +104,7 @@ class MessageComposerPresenter @Inject constructor(
         val text: MutableState<String> = rememberSaveable {
             mutableStateOf("")
         }
-        val ongoingSendAttachment = remember { mutableStateOf<Uri?>(null) }
+        val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
@@ -116,10 +118,9 @@ class MessageComposerPresenter @Inject constructor(
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
                 is AttachmentsState.Sending.Processing -> {
-                    localCoroutineScope.sendAttachment(
+                    ongoingSendAttachmentJob.value = localCoroutineScope.sendAttachment(
                         attachmentStateValue.attachments.first(),
                         attachmentsState,
-                        ongoingSendAttachment,
                     )
                 }
                 else -> Unit
@@ -179,8 +180,9 @@ class MessageComposerPresenter @Inject constructor(
                     // Navigation to the location picker screen is done at the view layer
                 }
                 is MessageComposerEvents.CancelSendAttachment -> {
-                    ongoingSendAttachment.value?.let {
-                        mediaSender.cancel(it)
+                    ongoingSendAttachmentJob.value?.let {
+                        it.cancel()
+                        ongoingSendAttachmentJob.value == null
                     }
                 }
             }
@@ -226,7 +228,6 @@ class MessageComposerPresenter @Inject constructor(
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
         attachmentState: MutableState<AttachmentsState>,
-        ongoingSendAttachment: MutableState<Uri?>,
     ) = when (attachment) {
         is Attachment.Media -> {
             launch {
@@ -234,7 +235,6 @@ class MessageComposerPresenter @Inject constructor(
                     uri = attachment.localMedia.uri,
                     mimeType = attachment.localMedia.info.mimeType,
                     attachmentState = attachmentState,
-                    ongoingSendAttachment = ongoingSendAttachment,
                 )
             }
         }
@@ -275,24 +275,27 @@ class MessageComposerPresenter @Inject constructor(
         uri: Uri,
         mimeType: String,
         attachmentState: MutableState<AttachmentsState>,
-        ongoingSendAttachment: MutableState<Uri?>,
     ) = runCatching {
-            val progressCallback = object : ProgressCallback {
-                override fun onProgress(current: Long, total: Long) {
+        val context = coroutineContext
+        val progressCallback = object : ProgressCallback {
+            override fun onProgress(current: Long, total: Long) {
+                if (context.isActive) {
                     attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total.toFloat())
                 }
             }
-            ongoingSendAttachment.value = uri
-            mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback).getOrThrow()
         }
-        .onSuccess {
-            attachmentState.value = AttachmentsState.None
+        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback).getOrThrow()
+    }
+    .onSuccess {
+        attachmentState.value = AttachmentsState.None
+    }
+    .onFailure { cause ->
+        attachmentState.value = AttachmentsState.None
+        if (cause is CancellationException) {
+            throw cause
+        } else {
+            val snackbarMessage = SnackbarMessage(sendAttachmentError(cause))
+            snackbarDispatcher.post(snackbarMessage)
         }
-        .onFailure { cause ->
-            attachmentState.value = AttachmentsState.None
-            if (cause !is CancellationException) {
-                val snackbarMessage = SnackbarMessage(sendAttachmentError(cause))
-                snackbarDispatcher.post(snackbarMessage)
-            }
-        }
+    }
 }

@@ -29,6 +29,8 @@ import io.element.android.features.messages.impl.attachments.preview.Attachments
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -91,6 +93,21 @@ class AttachmentsPreviewPresenterTest {
             failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
             val clearedState = awaitItem()
             assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Idle)
+        }
+    }
+
+    @Test
+    fun `present - dismissing the progress dialog stops media upload`() = runTest {
+        val presenter = anAttachmentsPreviewPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            initialState.eventSink(AttachmentsPreviewEvents.ClearSendState)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
         }
     }
 

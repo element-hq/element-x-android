@@ -17,27 +17,22 @@
 package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
-import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.flatMapCatching
-import io.element.android.libraries.core.result.onCancellation
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.Job
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.coroutineContext
 
 class MediaSender @Inject constructor(
     private val preProcessor: MediaPreProcessor,
     private val room: MatrixRoom,
 ) {
 
-    private val ongoingUploads = ConcurrentHashMap<Uri, MediaUploadToken>()
+    private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
+    val hasOngoingMediaUploads get() = ongoingUploadJobs.isNotEmpty()
 
     suspend fun sendMedia(
         uri: Uri,
@@ -45,7 +40,6 @@ class MediaSender @Inject constructor(
         compressIfPossible: Boolean,
         progressCallback: ProgressCallback? = null
     ): Result<Unit> {
-        ongoingUploads[uri] = MediaUploadToken(coroutineContext, null)
         return preProcessor
             .process(
                 uri = uri,
@@ -54,18 +48,18 @@ class MediaSender @Inject constructor(
                 compressIfPossible = compressIfPossible
             )
             .flatMapCatching { info ->
-                room.sendMedia(uri, info, progressCallback)
-            }.onFailure {
-                ongoingUploads.remove(uri)
+                room.sendMedia(info, progressCallback)
+            }.onFailure { error ->
+                val job = ongoingUploadJobs.remove(Job)
+                if (error !is CancellationException) {
+                    job?.cancel()
+                }
+            }.onSuccess {
+                ongoingUploadJobs.remove(Job)
             }
     }
 
-    fun cancel(uri: Uri) {
-        ongoingUploads.remove(uri)?.cancel()
-    }
-
     private suspend fun MatrixRoom.sendMedia(
-        originalUri: Uri,
         uploadInfo: MediaUploadInfo,
         progressCallback: ProgressCallback?,
     ): Result<Unit> {
@@ -106,17 +100,8 @@ class MediaSender @Inject constructor(
 
         return handler
             .flatMapCatching { uploadHandler ->
-                ongoingUploads[originalUri] = MediaUploadToken(coroutineContext, uploadHandler)
+                ongoingUploadJobs[Job] = uploadHandler
                 uploadHandler.await()
-            }.onSuccess {
-                ongoingUploads.remove(originalUri)
             }
-    }
-}
-
-data class MediaUploadToken(private val context: CoroutineContext, private val uploadHandler: MediaUploadHandler?) {
-    fun cancel() {
-        uploadHandler?.cancel()
-        context.cancel()
     }
 }
