@@ -29,8 +29,6 @@ import io.element.android.features.messages.impl.attachments.preview.Attachments
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.media.local.LocalMedia
-import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor

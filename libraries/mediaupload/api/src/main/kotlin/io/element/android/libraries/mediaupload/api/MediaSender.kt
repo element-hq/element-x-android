@@ -49,12 +49,14 @@ class MediaSender @Inject constructor(
             )
             .flatMapCatching { info ->
                 room.sendMedia(info, progressCallback)
-            }.onFailure { error ->
+            }
+            .onFailure { error ->
                 val job = ongoingUploadJobs.remove(Job)
                 if (error !is CancellationException) {
                     job?.cancel()
                 }
-            }.onSuccess {
+            }
+            .onSuccess {
                 ongoingUploadJobs.remove(Job)
             }
     }
