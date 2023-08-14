@@ -1,0 +1,1 @@
+Allow cancelling media upload
