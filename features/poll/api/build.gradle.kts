@@ -16,6 +16,7 @@
 
 plugins {
     id("io.element.android-compose-library")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -29,4 +30,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(projects.libraries.matrix.api)
+
+    ksp(libs.showkase.processor)
 }
