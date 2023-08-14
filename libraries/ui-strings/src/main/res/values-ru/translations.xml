@@ -95,6 +95,9 @@
   <string name="common_password">"Пароль"</string>
   <string name="common_people">"Пользователи"</string>
   <string name="common_permalink">"Постоянная ссылка"</string>
+  <string name="common_poll_final_votes">"Итоговые голоса: %1$s"</string>
+  <string name="common_poll_total_votes">"Всего голосов: %1$s"</string>
+  <string name="common_poll_undisclosed_text">"Результаты будут показаны после завершения опроса"</string>
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
   <string name="common_reactions">"Реакции"</string>
   <string name="common_refreshing">"Обновление…"</string>
@@ -180,6 +183,9 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Дополнительные параметры"</string>
   <string name="screen_notification_settings_calls_label">"Аудио и видео звонки"</string>
   <string name="screen_notification_settings_direct_chats">"Прямые чаты"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"При обновлении настроек уведомления произошла ошибка."</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Уведомлять меня в личных чатах"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Уведомлять меня в групповых чатах"</string>
   <string name="screen_notification_settings_enable_notifications">"Включить уведомления на данном устройстве"</string>
   <string name="screen_notification_settings_group_chats">"Групповые чаты"</string>
   <string name="screen_notification_settings_mentions_section_title">"Упоминания"</string>

@@ -9,8 +9,9 @@
   <string name="screen_room_attachment_source_camera_photo">"Сделать фото"</string>
   <string name="screen_room_attachment_source_camera_video">"Записать видео"</string>
   <string name="screen_room_attachment_source_files">"Вложение"</string>
-  <string name="screen_room_attachment_source_gallery">"Фото и Видео библиотека"</string>
+  <string name="screen_room_attachment_source_gallery">"Фото и Видео"</string>
   <string name="screen_room_attachment_source_location">"Местоположение"</string>
+  <string name="screen_room_attachment_source_poll">"Опрос"</string>
   <string name="screen_room_encrypted_history_banner">"В настоящее время история сообщений недоступна в этой комнате"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <string name="screen_room_invite_again_alert_message">"Хотите пригласить их снова?"</string>
