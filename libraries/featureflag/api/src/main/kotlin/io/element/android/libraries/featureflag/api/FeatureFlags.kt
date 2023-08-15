@@ -25,5 +25,9 @@ enum class FeatureFlags(
     LocationSharing(
         key = "feature.locationsharing",
         title = "Allow user to share location",
+    ),
+    Polls(
+        key = "feature.polls",
+        title = "Render poll events in the timeline and allow user to create polls",
     )
 }
