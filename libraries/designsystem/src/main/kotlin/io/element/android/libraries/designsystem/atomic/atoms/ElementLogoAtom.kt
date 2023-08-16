@@ -44,6 +44,7 @@ import io.element.android.libraries.theme.ElementTheme
 fun ElementLogoAtom(
     size: ElementLogoAtomSize,
     modifier: Modifier = Modifier,
+    useBlurredShadow: Boolean = canUseBlurMaskFilter(),
     darkTheme: Boolean = isSystemInDarkTheme(),
 ) {
     val blur = if (darkTheme) 160.dp else 24.dp
@@ -57,7 +58,7 @@ fun ElementLogoAtom(
             .border(size.borderWidth, borderColor, RoundedCornerShape(size.cornerRadius)),
         contentAlignment = Alignment.Center,
     ) {
-        if (canUseBlurMaskFilter()) {
+        if (useBlurredShadow) {
             Box(
                 Modifier
                     .size(size.outerSize)
@@ -138,7 +139,19 @@ internal fun ElementLogoAtomLargePreview() {
 }
 
 @Composable
-private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize) {
+@DayNightPreviews
+internal fun ElementLogoAtomMediumNoBlurShadowPreview() {
+    ContentToPreview(ElementLogoAtomSize.Medium, useBlurredShadow = false)
+}
+
+@Composable
+@DayNightPreviews
+internal fun ElementLogoAtomLargeNoBlurShadowPreview() {
+    ContentToPreview(ElementLogoAtomSize.Large, useBlurredShadow = false)
+}
+
+@Composable
+private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize, useBlurredShadow: Boolean = true) {
     ElementPreview {
         Box(
             Modifier
@@ -146,7 +159,7 @@ private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize) {
                 .background(ElementTheme.colors.bgSubtlePrimary),
             contentAlignment = Alignment.Center
         ) {
-            ElementLogoAtom(elementLogoAtomSize)
+            ElementLogoAtom(elementLogoAtomSize, useBlurredShadow = useBlurredShadow)
         }
     }
 }
