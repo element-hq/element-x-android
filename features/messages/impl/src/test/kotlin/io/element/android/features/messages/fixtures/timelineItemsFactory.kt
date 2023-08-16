@@ -37,6 +37,7 @@ import io.element.android.features.messages.impl.timeline.util.FileExtensionExtr
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -52,14 +53,14 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter(), FileExtensionExtractorWithoutValidation()),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
-                pollFactory = TimelineItemContentPollFactory(matrixClient),
+                pollFactory = TimelineItemContentPollFactory(matrixClient, FakeFeatureFlagService()),
                 pollEndFactory = TimelineItemContentPollEndFactory(),
                 utdFactory = TimelineItemContentUTDFactory(),
                 roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
                 profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
                 stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
                 failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
-                failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory()
+                failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
             ),
             matrixClient = matrixClient,
         ),

@@ -19,5 +19,6 @@ package io.element.android.libraries.featureflag.ui.model
 data class FeatureUiModel(
     val key: String,
     val title: String,
+    val description: String?,
     val isEnabled: Boolean
 )
