@@ -72,19 +72,19 @@ internal fun SimpleAlertDialogContent(
                     // Having this 3rd action is discouraged, see https://m3.material.io/components/dialogs/guidelines#e13b68f5-e367-4275-ad6f-c552ee8e358f
                     TextButton(
                         text = thirdButtonText,
-                        buttonSize = ButtonSize.Medium,
+                        size = ButtonSize.Medium,
                         onClick = onThirdButtonClicked,
                     )
                 }
                 TextButton(
                     text = cancelText,
-                    buttonSize = ButtonSize.Medium,
+                    size = ButtonSize.Medium,
                     onClick = onCancelClicked,
                 )
                 if (submitText != null) {
                     Button(
                         text = submitText,
-                        buttonSize = ButtonSize.Medium,
+                        size = ButtonSize.Medium,
                         onClick = onSubmitClicked,
                     )
                 }

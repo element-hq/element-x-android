@@ -135,7 +135,7 @@ internal fun DefaultInviteSummaryRow(
                     text = stringResource(CommonStrings.action_decline),
                     onClick = onDeclineClicked,
                     modifier = Modifier.weight(1f),
-                    buttonSize = ButtonSize.Medium,
+                    size = ButtonSize.Medium,
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -144,7 +144,7 @@ internal fun DefaultInviteSummaryRow(
                     text = stringResource(CommonStrings.action_accept),
                     onClick = onAcceptClicked,
                     modifier = Modifier.weight(1f),
-                    buttonSize = ButtonSize.Medium,
+                    size = ButtonSize.Medium,
                 )
             }
         }

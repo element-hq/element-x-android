@@ -18,15 +18,21 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.theme.ElementTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +49,11 @@ fun MediumTopAppBar(
         title = title,
         modifier = modifier,
         navigationIcon = navigationIcon,
-        actions = actions,
+        actions = {
+            CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textActionPrimary) {
+                actions()
+            }
+        },
         windowInsets = windowInsets,
         colors = colors,
         scrollBehavior = scrollBehavior,
@@ -58,5 +68,14 @@ internal fun MediumTopAppBarPreview() =
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview() {
-    MediumTopAppBar(title = { Text(text = "Title") })
+    MediumTopAppBar(
+        title = { Text(text = "Title") },
+        navigationIcon = { BackButton(onClick = {}) },
+        actions = {
+            TextButton(text = "Action", onClick = {})
+            IconButton(onClick = {}) {
+                Icon(imageVector = Icons.Default.Share, contentDescription = null)
+            }
+        }
+    )
 }
