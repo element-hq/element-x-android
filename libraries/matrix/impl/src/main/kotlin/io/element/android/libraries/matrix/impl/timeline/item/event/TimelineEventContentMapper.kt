@@ -22,6 +22,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.PollEndContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
@@ -30,6 +32,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.poll.map
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import org.matrix.rustcomponents.sdk.EncryptedMessage as RustEncryptedMessage
@@ -90,6 +93,21 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                     info = kind.info.map(),
                     url = kind.url,
                 )
+            }
+            is TimelineItemContentKind.Poll -> {
+                PollContent(
+                    question = kind.question,
+                    kind = kind.kind.map(),
+                    maxSelections = kind.maxSelections,
+                    answers = kind.answers.map { answer -> answer.map() },
+                    votes = kind.votes.mapValues { vote ->
+                        vote.value.map { userId -> UserId(userId) }
+                    },
+                    endTime = kind.endTime,
+                )
+            }
+            is TimelineItemContentKind.PollEnd -> {
+                PollEndContent(startEventId = kind.startEventId)
             }
             is TimelineItemContentKind.UnableToDecrypt -> {
                 UnableToDecryptContent(

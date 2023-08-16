@@ -62,6 +62,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -236,6 +237,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     val textContent = remember(event.content) { formatter.format(event) }
 
     when (event.content) {
+        is TimelineItemPollContent, // TODO Polls: handle summary
         is TimelineItemTextBasedContent,
         is TimelineItemStateContent,
         is TimelineItemEncryptedContent,
