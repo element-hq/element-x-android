@@ -202,6 +202,7 @@ dependencies {
     allFeaturesImpl(rootDir, logger)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
+    implementation(projects.features.call)
     anvil(projects.anvilcodegen)
 
     coreLibraryDesugaring(libs.android.desugar)
