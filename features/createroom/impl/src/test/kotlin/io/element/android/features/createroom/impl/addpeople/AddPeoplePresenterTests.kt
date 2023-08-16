@@ -16,7 +16,7 @@
 
 package io.element.android.features.createroom.impl.addpeople
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -43,7 +43,7 @@ class AddPeoplePresenterTests {
 
     @Test
     fun `present - initial state`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // TODO This doesn't actually test anything...

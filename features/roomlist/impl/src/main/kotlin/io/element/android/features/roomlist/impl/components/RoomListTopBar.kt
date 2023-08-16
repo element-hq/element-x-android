@@ -43,10 +43,11 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.applyScaleDown
+import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
-import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
@@ -114,7 +115,11 @@ private fun DefaultRoomListTopBar(
             val fontStyle = if (scrollBehavior.state.collapsedFraction > 0.5)
                 ElementTheme.typography.aliasScreenTitle
             else
-                ElementTheme.typography.fontHeadingLgBold
+                ElementTheme.typography.fontHeadingLgBold.copy(
+                    // Due to a limitation of MediumTopAppBar, and to avoid the text to be truncated,
+                    // ensure that the font size will never be bigger than 28.dp.
+                    fontSize = 28.dp.applyScaleDown().toSp()
+                )
             Text(
                 style = fontStyle,
                 text = stringResource(id = R.string.screen_roomlist_main_space_title)
@@ -163,7 +168,7 @@ private fun DefaultRoomListTopBar(
                         showMenu = false
                         onMenuActionClicked(RoomListMenuAction.InviteFriends)
                     },
-                    text = { DropdownMenuItemText(stringResource(id = CommonStrings.action_invite)) },
+                    text = { Text(stringResource(id = CommonStrings.action_invite)) },
                     leadingIcon = {
                         Icon(
                             Icons.Outlined.Share,
@@ -177,7 +182,7 @@ private fun DefaultRoomListTopBar(
                         showMenu = false
                         onMenuActionClicked(RoomListMenuAction.ReportBug)
                     },
-                    text = { DropdownMenuItemText(stringResource(id = CommonStrings.common_report_a_bug)) },
+                    text = { Text(stringResource(id = CommonStrings.common_report_a_bug)) },
                     leadingIcon = {
                         Icon(
                             Icons.Outlined.BugReport,

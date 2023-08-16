@@ -56,7 +56,7 @@ allprojects {
         // activate all available (even unstable) rules.
         allRules = true
         // point to your custom config defining rules to run, overwriting default behavior
-        config = files("$rootDir/tools/detekt/detekt.yml")
+        config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
         detektPlugins("io.nlopez.compose.rules:detekt:0.1.12")
@@ -89,6 +89,14 @@ allprojects {
     // Dependency check
     apply {
         plugin("org.owasp.dependencycheck")
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        // Warnings are potential errors, so stop ignoring them
+        // This is disabled by default, but the CI will enforce this.
+        // You can override by passing `-PallWarningsAsErrors=true` in the command line
+        // Or add a line with "allWarningsAsErrors=true" in your ~/.gradle/gradle.properties file
+        kotlinOptions.allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
     }
 }
 

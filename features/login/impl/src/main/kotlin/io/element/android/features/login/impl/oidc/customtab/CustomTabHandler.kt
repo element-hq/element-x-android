@@ -41,8 +41,7 @@ class CustomTabHandler @Inject constructor(
         if (packageName != null) {
             customTabsServiceConnection = object : CustomTabsServiceConnection() {
                 override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
-                    customTabsClient = client
-                        .also { it.warmup(0L) }
+                    customTabsClient = client.apply { warmup(0L) }
                     prefetchUrl(url)
                 }
 

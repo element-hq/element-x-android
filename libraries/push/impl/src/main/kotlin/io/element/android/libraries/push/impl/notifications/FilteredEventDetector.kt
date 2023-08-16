@@ -27,7 +27,7 @@ class FilteredEventDetector @Inject constructor(
      * Returns true if the given event should be ignored.
      * Used to skip notifications if a non expected message is received.
      */
-    fun shouldBeIgnored(notifiableEvent: NotifiableEvent): Boolean {
+    fun shouldBeIgnored(@Suppress("UNUSED_PARAMETER") notifiableEvent: NotifiableEvent): Boolean {
         /* TODO EAx
         val session = activeSessionDataSource.currentValue?.orNull() ?: return false
 

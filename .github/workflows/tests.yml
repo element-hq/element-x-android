@@ -2,7 +2,8 @@ name: Test
 
 on:
   workflow_dispatch:
-  pull_request: { }
+  pull_request:
+  merge_group:
   push:
     branches: [ main, develop ]
 
@@ -15,6 +16,8 @@ jobs:
   tests:
     name: Runs unit tests
     runs-on: ubuntu-latest
+    # Don't run in the merge queue again if the branch is up to date with `develop`
+    if: github.event.merge_group.base_ref != 'refs/heads/develop'
 
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
@@ -33,7 +36,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.6.1
+        uses: gradle/gradle-build-action@v2.7.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 

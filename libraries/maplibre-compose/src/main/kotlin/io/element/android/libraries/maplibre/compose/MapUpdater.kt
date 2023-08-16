@@ -39,6 +39,7 @@ internal class MapPropertiesNode(
     style: Style,
     context: Context,
     cameraPositionState: CameraPositionState,
+    locationSettings: MapLocationSettings,
 ) : MapNode {
 
     init {
@@ -46,7 +47,13 @@ internal class MapPropertiesNode(
             LocationComponentActivationOptions.Builder(context, style)
                 .locationComponentOptions(
                     LocationComponentOptions.builder(context)
-                        .pulseEnabled(true)
+                        .backgroundTintColor(locationSettings.backgroundTintColor.toArgb())
+                        .foregroundTintColor(locationSettings.foregroundTintColor.toArgb())
+                        .backgroundStaleTintColor(locationSettings.backgroundStaleTintColor.toArgb())
+                        .foregroundStaleTintColor(locationSettings.foregroundStaleTintColor.toArgb())
+                        .accuracyColor(locationSettings.accuracyColor.toArgb())
+                        .pulseEnabled(locationSettings.pulseEnabled)
+                        .pulseColor(locationSettings.pulseColor.toArgb())
                         .build()
                 )
                 .locationEngineRequest(
@@ -116,9 +123,9 @@ internal class MapPropertiesNode(
 @Composable
 internal inline fun MapUpdater(
     cameraPositionState: CameraPositionState,
-    mapLocationSettings: MapLocationSettings,
-    mapUiSettings: MapUiSettings,
-    mapSymbolManagerSettings: MapSymbolManagerSettings,
+    locationSettings: MapLocationSettings,
+    uiSettings: MapUiSettings,
+    symbolManagerSettings: MapSymbolManagerSettings,
 ) {
     val mapApplier = currentComposer.applier as MapApplier
     val map = mapApplier.map
@@ -132,21 +139,22 @@ internal inline fun MapUpdater(
                 style = style,
                 context = context,
                 cameraPositionState = cameraPositionState,
+                locationSettings = locationSettings,
             )
         },
         update = {
-            set(mapLocationSettings.locationEnabled) { map.locationComponent.isLocationComponentEnabled = it }
+            set(locationSettings.locationEnabled) { map.locationComponent.isLocationComponentEnabled = it }
 
-            set(mapUiSettings.compassEnabled) { map.uiSettings.isCompassEnabled = it }
-            set(mapUiSettings.rotationGesturesEnabled) { map.uiSettings.isRotateGesturesEnabled = it }
-            set(mapUiSettings.scrollGesturesEnabled) { map.uiSettings.isScrollGesturesEnabled = it }
-            set(mapUiSettings.tiltGesturesEnabled) { map.uiSettings.isTiltGesturesEnabled = it }
-            set(mapUiSettings.zoomGesturesEnabled) { map.uiSettings.isZoomGesturesEnabled = it }
-            set(mapUiSettings.logoGravity) { map.uiSettings.logoGravity = it }
-            set(mapUiSettings.attributionGravity) { map.uiSettings.attributionGravity = it }
-            set(mapUiSettings.attributionTintColor) { map.uiSettings.setAttributionTintColor(it.toArgb()) }
+            set(uiSettings.compassEnabled) { map.uiSettings.isCompassEnabled = it }
+            set(uiSettings.rotationGesturesEnabled) { map.uiSettings.isRotateGesturesEnabled = it }
+            set(uiSettings.scrollGesturesEnabled) { map.uiSettings.isScrollGesturesEnabled = it }
+            set(uiSettings.tiltGesturesEnabled) { map.uiSettings.isTiltGesturesEnabled = it }
+            set(uiSettings.zoomGesturesEnabled) { map.uiSettings.isZoomGesturesEnabled = it }
+            set(uiSettings.logoGravity) { map.uiSettings.logoGravity = it }
+            set(uiSettings.attributionGravity) { map.uiSettings.attributionGravity = it }
+            set(uiSettings.attributionTintColor) { map.uiSettings.setAttributionTintColor(it.toArgb()) }
 
-            set(mapSymbolManagerSettings.iconAllowOverlap) { symbolManager.iconAllowOverlap = it }
+            set(symbolManagerSettings.iconAllowOverlap) { symbolManager.iconAllowOverlap = it }
 
             update(cameraPositionState) { this.cameraPositionState = it }
         }

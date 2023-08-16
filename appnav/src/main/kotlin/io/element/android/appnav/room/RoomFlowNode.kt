@@ -96,7 +96,8 @@ class RoomFlowNode @AssistedInject constructor(
                 } else {
                     backstack.newRoot(NavTarget.Loading)
                 }
-            }.launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

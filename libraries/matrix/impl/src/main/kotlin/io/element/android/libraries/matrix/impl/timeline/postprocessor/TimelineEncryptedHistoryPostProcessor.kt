@@ -19,19 +19,23 @@ package io.element.android.libraries.matrix.impl.timeline.postprocessor
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Date
-import java.util.UUID
 
 class TimelineEncryptedHistoryPostProcessor(
+    private val dispatcher: CoroutineDispatcher,
     private val lastLoginTimestamp: Date?,
     private val isRoomEncrypted: Boolean,
     private val paginationStateFlow: MutableStateFlow<MatrixTimeline.PaginationState>,
 ) {
 
-    fun process(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
-        if (!isRoomEncrypted || lastLoginTimestamp == null) return items
+    suspend fun process(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> = withContext(dispatcher) {
+        Timber.d("Process on Thread=${Thread.currentThread()}")
+        if (!isRoomEncrypted || lastLoginTimestamp == null) return@withContext items
 
         val filteredItems = replaceWithEncryptionHistoryBannerIfNeeded(items)
         // Disable back pagination
@@ -44,7 +48,7 @@ class TimelineEncryptedHistoryPostProcessor(
                 )
             }
         }
-        return filteredItems
+        filteredItems
     }
 
     private fun replaceWithEncryptionHistoryBannerIfNeeded(list: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
@@ -70,5 +74,4 @@ class TimelineEncryptedHistoryPostProcessor(
         val timestamp = (item as? MatrixTimelineItem.Event)?.event?.timestamp ?: return false
         return timestamp <= lastLoginTimestamp!!.time
     }
-
 }

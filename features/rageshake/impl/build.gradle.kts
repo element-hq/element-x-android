@@ -32,6 +32,7 @@ anvil {
 dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
+    implementation(projects.services.toolbox.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.network)
@@ -56,6 +57,4 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.rageshake.test)
-
-    androidTestImplementation(libs.test.junitext)
 }

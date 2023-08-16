@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -188,29 +189,28 @@ private fun AnalyticsOptInFooter(
         modifier = modifier,
     ) {
         Button(
+            text = stringResource(id = CommonStrings.action_ok),
             onClick = onTermsAccepted,
             modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(text = stringResource(id = CommonStrings.action_ok))
-        }
+        )
         TextButton(
+            text = stringResource(id = CommonStrings.action_not_now),
+            size = ButtonSize.Medium,
             onClick = onTermsDeclined,
             modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(text = stringResource(id = CommonStrings.action_not_now))
-        }
+        )
     }
 }
 
 @Preview
 @Composable
-fun AnalyticsOptInViewLightPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewLight {
+internal fun AnalyticsOptInViewLightPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewLight {
     ContentToPreview(state)
 }
 
 @Preview
 @Composable
-fun AnalyticsOptInViewDarkPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewDark {
+internal fun AnalyticsOptInViewDarkPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewDark {
     ContentToPreview(state)
 }
 

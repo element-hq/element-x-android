@@ -29,7 +29,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemRedactedView(
-    content: TimelineItemRedactedContent,
+    @Suppress("UNUSED_PARAMETER") content: TimelineItemRedactedContent,
     extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {

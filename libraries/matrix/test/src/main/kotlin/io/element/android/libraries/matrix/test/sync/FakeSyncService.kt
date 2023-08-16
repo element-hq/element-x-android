@@ -34,7 +34,7 @@ class FakeSyncService : SyncService {
         return Result.success(Unit)
     }
 
-    override fun stopSync(): Result<Unit> {
+    override suspend fun stopSync(): Result<Unit> {
         syncStateFlow.value = SyncState.Terminated
         return Result.success(Unit)
     }

@@ -17,7 +17,6 @@
 package io.element.android.features.rageshake.api.detection
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 
 @Immutable

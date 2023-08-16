@@ -23,5 +23,5 @@ import com.bumble.appyx.core.plugin.plugins
 interface NodeInputs : Plugin
 
 inline fun <reified I : NodeInputs> Node.inputs(): I {
-    return plugins<I>().firstOrNull() ?: throw RuntimeException("Make sure to actually pass NodeInputs plugin to your node")
+    return requireNotNull(plugins<I>().firstOrNull()) { "Make sure to actually pass NodeInputs plugin to your node" }
 }

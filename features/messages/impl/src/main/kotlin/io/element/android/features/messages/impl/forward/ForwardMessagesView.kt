@@ -63,7 +63,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -82,6 +82,7 @@ fun ForwardMessagesView(
         return
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onRoomRemoved(roomSummaryDetails: RoomSummaryDetails) {
         // TODO toggle selection when multi-selection is enabled
         state.eventSink(ForwardMessagesEvents.RemoveSelectedRoom)
@@ -122,11 +123,10 @@ fun ForwardMessagesView(
                 },
                 actions = {
                     TextButton(
+                        text = stringResource(CommonStrings.action_send),
                         enabled = state.selectedRooms.isNotEmpty(),
                         onClick = { state.eventSink(ForwardMessagesEvents.ForwardEvent) }
-                    ) {
-                        Text(text = stringResource(CommonStrings.action_send))
-                    }
+                    )
                 }
             )
         }
@@ -282,12 +282,12 @@ private fun ForwardingErrorDialog(onDismiss: () -> Unit, modifier: Modifier = Mo
 
 @Preview
 @Composable
-fun ForwardMessagesViewLightPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
+internal fun ForwardMessagesViewLightPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun ForwardMessagesViewDarkPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
+internal fun ForwardMessagesViewDarkPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

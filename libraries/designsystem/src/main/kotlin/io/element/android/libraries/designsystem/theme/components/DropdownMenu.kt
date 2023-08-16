@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import io.element.android.libraries.theme.ElementTheme
 
-private val minMenuWidth = 200.dp
+// Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=1032%3A44063&mode=design&t=rsNegTbEVLYAXL76-1
 
 @Composable
 fun DropdownMenu(
@@ -38,19 +38,17 @@ fun DropdownMenu(
     properties: PopupProperties = PopupProperties(focusable = true),
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val bgColor = if (ElementTheme.isLightTheme) {
-        ElementTheme.materialColors.background
-    } else {
-        ElementTheme.colors.bgSubtlePrimary
-    }
+    // Note: the internal shape corner radius should be 8dp, but there is a 4p value hardcoded in the internal Surface component
     androidx.compose.material3.DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
         modifier = modifier
-            .background(color = bgColor)
+            .background(color = ElementTheme.colors.bgCanvasDefault)
             .widthIn(min = minMenuWidth),
         offset = offset,
         properties = properties,
         content = content
     )
 }
+
+private val minMenuWidth = 200.dp

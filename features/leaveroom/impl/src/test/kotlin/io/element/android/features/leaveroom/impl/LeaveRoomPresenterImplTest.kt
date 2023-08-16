@@ -16,7 +16,7 @@
 
 package io.element.android.features.leaveroom.impl
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -40,7 +40,7 @@ class LeaveRoomPresenterImplTest {
     @Test
     fun `present - initial state hides all dialogs`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -60,7 +60,7 @@ class LeaveRoomPresenterImplTest {
                 )
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -80,7 +80,7 @@ class LeaveRoomPresenterImplTest {
                 )
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -100,7 +100,7 @@ class LeaveRoomPresenterImplTest {
                 )
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -122,7 +122,7 @@ class LeaveRoomPresenterImplTest {
             },
             roomMembershipObserver = roomMembershipObserver
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -145,7 +145,7 @@ class LeaveRoomPresenterImplTest {
                 )
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -167,7 +167,7 @@ class LeaveRoomPresenterImplTest {
                 )
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -191,7 +191,7 @@ class LeaveRoomPresenterImplTest {
                 )
             }
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

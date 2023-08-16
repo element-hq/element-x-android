@@ -24,7 +24,7 @@ import androidx.compose.material3.TimePickerLayoutType
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.components.dialogs.AlertDialogContent
+import io.element.android.libraries.designsystem.theme.components.AlertDialogContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview

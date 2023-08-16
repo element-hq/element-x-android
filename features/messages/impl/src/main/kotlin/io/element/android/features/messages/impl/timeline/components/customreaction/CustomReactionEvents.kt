@@ -16,8 +16,8 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
-import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
 
 sealed interface CustomReactionEvents {
-    data class UpdateSelectedEvent(val eventId: EventId?) : CustomReactionEvents
+    data class UpdateSelectedEvent(val event: TimelineItem.Event?) : CustomReactionEvents
 }

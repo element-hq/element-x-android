@@ -68,12 +68,12 @@ fun MatrixUserHeaderPlaceholder(
 
 @Preview
 @Composable
-fun MatrixUserHeaderPlaceholderLightPreview() =
+internal fun MatrixUserHeaderPlaceholderLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun MatrixUserHeaderPlaceholderDarkPreview() =
+internal fun MatrixUserHeaderPlaceholderDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @Composable

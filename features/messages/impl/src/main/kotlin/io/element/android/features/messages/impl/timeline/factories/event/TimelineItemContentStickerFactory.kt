@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class TimelineItemContentStickerFactory @Inject constructor() {
 
-    fun create(content: StickerContent): TimelineItemEventContent {
+    fun create(@Suppress("UNUSED_PARAMETER") content: StickerContent): TimelineItemEventContent {
         return TimelineItemUnknownContent
     }
 }

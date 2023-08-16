@@ -13,6 +13,7 @@
   * [Kotlin](#kotlin)
   * [Changelog](#changelog)
   * [Code quality](#code-quality)
+    * [detekt](#detekt)
     * [ktlint](#ktlint)
     * [knit](#knit)
     * [lint](#lint)
@@ -50,7 +51,7 @@ Note: please make sure that the configuration is `app` and not `samples.minimal`
 
 ## Strings
 
-The strings of the project are managed externally using [https://localazy.com](https://localazy.com) and shared with ElementX iOS.
+The strings of the project are managed externally using [https://localazy.com](https://localazy.com) and shared with Element X iOS.
 
 ### I want to add new strings to the project
 
@@ -60,14 +61,12 @@ Please follow the naming rules for the key. More details in [the dedicated secti
 
 ### I want to help translating Element
 
-Please note that the Localazy project is not open yet for external contributions.
-
 To help translating, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
 
-- If you want to fix an issue with an English string, please open an issue on the github project of ElementX (Android or iOS). Only the core team can modify or add English strings.
+- If you want to fix an issue with an English string, please open an issue on the github project of Element X (Android or iOS). Only the core team can modify or add English strings.
 - If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
 
-More informations can be found [in this README.md](./tools/localazy/README.md).
+More information can be found [in this README.md](./tools/localazy/README.md).
 
 ## I want to submit a PR to fix an issue
 
@@ -101,10 +100,16 @@ See https://github.com/twisted/towncrier#news-fragments if you need more details
 Make sure the following commands execute without any error:
 
 <pre>
-./gradlew check
+./tools/quality/check.sh
 </pre>
 
 Some separate commands can also be run, see below.
+
+#### detekt
+
+<pre>
+./gradlew detekt
+</pre>
 
 #### ktlint
 
@@ -153,7 +158,7 @@ Make sure the following commands execute without any error:
 
 ### Tests
 
-Element X is currently supported on Android Lollipop (API 21+): please test your change on an Android device (or Android emulator) running with API 21. Many issues can happen (including crashes) on older devices.
+Element X is currently supported on Android Marshmallow (API 23+): please test your change on an Android device (or Android emulator) running with API 23. Many issues can happen (including crashes) on older devices.
 Also, if possible, please test your change on a real device. Testing on Android emulator may not be sufficient.
 
 You should consider adding Unit tests with your PR, and also integration tests (AndroidTest). Please refer to [this document](./docs/integration_tests.md) to install and run the integration test environment.
@@ -166,7 +171,18 @@ For instance, when updating the image `src` of an ImageView, please also conside
 
 ### Jetpack Compose
 
-When adding or editing `@Composable`, make sure that you create a `@Preview` function, with suffix `Preview`. This will also create a UI test automatically.
+When adding or editing `@Composable`, make sure that you create an internal function annotated with `@DayNightPreviews`, with a name suffixed by `Preview`, and having `ElementPreview` as the root composable.
+
+Example:
+```kotlin
+@DayNightPreviews
+@Composable
+internal fun PinIconPreview() = ElementPreview {
+    PinIcon()
+}
+```
+
+This will allow to preview the composable in both light and dark mode in Android Studio. This will also automatically add UI tests. The GitHub action [Record screenshots](https://github.com/vector-im/element-x-android/actions/workflows/recordScreenshots.yml) has to be run to record the new screenshots. The PR reviewer can trigger this for you if you're not part of the core team. 
 
 ### Authors
 

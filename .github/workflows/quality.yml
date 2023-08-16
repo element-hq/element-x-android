@@ -2,7 +2,8 @@ name: Code Quality Checks
 
 on:
   workflow_dispatch:
-  pull_request: { }
+  pull_request:
+  merge_group:
   push:
     branches: [ main, develop ]
 
@@ -15,6 +16,8 @@ jobs:
   checkScript:
     name: Search for forbidden patterns
     runs-on: ubuntu-latest
+    # Don't run in the merge queue again if the branch is up to date with `develop`
+    if: github.event.merge_group.base_ref != 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v3
       - name: Run code quality check suite
@@ -23,6 +26,8 @@ jobs:
   check:
     name: Project Check Suite
     runs-on: ubuntu-latest
+    # Don't run in the merge queue again if the branch is up to date with `develop`
+    if: github.event.merge_group.base_ref != 'refs/heads/develop'
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('check-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-develop-{0}', github.sha) || format('check-{0}', github.ref) }}
@@ -39,7 +44,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.6.1
+        uses: gradle/gradle-build-action@v2.7.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Run code quality check suite
@@ -65,7 +70,7 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@11.2.6
+        uses: danger/danger-js@11.2.8
         with:
           args: "--dangerfile ./tools/danger/dangerfile-lint.js"
         env:

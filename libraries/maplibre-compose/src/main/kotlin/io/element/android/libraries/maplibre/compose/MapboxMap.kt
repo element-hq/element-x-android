@@ -124,9 +124,9 @@ public fun MapboxMap(
             ) {
                 MapUpdater(
                     cameraPositionState = currentCameraPositionState,
-                    mapUiSettings = currentUiSettings,
-                    mapLocationSettings = currentMapLocationSettings,
-                    mapSymbolManagerSettings = currentSymbolManagerSettings,
+                    uiSettings = currentUiSettings,
+                    locationSettings = currentMapLocationSettings,
+                    symbolManagerSettings = currentSymbolManagerSettings,
                 )
                 CompositionLocalProvider(
                     LocalCameraPositionState provides cameraPositionState,
@@ -236,7 +236,7 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
             Lifecycle.Event.ON_DESTROY -> {
                 //handled in onDispose
             }
-            else -> throw IllegalStateException()
+            Lifecycle.Event.ON_ANY -> error("ON_ANY should never be used")
         }
         previousState.value = event
     }

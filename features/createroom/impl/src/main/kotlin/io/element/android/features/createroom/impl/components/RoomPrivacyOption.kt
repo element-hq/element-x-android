@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.configureroom.RoomPrivacyItem
 import io.element.android.features.createroom.impl.configureroom.roomPrivacyItems
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -94,11 +93,11 @@ fun RoomPrivacyOption(
 
 @Preview
 @Composable
-fun RoomPrivacyOptionLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RoomPrivacyOptionLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun RoomPrivacyOptionDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RoomPrivacyOptionDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

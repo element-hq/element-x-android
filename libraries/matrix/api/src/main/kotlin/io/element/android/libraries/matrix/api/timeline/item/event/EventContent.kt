@@ -23,6 +23,8 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.poll.PollAnswer
+import io.element.android.libraries.matrix.api.poll.PollKind
 
 sealed interface EventContent
 
@@ -44,7 +46,7 @@ sealed interface InReplyTo {
     /** The event details are available. */
     data class Ready(
         val eventId: EventId,
-        val content: MessageContent,
+        val content: EventContent,
         val senderId: UserId,
         val senderDisplayName: String?,
         val senderAvatarUrl: String?,
@@ -67,6 +69,19 @@ data class StickerContent(
     val body: String,
     val info: ImageInfo,
     val url: String
+) : EventContent
+
+data class PollContent(
+    val question: String,
+    val kind: PollKind,
+    val maxSelections: ULong,
+    val answers: List<PollAnswer>,
+    val votes: Map<String, List<UserId>>,
+    val endTime: ULong?
+) : EventContent
+
+data class PollEndContent(
+    val startEventId: String
 ) : EventContent
 
 data class UnableToDecryptContent(

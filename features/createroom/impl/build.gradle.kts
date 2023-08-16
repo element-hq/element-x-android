@@ -66,7 +66,5 @@ dependencies {
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.usersearch.test)
 
-    androidTestImplementation(libs.test.junitext)
-
     ksp(libs.showkase.processor)
 }

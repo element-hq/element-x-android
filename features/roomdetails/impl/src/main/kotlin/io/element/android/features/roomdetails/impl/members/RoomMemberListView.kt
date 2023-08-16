@@ -45,7 +45,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -212,14 +211,9 @@ private fun RoomMemberListTopBar(
         actions = {
             if (canInvite) {
                 TextButton(
-                    modifier = Modifier.padding(horizontal = 8.dp),
+                    text = stringResource(CommonStrings.action_invite),
                     onClick = onInvitePressed,
-                ) {
-                    Text(
-                        text = stringResource(CommonStrings.action_invite),
-                        style = ElementTheme.typography.aliasButtonText,
-                    )
-                }
+                )
             }
         }
     )
@@ -257,12 +251,12 @@ private fun RoomMemberSearchBar(
 
 @Preview
 @Composable
-fun RoomMemberListLightPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) =
+internal fun RoomMemberListLightPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun RoomMemberListDarkPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) =
+internal fun RoomMemberListDarkPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

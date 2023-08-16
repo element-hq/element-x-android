@@ -19,12 +19,10 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class TestNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        // Internal broadcast to any one interested
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
+        // TODO The test notification has been clicked, notify the ui
     }
 }

@@ -26,28 +26,33 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
-import kotlinx.coroutines.CompletableDeferred
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
+import io.element.android.libraries.matrix.impl.util.TaskHandleBag
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackPaginationStatus
+import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.Date
+import java.util.concurrent.atomic.AtomicBoolean
 
 private const val INITIAL_MAX_SIZE = 50
 
@@ -57,6 +62,7 @@ class RustMatrixTimeline(
     private val innerRoom: Room,
     private val dispatcher: CoroutineDispatcher,
     private val lastLoginTimestamp: Date?,
+    private val onNewSyncedEvent: () -> Unit,
 ) : MatrixTimeline {
 
     private val initLatch = CompletableDeferred<Unit>()
@@ -73,6 +79,7 @@ class RustMatrixTimeline(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = matrixRoom.isEncrypted,
         paginationStateFlow = _paginationState,
+        dispatcher = dispatcher,
     )
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
@@ -93,27 +100,60 @@ class RustMatrixTimeline(
 
     override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState.asStateFlow()
 
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.sample(50)
-        .mapLatest { items ->
-            encryptedHistoryPostProcessor.process(items)
-        }
+    init {
+        Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
 
-    internal suspend fun postItems(items: List<TimelineItem>) {
+        val taskHandleBag = TaskHandleBag()
+        roomCoroutineScope.launch(dispatcher) {
+            innerRoom.timelineDiffFlow { initialList ->
+                postItems(initialList)
+            }.onEach { diffs ->
+                if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
+                    onNewSyncedEvent()
+                }
+                postDiffs(diffs)
+            }.launchIn(this)
+
+            innerRoom.backPaginationStatusFlow()
+                .onEach {
+                    postPaginationStatus(it)
+                }
+                .launchIn(this)
+
+            taskHandleBag += fetchMembers().getOrNull()
+        }.invokeOnCompletion {
+            taskHandleBag.dispose()
+        }
+    }
+
+    private suspend fun fetchMembers() = withContext(dispatcher) {
+        initLatch.await()
+        runCatching {
+            innerRoom.fetchMembers()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
+        encryptedHistoryPostProcessor.process(items)
+    }
+
+    private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
         // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
         items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
+            ensureActive()
             timelineDiffProcessor.postItems(it)
         }
         isInit.set(true)
         initLatch.complete(Unit)
     }
 
-    internal suspend fun postDiff(timelineDiff: TimelineDiff) {
+    private suspend fun postDiffs(diffs: List<TimelineDiff>) {
         initLatch.await()
-        timelineDiffProcessor.postDiff(timelineDiff)
+        timelineDiffProcessor.postDiffs(diffs)
     }
 
-    internal fun postPaginationStatus(status: BackPaginationStatus) {
+    private fun postPaginationStatus(status: BackPaginationStatus) {
         _paginationState.getAndUpdate { currentPaginationState ->
             if (hasEncryptionHistoryBanner()) {
                 return@getAndUpdate currentPaginationState.copy(

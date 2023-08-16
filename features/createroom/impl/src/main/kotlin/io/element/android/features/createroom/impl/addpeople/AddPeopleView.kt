@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.features.createroom.impl.userlist.UserListEvents
@@ -36,7 +35,6 @@ import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -103,16 +101,11 @@ fun AddPeopleViewTopBar(
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
+            val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip
             TextButton(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                text = stringResource(id = textActionResId),
                 onClick = onNextPressed,
-            ) {
-                val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip
-                Text(
-                    text = stringResource(id = textActionResId),
-                    style = ElementTheme.typography.aliasButtonText,
-                )
-            }
+            )
         }
     )
 }

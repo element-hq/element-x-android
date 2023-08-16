@@ -29,9 +29,7 @@ class BuildtimeFeatureFlagProvider @Inject constructor() :
     override suspend fun isFeatureEnabled(feature: Feature): Boolean {
         return if (feature is FeatureFlags) {
             when (feature) {
-                FeatureFlags.CollapseRoomStateEvents -> false
-                FeatureFlags.ShowStartChatFlow -> false
-                FeatureFlags.ShowMediaUploadingFlow -> false
+                FeatureFlags.LocationSharing -> true
             }
         } else {
             false

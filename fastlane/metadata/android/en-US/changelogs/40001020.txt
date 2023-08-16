@@ -1,0 +1,2 @@
+First release of Element X 🚀!
+Full changelog: https://github.com/vector-im/element-x-android/releases

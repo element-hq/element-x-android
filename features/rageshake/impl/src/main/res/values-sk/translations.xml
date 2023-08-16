@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Priložiť snímku obrazovky"</string>
-  <string name="screen_bug_report_contact_me">"V prípade ďalších otázok ma môžete kontaktovať"</string>
+  <string name="screen_bug_report_contact_me">"V prípade ďalších otázok ma môžete kontaktovať."</string>
   <string name="screen_bug_report_contact_me_title">"Kontaktujte ma"</string>
   <string name="screen_bug_report_edit_screenshot">"Upraviť snímku obrazovky"</string>
   <string name="screen_bug_report_editor_description">"Popíšte prosím chybu. Čo ste urobili? Čo ste očakávali, že sa stane? Čo sa skutočne stalo. Prosím, uveďte čo najviac podrobností."</string>

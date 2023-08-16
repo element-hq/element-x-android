@@ -18,6 +18,8 @@
 
 package io.element.android.libraries.maplibre.compose
 
+import androidx.compose.ui.graphics.Color
+
 internal val DefaultMapLocationSettings = MapLocationSettings()
 
 /**
@@ -28,4 +30,11 @@ internal val DefaultMapLocationSettings = MapLocationSettings()
  */
 public data class MapLocationSettings(
     public val locationEnabled: Boolean = false,
+    public val backgroundTintColor: Color = Color.Unspecified,
+    public val foregroundTintColor: Color = Color.Unspecified,
+    public val backgroundStaleTintColor: Color = Color.Unspecified,
+    public val foregroundStaleTintColor: Color = Color.Unspecified,
+    public val accuracyColor: Color = Color.Unspecified,
+    public val pulseEnabled: Boolean = false,
+    public val pulseColor: Color = Color.Unspecified
 )

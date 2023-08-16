@@ -28,9 +28,9 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
+import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -49,13 +49,20 @@ class ActionListPresenter @Inject constructor(
         }
 
         val displayEmojiReactions by remember {
-            derivedStateOf { (target.value as? ActionListState.Target.Success)?.event?.isRemote == true }
+            derivedStateOf {
+                val event = (target.value as? ActionListState.Target.Success)?.event
+                event?.isRemote == true && event.content.canReact()
+            }
         }
 
         fun handleEvents(event: ActionListEvents) {
             when (event) {
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
-                is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(event.event, target)
+                is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(
+                    timelineItem = event.event,
+                    userCanRedact = event.canRedact,
+                    target = target,
+                )
             }
         }
 
@@ -66,7 +73,11 @@ class ActionListPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.Event, target: MutableState<ActionListState.Target>) = launch {
+    private fun CoroutineScope.computeForMessage(
+        timelineItem: TimelineItem.Event,
+        userCanRedact: Boolean,
+        target: MutableState<ActionListState.Target>
+    ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
         val actions =
             when (timelineItem.content) {
@@ -103,7 +114,7 @@ class ActionListPresenter @Inject constructor(
                     if (!timelineItem.isMine) {
                         add(TimelineItemAction.ReportContent)
                     }
-                    if (timelineItem.isMine) {
+                    if (timelineItem.isMine || userCanRedact) {
                         add(TimelineItemAction.Redact)
                     }
                 }

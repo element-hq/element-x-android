@@ -33,7 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
 
 private val CORNER_RADIUS = 8.dp

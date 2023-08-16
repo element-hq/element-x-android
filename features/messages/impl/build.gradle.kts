@@ -34,6 +34,7 @@ dependencies {
     anvil(projects.anvilcodegen)
     api(projects.features.messages.api)
     implementation(projects.features.location.api)
+    implementation(projects.features.poll.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
@@ -52,7 +53,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.datetime)
     implementation(libs.accompanist.flowlayout)
-    implementation(libs.androidx.recyclerview)
     implementation(libs.jsoup)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.constraintlayout.compose)
@@ -78,6 +78,5 @@ dependencies {
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(libs.test.mockk)
 
-    androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)
 }

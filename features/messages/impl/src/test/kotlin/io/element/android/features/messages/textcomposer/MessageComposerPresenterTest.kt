@@ -19,7 +19,7 @@
 package io.element.android.features.messages.textcomposer
 
 import android.net.Uri
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
@@ -68,7 +68,7 @@ class MessageComposerPresenterTest {
         givenResult(mockk()) // Uri is not available in JVM, so the only way to have a non-null Uri is using Mockk
     }
     private val featureFlagService = FakeFeatureFlagService(
-        mapOf(FeatureFlags.ShowMediaUploadingFlow.key to true)
+        mapOf(FeatureFlags.LocationSharing.key to true)
     )
     private val mediaPreProcessor = FakeMediaPreProcessor()
     private val snackbarDispatcher = SnackbarDispatcher()
@@ -78,14 +78,16 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isFullScreen).isFalse()
             assertThat(initialState.text).isEqualTo("")
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal(""))
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
+            assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.attachmentsState).isEqualTo(AttachmentsState.None)
             assertThat(initialState.isSendButtonVisible).isFalse()
         }
@@ -94,9 +96,10 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - toggle fullscreen`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessageComposerEvents.ToggleFullScreenState)
             val fullscreenState = awaitItem()
@@ -110,9 +113,10 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change message`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessageComposerEvents.UpdateText(A_MESSAGE))
             val withMessageState = awaitItem()
@@ -128,9 +132,10 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change mode to edit`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             var state = awaitItem()
             val mode = anEditMode()
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
@@ -146,9 +151,10 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change mode to reply`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             var state = awaitItem()
             val mode = aReplyMode()
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
@@ -163,9 +169,10 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change mode to quote`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             var state = awaitItem()
             val mode = aQuoteMode()
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
@@ -180,9 +187,10 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - send message`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessageComposerEvents.UpdateText(A_MESSAGE))
             val withMessageState = awaitItem()
@@ -202,9 +210,10 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.text).isEqualTo("")
             val mode = anEditMode()
@@ -233,9 +242,10 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.text).isEqualTo("")
             val mode = anEditMode(eventId = null, transactionId = A_TRANSACTION_ID)
@@ -264,9 +274,10 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.text).isEqualTo("")
             val mode = aReplyMode()
@@ -291,9 +302,10 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Open attachments menu`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showAttachmentSourcePicker).isEqualTo(false)
             initialState.eventSink(MessageComposerEvents.AddAttachment)
@@ -304,9 +316,10 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Dismiss attachments menu`() = runTest {
         val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.AddAttachment)
             skipItems(1)
@@ -338,9 +351,10 @@ class MessageComposerPresenterTest {
                 )
             )
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
             val previewingState = awaitItem()
@@ -372,9 +386,10 @@ class MessageComposerPresenterTest {
                 )
             )
         )
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
             val previewingState = awaitItem()
@@ -390,9 +405,10 @@ class MessageComposerPresenterTest {
             givenResult(null) // Simulate a user canceling the flow
             givenMimeType(MimeTypes.Images)
         }
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
             // No crashes here, otherwise it fails
@@ -410,9 +426,10 @@ class MessageComposerPresenterTest {
             )
         )
         val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
             val sendingState = awaitItem()
@@ -431,9 +448,10 @@ class MessageComposerPresenterTest {
     fun `present - Take photo`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera)
             val previewingState = awaitItem()
@@ -447,9 +465,10 @@ class MessageComposerPresenterTest {
     fun `present - Record video`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera)
             val previewingState = awaitItem()
@@ -464,9 +483,10 @@ class MessageComposerPresenterTest {
             givenSendMediaResult(Result.failure(Exception()))
         }
         val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
             val sendingState = awaitItem()

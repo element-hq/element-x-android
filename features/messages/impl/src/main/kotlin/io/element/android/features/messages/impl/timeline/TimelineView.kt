@@ -81,6 +81,7 @@ fun TimelineView(
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     onReactionClicked: (emoji: String, TimelineItem.Event) -> Unit,
+    onReactionLongClicked: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -94,6 +95,7 @@ fun TimelineView(
 
     val lazyListState = rememberLazyListState()
 
+    @Suppress("UNUSED_PARAMETER")
     fun inReplyToClicked(eventId: EventId) {
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
@@ -120,6 +122,7 @@ fun TimelineView(
                     onUserDataClick = onUserDataClicked,
                     inReplyToClick = ::inReplyToClicked,
                     onReactionClick = onReactionClicked,
+                    onReactionLongClick = onReactionLongClicked,
                     onMoreReactionsClick = onMoreReactionsClicked,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = onSwipeToReply,
@@ -137,6 +140,7 @@ fun TimelineView(
         }
 
         TimelineScrollHelper(
+            isTimelineEmpty = state.timelineItems.isEmpty(),
             lazyListState = lazyListState,
             hasNewItems = state.hasNewItems,
             onScrollFinishedAt = ::onScrollFinishedAt
@@ -154,6 +158,7 @@ fun TimelineItemRow(
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
+    onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
@@ -185,6 +190,7 @@ fun TimelineItemRow(
                     onUserDataClick = onUserDataClick,
                     inReplyToClick = inReplyToClick,
                     onReactionClick = onReactionClick,
+                    onReactionLongClick = onReactionLongClick,
                     onMoreReactionsClick = onMoreReactionsClick,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = { onSwipeToReply(timelineItem) },
@@ -223,6 +229,7 @@ fun TimelineItemRow(
                                 onUserDataClick = onUserDataClick,
                                 onTimestampClicked = onTimestampClicked,
                                 onReactionClick = onReactionClick,
+                                onReactionLongClick = onReactionLongClick,
                                 onMoreReactionsClick = onMoreReactionsClick,
                                 onSwipeToReply = {},
                             )
@@ -236,6 +243,7 @@ fun TimelineItemRow(
 
 @Composable
 private fun BoxScope.TimelineScrollHelper(
+    isTimelineEmpty: Boolean,
     lazyListState: LazyListState,
     hasNewItems: Boolean,
     onScrollFinishedAt: (Int) -> Unit,
@@ -253,8 +261,8 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    LaunchedEffect(isScrollFinished) {
-        if (isScrollFinished) {
+    LaunchedEffect(isScrollFinished, isTimelineEmpty) {
+        if (isScrollFinished && !isTimelineEmpty) {
             // Notify the parent composable about the first visible item index when scrolling finishes
             onScrollFinishedAt(lazyListState.firstVisibleItemIndex)
         }
@@ -309,7 +317,7 @@ private fun JumpToBottomButton(
 
 @DayNightPreviews
 @Composable
-fun TimelineViewPreview(
+internal fun TimelineViewPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
 ) = ElementPreview {
     val timelineItems = aTimelineItemList(content)
@@ -320,6 +328,7 @@ fun TimelineViewPreview(
         onUserDataClicked = {},
         onMessageLongClicked = {},
         onReactionClicked = { _, _ -> },
+        onReactionLongClicked = { _, _ -> },
         onMoreReactionsClicked = {},
         onSwipeToReply = {},
     )

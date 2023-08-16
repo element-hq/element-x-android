@@ -56,6 +56,7 @@ class FakeMatrixRoom(
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
+    canRedact: Boolean = false,
 ) : MatrixRoom {
 
     private var ignoreResult: Result<Unit> = Result.success(Unit)
@@ -66,6 +67,7 @@ class FakeMatrixRoom(
     private var joinRoomResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
+    private var canRedactResult = Result.success(canRedact)
     private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
     private val canSendEventResults = mutableMapOf<MessageEventType, Result<Boolean>>()
     private var sendMediaResult = Result.success(Unit)
@@ -100,7 +102,6 @@ class FakeMatrixRoom(
     private val _sentLocations = mutableListOf<SendLocationInvocation>()
     val sentLocations: List<SendLocationInvocation> = _sentLocations
 
-
     var invitedUserId: UserId? = null
         private set
 
@@ -128,9 +129,11 @@ class FakeMatrixRoom(
 
     override val timeline: MatrixTimeline = matrixTimeline
 
-    override fun open(): Result<Unit> {
-        return Result.success(Unit)
-    }
+    override fun subscribeToSync() = Unit
+
+    override fun unsubscribeFromSync() = Unit
+
+    override fun destroy() = Unit
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = simulateLongTask {
         userDisplayNameResult
@@ -204,6 +207,10 @@ class FakeMatrixRoom(
 
     override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
         return canInviteResult
+    }
+
+    override suspend fun canUserRedact(userId: UserId): Result<Boolean> {
+        return canRedactResult
     }
 
     override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
@@ -282,8 +289,6 @@ class FakeMatrixRoom(
         _sentLocations.add(SendLocationInvocation(body, geoUri, description, zoomLevel, assetType))
         return sendLocationResult
     }
-
-    override fun close() = Unit
 
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable

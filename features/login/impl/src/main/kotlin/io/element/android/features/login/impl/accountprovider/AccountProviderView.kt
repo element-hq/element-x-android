@@ -30,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -115,12 +114,12 @@ fun AccountProviderView(
 
 @Preview
 @Composable
-fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
+internal fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewLight { ContentToPreview(item) }
 
 @Preview
 @Composable
-fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
+internal fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewDark { ContentToPreview(item) }
 
 @Composable

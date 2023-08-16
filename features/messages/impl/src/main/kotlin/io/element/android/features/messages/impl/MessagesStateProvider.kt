@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.messagecomposer.aMessageCompose
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.architecture.Async
@@ -29,6 +30,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import kotlinx.collections.immutable.persistentSetOf
 
 open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
@@ -38,14 +40,19 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
             aMessagesState().copy(userHasPermissionToSendMessage = false),
             aMessagesState().copy(showReinvitePrompt = true),
+            aMessagesState().copy(
+                roomName = Async.Uninitialized,
+                roomAvatar = Async.Uninitialized,
+            ),
         )
 }
 
 fun aMessagesState() = MessagesState(
     roomId = RoomId("!id:domain"),
-    roomName = "Room name",
-    roomAvatar = AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom),
+    roomName = Async.Success("Room name"),
+    roomAvatar = Async.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
     userHasPermissionToSendMessage = true,
+    userHasPermissionToRedact = false,
     composerState = aMessageComposerState().copy(
         text = "Hello",
         isFullScreen = false,
@@ -61,6 +68,11 @@ fun aMessagesState() = MessagesState(
     actionListState = anActionListState(),
     customReactionState = CustomReactionState(
         selectedEventId = null,
+        eventSink = {},
+        selectedEmoji = persistentSetOf(),
+    ),
+    reactionSummaryState = ReactionSummaryState(
+        target = null,
         eventSink = {},
     ),
     hasNetworkConnection = true,

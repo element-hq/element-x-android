@@ -16,6 +16,8 @@
 
 package io.element.android.features.rageshake.api.reporter
 
+import java.io.File
+
 interface BugReporter {
     /**
      * Send a bug report.
@@ -43,4 +45,14 @@ interface BugReporter {
         customFields: Map<String, String>? = null,
         listener: BugReporterListener?
     )
+
+    /**
+     * Clean the log files if needed to avoid wasting disk space.
+     */
+    fun cleanLogDirectoryIfNeeded()
+
+    /**
+     * Provide the log directory.
+     */
+    fun logDirectory(): File
 }

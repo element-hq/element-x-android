@@ -26,6 +26,7 @@ import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
@@ -39,7 +40,7 @@ class DefaultUserPushStoreFactory @Inject constructor(
     }
 
     // We can have only one class accessing a single data store, so keep a cache of them.
-    private val cache = mutableMapOf<SessionId, UserPushStore>()
+    private val cache = ConcurrentHashMap<SessionId, UserPushStore>()
     override fun create(userId: SessionId): UserPushStore {
         return cache.getOrPut(userId) {
             UserPushStoreDataStore(

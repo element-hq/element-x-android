@@ -29,7 +29,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemUnknownView(
-    content: TimelineItemUnknownContent,
+    @Suppress("UNUSED_PARAMETER") content: TimelineItemUnknownContent,
     extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {

@@ -57,7 +57,5 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
 
-    androidTestImplementation(libs.test.junitext)
-
     ksp(libs.showkase.processor)
 }

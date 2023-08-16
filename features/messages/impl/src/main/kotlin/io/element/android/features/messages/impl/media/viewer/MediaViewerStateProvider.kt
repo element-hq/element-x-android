@@ -32,7 +32,7 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
         get() = sequenceOf(
             aMediaViewerState(),
             aMediaViewerState(Async.Loading()),
-            aMediaViewerState(Async.Failure(IllegalStateException())),
+            aMediaViewerState(Async.Failure(IllegalStateException("error"))),
             aMediaViewerState(
                 Async.Success(
                     LocalMedia(Uri.EMPTY, anImageInfo())

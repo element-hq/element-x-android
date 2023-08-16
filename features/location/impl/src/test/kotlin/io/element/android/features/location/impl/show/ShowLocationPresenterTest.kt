@@ -16,7 +16,7 @@
 
 package io.element.android.features.location.impl.show
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
@@ -44,7 +44,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `emits initial state with no location permission`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -59,7 +59,7 @@ class ShowLocationPresenterTest {
     fun `emits initial state with location permission`() = runTest {
         permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -74,7 +74,7 @@ class ShowLocationPresenterTest {
     fun `emits initial state with partial location permission`() = runTest {
         permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.SomeGranted))
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -87,7 +87,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `uses action to share location`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -102,7 +102,7 @@ class ShowLocationPresenterTest {
     fun `centers on user location`() = runTest {
         permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()

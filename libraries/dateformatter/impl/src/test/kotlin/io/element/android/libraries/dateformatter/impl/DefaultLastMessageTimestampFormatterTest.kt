@@ -101,7 +101,7 @@ class DefaultLastMessageTimestampFormatterTest {
      * Create DefaultLastMessageFormatter and set current time to the provided date.
      */
     private fun createFormatter(@Suppress("SameParameterValue") currentDate: String): LastMessageTimestampFormatter {
-        val clock = FakeClock().also { it.givenInstant(Instant.parse(currentDate)) }
+        val clock = FakeClock().apply { givenInstant(Instant.parse(currentDate)) }
         val localDateTimeProvider = LocalDateTimeProvider(clock, TimeZone.UTC)
         val dateFormatters = DateFormatters(Locale.US, clock, TimeZone.UTC)
         return DefaultLastMessageTimestampFormatter(localDateTimeProvider, dateFormatters)

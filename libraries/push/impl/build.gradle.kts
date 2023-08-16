@@ -52,9 +52,6 @@ dependencies {
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
 
-    // TODO Temporary use the deprecated LocalBroadcastManager, to be changed later.
-    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
-
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.truth)

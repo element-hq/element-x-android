@@ -56,6 +56,12 @@ fun DeveloperSettingsView(
         RageshakePreferencesView(
             state = state.rageshakeState,
         )
+        PreferenceCategory(title = "Crash", showDivider = false) {
+            PreferenceText(
+                title = "Crash the app 💥",
+                onClick = { error("This crash is a test.") }
+            )
+        }
         val cache = state.cacheSize
         PreferenceCategory(title = "Cache", showDivider = false) {
             PreferenceText(
@@ -90,12 +96,12 @@ fun FeatureListContent(
 
 @Preview
 @Composable
-fun DeveloperSettingsViewLightPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
+internal fun DeveloperSettingsViewLightPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun DeveloperSettingsViewDarkPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
+internal fun DeveloperSettingsViewDarkPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

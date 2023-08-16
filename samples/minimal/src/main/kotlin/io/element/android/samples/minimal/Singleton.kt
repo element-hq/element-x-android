@@ -17,19 +17,41 @@
 package io.element.android.samples.minimal
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.impl.tracing.setupTracing
-import io.element.android.libraries.matrix.api.tracing.TracingConfigurations
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
+import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
+import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
+import io.element.android.libraries.matrix.impl.tracing.RustTracingService
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
-import timber.log.Timber
 
 object Singleton {
 
+    private val buildMeta = BuildMeta(
+        isDebuggable = true,
+        buildType = BuildType.DEBUG,
+        applicationName = "EAX-Minimal",
+        applicationId = "io.element.android.samples.minimal",
+        lowPrivacyLoggingEnabled = false,
+        versionName = "0.1.0",
+        versionCode = 1,
+        gitRevision = "TODO", // BuildConfig.GIT_REVISION,
+        gitRevisionDate = "TODO", //  BuildConfig.GIT_REVISION_DATE,
+        gitBranchName = "TODO", //  BuildConfig.GIT_BRANCH_NAME,
+        flavorDescription = "TODO", //  BuildConfig.FLAVOR_DESCRIPTION,
+        flavorShortDescription = "TODO", //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
+    )
+
     init {
-        Timber.plant(Timber.DebugTree())
-        setupTracing(TracingConfigurations.debug)
+        val tracingConfiguration = TracingConfiguration(
+            filterConfiguration = TracingFilterConfigurations.debug,
+            writesToLogcat = true,
+            writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
+        )
+        RustTracingService(buildMeta).setupTracing(tracingConfiguration)
     }
 
     val appScope = MainScope() + CoroutineName("Minimal Scope")

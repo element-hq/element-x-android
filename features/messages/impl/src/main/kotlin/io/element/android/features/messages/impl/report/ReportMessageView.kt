@@ -44,11 +44,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -150,7 +150,7 @@ fun ReportMessageView(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            ButtonWithProgress(
+            Button(
                 text = stringResource(CommonStrings.action_send),
                 enabled = state.reason.isNotBlank() && !isSending,
                 showProgress = isSending,
@@ -168,12 +168,12 @@ fun ReportMessageView(
 
 @Preview
 @Composable
-fun ReportMessageViewLightPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
+internal fun ReportMessageViewLightPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun ReportMessageViewDarkPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
+internal fun ReportMessageViewDarkPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

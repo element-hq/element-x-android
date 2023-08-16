@@ -24,8 +24,6 @@ import androidx.compose.material.icons.outlined.DeveloperMode
 import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.VerifiedUser
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -41,6 +39,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
@@ -65,13 +64,7 @@ fun PreferencesRootView(
         modifier = modifier,
         onBackPressed = onBackPressed,
         title = stringResource(id = CommonStrings.common_settings),
-        snackbarHost = {
-            SnackbarHost(snackbarHostState) { data ->
-                Snackbar(
-                    snackbarData = data,
-                )
-            }
-        }
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         UserPreferences(state.myUser)
         if (state.showCompleteVerification) {
@@ -82,11 +75,13 @@ fun PreferencesRootView(
             )
             Divider()
         }
-        PreferenceText(
-            title = stringResource(id = CommonStrings.common_analytics),
-            icon = Icons.Outlined.InsertChart,
-            onClick = onOpenAnalytics,
-        )
+        if (state.showAnalyticsSettings) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.common_analytics),
+                icon = Icons.Outlined.InsertChart,
+                onClick = onOpenAnalytics,
+            )
+        }
         PreferenceText(
             title = stringResource(id = CommonStrings.action_report_bug),
             icon = Icons.Outlined.BugReport,
@@ -127,12 +122,12 @@ fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
 
 @LargeHeightPreview
 @Composable
-fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
+internal fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewLight { ContentToPreview(matrixUser) }
 
 @LargeHeightPreview
 @Composable
-fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
+internal fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }
 
 @Composable

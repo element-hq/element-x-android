@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.forward
 
-import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 
 sealed interface ForwardMessagesEvents {
     data class SetSelectedRoom(val room: RoomSummaryDetails) : ForwardMessagesEvents

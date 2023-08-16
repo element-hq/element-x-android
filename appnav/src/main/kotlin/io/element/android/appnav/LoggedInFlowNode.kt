@@ -44,14 +44,14 @@ import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
+import io.element.android.features.ftue.api.FtueEntryPoint
+import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
-import io.element.android.features.ftue.api.FtueEntryPoint
-import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -69,10 +69,12 @@ import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 @ContributesNode(AppScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -100,13 +102,13 @@ class LoggedInFlowNode @AssistedInject constructor(
 ) {
 
     interface Callback : Plugin {
-        fun onOpenBugReport() = Unit
+        fun onOpenBugReport()
     }
 
     interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(identifier: String, client: MatrixClient) = Unit
+        fun onFlowCreated(identifier: String, client: MatrixClient)
 
-        fun onFlowReleased(identifier: String, client: MatrixClient) = Unit
+        fun onFlowReleased(identifier: String, client: MatrixClient)
     }
 
     data class Inputs(
@@ -123,7 +125,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
-
         lifecycle.subscribe(
             onCreate = {
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.matrixClient) }
@@ -138,13 +139,11 @@ class LoggedInFlowNode @AssistedInject constructor(
                     backstack.push(NavTarget.Ftue)
                 }
             },
-            onResume = {
-                lifecycleScope.launch {
-                    syncService.startSync()
+            onStop = {
+                //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
+                coroutineScope.launch {
+                    syncService.stopSync()
                 }
-            },
-            onPause = {
-                syncService.stopSync()
             },
             onDestroy = {
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.matrixClient) }
@@ -153,22 +152,23 @@ class LoggedInFlowNode @AssistedInject constructor(
                 loggedInFlowProcessor.stopObserving()
             }
         )
-
         observeSyncStateAndNetworkStatus()
     }
 
+    @OptIn(FlowPreview::class)
     private fun observeSyncStateAndNetworkStatus() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 combine(
-                    syncService.syncState,
+                    // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
+                    syncService.syncState.debounce(100),
                     networkMonitor.connectivity
                 ) { syncState, networkStatus ->
-                    syncState == SyncState.Error && networkStatus == NetworkStatus.Online
+                    Pair(syncState, networkStatus)
                 }
-                    .distinctUntilChanged()
-                    .collect { restartSync ->
-                        if (restartSync) {
+                    .collect { (syncState, networkStatus) ->
+                        Timber.d("Sync state: $syncState, network status: $networkStatus")
+                        if (syncState != SyncState.Running && networkStatus == NetworkStatus.Online) {
                             syncService.startSync()
                         }
                     }
@@ -305,7 +305,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                         override fun onFtueFlowFinished() {
                             backstack.pop()
                         }
-                    }).build()
+                    })
+                    .build()
             }
         }
     }
@@ -350,3 +351,4 @@ class LoggedInFlowNode @AssistedInject constructor(
         backstack.push(NavTarget.InviteList)
     }
 }
+

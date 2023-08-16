@@ -19,7 +19,6 @@ package io.element.android.libraries.mediaupload
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.androidutils.bitmap.calculateInSampleSize
 import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation
@@ -92,7 +91,7 @@ class ImageCompressor @Inject constructor(
     ) {
         val (width, height) = when (resizeMode) {
             is ResizeMode.Approximate -> resizeMode.desiredWidth to resizeMode.desiredHeight
-            is ResizeMode.Strict -> (resizeMode.maxWidth / 2) to (resizeMode.maxHeight / 2)
+            is ResizeMode.Strict -> resizeMode.maxWidth / 2 to resizeMode.maxHeight / 2
             is ResizeMode.None -> return
         }
         // Read bounds only

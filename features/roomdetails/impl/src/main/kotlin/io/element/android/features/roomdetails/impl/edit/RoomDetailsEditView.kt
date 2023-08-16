@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
@@ -52,6 +53,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -66,7 +68,6 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -113,17 +114,13 @@ fun RoomDetailsEditView(
                 navigationIcon = { BackButton(onClick = onBackPressed) },
                 actions = {
                     TextButton(
+                        text = stringResource(CommonStrings.action_save),
                         enabled = state.saveButtonEnabled,
                         onClick = {
                             focusManager.clearFocus()
                             state.eventSink(RoomDetailsEditEvents.Save)
                         },
-                    ) {
-                        Text(
-                            text = stringResource(CommonStrings.action_save),
-                            style = ElementTheme.typography.aliasButtonText,
-                        )
-                    }
+                    )
                 }
             )
         },
@@ -164,6 +161,9 @@ fun RoomDetailsEditView(
                     placeholder = stringResource(CommonStrings.common_topic_placeholder),
                     maxLines = 10,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomTopic(it)) },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                    ),
                 )
             } else {
                 LabelledReadOnlyField(
@@ -287,12 +287,12 @@ private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
 
 @Preview
 @Composable
-fun RoomDetailsEditViewLightPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) =
+internal fun RoomDetailsEditViewLightPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun RoomDetailsEditViewDarkPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) =
+internal fun RoomDetailsEditViewDarkPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

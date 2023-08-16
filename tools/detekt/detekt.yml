@@ -1,6 +1,21 @@
 # Default rules: https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml
 
 style:
+  AlsoCouldBeApply:
+    active: true
+  CascadingCallWrapping:
+    active: true
+    includeElvis: true
+  DataClassShouldBeImmutable:
+    active: true
+  EqualsNullCall:
+    active: true
+  EqualsOnSignatureLine:
+    active: true
+  ExplicitCollectionElementAccessMethod:
+    active: true
+  ExplicitItLambdaParameter:
+    active: true
   MaxLineLength:
     # Default is 120
     maxLineLength: 160
@@ -9,38 +24,117 @@ style:
   ReturnCount:
     active: false
   UnnecessaryAbstractClass:
-    active: false
+    active: true
   FunctionOnlyReturningConstant:
     active: false
   UnusedPrivateMember:
-    # TODO Enable it
-    active: false
+    active: true
   UnusedParameter:
-    # TODO Enable it
-    active: false
+    active: true
+  UnnecessaryInnerClass:
+    active: true
+  UnnecessaryLet:
+    active: true
+  UnnecessaryParentheses:
+    active: true
+    allowForUnclearPrecedence: false
+  UntilInsteadOfRangeTo:
+    active: true
+  UnusedImports:
+    active: true
   UnusedPrivateProperty:
-    # TODO Enable it
-    active: false
+    active: true
   ThrowsCount:
     active: false
   LoopWithTooManyJumpStatements:
-    active: false
+    active: true
   SerialVersionUIDInSerializableClass:
     active: false
   ProtectedMemberInFinalClass:
-    active: false
+    active: true
   UseCheckOrError:
+    active: true
+  OptionalUnit:
+    active: true
+  PreferToOverPairSyntax:
+    active: true
+  RedundantExplicitType:
+    active: true
+  TrailingWhitespace:
+    active: true
+  TrimMultilineRawString:
+    active: true
+    trimmingMethods:
+      - 'trimIndent'
+      - 'trimMargin'
+  UnderscoresInNumericLiterals:
+    active: true
+    acceptableLength: 4
+    allowNonStandardGrouping: false
+  UnnecessaryAnnotationUseSiteTarget:
+    active: true
+  UnnecessaryBackticks:
+    active: true
+  UnnecessaryBracesAroundTrailingLambda:
+    active: true
+  UseDataClass:
+    active: true
+    allowVars: false
+  UseEmptyCounterpart:
+    active: true
+  UseIfEmptyOrIfBlank:
+    active: true
+  UseLet:
+    active: true
+  UseSumOfInsteadOfFlatMapSize:
+    active: true
+
+coroutines:
+  GlobalCoroutineUsage:
+    # Keep false for now.
     active: false
+  SuspendFunSwallowedCancellation:
+    active: true
+  SuspendFunWithCoroutineScopeReceiver:
+    active: true
 
 empty-blocks:
   EmptyFunctionBlock:
     active: false
   EmptySecondaryConstructor:
-    active: false
+    active: true
 
 potential-bugs:
   ImplicitDefaultLocale:
-    active: false
+    active: true
+  CastNullableToNonNullableType:
+    active: true
+  CastToNullableType:
+    active: true
+  Deprecation:
+    active: true
+  DontDowncastCollectionTypes:
+    active: true
+  ElseCaseInsteadOfExhaustiveWhen:
+    active: true
+  ExitOutsideMain:
+    active: true
+  ImplicitUnitReturnType:
+    active: true
+    allowExplicitReturnType: false
+  MissingPackageDeclaration:
+    active: true
+    excludes: ['**/*.kts']
+  NullCheckOnMutableProperty:
+    active: true
+  NullableToStringCall:
+    active: true
+  PropertyUsedBeforeDeclaration:
+    active: true
+  UnconditionalJumpStatementInLoop:
+    active: true
+  UnnecessaryNotNullCheck:
+    active: true
 
 exceptions:
   TooGenericExceptionCaught:
@@ -48,11 +142,13 @@ exceptions:
   SwallowedException:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
-    active: false
+    active: true
   TooGenericExceptionThrown:
-    active: false
+    active: true
   InstanceOfCheckForException:
-    active: false
+    active: true
+  ObjectExtendsThrowable:
+    active: true
 
 complexity:
   TooManyFunctions:
@@ -66,24 +162,32 @@ complexity:
   NestedBlockDepth:
     active: false
   ComplexCondition:
-    active: false
+    active: true
   LargeClass:
-    active: false
+    active: true
 
 naming:
   VariableNaming:
-    # TODO Enable it
-    active: false
+    active: true
   TopLevelPropertyNaming:
-    # TODO Enable it
-    active: false
+    active: true
   FunctionNaming:
     active: true
     ignoreAnnotated: ['Composable']
+  LambdaParameterNaming:
+    active: true
+  NonBooleanPropertyPrefixedWithIs:
+    active: true
+  VariableMaxLength:
+    active: true
 
 performance:
   SpreadOperator:
     active: false
+  CouldBeSequence:
+    active: true
+  UnnecessaryPartOfBinaryExpression:
+    active: true
 
 # Note: all rules for `comments` are disabled by default, but I put them here to be aware of their existence
 comments:
@@ -143,15 +247,10 @@ Compose:
   PreviewNaming:
     active: true
   PreviewPublic:
-    active: false
+    active: true
     # You can optionally disable that only previews with @PreviewParameter are flagged
     previewPublicOnlyIfParams: false
   RememberMissing:
     active: true
   UnstableCollections:
-    active: true
-  ViewModelForwarding:
-    ## TODO Set to true later
-    active: false
-  ViewModelInjection:
     active: true

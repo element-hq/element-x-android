@@ -83,12 +83,12 @@ fun PermissionsView(
 
 @Preview
 @Composable
-fun PermissionsViewLightPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) =
+internal fun PermissionsViewLightPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun PermissionsViewDarkPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) =
+internal fun PermissionsViewDarkPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

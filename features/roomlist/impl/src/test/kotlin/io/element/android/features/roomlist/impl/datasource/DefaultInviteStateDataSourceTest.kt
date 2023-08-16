@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomlist.impl.datasource
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
@@ -25,8 +25,8 @@ import io.element.android.features.roomlist.impl.InvitesState
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -35,12 +35,12 @@ internal class DefaultInviteStateDataSourceTest {
 
     @Test
     fun `emits NoInvites state if invites list is empty`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
-        val client = FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
+        val roomListService = FakeRoomListService()
+        val client = FakeMatrixClient(roomListService = roomListService)
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
@@ -49,13 +49,13 @@ internal class DefaultInviteStateDataSourceTest {
 
     @Test
     fun `emits NewInvites state if unseen invite exists`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
-        roomSummaryDataSource.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
-        val client = FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
+        val roomListService = FakeRoomListService()
+        roomListService.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
+        val client = FakeMatrixClient(roomListService = roomListService)
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             skipItems(1)
@@ -65,14 +65,14 @@ internal class DefaultInviteStateDataSourceTest {
 
     @Test
     fun `emits NewInvites state if multiple invites exist and at least one is unseen`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
-        roomSummaryDataSource.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(roomId = A_ROOM_ID_2)))
-        val client = FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
+        val roomListService = FakeRoomListService()
+        roomListService.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(roomId = A_ROOM_ID_2)))
+        val client = FakeMatrixClient(roomListService = roomListService)
         val seenStore = FakeSeenInvitesStore()
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers(useUnconfinedTestDispatcher = true))
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             skipItems(1)
@@ -82,14 +82,14 @@ internal class DefaultInviteStateDataSourceTest {
 
     @Test
     fun `emits SeenInvites state if invite exists in seen store`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
-        roomSummaryDataSource.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
-        val client = FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
+        val roomListService = FakeRoomListService()
+        roomListService.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
+        val client = FakeMatrixClient(roomListService = roomListService)
         val seenStore = FakeSeenInvitesStore()
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers(useUnconfinedTestDispatcher = true))
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             skipItems(1)
@@ -100,19 +100,19 @@ internal class DefaultInviteStateDataSourceTest {
 
     @Test
     fun `emits new state in response to upstream events`() = runTest {
-        val roomSummaryDataSource = FakeRoomSummaryDataSource()
-        val client = FakeMatrixClient(roomSummaryDataSource = roomSummaryDataSource)
+        val roomListService = FakeRoomListService()
+        val client = FakeMatrixClient(roomListService = roomListService)
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
-        moleculeFlow(RecompositionClock.Immediate) {
+        moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
             // Initially there are no invites
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
 
             // When a single invite is received, state should be NewInvites
-            roomSummaryDataSource.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
+            roomListService.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
             skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
 
@@ -122,12 +122,12 @@ internal class DefaultInviteStateDataSourceTest {
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.SeenInvites)
 
             // Another new invite resets it to NewInvites
-            roomSummaryDataSource.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(roomId = A_ROOM_ID_2)))
+            roomListService.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(roomId = A_ROOM_ID_2)))
             skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
 
             // All of the invites going away reverts to NoInvites
-            roomSummaryDataSource.postInviteRooms(emptyList())
+            roomListService.postInviteRooms(emptyList())
             skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
         }

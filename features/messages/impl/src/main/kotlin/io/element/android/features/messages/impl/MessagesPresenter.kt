@@ -21,10 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,6 +39,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -48,6 +47,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -72,10 +72,12 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.room.canRedactAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MessagesPresenter @AssistedInject constructor(
@@ -84,6 +86,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
+    private val reactionSummaryPresenter: ReactionSummaryPresenter,
     private val retrySendMenuPresenter: RetrySendMenuPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -105,32 +108,31 @@ class MessagesPresenter @AssistedInject constructor(
         val timelineState = timelinePresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
+        val reactionSummaryState = reactionSummaryPresenter.present()
         val retryState = retrySendMenuPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val roomName by produceState(initialValue = room.displayName, key1 = syncUpdateFlow.value) {
-            value = room.displayName
-        }
-        val roomAvatar by produceState(initialValue = room.avatarData(), key1 = syncUpdateFlow.value) {
-            value = room.avatarData()
+        val userHasPermissionToRedact by room.canRedactAsState(updateKey = syncUpdateFlow.value)
+        var roomName: Async<String> by remember { mutableStateOf(Async.Uninitialized) }
+        var roomAvatar: Async<AvatarData> by remember { mutableStateOf(Async.Uninitialized) }
+        LaunchedEffect(syncUpdateFlow.value) {
+            withContext(dispatchers.io) {
+                roomName = Async.Success(room.displayName)
+                roomAvatar = Async.Success(room.avatarData())
+            }
         }
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
         }
 
         val inviteProgress = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
-
-        val showReinvitePrompt by remember(
-            hasDismissedInviteDialog,
-            composerState.hasFocus,
-            syncUpdateFlow,
-        ) {
-            derivedStateOf {
-                !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
+        var showReinvitePrompt by remember { mutableStateOf(false) }
+        LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow) {
+            withContext(dispatchers.io) {
+                showReinvitePrompt = !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
             }
         }
-
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
@@ -163,10 +165,12 @@ class MessagesPresenter @AssistedInject constructor(
             roomName = roomName,
             roomAvatar = roomAvatar,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
+            userHasPermissionToRedact = userHasPermissionToRedact,
             composerState = composerState,
             timelineState = timelineState,
             actionListState = actionListState,
             customReactionState = customReactionState,
+            reactionSummaryState = reactionSummaryState,
             retrySendMenuState = retryState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,
@@ -274,6 +278,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemLocationContent -> AttachmentThumbnailInfo(
                 type = AttachmentThumbnailType.Location,
             )
+            is TimelineItemPollContent, // TODO Polls: handle reply to
             is TimelineItemTextBasedContent,
             is TimelineItemRedactedContent,
             is TimelineItemStateContent,

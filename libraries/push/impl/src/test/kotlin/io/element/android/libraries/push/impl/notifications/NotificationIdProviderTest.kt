@@ -25,7 +25,7 @@ class NotificationIdProviderTest {
     @Test
     fun `test notification id provider`() {
         val sut = NotificationIdProvider()
-        val offsetForASessionId = 305410
+        val offsetForASessionId = 305_410
         assertThat(sut.getSummaryNotificationId(A_SESSION_ID)).isEqualTo(offsetForASessionId + 0)
         assertThat(sut.getRoomMessagesNotificationId(A_SESSION_ID)).isEqualTo(offsetForASessionId + 1)
         assertThat(sut.getRoomEventNotificationId(A_SESSION_ID)).isEqualTo(offsetForASessionId + 2)

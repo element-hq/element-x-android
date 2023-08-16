@@ -17,18 +17,15 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -50,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.leaveroom.api.LeaveRoomView
@@ -69,7 +67,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
-import io.element.android.libraries.designsystem.theme.components.DropdownMenuItemText
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -197,7 +194,7 @@ internal fun RoomDetailsTopBar(
                     onDismissRequest = { showMenu = false },
                 ) {
                     DropdownMenuItem(
-                        text = { DropdownMenuItemText(stringResource(id = CommonStrings.action_edit)) },
+                        text = { Text(stringResource(id = CommonStrings.action_edit)) },
                         onClick = {
                             // Explicitly close the menu before handling the action, as otherwise it stays open during the
                             // transition and renders really badly.
@@ -226,18 +223,30 @@ internal fun RoomHeaderSection(
     roomAlias: String?,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(modifier = Modifier.size(70.dp)) {
-            Avatar(
-                avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Avatar(
+            avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
+            modifier = Modifier.size(70.dp)
+        )
         Spacer(modifier = Modifier.height(24.dp))
-        Text(roomName, style = ElementTheme.typography.fontHeadingLgBold)
+        Text(
+            text = roomName,
+            style = ElementTheme.typography.fontHeadingLgBold,
+            textAlign = TextAlign.Center,
+        )
         if (roomAlias != null) {
             Spacer(modifier = Modifier.height(6.dp))
-            Text(roomAlias, style = ElementTheme.typography.fontBodyLgRegular, color = MaterialTheme.colorScheme.secondary)
+            Text(
+                text = roomAlias,
+                style = ElementTheme.typography.fontBodyLgRegular,
+                color = MaterialTheme.colorScheme.secondary,
+                textAlign = TextAlign.Center,
+            )
         }
         Spacer(Modifier.height(32.dp))
     }
@@ -322,12 +331,12 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
 
 @LargeHeightPreview
 @Composable
-fun RoomDetailsLightPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
+internal fun RoomDetailsLightPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @LargeHeightPreview
 @Composable
-fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
+internal fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

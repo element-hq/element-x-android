@@ -22,5 +22,6 @@ sealed class AuthenticationException(message: String) : Exception(message) {
     class SlidingSyncNotAvailable(message: String) : AuthenticationException(message)
     class SessionMissing(message: String) : AuthenticationException(message)
     class Generic(message: String) : AuthenticationException(message)
-    class OidcError(type: String, message: String) : AuthenticationException(message)
+    // TODO Oidc
+    // class OidcError(type: String, message: String) : AuthenticationException(message)
 }
