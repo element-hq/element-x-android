@@ -54,6 +54,7 @@ fun FeaturePreferenceView(
 ) {
     PreferenceCheckbox(
         title = feature.title,
+        supportingText = feature.description,
         isChecked = feature.isEnabled,
         modifier = modifier,
         onCheckedChange = onCheckedChange
