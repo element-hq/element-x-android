@@ -17,6 +17,8 @@
 package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +37,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
+import io.element.android.libraries.designsystem.toSecondaryEnabledColor
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -42,6 +45,7 @@ fun PreferenceCheckbox(
     title: String,
     isChecked: Boolean,
     modifier: Modifier = Modifier,
+    supportingText: String? = null,
     enabled: Boolean = true,
     icon: ImageVector? = null,
     showIconAreaIfNoIcon: Boolean = false,
@@ -60,13 +64,23 @@ fun PreferenceCheckbox(
             enabled = enabled,
             isVisible = showIconAreaIfNoIcon
         )
-        Text(
-            modifier = Modifier
-                .weight(1f),
-            style = ElementTheme.typography.fontBodyLgRegular,
-            text = title,
-            color = enabled.toEnabledColor(),
-        )
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Text(
+                style = ElementTheme.typography.fontBodyLgRegular,
+                text = title,
+                color = enabled.toEnabledColor(),
+            )
+            if (supportingText != null) {
+                Text(
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    text = supportingText,
+                    color = enabled.toSecondaryEnabledColor(),
+                )
+            }
+        }
         Checkbox(
             modifier = Modifier
                 .align(Alignment.CenterVertically),
@@ -83,10 +97,19 @@ internal fun PreferenceCheckboxPreview() = ElementThemedPreview { ContentToPrevi
 
 @Composable
 private fun ContentToPreview() {
-    PreferenceCheckbox(
-        title = "Checkbox",
-        icon = Icons.Default.Announcement,
-        enabled = true,
-        isChecked = true
-    )
+    Column {
+        PreferenceCheckbox(
+            title = "Checkbox",
+            icon = Icons.Default.Announcement,
+            enabled = true,
+            isChecked = true
+        )
+        PreferenceCheckbox(
+            title = "Checkbox with supporting text",
+            supportingText = "Supporting text",
+            icon = Icons.Default.Announcement,
+            enabled = true,
+            isChecked = true
+        )
+    }
 }

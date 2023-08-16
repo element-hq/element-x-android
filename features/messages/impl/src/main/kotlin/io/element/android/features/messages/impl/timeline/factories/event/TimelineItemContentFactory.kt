@@ -47,7 +47,7 @@ class TimelineItemContentFactory @Inject constructor(
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory
 ) {
 
-    fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
+    suspend fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
         return when (val itemContent = eventTimelineItem.content) {
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
