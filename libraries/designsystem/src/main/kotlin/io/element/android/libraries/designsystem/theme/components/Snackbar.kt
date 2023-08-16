@@ -109,7 +109,7 @@ internal fun SnackbarPreview() {
 @Composable
 internal fun SnackbarWithActionPreview() {
     ElementThemedPreview {
-        Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Label", {}))
+        Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Action", {}))
     }
 }
 
@@ -119,7 +119,7 @@ internal fun SnackbarWithActionAndCloseButtonPreview() {
     ElementThemedPreview {
         Snackbar(
             message = "Snackbar supporting text",
-            action = ButtonVisuals.Text("Label", {}),
+            action = ButtonVisuals.Text("Action", {}),
             dismissAction = ButtonVisuals.Icon(IconSource.Vector(Icons.Default.Close), {})
         )
     }
@@ -129,7 +129,7 @@ internal fun SnackbarWithActionAndCloseButtonPreview() {
 @Composable
 internal fun SnackbarWithActionOnNewLinePreview() {
     ElementThemedPreview {
-        Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Label", {}), actionOnNewLine = true)
+        Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Action", {}), actionOnNewLine = true)
     }
 }
 
@@ -139,7 +139,7 @@ internal fun SnackbarWithActionOnNewLineAndCloseButtonPreview() {
     ElementThemedPreview {
         Snackbar(
             message = "Snackbar supporting text",
-            action = ButtonVisuals.Text("Label", {}),
+            action = ButtonVisuals.Text("Action", {}),
             dismissAction = ButtonVisuals.Icon(IconSource.Vector(Icons.Default.Close), {}),
             actionOnNewLine = true
         )
