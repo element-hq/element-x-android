@@ -30,6 +30,7 @@ object PreviewGroup {
     const val Preferences = "Preferences"
     const val Progress = "Progress Indicators"
     const val Search = "Search views"
+    const val Snackbars = "Snackbars"
     const val Sliders = "Sliders"
     const val Text = "Text"
     const val TextFields = "TextFields"

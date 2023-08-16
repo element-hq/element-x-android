@@ -32,6 +32,7 @@ import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -60,10 +62,19 @@ fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    buttonSize: ButtonSize = ButtonSize.Large,
+    size: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
-) = ButtonInternal(text, onClick, ButtonStyle.Filled, modifier, enabled, buttonSize, showProgress, leadingIcon)
+) = ButtonInternal(
+    text = text,
+    onClick = onClick,
+    style = ButtonStyle.Filled,
+    modifier = modifier,
+    enabled = enabled,
+    size = size,
+    showProgress = showProgress,
+    leadingIcon = leadingIcon
+)
 
 @Composable
 fun OutlinedButton(
@@ -71,10 +82,19 @@ fun OutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    buttonSize: ButtonSize = ButtonSize.Large,
+    size: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
-) = ButtonInternal(text, onClick, ButtonStyle.Outlined, modifier, enabled, buttonSize, showProgress, leadingIcon)
+) = ButtonInternal(
+    text = text,
+    onClick = onClick,
+    style = ButtonStyle.Outlined,
+    modifier = modifier,
+    enabled = enabled,
+    size = size,
+    showProgress = showProgress,
+    leadingIcon = leadingIcon
+)
 
 @Composable
 fun TextButton(
@@ -82,17 +102,27 @@ fun TextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    buttonSize: ButtonSize = ButtonSize.Large,
+    size: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
-) = ButtonInternal(text, onClick, ButtonStyle.Text, modifier, enabled, buttonSize, showProgress, leadingIcon)
+) = ButtonInternal(
+    text = text,
+    onClick = onClick,
+    style = ButtonStyle.Text,
+    modifier = modifier,
+    enabled = enabled,
+    size = size,
+    showProgress = showProgress,
+    leadingIcon = leadingIcon
+)
 
 @Composable
-private fun ButtonInternal(
+internal fun ButtonInternal(
     text: String,
     onClick: () -> Unit,
     style: ButtonStyle,
     modifier: Modifier = Modifier,
+    colors: ButtonColors = style.getColors(),
     enabled: Boolean = true,
     size: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
@@ -121,21 +151,6 @@ private fun ButtonInternal(
     val shape = when (style) {
         ButtonStyle.Filled, ButtonStyle.Outlined -> RoundedCornerShape(percent = 50)
         ButtonStyle.Text -> RectangleShape
-    }
-
-    val colors = when (style) {
-        ButtonStyle.Filled -> ButtonDefaults.buttonColors(
-            containerColor = ElementTheme.materialColors.primary,
-            contentColor = ElementTheme.materialColors.onPrimary,
-            disabledContainerColor = ElementTheme.colors.bgActionPrimaryDisabled,
-            disabledContentColor = ElementTheme.colors.textOnSolidPrimary
-        )
-        ButtonStyle.Outlined, ButtonStyle.Text -> ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent,
-            contentColor = ElementTheme.materialColors.primary,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = ElementTheme.colors.textDisabled,
-        )
     }
 
     val border = when (style) {
@@ -202,8 +217,10 @@ private fun ButtonInternal(
 }
 
 sealed interface IconSource {
-    data class Resource(val id: Int) : IconSource
-    data class Vector(val vector: ImageVector) : IconSource
+    val contentDescription: String?
+
+    data class Resource(val id: Int, override val contentDescription: String? = null) : IconSource
+    data class Vector(val vector: ImageVector, override val contentDescription: String? = null) : IconSource
 
     @Composable
     fun getPainter(): Painter = when (this) {
@@ -216,16 +233,38 @@ enum class ButtonSize {
     Medium, Large
 }
 
-private enum class ButtonStyle {
-    Filled, Outlined, Text
+internal enum class ButtonStyle {
+    Filled, Outlined, Text;
+
+    @Composable
+    fun getColors(): ButtonColors = when (this) {
+        Filled -> ButtonDefaults.buttonColors(
+            containerColor = ElementTheme.materialColors.primary,
+            contentColor = ElementTheme.materialColors.onPrimary,
+            disabledContainerColor = ElementTheme.colors.bgActionPrimaryDisabled,
+            disabledContentColor = ElementTheme.colors.textOnSolidPrimary
+        )
+        Outlined -> ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = ElementTheme.materialColors.primary,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = ElementTheme.colors.textDisabled,
+        )
+        Text -> ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = if (LocalContentColor.current.isSpecified) LocalContentColor.current else ElementTheme.materialColors.primary,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = ElementTheme.colors.textDisabled,
+        )
+    }
 }
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
 internal fun FilledButtonMediumPreview() {
     ButtonCombinationPreview(
-        buttonStyle = ButtonStyle.Filled,
-        buttonSize = ButtonSize.Medium,
+        style = ButtonStyle.Filled,
+        size = ButtonSize.Medium,
     )
 }
 
@@ -233,8 +272,8 @@ internal fun FilledButtonMediumPreview() {
 @Composable
 internal fun FilledButtonLargePreview() {
     ButtonCombinationPreview(
-        buttonStyle = ButtonStyle.Filled,
-        buttonSize = ButtonSize.Large,
+        style = ButtonStyle.Filled,
+        size = ButtonSize.Large,
     )
 }
 
@@ -242,8 +281,8 @@ internal fun FilledButtonLargePreview() {
 @Composable
 internal fun OutlinedButtonMediumPreview() {
     ButtonCombinationPreview(
-        buttonStyle = ButtonStyle.Outlined,
-        buttonSize = ButtonSize.Medium,
+        style = ButtonStyle.Outlined,
+        size = ButtonSize.Medium,
     )
 }
 
@@ -251,8 +290,8 @@ internal fun OutlinedButtonMediumPreview() {
 @Composable
 internal fun OutlinedButtonLargePreview() {
     ButtonCombinationPreview(
-        buttonStyle = ButtonStyle.Outlined,
-        buttonSize = ButtonSize.Large,
+        style = ButtonStyle.Outlined,
+        size = ButtonSize.Large,
     )
 }
 
@@ -260,8 +299,8 @@ internal fun OutlinedButtonLargePreview() {
 @Composable
 internal fun TextButtonMediumPreview() {
     ButtonCombinationPreview(
-        buttonStyle = ButtonStyle.Text,
-        buttonSize = ButtonSize.Medium,
+        style = ButtonStyle.Text,
+        size = ButtonSize.Medium,
     )
 }
 
@@ -269,15 +308,15 @@ internal fun TextButtonMediumPreview() {
 @Composable
 internal fun TextButtonLargePreview() {
     ButtonCombinationPreview(
-        buttonStyle = ButtonStyle.Text,
-        buttonSize = ButtonSize.Large,
+        style = ButtonStyle.Text,
+        size = ButtonSize.Large,
     )
 }
 
 @Composable
 private fun ButtonCombinationPreview(
-    buttonStyle: ButtonStyle,
-    buttonSize: ButtonSize,
+    style: ButtonStyle,
+    size: ButtonSize,
     modifier: Modifier = Modifier,
 ) {
     ElementThemedPreview {
@@ -290,24 +329,24 @@ private fun ButtonCombinationPreview(
             // Normal
             ButtonRowPreview(
                 modifier = Modifier.then(modifier),
-                buttonStyle = buttonStyle,
-                buttonSize = buttonSize,
+                style = style,
+                size = size,
             )
 
             // With icon
             ButtonRowPreview(
                 modifier = Modifier.then(modifier),
                 leadingIcon = IconSource.Vector(Icons.Outlined.Share),
-                buttonStyle = buttonStyle,
-                buttonSize = buttonSize,
+                style = style,
+                size = size,
             )
 
             // With progress
             ButtonRowPreview(
                 modifier = Modifier.then(modifier),
                 showProgress = true,
-                buttonStyle = buttonStyle,
-                buttonSize = buttonSize,
+                style = style,
+                size = size,
             )
         }
     }
@@ -315,8 +354,8 @@ private fun ButtonCombinationPreview(
 
 @Composable
 private fun ButtonRowPreview(
-    buttonStyle: ButtonStyle,
-    buttonSize: ButtonSize,
+    style: ButtonStyle,
+    size: ButtonSize,
     modifier: Modifier = Modifier,
     leadingIcon: IconSource? = null,
     showProgress: Boolean = false,
@@ -326,8 +365,8 @@ private fun ButtonRowPreview(
             text = "A button",
             showProgress = showProgress,
             onClick = {},
-            style = buttonStyle,
-            size = buttonSize,
+            style = style,
+            size = size,
             leadingIcon = leadingIcon,
             modifier = Modifier.then(modifier),
         )
@@ -336,8 +375,8 @@ private fun ButtonRowPreview(
             showProgress = showProgress,
             enabled = false,
             onClick = {},
-            style = buttonStyle,
-            size = buttonSize,
+            style = style,
+            size = size,
             leadingIcon = leadingIcon,
             modifier = Modifier.then(modifier),
         )

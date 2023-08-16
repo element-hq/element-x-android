@@ -17,6 +17,8 @@
 package io.element.android.libraries.theme
 
 import androidx.compose.ui.graphics.Color
+import io.element.android.libraries.theme.compound.generated.internal.DarkDesignTokens
+import io.element.android.libraries.theme.compound.generated.internal.LightDesignTokens
 
 // =================================================================================================
 // IMPORTANT!
@@ -26,3 +28,6 @@ import androidx.compose.ui.graphics.Color
 // =================================================================================================
 
 val LinkColor = Color(0xFF0086E6)
+
+val SnackBarLabelColorLight = LightDesignTokens.colorGray700
+val SnackBarLabelColorDark = DarkDesignTokens.colorGray700
