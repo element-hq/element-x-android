@@ -64,6 +64,7 @@ fun RoomInviteMembersView(
     onSendPressed: (List<MatrixUser>) -> Unit = {},
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             RoomInviteMembersTopBar(
                 onBackPressed = {
@@ -79,7 +80,7 @@ fun RoomInviteMembersView(
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
                 .consumeWindowInsets(padding),

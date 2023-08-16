@@ -76,6 +76,7 @@ fun RoomMemberListView(
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             if (!state.isSearchActive) {
                 RoomMemberListTopBar(
@@ -87,7 +88,7 @@ fun RoomMemberListView(
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
                 .consumeWindowInsets(padding),

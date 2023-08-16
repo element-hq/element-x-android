@@ -50,9 +50,9 @@ internal fun RequestVerificationHeader(
     onDismissClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+    Box(modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         Surface(
-            modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.small,
             color = MaterialTheme.colorScheme.surfaceVariant
         ) {
