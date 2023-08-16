@@ -28,6 +28,8 @@ enum class FeatureFlags(
     ),
     Polls(
         key = "feature.polls",
-        title = "Render poll events in the timeline and allow user to create polls",
+        title = "Polls",
+        description = "Render poll events in the timeline",
+        defaultValue = false,
     )
 }
