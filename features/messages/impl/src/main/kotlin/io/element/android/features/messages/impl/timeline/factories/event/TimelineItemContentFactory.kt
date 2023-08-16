@@ -18,8 +18,6 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -36,7 +34,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownConten
 import javax.inject.Inject
 
 class TimelineItemContentFactory @Inject constructor(
-    private val featureFlagService: FeatureFlagService,
     private val messageFactory: TimelineItemContentMessageFactory,
     private val redactedMessageFactory: TimelineItemContentRedactedFactory,
     private val stickerFactory: TimelineItemContentStickerFactory,
@@ -60,10 +57,8 @@ class TimelineItemContentFactory @Inject constructor(
             is RoomMembershipContent -> roomMembershipFactory.create(eventTimelineItem)
             is StateContent -> stateFactory.create(eventTimelineItem)
             is StickerContent -> stickerFactory.create(itemContent)
-            is PollContent ->
-                if (featureFlagService.isFeatureEnabled(FeatureFlags.Polls)) pollFactory.create(itemContent) else TimelineItemUnknownContent
-            is PollEndContent ->
-                if (featureFlagService.isFeatureEnabled(FeatureFlags.Polls)) pollEndFactory.create(itemContent) else TimelineItemUnknownContent
+            is PollContent -> pollFactory.create(itemContent)
+            is PollEndContent -> pollEndFactory.create(itemContent)
             is UnableToDecryptContent -> utdFactory.create(itemContent)
             is UnknownContent -> TimelineItemUnknownContent
         }

@@ -50,11 +50,10 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
         dispatchers = testCoroutineDispatchers(),
         eventItemFactory = TimelineItemEventFactory(
             contentFactory = TimelineItemContentFactory(
-                featureFlagService = FakeFeatureFlagService(),
                 messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter(), FileExtensionExtractorWithoutValidation()),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
-                pollFactory = TimelineItemContentPollFactory(matrixClient),
+                pollFactory = TimelineItemContentPollFactory(matrixClient, FakeFeatureFlagService()),
                 pollEndFactory = TimelineItemContentPollEndFactory(),
                 utdFactory = TimelineItemContentUTDFactory(),
                 roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
