@@ -45,7 +45,7 @@ class MediaSenderTests {
     }
 
     @Test
-    fun `given an attachment when sending it the MatrxiRoom will call sendMedia`() = runTest {
+    fun `given an attachment when sending it the MatrixRoom will call sendMedia`() = runTest {
         val room = FakeMatrixRoom()
         val sender = aMediaSender(room = room)
 
