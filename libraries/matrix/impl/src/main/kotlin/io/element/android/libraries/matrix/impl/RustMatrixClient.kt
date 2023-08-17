@@ -282,6 +282,8 @@ class RustMatrixClient constructor(
     override fun close() {
         sessionCoroutineScope.cancel()
         client.setDelegate(null)
+        notificationSettings.setDelegate(null)
+        notificationSettings.destroy()
         verificationService.destroy()
         syncService.destroy()
         innerRoomListService.destroy()
