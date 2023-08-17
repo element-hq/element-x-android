@@ -40,6 +40,8 @@ class ElementCallActivity : ComponentActivity() {
 
         setContentView(R.layout.activity_call)
 
+        CallForegroundService.start(this)
+
         val webView = findViewById<WebView>(R.id.webView)
         webView.settings.javaScriptEnabled = true
         webView.settings.allowContentAccess = true
@@ -106,6 +108,7 @@ class ElementCallActivity : ComponentActivity() {
         super.onDestroy()
 
         wakeLock.release()
+        CallForegroundService.stop(this)
     }
 
 }
