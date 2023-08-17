@@ -23,6 +23,8 @@ android {
     namespace = "io.element.android.libraries.theme"
 
     dependencies {
+        api(libs.androidx.compose.material3)
+
         ksp(libs.showkase.processor)
         kspTest(libs.showkase.processor)
 

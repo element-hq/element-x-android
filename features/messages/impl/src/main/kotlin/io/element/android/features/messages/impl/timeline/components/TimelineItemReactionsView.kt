@@ -42,71 +42,83 @@ fun TimelineItemReactions(
     reactionsState: TimelineItemReactions,
     isOutgoing: Boolean,
     onReactionClicked: (emoji: String) -> Unit,
+    onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
-
-    // In LTR languages we want an incoming message's reactions to be LRT and outgoing to be RTL.
-    // For RTL languages it should be the opposite.
-    val reactionsLayoutDirection = if (!isOutgoing) LocalLayoutDirection.current
-    else if (LocalLayoutDirection.current == LayoutDirection.Ltr)
-        LayoutDirection.Rtl
-    else
-        LayoutDirection.Ltr
-
-    CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
         TimelineItemReactionsView(
             modifier = modifier,
             reactions = reactionsState.reactions,
             expanded = expanded,
+            isOutgoing = isOutgoing,
             onReactionClick = onReactionClicked,
+            onReactionLongClick = onReactionLongClicked,
             onMoreReactionsClick = onMoreReactionsClicked,
             onToggleExpandClick = { expanded = !expanded },
         )
-    }
 }
 
 @Composable
 private fun TimelineItemReactionsView(
     reactions: ImmutableList<AggregatedReaction>,
+    isOutgoing: Boolean,
     expanded: Boolean,
     onReactionClick: (emoji: String) -> Unit,
+    onReactionLongClick: (emoji: String) -> Unit,
     onMoreReactionsClick: () -> Unit,
     onToggleExpandClick: () -> Unit,
     modifier: Modifier = Modifier
-) = TimelineItemReactionsLayout(
-    modifier = modifier,
-    itemSpacing = 4.dp,
-    rowSpacing = 4.dp,
-    expanded = expanded,
-    expandButton = {
-        MessagesReactionButton(
-            content = MessagesReactionsButtonContent.Text(
-                text = stringResource(id = if (expanded) R.string.screen_room_reactions_show_less else R.string.screen_room_reactions_show_more)
-            ),
-            onClick = onToggleExpandClick,
+) {
+    // In LTR languages we want an incoming message's reactions to be LRT and outgoing to be RTL.
+    // For RTL languages it should be the opposite.
+    val currentLayout = LocalLayoutDirection.current
+    val reactionsLayoutDirection = if (!isOutgoing) currentLayout
+    else if (currentLayout == LayoutDirection.Ltr)
+        LayoutDirection.Rtl
+    else
+        LayoutDirection.Ltr
+
+    return CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
+        TimelineItemReactionsLayout(
+            modifier = modifier,
+            itemSpacing = 4.dp,
+            rowSpacing = 4.dp,
+            expanded = expanded,
+            expandButton = {
+                MessagesReactionButton(
+                    content = MessagesReactionsButtonContent.Text(
+                        text = stringResource(id = if (expanded) R.string.screen_room_reactions_show_less else R.string.screen_room_reactions_show_more)
+                    ),
+                    onClick = onToggleExpandClick,
+                    onLongClick = {}
+                )
+            },
+            addMoreButton = {
+                MessagesReactionButton(
+                    content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+                    onClick = onMoreReactionsClick,
+                    onLongClick = {}
+                )
+            },
+            reactions = {
+                reactions.forEach { reaction ->
+                    CompositionLocalProvider(LocalLayoutDirection provides currentLayout) {
+                        MessagesReactionButton(
+                            content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
+                            onClick = { onReactionClick(reaction.key) },
+                            onLongClick = { onReactionLongClick(reaction.key) }
+                        )
+                    }
+                }
+            }
         )
-    },
-    addMoreButton = {
-        MessagesReactionButton(
-            content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
-            onClick = onMoreReactionsClick
-        )
-    },
-    reactions = {
-        reactions.forEach { reaction ->
-            MessagesReactionButton(
-                content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
-                onClick = { onReactionClick(reaction.key) }
-            )
-        }
     }
-)
+}
 
 @DayNightPreviews
 @Composable
-fun TimelineItemReactionsViewPreview() = ElementPreview {
+internal fun TimelineItemReactionsViewPreview() = ElementPreview {
     ContentToPreview(
         reactions = aTimelineItemReactions(count = 1).reactions
     )
@@ -114,7 +126,7 @@ fun TimelineItemReactionsViewPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TimelineItemReactionsViewFewPreview() = ElementPreview {
+internal fun TimelineItemReactionsViewFewPreview() = ElementPreview {
     ContentToPreview(
         reactions = aTimelineItemReactions(count = 3).reactions
     )
@@ -122,7 +134,7 @@ fun TimelineItemReactionsViewFewPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
+internal fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
     ContentToPreview(
         reactions = aTimelineItemReactions(count = 18).reactions
     )
@@ -130,7 +142,7 @@ fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TimelineItemReactionsViewOutgoingPreview() = ElementPreview {
+internal fun TimelineItemReactionsViewOutgoingPreview() = ElementPreview {
     ContentToPreview(
         reactions = aTimelineItemReactions(count = 18).reactions,
         isOutgoing = true
@@ -148,6 +160,7 @@ private fun ContentToPreview(
         ),
         isOutgoing = isOutgoing,
         onReactionClicked = {},
+        onReactionLongClicked = {},
         onMoreReactionsClicked = {},
     )
 }

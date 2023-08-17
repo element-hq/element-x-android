@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -81,13 +82,13 @@ private fun ContentToPreview() {
     Column {
         MessageStateEventContainer(
             isHighlighted = false,
-            interactionSource = MutableInteractionSource(),
+            interactionSource = remember { MutableInteractionSource() },
         ) {
             Spacer(modifier = Modifier.size(width = 120.dp, height = 32.dp))
         }
         MessageStateEventContainer(
             isHighlighted = true,
-            interactionSource = MutableInteractionSource(),
+            interactionSource = remember { MutableInteractionSource() },
         ) {
             Spacer(modifier = Modifier.size(width = 120.dp, height = 32.dp))
         }

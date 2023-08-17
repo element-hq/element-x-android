@@ -100,12 +100,12 @@ fun OidcView(
 
 @Preview
 @Composable
-fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) =
+internal fun OidcViewLightPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun OidcViewDarkPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) =
+internal fun OidcViewDarkPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

@@ -15,6 +15,7 @@
  */
 
 @file:OptIn(ExperimentalMaterialApi::class)
+@file:Suppress("UsingMaterialAndMaterial3Libraries")
 
 package io.element.android.libraries.matrix.ui.components
 
@@ -32,6 +33,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -111,12 +113,12 @@ private fun AvatarActionBottomSheetContent(
 
 @Preview
 @Composable
-fun AvatarActionBottomSheetLightPreview() =
+internal fun AvatarActionBottomSheetLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun AvatarActionBottomSheetDarkPreview() =
+internal fun AvatarActionBottomSheetDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @Composable
@@ -124,7 +126,8 @@ private fun ContentToPreview() {
     AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
         modalBottomSheetState = ModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Expanded
+            initialValue = ModalBottomSheetValue.Expanded,
+            density = LocalDensity.current,
         ),
     )
 }

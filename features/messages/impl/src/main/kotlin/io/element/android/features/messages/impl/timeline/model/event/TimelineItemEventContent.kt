@@ -33,3 +33,21 @@ fun TimelineItemEventContent.canBeCopied(): Boolean =
         is TimelineItemRedactedContent -> true
         else -> false
     }
+
+/**
+ * Return true if user can react (i.e. send a reaction) on the event content.
+ */
+fun TimelineItemEventContent.canReact(): Boolean =
+    when (this) {
+        is TimelineItemTextBasedContent,
+        is TimelineItemAudioContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemFileContent,
+        is TimelineItemImageContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent,
+        is TimelineItemVideoContent -> true
+        is TimelineItemStateContent,
+        is TimelineItemRedactedContent,
+        TimelineItemUnknownContent -> false
+    }

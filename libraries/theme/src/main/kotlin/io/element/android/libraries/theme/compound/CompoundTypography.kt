@@ -17,9 +17,11 @@
 package io.element.android.libraries.theme.compound
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.theme.compound.generated.TypographyTokens
@@ -41,6 +43,8 @@ internal val defaultHeadlineSmall = TextStyle(
     lineHeight = 32.sp,
     fontSize = 24.sp,
     letterSpacing = 0.em,
+    platformStyle = PlatformTextStyle(includeFontPadding = false),
+    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
 )
 
 // 22px (Material) vs 20px, it's the closest one

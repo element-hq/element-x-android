@@ -16,19 +16,13 @@
 
 package io.element.android.appnav.room
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
-import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -47,7 +41,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -102,20 +95,7 @@ private fun LoadingRoomTopBar(
             BackButton(onClick = onBackClicked)
         },
         title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(AvatarSize.TimelineRoom.dp)
-                        .align(Alignment.CenterVertically)
-                        .background(color = ElementTheme.colors.placeholderBackground, shape = CircleShape)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                PlaceholderAtom(width = 20.dp, height = 7.dp)
-                Spacer(modifier = Modifier.width(7.dp))
-                PlaceholderAtom(width = 45.dp, height = 7.dp)
-            }
+            IconTitlePlaceholdersRowMolecule(iconSize = AvatarSize.TimelineRoom.dp)
         },
         windowInsets = WindowInsets(0.dp),
     )
@@ -123,12 +103,12 @@ private fun LoadingRoomTopBar(
 
 @Preview
 @Composable
-fun LoadingRoomNodeViewLightPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
+internal fun LoadingRoomNodeViewLightPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun LoadingRoomNodeViewDarkPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
+internal fun LoadingRoomNodeViewDarkPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

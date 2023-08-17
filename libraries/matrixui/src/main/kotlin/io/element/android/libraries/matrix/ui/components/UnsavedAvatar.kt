@@ -85,11 +85,11 @@ fun UnsavedAvatar(
 
 @Preview
 @Composable
-fun UnsavedAvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun UnsavedAvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun UnsavedAvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun UnsavedAvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

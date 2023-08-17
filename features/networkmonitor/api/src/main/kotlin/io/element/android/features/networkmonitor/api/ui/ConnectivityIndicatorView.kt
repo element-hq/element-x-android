@@ -44,8 +44,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -85,14 +87,14 @@ private fun Indicator(modifier: Modifier = Modifier) {
             .statusBarsPadding()
             .padding(vertical = 6.dp),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.Bottom,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         val tint = MaterialTheme.colorScheme.primary
         Image(
             imageVector = Icons.Outlined.WifiOff,
             contentDescription = null,
             colorFilter = ColorFilter.tint(tint),
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier.size(16.sp.toDp()),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(

@@ -15,9 +15,9 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <integer name="rtl_x_multiplier">1</integer>
-    <integer name="rtl_mirror_flip">0</integer>
+    <integer name="rtl_x_multiplier" tools:ignore="UnusedResources">1</integer>
+    <integer name="rtl_mirror_flip" tools:ignore="UnusedResources">0</integer>
 
 </resources>

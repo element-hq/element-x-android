@@ -21,6 +21,7 @@ import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.api.reporter.ReportType
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import kotlinx.coroutines.delay
+import java.io.File
 
 class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Success) : BugReporter {
     override suspend fun sendBugReport(
@@ -54,6 +55,14 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
         listener?.onProgress(100)
         delay(100)
         listener?.onUploadSucceed(null)
+    }
+
+    override fun cleanLogDirectoryIfNeeded() {
+        // No op
+    }
+
+    override fun logDirectory(): File {
+        return File("fake")
     }
 }
 

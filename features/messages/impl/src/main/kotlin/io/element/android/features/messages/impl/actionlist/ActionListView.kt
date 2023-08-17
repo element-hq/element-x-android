@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
@@ -61,6 +62,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -72,7 +74,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toSp
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
@@ -175,7 +177,7 @@ private fun SheetContent(
                             .padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.height(14.dp))
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 if (state.displayEmojiReactions) {
@@ -186,7 +188,7 @@ private fun SheetContent(
                             onCustomReactionClicked = onCustomReactionClicked,
                             modifier = Modifier.fillMaxWidth(),
                         )
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 items(
@@ -235,6 +237,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     val textContent = remember(event.content) { formatter.format(event) }
 
     when (event.content) {
+        is TimelineItemPollContent, // TODO Polls: handle summary
         is TimelineItemTextBasedContent,
         is TimelineItemStateContent,
         is TimelineItemEncryptedContent,
@@ -342,7 +345,7 @@ internal fun EmojiReactionsRow(
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier.padding(horizontal = 28.dp, vertical = 16.dp)
+        modifier = modifier.padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
         // TODO use most recently used emojis here when available from the Rust SDK
         val defaultEmojis = sequenceOf(
@@ -352,21 +355,25 @@ internal fun EmojiReactionsRow(
             val isHighlighted = highlightedEmojis.contains(emoji)
             EmojiButton(emoji, isHighlighted, onEmojiReactionClicked)
         }
-
-        Icon(
-            imageVector = Icons.Outlined.AddReaction,
-            contentDescription = "Emojis",
-            tint = MaterialTheme.colorScheme.secondary,
+        Box(
             modifier = Modifier
-                .size(24.dp)
-                .align(Alignment.CenterVertically)
-                .clickable(
-                    enabled = true,
-                    onClick = onCustomReactionClicked,
-                    indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
-                    interactionSource = remember { MutableInteractionSource() }
-                )
-        )
+                .size(48.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.AddReaction,
+                contentDescription = "Emojis",
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable(
+                        enabled = true,
+                        onClick = onCustomReactionClicked,
+                        indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+            )
+        }
     }
 }
 
@@ -385,12 +392,13 @@ private fun EmojiButton(
     Box(
         modifier = modifier
             .size(48.dp)
-            .background(backgroundColor, RoundedCornerShape(24.dp)),
+            .background(backgroundColor, CircleShape),
+
         contentAlignment = Alignment.Center
     ) {
         Text(
             emoji,
-            fontSize = 28.dp.toSp(),
+            fontSize = 24.dp.toSp(),
             color = Color.White,
             modifier = Modifier
                 .clickable(
@@ -405,7 +413,7 @@ private fun EmojiButton(
 
 @DayNightPreviews
 @Composable
-fun SheetContentPreview(
+internal fun SheetContentPreview(
     @PreviewParameter(ActionListStateProvider::class) state: ActionListState
 ) = ElementPreview {
     SheetContent(

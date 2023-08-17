@@ -1,9 +1,11 @@
+import com.google.devtools.ksp.gradle.KspTask
 import kotlinx.kover.api.KoverTaskExtension
+import org.apache.tools.ant.taskdefs.optional.ReplaceRegExp
 import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 buildscript {
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
         classpath("com.google.gms:google-services:4.3.15")
     }
 }
@@ -56,7 +58,7 @@ allprojects {
         // activate all available (even unstable) rules.
         allRules = true
         // point to your custom config defining rules to run, overwriting default behavior
-        config = files("$rootDir/tools/detekt/detekt.yml")
+        config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
         detektPlugins("io.nlopez.compose.rules:detekt:0.1.12")
@@ -342,4 +344,22 @@ subprojects {
     tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziDebug")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziRelease")?.dependsOn(removeOldScreenshotsTask)
+}
+
+// Workaround for https://github.com/airbnb/Showkase/issues/335
+subprojects {
+    tasks.withType<KspTask>() {
+        doLast {
+            fileTree(buildDir).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
+                ReplaceRegExp().apply {
+                    setMatch("public fun Showkase.getMetadata")
+                    setReplace("@Suppress(\"DEPRECATION\") public fun Showkase.getMetadata")
+                    setFlags("g")
+                    setByLine(true)
+                    setFile(file)
+                    execute()
+                }
+            }
+        }
+    }
 }

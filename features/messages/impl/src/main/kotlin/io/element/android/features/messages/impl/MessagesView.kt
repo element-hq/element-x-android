@@ -35,7 +35,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -53,19 +52,24 @@ import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -74,6 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
@@ -96,7 +101,11 @@ fun MessagesView(
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
 
-    AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
+    AttachmentStateView(
+        state = state.composerState.attachmentsState,
+        onPreviewAttachments = onPreviewAttachments,
+        onCancel = { state.composerState.eventSink(MessageComposerEvents.CancelSendAttachment) },
+    )
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
@@ -113,7 +122,7 @@ fun MessagesView(
     fun onMessageLongClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageLongClicked= ${event.id}")
         localView.hideKeyboard()
-        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event))
+        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event, state.userHasPermissionToRedact))
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
@@ -125,8 +134,14 @@ fun MessagesView(
         state.eventSink(MessagesEvents.ToggleReaction(emoji, event.eventId))
     }
 
-    fun onMoreReactionsClicked(event: TimelineItem.Event): Unit =
-        state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event.eventId))
+    fun onEmojiReactionLongClicked(emoji: String, event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        state.reactionSummaryState.eventSink(ReactionSummaryEvents.ShowReactionSummary(event.eventId, event.reactionsState.reactions, emoji))
+    }
+
+    fun onMoreReactionsClicked(event: TimelineItem.Event) {
+        state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event))
+    }
 
     Scaffold(
         modifier = modifier,
@@ -135,8 +150,8 @@ fun MessagesView(
             Column {
                 ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
                 MessagesViewTopBar(
-                    roomTitle = state.roomName,
-                    roomAvatar = state.roomAvatar,
+                    roomName = state.roomName.dataOrNull(),
+                    roomAvatar = state.roomAvatar.dataOrNull(),
                     onBackPressed = onBackPressed,
                     onRoomDetailsClicked = onRoomDetailsClicked,
                 )
@@ -157,6 +172,7 @@ fun MessagesView(
                     }
                 },
                 onReactionClicked = ::onEmojiReactionClicked,
+                onReactionLongClicked = ::onEmojiReactionLongClicked,
                 onMoreReactionsClicked = ::onMoreReactionsClicked,
                 onSendLocationClicked = onSendLocationClicked,
                 onSwipeToReply = { targetEvent ->
@@ -176,7 +192,7 @@ fun MessagesView(
         state = state.actionListState,
         onActionSelected = ::onActionSelected,
         onCustomReactionClicked = { event ->
-            state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event.eventId))
+            state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event))
         },
         onEmojiReactionClicked = ::onEmojiReactionClicked,
     )
@@ -191,6 +207,7 @@ fun MessagesView(
         }
     )
 
+    ReactionSummaryView(state = state.reactionSummaryState)
     RetrySendMessageMenu(
         state = state.retrySendMenuState
     )
@@ -201,14 +218,13 @@ fun MessagesView(
 }
 
 @Composable
-fun ReinviteDialog(state: MessagesState) {
+private fun ReinviteDialog(state: MessagesState) {
     if (state.showReinvitePrompt) {
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_room_invite_again_alert_title),
             content = stringResource(id = R.string.screen_room_invite_again_alert_message),
             cancelText = stringResource(id = CommonStrings.action_cancel),
             submitText = stringResource(id = CommonStrings.action_invite),
-            emphasizeSubmitButton = true,
             onSubmitClicked = { state.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite)) },
             onDismiss = { state.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel)) }
         )
@@ -218,7 +234,8 @@ fun ReinviteDialog(state: MessagesState) {
 @Composable
 private fun AttachmentStateView(
     state: AttachmentsState,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit
+    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
+    onCancel: () -> Unit,
 ) {
     when (state) {
         AttachmentsState.None -> Unit
@@ -231,18 +248,21 @@ private fun AttachmentStateView(
                     is AttachmentsState.Sending.Uploading -> ProgressDialogType.Determinate(state.progress)
                     is AttachmentsState.Sending.Processing -> ProgressDialogType.Indeterminate
                 },
-                text = stringResource(id = CommonStrings.common_sending)
+                text = stringResource(id = CommonStrings.common_sending),
+                isCancellable = true,
+                onDismissRequest = onCancel,
             )
         }
     }
 }
 
 @Composable
-fun MessagesViewContent(
+private fun MessagesViewContent(
     state: MessagesState,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
+    onReactionLongClicked: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
@@ -266,6 +286,7 @@ fun MessagesViewContent(
                 onUserDataClicked = onUserDataClicked,
                 onTimestampClicked = onTimestampClicked,
                 onReactionClicked = onReactionClicked,
+                onReactionLongClicked = onReactionLongClicked,
                 onMoreReactionsClicked = onMoreReactionsClicked,
                 onSwipeToReply = onSwipeToReply,
             )
@@ -286,9 +307,9 @@ fun MessagesViewContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MessagesViewTopBar(
-    roomTitle: String,
-    roomAvatar: AvatarData,
+private fun MessagesViewTopBar(
+    roomName: String?,
+    roomAvatar: AvatarData?,
     modifier: Modifier = Modifier,
     onRoomDetailsClicked: () -> Unit = {},
     onBackPressed: () -> Unit = {},
@@ -299,17 +320,17 @@ fun MessagesViewTopBar(
             BackButton(onClick = onBackPressed)
         },
         title = {
-            Row(
-                modifier = Modifier.clickable { onRoomDetailsClicked() },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Avatar(roomAvatar)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = roomTitle,
-                    style = ElementTheme.typography.fontBodyLgMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+            val titleModifier = Modifier.clickable { onRoomDetailsClicked() }
+            if (roomName != null && roomAvatar != null) {
+                RoomAvatarAndNameRow(
+                    roomName = roomName,
+                    roomAvatar = roomAvatar,
+                    modifier = titleModifier
+                )
+            } else {
+                IconTitlePlaceholdersRowMolecule(
+                    iconSize = AvatarSize.TimelineRoom.dp,
+                    modifier = titleModifier
                 )
             }
         },
@@ -318,7 +339,28 @@ fun MessagesViewTopBar(
 }
 
 @Composable
-fun CantSendMessageBanner(
+private fun RoomAvatarAndNameRow(
+    roomName: String,
+    roomAvatar: AvatarData,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Avatar(roomAvatar)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = roomName,
+            style = ElementTheme.typography.fontBodyLgMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun CantSendMessageBanner(
     modifier: Modifier = Modifier,
 ) {
     Row(

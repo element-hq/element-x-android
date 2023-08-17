@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.extensions.toAnalyticsJoinedRoom
@@ -56,8 +56,9 @@ class InviteListPresenter @Inject constructor(
     @Composable
     override fun present(): InviteListState {
         val invites by client
-            .roomSummaryDataSource
-            .inviteRooms()
+            .roomListService
+            .invites()
+            .summaries
             .collectAsState()
 
         var seenInvites by remember { mutableStateOf<Set<RoomId>>(emptySet()) }
@@ -152,8 +153,7 @@ class InviteListPresenter @Inject constructor(
             client.getRoom(roomId)?.use {
                 it.leave().getOrThrow()
                 notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
-            }
-            Unit
+            }.let { }
         }.runCatchingUpdatingState(declinedAction)
     }
 

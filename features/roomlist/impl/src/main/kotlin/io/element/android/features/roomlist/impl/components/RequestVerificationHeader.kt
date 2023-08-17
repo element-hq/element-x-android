@@ -19,7 +19,6 @@ package io.element.android.features.roomlist.impl.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -83,15 +82,11 @@ internal fun RequestVerificationHeader(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
+                    text = stringResource(CommonStrings.action_continue),
+                    size = ButtonSize.Medium,
                     modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 7.dp),
                     onClick = onVerifyClicked,
-                ) {
-                    Text(
-                        stringResource(CommonStrings.action_continue),
-                        style = ElementTheme.typography.aliasButtonText
-                    )
-                }
+                )
             }
         }
     }

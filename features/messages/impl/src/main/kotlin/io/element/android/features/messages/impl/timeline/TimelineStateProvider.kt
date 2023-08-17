@@ -16,10 +16,10 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.anAggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
@@ -141,7 +141,11 @@ fun aTimelineItemReactions(
         reactions = buildList {
             repeat(count) { index ->
                 val key = emojis[index % emojis.size]
-                add(AggregatedReaction(key = key, count = 1 + index, isHighlighted = isHighlighted))
+                add(anAggregatedReaction(
+                    key = key,
+                    count = index + 1,
+                    isHighlighted = isHighlighted
+                ))
             }
         }.toPersistentList()
     )

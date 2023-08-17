@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.Density
 import androidx.lifecycle.Lifecycle
 import app.cash.paparazzi.Paparazzi
+import app.cash.paparazzi.detectEnvironment
 import com.airbnb.android.showkase.models.Showkase
 import com.android.ide.common.rendering.api.SessionParams
 import com.android.resources.NightMode
@@ -70,6 +71,10 @@ class ScreenshotTest {
 
     @get:Rule
     val paparazzi = Paparazzi(
+        environment = detectEnvironment().run {
+            // Workaround to work with API 34 (https://github.com/cashapp/paparazzi/issues/1025)
+            copy(compileSdkVersion = 33, platformDir = platformDir.replace("34", "33"))
+        },
         maxPercentDifference = 0.01,
         renderingMode = SessionParams.RenderingMode.NORMAL,
     )

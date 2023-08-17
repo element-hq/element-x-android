@@ -112,6 +112,7 @@ fun TimelineItemEventRow(
     inReplyToClick: (EventId) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
+    onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
     modifier: Modifier = Modifier
@@ -169,6 +170,7 @@ fun TimelineItemEventRow(
                         inReplyToClicked = ::inReplyToClicked,
                         onUserDataClicked = ::onUserDataClicked,
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                        onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
                     )
                 }
@@ -184,6 +186,7 @@ fun TimelineItemEventRow(
                 inReplyToClicked = ::inReplyToClicked,
                 onUserDataClicked = ::onUserDataClicked,
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
+                onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
             )
         }
@@ -224,6 +227,7 @@ private fun TimelineItemEventRowContent(
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
     onReactionClicked: (emoji: String) -> Unit,
+    onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -292,6 +296,7 @@ private fun TimelineItemEventRowContent(
                 reactionsState = event.reactionsState,
                 isOutgoing = event.isMine,
                 onReactionClicked = onReactionClicked,
+                onReactionLongClicked = onReactionLongClicked,
                 onMoreReactionsClicked = { onMoreReactionsClicked(event) },
                 modifier = Modifier
                     .constrainAs(reactions) {
@@ -479,7 +484,7 @@ private fun ReplyToContent(
     val paddings = if (attachmentThumbnailInfo != null) {
         PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
     } else {
-        PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 4.dp)
+        PaddingValues(horizontal = 12.dp, vertical = 4.dp)
     }
     Row(
         modifier
@@ -517,42 +522,46 @@ private fun ReplyToContent(
     }
 }
 
-private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready) =
-    when (val type = inReplyTo.content.type) {
+private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): AttachmentThumbnailInfo? {
+    val messageContent = inReplyTo.content as? MessageContent ?: return null
+    return when (val type = messageContent.type) {
         is ImageMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource,
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.Image,
             blurHash = type.info?.blurhash,
         )
         is VideoMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource,
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.Video,
             blurHash = type.info?.blurhash,
         )
         is FileMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource,
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.File,
         )
         is LocationMessageType -> AttachmentThumbnailInfo(
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.Location,
         )
         is AudioMessageType -> AttachmentThumbnailInfo(
-            textContent = inReplyTo.content.body,
+            textContent = messageContent.body,
             type = AttachmentThumbnailType.Audio,
         )
         else -> null
     }
+}
 
 @Composable
-private fun textForInReplyTo(inReplyTo: InReplyTo.Ready) =
-    when (inReplyTo.content.type) {
+private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
+    val messageContent = inReplyTo.content as? MessageContent ?: return ""
+    return when (messageContent.type) {
         is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
-        else -> inReplyTo.content.body
+        else -> messageContent.body
     }
+}
 
 @Preview
 @Composable
@@ -584,6 +593,7 @@ private fun ContentToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
@@ -603,6 +613,7 @@ private fun ContentToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
@@ -649,6 +660,7 @@ private fun ContentToPreviewWithReply() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
@@ -669,6 +681,7 @@ private fun ContentToPreviewWithReply() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
@@ -725,6 +738,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                     onUserDataClick = {},
                     inReplyToClick = {},
                     onReactionClick = { _, _ -> },
+                    onReactionLongClick = { _, _ -> },
                     onMoreReactionsClick = {},
                     onTimestampClicked = {},
                     onSwipeToReply = {},
@@ -764,6 +778,7 @@ private fun ContentWithManyReactionsToPreview() {
                 onUserDataClick = {},
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onSwipeToReply = {},
                 onTimestampClicked = {},

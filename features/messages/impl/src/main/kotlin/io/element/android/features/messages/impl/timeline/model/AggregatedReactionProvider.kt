@@ -17,6 +17,9 @@
 package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.core.UserId
+import java.text.DateFormat
+import java.util.Date
 
 open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReaction> {
     override val values: Sequence<AggregatedReaction>
@@ -29,11 +32,27 @@ open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReact
 }
 
 fun anAggregatedReaction(
+    userId: UserId = UserId("@alice:server.org"),
     key: String = "👍",
     count: Int = 1,
     isHighlighted: Boolean = false,
-) = AggregatedReaction(
-    key = key,
-    count = count,
-    isHighlighted = isHighlighted,
-)
+): AggregatedReaction {
+    val senders = buildList {
+        repeat(count) { index ->
+            val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
+            val date = Date(1_689_061_264L)
+            add(
+                AggregatedReactionSender(
+                    senderId = if (isHighlighted && index == 0) userId else UserId("@user$index:server.org"),
+                    timestamp = date,
+                    sentTime = timeFormatter.format(date),
+                )
+            )
+        }
+    }
+    return AggregatedReaction(
+        currentUserId = userId,
+        key = key,
+        senders = senders
+    )
+}

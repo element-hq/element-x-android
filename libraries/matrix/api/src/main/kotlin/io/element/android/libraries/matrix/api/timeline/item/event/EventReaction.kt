@@ -16,10 +16,7 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
-import io.element.android.libraries.matrix.api.core.UserId
-
 data class EventReaction(
     val key: String,
-    val count: Long,
-    val senderIds: List<UserId>
+    val senders: List<ReactionSender>
 )

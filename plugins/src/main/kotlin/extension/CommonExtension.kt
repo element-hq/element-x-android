@@ -45,6 +45,7 @@ fun CommonExtension<*, *, *, *, *>.androidConfig(project: Project) {
         checkDependencies = true
         abortOnError = true
         ignoreTestFixturesSources = true
+        checkGeneratedSources = false
     }
 }
 
@@ -71,6 +72,7 @@ fun CommonExtension<*, *, *, *, *>.composeConfig(libs: LibrariesForLibs) {
         // error.add("ComposableLambdaParameterNaming")
         error.add("ComposableLambdaParameterPosition")
         ignoreTestFixturesSources = true
+        checkGeneratedSources = false
     }
 }
 

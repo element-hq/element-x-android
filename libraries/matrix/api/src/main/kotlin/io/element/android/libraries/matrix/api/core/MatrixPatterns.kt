@@ -30,7 +30,8 @@ object MatrixPatterns {
 
     // regex pattern to find matrix user ids in a string.
     // See https://matrix.org/docs/spec/appendices#historical-user-ids
-    private const val MATRIX_USER_IDENTIFIER_REGEX = "@[A-Z0-9\\x21-\\x39\\x3B-\\x7F]+$DOMAIN_REGEX"
+    // Sadly, we need to relax the regex pattern a bit as there already exist some ids that don't match the spec.
+    private const val MATRIX_USER_IDENTIFIER_REGEX = "^@.*?$DOMAIN_REGEX$"
     val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find room ids in a string.
@@ -42,7 +43,8 @@ object MatrixPatterns {
     private val PATTERN_CONTAIN_MATRIX_ALIAS = MATRIX_ROOM_ALIAS_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find message ids in a string.
-    private const val MATRIX_EVENT_IDENTIFIER_REGEX = "\\$[A-Z0-9]+$DOMAIN_REGEX"
+    // Sadly, we need to relax the regex pattern a bit as there already exist some ids that don't match the spec.
+    private const val MATRIX_EVENT_IDENTIFIER_REGEX = "^\\$.+$DOMAIN_REGEX$"
     private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER = MATRIX_EVENT_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find message ids in a string.

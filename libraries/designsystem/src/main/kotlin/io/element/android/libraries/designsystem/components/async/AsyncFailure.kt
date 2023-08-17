@@ -48,9 +48,10 @@ fun AsyncFailure(
         Text(text = throwable.message ?: stringResource(id = CommonStrings.error_unknown))
         if (onRetry != null) {
             Spacer(modifier = Modifier.height(24.dp))
-            Button(onClick = onRetry) {
-                Text(text = stringResource(id = CommonStrings.action_retry))
-            }
+            Button(
+                text = stringResource(id = CommonStrings.action_retry),
+                onClick = onRetry
+            )
         }
     }
 }

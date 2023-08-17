@@ -183,7 +183,7 @@ fun Context.startInstallFromSourceIntent(
     noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
-        .setData(Uri.parse(String.format("package:%s", packageName)))
+        .setData(Uri.parse("package:$packageName"))
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {

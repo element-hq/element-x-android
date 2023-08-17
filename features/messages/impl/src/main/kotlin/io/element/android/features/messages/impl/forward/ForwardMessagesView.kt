@@ -52,7 +52,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogD
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
@@ -63,7 +63,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -123,11 +123,10 @@ fun ForwardMessagesView(
                 },
                 actions = {
                     TextButton(
+                        text = stringResource(CommonStrings.action_send),
                         enabled = state.selectedRooms.isNotEmpty(),
                         onClick = { state.eventSink(ForwardMessagesEvents.ForwardEvent) }
-                    ) {
-                        Text(text = stringResource(CommonStrings.action_send))
-                    }
+                    )
                 }
             )
         }
@@ -162,7 +161,7 @@ fun ForwardMessagesView(
                                     state.eventSink(ForwardMessagesEvents.SetSelectedRoom(roomSummary))
                                 }
                             )
-                            Divider(modifier = Modifier.fillMaxWidth())
+                            HorizontalDivider(modifier = Modifier.fillMaxWidth())
                         }
                     }
                 }
@@ -187,7 +186,7 @@ fun ForwardMessagesView(
                                         state.eventSink(ForwardMessagesEvents.SetSelectedRoom(roomSummary))
                                     }
                                 )
-                                Divider(modifier = Modifier.fillMaxWidth())
+                                HorizontalDivider(modifier = Modifier.fillMaxWidth())
                             }
                         }
                     }
@@ -283,12 +282,12 @@ private fun ForwardingErrorDialog(onDismiss: () -> Unit, modifier: Modifier = Mo
 
 @Preview
 @Composable
-fun ForwardMessagesViewLightPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
+internal fun ForwardMessagesViewLightPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun ForwardMessagesViewDarkPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
+internal fun ForwardMessagesViewDarkPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

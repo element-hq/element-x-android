@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
@@ -55,7 +55,7 @@ fun AccountProviderView(
     Column(modifier = modifier
         .fillMaxWidth()
         .clickable { onClick() }) {
-        Divider()
+        HorizontalDivider()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,12 +114,12 @@ fun AccountProviderView(
 
 @Preview
 @Composable
-fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
+internal fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewLight { ContentToPreview(item) }
 
 @Preview
 @Composable
-fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
+internal fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewDark { ContentToPreview(item) }
 
 @Composable

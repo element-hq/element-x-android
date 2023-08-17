@@ -24,8 +24,12 @@ import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
+import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -37,6 +41,7 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import java.util.Date
 
 class TimelinePresenterTest {
     @Test
@@ -114,7 +119,7 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - on scroll finished will not send read receipt no event is before the index`() = runTest {
+    fun `present - on scroll finished will not send read receipt if no event is before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
                 MatrixTimelineItem.Event(0, anEventTimelineItem())
@@ -185,6 +190,61 @@ class TimelinePresenterTest {
             initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
             assertThat(awaitItem().hasNewItems).isFalse()
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - reaction ordering`() = runTest {
+        val timeline = FakeMatrixTimeline()
+        val presenter = createTimelinePresenter(timeline)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.hasNewItems).isFalse()
+            assertThat(initialState.timelineItems.size).isEqualTo(0)
+            val now = Date().time
+            val minuteInMilis = 60 * 1000
+            // Use index as a convenient value for timestamp
+            val (alice, bob, charlie) = aMatrixUserList().take(3).mapIndexed { i, user ->
+                ReactionSender(senderId = user.userId, timestamp = now + i * minuteInMilis)
+            }
+            val oneReaction = listOf(
+                EventReaction(
+                    key = "❤️",
+                    senders = listOf(alice, charlie)
+                ),
+                EventReaction(
+                key = "👍",
+                senders = listOf(alice, bob)
+                ),
+                EventReaction(
+                    key = "🐶",
+                    senders = listOf(charlie)
+                ),
+            )
+            timeline.updateTimelineItems {
+                listOf(MatrixTimelineItem.Event(0, anEventTimelineItem(reactions = oneReaction)))
+            }
+            skipItems(1)
+            val item = awaitItem().timelineItems.first()
+            assertThat(item).isInstanceOf(TimelineItem.Event::class.java)
+            val event = item as TimelineItem.Event
+            val reactions = event.reactionsState.reactions
+            assertThat(reactions.size).isEqualTo(3)
+
+            // Aggregated reactions are sorted by count first and then timestamp ascending(new ones tagged on the end)
+            assertThat(reactions[0].count).isEqualTo(2)
+            assertThat(reactions[0].key).isEqualTo("👍")
+            assertThat(reactions[0].senders[0].senderId).isEqualTo(bob.senderId)
+
+            assertThat(reactions[1].count).isEqualTo(2)
+            assertThat(reactions[1].key).isEqualTo("❤️")
+            assertThat(reactions[1].senders[0].senderId).isEqualTo(charlie.senderId)
+
+            assertThat(reactions[2].count).isEqualTo(1)
+            assertThat(reactions[2].key).isEqualTo("🐶")
+            assertThat(reactions[2].senders[0].senderId).isEqualTo(charlie.senderId)
         }
     }
 

@@ -94,6 +94,21 @@ class AttachmentsPreviewPresenterTest {
         }
     }
 
+    @Test
+    fun `present - dismissing the progress dialog stops media upload`() = runTest {
+        val presenter = anAttachmentsPreviewPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            initialState.eventSink(AttachmentsPreviewEvents.ClearSendState)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+        }
+    }
+
     private fun anAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,

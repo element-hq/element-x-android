@@ -19,38 +19,40 @@ package io.element.android.libraries.matrix.impl.sync
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.SyncServiceInterface
+import org.matrix.rustcomponents.sdk.SyncServiceState
 import timber.log.Timber
 
 class RustSyncService(
     private val innerSyncService: SyncServiceInterface,
-    roomListStateFlow: Flow<RoomListServiceState>,
     sessionCoroutineScope: CoroutineScope
 ) : SyncService {
 
     override suspend fun startSync() = runCatching {
-        Timber.v("Start sync")
+        Timber.i("Start sync")
         innerSyncService.start()
+    }.onFailure {
+        Timber.d("Start sync failed: $it")
     }
 
-    override fun stopSync() = runCatching {
-        Timber.v("Stop sync")
-        innerSyncService.pause()
+    override suspend fun stopSync() = runCatching {
+        Timber.i("Stop sync")
+        innerSyncService.stop()
+    }.onFailure {
+        Timber.d("Stop sync failed: $it")
     }
 
     override val syncState: StateFlow<SyncState> =
-        roomListStateFlow
-            .map(RoomListServiceState::toSyncState)
+        innerSyncService.stateFlow()
+            .map(SyncServiceState::toSyncState)
             .onEach { state ->
-                Timber.v("Sync state=$state")
+                Timber.i("Sync state=$state")
             }
             .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)

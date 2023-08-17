@@ -19,13 +19,13 @@ package io.element.android.features.messages.impl.timeline.factories
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.recyclerview.widget.DiffUtil
-import io.element.android.features.messages.impl.timeline.diff.CacheInvalidator
-import io.element.android.features.messages.impl.timeline.diff.MatrixTimelineItemsDiffCallback
+import io.element.android.features.messages.impl.timeline.diff.TimelineItemsCacheInvalidator
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
+import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
@@ -35,9 +35,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
-import kotlin.system.measureTimeMillis
 
 class TimelineItemsFactory @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
@@ -46,13 +44,20 @@ class TimelineItemsFactory @Inject constructor(
     private val timelineItemGrouper: TimelineItemGrouper,
 ) {
     private val timelineItems = MutableStateFlow(persistentListOf<TimelineItem>())
-    private val timelineItemsCache = arrayListOf<TimelineItem?>()
-
-    // Items from rust sdk, used for diffing
-    private var matrixTimelineItems: List<MatrixTimelineItem> = emptyList()
 
     private val lock = Mutex()
-    private val cacheInvalidator = CacheInvalidator(timelineItemsCache)
+    private val diffCache = MutableListDiffCache<TimelineItem>()
+    private val diffCacheUpdater = DiffCacheUpdater<MatrixTimelineItem, TimelineItem>(
+        diffCache = diffCache,
+        detectMoves = false,
+        cacheInvalidator = TimelineItemsCacheInvalidator()
+    ) { old, new ->
+        if (old is MatrixTimelineItem.Event && new is MatrixTimelineItem.Event) {
+            old.uniqueId == new.uniqueId
+        } else {
+            false
+        }
+    }
 
     @Composable
     fun collectItemsAsState(): State<ImmutableList<TimelineItem>> {
@@ -63,15 +68,15 @@ class TimelineItemsFactory @Inject constructor(
         timelineItems: List<MatrixTimelineItem>,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
-            calculateAndApplyDiff(timelineItems)
+            diffCacheUpdater.updateWith(timelineItems)
             buildAndEmitTimelineItemStates(timelineItems)
         }
     }
 
     private suspend fun buildAndEmitTimelineItemStates(timelineItems: List<MatrixTimelineItem>) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
-        for (index in timelineItemsCache.indices.reversed()) {
-            val cacheItem = timelineItemsCache[index]
+        for (index in diffCache.indices().reversed()) {
+            val cacheItem = diffCache.get(index)
             if (cacheItem == null) {
                 buildAndCacheItem(timelineItems, index)?.also { timelineItemState ->
                     newTimelineItemStates.add(timelineItemState)
@@ -84,21 +89,7 @@ class TimelineItemsFactory @Inject constructor(
         this.timelineItems.emit(result)
     }
 
-    private fun calculateAndApplyDiff(newTimelineItems: List<MatrixTimelineItem>) {
-        val timeToDiff = measureTimeMillis {
-            val diffCallback =
-                MatrixTimelineItemsDiffCallback(
-                    oldList = matrixTimelineItems,
-                    newList = newTimelineItems
-                )
-            val diffResult = DiffUtil.calculateDiff(diffCallback, false)
-            matrixTimelineItems = newTimelineItems
-            diffResult.dispatchUpdatesTo(cacheInvalidator)
-        }
-        Timber.v("Time to apply diff on new list of ${newTimelineItems.size} items: $timeToDiff ms")
-    }
-
-    private fun buildAndCacheItem(
+    private suspend fun buildAndCacheItem(
         timelineItems: List<MatrixTimelineItem>,
         index: Int
     ): TimelineItem? {
@@ -108,7 +99,7 @@ class TimelineItemsFactory @Inject constructor(
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }
-        timelineItemsCache[index] = timelineItemState
+        diffCache[index] = timelineItemState
         return timelineItemState
     }
 }

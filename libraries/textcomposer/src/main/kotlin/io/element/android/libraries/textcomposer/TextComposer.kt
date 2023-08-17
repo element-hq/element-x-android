@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.ripple.rememberRipple
@@ -48,6 +49,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -65,6 +67,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -73,6 +76,7 @@ import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -109,12 +113,15 @@ fun TextComposer(
     ) {
         AttachmentButton(onClick = onAddAttachment, modifier = Modifier.padding(vertical = 6.dp))
         Spacer(modifier = Modifier.width(12.dp))
-        var lineCount by remember { mutableStateOf(0) }
+        val roundCornerSmall = 20.dp.applyScaleUp()
+        val roundCornerLarge = 28.dp.applyScaleUp()
+        var lineCount by remember { mutableIntStateOf(0) }
+
         val roundedCornerSize = remember(lineCount, composerMode) {
             if (lineCount > 1 || composerMode is MessageComposerMode.Special) {
-                20.dp
+                roundCornerSmall
             } else {
-                28.dp
+                roundCornerLarge
             }
         }
         val roundedCornerSizeState = animateDpAsState(
@@ -124,7 +131,7 @@ fun TextComposer(
             )
         )
         val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
-        val minHeight = 42.dp
+        val minHeight = 42.dp.applyScaleUp()
         val bgColor = ElementTheme.colors.bgSubtleSecondary
         // Change border color depending on focus
         var hasFocus by remember { mutableStateOf(false) }
@@ -155,6 +162,9 @@ fun TextComposer(
                     onTextLayout = {
                         lineCount = it.lineCount
                     },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                    ),
                     textStyle = defaultTypography.copy(color = MaterialTheme.colorScheme.primary),
                     cursorBrush = SolidColor(ElementTheme.colors.iconAccentTertiary),
                     decorationBox = { innerTextField ->
@@ -165,7 +175,12 @@ fun TextComposer(
                             singleLine = false,
                             visualTransformation = VisualTransformation.None,
                             shape = roundedCorners,
-                            contentPadding = PaddingValues(top = 10.dp, bottom = 10.dp, start = 12.dp, end = 42.dp),
+                            contentPadding = PaddingValues(
+                                top = 10.dp.applyScaleUp(),
+                                bottom = 10.dp.applyScaleUp(),
+                                start = 12.dp.applyScaleUp(),
+                                end = 42.dp.applyScaleUp(),
+                            ),
                             interactionSource = remember { MutableInteractionSource() },
                             placeholder = {
                                 Text(stringResource(CommonStrings.common_message), style = defaultTypography)
@@ -193,7 +208,7 @@ fun TextComposer(
                     canSendMessage = composerCanSendMessage,
                     onSendMessage = onSendMessage,
                     composerMode = composerMode,
-                    modifier = Modifier.padding(end = 6.dp, bottom = 6.dp)
+                    modifier = Modifier.padding(end = 6.dp.applyScaleUp(), bottom = 6.dp.applyScaleUp())
                 )
             }
         }
@@ -253,7 +268,7 @@ private fun EditingModeView(
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
                 .padding(vertical = 8.dp)
-                .size(16.dp),
+                .size(16.dp.applyScaleUp()),
         )
         Text(
             stringResource(CommonStrings.common_editing),
@@ -270,11 +285,11 @@ private fun EditingModeView(
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
                 .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 12.dp)
-                .size(16.dp)
+                .size(16.dp.applyScaleUp())
                 .clickable(
                     enabled = true,
                     onClick = onResetComposerMode,
-                    interactionSource = MutableInteractionSource(),
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
                 ),
         )
@@ -333,11 +348,11 @@ private fun ReplyToModeView(
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
                 .padding(end = 4.dp, top = 4.dp, start = 16.dp, bottom = 16.dp)
-                .size(16.dp)
+                .size(16.dp.applyScaleUp())
                 .clickable(
                     enabled = true,
                     onClick = onResetComposerMode,
-                    interactionSource = MutableInteractionSource(),
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
                 ),
         )
@@ -351,13 +366,13 @@ private fun AttachmentButton(
 ) {
     Surface(
         modifier
-            .size(30.dp)
+            .size(30.dp.applyScaleUp())
             .clickable(onClick = onClick),
         shape = CircleShape,
         color = ElementTheme.colors.iconPrimary
     ) {
         Image(
-            modifier = Modifier.size(12.5f.dp),
+            modifier = Modifier.size(12.5f.dp.applyScaleUp()),
             painter = painterResource(R.drawable.ic_add_attachment),
             contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
             contentScale = ContentScale.Inside,
@@ -376,15 +391,15 @@ private fun BoxScope.SendButton(
     composerMode: MessageComposerMode,
     modifier: Modifier = Modifier,
 ) {
-    val interactionSource = MutableInteractionSource()
+    val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
             .clip(CircleShape)
             .background(if (canSendMessage) ElementTheme.colors.iconAccentTertiary else Color.Transparent)
-            .size(30.dp)
+            .size(30.dp.applyScaleUp())
             .align(Alignment.BottomEnd)
             .applyIf(composerMode !is MessageComposerMode.Edit, ifTrue = {
-                padding(start = 1.dp) // Center the arrow in the circle
+                padding(start = 1.dp.applyScaleUp()) // Center the arrow in the circle
             })
             .clickable(
                 enabled = canSendMessage,
@@ -404,7 +419,7 @@ private fun BoxScope.SendButton(
             else -> stringResource(CommonStrings.action_send)
         }
         Icon(
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier.size(16.dp.applyScaleUp()),
             resourceId = iconId,
             contentDescription = contentDescription,
             // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
@@ -415,7 +430,7 @@ private fun BoxScope.SendButton(
 
 @DayNightPreviews
 @Composable
-fun TextComposerSimplePreview() = ElementPreview {
+internal fun TextComposerSimplePreview() = ElementPreview {
     Column {
         TextComposer(
             onSendMessage = {},
@@ -446,7 +461,7 @@ fun TextComposerSimplePreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TextComposerEditPreview() = ElementPreview {
+internal fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
         onSendMessage = {},
         onComposerTextChange = {},
@@ -459,7 +474,7 @@ fun TextComposerEditPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-fun TextComposerReplyPreview() = ElementPreview {
+internal fun TextComposerReplyPreview() = ElementPreview {
     Column {
         TextComposer(
             onSendMessage = {},

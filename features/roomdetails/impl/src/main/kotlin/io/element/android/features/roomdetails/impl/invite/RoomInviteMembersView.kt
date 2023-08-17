@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -128,10 +128,8 @@ fun RoomInviteMembersTopBar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             TextButton(
+                text = stringResource(CommonStrings.action_send),
                 onClick = onSendPressed,
-                content = {
-                    Text(stringResource(CommonStrings.action_send))
-                },
                 enabled = canSend,
             )
         }
@@ -210,7 +208,7 @@ private fun RoomInviteMembersSearchBar(
                     }
 
                     if (index < results.lastIndex) {
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
             }
@@ -220,12 +218,12 @@ private fun RoomInviteMembersSearchBar(
 
 @Preview
 @Composable
-fun RoomInviteMembersLightPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
+internal fun RoomInviteMembersLightPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun RoomInviteMembersDarkPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
+internal fun RoomInviteMembersDarkPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

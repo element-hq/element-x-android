@@ -17,7 +17,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.8.22"
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -29,7 +29,7 @@ anvil {
 }
 
 dependencies {
-    // api(projects.libraries.rustsdk)
+    // implementation(projects.libraries.rustsdk)
     implementation(libs.matrix.sdk)
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
@@ -45,4 +45,5 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(libs.coroutines.test)
 }

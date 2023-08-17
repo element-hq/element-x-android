@@ -79,7 +79,7 @@ internal fun StaticMapPlaceholder(
 
 @DayNightPreviews
 @Composable
-fun StaticMapPlaceholderPreview(
+internal fun StaticMapPlaceholderPreview(
     @PreviewParameter(BooleanParameterProvider::class) values: Boolean
 ) = ElementPreview {
     StaticMapPlaceholder(

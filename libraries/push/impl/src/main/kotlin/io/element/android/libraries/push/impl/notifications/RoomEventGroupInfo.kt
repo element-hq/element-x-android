@@ -23,17 +23,15 @@ import io.element.android.libraries.matrix.api.core.SessionId
  * Data class to hold information about a group of notifications for a room.
  */
 data class RoomEventGroupInfo(
-        val sessionId: SessionId,
-        val roomId: RoomId,
-        val roomDisplayName: String,
-        val isDirect: Boolean = false
-) {
+    val sessionId: SessionId,
+    val roomId: RoomId,
+    val roomDisplayName: String,
+    val isDirect: Boolean = false,
     // An event in the list has not yet been display
-    var hasNewEvent: Boolean = false
-
+    val hasNewEvent: Boolean = false,
     // true if at least one on the not yet displayed event is noisy
-    var shouldBing: Boolean = false
-    var customSound: String? = null
-    var hasSmartReplyError: Boolean = false
-    var isUpdated: Boolean = false
-}
+    val shouldBing: Boolean = false,
+    val customSound: String? = null,
+    val hasSmartReplyError: Boolean = false,
+    val isUpdated: Boolean = false,
+)

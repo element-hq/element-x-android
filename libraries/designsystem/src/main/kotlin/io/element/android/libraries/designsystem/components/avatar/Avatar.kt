@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -91,10 +92,14 @@ private fun InitialsAvatar(
     Box(
         modifier.background(color = avatarColor),
     ) {
+        val fontSize = avatarData.size.dp.toSp() / 2
+        val originalFont = ElementTheme.typography.fontBodyMdRegular
+        val ratio = fontSize.value / originalFont.fontSize.value
+        val lineHeight = originalFont.lineHeight * ratio
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = avatarData.initial,
-            style = ElementTheme.typography.fontBodyMdRegular.copy(fontSize = avatarData.size.dp.toSp() / 2),
+            style = originalFont.copy(fontSize = fontSize, lineHeight = lineHeight, letterSpacing = 0.sp),
             color = Color.White,
         )
     }
@@ -102,7 +107,7 @@ private fun InitialsAvatar(
 
 @Preview(group = PreviewGroup.Avatars)
 @Composable
-fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
+internal fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
     ElementThemedPreview {
         Row(
             verticalAlignment = Alignment.CenterVertically,

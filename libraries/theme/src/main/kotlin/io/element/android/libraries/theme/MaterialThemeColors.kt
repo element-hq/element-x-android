@@ -91,7 +91,7 @@ internal val materialColorSchemeDark = darkColorScheme(
 
 @Preview
 @Composable
-fun ColorsSchemePreviewLight() = ColorsSchemePreview(
+internal fun ColorsSchemePreviewLight() = ColorsSchemePreview(
     Color.Black,
     Color.White,
     materialColorSchemeLight,
@@ -99,7 +99,7 @@ fun ColorsSchemePreviewLight() = ColorsSchemePreview(
 
 @Preview
 @Composable
-fun ColorsSchemePreviewDark() = ColorsSchemePreview(
+internal fun ColorsSchemePreviewDark() = ColorsSchemePreview(
     Color.White,
     Color.Black,
     materialColorSchemeDark,

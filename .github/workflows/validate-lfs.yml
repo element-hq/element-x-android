@@ -1,10 +1,12 @@
 name: Validate Git LFS
 
-on: [pull_request]
+on: [pull_request, merge_group]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Don't run in the merge queue again if the branch is up to date with `develop`
+    if: github.event.merge_group.base_ref != 'refs/heads/develop'
     name: Validate
     steps:
       - uses: nschloe/action-cached-lfs-checkout@v1.2.1

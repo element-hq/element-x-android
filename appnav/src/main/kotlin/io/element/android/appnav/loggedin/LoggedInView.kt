@@ -47,7 +47,7 @@ fun LoggedInView(
             modifier = Modifier
                 .padding(top = 8.dp)
                 .align(Alignment.TopCenter),
-            syncState = state.syncState,
+            isVisible = state.showSyncSpinner,
         )
         PermissionsView(
             state = state.permissionsState,
@@ -58,7 +58,7 @@ fun LoggedInView(
 
 @DayNightPreviews
 @Composable
-fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) = ElementPreview {
+internal fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) = ElementPreview {
     LoggedInView(
         state = state
     )

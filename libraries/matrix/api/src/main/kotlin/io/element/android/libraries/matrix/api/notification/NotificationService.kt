@@ -21,5 +21,5 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 
 interface NotificationService {
-    fun getNotification(userId: SessionId, roomId: RoomId, eventId: EventId, filterByPushRules: Boolean): Result<NotificationData?>
+    suspend fun getNotification(userId: SessionId, roomId: RoomId, eventId: EventId): Result<NotificationData?>
 }

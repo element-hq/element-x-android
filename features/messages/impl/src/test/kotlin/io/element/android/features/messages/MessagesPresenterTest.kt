@@ -35,6 +35,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -44,8 +45,11 @@ import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -65,6 +69,8 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
@@ -81,9 +87,16 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = consumeItemsUntilTimeout().last()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
+            assertThat(initialState.roomName).isEqualTo(Async.Success(""))
+            assertThat(initialState.roomAvatar).isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", size = AvatarSize.TimelineRoom)))
+            assertThat(initialState.userHasPermissionToSendMessage).isTrue()
+            assertThat(initialState.userHasPermissionToRedact).isFalse()
+            assertThat(initialState.hasNetworkConnection).isTrue()
+            assertThat(initialState.snackbarMessage).isNull()
+            assertThat(initialState.inviteProgress).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.showReinvitePrompt).isFalse()
         }
     }
 
@@ -132,7 +145,6 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -177,7 +189,6 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -314,7 +325,6 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -328,10 +338,10 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.Dismiss)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+
         }
     }
 
@@ -342,7 +352,6 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -363,11 +372,15 @@ class MessagesPresenterTest {
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
             initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
-            val focusedState = awaitItem()
+            val focusedState = consumeItemsUntilPredicate { state ->
+                state.showReinvitePrompt
+            }.last()
             assertThat(focusedState.showReinvitePrompt).isTrue()
             // If it's dismissed then we stop showing the alert
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
-            val dismissedState = awaitItem()
+            val dismissedState = consumeItemsUntilPredicate { state ->
+                !state.showReinvitePrompt
+            }.last()
             assertThat(dismissedState.showReinvitePrompt).isFalse()
         }
     }
@@ -419,9 +432,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            skipItems(1)
+            val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
@@ -448,9 +459,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            skipItems(1)
+            val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
@@ -469,9 +478,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            skipItems(1)
+            val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
@@ -497,15 +504,16 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            skipItems(1)
+            val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
-            skipItems(1)
-            val loadingState = awaitItem()
+            val loadingState = consumeItemsUntilPredicate { state ->
+                state.inviteProgress.isLoading()
+            }.last()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
-            val newState = awaitItem()
-            assertThat(newState.inviteProgress.isFailure()).isTrue()
+            val failureState = consumeItemsUntilPredicate { state ->
+                state.inviteProgress.isFailure()
+            }.last()
+            assertThat(failureState.inviteProgress.isFailure()).isTrue()
         }
     }
 
@@ -532,8 +540,22 @@ class MessagesPresenterTest {
         }.test {
             // Default value
             assertThat(awaitItem().userHasPermissionToSendMessage).isTrue()
-            skipItems(2)
+            skipItems(1)
             assertThat(awaitItem().userHasPermissionToSendMessage).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - permission to redact`() = runTest {
+        val matrixRoom = FakeMatrixRoom(canRedact = true)
+        val presenter = createMessagePresenter(matrixRoom = matrixRoom)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedact }.last()
+            assertThat(initialState.userHasPermissionToRedact).isTrue()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -563,6 +585,7 @@ class MessagesPresenterTest {
         val buildMeta = aBuildMeta()
         val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
         val customReactionPresenter = CustomReactionPresenter()
+        val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
         return MessagesPresenter(
             room = matrixRoom,
@@ -570,6 +593,7 @@ class MessagesPresenterTest {
             timelinePresenter = timelinePresenter,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
+            reactionSummaryPresenter = reactionSummaryPresenter,
             retrySendMenuPresenter = retrySendMenuPresenter,
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),

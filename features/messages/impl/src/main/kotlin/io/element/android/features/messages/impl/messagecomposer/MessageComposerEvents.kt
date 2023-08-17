@@ -36,4 +36,5 @@ sealed interface MessageComposerEvents {
         object VideoFromCamera : PickAttachmentSource
         object Location : PickAttachmentSource
     }
+    object CancelSendAttachment : MessageComposerEvents
 }

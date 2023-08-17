@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -39,6 +40,7 @@ fun LabelledTextField(
     placeholder: String? = null,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onValueChange: (String) -> Unit = {},
 ) {
     Column(
@@ -59,17 +61,18 @@ fun LabelledTextField(
             onValueChange = onValueChange,
             singleLine = singleLine,
             maxLines = maxLines,
+            keyboardOptions = keyboardOptions,
         )
     }
 }
 
 @Preview
 @Composable
-fun LabelledTextFieldLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun LabelledTextFieldLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun LabelledTextFieldDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun LabelledTextFieldDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

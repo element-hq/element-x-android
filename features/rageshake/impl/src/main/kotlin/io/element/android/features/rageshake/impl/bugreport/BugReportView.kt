@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -47,8 +48,8 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
@@ -97,6 +98,7 @@ fun BugReportView(
                         eventSink(BugReportEvents.SetDescription(it))
                     },
                     keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
@@ -147,14 +149,13 @@ fun BugReportView(
             // Submit
             PreferenceRow {
                 Button(
+                    text = stringResource(id = CommonStrings.action_send),
                     onClick = { eventSink(BugReportEvents.SendBugReport) },
                     enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp, bottom = 16.dp)
-                ) {
-                    Text(text = stringResource(id = CommonStrings.action_send))
-                }
+                )
             }
         }
 
@@ -176,11 +177,11 @@ fun BugReportView(
 
 @Preview
 @Composable
-fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewLight { ContentToPreview(state) }
+internal fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun BugReportViewDarkPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewDark { ContentToPreview(state) }
+internal fun BugReportViewDarkPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
 private fun ContentToPreview(state: BugReportState) {

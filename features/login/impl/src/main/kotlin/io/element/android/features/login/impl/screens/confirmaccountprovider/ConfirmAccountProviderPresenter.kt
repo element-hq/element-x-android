@@ -92,7 +92,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                 } else if (matrixHomeServerDetails.supportsPasswordLogin) {
                     LoginFlow.PasswordLogin
                 } else {
-                    throw IllegalStateException("Unsupported login flow")
+                    error("Unsupported login flow")
                 }
             }.getOrThrow()
         }.runCatchingUpdatingState(loginFlowAction, errorTransform = ChangeServerError::from)

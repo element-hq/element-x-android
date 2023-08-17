@@ -125,7 +125,7 @@ internal fun TimelineItemTextViewDarkPreview(@PreviewParameter(TimelineItemTextB
 fun ContentToPreview(content: TimelineItemTextBasedContent) {
     TimelineItemTextView(
         content = content,
-        interactionSource = MutableInteractionSource(),
+        interactionSource = remember { MutableInteractionSource() },
         extraPadding = ExtraPadding(nbChars = 8),
     )
 }

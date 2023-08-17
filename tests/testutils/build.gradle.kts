@@ -30,4 +30,5 @@ dependencies {
     implementation(libs.test.junit)
     implementation(libs.coroutines.test)
     implementation(projects.libraries.core)
+    implementation(libs.test.turbine)
 }

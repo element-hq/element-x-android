@@ -85,12 +85,11 @@ class RoomGroupMessageCreator @Inject constructor(
                     roomId = roomId,
                     roomDisplayName = roomName,
                     isDirect = !roomIsGroup,
-                ).also {
-                    it.hasSmartReplyError = smartReplyErrors.isNotEmpty()
-                    it.shouldBing = meta.shouldBing
-                    it.customSound = events.last().soundName
-                    it.isUpdated = events.last().isUpdated
-                },
+                    hasSmartReplyError = smartReplyErrors.isNotEmpty(),
+                    shouldBing = meta.shouldBing,
+                    customSound = events.last().soundName,
+                    isUpdated = events.last().isUpdated,
+                ),
                 threadId = lastKnownRoomEvent.threadId,
                 largeIcon = largeBitmap,
                 lastMessageTimestamp,
@@ -108,7 +107,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 Person.Builder()
                     .setName(event.senderName?.annotateForDebug(70))
                     .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath))
-                    .setKey(event.senderId)
+                    .setKey(event.senderId.value)
                     .build()
             }
             when {

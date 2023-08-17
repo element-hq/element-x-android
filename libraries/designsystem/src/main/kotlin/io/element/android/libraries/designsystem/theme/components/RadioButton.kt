@@ -17,15 +17,21 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.theme.ElementTheme
+
+// Designs in https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=425%3A24202&mode=design&t=qb99xBP5mwwCtGkN-1
 
 @Composable
 fun RadioButton(
@@ -33,7 +39,7 @@ fun RadioButton(
     onClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    colors: RadioButtonColors = RadioButtonDefaults.colors(),
+    colors: RadioButtonColors = compoundRadioButtonColors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     androidx.compose.material3.RadioButton(
@@ -46,6 +52,15 @@ fun RadioButton(
     )
 }
 
+@Composable
+internal fun compoundRadioButtonColors(): RadioButtonColors {
+    return RadioButtonDefaults.colors(
+        unselectedColor = ElementTheme.colors.borderInteractivePrimary,
+        disabledUnselectedColor = ElementTheme.colors.borderDisabled,
+        disabledSelectedColor = ElementTheme.colors.iconDisabled,
+    )
+}
+
 @Preview(group = PreviewGroup.Toggles)
 @Composable
 internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
@@ -53,9 +68,13 @@ internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) { Con
 @Composable
 private fun ContentToPreview() {
     Column {
-        RadioButton(selected = false, onClick = {})
-        RadioButton(selected = true, onClick = {})
-        RadioButton(selected = false, enabled = false, onClick = {})
-        RadioButton(selected = true, enabled = false, onClick = {})
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            RadioButton(selected = false, onClick = {})
+            RadioButton(selected = false, enabled = false, onClick = {})
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            RadioButton(selected = true, onClick = {})
+            RadioButton(selected = true, enabled = false, onClick = {})
+        }
     }
 }
