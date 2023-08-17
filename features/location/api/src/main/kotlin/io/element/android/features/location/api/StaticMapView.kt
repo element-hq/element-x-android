@@ -111,7 +111,8 @@ fun StaticMapView(
             StaticMapPlaceholder(
                 showProgress = painter.state is AsyncImagePainter.State.Loading,
                 contentDescription = contentDescription,
-                modifier = Modifier.size(width = maxWidth, height = maxHeight),
+                width = maxWidth,
+                height = maxHeight,
                 onLoadMapClick = { retryHash++ }
             )
         }
