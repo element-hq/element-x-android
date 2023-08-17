@@ -106,7 +106,7 @@ class RustMatrixClient constructor(
     private val notificationSettings = client.getNotificationSettings()
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
-    private val notificationSettingsService = RustNotificationSettingsService(notificationSettings)
+    private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
 
     private val isLoggingOut = AtomicBoolean(false)
 

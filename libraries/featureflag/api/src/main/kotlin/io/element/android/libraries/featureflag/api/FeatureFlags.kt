@@ -31,7 +31,7 @@ enum class FeatureFlags(
         title = "Polls",
         description = "Render poll events in the timeline",
         defaultValue = false,
-    )
+    ),
     NotificationSettings(
         key = "feature.notificationsettings",
         title = "Show notification settings",
