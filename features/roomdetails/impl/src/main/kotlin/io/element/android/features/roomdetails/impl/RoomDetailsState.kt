@@ -33,6 +33,7 @@ data class RoomDetailsState(
     val roomMemberDetailsState: RoomMemberDetailsState?,
     val canEdit: Boolean,
     val canInvite: Boolean,
+    val canShowNotificationSettings: Boolean,
     val leaveRoomState: LeaveRoomState,
     val roomNotificationSettings: RoomNotificationSettings?,
     val eventSink: (RoomDetailsEvent) -> Unit

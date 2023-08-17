@@ -77,6 +77,7 @@ fun aRoomDetailsState() = RoomDetailsState(
     isEncrypted = true,
     canInvite = false,
     canEdit = false,
+    canShowNotificationSettings = true,
     roomType = RoomDetailsType.Room,
     roomMemberDetailsState = null,
     leaveRoomState = LeaveRoomState(),

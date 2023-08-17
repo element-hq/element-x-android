@@ -22,6 +22,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,6 +31,8 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -49,6 +52,7 @@ import javax.inject.Inject
 class RoomDetailsPresenter @Inject constructor(
     private val client: MatrixClient,
     private val room: MatrixRoom,
+    private val featureFlagService: FeatureFlagService,
     private val notificationSettingsService: NotificationSettingsService,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: LeaveRoomPresenter,
@@ -59,9 +63,14 @@ class RoomDetailsPresenter @Inject constructor(
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
+        val canShowNotificationSettings = remember { mutableStateOf(false) }
+
         LaunchedEffect(Unit) {
-            room.updateRoomNotificationSettings()
-            observeNotificationSettings()
+            canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
+            if (canShowNotificationSettings.value) {
+                room.updateRoomNotificationSettings()
+                observeNotificationSettings()
+            }
             room.updateMembers()
         }
 
@@ -115,6 +124,7 @@ class RoomDetailsPresenter @Inject constructor(
             isEncrypted = room.isEncrypted,
             canInvite = canInvite,
             canEdit = (canEditAvatar || canEditName || canEditTopic) && roomType == RoomDetailsType.Room,
+            canShowNotificationSettings = canShowNotificationSettings.value,
             roomType = roomType,
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
