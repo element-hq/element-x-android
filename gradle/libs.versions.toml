@@ -19,7 +19,7 @@ lifecycle = "2.6.1"
 activity = "1.7.2"
 startup = "1.1.1"
 media3 = "1.1.1"
-browser = "1.5.0"
+browser = "1.6.0"
 
 # Compose
 compose_bom = "2023.06.01"
