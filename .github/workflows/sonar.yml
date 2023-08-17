@@ -16,8 +16,6 @@ jobs:
   sonar:
     name: Project Check Suite
     runs-on: ubuntu-latest
-    # Don't run in the merge queue again if the branch is up to date with `develop`
-    if: github.event.merge_group.base_ref != 'refs/heads/develop'
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('sonar-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('sonar-develop-{0}', github.sha) || format('sonar-{0}', github.ref) }}
