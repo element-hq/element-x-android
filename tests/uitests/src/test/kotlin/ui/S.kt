@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.element.android.tests.uitests
+package ui
 
 import android.content.res.Configuration
 import android.os.LocaleList
@@ -48,15 +48,16 @@ import java.util.Locale
 
 /**
  * BMA: Inspired from https://github.com/airbnb/Showkase/blob/master/showkase-screenshot-testing-paparazzi-sample/src/test/java/com/airbnb/android/showkase/screenshot/testing/paparazzi/sample/PaparazziSampleScreenshotTest.kt
- */
-
-/*
+ *
  * Credit to Alex Vanyo for creating this sample in the Now In Android app by Google.
  * PR here - https://github.com/android/nowinandroid/pull/101. Modified the test from that PR to
  * my own needs for this sample.
+ *
+ * *Note*: keep the class name as short as possible to get shorter filename for generated screenshot.
+ * Long name was ScreenshotTest.
  */
 @RunWith(TestParameterInjector::class)
-class ScreenshotTest {
+class S {
 
     object PreviewProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): List<TestPreview> {
@@ -79,8 +80,12 @@ class ScreenshotTest {
         renderingMode = SessionParams.RenderingMode.NORMAL,
     )
 
+    /**
+     * *Note*: keep the method name as short as possible to get shorter filename for generated screenshot.
+     * Long name was preview_test.
+     */
     @Test
-    fun preview_tests(
+    fun t(
         @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,

@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.tests.uitests
+package ui
 
-import com.airbnb.android.showkase.annotation.ShowkaseRoot
-import com.airbnb.android.showkase.annotation.ShowkaseRootModule
+import android.app.Activity
+import android.content.Intent
+import com.airbnb.android.showkase.ui.ShowkaseBrowserActivity
 
-@ShowkaseRoot
-class ElementXShowkaseRootModule : ShowkaseRootModule
+fun openShowkase(activity: Activity) {
+    val intent = Intent(activity, ShowkaseBrowserActivity::class.java)
+    intent.putExtra("SHOWKASE_ROOT_MODULE",
+        "io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModule")
+    activity.startActivity(intent)
+}

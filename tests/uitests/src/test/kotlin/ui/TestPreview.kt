@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.tests.uitests
+package ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
