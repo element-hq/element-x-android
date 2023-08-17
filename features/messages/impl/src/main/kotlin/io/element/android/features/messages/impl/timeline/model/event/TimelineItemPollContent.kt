@@ -25,7 +25,6 @@ data class TimelineItemPollContent(
     val answerItems: List<PollAnswerItem>,
     val votes: Map<String, List<UserId>>,
     val pollKind: PollKind,
-    val isDisclosed: Boolean,
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemPollContent"
 }

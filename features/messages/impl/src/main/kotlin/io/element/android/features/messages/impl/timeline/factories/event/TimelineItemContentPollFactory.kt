@@ -23,7 +23,7 @@ import io.element.android.features.poll.api.PollAnswerItem
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.poll.isDisclosed
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import javax.inject.Inject
 
@@ -36,16 +36,15 @@ class TimelineItemContentPollFactory @Inject constructor(
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.Polls)) return TimelineItemUnknownContent
 
         // Todo Move this computation to the matrix rust sdk
-        val showResults = content.kind == PollKind.Disclosed && matrixClient.sessionId in content.votes.flatMap { it.value }
         val pollVotesCount = content.votes.flatMap { it.value }.size
         val userVotes = content.votes.filter { matrixClient.sessionId in it.value }.keys
         val answerItems = content.answers.map { answer ->
             val votesCount = content.votes[answer.id]?.size ?: 0
-            val progress = if (pollVotesCount > 0) votesCount.toFloat() / pollVotesCount.toFloat() else 0f
+            val progress = if (content.kind.isDisclosed && pollVotesCount > 0) votesCount.toFloat() / pollVotesCount.toFloat() else 0f
             PollAnswerItem(
                 answer = answer,
                 isSelected = answer.id in userVotes,
-                isDisclosed = showResults,
+                isDisclosed = content.kind.isDisclosed,
                 votesCount = votesCount,
                 progress = progress,
             )
@@ -56,7 +55,6 @@ class TimelineItemContentPollFactory @Inject constructor(
             answerItems = answerItems,
             votes = content.votes,
             pollKind = content.kind,
-            isDisclosed = showResults
         )
     }
 }

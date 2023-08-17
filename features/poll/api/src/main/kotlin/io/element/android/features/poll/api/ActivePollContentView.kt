@@ -18,12 +18,14 @@ package io.element.android.features.poll.api
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.outlined.Poll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,52 +49,78 @@ fun ActivePollContentView(
     onAnswerSelected: (PollAnswer) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val showResults = answerItems.any { it.isSelected }
     Column(
         modifier = modifier
             .selectableGroup()
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Icon(imageVector = Icons.Default.BarChart, contentDescription = null)
-            Text(
-                text = question,
-                style = ElementTheme.typography.fontBodyLgMedium
-            )
-        }
+        PollTitle(title = question)
 
-        answerItems.forEach { answerItem ->
-            PollAnswerView(
-                answerItem = answerItem,
-                onClick = { onAnswerSelected(answerItem.answer) }
-            )
-        }
+        PollAnswers(answerItems = answerItems, onAnswerSelected = onAnswerSelected)
 
-        val votesCount = answerItems.sumOf { it.votesCount }
-        when {
-            pollKind == PollKind.Undisclosed -> {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(start = 32.dp),
-                    style = ElementTheme.typography.fontBodyXsRegular,
-                    color = ElementTheme.colors.textSecondary,
-                    text = stringResource(CommonStrings.common_poll_undisclosed_text),
-                )
-            }
-            showResults -> {
-                Text(
-                    modifier = Modifier.align(Alignment.End),
-                    style = ElementTheme.typography.fontBodyXsRegular,
-                    color = ElementTheme.colors.textSecondary,
-                    text = stringResource(CommonStrings.common_poll_total_votes, votesCount),
-                )
-            }
+        when (pollKind) {
+            PollKind.Disclosed -> DisclosedPollBottomNotice(answerItems)
+            PollKind.Undisclosed -> UndisclosedPollBottomNotice()
         }
     }
+}
+
+@Composable
+internal fun PollTitle(
+    title: String,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Icon(
+            modifier = Modifier.size(22.dp),
+            imageVector = Icons.Outlined.Poll,
+            contentDescription = null
+        )
+        Text(
+            text = title,
+            style = ElementTheme.typography.fontBodyLgMedium
+        )
+    }
+}
+
+@Composable
+internal fun PollAnswers(
+    answerItems: ImmutableList<PollAnswerItem>,
+    onAnswerSelected: (PollAnswer) -> Unit,
+) {
+    answerItems.forEach { answerItem ->
+        PollAnswerView(
+            answerItem = answerItem,
+            onClick = { onAnswerSelected(answerItem.answer) }
+        )
+    }
+}
+
+@Composable
+internal fun ColumnScope.DisclosedPollBottomNotice(
+    answerItems: ImmutableList<PollAnswerItem>,
+) {
+    val votesCount = answerItems.sumOf { it.votesCount }
+    Text(
+        modifier = Modifier.align(Alignment.End),
+        style = ElementTheme.typography.fontBodyXsRegular,
+        color = ElementTheme.colors.textSecondary,
+        text = stringResource(CommonStrings.common_poll_total_votes, votesCount),
+    )
+}
+
+@Composable
+fun ColumnScope.UndisclosedPollBottomNotice() {
+    Text(
+        modifier = Modifier
+            .align(Alignment.Start)
+            .padding(start = 34.dp),
+        style = ElementTheme.typography.fontBodyXsRegular,
+        color = ElementTheme.colors.textSecondary,
+        text = stringResource(CommonStrings.common_poll_undisclosed_text),
+    )
 }
 
 @DayNightPreviews
