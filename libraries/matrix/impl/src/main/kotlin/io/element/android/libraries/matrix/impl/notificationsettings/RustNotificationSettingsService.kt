@@ -26,8 +26,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Client
-import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
 
@@ -65,17 +63,19 @@ class RustNotificationSettingsService(
         }
     }
 
-    override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> =
+    override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
             notificationSettings.restoreDefaultRoomNotificationMode(roomId.value)
         }
+    }
 
     override suspend fun muteRoom(roomId: RoomId): Result<Unit> = setRoomNotificationMode(roomId, RoomNotificationMode.MUTE)
 
-    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: Long) =
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: Long) = withContext(dispatchers.io) {
         runCatching {
             notificationSettings.unmuteRoom(roomId.value, isEncrypted, isOneToOne(membersCount))
         }
+    }
 
     /**
      * A one-to-one is a room with exactly 2 members.
