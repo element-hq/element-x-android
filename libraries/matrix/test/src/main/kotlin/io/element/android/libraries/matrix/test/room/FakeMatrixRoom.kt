@@ -70,8 +70,6 @@ class FakeMatrixRoom(
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
     private var joinRoomResult = Result.success(Unit)
     private var updateRoomNotificationSettingsResult: Result<Unit> = Result.success(Unit)
-    private var acceptInviteResult = Result.success(Unit)
-    private var rejectInviteResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
     private var canRedactResult = Result.success(canRedact)

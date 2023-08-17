@@ -214,7 +214,10 @@ class RustMatrixRoom(
         }.map {
             _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(it)
         }.onFailure {
-            _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Error(prevRoomNotificationSettings = currentRoomNotificationSettings, failure = it)
+            _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Error(
+                prevRoomNotificationSettings = currentRoomNotificationSettings,
+                failure = it
+            )
         }
     }
 
