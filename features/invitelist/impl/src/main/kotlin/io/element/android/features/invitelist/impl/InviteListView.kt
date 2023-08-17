@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -161,7 +161,7 @@ fun InviteListContent(
                             )
 
                             if (index != state.inviteList.lastIndex) {
-                                Divider()
+                                HorizontalDivider()
                             }
                         }
                     }

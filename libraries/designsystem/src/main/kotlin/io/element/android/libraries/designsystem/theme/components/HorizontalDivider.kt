@@ -30,12 +30,12 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
-fun Divider(
+fun HorizontalDivider(
     modifier: Modifier = Modifier,
     thickness: Dp = ElementDividerDefaults.thickness,
     color: Color = DividerDefaults.color,
 ) {
-    androidx.compose.material3.Divider(
+    androidx.compose.material3.HorizontalDivider(
         modifier = modifier,
         thickness = thickness,
         color = color,
@@ -48,7 +48,7 @@ object ElementDividerDefaults {
 
 @Preview(group = PreviewGroup.Dividers)
 @Composable
-internal fun DividerPreview() = ElementThemedPreview {
+internal fun HorizontalDividerPreview() = ElementThemedPreview {
     Box(Modifier.padding(vertical = 10.dp), contentAlignment = Alignment.Center) {
         ContentToPreview()
     }
@@ -56,5 +56,5 @@ internal fun DividerPreview() = ElementThemedPreview {
 
 @Composable
 private fun ContentToPreview() {
-    Divider()
+    HorizontalDivider()
 }

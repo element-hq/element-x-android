@@ -35,7 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -117,7 +117,7 @@ fun SearchUserBar(
                             }
                         )
                         if (index < users.lastIndex) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 } else {
@@ -128,7 +128,7 @@ fun SearchUserBar(
                             onClick = { onUserSelected(searchResult.matrixUser) }
                         )
                         if (index < users.lastIndex) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 }

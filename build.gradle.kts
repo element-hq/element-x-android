@@ -1,4 +1,6 @@
+import com.google.devtools.ksp.gradle.KspTask
 import kotlinx.kover.api.KoverTaskExtension
+import org.apache.tools.ant.taskdefs.optional.ReplaceRegExp
 import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 buildscript {
@@ -342,4 +344,22 @@ subprojects {
     tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziDebug")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziRelease")?.dependsOn(removeOldScreenshotsTask)
+}
+
+// Workaround for https://github.com/airbnb/Showkase/issues/335
+subprojects {
+    tasks.withType<KspTask>() {
+        doLast {
+            fileTree(buildDir).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
+                ReplaceRegExp().apply {
+                    setMatch("public fun Showkase.getMetadata")
+                    setReplace("@Suppress(\"DEPRECATION\") public fun Showkase.getMetadata")
+                    setFlags("g")
+                    setByLine(true)
+                    setFile(file)
+                    execute()
+                }
+            }
+        }
+    }
 }

@@ -37,7 +37,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
@@ -73,7 +73,7 @@ fun PreferencesRootView(
                 icon = Icons.Outlined.VerifiedUser,
                 onClick = onVerifyClicked,
             )
-            Divider()
+            HorizontalDivider()
         }
         if (state.showAnalyticsSettings) {
             PreferenceText(
@@ -95,7 +95,7 @@ fun PreferencesRootView(
         if (state.showDeveloperSettings) {
             DeveloperPreferencesView(onOpenDeveloperSettings)
         }
-        Divider()
+        HorizontalDivider()
         LogoutPreferenceView(
             state = state.logoutState,
         )
