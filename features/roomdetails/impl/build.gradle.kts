@@ -60,6 +60,7 @@ dependencies {
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.usersearch.test)
+    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.fake)
 
