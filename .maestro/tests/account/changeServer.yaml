@@ -13,6 +13,9 @@ appId: ${APP_ID}
 - inputText: "gnuradio"
 - hideKeyboard
 - tapOn: "gnuradio.org"
+- extendedWaitUntil:
+    visible: "This server currently doesn’t support sliding sync."
+    timeout: 10_000
 - tapOn: "Cancel"
 - back
 - back
