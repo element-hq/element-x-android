@@ -16,8 +16,8 @@ jobs:
   debug:
     name: Build APKs
     runs-on: ubuntu-latest
-    # Skip for `main` and the merge queue if the branch is up to date with `develop`
-    if: github.ref != 'refs/heads/main' && github.event.merge_group.base_ref != 'refs/heads/develop'
+    # Skip for `main`
+    if: github.ref != 'refs/heads/main'
     strategy:
       matrix:
         variant: [debug, release, nightly, samples]

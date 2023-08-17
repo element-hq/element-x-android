@@ -16,8 +16,6 @@ jobs:
   tests:
     name: Runs unit tests
     runs-on: ubuntu-latest
-    # Don't run in the merge queue again if the branch is up to date with `develop`
-    if: github.event.merge_group.base_ref != 'refs/heads/develop'
 
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
