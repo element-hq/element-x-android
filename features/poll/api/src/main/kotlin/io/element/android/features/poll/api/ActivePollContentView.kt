@@ -90,6 +90,7 @@ internal fun PollAnswers(
     answerItems: ImmutableList<PollAnswerItem>,
     onAnswerSelected: (PollAnswer) -> Unit,
 ) {
+
     answerItems.forEach { answerItem ->
         PollAnswerView(
             answerItem = answerItem,

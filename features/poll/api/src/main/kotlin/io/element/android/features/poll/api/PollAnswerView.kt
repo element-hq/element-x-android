@@ -24,6 +24,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.RadioButtonUnchecked
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,8 +37,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconToggleButton
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonPlurals
@@ -54,11 +59,25 @@ fun PollAnswerView(
                 role = Role.RadioButton,
             )
     ) {
-        RadioButton(
+        IconToggleButton(
             modifier = Modifier.size(22.dp),
-            selected = answerItem.isSelected,
-            onClick = null // null recommended for accessibility with screenreaders
-        )
+            checked = answerItem.isSelected,
+            colors = IconButtonDefaults.iconToggleButtonColors(
+                contentColor = ElementTheme.colors.iconSecondary,
+                checkedContentColor = ElementTheme.colors.iconPrimary,
+                disabledContentColor = ElementTheme.colors.iconDisabled,
+            ),
+            onCheckedChange = { onClick() },
+        ) {
+            Icon(
+                imageVector = if (answerItem.isSelected) {
+                    Icons.Default.CheckCircle
+                } else {
+                    Icons.Default.RadioButtonUnchecked
+                },
+                contentDescription = null,
+            )
+        }
         Spacer(modifier = Modifier.width(12.dp))
         Column {
             Row {
@@ -93,7 +112,7 @@ fun PollAnswerView(
 @Composable
 internal fun PollAnswerViewNoResultsPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(),
+        answerItem = aPollAnswerItem(isSelected = true),
         onClick = { },
     )
 }
@@ -102,7 +121,7 @@ internal fun PollAnswerViewNoResultsPreview() = ElementPreview {
 @Composable
 internal fun PollAnswerViewWithResultPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = true),
+        answerItem = aPollAnswerItem(isDisclosed = false),
         onClick = { }
     )
 }
