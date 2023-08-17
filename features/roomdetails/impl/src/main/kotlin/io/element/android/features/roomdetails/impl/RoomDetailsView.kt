@@ -148,7 +148,7 @@ fun RoomDetailsView(
                 )
             }
 
-            if (state.roomNotificationSettings != null) {
+            if (state.canShowNotificationSettings && state.roomNotificationSettings != null) {
                 NotificationSection(
                     state = state,
                     openRoomNotificationSettings = openRoomNotificationSettings)
@@ -226,7 +226,7 @@ internal fun RoomDetailsTopBar(
 internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         val roomNotificationSettings = state.roomNotificationSettings
-        if (roomNotificationSettings != null) {
+        if (state.canShowNotificationSettings && roomNotificationSettings != null) {
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
                 MainActionButton(title = stringResource(CommonStrings.common_unmute), icon = Icons.Outlined.NotificationsOff, onClick = {
                     state.eventSink(RoomDetailsEvent.UnmuteNotification)
