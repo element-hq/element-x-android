@@ -30,6 +30,8 @@ import io.element.android.features.roomdetails.impl.RoomTopicState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -56,9 +58,13 @@ class RoomDetailsPresenterTests {
                 return RoomMemberDetailsPresenter(matrixClient, room, roomMemberId)
             }
         }
+        val featureFlagService = FakeFeatureFlagService(
+            mapOf(FeatureFlags.NotificationSettings.key to true)
+        )
         return RoomDetailsPresenter(
             matrixClient,
             room,
+            featureFlagService,
             matrixClient.notificationSettingsService(),
             roomMemberDetailsPresenterFactory,
             leaveRoomPresenter,
