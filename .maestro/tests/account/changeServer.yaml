@@ -9,9 +9,10 @@ appId: ${APP_ID}
 - tapOn: "Other"
 - tapOn:
     id: "change_server-server"
-- inputText: "element"
+# Test server that does not support sliding sync.
+- inputText: "gnuradio"
 - hideKeyboard
-- tapOn: "element.io"
+- tapOn: "gnuradio.org"
 - tapOn: "Cancel"
 - back
 - back
