@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
@@ -268,26 +270,26 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit> {
-        return sendAttachment {
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file, thumbnailFile)) {
             innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> {
-        return sendAttachment {
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file, thumbnailFile)) {
             innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> {
-        return sendAttachment {
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file)) {
             innerRoom.sendAudio(file.path, audioInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> {
-        return sendAttachment {
+    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file)) {
             innerRoom.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
@@ -371,14 +373,9 @@ class RustMatrixRoom(
         }
     }
 
-    //TODO handle cancellation, need refactoring of how we are catching errors
-    private suspend fun sendAttachment(handle: () -> SendAttachmentJoinHandle): Result<Unit> {
+    private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
         return runCatching {
-            handle().use {
-                it.join()
-            }
+            MediaUploadHandlerImpl(files, handle())
         }
     }
 }
-
-
