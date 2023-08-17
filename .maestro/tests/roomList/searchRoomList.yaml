@@ -7,6 +7,7 @@ appId: ${APP_ID}
 - tapOn: ${ROOM_NAME}
 # Back from timeline
 - back
+- assertVisible: "MyR"
 # Close keyboard
 - hideKeyboard
 # Back from search
