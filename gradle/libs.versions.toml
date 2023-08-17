@@ -92,7 +92,7 @@ androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = 
 androidx_preference = "androidx.preference:preference:1.2.0"
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
-androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha04"
+androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha05"
 
 # Coroutines
 coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
