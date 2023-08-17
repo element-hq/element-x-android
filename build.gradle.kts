@@ -352,7 +352,7 @@ subprojects {
         doLast {
             fileTree(buildDir).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
                 ReplaceRegExp().apply {
-                    setMatch("public fun Showkase.getMetadata")
+                    setMatch("^public fun Showkase.getMetadata")
                     setReplace("@Suppress(\"DEPRECATION\") public fun Showkase.getMetadata")
                     setFlags("g")
                     setByLine(true)
