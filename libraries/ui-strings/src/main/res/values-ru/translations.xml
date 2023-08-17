@@ -163,7 +163,7 @@
     <item quantity="many">"%1$d участников"</item>
   </plurals>
   <plurals name="common_poll_votes_count">
-    <item quantity="one">"1 голос"</item>
+    <item quantity="one">"%d голос"</item>
     <item quantity="few">"%d голоса"</item>
     <item quantity="many">"%d голосов"</item>
   </plurals>
