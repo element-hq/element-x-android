@@ -30,10 +30,14 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 class RoomNotificationSettingsPresenter @Inject constructor(
     private val room: MatrixRoom,
@@ -71,6 +75,8 @@ class RoomNotificationSettingsPresenter @Inject constructor(
             }
         }
 
+        Timber.d("NotifState: $roomNotificationSettingsState")
+
         return RoomNotificationSettingsState(
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             defaultRoomNotificationMode = defaultRoomNotificationMode.value,
@@ -78,10 +84,14 @@ class RoomNotificationSettingsPresenter @Inject constructor(
         )
     }
 
+    @OptIn(FlowPreview::class)
     private fun CoroutineScope.observeNotificationSettings() {
-        notificationSettingsService.notificationSettingsChangeFlow.onEach {
-            room.updateRoomNotificationSettings()
-        }.launchIn(this)
+        notificationSettingsService.notificationSettingsChangeFlow
+            .debounce(0.5.seconds)
+            .onEach {
+                room.updateRoomNotificationSettings()
+            }
+            .launchIn(this)
     }
 
     private fun CoroutineScope.getDefaultRoomNotificationMode(defaultRoomNotificationMode: MutableState<RoomNotificationMode?>) = launch {
