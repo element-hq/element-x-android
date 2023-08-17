@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.tests.uitests
+package ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

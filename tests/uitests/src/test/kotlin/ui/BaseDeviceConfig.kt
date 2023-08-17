@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.tests.uitests
+package ui
 
-import android.app.Activity
-import android.content.Intent
-import com.airbnb.android.showkase.ui.ShowkaseBrowserActivity
+import app.cash.paparazzi.DeviceConfig
 
-fun openShowkase(activity: Activity) {
-    val intent = Intent(activity, ShowkaseBrowserActivity::class.java)
-    intent.putExtra("SHOWKASE_ROOT_MODULE",
-        "io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModule")
-    activity.startActivity(intent)
+enum class BaseDeviceConfig(
+    val deviceConfig: DeviceConfig,
+) {
+    NEXUS_5(DeviceConfig.NEXUS_5),
+    // PIXEL_C(DeviceConfig.PIXEL_C),
 }

@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.tests.uitests
+package ui
 
-import app.cash.paparazzi.DeviceConfig
+import com.airbnb.android.showkase.annotation.ShowkaseRoot
+import com.airbnb.android.showkase.annotation.ShowkaseRootModule
 
-enum class BaseDeviceConfig(
-    val deviceConfig: DeviceConfig,
-) {
-    NEXUS_5(DeviceConfig.NEXUS_5),
-    // PIXEL_C(DeviceConfig.PIXEL_C),
-}
+@ShowkaseRoot
+class ElementXShowkaseRootModule : ShowkaseRootModule

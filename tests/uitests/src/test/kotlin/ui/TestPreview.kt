@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.tests.uitests
+package ui
 
 import androidx.compose.runtime.Composable
-import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
+import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
+import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 
-class ComponentTestPreview(
-    private val showkaseBrowserComponent: ShowkaseBrowserComponent
-) : TestPreview {
+interface TestPreview {
     @Composable
-    override fun Content() = showkaseBrowserComponent.component()
+    fun Content()
 
-    override val name: String = showkaseBrowserComponent.componentName
+    val name: String
+}
 
-    override fun toString(): String = showkaseBrowserComponent.componentKey
+/**
+ * Showkase doesn't put the [Preview.uiMode] parameter in its [ShowkaseElementsMetadata]
+ * so we have to encode the night mode bit in a preview's name.
+ */
+fun TestPreview.isNightMode(): Boolean {
+    // Dark mode previews have name "N" so their component name contains "- N"
+    return this.name.contains("- $NIGHT_MODE_NAME")
 }
