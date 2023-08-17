@@ -79,7 +79,7 @@ fun RoomNotificationSettingsOption(
 
 @DayNightPreviews
 @Composable
-fun RoomPrivacyOptionLightPreview() = ElementPreview { ContentToPreview() }
+internal fun RoomPrivacyOptionLightPreview() = ElementPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

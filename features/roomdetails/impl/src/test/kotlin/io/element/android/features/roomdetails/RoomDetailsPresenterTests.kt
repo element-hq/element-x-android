@@ -51,7 +51,11 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
-    private fun aRoomDetailsPresenter(room: MatrixRoom, leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake(), dispatchers: CoroutineDispatchers): RoomDetailsPresenter {
+    private fun aRoomDetailsPresenter(
+        room: MatrixRoom,
+        leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake(),
+        dispatchers: CoroutineDispatchers
+    ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient()
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {

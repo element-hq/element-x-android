@@ -54,6 +54,7 @@ fun RoomNotificationSettingsView(
     onBackPressed: () -> Unit = {},
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             RoomNotificationSettingsTopBar(
                 onBackPressed = { onBackPressed() }
@@ -61,7 +62,7 @@ fun RoomNotificationSettingsView(
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
                 .consumeWindowInsets(padding),
@@ -94,7 +95,6 @@ fun RoomNotificationSettingsView(
 
                 if (state.roomNotificationSettings != null) {
                     RoomNotificationSettingsOptions(
-                        modifier = modifier,
                         selected = state.roomNotificationSettings.mode,
                         enabled = !state.roomNotificationSettings.isDefault,
                         onOptionSelected = {
@@ -128,8 +128,8 @@ fun RoomNotificationSettingsTopBar(
 @Composable
 fun RoomNotificationSettingsOptions(
     selected: RoomNotificationMode?,
-    modifier: Modifier = Modifier,
     enabled: Boolean,
+    modifier: Modifier = Modifier,
     onOptionSelected: (RoomNotificationSettingsItem) -> Unit = {},
 ) {
     val items = roomNotificationSettingsItems()
@@ -147,12 +147,12 @@ fun RoomNotificationSettingsOptions(
 
 @Preview
 @Composable
-fun RoomNotificationSettingsLightPreview(@PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState) =
+internal fun RoomNotificationSettingsLightPreview(@PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun RoomNotificationSettingsDarkPreview(@PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState) =
+internal fun RoomNotificationSettingsDarkPreview(@PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
