@@ -36,11 +36,11 @@ class FakeNotificationSettingsService : NotificationSettingsService {
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _roomNotificationSettingsStateFlow
 
-    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong): Result<RoomNotificationSettings> {
+    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationSettings> {
         return getRoomNotificationSettingsResult
     }
 
-    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: ULong): Result<RoomNotificationMode> {
+    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationMode> {
         return getDefaultRoomNotificationMode
     }
 
@@ -56,7 +56,7 @@ class FakeNotificationSettingsService : NotificationSettingsService {
         return muteRoomResult
     }
 
-    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong): Result<Unit> {
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<Unit> {
         return unmuteRoomResult
     }
 }

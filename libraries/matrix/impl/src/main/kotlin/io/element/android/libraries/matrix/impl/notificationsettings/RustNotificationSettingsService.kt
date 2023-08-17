@@ -49,14 +49,14 @@ class RustNotificationSettingsService(
         notificationSettings.setDelegate(notificationSettingsDelegate)
     }
 
-    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong): Result<RoomNotificationSettings> =
+    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationSettings> =
         runCatching {
-            notificationSettings.getRoomNotificationSettings(roomId.value, isEncrypted, membersCount).let(RoomNotificationSettingsMapper::map)
+            notificationSettings.getRoomNotificationSettings(roomId.value, isEncrypted, isOneToOne(membersCount)).let(RoomNotificationSettingsMapper::map)
         }
 
-    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: ULong): Result<RoomNotificationMode> =
+    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationMode> =
         runCatching {
-            notificationSettings.getDefaultRoomNotificationMode(isEncrypted, membersCount).let(RoomNotificationSettingsMapper::mapMode)
+            notificationSettings.getDefaultRoomNotificationMode(isEncrypted, isOneToOne(membersCount)).let(RoomNotificationSettingsMapper::mapMode)
         }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> = withContext(dispatchers.io) {
@@ -72,8 +72,15 @@ class RustNotificationSettingsService(
 
     override suspend fun muteRoom(roomId: RoomId): Result<Unit> = setRoomNotificationMode(roomId, RoomNotificationMode.MUTE)
 
-    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: ULong) =
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: Long) =
         runCatching {
-            notificationSettings.unmuteRoom(roomId.value, isEncrypted, membersCount)
+            notificationSettings.unmuteRoom(roomId.value, isEncrypted, isOneToOne(membersCount))
         }
+
+    /**
+     * A one-to-one is a room with exactly 2 members.
+     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
+     * @param membersCount The active members count in a room
+     */
+    private fun isOneToOne(membersCount: Long) = membersCount == 2L
 }
