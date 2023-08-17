@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
@@ -55,18 +56,23 @@ fun IconToggleButton(
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun IconToggleButtonPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
+internal fun IconToggleButtonCheckedPreview() = ElementThemedPreview(vertical = false) { ContentToPreview(true) }
+
+@Preview(group = PreviewGroup.Toggles)
+@Composable
+internal fun IconToggleButtonUncheckedPreview() = ElementThemedPreview(vertical = false) { ContentToPreview(false) }
 
 @Composable
-private fun ContentToPreview() {
-    var checked by remember { mutableStateOf(false) }
-    IconToggleButton(
-        checked = checked,
-        onCheckedChange = { checked = !checked },
-    ) {
+private fun ContentToPreview(defaultCheck: Boolean) {
+    var checked by remember { mutableStateOf(defaultCheck) }
+    val icon: @Composable () -> Unit = {
         Icon(
             imageVector = if (checked) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
             contentDescription = "IconToggleButton"
         )
+    }
+    Column {
+        IconToggleButton(checked = checked, enabled = true, onCheckedChange = { checked = !checked }, content = icon)
+        IconToggleButton(checked = checked, enabled = false, onCheckedChange = { checked = !checked }, content = icon)
     }
 }

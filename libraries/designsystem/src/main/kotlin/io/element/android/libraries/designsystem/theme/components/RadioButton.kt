@@ -17,16 +17,16 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
@@ -63,18 +63,17 @@ internal fun compoundRadioButtonColors(): RadioButtonColors {
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
+internal fun RadioButtonCheckedPreview() = ElementThemedPreview(vertical = false) { ContentToPreview(true) }
+
+@Preview(group = PreviewGroup.Toggles)
+@Composable
+internal fun RadioButtonUncheckedPreview() = ElementThemedPreview(vertical = false) { ContentToPreview(false) }
 
 @Composable
-private fun ContentToPreview() {
+private fun ContentToPreview(defaultCheck: Boolean) {
+    var checked by remember { mutableStateOf(defaultCheck) }
     Column {
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            RadioButton(selected = false, onClick = {})
-            RadioButton(selected = false, enabled = false, onClick = {})
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            RadioButton(selected = true, onClick = {})
-            RadioButton(selected = true, enabled = false, onClick = {})
-        }
+        RadioButton(selected = checked, enabled = true, onClick = { checked = !checked })
+        RadioButton(selected = checked, enabled = false, onClick = { checked = !checked })
     }
 }
