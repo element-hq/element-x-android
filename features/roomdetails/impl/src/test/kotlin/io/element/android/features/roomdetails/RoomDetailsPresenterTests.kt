@@ -159,6 +159,8 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             assertThat(awaitItem().canInvite).isFalse()
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -172,6 +174,8 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             assertThat(awaitItem().canInvite).isFalse()
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -289,6 +293,8 @@ class RoomDetailsPresenterTests {
         }.test {
             // Initially false, and no further events
             assertThat(awaitItem().canEdit).isFalse()
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -305,6 +311,8 @@ class RoomDetailsPresenterTests {
         }.test {
             // The initial state is "hidden" and no further state changes happen
             assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.Hidden)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
