@@ -30,6 +30,7 @@ class BuildtimeFeatureFlagProvider @Inject constructor() :
         return if (feature is FeatureFlags) {
             when (feature) {
                 FeatureFlags.LocationSharing -> true
+                FeatureFlags.Polls -> false
             }
         } else {
             false

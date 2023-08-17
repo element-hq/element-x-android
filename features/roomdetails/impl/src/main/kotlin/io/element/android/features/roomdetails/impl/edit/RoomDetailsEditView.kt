@@ -68,7 +68,6 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -115,17 +114,13 @@ fun RoomDetailsEditView(
                 navigationIcon = { BackButton(onClick = onBackPressed) },
                 actions = {
                     TextButton(
+                        text = stringResource(CommonStrings.action_save),
                         enabled = state.saveButtonEnabled,
                         onClick = {
                             focusManager.clearFocus()
                             state.eventSink(RoomDetailsEditEvents.Save)
                         },
-                    ) {
-                        Text(
-                            text = stringResource(CommonStrings.action_save),
-                            style = ElementTheme.typography.aliasButtonText,
-                        )
-                    }
+                    )
                 }
             )
         },

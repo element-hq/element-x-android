@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
-import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
  * Debug tool to add a vertical and a horizontal ruler on top of the content.
@@ -76,8 +76,10 @@ internal fun WithRulerDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     WithRulers(xRulersOffset = 20.dp, yRulersOffset = 15.dp) {
-        OutlinedButton(onClick = {}) {
-            Text(text = "A Button with rulers on it!")
-        }
+        OutlinedButton(
+            text = "A Button with rulers on it!",
+            size = ButtonSize.Medium,
+            onClick = {},
+        )
     }
 }

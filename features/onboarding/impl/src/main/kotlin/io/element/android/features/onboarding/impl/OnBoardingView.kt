@@ -23,10 +23,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
@@ -42,9 +40,8 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.aliasButtonText
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
@@ -144,46 +141,27 @@ private fun OnBoardingButtons(
         }
         if (state.canLoginWithQrCode) {
             Button(
+                text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
+                leadingIcon = IconSource.Vector(Icons.Default.QrCode),
                 onClick = onSignInWithQrCode,
-                enabled = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.QrCode, contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-                Spacer(Modifier.width(14.dp))
-                Text(
-                    text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
-                    style = ElementTheme.typography.aliasButtonText,
-                )
-            }
+                modifier = Modifier.fillMaxWidth()
+            )
         }
         Button(
+            text = stringResource(id = signInButtonStringRes),
             onClick = onSignIn,
-            enabled = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(TestTags.onBoardingSignIn)
-        ) {
-            Text(
-                text = stringResource(id = signInButtonStringRes),
-                style = ElementTheme.typography.aliasButtonText,
-            )
-        }
+        )
         if (state.canCreateAccount) {
             OutlinedButton(
+                text = stringResource(id = R.string.screen_onboarding_sign_up),
                 onClick = onCreateAccount,
                 enabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(id = R.string.screen_onboarding_sign_up),
-                    style = ElementTheme.typography.aliasButtonText,
-                )
-            }
+            )
         }
         Spacer(modifier = Modifier.height(16.dp))
     }

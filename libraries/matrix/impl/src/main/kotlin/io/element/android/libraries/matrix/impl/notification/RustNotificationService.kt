@@ -39,7 +39,6 @@ class RustNotificationService(
         userId: SessionId,
         roomId: RoomId,
         eventId: EventId,
-        filterByPushRules: Boolean,
     ): Result<NotificationData?> = withContext(dispatchers.io) {
         runCatching {
             val item = notificationClient.getNotification(roomId.value, eventId.value)

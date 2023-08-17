@@ -17,18 +17,7 @@
 package io.element.android.libraries.matrix.impl.sync
 
 import io.element.android.libraries.matrix.api.sync.SyncState
-import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.SyncServiceState
-
-internal fun RoomListServiceState.toSyncState(): SyncState {
-    return when (this) {
-        RoomListServiceState.INIT,
-        RoomListServiceState.SETTING_UP -> SyncState.Idle
-        RoomListServiceState.RUNNING -> SyncState.Running
-        RoomListServiceState.ERROR -> SyncState.Error
-        RoomListServiceState.TERMINATED -> SyncState.Terminated
-    }
-}
 
 internal fun SyncServiceState.toSyncState(): SyncState {
     return when (this) {

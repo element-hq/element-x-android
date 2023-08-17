@@ -110,6 +110,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                     FeatureUiModel(
                         key = feature.key,
                         title = feature.title,
+                        description = feature.description,
                         isEnabled = isEnabled
                     )
                 }

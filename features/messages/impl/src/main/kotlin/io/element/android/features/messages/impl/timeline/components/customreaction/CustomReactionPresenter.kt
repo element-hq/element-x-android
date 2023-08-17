@@ -21,22 +21,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 
 class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionState> {
 
     @Composable
     override fun present(): CustomReactionState {
-        var selectedEventId by remember { mutableStateOf<EventId?>(null) }
+        var selectedEvent by remember { mutableStateOf<TimelineItem.Event?>(null) }
 
         fun handleEvents(event: CustomReactionEvents) {
             when (event) {
-                is CustomReactionEvents.UpdateSelectedEvent -> selectedEventId = event.eventId
+                is CustomReactionEvents.UpdateSelectedEvent -> selectedEvent = event.event
             }
         }
 
-        return CustomReactionState(selectedEventId = selectedEventId, eventSink = ::handleEvents)
+        val selectedEmoji = selectedEvent?.reactionsState?.reactions?.mapNotNull { if(it.isHighlighted) it.key else null }.orEmpty().toImmutableSet()
+        return CustomReactionState(selectedEventId = selectedEvent?.eventId, selectedEmoji = selectedEmoji, eventSink = ::handleEvents)
     }
 }

@@ -97,9 +97,11 @@ fun WelcomeView(
             }
         },
         footer = {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onContinueClicked) {
-                Text(text = stringResource(CommonStrings.action_continue))
-            }
+            Button(
+                text = stringResource(CommonStrings.action_continue),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onContinueClicked
+            )
             Spacer(modifier = Modifier.height(32.dp))
         }
     )

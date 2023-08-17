@@ -69,16 +69,12 @@ class NotifiableEventResolver @Inject constructor(
             userId = sessionId,
             roomId = roomId,
             eventId = eventId,
-            // FIXME should be true in the future, but right now it's broken
-            //  (https://github.com/vector-im/element-x-android/issues/640#issuecomment-1612913658)
-            filterByPushRules = false,
         ).onFailure {
             Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
         }.getOrNull()
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
         return notificationData?.asNotifiableEvent(sessionId)
-            ?: fallbackNotifiableEvent(sessionId, roomId, eventId)
     }
 
     private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent? {
@@ -119,10 +115,10 @@ class NotifiableEventResolver @Inject constructor(
                         title = null, // TODO check if title is needed anymore
                     )
                 } else {
-                    null
+                    fallbackNotifiableEvent(userId, roomId, eventId)
                 }
             }
-            else -> null
+            else -> fallbackNotifiableEvent(userId, roomId, eventId)
         }
     }
 

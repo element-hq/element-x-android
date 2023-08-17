@@ -38,9 +38,9 @@ interface DiffCacheInvalidator<T> {
 class DefaultDiffCacheInvalidator<T> : DiffCacheInvalidator<T> {
 
     override fun onChanged(position: Int, count: Int, cache: MutableDiffCache<T>) {
-        (position until position + count).forEach {
+        for (i in position until position + count) {
             // Invalidate cache
-            cache[it] = null
+            cache[i] = null
         }
     }
 
