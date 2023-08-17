@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.notificationsettings
 
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -24,13 +25,15 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
 
 class RustNotificationSettingsService(
-    private val notificationSettings: NotificationSettings
+    private val notificationSettings: NotificationSettings,
+    private val dispatchers: CoroutineDispatchers,
 ) : NotificationSettingsService {
 
     private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
@@ -56,10 +59,11 @@ class RustNotificationSettingsService(
             notificationSettings.getDefaultRoomNotificationMode(isEncrypted, membersCount).let(RoomNotificationSettingsMapper::mapMode)
         }
 
-    override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> =
+    override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
             notificationSettings.setRoomNotificationMode(roomId.value, mode.let(RoomNotificationSettingsMapper::mapMode))
         }
+    }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> =
         runCatching {
