@@ -89,7 +89,7 @@ androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "medi
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
-androidx_preference = "androidx.preference:preference:1.2.0"
+androidx_preference = "androidx.preference:preference:1.2.1"
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha05"
