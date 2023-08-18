@@ -57,14 +57,6 @@ jobs:
           path: |
             **/kover/merged/verification/errors.txt
 
-      - name: 🚫 Upload Screenshot failure differences on error
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: failures
-          path: tests/uitests/build/paparazzi/failures/
-          retention-days: 5
-
       - name: ✅ Upload kover report (disabled)
         if: always()
         run: echo "This is now done only once a day, see nightlyReports.yml"
