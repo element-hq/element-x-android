@@ -70,7 +70,7 @@ jobs:
         if: failure()
         with:
           name: failures
-          path: tests/uitests/out/failures/
+          path: tests/uitests/build/paparazzi/failures/
           retention-days: 5
 
       - name: ✅ Upload kover report (disabled)
@@ -83,7 +83,7 @@ jobs:
         with:
           name: tests-and-screenshot-tests-results
           path: |
-            **/out/failures/
+            **/build/paparazzi/failures/
             **/build/reports/tests/*UnitTest/
 
       # https://github.com/codecov/codecov-action
