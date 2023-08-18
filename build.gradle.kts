@@ -152,7 +152,7 @@ allprojects {
             maxHeapSize = "1g"
         } else {
             // Disable screenshot tests by default
-            exclude("**/ScreenshotTest*")
+            exclude("ui/S.class")
         }
     }
 }
