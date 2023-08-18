@@ -149,7 +149,7 @@ allprojects {
         val isScreenshotTest = project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
         if (isScreenshotTest) {
             // Increase heap size for screenshot tests
-            maxHeapSize = "2g"
+            maxHeapSize = "1g"
         } else {
             // Disable screenshot tests by default
             exclude("ui/S.class")

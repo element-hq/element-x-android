@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.compound.forceLineHeight
 
 // Designs:https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=425%3A24208&mode=design&t=G5hCfkLB6GgXDuWe-1
 
@@ -90,7 +89,7 @@ fun ListItem(
 
     val decoratedHeadlineContent: @Composable () -> Unit = {
         CompositionLocalProvider(
-            LocalTextStyle provides ElementTheme.materialTypography.bodyLarge.forceLineHeight(),
+            LocalTextStyle provides ElementTheme.materialTypography.bodyLarge,
             LocalContentColor provides headlineColor,
         ) {
             headlineContent()
@@ -99,7 +98,7 @@ fun ListItem(
     val decoratedSupportingContent: (@Composable () -> Unit)? = supportingContent?.let { content ->
         {
             CompositionLocalProvider(
-                LocalTextStyle provides ElementTheme.materialTypography.bodyMedium.forceLineHeight(),
+                LocalTextStyle provides ElementTheme.materialTypography.bodyMedium,
                 LocalContentColor provides ElementTheme.materialColors.onSurfaceVariant,
             ) {
                 content()
