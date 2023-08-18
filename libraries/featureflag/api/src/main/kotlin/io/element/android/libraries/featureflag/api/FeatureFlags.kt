@@ -35,5 +35,6 @@ enum class FeatureFlags(
     NotificationSettings(
         key = "feature.notificationsettings",
         title = "Show notification settings",
+        defaultValue = false,
     )
 }
