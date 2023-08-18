@@ -29,7 +29,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.Modifier
@@ -132,73 +134,75 @@ private fun WaitListContent(
     onCancelClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 16.dp)
+    ElementTheme(
+        darkTheme = true
     ) {
-        if (state.loginAction !is Async.Success) {
-            ElementTheme(darkTheme = true) {
-                TextButton(
-                    text = stringResource(CommonStrings.action_cancel),
-                    onClick = onCancelClicked,
-                )
-            }
-        }
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = BiasAbsoluteAlignment(
-                horizontalBias = 0f,
-                verticalBias = -0.05f
-            )
+            modifier = modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (state.loginAction.isLoading()) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        strokeWidth = 2.dp,
-                        color = Color.White
-                    )
-                } else {
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-                Spacer(modifier = Modifier.height(18.dp))
-                val titleRes = when (state.loginAction) {
-                    is Async.Success -> R.string.screen_waitlist_title_success
-                    else -> R.string.screen_waitlist_title
-                }
-                Text(
-                    text = withColoredPeriod(titleRes),
-                    style = ElementTheme.typography.fontHeadingXlBold,
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                val subtitle = when (state.loginAction) {
-                    is Async.Success -> stringResource(
-                        id = R.string.screen_waitlist_message_success,
-                        state.appName,
-                    )
-                    else -> stringResource(
-                        id = R.string.screen_waitlist_message,
-                        state.appName,
-                        state.serverName,
+            if (state.loginAction !is Async.Success) {
+                CompositionLocalProvider(LocalContentColor provides Color.Black) {
+                    TextButton(
+                        text = stringResource(CommonStrings.action_cancel),
+                        onClick = onCancelClicked,
                     )
                 }
-                Text(
-                    modifier = Modifier.widthIn(max = 360.dp),
-                    text = subtitle,
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                )
             }
-        }
-        if (state.loginAction is Async.Success) {
-            ElementTheme(darkTheme = true) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = BiasAbsoluteAlignment(
+                    horizontalBias = 0f,
+                    verticalBias = -0.05f
+                )
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (state.loginAction.isLoading()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp,
+                            color = ElementTheme.colors.iconPrimary
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                    Spacer(modifier = Modifier.height(18.dp))
+                    val titleRes = when (state.loginAction) {
+                        is Async.Success -> R.string.screen_waitlist_title_success
+                        else -> R.string.screen_waitlist_title
+                    }
+                    Text(
+                        text = withColoredPeriod(titleRes),
+                        style = ElementTheme.typography.fontHeadingXlBold,
+                        textAlign = TextAlign.Center,
+                        color = ElementTheme.colors.textPrimary,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    val subtitle = when (state.loginAction) {
+                        is Async.Success -> stringResource(
+                            id = R.string.screen_waitlist_message_success,
+                            state.appName,
+                        )
+                        else -> stringResource(
+                            id = R.string.screen_waitlist_message,
+                            state.appName,
+                            state.serverName,
+                        )
+                    }
+                    Text(
+                        modifier = Modifier.widthIn(max = 360.dp),
+                        text = subtitle,
+                        style = ElementTheme.typography.fontBodyLgRegular,
+                        textAlign = TextAlign.Center,
+                        color = ElementTheme.colors.textPrimary,
+                    )
+                }
+            }
+            if (state.loginAction is Async.Success) {
                 Button(
                     text = stringResource(id = CommonStrings.action_continue),
                     onClick = { state.eventSink.invoke(WaitListEvents.Continue) },

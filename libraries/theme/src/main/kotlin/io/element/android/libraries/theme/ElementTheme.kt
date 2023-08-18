@@ -19,6 +19,7 @@ package io.element.android.libraries.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -115,6 +116,7 @@ fun ElementTheme(
     }
     CompositionLocalProvider(
         LocalCompoundColors provides currentCompoundColor,
+        LocalContentColor provides colorScheme.onSurface,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
