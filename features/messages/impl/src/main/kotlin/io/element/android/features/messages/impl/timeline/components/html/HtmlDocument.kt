@@ -400,22 +400,14 @@ private fun HtmlOrderedList(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    var number = 1
     val delimiter = "."
     HtmlListItems(
         list = orderedList,
+        marker = { index -> "$index$delimiter"},
         modifier = modifier,
         onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
-    ) {
-        val text = buildAnnotatedString {
-            append("${number++}$delimiter ${it.text()}")
-        }
-        HtmlText(
-            text = text, onClick = onTextClicked,
-            onLongClick = onTextLongClicked, interactionSource = interactionSource
-        )
-    }
+    )
 }
 
 @Composable
@@ -429,42 +421,52 @@ private fun HtmlUnorderedList(
     val marker = "・"
     HtmlListItems(
         list = unorderedList,
+        marker = { marker },
         modifier = modifier,
         onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
-    ) {
-        val text = buildAnnotatedString {
-            append("$marker ${it.text()}")
-        }
-        HtmlText(
-            text = text, onClick = onTextClicked,
-            onLongClick = onTextLongClicked, interactionSource = interactionSource
-        )
-    }
+    )
 }
 
 @Composable
 private fun HtmlListItems(
     list: Element,
+    marker: (Int) -> String,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
-    content: @Composable (node: TextNode) -> Unit = {}
 ) {
     Column(modifier = modifier) {
-        for (node in list.children()) {
-            for (innerNode in node.childNodes()) {
-                when (innerNode) {
-                    is TextNode -> {
-                        if (!innerNode.isBlank) content(innerNode)
+        for ((index, node) in list.children().withIndex()) {
+            val areAllChildrenInline = node.childNodes().all { it is TextNode || it is Element && it.isInline() }
+            if (areAllChildrenInline) {
+                val text = buildAnnotatedString {
+                    append("${marker(index + 1)} ")
+                    appendInlineChildrenElements(node.childNodes(), MaterialTheme.colorScheme)
+                }
+                HtmlText(text = text, interactionSource = remember { MutableInteractionSource() })
+            } else {
+                for (innerNode in node.childNodes()) {
+                    when (innerNode) {
+                        is TextNode -> {
+                            if (!innerNode.isBlank) {
+                                val text = buildAnnotatedString {
+                                    append("${marker(index + 1)} ")
+                                }
+                                HtmlText(
+                                    text = text, onClick = onTextClicked,
+                                    onLongClick = onTextLongClicked, interactionSource = interactionSource
+                                )
+                            }
+                        }
+                        is Element -> HtmlBlock(
+                            element = innerNode,
+                            modifier = Modifier.padding(start = 4.dp),
+                            onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
+                            interactionSource = interactionSource
+                        )
                     }
-                    is Element -> HtmlBlock(
-                        element = innerNode,
-                        modifier = Modifier.padding(start = 4.dp),
-                        onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
-                        interactionSource = interactionSource
-                    )
                 }
             }
         }
