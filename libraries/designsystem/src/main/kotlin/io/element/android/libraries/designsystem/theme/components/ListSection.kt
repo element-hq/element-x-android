@@ -54,7 +54,7 @@ fun ListSectionHeader(
 ) {
     Column(modifier.fillMaxWidth()) {
         if (hasDivider) {
-            Divider(modifier = Modifier.padding(top = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
         }
         Column(
             modifier = Modifier.padding(16.dp),
