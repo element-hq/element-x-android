@@ -56,7 +56,8 @@ import io.element.android.libraries.theme.compound.forceLineHeight
  * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
  * @param onClick The callback to be called when the list item is clicked.
  *
- * **Note:** [isPrimaryAction], [isDestructive] and [enabled] should only be used in single line [ListItem] components, and only one should be customised at a time.
+ * **Note:** [isPrimaryAction], [isDestructive] and [enabled] should only be used in single line [ListItem] components,
+ * and only one should be customised at a time.
  */
 @Suppress("LongParameterList")
 @Composable
