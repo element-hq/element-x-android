@@ -36,6 +36,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kapt) apply false
     alias(libs.plugins.dependencycheck) apply false
+    alias(libs.plugins.dependencyanalysis)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
@@ -99,6 +100,22 @@ allprojects {
         // You can override by passing `-PallWarningsAsErrors=true` in the command line
         // Or add a line with "allWarningsAsErrors=true" in your ~/.gradle/gradle.properties file
         kotlinOptions.allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
+    }
+
+    // Detect unused dependencies
+    apply {
+        plugin("com.autonomousapps.dependency-analysis")
+    }
+}
+
+// See https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/wiki/Customizing-plugin-behavior
+dependencyAnalysis {
+    issues {
+        all {
+            onUnusedDependencies {
+                exclude("com.jakewharton.timber:timber")
+            }
+        }
     }
 }
 
@@ -327,6 +344,7 @@ tasks.register("runQualityChecks") {
         tasks.findByPath("$path:lint")?.let { dependsOn(it) }
         tasks.findByName("detekt")?.let { dependsOn(it) }
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
+        // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }
     dependsOn(":app:knitCheck")
 }
