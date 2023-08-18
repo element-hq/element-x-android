@@ -419,7 +419,7 @@ private fun HtmlUnorderedList(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    val marker = "•"
+    val marker = "・"
     HtmlListItems(
         list = unorderedList,
         marker = { marker },
@@ -443,7 +443,7 @@ private fun HtmlListItems(
             val areAllChildrenInline = node.childNodes().all { it is TextNode || it is Element && it.isInline() }
             if (areAllChildrenInline) {
                 val text = buildAnnotatedString {
-                    append("${marker(index + 1)}  ")
+                    append("${marker(index + 1)} ")
                     appendInlineChildrenElements(node.childNodes(), MaterialTheme.colorScheme)
                 }
                 HtmlText(text = text, interactionSource = remember { MutableInteractionSource() })
@@ -453,7 +453,7 @@ private fun HtmlListItems(
                         is TextNode -> {
                             if (!innerNode.isBlank) {
                                 val text = buildAnnotatedString {
-                                    append("${marker(index + 1)}  ")
+                                    append("${marker(index + 1)} ")
                                 }
                                 HtmlText(
                                     text = text, onClick = onTextClicked,
