@@ -44,6 +44,8 @@ open class DocumentProvider : PreviewParameterProvider<Document> {
             "<ol><li>ol item 1</li><li>ol item 2</li></ol>",
             "<ol><li><i>ol item 1 italic</i></li><li><b>ol item 2 bold</b></li></ol>",
             "<ul><li>ul item 1</li><li>ul item 2</li></ul>",
+            "<ol><li>Testing <a href='#'>link</a> item.</li><li>And <a href='#'>another</a> item.</li></ol>",
+            "<ul><li>Testing <a href='#'>link</a> item.</li><li>And <a href='#'>another</a> item.</li></ul>",
             "<blockquote>blockquote</blockquote>",
             // TODO Find a way to make is work with `pre`. For now there is an error with
             // jsoup: java.lang.NoSuchMethodError: 'org.jsoup.nodes.Element org.jsoup.nodes.Element.firstElementChild()'
