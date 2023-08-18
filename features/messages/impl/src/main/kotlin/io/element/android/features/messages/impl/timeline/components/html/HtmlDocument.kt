@@ -408,15 +408,7 @@ private fun HtmlOrderedList(
         modifier = modifier,
         onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
-    ) {
-        val text = buildAnnotatedString {
-            append("${number++}$delimiter ${it.text()}")
-        }
-        HtmlText(
-            text = text, onClick = onTextClicked,
-            onLongClick = onTextLongClicked, interactionSource = interactionSource
-        )
-    }
+    )
 }
 
 @Composable
@@ -434,15 +426,7 @@ private fun HtmlUnorderedList(
         modifier = modifier,
         onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
-    ) {
-        val text = buildAnnotatedString {
-            append("$marker ${it.text()}")
-        }
-        HtmlText(
-            text = text, onClick = onTextClicked,
-            onLongClick = onTextLongClicked, interactionSource = interactionSource
-        )
-    }
+    )
 }
 
 @Composable
@@ -453,11 +437,10 @@ private fun HtmlListItems(
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
-    content: @Composable (node: TextNode) -> Unit = {}
 ) {
     Column(modifier = modifier) {
         for ((index, node) in list.children().withIndex()) {
-            val areAllChildrenInline = node.childNodes().all { it is TextNode || (it is Element && it.isInline()) }
+            val areAllChildrenInline = node.childNodes().all { it is TextNode || it is Element && it.isInline() }
             if (areAllChildrenInline) {
                 val text = buildAnnotatedString {
                     append("${marker(index + 1)}  ")
@@ -468,7 +451,15 @@ private fun HtmlListItems(
                 for (innerNode in node.childNodes()) {
                     when (innerNode) {
                         is TextNode -> {
-                            if (!innerNode.isBlank) content(innerNode)
+                            if (!innerNode.isBlank) {
+                                val text = buildAnnotatedString {
+                                    append("${marker(index + 1)}  ")
+                                }
+                                HtmlText(
+                                    text = text, onClick = onTextClicked,
+                                    onLongClick = onTextLongClicked, interactionSource = interactionSource
+                                )
+                            }
                         }
                         is Element -> HtmlBlock(
                             element = innerNode,
