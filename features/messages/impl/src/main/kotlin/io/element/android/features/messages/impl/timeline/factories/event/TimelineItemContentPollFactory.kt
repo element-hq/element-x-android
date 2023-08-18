@@ -40,10 +40,16 @@ class TimelineItemContentPollFactory @Inject constructor(
         val userVotes = content.votes.filter { matrixClient.sessionId in it.value }.keys
         val answerItems = content.answers.map { answer ->
             val votesCount = content.votes[answer.id]?.size ?: 0
-            val progress = if (content.kind.isDisclosed && pollVotesCount > 0) votesCount.toFloat() / pollVotesCount.toFloat() else 0f
+            val isSelected = answer.id in userVotes
+            val progress = when {
+                pollVotesCount == 0 -> 0f
+                content.kind.isDisclosed -> votesCount.toFloat() / pollVotesCount.toFloat()
+                isSelected -> 1f
+                else -> 0f
+            }
             PollAnswerItem(
                 answer = answer,
-                isSelected = answer.id in userVotes,
+                isSelected = isSelected,
                 isDisclosed = content.kind.isDisclosed,
                 votesCount = votesCount,
                 progress = progress,
