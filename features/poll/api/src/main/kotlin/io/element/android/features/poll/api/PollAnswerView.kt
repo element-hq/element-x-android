@@ -101,7 +101,7 @@ fun PollAnswerView(
             Spacer(modifier = Modifier.height(10.dp))
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth(),
-                progress = answerItem.progress,
+                progress = answerItem.percentage,
                 strokeCap = StrokeCap.Round,
             )
         }

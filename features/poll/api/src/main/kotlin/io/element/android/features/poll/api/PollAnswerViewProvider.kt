@@ -24,20 +24,20 @@ fun aPollAnswerItemList(isDisclosed: Boolean = true) = persistentListOf(
         answer = PollAnswer("option_1", "Italian \uD83C\uDDEE\uD83C\uDDF9"),
         isDisclosed = isDisclosed,
         votesCount = 5,
-        progress = 0.5f
+        percentage = 0.5f
     ),
     aPollAnswerItem(
         answer = PollAnswer("option_2", "Chinese \uD83C\uDDE8\uD83C\uDDF3"),
         isDisclosed = isDisclosed,
         votesCount = 0,
-        progress = 0f
+        percentage = 0f
     ),
     aPollAnswerItem(
         answer = PollAnswer("option_3", "Brazilian \uD83C\uDDE7\uD83C\uDDF7"),
         isDisclosed = isDisclosed,
         isSelected = true,
         votesCount = 1,
-        progress = 0.1f
+        percentage = 0.1f
     ),
     aPollAnswerItem(isDisclosed = isDisclosed),
 )
@@ -50,11 +50,11 @@ fun aPollAnswerItem(
     isSelected: Boolean = false,
     isDisclosed: Boolean = true,
     votesCount: Int = 4,
-    progress: Float = 0.4f,
+    percentage: Float = 0.4f,
 ) = PollAnswerItem(
     answer = answer,
     isSelected = isSelected,
     isDisclosed = isDisclosed,
     votesCount = votesCount,
-    progress = progress
+    percentage = percentage
 )

@@ -41,7 +41,7 @@ class TimelineItemContentPollFactory @Inject constructor(
         val answerItems = content.answers.map { answer ->
             val votesCount = content.votes[answer.id]?.size ?: 0
             val isSelected = answer.id in userVotes
-            val progress = when {
+            val percentage = when {
                 pollVotesCount == 0 -> 0f
                 content.kind.isDisclosed -> votesCount.toFloat() / pollVotesCount.toFloat()
                 isSelected -> 1f
@@ -52,7 +52,7 @@ class TimelineItemContentPollFactory @Inject constructor(
                 isSelected = isSelected,
                 isDisclosed = content.kind.isDisclosed,
                 votesCount = votesCount,
-                progress = progress,
+                percentage = percentage,
             )
         }
 
