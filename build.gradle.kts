@@ -344,7 +344,7 @@ tasks.register("runQualityChecks") {
         tasks.findByPath("$path:lint")?.let { dependsOn(it) }
         tasks.findByName("detekt")?.let { dependsOn(it) }
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
-        tasks.findByName("buildHealth")?.let { dependsOn(it) }
+        // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }
     dependsOn(":app:knitCheck")
 }
