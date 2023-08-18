@@ -198,7 +198,7 @@ private fun WaitListContent(
                         text = subtitle,
                         style = ElementTheme.typography.fontBodyLgRegular,
                         textAlign = TextAlign.Center,
-                        color = Color.White,
+                        color = ElementTheme.colors.textPrimary,
                     )
                 }
             }
