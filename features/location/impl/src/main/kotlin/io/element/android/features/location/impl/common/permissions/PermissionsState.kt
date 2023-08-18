@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.show
+package io.element.android.features.location.impl.common.permissions
 
-import io.element.android.features.location.api.Location
-
-class FakeLocationActions : LocationActions {
-
-    var sharedLocation: Location? = null
-        private set
-
-    var sharedLabel: String? = null
-        private set
-
-    var openSettingsInvocationsCount = 0
-        private set
-
-    override fun share(location: Location, label: String?) {
-        sharedLocation = location
-        sharedLabel = label
+data class PermissionsState(
+    val permissions: Permissions = Permissions.NoneGranted,
+    val shouldShowRationale: Boolean = false,
+    val eventSink: (PermissionsEvents) -> Unit = {},
+) {
+    sealed interface Permissions {
+        object AllGranted : Permissions
+        object SomeGranted : Permissions
+        object NoneGranted : Permissions
     }
 
-    override fun openSettings() {
-        openSettingsInvocationsCount++
-    }
+    val isAnyGranted: Boolean
+        get() = permissions is Permissions.SomeGranted || permissions is Permissions.AllGranted
 }

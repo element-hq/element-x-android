@@ -25,11 +25,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.Composer
-import io.element.android.features.location.impl.MapDefaults
-import io.element.android.features.location.impl.permissions.PermissionsEvents
-import io.element.android.features.location.impl.permissions.PermissionsPresenter
-import io.element.android.features.location.impl.permissions.PermissionsState
-import io.element.android.features.location.impl.show.LocationActions
+import io.element.android.features.location.impl.common.MapDefaults
+import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
+import io.element.android.features.location.impl.common.permissions.PermissionsState
+import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta

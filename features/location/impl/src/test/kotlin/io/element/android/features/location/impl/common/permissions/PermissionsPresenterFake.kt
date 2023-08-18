@@ -14,12 +14,27 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.permissions
+package io.element.android.features.location.impl.common.permissions
 
-import io.element.android.libraries.architecture.Presenter
+import androidx.compose.runtime.Composable
 
-interface PermissionsPresenter : Presenter<PermissionsState> {
-    interface Factory {
-        fun create(permissions: List<String>): PermissionsPresenter
+class PermissionsPresenterFake : PermissionsPresenter {
+
+    val events = mutableListOf<PermissionsEvents>()
+
+    private fun handleEvent(event: PermissionsEvents) {
+        events += event
     }
+
+    private var state = PermissionsState(eventSink = ::handleEvent)
+        set(value) {
+            field = value.copy(eventSink = ::handleEvent)
+        }
+
+    fun givenState(state: PermissionsState) {
+        this.state = state
+    }
+
+    @Composable
+    override fun present(): PermissionsState = state
 }

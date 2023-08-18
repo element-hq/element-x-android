@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.permissions
+package io.element.android.features.location.impl.common.permissions
 
 import androidx.compose.runtime.Composable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi

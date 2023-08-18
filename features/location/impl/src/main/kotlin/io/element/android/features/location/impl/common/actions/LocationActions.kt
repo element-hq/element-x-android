@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.permissions
+package io.element.android.features.location.impl.common.actions
 
-data class PermissionsState(
-    val permissions: Permissions = Permissions.NoneGranted,
-    val shouldShowRationale: Boolean = false,
-    val eventSink: (PermissionsEvents) -> Unit = {},
-) {
-    sealed interface Permissions {
-        object AllGranted : Permissions
-        object SomeGranted : Permissions
-        object NoneGranted : Permissions
-    }
+import io.element.android.features.location.api.Location
 
-    val isAnyGranted: Boolean
-        get() = permissions is Permissions.SomeGranted || permissions is Permissions.AllGranted
+interface LocationActions {
+    fun share(location: Location, label: String?)
+    fun openSettings()
 }

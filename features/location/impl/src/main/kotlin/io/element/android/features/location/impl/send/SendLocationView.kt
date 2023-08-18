@@ -47,10 +47,11 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
-import io.element.android.features.location.impl.MapDefaults
+import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.R
+import io.element.android.features.location.impl.common.PermissionDeniedDialog
+import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
@@ -230,35 +231,5 @@ internal fun SendLocationViewPreview(
     SendLocationView(
         state = state,
         navigateUp = {},
-    )
-}
-
-@Composable
-private fun PermissionRationaleDialog(
-    onContinue: () -> Unit,
-    onDismiss: () -> Unit,
-    appName: String,
-) {
-    ConfirmationDialog(
-        content = stringResource(CommonStrings.error_missing_location_rationale_android, appName),
-        onSubmitClicked = onContinue,
-        onDismiss = onDismiss,
-        submitText = stringResource(CommonStrings.action_continue),
-        cancelText = stringResource(CommonStrings.action_cancel),
-    )
-}
-
-@Composable
-private fun PermissionDeniedDialog(
-    onContinue: () -> Unit,
-    onDismiss: () -> Unit,
-    appName: String,
-) {
-    ConfirmationDialog(
-        content = stringResource(CommonStrings.error_missing_location_auth_android, appName),
-        onSubmitClicked = onContinue,
-        onDismiss = onDismiss,
-        submitText = stringResource(CommonStrings.action_continue),
-        cancelText = stringResource(CommonStrings.action_cancel),
     )
 }

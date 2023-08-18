@@ -19,9 +19,17 @@ package io.element.android.features.location.impl.show
 import io.element.android.features.location.api.Location
 
 data class ShowLocationState(
+    val permissionDialog: Dialog,
     val location: Location,
     val description: String?,
     val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
+    val appName: String,
     val eventSink: (ShowLocationEvents) -> Unit,
-)
+) {
+    sealed interface Dialog {
+        object None : Dialog
+        object PermissionRationale : Dialog
+        object PermissionDenied : Dialog
+    }
+}

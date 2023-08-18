@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.show
+package io.element.android.features.location.impl.common.permissions
 
-import io.element.android.features.location.api.Location
-
-interface LocationActions {
-    fun share(location: Location, label: String?)
-    fun openSettings()
+sealed interface PermissionsEvents {
+    object RequestPermissions : PermissionsEvents
 }
