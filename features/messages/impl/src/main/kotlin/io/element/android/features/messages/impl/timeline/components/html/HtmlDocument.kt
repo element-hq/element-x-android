@@ -400,7 +400,6 @@ private fun HtmlOrderedList(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    var number = 1
     val delimiter = "."
     HtmlListItems(
         list = orderedList,
