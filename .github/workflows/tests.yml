@@ -55,22 +55,6 @@ jobs:
           path: |
             **/kover/merged/verification/errors.txt
 
-      - name: 📸 Upload Screenshot test report
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: reports
-          path: tests/uitests/build/reports/tests/testDebugUnitTest/
-          retention-days: 5
-
-      - name: 🚫 Upload Screenshot failure differences on error
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: failures
-          path: tests/uitests/out/failures/
-          retention-days: 5
-
       - name: ✅ Upload kover report (disabled)
         if: always()
         run: echo "This is now done only once a day, see nightlyReports.yml"
@@ -81,7 +65,7 @@ jobs:
         with:
           name: tests-and-screenshot-tests-results
           path: |
-            **/out/failures/
+            **/build/paparazzi/failures/
             **/build/reports/tests/*UnitTest/
 
       # https://github.com/codecov/codecov-action
