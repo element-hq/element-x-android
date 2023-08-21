@@ -61,7 +61,7 @@ fun ClickableLinkText(
     inlineContent: ImmutableMap<String, InlineTextContent> = persistentMapOf(),
 ) {
     ClickableLinkText(
-        text = AnnotatedString(text),
+        annotatedString = AnnotatedString(text),
         interactionSource = interactionSource,
         modifier = modifier,
         linkify = linkify,
@@ -76,7 +76,7 @@ fun ClickableLinkText(
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun ClickableLinkText(
-    text: AnnotatedString,
+    annotatedString: AnnotatedString,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     linkify: Boolean = true,
@@ -86,10 +86,12 @@ fun ClickableLinkText(
     style: TextStyle = LocalTextStyle.current,
     inlineContent: ImmutableMap<String, InlineTextContent> = persistentMapOf(),
 ) {
-    val processedText = if (linkify) {
-        text.linkify(SpanStyle(color = LinkColor))
-    } else {
-        text
+    val processedText = remember(annotatedString) {
+        if (linkify) {
+            annotatedString.linkify(SpanStyle(color = LinkColor))
+        } else {
+            annotatedString
+        }
     }
     val uriHandler = LocalUriHandler.current
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -111,10 +113,10 @@ fun ClickableLinkText(
         ) { offset ->
             layoutResult.value?.let { layoutResult ->
                 val position = layoutResult.getOffsetForPosition(offset)
-                val linkUrlAnnotations = text.getUrlAnnotations(position, position)
+                val linkUrlAnnotations = annotatedString.getUrlAnnotations(position, position)
                     .map { AnnotatedString.Range(it.item.url, it.start, it.end, linkAnnotationTag) }
                 val linkStringAnnotations = linkUrlAnnotations +
-                    text.getStringAnnotations(linkAnnotationTag, position, position)
+                    annotatedString.getStringAnnotations(linkAnnotationTag, position, position)
                 if (linkStringAnnotations.isEmpty()) {
                     onClick()
                 } else {
@@ -174,7 +176,7 @@ internal fun ClickableLinkTextPreview() =
 @Composable
 private fun ContentToPreview() {
     ClickableLinkText(
-        text = AnnotatedString("Hello", ParagraphStyle()),
+        annotatedString = AnnotatedString("Hello", ParagraphStyle()),
         linkAnnotationTag = "",
         onClick = {},
         onLongClick = {},
