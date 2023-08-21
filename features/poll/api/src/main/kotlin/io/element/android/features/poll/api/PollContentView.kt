@@ -127,7 +127,7 @@ fun ColumnScope.UndisclosedPollBottomNotice() {
 
 @DayNightPreviews
 @Composable
-internal fun PollContentNoResultsPreview() = ElementPreview {
+internal fun PollContentUndisclosedPreview() = ElementPreview {
     PollContentView(
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isDisclosed = false),
@@ -139,7 +139,7 @@ internal fun PollContentNoResultsPreview() = ElementPreview {
 
 @DayNightPreviews
 @Composable
-internal fun PollContentWithResultsPreview() = ElementPreview {
+internal fun PollContentDisclosedPreview() = ElementPreview {
     PollContentView(
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),
