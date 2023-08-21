@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalLayoutApi::class)
+
 package io.element.android.features.messages.impl.timeline.components.html
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,6 +35,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -47,7 +53,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -96,8 +101,8 @@ private fun HtmlBody(
         onTextClicked: () -> Unit = {},
         onTextLongClicked: () -> Unit = {},
     ) = FlowRow(
-        mainAxisSpacing = 2.dp,
-        crossAxisSpacing = 8.dp,
+        horizontalArrangement = Arrangement.spacedBy(2.dp, Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
     ) {
         var sameRow = true
         while (sameRow && nodes.hasNext()) {
@@ -403,7 +408,7 @@ private fun HtmlOrderedList(
     val delimiter = "."
     HtmlListItems(
         list = orderedList,
-        marker = { index -> "$index$delimiter"},
+        marker = { index -> "$index$delimiter" },
         modifier = modifier,
         onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
