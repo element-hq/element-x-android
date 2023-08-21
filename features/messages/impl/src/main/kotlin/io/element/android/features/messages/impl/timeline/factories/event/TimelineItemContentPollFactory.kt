@@ -52,7 +52,7 @@ class TimelineItemContentPollFactory @Inject constructor(
             PollAnswerItem(
                 answer = answer,
                 isSelected = isSelected,
-                isEnabled = isEndedPoll,
+                isEnabled = !isEndedPoll,
                 isWinner = isWinner,
                 isDisclosed = content.kind.isDisclosed || isEndedPoll,
                 votesCount = votesCount,
