@@ -42,10 +42,11 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun ActivePollContentView(
+fun PollContentView(
     question: String,
     answerItems: ImmutableList<PollAnswerItem>,
     pollKind: PollKind,
+    isPollEnded: Boolean,
     onAnswerSelected: (PollAnswer) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -59,9 +60,9 @@ fun ActivePollContentView(
 
         PollAnswers(answerItems = answerItems, onAnswerSelected = onAnswerSelected)
 
-        when (pollKind) {
-            PollKind.Disclosed -> DisclosedPollBottomNotice(answerItems)
-            PollKind.Undisclosed -> UndisclosedPollBottomNotice()
+        when {
+            isPollEnded || pollKind == PollKind.Disclosed -> DisclosedPollBottomNotice(answerItems)
+            pollKind == PollKind.Undisclosed -> UndisclosedPollBottomNotice()
         }
     }
 }
@@ -126,22 +127,36 @@ fun ColumnScope.UndisclosedPollBottomNotice() {
 
 @DayNightPreviews
 @Composable
-internal fun ActivePollContentNoResultsPreview() = ElementPreview {
-    ActivePollContentView(
+internal fun PollContentNoResultsPreview() = ElementPreview {
+    PollContentView(
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isDisclosed = false),
         pollKind = PollKind.Undisclosed,
+        isPollEnded = false,
         onAnswerSelected = { },
     )
 }
 
 @DayNightPreviews
 @Composable
-internal fun ActivePollContentWithResultsPreview() = ElementPreview {
-    ActivePollContentView(
+internal fun PollContentWithResultsPreview() = ElementPreview {
+    PollContentView(
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),
         pollKind = PollKind.Disclosed,
+        isPollEnded = false,
+        onAnswerSelected = { },
+    )
+}
+
+@DayNightPreviews
+@Composable
+internal fun PollContentEndedPreview() = ElementPreview {
+    PollContentView(
+        question = "What type of food should we have at the party?",
+        answerItems = aPollAnswerItemList(isEnded = true),
+        pollKind = PollKind.Disclosed,
+        isPollEnded = false,
         onAnswerSelected = { },
     )
 }

@@ -38,19 +38,23 @@ class TimelineItemContentPollFactory @Inject constructor(
         // Todo Move this computation to the matrix rust sdk
         val pollVotesCount = content.votes.flatMap { it.value }.size
         val userVotes = content.votes.filter { matrixClient.sessionId in it.value }.keys
+        val isEndedPoll = content.endTime != null
+        val winnerIds = content.answers.map { it.id }
+            .groupBy { content.votes[it]?.size ?: 0 } // Group by votes count
+            .maxBy { it.key } // Keep max voted answers
+            .takeIf { it.key > 0 } // Ignore if no option has been voted
+            ?.value.orEmpty()
         val answerItems = content.answers.map { answer ->
             val votesCount = content.votes[answer.id]?.size ?: 0
             val isSelected = answer.id in userVotes
-            val percentage = when {
-                pollVotesCount == 0 -> 0f
-                content.kind.isDisclosed -> votesCount.toFloat() / pollVotesCount.toFloat()
-                isSelected -> 1f
-                else -> 0f
-            }
+            val isWinner = answer.id in winnerIds
+            val percentage = if (pollVotesCount > 0) votesCount.toFloat() / pollVotesCount.toFloat() else 0f
             PollAnswerItem(
                 answer = answer,
                 isSelected = isSelected,
-                isDisclosed = content.kind.isDisclosed,
+                isEnabled = isEndedPoll,
+                isWinner = isWinner,
+                isDisclosed = content.kind.isDisclosed || isEndedPoll,
                 votesCount = votesCount,
                 percentage = percentage,
             )
@@ -61,6 +65,7 @@ class TimelineItemContentPollFactory @Inject constructor(
             answerItems = answerItems,
             votes = content.votes,
             pollKind = content.kind,
+            isEnded = isEndedPoll,
         )
     }
 }
