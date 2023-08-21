@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_account_provider_change">"Changer de fournisseur"</string>
-  <string name="screen_account_provider_continue">"Continuer"</string>
   <string name="screen_account_provider_form_hint">"Adresse du serveur d\'accueil"</string>
   <string name="screen_account_provider_form_notice">"Entrez un mot clé de recherche ou un nom de domaine."</string>
   <string name="screen_account_provider_form_subtitle">"Rechercher une entreprise, une communauté ou un serveur privé."</string>
@@ -38,6 +37,7 @@ Merci de votre patience !"</string>
   <string name="screen_waitlist_message_success">"Bienvenue sur %1$s !"</string>
   <string name="screen_waitlist_title">"Vous y êtes presque."</string>
   <string name="screen_waitlist_title_success">"Vous y êtes."</string>
+  <string name="screen_account_provider_continue">"Continuer"</string>
   <string name="screen_change_server_submit">"Continuer"</string>
   <string name="screen_change_server_title">"Sélectionnez votre serveur"</string>
   <string name="screen_login_password_hint">"Mot de passe"</string>
