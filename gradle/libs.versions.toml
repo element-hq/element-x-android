@@ -29,7 +29,7 @@ composecompiler = "1.5.1"
 coroutines = "1.7.3"
 
 # Accompanist
-accompanist = "0.30.1"
+accompanist = "0.32.0"
 
 # Test
 test_core = "1.5.0"
