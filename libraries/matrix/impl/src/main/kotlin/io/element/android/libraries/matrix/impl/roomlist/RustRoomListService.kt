@@ -125,7 +125,7 @@ private fun RoomListLoadingState.toLoadingState(): RoomList.LoadingState {
 
 private fun RoomListServiceState.toRoomListState(): RoomListService.State {
     return when (this) {
-        RoomListServiceState.INIT,
+        RoomListServiceState.INITIAL,
         RoomListServiceState.SETTING_UP -> RoomListService.State.Idle
         RoomListServiceState.RUNNING -> RoomListService.State.Running
         RoomListServiceState.ERROR -> RoomListService.State.Error
