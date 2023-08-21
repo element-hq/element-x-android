@@ -104,10 +104,7 @@ private fun HtmlBody(
             when (val node = nodes.next()) {
                 is TextNode -> {
                     if (!node.isBlank) {
-                        Text(
-                            text = node.text(),
-                            color = MaterialTheme.colorScheme.primary,
-                        )
+                        ClickableLinkText(text = node.text(), interactionSource = interactionSource)
                     }
                 }
                 is Element -> {
