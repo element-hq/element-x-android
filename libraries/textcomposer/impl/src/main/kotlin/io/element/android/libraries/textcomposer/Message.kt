@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model.event
+package io.element.android.libraries.textcomposer
 
-import org.jsoup.nodes.Document
-
-sealed interface TimelineItemTextBasedContent : TimelineItemEventContent {
-    val body: String
-    val htmlDocument: Document?
-    val isEdited: Boolean
-    val htmlBody: String?
-        get() = htmlDocument?.body()?.html()
-}
+data class Message(
+    val html: String,
+    val markdown: String,
+)

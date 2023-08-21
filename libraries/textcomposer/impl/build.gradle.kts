@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,25 @@
  */
 
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
+    alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.features.messages.api"
+    namespace = "io.element.android.libraries.textcomposer"
 }
 
 dependencies {
-    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
-    api(projects.libraries.textcomposer.impl)
+    implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.designsystem)
+
+    implementation(libs.matrix.richtexteditor)
+    implementation(libs.matrix.richtexteditor.compose)
+
+    ksp(libs.showkase.processor)
 }

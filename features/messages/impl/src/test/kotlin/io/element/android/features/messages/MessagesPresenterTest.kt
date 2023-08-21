@@ -30,7 +30,6 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
@@ -41,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.media.FakeLocalMediaFactory
+import io.element.android.features.messages.textcomposer.TestTextComposerStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
@@ -323,6 +323,7 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
             assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            skipItems(1) // back paginating
         }
     }
 
@@ -379,7 +380,7 @@ class MessagesPresenterTest {
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            initialState.composerState.composerState.requestFocus()
             val focusedState = consumeItemsUntilPredicate { state ->
                 state.showReinvitePrompt
             }.last()
@@ -403,7 +404,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            initialState.composerState.composerState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -419,7 +420,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            initialState.composerState.composerState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -601,6 +602,8 @@ class MessagesPresenterTest {
             snackbarDispatcher = SnackbarDispatcher(),
             analyticsService = FakeAnalyticsService(),
             messageComposerContext = MessageComposerContextImpl(),
+            textComposerStateFactory = TestTextComposerStateFactory(),
+
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),

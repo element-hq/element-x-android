@@ -19,11 +19,12 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.TextComposerState
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class MessageComposerState(
-    val text: String?,
+    val composerState: TextComposerState,
     val isFullScreen: Boolean,
     val hasFocus: Boolean,
     val mode: MessageComposerMode,
@@ -32,9 +33,7 @@ data class MessageComposerState(
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
     val eventSink: (MessageComposerEvents) -> Unit
-) {
-    val isSendButtonVisible: Boolean = text.isNullOrEmpty().not()
-}
+)
 
 @Immutable
 sealed interface AttachmentsState {

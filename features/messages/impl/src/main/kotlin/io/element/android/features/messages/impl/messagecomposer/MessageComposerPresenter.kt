@@ -21,6 +21,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +45,9 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.TextComposerState
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CancellationException
@@ -67,6 +70,7 @@ class MessageComposerPresenter @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContextImpl,
+    private val textComposerStateFactory: TextComposerStateFactory,
 ) : Presenter<MessageComposerState> {
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -103,11 +107,9 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val hasFocus = remember {
-            mutableStateOf(false)
-        }
-        val text: MutableState<String> = rememberSaveable {
-            mutableStateOf("")
+        val composerState = textComposerStateFactory.create()
+        val hasFocus = remember(composerState.hasFocus) {
+            derivedStateOf { composerState.hasFocus }
         }
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
@@ -115,7 +117,8 @@ class MessageComposerPresenter @Inject constructor(
 
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
-                is MessageComposerMode.Edit -> text.value = modeValue.defaultContent
+                is MessageComposerMode.Edit ->
+                    composerState.setHtml(modeValue.defaultContent)
                 else -> Unit
             }
         }
@@ -136,18 +139,15 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
 
-                is MessageComposerEvents.FocusChanged -> hasFocus.value = event.hasFocus
-
-                is MessageComposerEvents.UpdateText -> text.value = event.text
                 MessageComposerEvents.CloseSpecialMode -> {
-                    text.value = ""
+                    composerState.setHtml("")
                     messageComposerContext.composerMode = MessageComposerMode.Normal("")
                 }
 
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
-                    text = event.message,
+                    message = event.message,
                     updateComposerMode = { messageComposerContext.composerMode = it },
-                    textState = text
+                    composerState = composerState,
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
@@ -194,11 +194,14 @@ class MessageComposerPresenter @Inject constructor(
                         ongoingSendAttachmentJob.value == null
                     }
                 }
+                is MessageComposerEvents.Error -> {
+                    analyticsService.trackError(event.error)
+                }
             }
         }
 
         return MessageComposerState(
-            text = text.value,
+            composerState = composerState,
             isFullScreen = isFullScreen.value,
             hasFocus = hasFocus.value,
             mode = messageComposerContext.composerMode,
@@ -206,31 +209,32 @@ class MessageComposerPresenter @Inject constructor(
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 
     private fun CoroutineScope.sendMessage(
-        text: String,
+        message: Message,
         updateComposerMode: (newComposerMode: MessageComposerMode) -> Unit,
-        textState: MutableState<String>
+        composerState: TextComposerState,
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
         // Reset composer right away
-        textState.value = ""
+        composerState.setHtml("")
         updateComposerMode(MessageComposerMode.Normal(""))
         when (capturedMode) {
-            is MessageComposerMode.Normal -> room.sendMessage(text)
+            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html)
             is MessageComposerMode.Edit -> {
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
-                room.editMessage(eventId, transactionId, text)
+                room.editMessage(eventId, transactionId, message.markdown, message.html)
             }
 
             is MessageComposerMode.Quote -> TODO()
             is MessageComposerMode.Reply -> room.replyMessage(
                 capturedMode.eventId,
-                text
+                message.markdown,
+                message.html,
             )
         }
     }

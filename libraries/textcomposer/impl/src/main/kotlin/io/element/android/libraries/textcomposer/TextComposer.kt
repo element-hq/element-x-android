@@ -37,38 +37,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -88,23 +76,22 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.compose.RichTextEditor
+import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import kotlinx.coroutines.android.awaitFrame
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TextComposer(
-    composerText: String?,
+    state: TextComposerState,
     composerMode: MessageComposerMode,
-    composerCanSendMessage: Boolean,
     modifier: Modifier = Modifier,
-    focusRequester: FocusRequester = FocusRequester(),
-    onSendMessage: (String) -> Unit = {},
+    onRequestFocus: () -> Unit = {},
+    onSendMessage: (Message) -> Unit = {},
     onResetComposerMode: () -> Unit = {},
-    onComposerTextChange: (String) -> Unit = {},
     onAddAttachment: () -> Unit = {},
-    onFocusChanged: (Boolean) -> Unit = {},
+    onError: (Throwable) -> Unit = {},
 ) {
-    val text = composerText.orEmpty()
     Row(
         modifier.padding(
             horizontal = 12.dp,
@@ -115,10 +102,9 @@ fun TextComposer(
         Spacer(modifier = Modifier.width(12.dp))
         val roundCornerSmall = 20.dp.applyScaleUp()
         val roundCornerLarge = 28.dp.applyScaleUp()
-        var lineCount by remember { mutableIntStateOf(0) }
 
-        val roundedCornerSize = remember(lineCount, composerMode) {
-            if (lineCount > 1 || composerMode is MessageComposerMode.Special) {
+        val roundedCornerSize = remember(state.lineCount, composerMode) {
+            if (state.lineCount > 1 || composerMode is MessageComposerMode.Special) {
                 roundCornerSmall
             } else {
                 roundCornerLarge
@@ -132,10 +118,15 @@ fun TextComposer(
         )
         val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
         val minHeight = 42.dp.applyScaleUp()
-        val bgColor = ElementTheme.colors.bgSubtleSecondary
-        // Change border color depending on focus
-        var hasFocus by remember { mutableStateOf(false) }
-        val borderColor = if (hasFocus) ElementTheme.colors.borderDisabled else bgColor
+        val colors = ElementTheme.colors
+        val bgColor = colors.bgSubtleSecondary
+
+        val borderColor by remember(state.hasFocus, colors) {
+            derivedStateOf {
+                if (state.hasFocus) colors.borderDisabled else bgColor
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,66 +138,56 @@ fun TextComposer(
                 ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
             }
             val defaultTypography = ElementTheme.typography.fontBodyLgRegular
+
             Box {
-                BasicTextField(
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .heightIn(min = minHeight)
-                        .focusRequester(focusRequester)
-                        .onFocusEvent {
-                            hasFocus = it.hasFocus
-                            onFocusChanged(it.hasFocus)
-                        },
-                    value = text,
-                    onValueChange = { onComposerTextChange(it) },
-                    onTextLayout = {
-                        lineCount = it.lineCount
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences,
-                    ),
-                    textStyle = defaultTypography.copy(color = MaterialTheme.colorScheme.primary),
-                    cursorBrush = SolidColor(ElementTheme.colors.iconAccentTertiary),
-                    decorationBox = { innerTextField ->
-                        TextFieldDefaults.DecorationBox(
-                            value = text,
-                            innerTextField = innerTextField,
-                            enabled = true,
-                            singleLine = false,
-                            visualTransformation = VisualTransformation.None,
-                            shape = roundedCorners,
-                            contentPadding = PaddingValues(
-                                top = 10.dp.applyScaleUp(),
-                                bottom = 10.dp.applyScaleUp(),
+                        .background(color = bgColor, shape = roundedCorners)
+                        .padding(
+                            PaddingValues(
+                                top = 4.dp.applyScaleUp(),
+                                bottom = 4.dp.applyScaleUp(),
                                 start = 12.dp.applyScaleUp(),
-                                end = 42.dp.applyScaleUp(),
-                            ),
-                            interactionSource = remember { MutableInteractionSource() },
-                            placeholder = {
-                                Text(stringResource(CommonStrings.common_message), style = defaultTypography)
-                            },
-                            colors = TextFieldDefaults.colors(
-                                unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-                                focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
-                                focusedPlaceholderColor = ElementTheme.colors.textDisabled,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent,
-                                errorIndicatorColor = Color.Transparent,
-                                unfocusedContainerColor = bgColor,
-                                focusedContainerColor = bgColor,
-                                errorContainerColor = bgColor,
-                                disabledContainerColor = bgColor,
+                                end = 42.dp.applyScaleUp()
                             )
+                        ),
+                    contentAlignment = Alignment.CenterStart,
+                ) {
+
+                    // Placeholder
+                    if (state.messageHtml.isEmpty()) {
+                        Text(
+                            stringResource(CommonStrings.common_message),
+                            style = defaultTypography.copy(
+                                color = ElementTheme.colors.textDisabled,
+                            ),
                         )
                     }
-                )
+
+                    RichTextEditor(
+                        state = (state.inner as RealInnerTextComposerState).richTextEditorState,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        style = RichTextEditorDefaults.style(
+                            text = RichTextEditorDefaults.textStyle(
+                                color = if (state.hasFocus) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.secondary
+                                }
+                            ),
+                            cursor = RichTextEditorDefaults.cursorStyle(
+                                color = ElementTheme.colors.iconAccentTertiary,
+                            )
+                        ),
+                        onError = onError
+                    )
+                }
 
                 SendButton(
-                    text = text,
-                    canSendMessage = composerCanSendMessage,
-                    onSendMessage = onSendMessage,
+                    canSendMessage = state.canSendMessage,
+                    onClick = { onSendMessage(Message(html = state.messageHtml, markdown = state.messageMarkdown)) },
                     composerMode = composerMode,
                     modifier = Modifier.padding(end = 6.dp.applyScaleUp(), bottom = 6.dp.applyScaleUp())
                 )
@@ -218,7 +199,7 @@ fun TextComposer(
     val keyboard = LocalSoftwareKeyboardController.current
     LaunchedEffect(composerMode) {
         if (composerMode is MessageComposerMode.Special) {
-            focusRequester.requestFocus()
+            onRequestFocus()
             keyboard?.let {
                 awaitFrame()
                 it.show()
@@ -241,7 +222,7 @@ private fun ComposerModeView(
             ReplyToModeView(
                 modifier = modifier.padding(8.dp),
                 senderName = composerMode.senderName,
-                text = composerMode.defaultContent.toString(),
+                text = composerMode.defaultContent,
                 attachmentThumbnailInfo = composerMode.attachmentThumbnailInfo,
                 onResetComposerMode = onResetComposerMode,
             )
@@ -385,9 +366,8 @@ private fun AttachmentButton(
 
 @Composable
 private fun BoxScope.SendButton(
-    text: String,
     canSendMessage: Boolean,
-    onSendMessage: (String) -> Unit,
+    onClick: () -> Unit,
     composerMode: MessageComposerMode,
     modifier: Modifier = Modifier,
 ) {
@@ -405,9 +385,8 @@ private fun BoxScope.SendButton(
                 enabled = canSendMessage,
                 interactionSource = interactionSource,
                 indication = rememberRipple(bounded = false),
-                onClick = {
-                    onSendMessage(text)
-                }),
+                onClick = onClick,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         val iconId = when (composerMode) {
@@ -433,28 +412,22 @@ private fun BoxScope.SendButton(
 internal fun TextComposerSimplePreview() = ElementPreview {
     Column {
         TextComposer(
+            previewTextComposerState(""),
             onSendMessage = {},
-            onComposerTextChange = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
-            composerCanSendMessage = false,
-            composerText = "",
         )
         TextComposer(
+            previewTextComposerState("A message"),
             onSendMessage = {},
-            onComposerTextChange = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
-            composerCanSendMessage = true,
-            composerText = "A message",
         )
         TextComposer(
+            previewTextComposerState("A message\nWith several lines\nTo preview larger textfields and long lines with overflow"),
             onSendMessage = {},
-            onComposerTextChange = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
-            composerCanSendMessage = true,
-            composerText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
         )
     }
 }
@@ -463,12 +436,10 @@ internal fun TextComposerSimplePreview() = ElementPreview {
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
+        previewTextComposerState("A message"),
         onSendMessage = {},
-        onComposerTextChange = {},
         composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
         onResetComposerMode = {},
-        composerCanSendMessage = true,
-        composerText = "A message",
     )
 }
 
@@ -477,8 +448,8 @@ internal fun TextComposerEditPreview() = ElementPreview {
 internal fun TextComposerReplyPreview() = ElementPreview {
     Column {
         TextComposer(
+            previewTextComposerState(""),
             onSendMessage = {},
-            onComposerTextChange = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
                 eventId = EventId("$1234"),
@@ -488,12 +459,10 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                     "To preview larger textfields and long lines with overflow"
             ),
             onResetComposerMode = {},
-            composerCanSendMessage = true,
-            composerText = "A message",
         )
         TextComposer(
+            previewTextComposerState("A message"),
             onSendMessage = {},
-            onComposerTextChange = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
                 eventId = EventId("$1234"),
@@ -506,12 +475,10 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 defaultContent = "image.jpg"
             ),
             onResetComposerMode = {},
-            composerCanSendMessage = true,
-            composerText = "A message",
         )
         TextComposer(
+            previewTextComposerState("A message"),
             onSendMessage = {},
-            onComposerTextChange = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
                 eventId = EventId("$1234"),
@@ -524,12 +491,10 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 defaultContent = "video.mp4"
             ),
             onResetComposerMode = {},
-            composerCanSendMessage = true,
-            composerText = "A message",
         )
         TextComposer(
+            previewTextComposerState("A message"),
             onSendMessage = {},
-            onComposerTextChange = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
                 eventId = EventId("$1234"),
@@ -542,12 +507,10 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 defaultContent = "logs.txt"
             ),
             onResetComposerMode = {},
-            composerCanSendMessage = true,
-            composerText = "A message",
         )
         TextComposer(
+            previewTextComposerState("A message"),
             onSendMessage = {},
-            onComposerTextChange = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
                 eventId = EventId("$1234"),
@@ -560,8 +523,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 defaultContent = "Shared location"
             ),
             onResetComposerMode = {},
-            composerCanSendMessage = true,
-            composerText = "A message",
         )
     }
 }
