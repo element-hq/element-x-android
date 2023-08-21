@@ -17,9 +17,9 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.ListItemColors
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -32,7 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
@@ -43,48 +43,50 @@ import io.element.android.libraries.theme.ElementTheme
  * A List Item component to be used in lists and menus with simple layouts, matching the Material 3 guidelines.
  * @param headlineContent The main content of the list item, usually a text.
  * @param modifier The modifier to be applied to the list item.
- * @param overlineContent The content to be displayed above the headline content.
  * @param supportingContent The content to be displayed below the headline content.
  * @param leadingContent The content to be displayed before the headline content.
  * @param trailingContent The content to be displayed after the headline content.
  * @param colors The colors to be used for the list item.
- * @param tonalElevation The tonal elevation to be used for the list item.
- * @param shadowElevation The shadow elevation to be used for the list item.
- * @param isPrimaryAction Whether the list item is a primary action. This will change the color of the leading content to use primary tokens.
- * @param isDestructive Whether the list item is a destructive action. This will change the color of the headline content to use critical tokens.
+ * @param style The style to use for the list item. This may change the color and text styles of the contents. [ListItemStyle.Default] is used by default.
  * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
+ * @param isCompact Whether the list item should be displayed in a compact layout. `false` by default.
  * @param onClick The callback to be called when the list item is clicked.
- *
- * **Note:** [isPrimaryAction], [isDestructive] and [enabled] should only be used in single line [ListItem] components,
- * and only one should be customised at a time.
  */
 @Suppress("LongParameterList")
 @Composable
 fun ListItem(
     headlineContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    overlineContent: @Composable (() -> Unit)? = null,
     supportingContent: @Composable (() -> Unit)? = null,
     leadingContent: @Composable (() -> Unit)? = null,
     trailingContent: @Composable (() -> Unit)? = null,
-    colors: ListItemColors = ListItemDefaults.colors(),
-    tonalElevation: Dp = ListItemDefaults.Elevation,
-    shadowElevation: Dp = ListItemDefaults.Elevation,
-    isPrimaryAction: Boolean = false,
-    isDestructive: Boolean = false,
+    style: ListItemStyle = ListItemStyle.Default,
     enabled: Boolean = true,
-    onClick: () -> Unit = { },
+    isCompact: Boolean = false,
+    onClick: (() -> Unit)? = null,
 ) {
-    val headlineColor = when {
-        isDestructive -> ElementTheme.colors.textCriticalPrimary
-        !enabled -> ElementTheme.colors.textDisabled
+    val headlineColor = if (enabled) when (style) {
+        ListItemStyle.Destructive -> ElementTheme.colors.textCriticalPrimary
         else -> ElementTheme.colors.textPrimary
+    } else {
+        // We cannot apply a disabled color by default: https://issuetracker.google.com/issues/280480132
+        ElementTheme.colors.textDisabled
     }
-    val leadingContentColor = when {
-        isPrimaryAction -> ElementTheme.colors.iconPrimary
-        isDestructive -> ElementTheme.colors.iconCriticalPrimary
-        !enabled -> ElementTheme.colors.iconDisabled
+
+    val supportingContentColor = if (enabled) {
+        ElementTheme.materialColors.onSurfaceVariant
+    } else {
+        // We cannot apply a disabled color by default: https://issuetracker.google.com/issues/280480132
+        ElementTheme.colors.textDisabled
+    }
+
+    val leadingTrailingContentColor = if (enabled) when (style) {
+        ListItemStyle.Primary -> ElementTheme.colors.iconPrimary
+        ListItemStyle.Destructive -> ElementTheme.colors.iconCriticalPrimary
         else -> ElementTheme.colors.iconTertiary
+    } else {
+        // We cannot apply a disabled color by default: https://issuetracker.google.com/issues/280480132
+        ElementTheme.colors.iconDisabled
     }
 
     val decoratedHeadlineContent: @Composable () -> Unit = {
@@ -99,7 +101,7 @@ fun ListItem(
         {
             CompositionLocalProvider(
                 LocalTextStyle provides ElementTheme.materialTypography.bodyMedium,
-                LocalContentColor provides ElementTheme.materialColors.onSurfaceVariant,
+                LocalContentColor provides supportingContentColor,
             ) {
                 content()
             }
@@ -108,7 +110,7 @@ fun ListItem(
     val decoratedLeadingContent: (@Composable () -> Unit)? = leadingContent?.let { content ->
         {
             CompositionLocalProvider(
-                LocalContentColor provides leadingContentColor,
+                LocalContentColor provides leadingTrailingContentColor,
             ) {
                 content()
             }
@@ -117,23 +119,38 @@ fun ListItem(
     val decoratedTrailingContent: (@Composable () -> Unit)? = trailingContent?.let { content ->
         {
             CompositionLocalProvider(
-                LocalContentColor provides ElementTheme.materialColors.primary,
+                LocalContentColor provides leadingTrailingContentColor,
+                LocalTextStyle provides ElementTheme.typography.fontBodyMdRegular,
             ) {
                 content()
             }
         }
     }
+
+    val setUpModifier = modifier
+        .then(if (isCompact) Modifier else Modifier.padding(vertical = 4.dp))
+        .clickable(enabled = onClick != null, onClick = onClick ?: {})
+
     androidx.compose.material3.ListItem(
         headlineContent = decoratedHeadlineContent,
-        modifier = modifier.clickable(enabled = enabled, onClick = onClick),
-        overlineContent = overlineContent,
+        modifier = setUpModifier,
+        overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,
         trailingContent = decoratedTrailingContent,
-        colors = colors,
-        tonalElevation = tonalElevation,
-        shadowElevation = shadowElevation,
+        colors = ListItemDefaults.colors(), // These aren't really used since we need the workaround for the disabled state color
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
     )
+}
+
+/**
+ * The style to use for a [ListItem].
+ */
+sealed interface ListItemStyle {
+    object Default : ListItemStyle
+    object Primary: ListItemStyle
+    object Destructive : ListItemStyle
 }
 
 // region: Simple list item
@@ -285,11 +302,37 @@ internal fun ListItemSingleLineBothIconsPreview() = PreviewItems.OneLineListItem
 )
 // endregion
 
+// region: Both Icons - Compact
+@Preview(name = "List item (3 lines) - Both Icons - Compact", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemThreeLinesBothIconsCompactPreview() = PreviewItems.ThreeLinesListItemPreview(
+    leadingContent = PreviewItems.icon(),
+    trailingContent = PreviewItems.icon(),
+    isCompact = true,
+)
+
+@Preview(name = "List item (2 lines) - Both Icons - Compact", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesBothIconsCompactPreview() = PreviewItems.TwoLinesListItemPreview(
+    leadingContent = PreviewItems.icon(),
+    trailingContent = PreviewItems.icon(),
+    isCompact = true,
+)
+
+@Preview(name = "List item (1 line) - Both Icons - Compact", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemSingleLineBothIconsCompactPreview() = PreviewItems.OneLineListItemPreview(
+    leadingContent = PreviewItems.icon(),
+    trailingContent = PreviewItems.icon(),
+    isCompact = true,
+)
+// endregion
+
 // region: Primary action
 @Preview(name = "List item - Primary action & Icon", group = PreviewGroup.ListItems)
 @Composable
 internal fun ListItemPrimaryActionWithIconPreview() = PreviewItems.OneLineListItemPreview(
-    isPrimaryAction = true,
+    style = ListItemStyle.Primary,
     leadingContent = PreviewItems.icon(),
 )
 // endregion
@@ -297,12 +340,12 @@ internal fun ListItemPrimaryActionWithIconPreview() = PreviewItems.OneLineListIt
 // region: Error state
 @Preview(name = "List item - Error", group = PreviewGroup.ListItems)
 @Composable
-internal fun ListItemErrorPreview() = PreviewItems.OneLineListItemPreview(isDestructive = true)
+internal fun ListItemErrorPreview() = PreviewItems.OneLineListItemPreview(style = ListItemStyle.Destructive)
 
 @Preview(name = "List item - Error & Icon", group = PreviewGroup.ListItems)
 @Composable
 internal fun ListItemErrorWithIconPreview() = PreviewItems.OneLineListItemPreview(
-    isDestructive = true,
+    style = ListItemStyle.Destructive,
     leadingContent = PreviewItems.icon(),
 )
 // endregion
@@ -328,6 +371,7 @@ private object PreviewItems {
         modifier: Modifier = Modifier,
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
+        isCompact: Boolean = false,
     ) {
         ElementThemedPreview {
             ListItem(
@@ -335,6 +379,7 @@ private object PreviewItems {
                 supportingContent = PreviewItems.text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
+                isCompact = isCompact,
                 modifier = modifier,
             )
         }
@@ -345,6 +390,7 @@ private object PreviewItems {
         modifier: Modifier = Modifier,
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
+        isCompact: Boolean = false,
     ) {
         ElementThemedPreview {
             ListItem(
@@ -352,6 +398,7 @@ private object PreviewItems {
                 supportingContent = PreviewItems.textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
+                isCompact = isCompact,
                 modifier = modifier,
             )
         }
@@ -362,9 +409,9 @@ private object PreviewItems {
         modifier: Modifier = Modifier,
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
-        isPrimaryAction: Boolean = false,
+        style: ListItemStyle = ListItemStyle.Default,
+        isCompact: Boolean = false,
         enabled: Boolean = true,
-        isDestructive: Boolean = false,
     ) {
         ElementThemedPreview {
             ListItem(
@@ -372,8 +419,8 @@ private object PreviewItems {
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 enabled = enabled,
-                isPrimaryAction = isPrimaryAction,
-                isDestructive = isDestructive,
+                style = style,
+                isCompact = isCompact,
                 modifier = modifier,
             )
         }
