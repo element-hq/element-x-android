@@ -127,13 +127,9 @@ fun ListItem(
         }
     }
 
-    val setUpModifier = modifier
-        .then(if (isCompact) Modifier else Modifier.padding(vertical = 4.dp))
-        .clickable(enabled = onClick != null, onClick = onClick ?: {})
-
     androidx.compose.material3.ListItem(
         headlineContent = decoratedHeadlineContent,
-        modifier = setUpModifier,
+        modifier = modifier.clickable(enabled = enabled && onClick != null, onClick = onClick ?: {}),
         overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,
