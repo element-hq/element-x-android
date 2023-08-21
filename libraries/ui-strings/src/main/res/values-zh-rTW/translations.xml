@@ -142,6 +142,7 @@
   </plurals>
   <string name="report_content_hint">"檢舉這個內容的原因"</string>
   <string name="room_timeline_read_marker_title">"新訊息"</string>
+  <string name="screen_analytics_settings_share_data">"分享分析數據"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_migration_title">"設定您的帳號"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
