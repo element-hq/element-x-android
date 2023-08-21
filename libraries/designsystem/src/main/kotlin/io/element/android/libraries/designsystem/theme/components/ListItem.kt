@@ -49,7 +49,6 @@ import io.element.android.libraries.theme.ElementTheme
  * @param colors The colors to be used for the list item.
  * @param style The style to use for the list item. This may change the color and text styles of the contents. [ListItemStyle.Default] is used by default.
  * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
- * @param isCompact Whether the list item should be displayed in a compact layout. `false` by default.
  * @param onClick The callback to be called when the list item is clicked.
  */
 @Suppress("LongParameterList")
@@ -62,7 +61,6 @@ fun ListItem(
     trailingContent: @Composable (() -> Unit)? = null,
     style: ListItemStyle = ListItemStyle.Default,
     enabled: Boolean = true,
-    isCompact: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
     val headlineColor = if (enabled) when (style) {
@@ -298,32 +296,6 @@ internal fun ListItemSingleLineBothIconsPreview() = PreviewItems.OneLineListItem
 )
 // endregion
 
-// region: Both Icons - Compact
-@Preview(name = "List item (3 lines) - Both Icons - Compact", group = PreviewGroup.ListItems)
-@Composable
-internal fun ListItemThreeLinesBothIconsCompactPreview() = PreviewItems.ThreeLinesListItemPreview(
-    leadingContent = PreviewItems.icon(),
-    trailingContent = PreviewItems.icon(),
-    isCompact = true,
-)
-
-@Preview(name = "List item (2 lines) - Both Icons - Compact", group = PreviewGroup.ListItems)
-@Composable
-internal fun ListItemTwoLinesBothIconsCompactPreview() = PreviewItems.TwoLinesListItemPreview(
-    leadingContent = PreviewItems.icon(),
-    trailingContent = PreviewItems.icon(),
-    isCompact = true,
-)
-
-@Preview(name = "List item (1 line) - Both Icons - Compact", group = PreviewGroup.ListItems)
-@Composable
-internal fun ListItemSingleLineBothIconsCompactPreview() = PreviewItems.OneLineListItemPreview(
-    leadingContent = PreviewItems.icon(),
-    trailingContent = PreviewItems.icon(),
-    isCompact = true,
-)
-// endregion
-
 // region: Primary action
 @Preview(name = "List item - Primary action & Icon", group = PreviewGroup.ListItems)
 @Composable
@@ -367,7 +339,6 @@ private object PreviewItems {
         modifier: Modifier = Modifier,
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
-        isCompact: Boolean = false,
     ) {
         ElementThemedPreview {
             ListItem(
@@ -375,7 +346,6 @@ private object PreviewItems {
                 supportingContent = PreviewItems.text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
-                isCompact = isCompact,
                 modifier = modifier,
             )
         }
@@ -386,7 +356,6 @@ private object PreviewItems {
         modifier: Modifier = Modifier,
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
-        isCompact: Boolean = false,
     ) {
         ElementThemedPreview {
             ListItem(
@@ -394,7 +363,6 @@ private object PreviewItems {
                 supportingContent = PreviewItems.textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
-                isCompact = isCompact,
                 modifier = modifier,
             )
         }
@@ -406,7 +374,6 @@ private object PreviewItems {
         leadingContent: @Composable (() -> Unit)? = null,
         trailingContent: @Composable (() -> Unit)? = null,
         style: ListItemStyle = ListItemStyle.Default,
-        isCompact: Boolean = false,
         enabled: Boolean = true,
     ) {
         ElementThemedPreview {
@@ -416,7 +383,6 @@ private object PreviewItems {
                 trailingContent = trailingContent,
                 enabled = enabled,
                 style = style,
-                isCompact = isCompact,
                 modifier = modifier,
             )
         }
