@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="Use_an_identity_server_to_invite_by_email.__default_Use_the_default____defaultIdentityServerName_s___default__or_manage_in__settings_Settings__settings_._web">"Use an identity server to invite by email. "<default>"Use the default (%(defaultIdentityServerName)s)"</default>" or manage in "<settings>"Settings"</settings>"."</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_show_password">"Show password"</string>
@@ -158,10 +157,6 @@
   <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you won\'t be able to rejoin without an invite."</string>
   <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="__count_s_rooms_web">
-    <item quantity="one">"%(count)s room"</item>
-    <item quantity="other">"%(count)s rooms"</item>
-  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
     <item quantity="other">"%1$d members"</item>
