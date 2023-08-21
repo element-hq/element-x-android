@@ -17,7 +17,6 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ListItemDefaults
@@ -46,7 +45,6 @@ import io.element.android.libraries.theme.ElementTheme
  * @param supportingContent The content to be displayed below the headline content.
  * @param leadingContent The content to be displayed before the headline content.
  * @param trailingContent The content to be displayed after the headline content.
- * @param colors The colors to be used for the list item.
  * @param style The style to use for the list item. This may change the color and text styles of the contents. [ListItemStyle.Default] is used by default.
  * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
  * @param onClick The callback to be called when the list item is clicked.
