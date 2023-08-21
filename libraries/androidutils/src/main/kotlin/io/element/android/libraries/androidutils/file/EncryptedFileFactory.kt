@@ -18,7 +18,7 @@ package io.element.android.libraries.androidutils.file
 
 import android.content.Context
 import androidx.security.crypto.EncryptedFile
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import java.io.File
 
 class EncryptedFileFactory(
@@ -26,11 +26,13 @@ class EncryptedFileFactory(
 ) {
     fun create(file: File): EncryptedFile {
         // We need to use the same key for all the encrypted files.
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val masterKey = MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
         return EncryptedFile.Builder(
-            file,
             context,
-            masterKeyAlias,
+            file,
+            masterKey,
             EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         ).build()
     }
