@@ -17,16 +17,20 @@
 package io.element.android.libraries.designsystem.components.list
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun SingleSelectionListItem(
@@ -36,14 +40,15 @@ fun SingleSelectionListItem(
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     leadingContent: ListItemContent? = null,
+    resultFormatter: (Int) -> String? = { options.getOrNull(it) },
     selected: Int? = null,
-    displayAsTrailingContent: Boolean = false,
+    displayResultInTrailingContent: Boolean = false,
 ) {
     var selectedIndex by rememberSaveable(selected) { mutableStateOf(selected) }
-    val selectedItem = remember(selectedIndex) { selectedIndex?.let { options.getOrNull(it) } }
-    val decoratedSupportedText: @Composable (() -> Unit)? = if (selectedItem != null && !displayAsTrailingContent) {
+    val selectedItem by remember { derivedStateOf { selectedIndex?.let { resultFormatter(it) } } }
+    val decoratedSupportedText: @Composable (() -> Unit)? = if (!selectedItem.isNullOrBlank() && !displayResultInTrailingContent) {
         @Composable {
-            Text(selectedItem)
+            Text(selectedItem!!)
         }
     } else if (supportingText != null) {
         @Composable {
@@ -52,8 +57,8 @@ fun SingleSelectionListItem(
     } else {
         null
     }
-    val trailingContent: ListItemContent? = if (selectedItem != null && displayAsTrailingContent) {
-        ListItemContent.Text(selectedItem)
+    val trailingContent: ListItemContent? = if (!selectedItem.isNullOrBlank() && displayResultInTrailingContent) {
+        ListItemContent.Text(selectedItem!!)
     } else {
         null
     }
@@ -82,6 +87,76 @@ fun SingleSelectionListItem(
             },
             onDismissRequest = { displaySelectionDialog = false },
             initialSelection = selectedIndex,
+        )
+    }
+}
+
+@Preview("Single selection List item - no selection")
+@Composable
+internal fun SingleSelectionListItemPreview() {
+    ElementThemedPreview {
+        SingleSelectionListItem(
+            headline = "Headline",
+            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            onSelectionChanged = {},
+        )
+    }
+}
+
+@Preview("Single selection List item - no selection, supporting text")
+@Composable
+internal fun SingleSelectionListItemUnselectedWithSupportingTextPreview() {
+    ElementThemedPreview {
+        SingleSelectionListItem(
+            headline = "Headline",
+            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            supportingText = "Supporting text",
+            onSelectionChanged = {},
+        )
+    }
+}
+
+@Preview("Single selection List item - selection in supporting text")
+@Composable
+internal fun SingleSelectionListItemSelectedInSupportingTextPreview() {
+    ElementThemedPreview {
+        SingleSelectionListItem(
+            headline = "Headline",
+            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            supportingText = "Supporting text",
+            onSelectionChanged = {},
+            selected = 1,
+        )
+    }
+}
+
+@Preview("Single selection List item - selection in trailing content")
+@Composable
+internal fun SingleSelectionListItemSelectedInTrailingContentPreview() {
+    ElementThemedPreview {
+        SingleSelectionListItem(
+            headline = "Headline",
+            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            supportingText = "Supporting text",
+            onSelectionChanged = {},
+            selected = 1,
+            displayResultInTrailingContent = true,
+        )
+    }
+}
+
+@Preview("Single selection List item - custom formatter")
+@Composable
+internal fun SingleSelectionListItemCustomFormattertPreview() {
+    ElementThemedPreview {
+        SingleSelectionListItem(
+            headline = "Headline",
+            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            supportingText = "Supporting text",
+            onSelectionChanged = {},
+            resultFormatter = { "Selected index: $it"},
+            selected = 1,
+            displayResultInTrailingContent = true,
         )
     }
 }
