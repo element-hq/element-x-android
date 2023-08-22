@@ -39,10 +39,10 @@ import kotlinx.collections.immutable.persistentListOf
 fun SingleSelectionDialog(
     options: ImmutableList<String>,
     onOptionSelected: (Int) -> Unit,
-    dismissButtonTitle: String = stringResource(CommonStrings.action_cancel),
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
+    dismissButtonTitle: String = stringResource(CommonStrings.action_cancel),
     initialSelection: Int? = null,
 ) {
     AlertDialog(

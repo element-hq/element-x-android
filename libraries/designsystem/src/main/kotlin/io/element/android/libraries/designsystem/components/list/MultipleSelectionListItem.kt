@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun MultipleSelectionListItem(
@@ -42,22 +43,26 @@ fun MultipleSelectionListItem(
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     leadingContent: ListItemContent? = null,
-    selected: List<Int> = emptyList(),
+    selected: ImmutableList<Int> = persistentListOf(),
     displayResultInTrailingContent: Boolean = false,
 ) {
     val selectedIndexes = remember(selected) { selected.toMutableStateList() }
     val selectedItemsText by remember { derivedStateOf { resultFormatter(selectedIndexes) } }
-    val decoratedSupportedText: @Composable (() -> Unit)? = if (!selectedItemsText.isNullOrBlank() && !displayResultInTrailingContent) {
-        @Composable {
-            Text(selectedItemsText!!)
+
+    val decoratedSupportedText: @Composable (() -> Unit)? = when {
+        !selectedItemsText.isNullOrBlank() && !displayResultInTrailingContent -> {
+            @Composable {
+                Text(selectedItemsText!!)
+            }
         }
-    } else if (supportingText != null) {
-        @Composable {
-            Text(supportingText)
+        supportingText != null -> {
+            @Composable {
+                Text(supportingText)
+            }
         }
-    } else {
-        null
+        else -> null
     }
+
     val trailingContent: ListItemContent? = if (!selectedItemsText.isNullOrBlank() && displayResultInTrailingContent) {
         ListItemContent.Text(selectedItemsText!!)
     } else {
@@ -88,7 +93,7 @@ fun MultipleSelectionListItem(
                 displaySelectionDialog = false
             },
             onDismissRequest = { displaySelectionDialog = false },
-            initialSelection = selectedIndexes,
+            initialSelection = selectedIndexes.toImmutableList(),
         )
     }
 }

@@ -46,7 +46,7 @@ fun MultipleSelectionDialog(
     confirmButtonTitle: String = stringResource(CommonStrings.action_confirm),
     dismissButtonTitle: String = stringResource(CommonStrings.action_cancel),
     title: String? = null,
-    initialSelection: List<Int> = emptyList(),
+    initialSelection: ImmutableList<Int> = persistentListOf(),
 ) {
     AlertDialog(
         modifier = modifier,
@@ -73,7 +73,7 @@ internal fun MultipleSelectionDialogContent(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
-    initialSelected: List<Int> = emptyList(),
+    initialSelected: ImmutableList<Int> = persistentListOf(),
 ) {
     val selectedOptionIndexes = remember { initialSelected.toMutableStateList() }
 
@@ -123,7 +123,7 @@ internal fun MultipleSelectionDialogContentPreview() {
                 onDismissRequest = {},
                 confirmButtonTitle = "Save",
                 dismissButtonTitle = "Cancel",
-                initialSelected = listOf(0),
+                initialSelected = persistentListOf(0),
             )
         }
     }

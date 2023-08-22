@@ -42,7 +42,6 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
