@@ -70,8 +70,10 @@ fun PollContentView(
 @Composable
 internal fun PollTitle(
     title: String,
+    modifier: Modifier = Modifier
 ) {
     Row(
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Icon(
@@ -90,10 +92,12 @@ internal fun PollTitle(
 internal fun PollAnswers(
     answerItems: ImmutableList<PollAnswerItem>,
     onAnswerSelected: (PollAnswer) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
     answerItems.forEach { answerItem ->
         PollAnswerView(
+            modifier = modifier,
             answerItem = answerItem,
             onClick = { onAnswerSelected(answerItem.answer) }
         )
@@ -103,10 +107,11 @@ internal fun PollAnswers(
 @Composable
 internal fun ColumnScope.DisclosedPollBottomNotice(
     answerItems: ImmutableList<PollAnswerItem>,
+    modifier: Modifier = Modifier
 ) {
     val votesCount = answerItems.sumOf { it.votesCount }
     Text(
-        modifier = Modifier.align(Alignment.End),
+        modifier = modifier.align(Alignment.End),
         style = ElementTheme.typography.fontBodyXsRegular,
         color = ElementTheme.colors.textSecondary,
         text = stringResource(CommonStrings.common_poll_total_votes, votesCount),
@@ -114,9 +119,9 @@ internal fun ColumnScope.DisclosedPollBottomNotice(
 }
 
 @Composable
-fun ColumnScope.UndisclosedPollBottomNotice() {
+fun ColumnScope.UndisclosedPollBottomNotice(modifier: Modifier = Modifier) {
     Text(
-        modifier = Modifier
+        modifier = modifier
             .align(Alignment.Start)
             .padding(start = 34.dp),
         style = ElementTheme.typography.fontBodyXsRegular,
