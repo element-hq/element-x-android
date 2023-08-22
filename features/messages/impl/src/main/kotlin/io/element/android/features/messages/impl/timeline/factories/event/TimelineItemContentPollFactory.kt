@@ -43,7 +43,8 @@ class TimelineItemContentPollFactory @Inject constructor(
             .groupBy { content.votes[it]?.size ?: 0 } // Group by votes count
             .maxBy { it.key } // Keep max voted answers
             .takeIf { it.key > 0 } // Ignore if no option has been voted
-            ?.value.orEmpty()
+            ?.value
+            .orEmpty()
         val answerItems = content.answers.map { answer ->
             val votesCount = content.votes[answer.id]?.size ?: 0
             val isSelected = answer.id in userVotes
