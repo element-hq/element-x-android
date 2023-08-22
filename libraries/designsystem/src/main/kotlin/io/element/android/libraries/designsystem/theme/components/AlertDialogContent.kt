@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
@@ -59,7 +61,42 @@ internal fun SimpleAlertDialogContent(
     onSubmitClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
+    useExternalPaddingForContent: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
+) {
+    SimpleAlertDialogContent(
+        content = {
+            Text(
+                text = content,
+                style = ElementTheme.materialTypography.bodyMedium,
+            )
+        },
+        cancelText = cancelText,
+        onCancelClicked = onCancelClicked,
+        modifier = modifier,
+        title = title,
+        submitText = submitText,
+        onSubmitClicked = onSubmitClicked,
+        thirdButtonText = thirdButtonText,
+        onThirdButtonClicked = onThirdButtonClicked,
+        icon = icon,
+        useExternalPaddingForContent = useExternalPaddingForContent,
+    )
+}
+
+@Composable
+internal fun SimpleAlertDialogContent(
+    cancelText: String,
+    onCancelClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    submitText: String? = null,
+    onSubmitClicked: () -> Unit = {},
+    thirdButtonText: String? = null,
+    onThirdButtonClicked: () -> Unit = {},
+    useExternalPaddingForContent: Boolean = true,
+    icon: @Composable (() -> Unit)? = null,
+    content: @Composable () -> Unit,
 ) {
     AlertDialogContent(
         buttons = {
@@ -99,12 +136,7 @@ internal fun SimpleAlertDialogContent(
                 )
             }
         },
-        text = {
-            Text(
-                text = content,
-                style = ElementTheme.materialTypography.bodyMedium,
-            )
-        },
+        text = content,
         shape = DialogContentDefaults.shape,
         containerColor = DialogContentDefaults.containerColor,
         iconContentColor = DialogContentDefaults.iconContentColor,
@@ -117,6 +149,7 @@ internal fun SimpleAlertDialogContent(
         // TextButtons will not consume this provided content color value, and will used their
         // own defined or default colors.
         buttonContentColor = MaterialTheme.colorScheme.primary,
+        useExternalPaddingForContent = useExternalPaddingForContent,
     )
 }
 
@@ -137,6 +170,7 @@ internal fun AlertDialogContent(
     titleContentColor: Color,
     textContentColor: Color,
     modifier: Modifier = Modifier,
+    useExternalPaddingForContent: Boolean = true,
 ) {
     Surface(
         modifier = modifier,
@@ -145,12 +179,19 @@ internal fun AlertDialogContent(
         tonalElevation = tonalElevation,
     ) {
         Column(
-            modifier = Modifier.padding(DialogContentDefaults.externalPadding)
+            modifier = Modifier.padding(
+                if (useExternalPaddingForContent) {
+                    DialogContentDefaults.externalPadding
+                } else {
+                    DialogContentDefaults.externalVerticalPadding
+                }
+            )
         ) {
             icon?.let {
                 CompositionLocalProvider(LocalContentColor provides iconContentColor) {
                     Box(
                         Modifier
+                            .then(if (useExternalPaddingForContent) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
                             .padding(DialogContentDefaults.iconPadding)
                             .align(Alignment.CenterHorizontally)
                     ) {
@@ -165,6 +206,7 @@ internal fun AlertDialogContent(
                         Box(
                             // Align the title to the center when an icon is present.
                             Modifier
+                                .then(if (useExternalPaddingForContent) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
                                 .padding(DialogContentDefaults.titlePadding)
                                 .align(
                                     if (icon == null) {
@@ -195,7 +237,11 @@ internal fun AlertDialogContent(
                     }
                 }
             }
-            Box(modifier = Modifier.align(Alignment.End)) {
+            Box(
+                modifier = Modifier
+                    .then(if (useExternalPaddingForContent) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
+                    .align(Alignment.End)
+            ) {
                 CompositionLocalProvider(LocalContentColor provides buttonContentColor) {
                     val textStyle =
                         MaterialTheme.typography.labelLarge
@@ -304,6 +350,7 @@ private fun AlertDialogFlowRow(
 internal fun DialogPreview(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
+            .background(ElementTheme.materialColors.onSurfaceVariant)
             .sizeIn(minWidth = DialogMinWidth, maxWidth = DialogMaxWidth)
             .padding(20.dp),
         propagateMinConstraints = true
@@ -313,8 +360,11 @@ internal fun DialogPreview(content: @Composable () -> Unit) {
 }
 
 internal object DialogContentDefaults {
+    private val externalPaddingDp = 24.dp
     val shape = RoundedCornerShape(12.dp)
-    val externalPadding = PaddingValues(all = 24.dp)
+    val externalPadding = PaddingValues(all = externalPaddingDp)
+    val externalHorizontalPadding = PaddingValues(horizontal = externalPaddingDp)
+    val externalVerticalPadding = PaddingValues(vertical = externalPaddingDp)
     val titlePadding = PaddingValues(bottom = 16.dp)
     val iconPadding = PaddingValues(bottom = 8.dp)
     val textPadding = PaddingValues(bottom = 16.dp)

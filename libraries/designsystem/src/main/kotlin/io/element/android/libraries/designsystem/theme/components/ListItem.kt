@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ListItemColors
@@ -65,6 +66,7 @@ fun ListItem(
     onClick: (() -> Unit)? = null,
 ) {
     val colors = ListItemDefaults.colors(
+        containerColor = Color.Transparent,
         headlineColor = style.headlineColor(),
         leadingIconColor = style.leadingIconColor(),
         trailingIconColor = style.trailingIconColor(),
