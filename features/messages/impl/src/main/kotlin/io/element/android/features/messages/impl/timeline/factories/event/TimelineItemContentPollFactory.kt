@@ -36,27 +36,32 @@ class TimelineItemContentPollFactory @Inject constructor(
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.Polls)) return TimelineItemUnknownContent
 
         // Todo Move this computation to the matrix rust sdk
-        val pollVotesCount = content.votes.flatMap { it.value }.size
-        val userVotes = content.votes.filter { matrixClient.sessionId in it.value }.keys
+        val totalVoteCount = content.votes.flatMap { it.value }.size
+        val myVotes = content.votes.filter { matrixClient.sessionId in it.value }.keys
         val isEndedPoll = content.endTime != null
-        val winnerIds = content.answers.map { it.id }
-            .groupBy { content.votes[it]?.size ?: 0 } // Group by votes count
-            .maxBy { it.key } // Keep max voted answers
-            .takeIf { it.key > 0 } // Ignore if no option has been voted
-            ?.value
-            .orEmpty()
+        val winnerIds = if (!isEndedPoll) {
+            emptyList()
+        } else {
+            content.answers
+                .map { answer -> answer.id }
+                .groupBy { answerId -> content.votes[answerId]?.size ?: 0 } // Group by votes count
+                .maxByOrNull { (votes, _) -> votes } // Keep max voted answers
+                ?.takeIf { (votes, _) -> votes > 0 } // Ignore if no option has been voted
+                ?.value
+                .orEmpty()
+        }
         val answerItems = content.answers.map { answer ->
-            val votesCount = content.votes[answer.id]?.size ?: 0
-            val isSelected = answer.id in userVotes
+            val answerVoteCount = content.votes[answer.id]?.size ?: 0
+            val isSelected = answer.id in myVotes
             val isWinner = answer.id in winnerIds
-            val percentage = if (pollVotesCount > 0) votesCount.toFloat() / pollVotesCount.toFloat() else 0f
+            val percentage = if (totalVoteCount > 0) answerVoteCount.toFloat() / totalVoteCount.toFloat() else 0f
             PollAnswerItem(
                 answer = answer,
                 isSelected = isSelected,
                 isEnabled = !isEndedPoll,
                 isWinner = isWinner,
                 isDisclosed = content.kind.isDisclosed || isEndedPoll,
-                votesCount = votesCount,
+                votesCount = answerVoteCount,
                 percentage = percentage,
             )
         }
