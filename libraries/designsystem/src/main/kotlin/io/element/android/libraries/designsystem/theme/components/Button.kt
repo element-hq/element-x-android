@@ -133,22 +133,38 @@ internal fun ButtonInternal(
         ButtonSize.Large -> 48.dp
     }
 
-    val contentPadding = when (size) {
-        ButtonSize.Medium -> {
-            when (style) {
-                ButtonStyle.Filled,
-                ButtonStyle.Outlined -> PaddingValues(horizontal = 16.dp, vertical = 10.dp)
-                ButtonStyle.Text -> PaddingValues(horizontal = 12.dp, vertical = 10.dp)
-            }
+    val hasNoStartDrawable = !showProgress && leadingIcon == null
+
+    val (paddingStart, paddingCenter, paddingEnd) = when (size) {
+        ButtonSize.Medium -> when (style) {
+            ButtonStyle.Filled,
+            ButtonStyle.Outlined -> if (hasNoStartDrawable)
+                Triple(24.dp, 0.dp, 24.dp)
+            else
+                Triple(16.dp, 8.dp, 24.dp)
+            ButtonStyle.Text -> if (hasNoStartDrawable)
+                Triple(12.dp, 0.dp, 12.dp)
+            else
+                Triple(12.dp, 8.dp, 16.dp)
         }
-        ButtonSize.Large -> {
-            when (style) {
-                ButtonStyle.Filled,
-                ButtonStyle.Outlined -> PaddingValues(horizontal = 24.dp, vertical = 13.dp)
-                ButtonStyle.Text -> PaddingValues(horizontal = 16.dp, vertical = 13.dp)
-            }
+        ButtonSize.Large -> when (style) {
+            ButtonStyle.Filled,
+            ButtonStyle.Outlined -> if (hasNoStartDrawable)
+                Triple(32.dp, 0.dp, 32.dp)
+            else
+                Triple(24.dp, 8.dp, 32.dp)
+            ButtonStyle.Text -> if (hasNoStartDrawable)
+                Triple(16.dp, 0.dp, 16.dp)
+            else
+                Triple(12.dp, 8.dp, 16.dp)
         }
     }
+
+    val contentPadding = when (size) {
+        ButtonSize.Medium -> PaddingValues(start = paddingStart, end = paddingEnd, top = 10.dp, bottom = 10.dp)
+        ButtonSize.Large -> PaddingValues(start = paddingStart, end = paddingEnd, top = 13.dp, bottom = 13.dp)
+    }
+    val internalPadding = PaddingValues(start = paddingCenter)
 
     val shape = when (style) {
         ButtonStyle.Filled,
@@ -168,12 +184,6 @@ internal fun ButtonInternal(
     val textStyle = when (size) {
         ButtonSize.Medium -> MaterialTheme.typography.labelLarge
         ButtonSize.Large -> ElementTheme.typography.fontBodyLgMedium
-    }
-
-    val internalPadding = when (style) {
-        ButtonStyle.Filled,
-        ButtonStyle.Outlined -> PaddingValues(horizontal = 8.dp)
-        ButtonStyle.Text -> if (leadingIcon != null) PaddingValues(start = 8.dp) else PaddingValues(0.dp)
     }
 
     androidx.compose.material3.Button(
