@@ -21,14 +21,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.CheckboxListItem
-import io.element.android.libraries.designsystem.components.list.RadioButtonListItem
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -48,7 +46,7 @@ fun MultipleSelectionDialog(
     confirmButtonTitle: String = stringResource(CommonStrings.action_confirm),
     dismissButtonTitle: String = stringResource(CommonStrings.action_cancel),
     title: String? = null,
-    initialSelected: List<Boolean> = emptyList(),
+    initialSelected: List<Int> = emptyList(),
 ) {
     AlertDialog(
         modifier = modifier,
@@ -75,24 +73,18 @@ internal fun MultipleSelectionDialogContent(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
-    initialSelected: List<Boolean> = emptyList(),
+    initialSelected: List<Int> = emptyList(),
 ) {
-    val values = remember {
-        if (initialSelected.size != options.size) {
-            List(options.size) { false }.toMutableStateList()
-        } else {
-            initialSelected.toMutableStateList()
-        }
-    }
+    val selectedOptionIndexes = remember { initialSelected.toMutableStateList() }
+
+    fun isSelected(index: Int) = selectedOptionIndexes.any { it == index }
+
     SimpleAlertDialogContent(
         title = title,
         modifier = modifier,
         submitText = confirmButtonTitle,
         onSubmitClicked = {
-            val selectedValues = values.mapIndexedNotNull { index, value ->
-                if (value) index else null
-            }
-            onConfirmClicked(selectedValues)
+            onConfirmClicked(selectedOptionIndexes.toList())
         },
         cancelText = dismissButtonTitle,
         onCancelClicked = onDismissRequest,
@@ -102,9 +94,13 @@ internal fun MultipleSelectionDialogContent(
             itemsIndexed(options) { index, option ->
                 CheckboxListItem(
                     headline = option,
-                    value = values[index],
+                    value = isSelected(index),
                     onChange = {
-                        values[index] = !values[index]
+                        if (isSelected(index)) {
+                            selectedOptionIndexes.remove(index)
+                        } else {
+                            selectedOptionIndexes.add(index)
+                        }
                     },
                     compactLayout = true,
                 )
@@ -127,7 +123,7 @@ internal fun MultipleSelectionDialogContentPreview() {
                 onDismissRequest = {},
                 confirmButtonTitle = "Save",
                 dismissButtonTitle = "Cancel",
-                initialSelected = listOf(true, false, false),
+                initialSelected = listOf(0),
             )
         }
     }
