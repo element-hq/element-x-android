@@ -60,7 +60,7 @@ internal fun SimpleAlertDialogContent(
     onSubmitClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
-    useExternalPaddingForContent: Boolean = true,
+    applyPaddingToContents: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
@@ -79,7 +79,7 @@ internal fun SimpleAlertDialogContent(
         thirdButtonText = thirdButtonText,
         onThirdButtonClicked = onThirdButtonClicked,
         icon = icon,
-        useExternalPaddingForContent = useExternalPaddingForContent,
+        applyPaddingToContents = applyPaddingToContents,
     )
 }
 
@@ -93,7 +93,7 @@ internal fun SimpleAlertDialogContent(
     onSubmitClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
-    useExternalPaddingForContent: Boolean = true,
+    applyPaddingToContents: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
@@ -135,7 +135,7 @@ internal fun SimpleAlertDialogContent(
                 )
             }
         },
-        text = content,
+        content = content,
         shape = DialogContentDefaults.shape,
         containerColor = DialogContentDefaults.containerColor,
         iconContentColor = DialogContentDefaults.iconContentColor,
@@ -148,7 +148,7 @@ internal fun SimpleAlertDialogContent(
         // TextButtons will not consume this provided content color value, and will used their
         // own defined or default colors.
         buttonContentColor = MaterialTheme.colorScheme.primary,
-        useExternalPaddingForContent = useExternalPaddingForContent,
+        applyPaddingToContents = applyPaddingToContents,
     )
 }
 
@@ -160,7 +160,7 @@ internal fun AlertDialogContent(
     buttons: @Composable () -> Unit,
     icon: (@Composable () -> Unit)?,
     title: (@Composable () -> Unit)?,
-    text: @Composable (() -> Unit)?,
+    content: @Composable (() -> Unit)?,
     shape: Shape,
     containerColor: Color,
     tonalElevation: Dp,
@@ -169,7 +169,7 @@ internal fun AlertDialogContent(
     titleContentColor: Color,
     textContentColor: Color,
     modifier: Modifier = Modifier,
-    useExternalPaddingForContent: Boolean = true,
+    applyPaddingToContents: Boolean = true,
 ) {
     Surface(
         modifier = modifier,
@@ -179,9 +179,11 @@ internal fun AlertDialogContent(
     ) {
         Column(
             modifier = Modifier.padding(
-                if (useExternalPaddingForContent) {
+                if (applyPaddingToContents) {
+                    // We can just apply the same padding to the whole dialog contents
                     DialogContentDefaults.externalPadding
                 } else {
+                    // We should only apply vertical padding in this case, every component will apply the horizontal content individually
                     DialogContentDefaults.externalVerticalPadding
                 }
             )
@@ -190,7 +192,7 @@ internal fun AlertDialogContent(
                 CompositionLocalProvider(LocalContentColor provides iconContentColor) {
                     Box(
                         Modifier
-                            .then(if (useExternalPaddingForContent) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
+                            .then(if (applyPaddingToContents) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
                             .padding(DialogContentDefaults.iconPadding)
                             .align(Alignment.CenterHorizontally)
                     ) {
@@ -205,7 +207,7 @@ internal fun AlertDialogContent(
                         Box(
                             // Align the title to the center when an icon is present.
                             Modifier
-                                .then(if (useExternalPaddingForContent) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
+                                .then(if (applyPaddingToContents) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
                                 .padding(DialogContentDefaults.titlePadding)
                                 .align(
                                     if (icon == null) {
@@ -220,25 +222,25 @@ internal fun AlertDialogContent(
                     }
                 }
             }
-            text?.let {
+            content?.let {
                 CompositionLocalProvider(LocalContentColor provides textContentColor) {
-                    val textStyle =
-                        MaterialTheme.typography.bodyMedium
+                    val textStyle = MaterialTheme.typography.bodyMedium
                     ProvideTextStyle(textStyle) {
                         Box(
                             Modifier
                                 .weight(weight = 1f, fill = false)
+                                // We don't apply padding here if it wasn't applied to the root component, this allows us to have a full width content
                                 .padding(DialogContentDefaults.textPadding)
                                 .align(Alignment.Start)
                         ) {
-                            text()
+                            content()
                         }
                     }
                 }
             }
             Box(
                 modifier = Modifier
-                    .then(if (useExternalPaddingForContent) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
+                    .then(if (applyPaddingToContents) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
                     .align(Alignment.End)
             ) {
                 CompositionLocalProvider(LocalContentColor provides buttonContentColor) {

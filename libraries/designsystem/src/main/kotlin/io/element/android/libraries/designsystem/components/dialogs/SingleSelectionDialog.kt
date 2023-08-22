@@ -75,7 +75,7 @@ internal fun SingleSelectionDialogContent(
         modifier = modifier,
         cancelText = dismissButtonTitle,
         onCancelClicked = onDismissRequest,
-        useExternalPaddingForContent = false,
+        applyPaddingToContents = false,
     ) {
         LazyColumn {
             itemsIndexed(options) { index, option ->
