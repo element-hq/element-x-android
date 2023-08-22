@@ -25,7 +25,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun CheckboxListItem(
     headline: String,
-    value: Boolean,
+    checked: Boolean,
     onChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
@@ -38,10 +38,10 @@ fun CheckboxListItem(
         modifier = modifier,
         headlineContent = { Text(headline) },
         supportingContent = supportingText?.let { @Composable { Text(it) } },
-        leadingContent = ListItemContent.Checkbox(value, onChange, enabled, compact = compactLayout),
+        leadingContent = ListItemContent.Checkbox(checked, onChange, enabled, compact = compactLayout),
         trailingContent = trailingContent,
         style = style,
         enabled = enabled,
-        onClick = { onChange(!value) },
+        onClick = { onChange(!checked) },
     )
 }

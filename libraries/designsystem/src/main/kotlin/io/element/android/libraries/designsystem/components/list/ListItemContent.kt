@@ -18,6 +18,8 @@ package io.element.android.libraries.designsystem.components.list
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -63,7 +65,7 @@ sealed interface ListItemContent {
                 painter = iconSource.getPainter(),
                 contentDescription = iconSource.contentDescription
             )
-            is Text -> TextComponent(text = text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            is Text -> TextComponent(modifier = Modifier.widthIn(max = 128.dp), text = text, maxLines = 1, overflow = TextOverflow.Ellipsis)
             is Custom -> content()
         }
     }

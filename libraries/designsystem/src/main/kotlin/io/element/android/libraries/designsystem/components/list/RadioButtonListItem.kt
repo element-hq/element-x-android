@@ -25,7 +25,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun RadioButtonListItem(
     headline: String,
-    value: Boolean,
+    selected: Boolean,
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
@@ -38,7 +38,7 @@ fun RadioButtonListItem(
         modifier = modifier,
         headlineContent = { Text(headline) },
         supportingContent = supportingText?.let { @Composable { Text(it) } },
-        leadingContent = ListItemContent.RadioButton(value, onSelected, enabled, compact = compactLayout),
+        leadingContent = ListItemContent.RadioButton(selected, onSelected, enabled, compact = compactLayout),
         trailingContent = trailingContent,
         style = style,
         enabled = enabled,

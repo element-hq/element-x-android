@@ -46,7 +46,7 @@ fun MultipleSelectionDialog(
     confirmButtonTitle: String = stringResource(CommonStrings.action_confirm),
     dismissButtonTitle: String = stringResource(CommonStrings.action_cancel),
     title: String? = null,
-    initialSelected: List<Int> = emptyList(),
+    initialSelection: List<Int> = emptyList(),
 ) {
     AlertDialog(
         modifier = modifier,
@@ -59,7 +59,7 @@ fun MultipleSelectionDialog(
             onConfirmClicked = onConfirmClicked,
             dismissButtonTitle = dismissButtonTitle,
             onDismissRequest = onDismissRequest,
-            initialSelected = initialSelected,
+            initialSelected = initialSelection,
         )
     }
 }
@@ -94,7 +94,7 @@ internal fun MultipleSelectionDialogContent(
             itemsIndexed(options) { index, option ->
                 CheckboxListItem(
                     headline = option,
-                    value = isSelected(index),
+                    checked = isSelected(index),
                     onChange = {
                         if (isSelected(index)) {
                             selectedOptionIndexes.remove(index)

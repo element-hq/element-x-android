@@ -43,6 +43,7 @@ fun SingleSelectionDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
+    initialSelection: Int? = null,
 ) {
     AlertDialog(
         modifier = modifier,
@@ -53,7 +54,8 @@ fun SingleSelectionDialog(
             options = options,
             onOptionSelected = onOptionSelected,
             dismissButtonTitle = dismissButtonTitle,
-            onDismissRequest = onDismissRequest
+            onDismissRequest = onDismissRequest,
+            initialSelection = initialSelection,
         )
     }
 }
@@ -66,6 +68,7 @@ internal fun SingleSelectionDialogContent(
     dismissButtonTitle: String,
     modifier: Modifier = Modifier,
     title: String? = null,
+    initialSelection: Int? = null,
 ) {
     SimpleAlertDialogContent(
         title = title,
@@ -76,7 +79,12 @@ internal fun SingleSelectionDialogContent(
     ) {
         LazyColumn {
             itemsIndexed(options) { index, option ->
-                RadioButtonListItem(headline = option, value = false, onSelected = { onOptionSelected(index) }, compactLayout = true)
+                RadioButtonListItem(
+                    headline = option,
+                    selected = index == initialSelection,
+                    onSelected = { onOptionSelected(index) },
+                    compactLayout = true
+                )
             }
         }
     }
@@ -89,7 +97,14 @@ internal fun SingleSelectionDialogContentPreview() {
     ElementPreview(showBackground = false) {
         DialogPreview {
             val options = persistentListOf("Option 1", "Option 2", "Option 3")
-            SingleSelectionDialogContent(title = "Dialog title", options = options, onOptionSelected = {}, onDismissRequest = {}, dismissButtonTitle = "Cancel")
+            SingleSelectionDialogContent(
+                title = "Dialog title",
+                options = options,
+                onOptionSelected = {},
+                onDismissRequest = {},
+                dismissButtonTitle = "Cancel",
+                initialSelection = 0
+            )
         }
     }
 }
