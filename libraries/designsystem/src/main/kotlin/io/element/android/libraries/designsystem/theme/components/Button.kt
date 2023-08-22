@@ -136,29 +136,33 @@ internal fun ButtonInternal(
     val contentPadding = when (size) {
         ButtonSize.Medium -> {
             when (style) {
+                ButtonStyle.Filled,
+                ButtonStyle.Outlined -> PaddingValues(horizontal = 16.dp, vertical = 10.dp)
                 ButtonStyle.Text -> PaddingValues(horizontal = 12.dp, vertical = 10.dp)
-                else -> PaddingValues(horizontal = 16.dp, vertical = 10.dp)
             }
         }
         ButtonSize.Large -> {
             when (style) {
+                ButtonStyle.Filled,
+                ButtonStyle.Outlined -> PaddingValues(horizontal = 24.dp, vertical = 13.dp)
                 ButtonStyle.Text -> PaddingValues(horizontal = 16.dp, vertical = 13.dp)
-                else -> PaddingValues(horizontal = 24.dp, vertical = 13.dp)
             }
         }
     }
 
     val shape = when (style) {
-        ButtonStyle.Filled, ButtonStyle.Outlined -> RoundedCornerShape(percent = 50)
+        ButtonStyle.Filled,
+        ButtonStyle.Outlined -> RoundedCornerShape(percent = 50)
         ButtonStyle.Text -> RectangleShape
     }
 
     val border = when (style) {
-        ButtonStyle.Filled, ButtonStyle.Text -> null
+        ButtonStyle.Filled -> null
         ButtonStyle.Outlined -> BorderStroke(
             width = 1.dp,
             color = ElementTheme.colors.borderInteractiveSecondary
         )
+        ButtonStyle.Text -> null
     }
 
     val textStyle = when (size) {
@@ -166,9 +170,10 @@ internal fun ButtonInternal(
         ButtonSize.Large -> ElementTheme.typography.fontBodyLgMedium
     }
 
-    val internalPadding = when {
-        style == ButtonStyle.Text -> if (leadingIcon != null) PaddingValues(start = 8.dp) else PaddingValues(0.dp)
-        else -> PaddingValues(horizontal = 8.dp)
+    val internalPadding = when (style) {
+        ButtonStyle.Filled,
+        ButtonStyle.Outlined -> PaddingValues(horizontal = 8.dp)
+        ButtonStyle.Text -> if (leadingIcon != null) PaddingValues(start = 8.dp) else PaddingValues(0.dp)
     }
 
     androidx.compose.material3.Button(
