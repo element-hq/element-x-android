@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -133,38 +134,32 @@ internal fun ButtonInternal(
         ButtonSize.Large -> 48.dp
     }
 
-    val hasNoStartDrawable = !showProgress && leadingIcon == null
+    val hasStartDrawable = showProgress || leadingIcon != null
 
-    val (paddingStart, paddingCenter, paddingEnd) = when (size) {
+    val contentPadding = when (size) {
         ButtonSize.Medium -> when (style) {
             ButtonStyle.Filled,
-            ButtonStyle.Outlined -> if (hasNoStartDrawable)
-                Triple(24.dp, 0.dp, 24.dp)
+            ButtonStyle.Outlined -> if (hasStartDrawable)
+                PaddingValues(start = 16.dp, top = 10.dp, end = 24.dp, bottom = 10.dp)
             else
-                Triple(16.dp, 8.dp, 24.dp)
-            ButtonStyle.Text -> if (hasNoStartDrawable)
-                Triple(12.dp, 0.dp, 12.dp)
+                PaddingValues(start = 24.dp, top = 10.dp, end = 24.dp, bottom = 10.dp)
+            ButtonStyle.Text -> if (hasStartDrawable)
+                PaddingValues(start = 12.dp, top = 10.dp, end = 16.dp, bottom = 10.dp)
             else
-                Triple(12.dp, 8.dp, 16.dp)
+                PaddingValues(start = 12.dp, top = 10.dp, end = 12.dp, bottom = 10.dp)
         }
         ButtonSize.Large -> when (style) {
             ButtonStyle.Filled,
-            ButtonStyle.Outlined -> if (hasNoStartDrawable)
-                Triple(32.dp, 0.dp, 32.dp)
+            ButtonStyle.Outlined -> if (hasStartDrawable)
+                PaddingValues(start = 24.dp, top = 13.dp, end = 32.dp, bottom = 13.dp)
             else
-                Triple(24.dp, 8.dp, 32.dp)
-            ButtonStyle.Text -> if (hasNoStartDrawable)
-                Triple(16.dp, 0.dp, 16.dp)
+                PaddingValues(start = 32.dp, top = 13.dp, end = 32.dp, bottom = 13.dp)
+            ButtonStyle.Text -> if (hasStartDrawable)
+                PaddingValues(start = 12.dp, top = 13.dp, end = 16.dp, bottom = 13.dp)
             else
-                Triple(12.dp, 8.dp, 16.dp)
+                PaddingValues(start = 16.dp, top = 13.dp, end = 16.dp, bottom = 13.dp)
         }
     }
-
-    val contentPadding = when (size) {
-        ButtonSize.Medium -> PaddingValues(start = paddingStart, end = paddingEnd, top = 10.dp, bottom = 10.dp)
-        ButtonSize.Large -> PaddingValues(start = paddingStart, end = paddingEnd, top = 13.dp, bottom = 13.dp)
-    }
-    val internalPadding = PaddingValues(start = paddingCenter)
 
     val shape = when (style) {
         ButtonStyle.Filled,
@@ -210,6 +205,7 @@ internal fun ButtonInternal(
                     color = LocalContentColor.current,
                     strokeWidth = 2.dp,
                 )
+                Spacer(modifier = Modifier.width(8.dp))
             }
             leadingIcon != null -> {
                 androidx.compose.material.Icon(
@@ -218,15 +214,14 @@ internal fun ButtonInternal(
                     tint = LocalContentColor.current,
                     modifier = Modifier.size(20.dp),
                 )
+                Spacer(modifier = Modifier.width(8.dp))
             }
-            else -> Unit
         }
         Text(
             text = text,
             style = textStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(internalPadding),
         )
     }
 }
