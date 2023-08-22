@@ -48,13 +48,15 @@ import io.element.android.libraries.theme.LinkColor
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 
+const val LINK_TAG = "URL"
+
 @Composable
 fun ClickableLinkText(
     text: String,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     linkify: Boolean = true,
-    linkAnnotationTag: String = "",
+    linkAnnotationTag: String = LINK_TAG,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
@@ -80,13 +82,14 @@ fun ClickableLinkText(
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     linkify: Boolean = true,
-    linkAnnotationTag: String = "",
+    linkAnnotationTag: String = LINK_TAG,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
     inlineContent: ImmutableMap<String, InlineTextContent> = persistentMapOf(),
 ) {
-    val processedText = remember(annotatedString) {
+    @Suppress("NAME_SHADOWING")
+    val annotatedString = remember(annotatedString) {
         if (linkify) {
             annotatedString.linkify(SpanStyle(color = LinkColor))
         } else {
@@ -126,7 +129,7 @@ fun ClickableLinkText(
         }
     }
     Text(
-        text = processedText,
+        text = annotatedString,
         modifier = modifier.then(pressIndicator),
         style = style,
         onTextLayout = {
@@ -158,7 +161,7 @@ fun AnnotatedString.linkify(linkStyle: SpanStyle): AnnotatedString {
                     style = linkStyle,
                 )
                 addStringAnnotation(
-                    tag = "URL",
+                    tag = LINK_TAG,
                     annotation = span.url,
                     start = start,
                     end = end

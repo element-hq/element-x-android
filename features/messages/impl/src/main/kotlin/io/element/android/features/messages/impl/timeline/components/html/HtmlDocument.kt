@@ -582,7 +582,6 @@ private fun HtmlText(
     val inlineContentMap = persistentMapOf<String, InlineTextContent>()
     ClickableLinkText(
         annotatedString = text,
-        linkAnnotationTag = "URL",
         style = style,
         modifier = modifier,
         inlineContent = inlineContentMap,
