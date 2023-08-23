@@ -28,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.dialogs.ListOption
 import io.element.android.libraries.designsystem.components.dialogs.MultipleSelectionDialog
+import io.element.android.libraries.designsystem.components.dialogs.listOptionOf
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
@@ -99,27 +101,26 @@ fun MultipleSelectionListItem(
     }
 }
 
-@Preview("Multiple selection List item - no selection")
+@Preview("Multiple selection List item - no selection", group = PreviewGroup.ListItems)
 @Composable
 internal fun MutipleSelectionListItemPreview() {
     ElementThemedPreview {
-        val options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3"))
-        val selected = persistentListOf<Int>()
+        val options = listOptionOf("Option 1", "Option 2", "Option 3")
         MultipleSelectionListItem(
             headline = "Headline",
             options = options,
             onSelectionChanged = {},
             supportingText = "Supporting text",
-            resultFormatter = { options.mapIndexedNotNull { index, value -> value.title.takeIf { selected.contains(index) } }.joinToString(", ") },
+            resultFormatter = { result -> formatResult(result, options) },
         )
     }
 }
 
-@Preview("Multiple selection List item - selection in supporting text")
+@Preview("Multiple selection List item - selection in supporting text", group = PreviewGroup.ListItems)
 @Composable
 internal fun MutipleSelectionListItemSelectedPreview() {
     ElementThemedPreview {
-        val options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3"))
+        val options = listOptionOf("Option 1", "Option 2", "Option 3")
         val selected = persistentListOf<Int>(0, 2)
         MultipleSelectionListItem(
             headline = "Headline",
@@ -127,18 +128,19 @@ internal fun MutipleSelectionListItemSelectedPreview() {
             onSelectionChanged = {},
             supportingText = "Supporting text",
             resultFormatter = {
-                val selectedValues = options.mapIndexedNotNull { index, value -> value.title.takeIf { selected.contains(index) } }.joinToString(", ")
+                val selectedValues = formatResult(it, options)
                 "Selected: $selectedValues"
             },
+            selected = selected,
         )
     }
 }
 
-@Preview("Multiple selection List item - selection in trailing content")
+@Preview("Multiple selection List item - selection in trailing content", group = PreviewGroup.ListItems)
 @Composable
 internal fun MutipleSelectionListItemSelectedTrailingContentPreview() {
     ElementThemedPreview {
-        val options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3"))
+        val options = listOptionOf("Option 1", "Option 2", "Option 3")
         val selected = persistentListOf<Int>(0, 2)
         MultipleSelectionListItem(
             headline = "Headline",
@@ -147,6 +149,11 @@ internal fun MutipleSelectionListItemSelectedTrailingContentPreview() {
             supportingText = "Supporting text",
             resultFormatter = { selected.size.toString() },
             displayResultInTrailingContent = true,
+            selected = selected,
         )
     }
+}
+
+private fun formatResult(result: List<Int>, options: ImmutableList<ListOption>): String? {
+    return options.mapIndexedNotNull { index, value -> value.title.takeIf { result.contains(index) } }.joinToString(", ").takeIf { it.isNotEmpty() }
 }

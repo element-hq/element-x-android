@@ -28,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.dialogs.ListOption
 import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
+import io.element.android.libraries.designsystem.components.dialogs.listOptionOf
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
@@ -102,38 +104,38 @@ fun SingleSelectionListItem(
     }
 }
 
-@Preview("Single selection List item - no selection")
+@Preview("Single selection List item - no selection", group = PreviewGroup.ListItems)
 @Composable
 internal fun SingleSelectionListItemPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
+            options = listOptionOf("Option 1", "Option 2", "Option 3"),
             onSelectionChanged = {},
         )
     }
 }
 
-@Preview("Single selection List item - no selection, supporting text")
+@Preview("Single selection List item - no selection, supporting text", group = PreviewGroup.ListItems)
 @Composable
 internal fun SingleSelectionListItemUnselectedWithSupportingTextPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
+            options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
             onSelectionChanged = {},
         )
     }
 }
 
-@Preview("Single selection List item - selection in supporting text")
+@Preview("Single selection List item - selection in supporting text", group = PreviewGroup.ListItems)
 @Composable
 internal fun SingleSelectionListItemSelectedInSupportingTextPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
+            options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
             onSelectionChanged = {},
             selected = 1,
@@ -141,13 +143,13 @@ internal fun SingleSelectionListItemSelectedInSupportingTextPreview() {
     }
 }
 
-@Preview("Single selection List item - selection in trailing content")
+@Preview("Single selection List item - selection in trailing content", group = PreviewGroup.ListItems)
 @Composable
 internal fun SingleSelectionListItemSelectedInTrailingContentPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
+            options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
             onSelectionChanged = {},
             selected = 1,
@@ -156,13 +158,13 @@ internal fun SingleSelectionListItemSelectedInTrailingContentPreview() {
     }
 }
 
-@Preview("Single selection List item - custom formatter")
+@Preview("Single selection List item - custom formatter", group = PreviewGroup.ListItems)
 @Composable
 internal fun SingleSelectionListItemCustomFormattertPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
+            options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
             onSelectionChanged = {},
             resultFormatter = { "Selected index: $it"},
