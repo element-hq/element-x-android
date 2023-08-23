@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -133,42 +134,51 @@ internal fun ButtonInternal(
         ButtonSize.Large -> 48.dp
     }
 
+    val hasStartDrawable = showProgress || leadingIcon != null
+
     val contentPadding = when (size) {
-        ButtonSize.Medium -> {
-            when (style) {
-                ButtonStyle.Text -> PaddingValues(horizontal = 12.dp, vertical = 10.dp)
-                else -> PaddingValues(horizontal = 16.dp, vertical = 10.dp)
-            }
+        ButtonSize.Medium -> when (style) {
+            ButtonStyle.Filled,
+            ButtonStyle.Outlined -> if (hasStartDrawable)
+                PaddingValues(start = 16.dp, top = 10.dp, end = 24.dp, bottom = 10.dp)
+            else
+                PaddingValues(start = 24.dp, top = 10.dp, end = 24.dp, bottom = 10.dp)
+            ButtonStyle.Text -> if (hasStartDrawable)
+                PaddingValues(start = 12.dp, top = 10.dp, end = 16.dp, bottom = 10.dp)
+            else
+                PaddingValues(start = 12.dp, top = 10.dp, end = 12.dp, bottom = 10.dp)
         }
-        ButtonSize.Large -> {
-            when (style) {
-                ButtonStyle.Text -> PaddingValues(horizontal = 16.dp, vertical = 13.dp)
-                else -> PaddingValues(horizontal = 24.dp, vertical = 13.dp)
-            }
+        ButtonSize.Large -> when (style) {
+            ButtonStyle.Filled,
+            ButtonStyle.Outlined -> if (hasStartDrawable)
+                PaddingValues(start = 24.dp, top = 13.dp, end = 32.dp, bottom = 13.dp)
+            else
+                PaddingValues(start = 32.dp, top = 13.dp, end = 32.dp, bottom = 13.dp)
+            ButtonStyle.Text -> if (hasStartDrawable)
+                PaddingValues(start = 12.dp, top = 13.dp, end = 16.dp, bottom = 13.dp)
+            else
+                PaddingValues(start = 16.dp, top = 13.dp, end = 16.dp, bottom = 13.dp)
         }
     }
 
     val shape = when (style) {
-        ButtonStyle.Filled, ButtonStyle.Outlined -> RoundedCornerShape(percent = 50)
+        ButtonStyle.Filled,
+        ButtonStyle.Outlined -> RoundedCornerShape(percent = 50)
         ButtonStyle.Text -> RectangleShape
     }
 
     val border = when (style) {
-        ButtonStyle.Filled, ButtonStyle.Text -> null
+        ButtonStyle.Filled -> null
         ButtonStyle.Outlined -> BorderStroke(
             width = 1.dp,
             color = ElementTheme.colors.borderInteractiveSecondary
         )
+        ButtonStyle.Text -> null
     }
 
     val textStyle = when (size) {
         ButtonSize.Medium -> MaterialTheme.typography.labelLarge
         ButtonSize.Large -> ElementTheme.typography.fontBodyLgMedium
-    }
-
-    val internalPadding = when {
-        style == ButtonStyle.Text -> if (leadingIcon != null) PaddingValues(start = 8.dp) else PaddingValues(0.dp)
-        else -> PaddingValues(horizontal = 8.dp)
     }
 
     androidx.compose.material3.Button(
@@ -195,6 +205,7 @@ internal fun ButtonInternal(
                     color = LocalContentColor.current,
                     strokeWidth = 2.dp,
                 )
+                Spacer(modifier = Modifier.width(8.dp))
             }
             leadingIcon != null -> {
                 androidx.compose.material.Icon(
@@ -203,15 +214,14 @@ internal fun ButtonInternal(
                     tint = LocalContentColor.current,
                     modifier = Modifier.size(20.dp),
                 )
+                Spacer(modifier = Modifier.width(8.dp))
             }
-            else -> Unit
         }
         Text(
             text = text,
             style = textStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(internalPadding),
         )
     }
 }
