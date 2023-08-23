@@ -109,9 +109,10 @@ class FakeMatrixClient(
     override suspend fun clearCache() {
     }
 
-    override suspend fun logout() {
+    override suspend fun logout(): String? {
         delay(100)
         logoutFailure?.let { throw it }
+        return null
     }
 
     override fun close() = Unit

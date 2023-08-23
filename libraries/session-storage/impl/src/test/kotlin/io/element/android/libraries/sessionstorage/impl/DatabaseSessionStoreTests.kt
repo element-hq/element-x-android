@@ -37,6 +37,7 @@ class DatabaseSessionStoreTests {
         homeserverUrl = "homeserverUrl",
         slidingSyncProxy = null,
         loginTimestamp = null,
+        oidcData = "aOidcData",
     )
 
     @Before

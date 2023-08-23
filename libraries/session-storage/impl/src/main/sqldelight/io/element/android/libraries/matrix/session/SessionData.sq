@@ -5,7 +5,8 @@ CREATE TABLE SessionData (
     refreshToken TEXT,
     homeserverUrl TEXT NOT NULL,
     slidingSyncProxy TEXT,
-    loginTimestamp INTEGER
+    loginTimestamp INTEGER,
+    oidcData TEXT
 );
 
 

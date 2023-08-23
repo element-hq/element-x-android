@@ -20,9 +20,12 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.oidc.customtab.DefaultOidcActionFlow
 import io.element.android.features.login.impl.util.defaultAccountProvider
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_OIDC
 import io.element.android.libraries.matrix.test.A_THROWABLE
@@ -33,11 +36,7 @@ import org.junit.Test
 class ConfirmAccountProviderPresenterTest {
     @Test
     fun `present - initial test`() = runTest {
-        val presenter = ConfirmAccountProviderPresenter(
-            ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
-            AccountProviderDataSource(),
-            FakeAuthenticationService(),
-        )
+        val presenter = createConfirmAccountProviderPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -51,13 +50,11 @@ class ConfirmAccountProviderPresenterTest {
 
     @Test
     fun `present - continue password login`() = runTest {
-        val authServer = FakeAuthenticationService()
-        val presenter = ConfirmAccountProviderPresenter(
-            ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
-            AccountProviderDataSource(),
-            authServer,
+        val authenticationService = FakeAuthenticationService()
+        val presenter = createConfirmAccountProviderPresenter(
+            matrixAuthenticationService = authenticationService,
         )
-        authServer.givenHomeserver(A_HOMESERVER)
+        authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -75,13 +72,11 @@ class ConfirmAccountProviderPresenterTest {
 
     @Test
     fun `present - continue oidc`() = runTest {
-        val authServer = FakeAuthenticationService()
-        val presenter = ConfirmAccountProviderPresenter(
-            ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
-            AccountProviderDataSource(),
-            authServer,
+        val authenticationService = FakeAuthenticationService()
+        val presenter = createConfirmAccountProviderPresenter(
+            matrixAuthenticationService = authenticationService,
         )
-        authServer.givenHomeserver(A_HOMESERVER_OIDC)
+        authenticationService.givenHomeserver(A_HOMESERVER_OIDC)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -99,17 +94,15 @@ class ConfirmAccountProviderPresenterTest {
 
     @Test
     fun `present - submit fails`() = runTest {
-        val authServer = FakeAuthenticationService()
-        val presenter = ConfirmAccountProviderPresenter(
-            ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
-            AccountProviderDataSource(),
-            authServer,
+        val authenticationService = FakeAuthenticationService()
+        val presenter = createConfirmAccountProviderPresenter(
+            matrixAuthenticationService = authenticationService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            authServer.givenChangeServerError(Throwable())
+            authenticationService.givenChangeServerError(Throwable())
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             skipItems(1) // Loading
             val failureState = awaitItem()
@@ -121,10 +114,8 @@ class ConfirmAccountProviderPresenterTest {
     @Test
     fun `present - clear error`() = runTest {
         val authenticationService = FakeAuthenticationService()
-        val presenter = ConfirmAccountProviderPresenter(
-            ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
-            AccountProviderDataSource(),
-            authenticationService,
+        val presenter = createConfirmAccountProviderPresenter(
+            matrixAuthenticationService = authenticationService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -147,4 +138,18 @@ class ConfirmAccountProviderPresenterTest {
             assertThat(clearedState.loginFlow).isEqualTo(Async.Uninitialized)
         }
     }
+
+    private fun createConfirmAccountProviderPresenter(
+        params: ConfirmAccountProviderPresenter.Params = ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
+        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(),
+        matrixAuthenticationService: MatrixAuthenticationService = FakeAuthenticationService(),
+        defaultOidcActionFlow: DefaultOidcActionFlow = DefaultOidcActionFlow(),
+        defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
+    ) = ConfirmAccountProviderPresenter(
+        params = params,
+        accountProviderDataSource = accountProviderDataSource,
+        authenticationService = matrixAuthenticationService,
+        defaultOidcActionFlow = defaultOidcActionFlow,
+        defaultLoginUserStory = defaultLoginUserStory,
+    )
 }

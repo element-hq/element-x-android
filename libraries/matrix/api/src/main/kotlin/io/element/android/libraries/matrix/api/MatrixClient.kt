@@ -55,7 +55,12 @@ interface MatrixClient : Closeable {
      * Will close the client and delete the cache data.
      */
     suspend fun clearCache()
-    suspend fun logout()
+
+    /**
+     * Logout the user.
+     * Returns an optional URL. When the URL is there, it should be presented to the user after logout for RP initiated logout on their account page.
+     */
+    suspend fun logout(): String?
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String?>
     suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>

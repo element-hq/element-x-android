@@ -119,6 +119,11 @@ class RustMatrixClient constructor(
                 Timber.v("didReceiveAuthError -> already cleaning up")
             }
         }
+
+        override fun didRefreshTokens() {
+            Timber.w("didRefreshTokens()")
+            // TODO handle refresh token
+        }
     }
 
     private val rustRoomListService: RoomListService =
@@ -287,19 +292,23 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout() = doLogout(doRequest = true)
+    override suspend fun logout(): String? = doLogout(doRequest = true)
 
-    private suspend fun doLogout(doRequest: Boolean) = withContext(sessionDispatcher) {
-        if (doRequest) {
-            try {
-                client.logout()
-            } catch (failure: Throwable) {
-                Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+    private suspend fun doLogout(doRequest: Boolean): String? {
+        var result: String? = null
+        withContext(sessionDispatcher) {
+            if (doRequest) {
+                try {
+                    result = client.logout()
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+                }
             }
+            close()
+            baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
+            sessionStore.removeSession(sessionId.value)
         }
-        close()
-        baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
-        sessionStore.removeSession(sessionId.value)
+        return result
     }
 
     override suspend fun loadUserDisplayName(): Result<String> = withContext(sessionDispatcher) {

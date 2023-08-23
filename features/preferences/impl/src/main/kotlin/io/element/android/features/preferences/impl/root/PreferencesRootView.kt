@@ -55,6 +55,7 @@ fun PreferencesRootView(
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    onSuccessLogout: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -98,6 +99,7 @@ fun PreferencesRootView(
         HorizontalDivider()
         LogoutPreferenceView(
             state = state.logoutState,
+            onSuccessLogout = onSuccessLogout,
         )
         Text(
             modifier = Modifier
@@ -140,5 +142,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenDeveloperSettings = {},
         onOpenAbout = {},
         onVerifyClicked = {},
+        onSuccessLogout = {},
     )
 }
