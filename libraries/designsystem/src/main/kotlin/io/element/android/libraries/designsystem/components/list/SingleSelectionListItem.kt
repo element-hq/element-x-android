@@ -21,6 +21,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -32,6 +33,9 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun SingleSelectionListItem(
@@ -45,6 +49,8 @@ fun SingleSelectionListItem(
     selected: Int? = null,
     displayResultInTrailingContent: Boolean = false,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     var selectedIndex by rememberSaveable(selected) { mutableStateOf(selected) }
     val selectedItem by remember { derivedStateOf { selectedIndex?.let { resultFormatter(it) } } }
     val decoratedSupportedText: @Composable (() -> Unit)? = if (!selectedItem.isNullOrBlank() && !displayResultInTrailingContent) {
@@ -84,7 +90,11 @@ fun SingleSelectionListItem(
                     onSelectionChanged(index)
                     selectedIndex = index
                 }
-                displaySelectionDialog = false
+                // Delay hiding the dialog for a bit so the new state is displayed in it before being dismissed
+                coroutineScope.launch {
+                    delay(0.5.seconds)
+                    displaySelectionDialog = false
+                }
             },
             onDismissRequest = { displaySelectionDialog = false },
             initialSelection = selectedIndex,
