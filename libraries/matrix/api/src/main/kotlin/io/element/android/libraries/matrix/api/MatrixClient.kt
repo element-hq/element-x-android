@@ -58,7 +58,8 @@ interface MatrixClient : Closeable {
 
     /**
      * Logout the user.
-     * Returns an optional URL. When the URL is there, it should be presented to the user after logout for RP initiated logout on their account page.
+     * Returns an optional URL. When the URL is there, it should be presented to the user after logout for
+     * Relying Party (RP) initiated logout on their account page.
      */
     suspend fun logout(): String?
     suspend fun loadUserDisplayName(): Result<String>
