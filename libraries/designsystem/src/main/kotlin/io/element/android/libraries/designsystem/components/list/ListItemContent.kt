@@ -64,8 +64,8 @@ sealed interface ListItemContent {
 
     /**
      * Default RadioButton content for [ListItem].
-     * @param checked The current state of the radio button.
-     * @param onChange Callback when the radio button is toggled: it should only be set to override the default click behaviour in the [ListItem].
+     * @param selected The current state of the radio button.
+     * @param onClick Callback when the radio button is toggled: it should only be set to override the default click behaviour in the [ListItem].
      * @param enabled Whether the radio button is enabled or not.
      * @param compact Reduces the size of the component to make the wrapping [ListItem] smaller.
      * This is especially useful when the [ListItem] is used inside a Dialog. `false` by default.
