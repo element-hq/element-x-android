@@ -22,7 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -33,6 +35,8 @@ import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.api.oidc.OidcAction
+import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
@@ -51,6 +55,8 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -61,6 +67,7 @@ class LoginFlowNode @AssistedInject constructor(
     private val customTabHandler: CustomTabHandler,
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultLoginUserStory: DefaultLoginUserStory,
+    private val oidcActionFlow: OidcActionFlow,
 ) : BackstackNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.ConfirmAccountProvider,
@@ -78,9 +85,26 @@ class LoginFlowNode @AssistedInject constructor(
 
     private val inputs: Inputs = inputs()
 
+    private var customChromeTabStarted = false
+
     override fun onBuilt() {
         super.onBuilt()
         defaultLoginUserStory.setLoginFlowIsDone(false)
+        lifecycle.subscribe(
+            onResume = {
+                if (customChromeTabStarted) {
+                    customChromeTabStarted = false
+                    // Workaround to detect that the Custom Chrome Tab has been closed
+                    // If there is no coming OidcAction (that would end this Node),
+                    // consider that the user has cancelled the login
+                    // by pressing back or by closing the Custom Chrome Tab.
+                    lifecycleScope.launch {
+                        delay(5000)
+                        oidcActionFlow.post(OidcAction.GoBack)
+                    }
+                }
+            }
+        )
     }
 
     sealed interface NavTarget : Parcelable {
@@ -113,7 +137,10 @@ class LoginFlowNode @AssistedInject constructor(
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
                         if (customTabAvailabilityChecker.supportCustomTab()) {
                             // In this case open a Chrome Custom tab
-                            activity?.let { customTabHandler.open(it, darkTheme, oidcDetails.url) }
+                            activity?.let {
+                                customChromeTabStarted = true
+                                customTabHandler.open(it, darkTheme, oidcDetails.url)
+                            }
                         } else {
                             // Fallback to WebView mode
                             backstack.push(NavTarget.OidcView(oidcDetails))
