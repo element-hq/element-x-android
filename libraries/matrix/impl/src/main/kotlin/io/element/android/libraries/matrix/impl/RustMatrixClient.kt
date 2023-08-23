@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
@@ -122,7 +123,9 @@ class RustMatrixClient constructor(
 
         override fun didRefreshTokens() {
             Timber.w("didRefreshTokens()")
-            // TODO handle refresh token
+            appCoroutineScope.launch {
+                sessionStore.updateData(client.session().toSessionData())
+            }
         }
     }
 

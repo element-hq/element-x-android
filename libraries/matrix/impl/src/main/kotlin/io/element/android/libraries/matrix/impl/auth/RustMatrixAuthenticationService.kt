@@ -28,18 +28,16 @@ import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.exception.mapClientException
+import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.network.useragent.UserAgentProvider
-import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
-import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
 import java.io.File
-import java.util.Date
 import javax.inject.Inject
 import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
 
@@ -155,14 +153,3 @@ class RustMatrixAuthenticationService @Inject constructor(
         }
     }
 }
-
-private fun Session.toSessionData() = SessionData(
-    userId = userId,
-    deviceId = deviceId,
-    accessToken = accessToken,
-    refreshToken = refreshToken,
-    homeserverUrl = homeserverUrl,
-    oidcData = oidcData,
-    slidingSyncProxy = slidingSyncProxy,
-    loginTimestamp = Date(),
-)

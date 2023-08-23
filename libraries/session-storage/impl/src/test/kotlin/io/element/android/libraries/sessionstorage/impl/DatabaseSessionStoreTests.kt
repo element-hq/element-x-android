@@ -109,4 +109,45 @@ class DatabaseSessionStoreTests {
 
         assertThat(database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOneOrNull()).isNull()
     }
+
+    @Test
+    fun `update session update all fields except loginTimestamp`() = runTest {
+        val firstSessionData = SessionData(
+            userId = "userId",
+            deviceId = "deviceId",
+            accessToken = "accessToken",
+            refreshToken = "refreshToken",
+            homeserverUrl = "homeserverUrl",
+            slidingSyncProxy = "slidingSyncProxy",
+            loginTimestamp = 1,
+            oidcData = "aOidcData",
+        )
+        val secondSessionData = SessionData(
+            userId = "userId",
+            deviceId = "deviceIdAltered",
+            accessToken = "accessTokenAltered",
+            refreshToken = "refreshTokenAltered",
+            homeserverUrl = "homeserverUrlAltered",
+            slidingSyncProxy = "slidingSyncProxyAltered",
+            loginTimestamp = 2,
+            oidcData = "aOidcDataAltered",
+        )
+        assertThat(firstSessionData.userId).isEqualTo(secondSessionData.userId)
+        assertThat(firstSessionData.loginTimestamp).isNotEqualTo(secondSessionData.loginTimestamp)
+
+        database.sessionDataQueries.insertSessionData(firstSessionData)
+        databaseSessionStore.updateData(secondSessionData.toApiModel())
+
+        // Get the altered session
+        val alteredSession = databaseSessionStore.getSession(firstSessionData.userId)!!.toDbModel()
+
+        assertThat(alteredSession.userId).isEqualTo(secondSessionData.userId)
+        assertThat(alteredSession.deviceId).isEqualTo(secondSessionData.deviceId)
+        assertThat(alteredSession.accessToken).isEqualTo(secondSessionData.accessToken)
+        assertThat(alteredSession.refreshToken).isEqualTo(secondSessionData.refreshToken)
+        assertThat(alteredSession.homeserverUrl).isEqualTo(secondSessionData.homeserverUrl)
+        assertThat(alteredSession.slidingSyncProxy).isEqualTo(secondSessionData.slidingSyncProxy)
+        assertThat(alteredSession.loginTimestamp).isEqualTo(/* Not altered! */ firstSessionData.loginTimestamp)
+        assertThat(alteredSession.oidcData).isEqualTo(secondSessionData.oidcData)
+    }
 }

@@ -24,3 +24,6 @@ INSERT INTO SessionData VALUES ?;
 
 removeSession:
 DELETE FROM SessionData WHERE userId = ?;
+
+updateSession:
+REPLACE INTO SessionData VALUES ?;
