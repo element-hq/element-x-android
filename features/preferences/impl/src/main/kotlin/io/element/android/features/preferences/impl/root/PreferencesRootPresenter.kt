@@ -68,6 +68,14 @@ class PreferencesRootPresenter @Inject constructor(
             derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified }
         }
 
+        val accountManagementUrl: MutableState<String?> = remember {
+            mutableStateOf(null)
+        }
+
+        LaunchedEffect(Unit) {
+            initAccountManagementUrl(accountManagementUrl)
+        }
+
         val logoutState = logoutPresenter.present()
         val showDeveloperSettings = buildType != BuildType.RELEASE
         return PreferencesRootState(
@@ -75,6 +83,7 @@ class PreferencesRootPresenter @Inject constructor(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
             showCompleteVerification = sessionIsNotVerified,
+            accountManagementUrl = accountManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             snackbarMessage = snackbarMessage,
@@ -83,5 +92,9 @@ class PreferencesRootPresenter @Inject constructor(
 
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
         matrixUser.value = matrixClient.getCurrentUser()
+    }
+
+    private fun CoroutineScope.initAccountManagementUrl(accountManagementUrl: MutableState<String?>) = launch {
+        accountManagementUrl.value = matrixClient.getAccountManagementUrl().getOrNull()
     }
 }

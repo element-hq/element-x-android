@@ -180,11 +180,21 @@
   <string name="screen_migration_title">"Setting up your account."</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
   <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Configuration mismatch"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"We’ve simplified Notifications Settings to make options easier to find. 
+
+Some custom settings you’ve chosen in the past are not shown here, but they’re still active. 
+
+If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_direct_chats">"Direct chats"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Custom setting per chat"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"All messages"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
   <string name="screen_notification_settings_edit_screen_direct_section_header">"On direct chats, notify me for"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"On group chats, notify me for"</string>
   <string name="screen_notification_settings_enable_notifications">"Enable notifications on this device"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"The configuration has not been corrected, please try again."</string>
   <string name="screen_notification_settings_group_chats">"Group chats"</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_mode_all">"All"</string>
@@ -196,6 +206,7 @@
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
+  <string name="screen_settings_oidc_account">"Account and devices"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>

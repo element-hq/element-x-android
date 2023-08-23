@@ -311,6 +311,11 @@ class RustMatrixClient constructor(
         return result
     }
 
+    override suspend fun getAccountManagementUrl(): Result<String?> = withContext(sessionDispatcher) {
+        runCatching {
+            client.accountUrl()
+        }
+    }
     override suspend fun loadUserDisplayName(): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.displayName()

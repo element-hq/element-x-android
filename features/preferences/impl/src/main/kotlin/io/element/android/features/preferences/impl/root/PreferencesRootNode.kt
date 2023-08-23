@@ -66,6 +66,12 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenAbout() }
     }
 
+    private fun onManageAccountClicked(activity: Activity, accountManagementUrl: String?) {
+        accountManagementUrl?.let {
+            activity.openUrlInChromeCustomTab(null, false, it)
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -79,7 +85,8 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenAbout = this::onOpenAbout,
             onVerifyClicked = this::onVerifyClicked,
             onOpenDeveloperSettings = this::onOpenDeveloperSettings,
-            onSuccessLogout = { onSuccessLogout(activity, it) }
+            onSuccessLogout = { onSuccessLogout(activity, it) },
+            onManageAccountClicked = { onManageAccountClicked(activity, state.accountManagementUrl) },
         )
     }
 

@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.DeveloperMode
 import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
+import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ fun PreferencesRootView(
     state: PreferencesRootState,
     onBackPressed: () -> Unit,
     onVerifyClicked: () -> Unit,
+    onManageAccountClicked: () -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
@@ -75,6 +77,13 @@ fun PreferencesRootView(
                 onClick = onVerifyClicked,
             )
             HorizontalDivider()
+        }
+        if (state.accountManagementUrl != null) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.screen_settings_oidc_account),
+                icon = Icons.Outlined.ManageAccounts,
+                onClick = onManageAccountClicked,
+            )
         }
         if (state.showAnalyticsSettings) {
             PreferenceText(
@@ -143,5 +152,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenAbout = {},
         onVerifyClicked = {},
         onSuccessLogout = {},
+        onManageAccountClicked = {},
     )
 }

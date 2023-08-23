@@ -51,6 +51,7 @@ class FakeMatrixClient(
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),
     private val syncService: FakeSyncService = FakeSyncService(),
+    private val accountManagementUrlString: Result<String?> = Result.success(null),
 ) : MatrixClient {
 
     private var ignoreUserResult: Result<Unit> = Result.success(Unit)
@@ -125,6 +126,9 @@ class FakeMatrixClient(
         return userAvatarURLString
     }
 
+    override suspend fun getAccountManagementUrl(): Result<String?> {
+        return accountManagementUrlString
+    }
     override suspend fun uploadMedia(
         mimeType: String,
         data: ByteArray,
