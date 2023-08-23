@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
@@ -117,6 +118,13 @@ class RustMatrixClient constructor(
                 }
             } else {
                 Timber.v("didReceiveAuthError -> already cleaning up")
+            }
+        }
+
+        override fun didRefreshTokens() {
+            Timber.w("didRefreshTokens()")
+            appCoroutineScope.launch {
+                sessionStore.updateData(client.session().toSessionData())
             }
         }
     }
@@ -287,21 +295,30 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout() = doLogout(doRequest = true)
+    override suspend fun logout(): String? = doLogout(doRequest = true)
 
-    private suspend fun doLogout(doRequest: Boolean) = withContext(sessionDispatcher) {
-        if (doRequest) {
-            try {
-                client.logout()
-            } catch (failure: Throwable) {
-                Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+    private suspend fun doLogout(doRequest: Boolean): String? {
+        var result: String? = null
+        withContext(sessionDispatcher) {
+            if (doRequest) {
+                try {
+                    result = client.logout()
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+                }
             }
+            close()
+            baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
+            sessionStore.removeSession(sessionId.value)
         }
-        close()
-        baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
-        sessionStore.removeSession(sessionId.value)
+        return result
     }
 
+    override suspend fun getAccountManagementUrl(): Result<String?> = withContext(sessionDispatcher) {
+        runCatching {
+            client.accountUrl()
+        }
+    }
     override suspend fun loadUserDisplayName(): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.displayName()

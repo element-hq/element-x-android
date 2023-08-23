@@ -24,6 +24,7 @@ data class SessionData(
     val accessToken: String,
     val refreshToken: String?,
     val homeserverUrl: String,
+    val oidcData: String?,
     val slidingSyncProxy: String?,
     val loginTimestamp: Date?,
 )

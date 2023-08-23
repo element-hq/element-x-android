@@ -38,6 +38,10 @@ class InMemorySessionStore : SessionStore {
         sessionDataFlow.value = sessionData
     }
 
+    override suspend fun updateData(sessionData: SessionData) {
+        sessionDataFlow.value = sessionData
+    }
+
     override suspend fun getSession(sessionId: String): SessionData? {
         return sessionDataFlow.value.takeIf { it?.userId == sessionId }
     }
