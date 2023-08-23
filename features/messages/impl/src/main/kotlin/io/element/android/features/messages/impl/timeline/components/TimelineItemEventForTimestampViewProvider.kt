@@ -35,5 +35,6 @@ class TimelineItemEventForTimestampViewProvider : PreviewParameterProvider<Timel
                 localSendState = LocalEventSendState.SendingFailed("AN_ERROR"),
                 content = aTimelineItemTextContent().copy(isEdited = true),
             ),
+            //aTimelineItemEvent().copy(content = aTimelineItemPollContent()),
         )
 }
