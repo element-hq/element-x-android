@@ -50,6 +50,7 @@ private fun ContentToPreview() {
         buttons = { /*TODO*/ },
         icon = { /*TODO*/ },
         title = { /*TODO*/ },
+        subtitle = null,
         content = { DatePicker(state = state, showModeToggle = true) },
         shape = AlertDialogDefaults.shape,
         containerColor = AlertDialogDefaults.containerColor,

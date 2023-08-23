@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
@@ -23,12 +24,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.RadioButtonListItem
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
+import io.element.android.libraries.designsystem.theme.components.ListSupportingText
 import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -37,20 +40,30 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleSelectionDialog(
-    options: ImmutableList<String>,
+    options: ImmutableList<ListOption>,
     onOptionSelected: (Int) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
+    subtitle: String? = null,
     dismissButtonTitle: String = stringResource(CommonStrings.action_cancel),
     initialSelection: Int? = null,
 ) {
+    val decoratedSubtitle: @Composable (() -> Unit)? = subtitle?.let {
+        @Composable {
+            ListSupportingText(
+                text = it,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
     AlertDialog(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
     ) {
         SingleSelectionDialogContent(
             title = title,
+            subtitle = decoratedSubtitle,
             options = options,
             onOptionSelected = onOptionSelected,
             dismissButtonTitle = dismissButtonTitle,
@@ -62,16 +75,18 @@ fun SingleSelectionDialog(
 
 @Composable
 internal fun SingleSelectionDialogContent(
-    options: ImmutableList<String>,
+    options: ImmutableList<ListOption>,
     onOptionSelected: (Int) -> Unit,
     onDismissRequest: () -> Unit,
     dismissButtonTitle: String,
     modifier: Modifier = Modifier,
     title: String? = null,
     initialSelection: Int? = null,
+    subtitle: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
         title = title,
+        subtitle = subtitle,
         modifier = modifier,
         cancelText = dismissButtonTitle,
         onCancelClicked = onDismissRequest,
@@ -80,10 +95,12 @@ internal fun SingleSelectionDialogContent(
         LazyColumn {
             itemsIndexed(options) { index, option ->
                 RadioButtonListItem(
-                    headline = option,
+                    headline = option.title,
+                    supportingText = option.subtitle,
                     selected = index == initialSelection,
                     onSelected = { onOptionSelected(index) },
-                    compactLayout = true
+                    compactLayout = true,
+                    modifier = Modifier.padding(start = 8.dp)
                 )
             }
         }
@@ -96,7 +113,11 @@ internal fun SingleSelectionDialogContent(
 internal fun SingleSelectionDialogContentPreview() {
     ElementPreview(showBackground = false) {
         DialogPreview {
-            val options = persistentListOf("Option 1", "Option 2", "Option 3")
+            val options = persistentListOf(
+                ListOption("Option 1"),
+                ListOption("Option 2"),
+                ListOption("Option 3"),
+            )
             SingleSelectionDialogContent(
                 title = "Dialog title",
                 options = options,

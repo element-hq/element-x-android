@@ -25,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.components.dialogs.ListOption
 import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -35,12 +36,12 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun SingleSelectionListItem(
     headline: String,
-    options: ImmutableList<String>,
+    options: ImmutableList<ListOption>,
     onSelectionChanged: (Int) -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     leadingContent: ListItemContent? = null,
-    resultFormatter: (Int) -> String? = { options.getOrNull(it) },
+    resultFormatter: (Int) -> String? = { options.getOrNull(it)?.title },
     selected: Int? = null,
     displayResultInTrailingContent: Boolean = false,
 ) {
@@ -50,12 +51,12 @@ fun SingleSelectionListItem(
         @Composable {
             Text(selectedItem!!)
         }
-    } else if (supportingText != null) {
-        @Composable {
-            Text(supportingText)
-        }
     } else {
-        null
+        supportingText?.let {
+            @Composable {
+                Text(it)
+            }
+        }
     }
     val trailingContent: ListItemContent? = if (!selectedItem.isNullOrBlank() && displayResultInTrailingContent) {
         ListItemContent.Text(selectedItem!!)
@@ -97,7 +98,7 @@ internal fun SingleSelectionListItemPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
             onSelectionChanged = {},
         )
     }
@@ -109,7 +110,7 @@ internal fun SingleSelectionListItemUnselectedWithSupportingTextPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
             supportingText = "Supporting text",
             onSelectionChanged = {},
         )
@@ -122,7 +123,7 @@ internal fun SingleSelectionListItemSelectedInSupportingTextPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
             supportingText = "Supporting text",
             onSelectionChanged = {},
             selected = 1,
@@ -136,7 +137,7 @@ internal fun SingleSelectionListItemSelectedInTrailingContentPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
             supportingText = "Supporting text",
             onSelectionChanged = {},
             selected = 1,
@@ -151,7 +152,7 @@ internal fun SingleSelectionListItemCustomFormattertPreview() {
     ElementThemedPreview {
         SingleSelectionListItem(
             headline = "Headline",
-            options = persistentListOf("Option 1", "Option 2", "Option 3"),
+            options = persistentListOf(ListOption("Option 1"), ListOption("Option 2"), ListOption("Option 3")),
             supportingText = "Supporting text",
             onSelectionChanged = {},
             resultFormatter = { "Selected index: $it"},

@@ -119,7 +119,7 @@ fun ListItem(
 
     androidx.compose.material3.ListItem(
         headlineContent = decoratedHeadlineContent,
-        modifier = modifier.clickable(enabled = enabled && onClick != null, onClick = onClick ?: {}),
+        modifier = Modifier.clickable(enabled = enabled && onClick != null, onClick = onClick ?: {}).then(modifier),
         overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,

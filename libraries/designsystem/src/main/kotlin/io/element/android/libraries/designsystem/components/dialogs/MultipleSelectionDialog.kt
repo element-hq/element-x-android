@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
@@ -25,12 +26,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.CheckboxListItem
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
+import io.element.android.libraries.designsystem.theme.components.ListSupportingText
 import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -39,21 +42,31 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MultipleSelectionDialog(
-    options: ImmutableList<String>,
+    options: ImmutableList<ListOption>,
     onConfirmClicked: (List<Int>) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     confirmButtonTitle: String = stringResource(CommonStrings.action_confirm),
     dismissButtonTitle: String = stringResource(CommonStrings.action_cancel),
     title: String? = null,
+    subtitle: String? = null,
     initialSelection: ImmutableList<Int> = persistentListOf(),
 ) {
+    val decoratedSubtitle: @Composable (() -> Unit)? = subtitle?.let {
+        @Composable {
+            ListSupportingText(
+                text = it,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
     AlertDialog(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
     ) {
         MultipleSelectionDialogContent(
             title = title,
+            subtitle = decoratedSubtitle,
             options = options,
             confirmButtonTitle = confirmButtonTitle,
             onConfirmClicked = onConfirmClicked,
@@ -66,7 +79,7 @@ fun MultipleSelectionDialog(
 
 @Composable
 internal fun MultipleSelectionDialogContent(
-    options: ImmutableList<String>,
+    options: ImmutableList<ListOption>,
     confirmButtonTitle: String,
     onConfirmClicked: (List<Int>) -> Unit,
     dismissButtonTitle: String,
@@ -74,6 +87,7 @@ internal fun MultipleSelectionDialogContent(
     modifier: Modifier = Modifier,
     title: String? = null,
     initialSelected: ImmutableList<Int> = persistentListOf(),
+    subtitle: @Composable (() -> Unit)? = null,
 ) {
     val selectedOptionIndexes = remember { initialSelected.toMutableStateList() }
 
@@ -81,6 +95,7 @@ internal fun MultipleSelectionDialogContent(
 
     SimpleAlertDialogContent(
         title = title,
+        subtitle = subtitle,
         modifier = modifier,
         submitText = confirmButtonTitle,
         onSubmitClicked = {
@@ -93,7 +108,7 @@ internal fun MultipleSelectionDialogContent(
         LazyColumn {
             itemsIndexed(options) { index, option ->
                 CheckboxListItem(
-                    headline = option,
+                    headline = option.title,
                     checked = isSelected(index),
                     onChange = {
                         if (isSelected(index)) {
@@ -102,7 +117,9 @@ internal fun MultipleSelectionDialogContent(
                             selectedOptionIndexes.add(index)
                         }
                     },
+                    supportingText = option.subtitle,
                     compactLayout = true,
+                    modifier = Modifier.padding(start = 8.dp)
                 )
             }
         }
@@ -115,7 +132,11 @@ internal fun MultipleSelectionDialogContent(
 internal fun MultipleSelectionDialogContentPreview() {
     ElementPreview(showBackground = false) {
         DialogPreview {
-            val options = persistentListOf("Option 1", "Option 2", "Option 3")
+            val options = persistentListOf(
+                ListOption("Option 1", "Supporting line text lorem ipsum dolor sit amet, consectetur."),
+                ListOption("Option 2"),
+                ListOption("Option 3"),
+            )
             MultipleSelectionDialogContent(
                 title = "Dialog title",
                 options = options,

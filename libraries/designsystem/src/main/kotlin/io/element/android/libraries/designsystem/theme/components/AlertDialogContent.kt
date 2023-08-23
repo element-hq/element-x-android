@@ -56,6 +56,7 @@ internal fun SimpleAlertDialogContent(
     onCancelClicked: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     submitText: String? = null,
     onSubmitClicked: () -> Unit = {},
     thirdButtonText: String? = null,
@@ -74,6 +75,7 @@ internal fun SimpleAlertDialogContent(
         onCancelClicked = onCancelClicked,
         modifier = modifier,
         title = title,
+        subtitle = subtitle,
         submitText = submitText,
         onSubmitClicked = onSubmitClicked,
         thirdButtonText = thirdButtonText,
@@ -89,6 +91,7 @@ internal fun SimpleAlertDialogContent(
     onCancelClicked: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     submitText: String? = null,
     onSubmitClicked: () -> Unit = {},
     thirdButtonText: String? = null,
@@ -135,6 +138,7 @@ internal fun SimpleAlertDialogContent(
                 )
             }
         },
+        subtitle = subtitle,
         content = content,
         shape = DialogContentDefaults.shape,
         containerColor = DialogContentDefaults.containerColor,
@@ -160,6 +164,7 @@ internal fun AlertDialogContent(
     buttons: @Composable () -> Unit,
     icon: (@Composable () -> Unit)?,
     title: (@Composable () -> Unit)?,
+    subtitle: @Composable (() -> Unit)?,
     content: @Composable (() -> Unit)?,
     shape: Shape,
     containerColor: Color,
@@ -207,7 +212,12 @@ internal fun AlertDialogContent(
                         Box(
                             // Align the title to the center when an icon is present.
                             Modifier
-                                .then(if (applyPaddingToContents) Modifier else Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
+                                .then(
+                                    if (applyPaddingToContents)
+                                        Modifier
+                                    else
+                                        Modifier.padding(DialogContentDefaults.externalHorizontalPadding)
+                                )
                                 .padding(DialogContentDefaults.titlePadding)
                                 .align(
                                     if (icon == null) {
@@ -222,6 +232,7 @@ internal fun AlertDialogContent(
                     }
                 }
             }
+            subtitle?.invoke()
             content?.let {
                 CompositionLocalProvider(LocalContentColor provides textContentColor) {
                     val textStyle = MaterialTheme.typography.bodyMedium

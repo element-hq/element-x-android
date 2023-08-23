@@ -38,7 +38,7 @@ fun SwitchListItem(
         headlineContent = { Text(headline) },
         supportingContent = supportingText?.let { @Composable { Text(it) } },
         leadingContent = leadingContent,
-        trailingContent = ListItemContent.Switch(value, onChange, enabled),
+        trailingContent = ListItemContent.Switch(value, null, enabled),
         style = style,
         enabled = enabled,
         onClick = { onChange(!value) },
