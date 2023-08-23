@@ -32,7 +32,7 @@ open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
 
 fun anAccountProvider() = AccountProvider(
     title = "matrix.org",
-    subtitle = "Matrix.org is an open network for secure, decentralized communication.",
+    subtitle = "Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation.",
     isPublic = true,
     isMatrixOrg = true,
     isValid = true,
