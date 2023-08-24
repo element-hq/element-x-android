@@ -75,4 +75,5 @@ private fun SessionData.toSession() = Session(
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
     slidingSyncProxy = slidingSyncProxy,
+    oidcData = oidcData,
 )

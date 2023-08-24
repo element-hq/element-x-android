@@ -26,11 +26,13 @@
   <string name="screen_room_notification_settings_default_setting_footnote">"You can change it in your %1$s."</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"global settings"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Default setting"</string>
+  <string name="screen_room_notification_settings_edit_remove_setting">"Remove custom setting"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"An error occurred while loading notification settings."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Failed restoring the default mode, please try again."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Failed setting the mode, please try again."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
+  <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_room_reactions_show_less">"Show less"</string>
   <string name="screen_room_reactions_show_more">"Show more"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Send again"</string>

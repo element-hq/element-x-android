@@ -21,7 +21,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProvider
 object LoginConstants {
     const val MATRIX_ORG_URL = "matrix.org"
 
-    const val DEFAULT_HOMESERVER_URL = "matrix.org" // TODO Oidc "synapse-oidc.lab.element.dev"
+    const val DEFAULT_HOMESERVER_URL = "matrix.org"
     const val SLIDING_SYNC_READ_MORE_URL = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
 }
 

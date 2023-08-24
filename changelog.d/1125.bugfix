@@ -1,0 +1,1 @@
+When event has no id, just cancel parsing the latest room message for a room.

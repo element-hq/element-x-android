@@ -66,7 +66,6 @@ fun TimelineItemTextView(
             }
             ClickableLinkText(
                 text = textWithPadding,
-                linkAnnotationTag = "URL",
                 onClick = onTextClicked,
                 onLongClick = onTextLongClicked,
                 interactionSource = interactionSource

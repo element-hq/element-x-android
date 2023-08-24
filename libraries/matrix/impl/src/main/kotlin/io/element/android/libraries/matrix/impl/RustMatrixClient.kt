@@ -35,11 +35,11 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
@@ -92,8 +92,8 @@ class RustMatrixClient constructor(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
-    private val verificationService = RustSessionVerificationService()
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
+    private val verificationService = RustSessionVerificationService(rustSyncService)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -119,6 +119,13 @@ class RustMatrixClient constructor(
                 Timber.v("didReceiveAuthError -> already cleaning up")
             }
         }
+
+        override fun didRefreshTokens() {
+            Timber.w("didRefreshTokens()")
+            appCoroutineScope.launch {
+                sessionStore.updateData(client.session().toSessionData())
+            }
+        }
     }
 
     private val rustRoomListService: RoomListService =
@@ -141,13 +148,11 @@ class RustMatrixClient constructor(
 
     init {
         client.setDelegate(clientDelegate)
-        rustSyncService.syncState
-            .onEach { syncState ->
-                if (syncState == SyncState.Running) {
-                    onSlidingSyncUpdate()
-                }
+        roomListService.state.onEach { state ->
+            if (state == RoomListService.State.Running) {
+                setupVerificationControllerIfNeeded()
             }
-            .launchIn(sessionCoroutineScope)
+        }.launchIn(sessionCoroutineScope)
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? = withContext(sessionDispatcher) {
@@ -287,21 +292,30 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout() = doLogout(doRequest = true)
+    override suspend fun logout(): String? = doLogout(doRequest = true)
 
-    private suspend fun doLogout(doRequest: Boolean) = withContext(sessionDispatcher) {
-        if (doRequest) {
-            try {
-                client.logout()
-            } catch (failure: Throwable) {
-                Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+    private suspend fun doLogout(doRequest: Boolean): String? {
+        var result: String? = null
+        withContext(sessionDispatcher) {
+            if (doRequest) {
+                try {
+                    result = client.logout()
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+                }
             }
+            close()
+            baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
+            sessionStore.removeSession(sessionId.value)
         }
-        close()
-        baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
-        sessionStore.removeSession(sessionId.value)
+        return result
     }
 
+    override suspend fun getAccountManagementUrl(): Result<String?> = withContext(sessionDispatcher) {
+        runCatching {
+            client.accountUrl()
+        }
+    }
     override suspend fun loadUserDisplayName(): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.displayName()
@@ -321,8 +335,8 @@ class RustMatrixClient constructor(
         }
     }
 
-    private fun onSlidingSyncUpdate() {
-        if (!verificationService.isReady.value) {
+    private fun setupVerificationControllerIfNeeded() {
+        if (verificationService.verificationController == null) {
             try {
                 verificationService.verificationController = client.getSessionVerificationController()
             } catch (e: Throwable) {

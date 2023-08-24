@@ -202,7 +202,7 @@ class RoomListPresenterTests {
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
         val roomListService = FakeRoomListService()
         val matrixClient = FakeMatrixClient(
-            roomListService = roomListService
+            roomListService = roomListService,
         )
         val presenter = createRoomListPresenter(
             client = matrixClient,

@@ -20,6 +20,8 @@ import android.content.Context
 import android.net.Uri
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
+import com.otaliastudios.transcoder.resize.AtMostResizer
+import com.otaliastudios.transcoder.strategy.DefaultVideoStrategy
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.di.ApplicationContext
@@ -35,6 +37,11 @@ class VideoCompressor @Inject constructor(
     fun compress(uri: Uri) = callbackFlow {
         val tmpFile = context.createTmpFile(extension = "mp4")
         val future = Transcoder.into(tmpFile.path)
+            .setVideoTrackStrategy(
+                DefaultVideoStrategy.Builder()
+                    .addResizer(AtMostResizer(1920, 1080))
+                    .build()
+            )
             .addDataSource(context, uri)
             .setListener(object : TranscoderListener {
                 override fun onTranscodeProgress(progress: Double) {

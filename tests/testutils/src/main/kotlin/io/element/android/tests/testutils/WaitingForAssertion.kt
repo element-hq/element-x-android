@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.logout.api
+package io.element.android.tests.testutils
 
-import io.element.android.libraries.architecture.Async
+import kotlinx.coroutines.delay
 
-data class LogoutPreferenceState(
-    val logoutAction: Async<String?>,
-    val eventSink: (LogoutPreferenceEvents) -> Unit,
-)
+suspend fun waitForPredicate(
+    delayBetweenAttemptsMillis: Long = 1,
+    maxNumberOfAttempts: Int = 20,
+    predicate: () -> Boolean,
+) {
+    for (i in 0..maxNumberOfAttempts) {
+        if (predicate()) return
+        if (i < maxNumberOfAttempts) delay(delayBetweenAttemptsMillis)
+    }
+    throw AssertionError("Predicate was not true after $maxNumberOfAttempts attempts")
+}

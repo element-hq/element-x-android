@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.logout.api
+package io.element.android.libraries.matrix.impl.mapper
 
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.sessionstorage.api.SessionData
+import org.matrix.rustcomponents.sdk.Session
+import java.util.Date
 
-data class LogoutPreferenceState(
-    val logoutAction: Async<String?>,
-    val eventSink: (LogoutPreferenceEvents) -> Unit,
+internal fun Session.toSessionData() = SessionData(
+    userId = userId,
+    deviceId = deviceId,
+    accessToken = accessToken,
+    refreshToken = refreshToken,
+    homeserverUrl = homeserverUrl,
+    oidcData = oidcData,
+    slidingSyncProxy = slidingSyncProxy,
+    loginTimestamp = Date(),
 )

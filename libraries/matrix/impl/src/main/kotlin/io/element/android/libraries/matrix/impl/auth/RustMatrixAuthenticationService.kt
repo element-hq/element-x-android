@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
-// TODO Oidc
-// import org.matrix.rustcomponents.sdk.OidcAuthenticationUrl
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
@@ -30,17 +28,16 @@ import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.exception.mapClientException
+import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.network.useragent.UserAgentProvider
-import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Session
+import org.matrix.rustcomponents.sdk.OidcAuthenticationData
 import org.matrix.rustcomponents.sdk.use
 import java.io.File
-import java.util.Date
 import javax.inject.Inject
 import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
 
@@ -57,9 +54,8 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val authService: RustAuthenticationService = RustAuthenticationService(
         basePath = baseDirectory.absolutePath,
         passphrase = null,
-        // TODO Oidc
-        // oidcClientMetadata = oidcClientMetadata,
         userAgent = userAgentProvider.provide(),
+        oidcConfiguration = oidcConfiguration,
         customSlidingSyncProxy = null,
     )
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
@@ -112,68 +108,48 @@ class RustMatrixAuthenticationService @Inject constructor(
             }
         }
 
-    // TODO Oidc
-    //  private var pendingUrlForOidcLogin: OidcAuthenticationUrl? = null
+    private var pendingOidcAuthenticationData: OidcAuthenticationData? = null
 
     override suspend fun getOidcUrl(): Result<OidcDetails> {
-        TODO("Oidc")
-        /*
         return withContext(coroutineDispatchers.io) {
             runCatching {
-                val urlForOidcLogin = authService.urlForOidcLogin()
-                val url = urlForOidcLogin.loginUrl()
-                pendingUrlForOidcLogin = urlForOidcLogin
+                val oidcAuthenticationData = authService.urlForOidcLogin()
+                val url = oidcAuthenticationData.loginUrl()
+                pendingOidcAuthenticationData = oidcAuthenticationData
                 OidcDetails(url)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
             }
         }
-         */
     }
 
     override suspend fun cancelOidcLogin(): Result<Unit> {
-        TODO("Oidc")
-        /*
         return withContext(coroutineDispatchers.io) {
             runCatching {
-                pendingUrlForOidcLogin?.close()
-                pendingUrlForOidcLogin = null
+                pendingOidcAuthenticationData?.close()
+                pendingOidcAuthenticationData = null
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
             }
         }
-         */
     }
 
     /**
      * callbackUrl should be the uriRedirect from OidcClientMetadata (with all the parameters).
      */
     override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> {
-        TODO("Oidc")
-        /*
         return withContext(coroutineDispatchers.io) {
             runCatching {
-                val urlForOidcLogin = pendingUrlForOidcLogin ?: error("You need to call `getOidcUrl()` first")
+                val urlForOidcLogin = pendingOidcAuthenticationData ?: error("You need to call `getOidcUrl()` first")
                 val client = authService.loginWithOidcCallback(urlForOidcLogin, callbackUrl)
                 val sessionData = client.use { it.session().toSessionData() }
-                pendingUrlForOidcLogin = null
+                pendingOidcAuthenticationData?.close()
+                pendingOidcAuthenticationData = null
                 sessionStore.storeData(sessionData)
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
             }
         }
-         */
     }
-
 }
-
-private fun Session.toSessionData() = SessionData(
-    userId = userId,
-    deviceId = deviceId,
-    accessToken = accessToken,
-    refreshToken = refreshToken,
-    homeserverUrl = homeserverUrl,
-    slidingSyncProxy = slidingSyncProxy,
-    loginTimestamp = Date(),
-)
