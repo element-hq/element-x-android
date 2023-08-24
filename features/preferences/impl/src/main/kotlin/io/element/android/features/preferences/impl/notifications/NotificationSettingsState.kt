@@ -16,18 +16,10 @@
 
 package io.element.android.features.preferences.impl.notifications
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-
-open class NotificationsSettingsStateProvider : PreviewParameterProvider<NotificationsSettingsState> {
-    override val values: Sequence<NotificationsSettingsState>
-        get() = sequenceOf(
-            aNotificationsSettingsState(),
-        )
-}
-
-fun aNotificationsSettingsState() = NotificationsSettingsState(
-    isEnabled = true,
-    hasSystemPermission = false,
-    notifyMeOnRoom = true,
-    acceptCalls = true
+data class NotificationSettingsState(
+    val hasSystemPermission: Boolean,
+    val isEnabled: Boolean,
+    val notifyMeOnRoom: Boolean,
+    val acceptCalls: Boolean
+//    val eventSink: (AnalyticsOptInEvents) -> Unit,
 )

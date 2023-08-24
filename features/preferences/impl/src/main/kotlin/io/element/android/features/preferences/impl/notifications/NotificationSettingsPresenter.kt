@@ -16,10 +16,19 @@
 
 package io.element.android.features.preferences.impl.notifications
 
-data class NotificationsSettingsState(
-    val hasSystemPermission: Boolean,
-    val isEnabled: Boolean,
-    val notifyMeOnRoom: Boolean,
-    val acceptCalls: Boolean
-//    val eventSink: (AnalyticsOptInEvents) -> Unit,
-)
+import androidx.compose.runtime.Composable
+import io.element.android.libraries.architecture.Presenter
+import javax.inject.Inject
+
+class NotificationSettingsPresenter @Inject constructor() : Presenter<NotificationSettingsState> {
+
+    @Composable
+    override fun present(): NotificationSettingsState {
+        return NotificationSettingsState(
+            isEnabled = true,
+            hasSystemPermission = true,
+            notifyMeOnRoom = true,
+            acceptCalls = true
+        )
+    }
+}

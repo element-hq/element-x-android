@@ -33,8 +33,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-fun NotificationsSettingsView(
-    state: NotificationsSettingsState,
+fun NotificationSettingsView(
+    state: NotificationSettingsState,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -100,17 +100,17 @@ fun NotificationsSettingsView(
 
 @Preview
 @Composable
-internal fun AboutViewLightPreview(@PreviewParameter(NotificationsSettingsStateProvider::class) state: NotificationsSettingsState) =
+internal fun AboutViewLightPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun AboutViewDarkPreview(@PreviewParameter(NotificationsSettingsStateProvider::class) state: NotificationsSettingsState) =
+internal fun AboutViewDarkPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview(state: NotificationsSettingsState) {
-    NotificationsSettingsView(
+private fun ContentToPreview(state: NotificationSettingsState) {
+    NotificationSettingsView(
         state = state,
         onBackPressed = {},
     )

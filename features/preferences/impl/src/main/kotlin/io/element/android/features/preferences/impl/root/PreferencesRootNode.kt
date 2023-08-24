@@ -44,7 +44,7 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenAnalytics()
         fun onOpenAbout()
         fun onOpenDeveloperSettings()
-        fun onOpenNotificationsSettings()
+        fun onOpenNotificationSettings()
     }
 
     private fun onOpenBugReport() {
