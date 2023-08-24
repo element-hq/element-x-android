@@ -18,9 +18,9 @@
 ## Screenshots / GIFs
 
 <!--
-We have screenshot test in the project, so adding screenshots is not mandatory, as far as there
+We have screenshot tests in the project, so attaching screenshots to a PR is not mandatory, as far as there
 is a Composable Preview covering the changes. In this case, the change will appear in the file diff.
-Note that all the UI composable should be covered by a Composable Preview.
+Note that all the UI composables should be covered by a Composable Preview.
 
 Providing a video of the change is still very useful for the reviewer and for the history of the project.
 
@@ -51,7 +51,7 @@ Uncomment this markdown table below and edit the last line `|||`:
 
 <!-- Depending on the Pull Request content, it can be acceptable if some of the following checkboxes stay unchecked. -->
 
-- [ ] Changes has been tested on an Android device or Android emulator with API 23
+- [ ] Changes have been tested on an Android device or Android emulator with API 23
 - [ ] UI change has been tested on both light and dark themes
 - [ ] Accessibility has been taken into account. See https://github.com/vector-im/element-x-android/blob/develop/CONTRIBUTING.md#accessibility
 - [ ] Pull request is based on the develop branch
