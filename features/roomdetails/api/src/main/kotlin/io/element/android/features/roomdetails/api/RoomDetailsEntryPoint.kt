@@ -29,7 +29,7 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
 
     sealed interface InitialTarget : Parcelable {
         @Parcelize
-        object RoomDetails : InitialTarget
+        data object RoomDetails : InitialTarget
 
         @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : InitialTarget

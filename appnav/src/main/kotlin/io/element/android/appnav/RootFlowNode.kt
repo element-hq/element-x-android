@@ -170,10 +170,10 @@ class RootFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object SplashScreen : NavTarget
+        data object SplashScreen : NavTarget
 
         @Parcelize
-        object NotLoggedInFlow : NavTarget
+        data object NotLoggedInFlow : NavTarget
 
         @Parcelize
         data class LoggedInFlow(
@@ -182,7 +182,7 @@ class RootFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        object BugReport : NavTarget
+        data object BugReport : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

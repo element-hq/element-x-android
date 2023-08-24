@@ -20,6 +20,6 @@ import io.element.android.features.messages.impl.timeline.model.AggregatedReacti
 import io.element.android.libraries.matrix.api.core.EventId
 
 sealed interface ReactionSummaryEvents {
-    object Clear : ReactionSummaryEvents
+    data object Clear : ReactionSummaryEvents
     data class ShowReactionSummary(val eventId: EventId, val reactions: List<AggregatedReaction>, val selectedKey: String) : ReactionSummaryEvents
 }

@@ -69,13 +69,13 @@ class FtueFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Placeholder : NavTarget
+        data object Placeholder : NavTarget
 
         @Parcelize
-        object WelcomeScreen : NavTarget
+        data object WelcomeScreen : NavTarget
 
         @Parcelize
-        object AnalyticsOptIn : NavTarget
+        data object AnalyticsOptIn : NavTarget
     }
 
     private val callback = plugins.filterIsInstance<FtueEntryPoint.Callback>().firstOrNull()

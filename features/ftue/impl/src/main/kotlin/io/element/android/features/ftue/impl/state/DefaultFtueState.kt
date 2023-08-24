@@ -89,6 +89,6 @@ class DefaultFtueState @Inject constructor(
 }
 
 sealed interface FtueStep {
-    object WelcomeScreen : FtueStep
-    object AnalyticsOptIn : FtueStep
+    data object WelcomeScreen : FtueStep
+    data object AnalyticsOptIn : FtueStep
 }

@@ -32,6 +32,6 @@ data class InviteListState(
 )
 
 sealed interface InviteDeclineConfirmationDialog {
-    object Hidden : InviteDeclineConfirmationDialog
+    data object Hidden : InviteDeclineConfirmationDialog
     data class Visible(val isDirect: Boolean, val name: String) : InviteDeclineConfirmationDialog
 }

@@ -17,13 +17,11 @@
 package io.element.android.services.apperror.api
 
 sealed interface AppErrorState {
-
-    object NoError : AppErrorState
+    data object NoError : AppErrorState
 
     data class Error(
         val title: String,
         val body: String,
         val dismiss: () -> Unit,
     ) : AppErrorState
-
 }

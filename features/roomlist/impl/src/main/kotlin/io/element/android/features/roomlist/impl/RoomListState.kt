@@ -40,7 +40,7 @@ data class RoomListState(
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     sealed interface ContextMenu {
-        object Hidden : ContextMenu
+        data object Hidden : ContextMenu
         data class Shown(
             val roomId: RoomId,
             val roomName: String,

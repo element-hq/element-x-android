@@ -28,8 +28,8 @@ data class ShowLocationState(
     val eventSink: (ShowLocationEvents) -> Unit,
 ) {
     sealed interface Dialog {
-        object None : Dialog
-        object PermissionRationale : Dialog
-        object PermissionDenied : Dialog
+        data object None : Dialog
+        data object PermissionRationale : Dialog
+        data object PermissionDenied : Dialog
     }
 }

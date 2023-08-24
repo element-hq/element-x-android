@@ -25,19 +25,19 @@ data class LeaveRoomState(
     val eventSink: (LeaveRoomEvent) -> Unit = {},
 ) {
     sealed interface Confirmation {
-        object Hidden : Confirmation
+        data object Hidden : Confirmation
         data class Generic(val roomId: RoomId) : Confirmation
         data class PrivateRoom(val roomId: RoomId) : Confirmation
         data class LastUserInRoom(val roomId: RoomId) : Confirmation
     }
 
     sealed interface Progress {
-        object Hidden : Progress
-        object Shown : Progress
+        data object Hidden : Progress
+        data object Shown : Progress
     }
 
     sealed interface Error {
-        object Hidden : Error
-        object Shown : Error
+        data object Hidden : Error
+        data object Shown : Error
     }
 }

@@ -120,13 +120,13 @@ object ListSupportingTextDefaults {
     /** Specifies the padding to use for the supporting text. */
     sealed interface Padding {
         /** No padding. */
-        object None : Padding
+        data object None : Padding
         /** Default padding, it will align fine with a [ListItem] with no leading content. */
-        object Default : Padding
+        data object Default : Padding
         /** It will align to a [ListItem] with an [Icon] or [Checkbox] as leading content. */
-        object SmallLeadingContent : Padding
+        data object SmallLeadingContent : Padding
         /** It will align to with a [ListItem] with a [Switch] as leading content. */
-        object LargeLeadingContent : Padding
+        data object LargeLeadingContent : Padding
         /** It will align to with a [ListItem] with a custom start [padding]. */
         data class Custom(val padding: Dp) : Padding
 

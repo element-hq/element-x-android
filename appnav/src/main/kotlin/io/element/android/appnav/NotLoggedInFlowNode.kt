@@ -64,7 +64,7 @@ class NotLoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object OnBoarding : NavTarget
+        data object OnBoarding : NavTarget
 
         @Parcelize
         data class LoginFlow(

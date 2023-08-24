@@ -30,13 +30,9 @@ sealed interface SendLocationEvents {
         )
     }
 
-    object SwitchToMyLocationMode : SendLocationEvents
-
-    object SwitchToPinLocationMode : SendLocationEvents
-
-    object DismissDialog : SendLocationEvents
-
-    object RequestPermissions : SendLocationEvents
-
-    object OpenAppSettings : SendLocationEvents
+    data object SwitchToMyLocationMode : SendLocationEvents
+    data object SwitchToPinLocationMode : SendLocationEvents
+    data object DismissDialog : SendLocationEvents
+    data object RequestPermissions : SendLocationEvents
+    data object OpenAppSettings : SendLocationEvents
 }

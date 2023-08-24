@@ -22,9 +22,9 @@ data class PermissionsState(
     val eventSink: (PermissionsEvents) -> Unit = {},
 ) {
     sealed interface Permissions {
-        object AllGranted : Permissions
-        object SomeGranted : Permissions
-        object NoneGranted : Permissions
+        data object AllGranted : Permissions
+        data object SomeGranted : Permissions
+        data object NoneGranted : Permissions
     }
 
     val isAnyGranted: Boolean

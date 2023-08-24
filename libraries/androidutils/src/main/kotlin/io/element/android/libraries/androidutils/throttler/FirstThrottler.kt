@@ -25,7 +25,7 @@ class FirstThrottler(private val minimumInterval: Long = 800) {
     private var lastDate = 0L
 
     sealed class CanHandleResult {
-        object Yes : CanHandleResult()
+        data object Yes : CanHandleResult()
         data class No(val shouldWaitMillis: Long) : CanHandleResult()
 
         fun waitMillis(): Long {
