@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -41,6 +42,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
@@ -378,7 +380,24 @@ class RustMatrixRoom(
                 description = description,
                 zoomLevel = zoomLevel?.toUByte(),
                 assetType = assetType?.toInner(),
-                txnId = genTransactionId()
+                txnId = genTransactionId(),
+            )
+        }
+    }
+
+    override suspend fun createPoll(
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind,
+    ): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.createPoll(
+                question = question,
+                answers = answers,
+                maxSelections = maxSelections.toUByte(),
+                pollKind = pollKind.toInner(),
+                txnId = genTransactionId(),
             )
         }
     }
