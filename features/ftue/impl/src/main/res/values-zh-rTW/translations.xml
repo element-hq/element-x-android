@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_migration_title">"設定您的帳號"</string>
   <string name="screen_welcome_button">"開始吧！"</string>
 </resources>

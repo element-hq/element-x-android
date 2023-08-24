@@ -178,8 +178,6 @@
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
-  <string name="screen_migration_message">"Toto je jednorázový proces, děkujeme za čekání."</string>
-  <string name="screen_migration_title">"Nastavení vašeho účtu"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Další nastavení"</string>
   <string name="screen_notification_settings_calls_label">"Halsové a video hovory"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Neshoda konfigurace"</string>

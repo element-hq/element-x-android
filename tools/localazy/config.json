@@ -117,7 +117,8 @@
     {
       "name": ":features:ftue:impl",
       "includeRegex": [
-        "screen_welcome_.*"
+        "screen_welcome_.*",
+        "screen_migration_.*"
       ]
     }
   ]
