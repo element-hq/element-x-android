@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -202,7 +203,8 @@ class RoomListPresenterTests {
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
         val roomListService = FakeRoomListService()
         val matrixClient = FakeMatrixClient(
-            roomListService = roomListService
+            roomListService = roomListService,
+            syncService = FakeSyncService().apply { startSync() }
         )
         val presenter = createRoomListPresenter(
             client = matrixClient,
