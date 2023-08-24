@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl
+package io.element.android.features.poll.api.create
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.poll.api.CreatePollEntryPoint
-import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import io.element.android.libraries.architecture.FeatureEntryPoint
 
-@ContributesBinding(AppScope::class)
-class DefaultCreatePollEntryPoint @Inject constructor() : CreatePollEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
-        return parentNode.createNode<CreatePollNode>(buildContext)
-    }
+interface CreatePollEntryPoint : FeatureEntryPoint {
+    fun createNode(parentNode: Node, buildContext: BuildContext): Node
 }

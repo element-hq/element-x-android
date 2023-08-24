@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl
+package io.element.android.features.poll.impl.create
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,14 +24,14 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.RoomScope
 
-@ContributesNode(SessionScope::class)
+@ContributesNode(RoomScope::class)
 class CreatePollNode @AssistedInject constructor(
-    // analyticsService: AnalyticsService, // TODO:("Add analytics")
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val presenter: CreatePollPresenter,
+    // analyticsService: AnalyticsService, // TODO:("Add analytics")
 ) : Node(buildContext, plugins = plugins) {
 
 //    TODO:("Add analytics")
@@ -45,6 +45,10 @@ class CreatePollNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Text(text = "TODO")
+        CreatePollView(
+            state = presenter.present(),
+            modifier = modifier,
+            navigateUp = ::navigateUp,
+        )
     }
 }

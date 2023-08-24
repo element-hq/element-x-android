@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.services.analytics.api)
+    implementation(projects.libraries.uiStrings)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
