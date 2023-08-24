@@ -1,4 +1,4 @@
-<!-- Please read [CONTRIBUTING.md](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
+<!-- Please read [CONTRIBUTING.md](https://github.com/vector-im/element-x-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
  
 ## Type of change
 
@@ -17,13 +17,17 @@
 
 ## Screenshots / GIFs
 
-<!-- Only if UI have been changed
+<!--
+We have screenshot test in the project, so adding screenshots is not mandatory, as far as there
+is a Composable Preview covering the changes. In this case, the change will appear in the file diff.
+Note that all the UI composable should be covered by a Composable Preview.
+
+Providing a video of the change is still very useful for the reviewer and for the history of the project.
+
 You can use a table like this to show screenshots comparison.
 Uncomment this markdown table below and edit the last line `|||`:
 |copy screenshot of before here|copy screenshot of after here|
--->
 
-<!--
 |Before|After|
 |-|-|
 |||
@@ -47,11 +51,11 @@ Uncomment this markdown table below and edit the last line `|||`:
 
 <!-- Depending on the Pull Request content, it can be acceptable if some of the following checkboxes stay unchecked. -->
 
-- [ ] Changes has been tested on an Android device or Android emulator with API 21
+- [ ] Changes has been tested on an Android device or Android emulator with API 23
 - [ ] UI change has been tested on both light and dark themes
-- [ ] Accessibility has been taken into account. See https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#accessibility
+- [ ] Accessibility has been taken into account. See https://github.com/vector-im/element-x-android/blob/develop/CONTRIBUTING.md#accessibility
 - [ ] Pull request is based on the develop branch
-- [ ] Pull request includes a new file under ./changelog.d. See https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog
+- [ ] Pull request includes a new file under ./changelog.d. See https://github.com/vector-im/element-x-android/blob/develop/CONTRIBUTING.md#changelog
 - [ ] Pull request includes screenshots or videos if containing UI changes
 - [ ] Pull request includes a [sign off](https://matrix-org.github.io/synapse/latest/development/contributing_guide.html#sign-off)
 - [ ] You've made a self review of your PR
