@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import io.element.android.libraries.matrix.api.timeline.item.event.PollEndContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
@@ -105,9 +104,6 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                     },
                     endTime = kind.endTime,
                 )
-            }
-            is TimelineItemContentKind.PollEnd -> {
-                PollEndContent(startEventId = kind.startEventId)
             }
             is TimelineItemContentKind.UnableToDecrypt -> {
                 UnableToDecryptContent(

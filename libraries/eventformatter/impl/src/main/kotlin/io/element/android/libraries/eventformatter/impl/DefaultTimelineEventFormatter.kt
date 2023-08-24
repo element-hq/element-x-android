@@ -27,7 +27,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import io.element.android.libraries.matrix.api.timeline.item.event.PollEndContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
@@ -66,7 +65,6 @@ class DefaultTimelineEventFormatter @Inject constructor(
             RedactedContent,
             is StickerContent,
             is PollContent,
-            is PollEndContent,
             is UnableToDecryptContent,
             is MessageContent,
             is FailedToParseMessageLikeContent,

@@ -80,10 +80,6 @@ data class PollContent(
     val endTime: ULong?
 ) : EventContent
 
-data class PollEndContent(
-    val startEventId: String
-) : EventContent
-
 data class UnableToDecryptContent(
     val data: Data
 ) : EventContent {

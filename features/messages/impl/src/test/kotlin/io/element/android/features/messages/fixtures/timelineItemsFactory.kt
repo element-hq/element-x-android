@@ -21,7 +21,6 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentMessageFactory
-import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollEndFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentProfileChangeFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRedactedFactory
@@ -54,7 +53,6 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
                 pollFactory = TimelineItemContentPollFactory(matrixClient, FakeFeatureFlagService()),
-                pollEndFactory = TimelineItemContentPollEndFactory(),
                 utdFactory = TimelineItemContentUTDFactory(),
                 roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
                 profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
