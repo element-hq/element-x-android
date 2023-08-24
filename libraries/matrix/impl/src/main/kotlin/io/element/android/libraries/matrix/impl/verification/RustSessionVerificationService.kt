@@ -17,20 +17,25 @@
 package io.element.android.libraries.matrix.impl.verification
 
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
 import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
 import javax.inject.Inject
 
-class RustSessionVerificationService @Inject constructor() : SessionVerificationService, SessionVerificationControllerDelegate {
+class RustSessionVerificationService @Inject constructor(
+    private val syncService: RustSyncService,
+) : SessionVerificationService, SessionVerificationControllerDelegate {
 
     var verificationController: SessionVerificationControllerInterface? = null
         set(value) {
@@ -51,6 +56,10 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
 
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
+
+    override val canVerifySessionFlow = combine(sessionVerifiedStatus, syncService.syncState) { verificationStatus, syncState ->
+        syncState == SyncState.Running && verificationStatus == SessionVerifiedStatus.NotVerified
+    }
 
     override suspend fun requestVerification() = tryOrFail {
         verificationController?.requestVerification()

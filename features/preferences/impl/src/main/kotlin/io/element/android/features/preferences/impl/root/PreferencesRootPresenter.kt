@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,11 +30,9 @@ import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -60,16 +57,11 @@ class PreferencesRootPresenter @Inject constructor(
             initialLoad(matrixUser)
         }
 
-        val syncState by matrixClient.syncService().syncState.collectAsState()
-
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
 
         // Session verification status (unknown, not verified, verified)
-        val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
-        val sessionIsNotVerified by remember {
-            derivedStateOf { syncState == SyncState.Running && sessionVerifiedStatus == SessionVerifiedStatus.NotVerified }
-        }
+        val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
 
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
@@ -85,7 +77,7 @@ class PreferencesRootPresenter @Inject constructor(
             logoutState = logoutState,
             myUser = matrixUser.value,
             version = versionFormatter.get(),
-            showCompleteVerification = sessionIsNotVerified,
+            showCompleteVerification = canVerifySession,
             accountManagementUrl = accountManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,

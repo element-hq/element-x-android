@@ -92,8 +92,8 @@ class RustMatrixClient constructor(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
-    private val verificationService = RustSessionVerificationService()
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
+    private val verificationService = RustSessionVerificationService(rustSyncService)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
