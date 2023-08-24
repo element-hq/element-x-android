@@ -83,6 +83,11 @@ class MessageComposerPresenter @Inject constructor(
             canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
         }
 
+        val canCreatePoll = remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            canCreatePoll.value = featureFlagService.isFeatureEnabled(FeatureFlags.Polls)
+        }
+
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
             handlePickedMedia(attachmentsState, uri, mimeType)
         }
@@ -179,6 +184,10 @@ class MessageComposerPresenter @Inject constructor(
                     showAttachmentSourcePicker = false
                     // Navigation to the location picker screen is done at the view layer
                 }
+                MessageComposerEvents.PickAttachmentSource.Poll -> {
+                    showAttachmentSourcePicker = false
+                    // Navigation to the create poll screen is done at the view layer
+                }
                 is MessageComposerEvents.CancelSendAttachment -> {
                     ongoingSendAttachmentJob.value?.let {
                         it.cancel()
@@ -195,6 +204,7 @@ class MessageComposerPresenter @Inject constructor(
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             canShareLocation = canShareLocation.value,
+            canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             eventSink = ::handleEvents
         )
