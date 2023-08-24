@@ -150,7 +150,7 @@ class RustMatrixClient constructor(
         client.setDelegate(clientDelegate)
         roomListService.state.onEach { state ->
             if (state == RoomListService.State.Running) {
-                onSlidingSyncUpdate()
+                setupVerificationControllerIfNeeded()
             }
         }.launchIn(sessionCoroutineScope)
     }
@@ -335,8 +335,8 @@ class RustMatrixClient constructor(
         }
     }
 
-    private fun onSlidingSyncUpdate() {
-        if (!verificationService.isReady.value) {
+    private fun setupVerificationControllerIfNeeded() {
+        if (verificationService.verificationController == null) {
             try {
                 verificationService.verificationController = client.getSessionVerificationController()
             } catch (e: Throwable) {

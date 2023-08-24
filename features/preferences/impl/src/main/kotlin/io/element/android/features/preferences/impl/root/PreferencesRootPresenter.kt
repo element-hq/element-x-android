@@ -60,8 +60,8 @@ class PreferencesRootPresenter @Inject constructor(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
 
-        // Session verification status (unknown, not verified, verified)
-        val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
+        // We should display the 'complete verification' option if the current session can be verified
+        val showCompleteVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
 
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
@@ -77,7 +77,7 @@ class PreferencesRootPresenter @Inject constructor(
             logoutState = logoutState,
             myUser = matrixUser.value,
             version = versionFormatter.get(),
-            showCompleteVerification = canVerifySession,
+            showCompleteVerification = showCompleteVerification,
             accountManagementUrl = accountManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,

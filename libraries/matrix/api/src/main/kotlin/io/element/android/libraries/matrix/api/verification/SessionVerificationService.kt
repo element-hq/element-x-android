@@ -39,7 +39,7 @@ interface SessionVerificationService {
     val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus>
 
     /**
-     * Returns whether the current session needs to be verified.
+     * Returns whether the current session needs to be verified and the SDK is ready to start the verification.
      */
     val canVerifySessionFlow: Flow<Boolean>
 
