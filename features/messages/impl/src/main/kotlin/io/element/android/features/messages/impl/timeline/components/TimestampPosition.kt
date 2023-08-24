@@ -30,5 +30,12 @@ enum class TimestampPosition {
     /**
      * Timestamp should always be rendered below the timeline event content (eg. poll).
      */
-    Below,
+    Below;
+
+    companion object {
+        /**
+         * Default timestamp position for timeline event contents.
+         */
+        val Default: TimestampPosition = Aligned
+    }
 }

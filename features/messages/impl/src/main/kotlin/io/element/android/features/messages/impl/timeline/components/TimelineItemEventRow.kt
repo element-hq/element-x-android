@@ -366,7 +366,7 @@ private fun MessageEventBubbleContent(
         is TimelineItemVideoContent,
         is TimelineItemLocationContent -> TimestampPosition.Above
         is TimelineItemPollContent -> TimestampPosition.Below
-        else -> TimestampPosition.Aligned
+        else -> TimestampPosition.Default
     }
     val replyToDetails = event.inReplyTo as? InReplyTo.Ready
 
