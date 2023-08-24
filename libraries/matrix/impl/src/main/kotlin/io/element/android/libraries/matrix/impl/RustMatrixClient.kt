@@ -35,7 +35,6 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -149,13 +148,11 @@ class RustMatrixClient constructor(
 
     init {
         client.setDelegate(clientDelegate)
-        rustSyncService.syncState
-            .onEach { syncState ->
-                if (syncState == SyncState.Running) {
-                    onSlidingSyncUpdate()
-                }
+        roomListService.state.onEach { state ->
+            if (state == RoomListService.State.Running) {
+                onSlidingSyncUpdate()
             }
-            .launchIn(sessionCoroutineScope)
+        }.launchIn(sessionCoroutineScope)
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? = withContext(sessionDispatcher) {

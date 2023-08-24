@@ -31,6 +31,7 @@ import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -59,13 +60,15 @@ class PreferencesRootPresenter @Inject constructor(
             initialLoad(matrixUser)
         }
 
+        val syncState by matrixClient.syncService().syncState.collectAsState()
+
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
 
         // Session verification status (unknown, not verified, verified)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
         val sessionIsNotVerified by remember {
-            derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified }
+            derivedStateOf { syncState == SyncState.Running && sessionVerifiedStatus == SessionVerifiedStatus.NotVerified }
         }
 
         val accountManagementUrl: MutableState<String?> = remember {
