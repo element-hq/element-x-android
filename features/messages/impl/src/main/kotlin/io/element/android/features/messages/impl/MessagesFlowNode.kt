@@ -46,6 +46,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.poll.api.CreatePollEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -64,6 +65,7 @@ class MessagesFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val sendLocationEntryPoint: SendLocationEntryPoint,
     private val showLocationEntryPoint: ShowLocationEntryPoint,
+    private val createPollEntryPoint: CreatePollEntryPoint,
 ) : BackstackNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -101,6 +103,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object SendLocation : NavTarget
+
+        @Parcelize
+        data object CreatePoll : NavTarget
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
@@ -140,6 +145,10 @@ class MessagesFlowNode @AssistedInject constructor(
                     override fun onSendLocationClicked() {
                         backstack.push(NavTarget.SendLocation)
                     }
+
+                    override fun onCreatePollClicked() {
+                        backstack.push(NavTarget.CreatePoll)
+                    }
                 }
                 createNode<MessagesNode>(buildContext, listOf(callback))
             }
@@ -178,6 +187,9 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             NavTarget.SendLocation -> {
                 sendLocationEntryPoint.createNode(this, buildContext)
+            }
+            NavTarget.CreatePoll -> {
+                createPollEntryPoint.createNode(this, buildContext)
             }
         }
     }

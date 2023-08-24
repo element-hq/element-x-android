@@ -16,55 +16,35 @@
 
 package io.element.android.features.poll.impl
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.architecture.BackstackNode
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
-import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.di.SessionScope
-import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-class PollFlowNode @AssistedInject constructor(
+class CreatePollNode @AssistedInject constructor(
+    // analyticsService: AnalyticsService, // TODO:("Add analytics")
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BackstackNode<PollFlowNode.NavTarget>(
-    backstack = BackStack(
-        initialElement = NavTarget.Root,
-        savedStateMap = buildContext.savedStateMap,
-    ),
-    buildContext = buildContext,
-    plugins = plugins,
-) {
+) : Node(buildContext, plugins = plugins) {
 
-    sealed interface NavTarget : Parcelable {
-        @Parcelize
-        data object Root : NavTarget
-    }
-
-    override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
-        return when (navTarget) {
-            NavTarget.Root -> {
-                createNode(buildContext)
-            }
-        }
-    }
+//    TODO:("Add analytics")
+//    init {
+//        lifecycle.subscribe(
+//            onResume = {
+//                analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.PollView))
+//            }
+//        )
+//    }
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        Text(text = "TODO")
     }
 }
