@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import coil.Coil
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -53,19 +52,15 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
-import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
-import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -76,7 +71,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
-@ContributesNode(AppScope::class)
+@ContributesNode(SessionScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
@@ -91,6 +86,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val networkMonitor: NetworkMonitor,
     private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueState: FtueState,
+    private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -105,32 +101,18 @@ class LoggedInFlowNode @AssistedInject constructor(
         fun onOpenBugReport()
     }
 
-    interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(identifier: String, client: MatrixClient)
-
-        fun onFlowReleased(identifier: String, client: MatrixClient)
-    }
-
-    data class Inputs(
-        val matrixClient: MatrixClient
-    ) : NodeInputs
-
-    private val inputs: Inputs = inputs()
-    private val syncService = inputs.matrixClient.syncService()
+    private val syncService = matrixClient.syncService()
     private val loggedInFlowProcessor = LoggedInEventProcessor(
         snackbarDispatcher,
-        inputs.matrixClient.roomMembershipObserver(),
-        inputs.matrixClient.sessionVerificationService(),
+        matrixClient.roomMembershipObserver(),
+        matrixClient.sessionVerificationService(),
     )
 
     override fun onBuilt() {
         super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
-                plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.matrixClient) }
-                val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
-                Coil.setImageLoader(imageLoaderFactory)
-                appNavigationStateService.onNavigateToSession(id, inputs.matrixClient.sessionId)
+                appNavigationStateService.onNavigateToSession(id, matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
@@ -146,7 +128,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                 }
             },
             onDestroy = {
-                plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.matrixClient) }
                 appNavigationStateService.onLeavingSpace(id)
                 appNavigationStateService.onLeavingSession(id)
                 loggedInFlowProcessor.stopObserving()
@@ -351,4 +332,3 @@ class LoggedInFlowNode @AssistedInject constructor(
         backstack.push(NavTarget.InviteList)
     }
 }
-
