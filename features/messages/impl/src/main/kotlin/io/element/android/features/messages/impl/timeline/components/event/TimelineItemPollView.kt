@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
-import io.element.android.features.poll.api.ActivePollContentView
+import io.element.android.features.poll.api.PollContentView
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.matrix.api.poll.PollAnswer
@@ -33,10 +33,11 @@ fun TimelineItemPollView(
     onAnswerSelected: (PollAnswer) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ActivePollContentView(
+    PollContentView(
         question = content.question,
         answerItems = content.answerItems.toImmutableList(),
         pollKind = content.pollKind,
+        isPollEnded = content.isEnded,
         onAnswerSelected = onAnswerSelected,
         modifier = modifier,
     )

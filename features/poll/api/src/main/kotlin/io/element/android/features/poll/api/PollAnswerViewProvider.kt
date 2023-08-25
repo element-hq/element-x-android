@@ -19,27 +19,33 @@ package io.element.android.features.poll.api
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import kotlinx.collections.immutable.persistentListOf
 
-fun aPollAnswerItemList(isDisclosed: Boolean = true) = persistentListOf(
+fun aPollAnswerItemList(isEnded: Boolean = false, isDisclosed: Boolean = true) = persistentListOf(
     aPollAnswerItem(
         answer = PollAnswer("option_1", "Italian \uD83C\uDDEE\uD83C\uDDF9"),
         isDisclosed = isDisclosed,
+        isEnabled = !isEnded,
+        isWinner = isEnded,
         votesCount = 5,
-        progress = 0.5f
+        percentage = 0.5f
     ),
     aPollAnswerItem(
         answer = PollAnswer("option_2", "Chinese \uD83C\uDDE8\uD83C\uDDF3"),
         isDisclosed = isDisclosed,
+        isEnabled = !isEnded,
+        isWinner = false,
         votesCount = 0,
-        progress = 0f
+        percentage = 0f
     ),
     aPollAnswerItem(
         answer = PollAnswer("option_3", "Brazilian \uD83C\uDDE7\uD83C\uDDF7"),
         isDisclosed = isDisclosed,
+        isEnabled = !isEnded,
+        isWinner = false,
         isSelected = true,
         votesCount = 1,
-        progress = 0.1f
+        percentage = 0.1f
     ),
-    aPollAnswerItem(isDisclosed = isDisclosed),
+    aPollAnswerItem(isDisclosed = isDisclosed, isEnabled = !isEnded),
 )
 
 fun aPollAnswerItem(
@@ -48,13 +54,17 @@ fun aPollAnswerItem(
         "French \uD83C\uDDEB\uD83C\uDDF7 But make it a very very very long option then this should just keep expanding"
     ),
     isSelected: Boolean = false,
+    isEnabled: Boolean = true,
+    isWinner: Boolean = false,
     isDisclosed: Boolean = true,
     votesCount: Int = 4,
-    progress: Float = 0.4f,
+    percentage: Float = 0.4f,
 ) = PollAnswerItem(
     answer = answer,
     isSelected = isSelected,
+    isEnabled = isEnabled,
+    isWinner = isWinner,
     isDisclosed = isDisclosed,
     votesCount = votesCount,
-    progress = progress
+    percentage = percentage
 )
