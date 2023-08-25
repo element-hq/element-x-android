@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -351,7 +352,6 @@ private fun MessageSenderInformation(
     }
 }
 
-@Suppress("")
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
@@ -360,7 +360,7 @@ private fun MessageEventBubbleContent(
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
-    bubbleModifier: Modifier = Modifier
+    @SuppressLint("ModifierParameter") bubbleModifier: Modifier = Modifier, // need to rename this modifier to distinguish it from the following ones
 ) {
     val timestampPosition = when (event.content) {
         is TimelineItemImageContent,
