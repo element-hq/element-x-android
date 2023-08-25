@@ -9,7 +9,6 @@
   <string name="screen_account_provider_signin_title">"Vous êtes sur le point de vous connecter à %s"</string>
   <string name="screen_account_provider_signup_subtitle">"C\'est ici que vos conversations seront stockées - tout comme vous utiliseriez un fournisseur de messagerie pour conserver vos e-mails."</string>
   <string name="screen_account_provider_signup_title">"Vous êtes sur le point de créer un compte sur %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org est un réseau ouvert pour des communications sécurisées et décentralisées."</string>
   <string name="screen_change_account_provider_other">"Autre"</string>
   <string name="screen_change_account_provider_subtitle">"Utilisez un autre fournisseur de compte, tel que votre propre serveur ou un compte professionnel."</string>
   <string name="screen_change_account_provider_title">"Changer de fournisseur"</string>

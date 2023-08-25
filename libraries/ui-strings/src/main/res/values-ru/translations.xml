@@ -182,11 +182,21 @@
   <string name="screen_migration_title">"Настройка учетной записи."</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Дополнительные параметры"</string>
   <string name="screen_notification_settings_calls_label">"Аудио и видео звонки"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Несоответствие конфигурации"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Мы упростили настройки уведомлений, чтобы упростить поиск опций. 
+
+Некоторые пользовательские настройки, выбранные вами ранее, не отображаются в данном меню, но они все еще активны. 
+
+Если вы продолжите, некоторые настройки могут быть изменены."</string>
   <string name="screen_notification_settings_direct_chats">"Прямые чаты"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Индивидуальные настройки для каждого чата"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"При обновлении настроек уведомления произошла ошибка."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Все сообщения"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
   <string name="screen_notification_settings_edit_screen_direct_section_header">"Уведомлять меня в личных чатах"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"Уведомлять меня в групповых чатах"</string>
   <string name="screen_notification_settings_enable_notifications">"Включить уведомления на данном устройстве"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Конфигурация не была исправлена, попробуйте еще раз."</string>
   <string name="screen_notification_settings_group_chats">"Групповые чаты"</string>
   <string name="screen_notification_settings_mentions_section_title">"Упоминания"</string>
   <string name="screen_notification_settings_mode_all">"Все"</string>
@@ -198,6 +208,7 @@
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>
   <string name="screen_notification_settings_title">"Уведомления"</string>
   <string name="screen_report_content_block_user_hint">"Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя"</string>
+  <string name="screen_settings_oidc_account">"Учетная запись и устройства"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>

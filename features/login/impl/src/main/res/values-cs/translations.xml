@@ -9,7 +9,7 @@
   <string name="screen_account_provider_signin_title">"Chystáte se přihlásit do %s"</string>
   <string name="screen_account_provider_signup_subtitle">"Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily."</string>
   <string name="screen_account_provider_signup_title">"Chystáte se vytvořit účet na %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org je otevřená síť pro bezpečnou, decentralizovanou komunikaci."</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org je velký bezplatný server ve veřejné síti Matrix pro bezpečnou decentralizovanou komunikaci, který provozuje nadace Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Jiný"</string>
   <string name="screen_change_account_provider_subtitle">"Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet."</string>
   <string name="screen_change_account_provider_title">"Změnit poskytovatele účtu"</string>
