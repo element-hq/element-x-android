@@ -19,7 +19,7 @@ package io.element.android.features.ftue.impl.migration
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.androidutils.hash.md5
+import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -49,7 +49,9 @@ class SharedPrefsMigrationScreenStore @Inject constructor(
     }
 
     private fun SessionId.toKey(): String {
-        return IS_MIGRATION_SCREEN_SHOWN_PREFIX + value.md5()
+        // Hash the sessionId to get ride of exotic char and take only the first 16 chars,
+        // The risk of collision is not high.
+        return IS_MIGRATION_SCREEN_SHOWN_PREFIX + value.hash().take(16)
     }
 
     companion object {

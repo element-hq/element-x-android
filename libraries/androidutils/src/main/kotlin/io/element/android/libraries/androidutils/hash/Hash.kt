@@ -20,10 +20,10 @@ import java.security.MessageDigest
 import java.util.Locale
 
 /**
- * Compute a Hash of a String, using md5 algorithm.
+ * Compute a Hash of a String, using SHA-512 algorithm.
  */
-fun String.md5() = try {
-    val digest = MessageDigest.getInstance("md5")
+fun String.hash() = try {
+    val digest = MessageDigest.getInstance("SHA-512")
     digest.update(toByteArray())
     digest.digest()
             .joinToString("") { String.format(Locale.ROOT, "%02X", it) }
