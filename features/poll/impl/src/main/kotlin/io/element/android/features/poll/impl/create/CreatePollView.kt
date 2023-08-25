@@ -29,8 +29,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.poll.impl.R
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -49,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +66,7 @@ fun CreatePollView(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Create Poll",
+                        text = stringResource(id = R.string.screen_create_poll_title),
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
@@ -72,7 +75,7 @@ fun CreatePollView(
                 },
                 actions = {
                     TextButton(
-                        text = "Create",
+                        text = stringResource(id = CommonStrings.action_create),
                         onClick = {
                             state.eventSink(CreatePollEvents.Create)
                             navigateUp()
@@ -92,7 +95,7 @@ fun CreatePollView(
             LazyColumn {
                 item {
                     Text(
-                        text = "Question or topic",
+                        text = stringResource(id = R.string.screen_create_poll_question_desc),
                         modifier = Modifier.padding(start = 32.dp),
                         style = ElementTheme.typography.fontBodyMdRegular,
                     )
@@ -107,7 +110,7 @@ fun CreatePollView(
                                 },
                                 modifier = Modifier.fillMaxWidth(),
                                 placeholder = {
-                                    Text(text = "What is the poll about?")
+                                    Text(text = stringResource(id = R.string.screen_create_poll_question_hint))
                                 },
                             )
                         }
@@ -123,7 +126,7 @@ fun CreatePollView(
                                 },
                                 modifier = Modifier.fillMaxWidth(),
                                 placeholder = {
-                                    Text(text = "Option ${index + 1}")
+                                    Text(text = stringResource(id = R.string.screen_create_poll_answer_hint, index + 1))
                                 },
                             )
                         },
@@ -144,7 +147,7 @@ fun CreatePollView(
                 if (state.canAddAnswer) {
                     item {
                         ListItem(
-                            headlineContent = { Text(text = "Add option") },
+                            headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_add_option_btn)) },
                             leadingContent = ListItemContent.Icon(
                                 iconSource = IconSource.Vector(Icons.Default.Add),
                             ),
@@ -158,8 +161,8 @@ fun CreatePollView(
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text(text = "Anonymous Poll") },
-                        supportingContent = { Text(text = "Show results only after poll ends") },
+                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
+                        supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
                         trailingContent = ListItemContent.Switch(
                             checked = state.pollKind == PollKind.Undisclosed,
                             onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
