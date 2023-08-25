@@ -56,4 +56,7 @@ class CreatePollPresenterTest {
 
     fun `can delete option if there are more than 2`() = runTest {
     }
+
+    fun `option with more than 240 char is truncated`() = runTest {
+    }
 }

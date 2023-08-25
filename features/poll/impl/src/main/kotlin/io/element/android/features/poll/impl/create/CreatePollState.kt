@@ -18,7 +18,6 @@ package io.element.android.features.poll.impl.create
 
 import io.element.android.libraries.matrix.api.poll.PollKind
 import kotlinx.collections.immutable.ImmutableList
-import java.util.UUID
 
 data class CreatePollState(
     val canCreate: Boolean,
@@ -32,6 +31,4 @@ data class CreatePollState(
 data class Answer(
     val text: String,
     val canDelete: Boolean,
-) {
-    val uuid: String = UUID.randomUUID().toString()
-}
+)

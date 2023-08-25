@@ -113,7 +113,7 @@ fun CreatePollView(
                         }
                     )
                 }
-                itemsIndexed(state.answers, key = { _, answer -> answer.uuid }) { index, answer ->
+                itemsIndexed(state.answers) { index, answer ->
                     ListItem(
                         headlineContent = {
                             OutlinedTextField(
