@@ -16,6 +16,7 @@
 
 package io.element.android.features.poll.impl.create
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.poll.impl.R
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -58,8 +60,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun CreatePollView(
     state: CreatePollState,
     modifier: Modifier = Modifier,
-    navigateUp: () -> Unit = {},
 ) {
+    val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
+    BackHandler(onBack = navBack)
+    if (state.showConfirmation) ConfirmationDialog(
+        content = stringResource(id = R.string.screen_create_poll_confirmation),
+        onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
+        onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+    )
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -71,15 +79,12 @@ fun CreatePollView(
                     )
                 },
                 navigationIcon = {
-                    BackButton(onClick = navigateUp)
+                    BackButton(onClick = navBack)
                 },
                 actions = {
                     TextButton(
                         text = stringResource(id = CommonStrings.action_create),
-                        onClick = {
-                            state.eventSink(CreatePollEvents.Create)
-                            navigateUp()
-                        },
+                        onClick = { state.eventSink(CreatePollEvents.Create) },
                         enabled = state.canCreate,
                     )
                 }
@@ -181,6 +186,5 @@ internal fun CreatePollViewPreview(
 ) = ElementPreview {
     CreatePollView(
         state = state,
-        navigateUp = {},
     )
 }
