@@ -4,6 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Show results only after poll ends"</string>
   <string name="screen_create_poll_anonymous_headline">"Anonymous Poll"</string>
   <string name="screen_create_poll_answer_hint">"Option %1$d"</string>
+  <string name="screen_create_poll_confirmation">"Are you sure you would like to go back?"</string>
   <string name="screen_create_poll_question_desc">"Question or topic"</string>
   <string name="screen_create_poll_question_hint">"What is the poll about?"</string>
   <string name="screen_create_poll_title">"Create Poll"</string>

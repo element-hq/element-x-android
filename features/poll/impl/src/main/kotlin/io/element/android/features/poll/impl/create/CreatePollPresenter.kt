@@ -22,6 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -29,24 +32,31 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 private const val MIN_ANSWERS = 2;
 private const val MAX_ANSWERS = 20;
 private const val MAX_ANSWER_LENGTH = 240;
 private const val MAX_SELECTIONS = 1;
 
-class CreatePollPresenter @Inject constructor(
+class CreatePollPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
+    @Assisted private val backNavigator: () -> Unit,
     // private val messageComposerContext: MessageComposerContext, // TODO
 ) : Presenter<CreatePollState> {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(backNavigator: () -> Unit): CreatePollPresenter
+    }
+
     @Composable
     override fun present(): CreatePollState {
 
         var question: String by remember { mutableStateOf("") }
         var answers: List<String> by remember { mutableStateOf(listOf("", "")) }
         var pollKind: PollKind by remember { mutableStateOf(PollKind.Disclosed) }
+        var showConfirmation: Boolean by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
 
         fun handleEvents(event: CreatePollEvents) {
@@ -58,6 +68,7 @@ class CreatePollPresenter @Inject constructor(
                         maxSelections = MAX_SELECTIONS,
                         pollKind = pollKind,
                     )
+                    backNavigator()
                 }
                 is CreatePollEvents.AddAnswer -> {
                     answers = answers + ""
@@ -81,15 +92,28 @@ class CreatePollPresenter @Inject constructor(
                 is CreatePollEvents.SetQuestion -> {
                     question = event.question
                 }
+                is CreatePollEvents.NavBack -> {
+                    backNavigator()
+                }
+                CreatePollEvents.ConfirmNavBack -> {
+                    val shouldConfirm = question.isNotBlank() || answers.any { it.isNotBlank() }
+                    if (shouldConfirm) {
+                        showConfirmation = true
+                    } else {
+                        backNavigator()
+                    }
+                }
+                is CreatePollEvents.HideConfirmation -> showConfirmation = false
             }
         }
 
         return CreatePollState(
-            canCreate = question.isNotBlank() && answers.size >= MIN_ANSWERS && answers.all { it.isNotBlank() } && answers.all { it.length <= MAX_ANSWER_LENGTH },
+            canCreate = question.isNotBlank() && answers.size >= MIN_ANSWERS && answers.all { it.isNotBlank() },
             canAddAnswer = answers.size < MAX_ANSWERS,
             question = question,
             answers = answers.toAnswers(),
             pollKind = pollKind,
+            showConfirmation = showConfirmation,
             eventSink = ::handleEvents,
         )
     }

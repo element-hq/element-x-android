@@ -32,6 +32,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("", false)
                 ),
                 pollKind = PollKind.Disclosed,
+                showConfirmation = false,
             ),
             CreatePollState(
                 canCreate = true,
@@ -41,6 +42,18 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("Italian \uD83C\uDDEE\uD83C\uDDF9", false),
                     Answer("Chinese \uD83C\uDDE8\uD83C\uDDF3", false),
                 ),
+                showConfirmation = false,
+                pollKind = PollKind.Undisclosed,
+            ),
+            CreatePollState(
+                canCreate = true,
+                canAddAnswer = true,
+                question = "What type of food should we have?",
+                answers = persistentListOf(
+                    Answer("Italian \uD83C\uDDEE\uD83C\uDDF9", false),
+                    Answer("Chinese \uD83C\uDDE8\uD83C\uDDF3", false),
+                ),
+                showConfirmation = true,
                 pollKind = PollKind.Undisclosed,
             ),
             CreatePollState(
@@ -53,6 +66,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("Brazilian \uD83C\uDDE7\uD83C\uDDF7", true),
                     Answer("French \uD83C\uDDEB\uD83C\uDDF7", true),
                 ),
+                showConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             CreatePollState(
@@ -81,6 +95,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("19", true),
                     Answer("20", true),
                 ),
+                showConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             CreatePollState(
@@ -97,6 +112,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                         false
                     ),
                 ),
+                showConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             )
         )

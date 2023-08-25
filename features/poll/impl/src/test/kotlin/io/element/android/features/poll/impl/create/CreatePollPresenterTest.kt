@@ -31,6 +31,7 @@ class CreatePollPresenterTest {
     val presenter = CreatePollPresenter(
         room = FakeMatrixRoom(),
         analyticsService = NoopAnalyticsService(),
+        backNavigator = {}, // TODO
     )
 
     @Test
@@ -44,6 +45,7 @@ class CreatePollPresenterTest {
                 Truth.assertThat(it.question).isEqualTo("")
                 Truth.assertThat(it.answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
                 Truth.assertThat(it.pollKind).isEqualTo(PollKind.Disclosed)
+                Truth.assertThat(it.showConfirmation).isEqualTo(false)
             }
         }
     }

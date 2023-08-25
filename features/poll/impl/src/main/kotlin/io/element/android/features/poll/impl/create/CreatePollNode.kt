@@ -32,9 +32,11 @@ import io.element.android.services.analytics.api.AnalyticsService
 class CreatePollNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: CreatePollPresenter,
+    presenterFactory: CreatePollPresenter.Factory,
     analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
+
+    private val presenter = presenterFactory.create { navigateUp() }
 
     init {
         lifecycle.subscribe(
@@ -50,7 +52,6 @@ class CreatePollNode @AssistedInject constructor(
         CreatePollView(
             state = presenter.present(),
             modifier = modifier,
-            navigateUp = ::navigateUp,
         )
     }
 }

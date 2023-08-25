@@ -25,4 +25,7 @@ sealed interface CreatePollEvents {
     data object AddAnswer : CreatePollEvents
     data class RemoveAnswer(val index: Int) : CreatePollEvents
     data class SetPollKind(val pollKind: PollKind) : CreatePollEvents
+    data object NavBack : CreatePollEvents
+    data object ConfirmNavBack : CreatePollEvents
+    data object HideConfirmation : CreatePollEvents
 }
