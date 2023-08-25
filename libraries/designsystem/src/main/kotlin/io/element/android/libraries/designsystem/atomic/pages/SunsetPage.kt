@@ -38,6 +38,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.withColoredPeriod
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -59,7 +61,7 @@ fun SunsetPage(
         ) {
             SunsetBackground()
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .systemBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 16.dp)
@@ -131,4 +133,15 @@ private fun SunsetBackground(
                 .background(Color(0xFF121418))
         )
     }
+}
+
+@DayNightPreviews
+@Composable
+internal fun SunsetPagePreview() = ElementPreview {
+    SunsetPage(
+        isLoading = true,
+        title = "Title with a green period.",
+        subtitle = "Subtitle",
+        overallContent = {}
+    )
 }

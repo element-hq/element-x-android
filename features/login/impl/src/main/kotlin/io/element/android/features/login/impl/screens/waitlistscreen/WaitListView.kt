@@ -106,7 +106,6 @@ private fun WaitListContent(
             )
         }
         SunsetPage(
-            modifier = modifier,
             isLoading = state.loginAction !is Async.Success,
             title = title,
             subtitle = subtitle,
