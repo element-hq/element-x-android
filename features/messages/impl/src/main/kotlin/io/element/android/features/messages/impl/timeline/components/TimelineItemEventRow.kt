@@ -364,7 +364,7 @@ private fun MessageEventBubbleContent(
     val timestampPosition = when (event.content) {
         is TimelineItemImageContent,
         is TimelineItemVideoContent,
-        is TimelineItemLocationContent -> TimestampPosition.Above
+        is TimelineItemLocationContent -> TimestampPosition.Overlay
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Default
     }
@@ -396,7 +396,7 @@ private fun MessageEventBubbleContent(
         timestampModifier: Modifier = Modifier,
     ) {
         when (timestampPosition) {
-            TimestampPosition.Above ->
+            TimestampPosition.Overlay ->
                 Box(modifier) {
                     ContentView(modifier = contentModifier)
                     TimelineEventTimestampView(
@@ -460,14 +460,14 @@ private fun MessageEventBubbleContent(
                             .clip(RoundedCornerShape(6.dp))
                             .clickable(enabled = true, onClick = inReplyToClick),
                     )
-                    if (timestampPosition == TimestampPosition.Above) {
+                    if (timestampPosition == TimestampPosition.Overlay) {
                         modifierWithPadding = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
                         contentModifier = Modifier.clip(RoundedCornerShape(12.dp))
                     } else {
                         contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
                     }
                 }
-                timestampPosition != TimestampPosition.Above -> {
+                timestampPosition != TimestampPosition.Overlay -> {
                     contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
                 }
             }

@@ -18,9 +18,9 @@ package io.element.android.features.messages.impl.timeline.components
 
 enum class TimestampPosition {
     /**
-     * Timestamp should be rendered above the timeline event content (eg. image).
+     * Timestamp should overlay the timeline event content (eg. image).
      */
-    Above,
+    Overlay,
 
     /**
      * Timestamp should be aligned with the timeline event content if this is possible (eg. text).
