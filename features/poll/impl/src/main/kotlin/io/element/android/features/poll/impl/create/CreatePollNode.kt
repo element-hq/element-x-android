@@ -18,6 +18,7 @@ package io.element.android.features.poll.impl.create
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -25,23 +26,24 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
 class CreatePollNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: CreatePollPresenter,
-    // analyticsService: AnalyticsService, // TODO:("Add analytics")
+    analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
-//    TODO:("Add analytics")
-//    init {
-//        lifecycle.subscribe(
-//            onResume = {
-//                analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.PollView))
-//            }
-//        )
-//    }
+    init {
+        lifecycle.subscribe(
+            onResume = {
+                // TODO:("Add analytics")
+                // analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.PollView))
+            }
+        )
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
