@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 sealed interface CreatePollEvents {
     data object Create : CreatePollEvents
     data class SetQuestion(val question: String) : CreatePollEvents
-    data class SetAnswer(val index: Int, val answer: String) : CreatePollEvents
+    data class SetAnswer(val index: Int, val text: String) : CreatePollEvents
     data object AddAnswer : CreatePollEvents
     data class RemoveAnswer(val index: Int) : CreatePollEvents
     data class SetPollKind(val pollKind: PollKind) : CreatePollEvents
