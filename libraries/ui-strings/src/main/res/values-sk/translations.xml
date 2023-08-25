@@ -182,10 +182,21 @@
   <string name="screen_migration_title">"Nastavenie vášho účtu."</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Ďalšie nastavenia"</string>
   <string name="screen_notification_settings_calls_label">"Audio a video hovory"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Nezhoda konfigurácie"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Zjednodušili sme Nastavenia oznámení, aby ste ľahšie našli možnosti.
+
+Niektoré vlastné nastavenia, ktoré ste si nastavili v minulosti, sa tu nezobrazujú, ale sú stále aktívne.
+
+Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</string>
   <string name="screen_notification_settings_direct_chats">"Priame konverzácie"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Vlastné nastavenie pre konverzácie"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Pri aktualizácii nastavenia oznámenia došlo k chybe."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Všetky správy"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
   <string name="screen_notification_settings_edit_screen_direct_section_header">"Pri priamych rozhovoroch ma upozorniť na"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"Pri skupinových rozhovoroch ma upozorniť na"</string>
   <string name="screen_notification_settings_enable_notifications">"Povoliť oznámenia na tomto zariadení"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurácia nebola opravená, skúste to prosím znova."</string>
   <string name="screen_notification_settings_group_chats">"Skupinové rozhovory"</string>
   <string name="screen_notification_settings_mentions_section_title">"Zmienky"</string>
   <string name="screen_notification_settings_mode_all">"Všetky"</string>
@@ -197,6 +208,7 @@
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémové oznámenia sú vypnuté"</string>
   <string name="screen_notification_settings_title">"Oznámenia"</string>
   <string name="screen_report_content_block_user_hint">"Označte, či chcete skryť všetky aktuálne a budúce správy od tohto používateľa"</string>
+  <string name="screen_settings_oidc_account">"Účet a zariadenia"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>
   <string name="screen_share_my_location_action">"Zdieľať moju polohu"</string>
   <string name="screen_share_open_apple_maps">"Otvoriť v Apple Maps"</string>
