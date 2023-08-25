@@ -351,6 +351,7 @@ private fun MessageSenderInformation(
     }
 }
 
+@Suppress("")
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
@@ -359,7 +360,7 @@ private fun MessageEventBubbleContent(
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    bubbleModifier: Modifier = Modifier
 ) {
     val timestampPosition = when (event.content) {
         is TimelineItemImageContent,
@@ -480,7 +481,7 @@ private fun MessageEventBubbleContent(
         }
     }
 
-    CommonLayout(inReplyToDetails = replyToDetails, modifier = modifier)
+    CommonLayout(inReplyToDetails = replyToDetails, modifier = bubbleModifier)
 }
 
 @Composable
