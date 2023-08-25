@@ -4,10 +4,6 @@
     <item quantity="one">"%1$d Raumänderung"</item>
     <item quantity="other">"%1$d Raumänderungen"</item>
   </plurals>
-  <plurals name="screen_room_timeline_more_reactions">
-    <item quantity="one"></item>
-    <item quantity="other">"%1$d weitere"</item>
-  </plurals>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>
