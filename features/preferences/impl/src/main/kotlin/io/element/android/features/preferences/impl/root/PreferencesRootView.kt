@@ -57,7 +57,7 @@ fun PreferencesRootView(
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
-    onSuccessLogout: (String?) -> Unit,
+    onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
