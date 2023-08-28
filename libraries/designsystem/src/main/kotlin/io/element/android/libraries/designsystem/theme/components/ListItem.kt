@@ -134,9 +134,9 @@ fun ListItem(
  * The style to use for a [ListItem].
  */
 sealed interface ListItemStyle {
-    object Default : ListItemStyle
-    object Primary: ListItemStyle
-    object Destructive : ListItemStyle
+    data object Default : ListItemStyle
+    data object Primary: ListItemStyle
+    data object Destructive : ListItemStyle
 
     @Composable fun headlineColor() = when (this) {
         Default, Primary -> ListItemDefaultColors.headline

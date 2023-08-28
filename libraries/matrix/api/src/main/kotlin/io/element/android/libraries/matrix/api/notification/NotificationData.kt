@@ -40,54 +40,53 @@ data class NotificationData(
 
 sealed interface NotificationContent {
     sealed interface MessageLike : NotificationContent {
-        object CallAnswer : MessageLike
-        object CallInvite : MessageLike
-        object CallHangup : MessageLike
-        object CallCandidates : MessageLike
-        object KeyVerificationReady : MessageLike
-        object KeyVerificationStart : MessageLike
-        object KeyVerificationCancel : MessageLike
-        object KeyVerificationAccept : MessageLike
-        object KeyVerificationKey : MessageLike
-        object KeyVerificationMac : MessageLike
-        object KeyVerificationDone : MessageLike
+        data object CallAnswer : MessageLike
+        data object CallInvite : MessageLike
+        data object CallHangup : MessageLike
+        data object CallCandidates : MessageLike
+        data object KeyVerificationReady : MessageLike
+        data object KeyVerificationStart : MessageLike
+        data object KeyVerificationCancel : MessageLike
+        data object KeyVerificationAccept : MessageLike
+        data object KeyVerificationKey : MessageLike
+        data object KeyVerificationMac : MessageLike
+        data object KeyVerificationDone : MessageLike
         data class ReactionContent(
             val relatedEventId: String
         ) : MessageLike
-        object RoomEncrypted : MessageLike
+        data object RoomEncrypted : MessageLike
         data class RoomMessage(
             val senderId: UserId,
             val messageType: MessageType
         ) : MessageLike
-        object RoomRedaction : MessageLike
-        object Sticker : MessageLike
+        data object RoomRedaction : MessageLike
+        data object Sticker : MessageLike
     }
 
     sealed interface StateEvent : NotificationContent {
-        object PolicyRuleRoom : StateEvent
-        object PolicyRuleServer : StateEvent
-        object PolicyRuleUser : StateEvent
-        object RoomAliases : StateEvent
-        object RoomAvatar : StateEvent
-        object RoomCanonicalAlias : StateEvent
-        object RoomCreate : StateEvent
-        object RoomEncryption : StateEvent
-        object RoomGuestAccess : StateEvent
-        object RoomHistoryVisibility : StateEvent
-        object RoomJoinRules : StateEvent
+        data object PolicyRuleRoom : StateEvent
+        data object PolicyRuleServer : StateEvent
+        data object PolicyRuleUser : StateEvent
+        data object RoomAliases : StateEvent
+        data object RoomAvatar : StateEvent
+        data object RoomCanonicalAlias : StateEvent
+        data object RoomCreate : StateEvent
+        data object RoomEncryption : StateEvent
+        data object RoomGuestAccess : StateEvent
+        data object RoomHistoryVisibility : StateEvent
+        data object RoomJoinRules : StateEvent
         data class RoomMemberContent(
             val userId: String,
             val membershipState: RoomMembershipState
         ) : StateEvent
-        object RoomName : StateEvent
-        object RoomPinnedEvents : StateEvent
-        object RoomPowerLevels : StateEvent
-        object RoomServerAcl : StateEvent
-        object RoomThirdPartyInvite : StateEvent
-        object RoomTombstone : StateEvent
-        object RoomTopic : StateEvent
-        object SpaceChild : StateEvent
-        object SpaceParent : StateEvent
+        data object RoomName : StateEvent
+        data object RoomPinnedEvents : StateEvent
+        data object RoomPowerLevels : StateEvent
+        data object RoomServerAcl : StateEvent
+        data object RoomThirdPartyInvite : StateEvent
+        data object RoomTombstone : StateEvent
+        data object RoomTopic : StateEvent
+        data object SpaceChild : StateEvent
+        data object SpaceParent : StateEvent
     }
-
 }

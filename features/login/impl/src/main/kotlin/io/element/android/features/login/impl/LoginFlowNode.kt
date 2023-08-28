@@ -85,16 +85,16 @@ class LoginFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object ConfirmAccountProvider : NavTarget
+        data object ConfirmAccountProvider : NavTarget
 
         @Parcelize
-        object ChangeAccountProvider : NavTarget
+        data object ChangeAccountProvider : NavTarget
 
         @Parcelize
-        object SearchAccountProvider : NavTarget
+        data object SearchAccountProvider : NavTarget
 
         @Parcelize
-        object LoginPassword : NavTarget
+        data object LoginPassword : NavTarget
 
         @Parcelize
         data class WaitList(val loginFormState: LoginFormState) : NavTarget

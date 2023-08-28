@@ -166,6 +166,6 @@ sealed interface OneShotNotification {
 }
 
 sealed interface SummaryNotification {
-    object Removed : SummaryNotification
+    data object Removed : SummaryNotification
     data class Update(val notification: Notification) : SummaryNotification
 }

@@ -29,11 +29,11 @@ data class VerifySelfSessionState(
 
     @Stable
     sealed interface VerificationStep {
-        object Initial : VerificationStep
-        object Canceled : VerificationStep
-        object AwaitingOtherDeviceResponse : VerificationStep
-        object Ready : VerificationStep
+        data object Initial : VerificationStep
+        data object Canceled : VerificationStep
+        data object AwaitingOtherDeviceResponse : VerificationStep
+        data object Ready : VerificationStep
         data class Verifying(val emojiList: List<VerificationEmoji>, val state: Async<Unit>) : VerificationStep
-        object Completed : VerificationStep
+        data object Completed : VerificationStep
     }
 }

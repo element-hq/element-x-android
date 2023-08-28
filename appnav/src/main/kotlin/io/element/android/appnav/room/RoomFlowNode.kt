@@ -77,10 +77,10 @@ class RoomFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Loading : NavTarget
+        data object Loading : NavTarget
 
         @Parcelize
-        object Loaded : NavTarget
+        data object Loaded : NavTarget
     }
 
     override fun onBuilt() {

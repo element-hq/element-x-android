@@ -19,7 +19,7 @@ package io.element.android.features.login.impl.oidc.webview
 import io.element.android.features.login.api.oidc.OidcAction
 
 sealed interface OidcEvents {
-    object Cancel : OidcEvents
+    data object Cancel : OidcEvents
     data class OidcActionEvent(val oidcAction: OidcAction): OidcEvents
-    object ClearError : OidcEvents
+    data object ClearError : OidcEvents
 }

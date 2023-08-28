@@ -37,12 +37,12 @@ data class RoomDetailsState(
 )
 
 sealed interface RoomDetailsType {
-    object Room : RoomDetailsType
+    data object Room : RoomDetailsType
     data class Dm(val roomMember: RoomMember) : RoomDetailsType
 }
 
 sealed interface RoomTopicState {
-    object Hidden : RoomTopicState
-    object CanAddTopic : RoomTopicState
+    data object Hidden : RoomTopicState
+    data object CanAddTopic : RoomTopicState
     data class ExistingTopic(val topic: String) : RoomTopicState
 }

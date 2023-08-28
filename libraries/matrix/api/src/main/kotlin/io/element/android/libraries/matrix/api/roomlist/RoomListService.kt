@@ -26,10 +26,10 @@ import kotlinx.coroutines.flow.StateFlow
 interface RoomListService {
 
     sealed class State {
-        object Idle : State()
-        object Running : State()
-        object Error : State()
-        object Terminated : State()
+        data object Idle : State()
+        data object Running : State()
+        data object Error : State()
+        data object Terminated : State()
     }
 
     /**

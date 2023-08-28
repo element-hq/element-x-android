@@ -22,9 +22,9 @@ import io.element.android.libraries.matrix.api.core.RoomId
 sealed interface RoomListEvents {
     data class UpdateFilter(val newFilter: String) : RoomListEvents
     data class UpdateVisibleRange(val range: IntRange) : RoomListEvents
-    object DismissRequestVerificationPrompt : RoomListEvents
-    object ToggleSearchResults : RoomListEvents
+    data object DismissRequestVerificationPrompt : RoomListEvents
+    data object ToggleSearchResults : RoomListEvents
     data class ShowContextMenu(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
-    object HideContextMenu : RoomListEvents
+    data object HideContextMenu : RoomListEvents
     data class LeaveRoom(val roomId: RoomId) : RoomListEvents
 }
