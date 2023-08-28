@@ -36,7 +36,7 @@ class CreatePollNode @AssistedInject constructor(
     analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
-    private val presenter = presenterFactory.create { navigateUp() }
+    private val presenter = presenterFactory.create(backNavigator = ::navigateUp)
 
     init {
         lifecycle.subscribe(
