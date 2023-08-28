@@ -88,7 +88,7 @@ fun ProgressDialog(
 @Immutable
 sealed interface ProgressDialogType {
     data class Determinate(val progress: Float) : ProgressDialogType
-    object Indeterminate : ProgressDialogType
+    data object Indeterminate : ProgressDialogType
 }
 
 @Composable

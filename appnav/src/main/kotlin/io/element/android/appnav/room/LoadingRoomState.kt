@@ -32,8 +32,8 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 sealed interface LoadingRoomState {
-    object Loading : LoadingRoomState
-    object Error : LoadingRoomState
+    data object Loading : LoadingRoomState
+    data object Error : LoadingRoomState
     data class Loaded(val room: MatrixRoom) : LoadingRoomState
 }
 

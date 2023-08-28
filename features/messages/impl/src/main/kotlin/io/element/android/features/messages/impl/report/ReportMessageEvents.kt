@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.report
 
 sealed interface ReportMessageEvents {
     data class UpdateReason(val reason: String) : ReportMessageEvents
-    object ToggleBlockUser : ReportMessageEvents
-    object Report : ReportMessageEvents
-    object ClearError : ReportMessageEvents
+    data object ToggleBlockUser : ReportMessageEvents
+    data object Report : ReportMessageEvents
+    data object ClearError : ReportMessageEvents
 }

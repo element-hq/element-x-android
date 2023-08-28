@@ -31,9 +31,9 @@ class RegisterUnifiedPushUseCase @Inject constructor(
 ) {
 
     sealed interface RegisterUnifiedPushResult {
-        object Success : RegisterUnifiedPushResult
-        object NeedToAskUserForDistributor : RegisterUnifiedPushResult
-        object Error : RegisterUnifiedPushResult
+        data object Success : RegisterUnifiedPushResult
+        data object NeedToAskUserForDistributor : RegisterUnifiedPushResult
+        data object Error : RegisterUnifiedPushResult
     }
 
     suspend fun execute(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String): RegisterUnifiedPushResult {

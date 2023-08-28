@@ -17,6 +17,6 @@
 package io.element.android.libraries.permissions.api
 
 sealed interface PermissionsEvents {
-    object OpenSystemDialog : PermissionsEvents
-    object CloseDialog : PermissionsEvents
+    data object OpenSystemDialog : PermissionsEvents
+    data object CloseDialog : PermissionsEvents
 }

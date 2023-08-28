@@ -17,7 +17,6 @@
 package io.element.android.features.roomdetails.impl
 
 sealed interface RoomDetailsAction {
-    object Edit : RoomDetailsAction
-
-    object AddTopic : RoomDetailsAction
+    data object Edit : RoomDetailsAction
+    data object AddTopic : RoomDetailsAction
 }

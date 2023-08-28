@@ -20,5 +20,5 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 
 sealed interface CreateRoomRootEvents {
     data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object CancelStartDM : CreateRoomRootEvents
+    data object CancelStartDM : CreateRoomRootEvents
 }

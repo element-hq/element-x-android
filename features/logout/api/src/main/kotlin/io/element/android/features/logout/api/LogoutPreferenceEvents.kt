@@ -17,5 +17,5 @@
 package io.element.android.features.logout.api
 
 sealed interface LogoutPreferenceEvents {
-    object Logout : LogoutPreferenceEvents
+    data object Logout : LogoutPreferenceEvents
 }

@@ -159,10 +159,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Permanent : NavTarget
+        data object Permanent : NavTarget
 
         @Parcelize
-        object RoomList : NavTarget
+        data object RoomList : NavTarget
 
         @Parcelize
         data class Room(
@@ -171,19 +171,19 @@ class LoggedInFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        object Settings : NavTarget
+        data object Settings : NavTarget
 
         @Parcelize
-        object CreateRoom : NavTarget
+        data object CreateRoom : NavTarget
 
         @Parcelize
-        object VerifySession : NavTarget
+        data object VerifySession : NavTarget
 
         @Parcelize
-        object InviteList : NavTarget
+        data object InviteList : NavTarget
 
         @Parcelize
-        object Ftue : NavTarget
+        data object Ftue : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

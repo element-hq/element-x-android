@@ -105,7 +105,7 @@ sealed class ElementLogoAtomSize(
     val shadowColorLight: Color,
     val shadowRadius: Dp,
 ) {
-    object Medium : ElementLogoAtomSize(
+    data object Medium : ElementLogoAtomSize(
         outerSize = 120.dp,
         logoSize = 83.5.dp,
         cornerRadius = 33.dp,
@@ -115,7 +115,7 @@ sealed class ElementLogoAtomSize(
         shadowRadius = 32.dp,
     )
 
-    object Large : ElementLogoAtomSize(
+    data object Large : ElementLogoAtomSize(
         outerSize = 158.dp,
         logoSize = 110.dp,
         cornerRadius = 44.dp,
