@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout with LFS
-        uses: nschloe/action-cached-lfs-checkout@v1.2.1
+        uses: nschloe/action-cached-lfs-checkout@v1.2.2
         with:
           persist-credentials: false
       - name: ☕️ Use JDK 17
@@ -24,7 +24,7 @@ jobs:
           java-version: '17'
       # Add gradle cache, this should speed up the process
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.7.0
+        uses: gradle/gradle-build-action@v2.7.1
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Record screenshots

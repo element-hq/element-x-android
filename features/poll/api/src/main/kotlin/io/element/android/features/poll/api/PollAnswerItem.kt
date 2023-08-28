@@ -23,14 +23,18 @@ import io.element.android.libraries.matrix.api.poll.PollAnswer
  *
  * @property answer the poll answer.
  * @property isSelected whether the user has selected this answer.
+ * @property isEnabled whether the answer can be voted.
+ * @property isWinner whether this is the winner answer in the poll.
  * @property isDisclosed whether the votes for this answer should be disclosed.
  * @property votesCount the number of votes for this answer.
- * @property progress the percentage of votes for this answer.
+ * @property percentage the percentage of votes for this answer.
  */
 data class PollAnswerItem(
     val answer: PollAnswer,
     val isSelected: Boolean,
+    val isEnabled: Boolean,
+    val isWinner: Boolean,
     val isDisclosed: Boolean,
     val votesCount: Int,
-    val progress: Float,
+    val percentage: Float,
 )

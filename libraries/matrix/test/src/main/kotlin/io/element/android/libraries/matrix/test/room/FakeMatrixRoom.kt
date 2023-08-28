@@ -25,7 +25,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -34,6 +36,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.delay
@@ -70,7 +73,7 @@ class FakeMatrixRoom(
     private var canRedactResult = Result.success(canRedact)
     private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
     private val canSendEventResults = mutableMapOf<MessageEventType, Result<Boolean>>()
-    private var sendMediaResult = Result.success(Unit)
+    private var sendMediaResult = Result.success(FakeMediaUploadHandler())
     private var setNameResult = Result.success(Unit)
     private var setTopicResult = Result.success(Unit)
     private var updateAvatarResult = Result.success(Unit)
@@ -81,6 +84,7 @@ class FakeMatrixRoom(
     private var forwardEventResult = Result.success(Unit)
     private var reportContentResult = Result.success(Unit)
     private var sendLocationResult = Result.success(Unit)
+    private var createPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
     val editMessageCalls = mutableListOf<String>()
 
@@ -101,6 +105,9 @@ class FakeMatrixRoom(
 
     private val _sentLocations = mutableListOf<SendLocationInvocation>()
     val sentLocations: List<SendLocationInvocation> = _sentLocations
+
+    private val _createPollInvocations = mutableListOf<CreatePollInvocation>()
+    val createPollInvocations: List<CreatePollInvocation> = _createPollInvocations
 
     var invitedUserId: UserId? = null
         private set
@@ -226,21 +233,34 @@ class FakeMatrixRoom(
         thumbnailFile: File,
         imageInfo: ImageInfo,
         progressCallback: ProgressCallback?
-    ): Result<Unit> = fakeSendMedia(progressCallback)
+    ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia(
+    override suspend fun sendVideo(
+        file: File,
+        thumbnailFile: File,
+        videoInfo: VideoInfo,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler> = fakeSendMedia(
         progressCallback
     )
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia(progressCallback)
+    override suspend fun sendAudio(
+        file: File,
+        audioInfo: AudioInfo,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia(progressCallback)
+    override suspend fun sendFile(
+        file: File,
+        fileInfo: FileInfo,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
 
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = simulateLongTask {
         forwardEventResult
     }
 
-    private suspend fun fakeSendMedia(progressCallback: ProgressCallback?): Result<Unit> = simulateLongTask {
+    private suspend fun fakeSendMedia(progressCallback: ProgressCallback?): Result<MediaUploadHandler> = simulateLongTask {
         sendMediaResult.onSuccess {
             progressCallbackValues.forEach { (current, total) ->
                 progressCallback?.onProgress(current, total)
@@ -288,6 +308,16 @@ class FakeMatrixRoom(
     ): Result<Unit> = simulateLongTask {
         _sentLocations.add(SendLocationInvocation(body, geoUri, description, zoomLevel, assetType))
         return sendLocationResult
+    }
+
+    override suspend fun createPoll(
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind
+    ): Result<Unit> = simulateLongTask {
+        _createPollInvocations.add(CreatePollInvocation(question, answers, maxSelections, pollKind))
+        return createPollResult
     }
 
     fun givenLeaveRoomError(throwable: Throwable?) {
@@ -338,7 +368,7 @@ class FakeMatrixRoom(
         unignoreResult = result
     }
 
-    fun givenSendMediaResult(result: Result<Unit>) {
+    fun givenSendMediaResult(result: Result<FakeMediaUploadHandler>) {
         sendMediaResult = result
     }
 
@@ -382,6 +412,10 @@ class FakeMatrixRoom(
         sendLocationResult = result
     }
 
+    fun givenCreatePollResult(result: Result<Unit>) {
+        createPollResult = result
+    }
+
     fun givenProgressCallbackValues(values: List<Pair<Long, Long>>) {
         progressCallbackValues = values
     }
@@ -393,4 +427,11 @@ data class SendLocationInvocation(
     val description: String?,
     val zoomLevel: Int?,
     val assetType: AssetType?,
+)
+
+data class CreatePollInvocation(
+    val question: String,
+    val answers: List<String>,
+    val maxSelections: Int,
+    val pollKind: PollKind,
 )

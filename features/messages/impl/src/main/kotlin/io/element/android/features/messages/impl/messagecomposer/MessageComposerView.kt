@@ -55,7 +55,7 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.FocusChanged(hasFocus))
     }
 
-    Box {
+    Box(modifier = modifier) {
         AttachmentsBottomSheet(
             state = state,
             onSendLocationClicked = onSendLocationClicked,
@@ -69,8 +69,7 @@ fun MessageComposerView(
             onAddAttachment = ::onAddAttachment,
             onFocusChanged = ::onFocusChanged,
             composerCanSendMessage = state.isSendButtonVisible,
-            composerText = state.text,
-            modifier = modifier
+            composerText = state.text
         )
     }
 }

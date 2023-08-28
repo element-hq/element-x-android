@@ -17,9 +17,9 @@
 package io.element.android.features.messages.impl.media.viewer
 
 sealed interface MediaViewerEvents {
-    object SaveOnDisk: MediaViewerEvents
-    object Share: MediaViewerEvents
-    object OpenWith: MediaViewerEvents
-    object RetryLoading : MediaViewerEvents
-    object ClearLoadingError : MediaViewerEvents
+    data object SaveOnDisk: MediaViewerEvents
+    data object Share: MediaViewerEvents
+    data object OpenWith: MediaViewerEvents
+    data object RetryLoading : MediaViewerEvents
+    data object ClearLoadingError : MediaViewerEvents
 }

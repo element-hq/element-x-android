@@ -152,10 +152,10 @@ class RoomLoadedFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Messages : NavTarget
+        data object Messages : NavTarget
 
         @Parcelize
-        object RoomDetails : NavTarget
+        data object RoomDetails : NavTarget
 
         @Parcelize
         data class RoomMemberDetails(val userId: UserId) : NavTarget

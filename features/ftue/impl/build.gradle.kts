@@ -33,6 +33,7 @@ dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     api(projects.features.ftue.api)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
@@ -49,7 +50,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.analytics.test)
+    testImplementation(projects.services.analytics.test)
 
     ksp(libs.showkase.processor)
 }

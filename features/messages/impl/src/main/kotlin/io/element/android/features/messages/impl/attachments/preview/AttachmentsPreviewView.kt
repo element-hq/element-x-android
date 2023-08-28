@@ -96,7 +96,9 @@ private fun AttachmentSendStateView(
                     is SendActionState.Sending.Uploading -> ProgressDialogType.Determinate(sendActionState.progress)
                     SendActionState.Sending.Processing -> ProgressDialogType.Indeterminate
                 },
-                text = stringResource(id = CommonStrings.common_sending)
+                text = stringResource(id = CommonStrings.common_sending),
+                isCancellable = true,
+                onDismissRequest = onDismissClicked,
             )
         }
         is SendActionState.Failure -> {

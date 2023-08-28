@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import io.element.android.libraries.matrix.api.timeline.item.event.PollEndContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
@@ -38,7 +37,6 @@ class TimelineItemContentFactory @Inject constructor(
     private val redactedMessageFactory: TimelineItemContentRedactedFactory,
     private val stickerFactory: TimelineItemContentStickerFactory,
     private val pollFactory: TimelineItemContentPollFactory,
-    private val pollEndFactory: TimelineItemContentPollEndFactory,
     private val utdFactory: TimelineItemContentUTDFactory,
     private val roomMembershipFactory: TimelineItemContentRoomMembershipFactory,
     private val profileChangeFactory: TimelineItemContentProfileChangeFactory,
@@ -47,7 +45,7 @@ class TimelineItemContentFactory @Inject constructor(
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory
 ) {
 
-    fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
+    suspend fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
         return when (val itemContent = eventTimelineItem.content) {
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
@@ -58,7 +56,6 @@ class TimelineItemContentFactory @Inject constructor(
             is StateContent -> stateFactory.create(eventTimelineItem)
             is StickerContent -> stickerFactory.create(itemContent)
             is PollContent -> pollFactory.create(itemContent)
-            is PollEndContent -> pollEndFactory.create(itemContent)
             is UnableToDecryptContent -> utdFactory.create(itemContent)
             is UnknownContent -> TimelineItemUnknownContent
         }

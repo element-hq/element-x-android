@@ -16,17 +16,19 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
-// TODO Oidc
-// import io.element.android.libraries.matrix.api.auth.OidcConfig
-// import org.matrix.rustcomponents.sdk.OidcClientMetadata
+import io.element.android.libraries.matrix.api.auth.OidcConfig
+import org.matrix.rustcomponents.sdk.OidcConfiguration
 
-/*
-val oidcClientMetadata: OidcClientMetadata = OidcClientMetadata(
+val oidcConfiguration: OidcConfiguration = OidcConfiguration(
     clientName = "Element",
     redirectUri = OidcConfig.redirectUri,
     clientUri = "https://element.io",
     tosUri = "https://element.io/user-terms-of-service",
-    policyUri = "https://element.io/privacy"
+    policyUri = "https://element.io/privacy",
+    /**
+     * Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
+     */
+    staticRegistrations = mapOf(
+        "https://id.thirdroom.io/realms/thirdroom" to "elementx",
+    ),
 )
- */
-

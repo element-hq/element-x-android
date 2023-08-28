@@ -16,8 +16,6 @@ jobs:
   tests:
     name: Runs unit tests
     runs-on: ubuntu-latest
-    # Don't run in the merge queue again if the branch is up to date with `develop`
-    if: github.event.merge_group.base_ref != 'refs/heads/develop'
 
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
@@ -25,7 +23,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: ⏬ Checkout with LFS
-        uses: nschloe/action-cached-lfs-checkout@v1.2.1
+        uses: nschloe/action-cached-lfs-checkout@v1.2.2
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -36,7 +34,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.7.0
+        uses: gradle/gradle-build-action@v2.7.1
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
@@ -57,22 +55,6 @@ jobs:
           path: |
             **/kover/merged/verification/errors.txt
 
-      - name: 📸 Upload Screenshot test report
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: reports
-          path: tests/uitests/build/reports/tests/testDebugUnitTest/
-          retention-days: 5
-
-      - name: 🚫 Upload Screenshot failure differences on error
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: failures
-          path: tests/uitests/out/failures/
-          retention-days: 5
-
       - name: ✅ Upload kover report (disabled)
         if: always()
         run: echo "This is now done only once a day, see nightlyReports.yml"
@@ -83,7 +65,7 @@ jobs:
         with:
           name: tests-and-screenshot-tests-results
           path: |
-            **/out/failures/
+            **/build/paparazzi/failures/
             **/build/reports/tests/*UnitTest/
 
       # https://github.com/codecov/codecov-action

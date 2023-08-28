@@ -106,6 +106,7 @@ internal fun aTimelineItemEvent(
     eventId: EventId = EventId("\$" + Random.nextInt().toString()),
     transactionId: TransactionId? = null,
     isMine: Boolean = false,
+    senderDisplayName: String = "Sender",
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: LocalEventSendState = LocalEventSendState.Sent(eventId),
@@ -123,7 +124,7 @@ internal fun aTimelineItemEvent(
         reactionsState = timelineItemReactions,
         sentTime = "12:34",
         isMine = isMine,
-        senderDisplayName = "Sender",
+        senderDisplayName = senderDisplayName,
         groupPosition = groupPosition,
         localSendState = sendState,
         inReplyTo = inReplyTo,
@@ -141,11 +142,13 @@ fun aTimelineItemReactions(
         reactions = buildList {
             repeat(count) { index ->
                 val key = emojis[index % emojis.size]
-                add(anAggregatedReaction(
-                    key = key,
-                    count = index + 1,
-                    isHighlighted = isHighlighted
-                ))
+                add(
+                    anAggregatedReaction(
+                        key = key,
+                        count = index + 1,
+                        isHighlighted = isHighlighted
+                    )
+                )
             }
         }.toPersistentList()
     )

@@ -89,7 +89,7 @@ class TimelineItemsFactory @Inject constructor(
         this.timelineItems.emit(result)
     }
 
-    private fun buildAndCacheItem(
+    private suspend fun buildAndCacheItem(
         timelineItems: List<MatrixTimelineItem>,
         index: Int
     ): TimelineItem? {

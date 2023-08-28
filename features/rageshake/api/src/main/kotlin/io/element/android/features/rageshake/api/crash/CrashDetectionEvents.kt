@@ -17,6 +17,6 @@
 package io.element.android.features.rageshake.api.crash
 
 sealed interface CrashDetectionEvents {
-    object ResetAllCrashData : CrashDetectionEvents
-    object ResetAppHasCrashed : CrashDetectionEvents
+    data object ResetAllCrashData : CrashDetectionEvents
+    data object ResetAppHasCrashed : CrashDetectionEvents
 }

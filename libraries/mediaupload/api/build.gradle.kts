@@ -38,5 +38,12 @@ android {
         api(projects.libraries.matrix.api)
         implementation(libs.inject)
         implementation(libs.coroutines.core)
+
+        testImplementation(projects.libraries.matrix.test)
+        testImplementation(projects.libraries.mediaupload.test)
+        testImplementation(libs.test.junit)
+        testImplementation(libs.test.truth)
+        testImplementation(libs.coroutines.test)
+        testImplementation(libs.test.robolectric)
     }
 }

@@ -25,6 +25,7 @@ fun aPreferencesRootState() = PreferencesRootState(
     myUser = null,
     version = "Version 1.1 (1)",
     showCompleteVerification = true,
+    accountManagementUrl = "aUrl",
     showAnalyticsSettings = true,
     showDeveloperSettings = true,
     snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),

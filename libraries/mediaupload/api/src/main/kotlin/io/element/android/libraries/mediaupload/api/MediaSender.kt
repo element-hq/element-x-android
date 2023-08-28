@@ -17,15 +17,22 @@
 package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
-import io.element.android.libraries.core.extensions.flatMap
+import io.element.android.libraries.core.extensions.flatMapCatching
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 class MediaSender @Inject constructor(
     private val preProcessor: MediaPreProcessor,
     private val room: MatrixRoom,
 ) {
+
+    private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
+    val hasOngoingMediaUploads get() = ongoingUploadJobs.isNotEmpty()
 
     suspend fun sendMedia(
         uri: Uri,
@@ -40,16 +47,25 @@ class MediaSender @Inject constructor(
                 deleteOriginal = true,
                 compressIfPossible = compressIfPossible
             )
-            .flatMap { info ->
+            .flatMapCatching { info ->
                 room.sendMedia(info, progressCallback)
+            }
+            .onFailure { error ->
+                val job = ongoingUploadJobs.remove(Job)
+                if (error !is CancellationException) {
+                    job?.cancel()
+                }
+            }
+            .onSuccess {
+                ongoingUploadJobs.remove(Job)
             }
     }
 
     private suspend fun MatrixRoom.sendMedia(
         uploadInfo: MediaUploadInfo,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
     ): Result<Unit> {
-        return when (uploadInfo) {
+        val handler = when (uploadInfo) {
             is MediaUploadInfo.Image -> {
                 sendImage(
                     file = uploadInfo.file,
@@ -83,5 +99,11 @@ class MediaSender @Inject constructor(
                 )
             }
         }
+
+        return handler
+            .flatMapCatching { uploadHandler ->
+                ongoingUploadJobs[Job] = uploadHandler
+                uploadHandler.await()
+            }
     }
 }

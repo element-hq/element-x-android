@@ -63,7 +63,7 @@ sealed interface Async<out T> {
     /**
      * Represents an uninitialized operation (i.e. yet to be run).
      */
-    object Uninitialized : Async<Nothing>
+    data object Uninitialized : Async<Nothing>
 
     /**
      * Returns the data returned by the operation, or null otherwise.

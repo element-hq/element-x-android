@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalLayoutApi::class)
+
 package io.element.android.features.messages.impl.timeline.components.html
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +34,8 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -46,7 +53,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -95,18 +101,15 @@ private fun HtmlBody(
         onTextClicked: () -> Unit = {},
         onTextLongClicked: () -> Unit = {},
     ) = FlowRow(
-        mainAxisSpacing = 2.dp,
-        crossAxisSpacing = 8.dp,
+        horizontalArrangement = Arrangement.spacedBy(2.dp, Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
     ) {
         var sameRow = true
         while (sameRow && nodes.hasNext()) {
             when (val node = nodes.next()) {
                 is TextNode -> {
                     if (!node.isBlank) {
-                        Text(
-                            text = node.text(),
-                            color = MaterialTheme.colorScheme.primary,
-                        )
+                        ClickableLinkText(text = node.text(), interactionSource = interactionSource)
                     }
                 }
                 is Element -> {
@@ -399,22 +402,14 @@ private fun HtmlOrderedList(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    var number = 1
     val delimiter = "."
     HtmlListItems(
         list = orderedList,
+        marker = { index -> "$index$delimiter" },
         modifier = modifier,
         onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
-    ) {
-        val text = buildAnnotatedString {
-            append("${number++}$delimiter ${it.text()}")
-        }
-        HtmlText(
-            text = text, onClick = onTextClicked,
-            onLongClick = onTextLongClicked, interactionSource = interactionSource
-        )
-    }
+    )
 }
 
 @Composable
@@ -428,42 +423,52 @@ private fun HtmlUnorderedList(
     val marker = "・"
     HtmlListItems(
         list = unorderedList,
+        marker = { marker },
         modifier = modifier,
         onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
-    ) {
-        val text = buildAnnotatedString {
-            append("$marker ${it.text()}")
-        }
-        HtmlText(
-            text = text, onClick = onTextClicked,
-            onLongClick = onTextLongClicked, interactionSource = interactionSource
-        )
-    }
+    )
 }
 
 @Composable
 private fun HtmlListItems(
     list: Element,
+    marker: (Int) -> String,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
-    content: @Composable (node: TextNode) -> Unit = {}
 ) {
     Column(modifier = modifier) {
-        for (node in list.children()) {
-            for (innerNode in node.childNodes()) {
-                when (innerNode) {
-                    is TextNode -> {
-                        if (!innerNode.isBlank) content(innerNode)
+        for ((index, node) in list.children().withIndex()) {
+            val areAllChildrenInline = node.childNodes().all { it is TextNode || it is Element && it.isInline() }
+            if (areAllChildrenInline) {
+                val text = buildAnnotatedString {
+                    append("${marker(index + 1)} ")
+                    appendInlineChildrenElements(node.childNodes(), MaterialTheme.colorScheme)
+                }
+                HtmlText(text = text, interactionSource = remember { MutableInteractionSource() })
+            } else {
+                for (innerNode in node.childNodes()) {
+                    when (innerNode) {
+                        is TextNode -> {
+                            if (!innerNode.isBlank) {
+                                val text = buildAnnotatedString {
+                                    append("${marker(index + 1)} ")
+                                }
+                                HtmlText(
+                                    text = text, onClick = onTextClicked,
+                                    onLongClick = onTextLongClicked, interactionSource = interactionSource
+                                )
+                            }
+                        }
+                        is Element -> HtmlBlock(
+                            element = innerNode,
+                            modifier = Modifier.padding(start = 4.dp),
+                            onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
+                            interactionSource = interactionSource
+                        )
                     }
-                    is Element -> HtmlBlock(
-                        element = innerNode,
-                        modifier = Modifier.padding(start = 4.dp),
-                        onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
-                        interactionSource = interactionSource
-                    )
                 }
             }
         }
@@ -576,8 +581,7 @@ private fun HtmlText(
 ) {
     val inlineContentMap = persistentMapOf<String, InlineTextContent>()
     ClickableLinkText(
-        text = text,
-        linkAnnotationTag = "URL",
+        annotatedString = text,
         style = style,
         modifier = modifier,
         inlineContent = inlineContentMap,
@@ -599,5 +603,5 @@ internal fun HtmlDocumentDarkPreview(@PreviewParameter(DocumentProvider::class) 
 
 @Composable
 private fun ContentToPreview(document: Document) {
-    HtmlDocument(document, MutableInteractionSource())
+    HtmlDocument(document, remember { MutableInteractionSource() })
 }

@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.DeveloperMode
 import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
+import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -37,7 +38,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
@@ -51,10 +52,12 @@ fun PreferencesRootView(
     state: PreferencesRootState,
     onBackPressed: () -> Unit,
     onVerifyClicked: () -> Unit,
+    onManageAccountClicked: () -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -73,7 +76,14 @@ fun PreferencesRootView(
                 icon = Icons.Outlined.VerifiedUser,
                 onClick = onVerifyClicked,
             )
-            Divider()
+            HorizontalDivider()
+        }
+        if (state.accountManagementUrl != null) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.screen_settings_oidc_account),
+                icon = Icons.Outlined.ManageAccounts,
+                onClick = onManageAccountClicked,
+            )
         }
         if (state.showAnalyticsSettings) {
             PreferenceText(
@@ -95,9 +105,10 @@ fun PreferencesRootView(
         if (state.showDeveloperSettings) {
             DeveloperPreferencesView(onOpenDeveloperSettings)
         }
-        Divider()
+        HorizontalDivider()
         LogoutPreferenceView(
             state = state.logoutState,
+            onSuccessLogout = onSuccessLogout,
         )
         Text(
             modifier = Modifier
@@ -140,5 +151,7 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenDeveloperSettings = {},
         onOpenAbout = {},
         onVerifyClicked = {},
+        onSuccessLogout = {},
+        onManageAccountClicked = {},
     )
 }

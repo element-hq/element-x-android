@@ -54,10 +54,10 @@ class CreateRoomFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Root : NavTarget
+        data object Root : NavTarget
 
         @Parcelize
-        object NewRoom : NavTarget
+        data object NewRoom : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

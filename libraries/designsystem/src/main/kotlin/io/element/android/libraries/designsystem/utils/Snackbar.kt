@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.utils
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.SnackbarDuration
@@ -29,6 +30,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.ButtonVisuals
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Snackbar
@@ -75,6 +77,7 @@ fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> 
 fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
     androidx.compose.material3.SnackbarHost(hostState, modifier) { data ->
         Snackbar(
+            modifier = Modifier.padding(12.dp), // Add default padding
             message = data.visuals.message,
             action = data.visuals.actionLabel?.let { ButtonVisuals.Text(it, data::performAction) },
             dismissAction = if (data.visuals.withDismissAction) {

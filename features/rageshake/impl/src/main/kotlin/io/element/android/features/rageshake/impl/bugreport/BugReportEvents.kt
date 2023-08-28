@@ -17,9 +17,9 @@
 package io.element.android.features.rageshake.impl.bugreport
 
 sealed interface BugReportEvents {
-    object SendBugReport : BugReportEvents
-    object ResetAll : BugReportEvents
-    object ClearError : BugReportEvents
+    data object SendBugReport : BugReportEvents
+    data object ResetAll : BugReportEvents
+    data object ClearError : BugReportEvents
 
     data class SetDescription(val description: String) : BugReportEvents
     data class SetSendLog(val sendLog: Boolean) : BugReportEvents

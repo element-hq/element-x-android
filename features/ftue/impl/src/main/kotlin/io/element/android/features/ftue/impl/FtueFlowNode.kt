@@ -34,6 +34,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
+import io.element.android.features.ftue.impl.migration.MigrationScreenNode
 import io.element.android.features.ftue.impl.state.DefaultFtueState
 import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.welcome.WelcomeNode
@@ -41,6 +42,7 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SessionScope
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,7 +52,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(AppScope::class)
+@ContributesNode(SessionScope::class)
 class FtueFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
@@ -69,13 +71,16 @@ class FtueFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Placeholder : NavTarget
+        data object Placeholder : NavTarget
 
         @Parcelize
-        object WelcomeScreen : NavTarget
+        data object MigrationScreen : NavTarget
 
         @Parcelize
-        object AnalyticsOptIn : NavTarget
+        data object WelcomeScreen : NavTarget
+
+        @Parcelize
+        data object AnalyticsOptIn : NavTarget
     }
 
     private val callback = plugins.filterIsInstance<FtueEntryPoint.Callback>().firstOrNull()
@@ -102,6 +107,14 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.Placeholder -> {
                 createNode<PlaceholderNode>(buildContext)
             }
+            NavTarget.MigrationScreen -> {
+                val callback = object : MigrationScreenNode.Callback {
+                    override fun onMigrationFinished() {
+                        lifecycleScope.launch { moveToNextStep() }
+                    }
+                }
+                createNode<MigrationScreenNode>(buildContext, listOf(callback))
+            }
             NavTarget.WelcomeScreen -> {
                 val callback = object : WelcomeNode.Callback {
                     override fun onContinueClicked() {
@@ -117,12 +130,15 @@ class FtueFlowNode @AssistedInject constructor(
         }
     }
 
-    private suspend fun moveToNextStep() {
+    private fun moveToNextStep() {
         when (ftueState.getNextStep()) {
-            is FtueStep.WelcomeScreen -> {
+            FtueStep.MigrationScreen -> {
+                backstack.newRoot(NavTarget.MigrationScreen)
+            }
+            FtueStep.WelcomeScreen -> {
                 backstack.newRoot(NavTarget.WelcomeScreen)
             }
-            is FtueStep.AnalyticsOptIn -> {
+            FtueStep.AnalyticsOptIn -> {
                 backstack.replace(NavTarget.AnalyticsOptIn)
             }
             null -> callback?.onFtueFlowFinished()

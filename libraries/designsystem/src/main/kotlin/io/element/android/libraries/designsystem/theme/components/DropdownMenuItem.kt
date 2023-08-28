@@ -90,7 +90,7 @@ private fun ContentToPreview() {
             onClick = {},
             trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
         )
-        Divider()
+        HorizontalDivider()
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
@@ -109,7 +109,7 @@ private fun ContentToPreview() {
             leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
             trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
         )
-        Divider()
+        HorizontalDivider()
         DropdownMenuItem(
             text = { Text(text = "Multiline\nItem") },
             onClick = {},

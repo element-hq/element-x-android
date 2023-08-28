@@ -28,11 +28,11 @@ sealed class TimelineItemAction(
     @DrawableRes val icon: Int,
     val destructive: Boolean = false
 ) {
-    object Forward : TimelineItemAction(CommonStrings.action_forward, VectorIcons.Forward)
-    object Copy : TimelineItemAction(CommonStrings.action_copy, VectorIcons.Copy)
-    object Redact : TimelineItemAction(CommonStrings.action_remove, VectorIcons.Delete, destructive = true)
-    object Reply : TimelineItemAction(CommonStrings.action_reply, VectorIcons.Reply)
-    object Edit : TimelineItemAction(CommonStrings.action_edit, VectorIcons.Edit)
-    object Developer : TimelineItemAction(CommonStrings.action_view_source, VectorIcons.DeveloperMode)
-    object ReportContent : TimelineItemAction(CommonStrings.action_report_content, VectorIcons.ReportContent, destructive = true)
+    data object Forward : TimelineItemAction(CommonStrings.action_forward, VectorIcons.Forward)
+    data object Copy : TimelineItemAction(CommonStrings.action_copy, VectorIcons.Copy)
+    data object Redact : TimelineItemAction(CommonStrings.action_remove, VectorIcons.Delete, destructive = true)
+    data object Reply : TimelineItemAction(CommonStrings.action_reply, VectorIcons.Reply)
+    data object Edit : TimelineItemAction(CommonStrings.action_edit, VectorIcons.Edit)
+    data object Developer : TimelineItemAction(CommonStrings.action_view_source, VectorIcons.DeveloperMode)
+    data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, VectorIcons.ReportContent, destructive = true)
 }

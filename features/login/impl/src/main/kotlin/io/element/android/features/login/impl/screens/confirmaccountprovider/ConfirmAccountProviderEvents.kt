@@ -17,6 +17,6 @@
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
 sealed interface ConfirmAccountProviderEvents {
-    object Continue : ConfirmAccountProviderEvents
-    object ClearError : ConfirmAccountProviderEvents
+    data object Continue : ConfirmAccountProviderEvents
+    data object ClearError : ConfirmAccountProviderEvents
 }

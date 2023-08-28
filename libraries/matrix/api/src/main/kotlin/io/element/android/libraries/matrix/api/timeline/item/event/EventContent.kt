@@ -35,13 +35,12 @@ data class MessageContent(
     val type: MessageType?
 ) : EventContent
 
-
 sealed interface InReplyTo {
     /** The event details are not loaded yet. We can fetch them. */
     data class NotLoaded(val eventId: EventId) : InReplyTo
 
     /** The event details are pending to be fetched. We should **not** fetch them again. */
-    object Pending : InReplyTo
+    data object Pending : InReplyTo
 
     /** The event details are available. */
     data class Ready(
@@ -60,7 +59,7 @@ sealed interface InReplyTo {
      * If the reason for the failure is consistent on the server, we'd enter a loop
      * where we keep trying to fetch the same event.
      * */
-    object Error : InReplyTo
+    data object Error : InReplyTo
 }
 
 object RedactedContent : EventContent
@@ -80,10 +79,6 @@ data class PollContent(
     val endTime: ULong?
 ) : EventContent
 
-data class PollEndContent(
-    val startEventId: String
-) : EventContent
-
 data class UnableToDecryptContent(
     val data: Data
 ) : EventContent {
@@ -96,7 +91,7 @@ data class UnableToDecryptContent(
             val sessionId: String
         ) : Data
 
-        object Unknown : Data
+        data object Unknown : Data
     }
 }
 
@@ -209,55 +204,25 @@ enum class MembershipChange {
 }
 
 sealed interface OtherState {
-    object PolicyRuleRoom : OtherState
-
-    object PolicyRuleServer : OtherState
-
-    object PolicyRuleUser : OtherState
-
-    object RoomAliases : OtherState
-
-    data class RoomAvatar(
-        val url: String?
-    ) : OtherState
-
-    object RoomCanonicalAlias : OtherState
-
-    object RoomCreate : OtherState
-
-    object RoomEncryption : OtherState
-
-    object RoomGuestAccess : OtherState
-
-    object RoomHistoryVisibility : OtherState
-
-    object RoomJoinRules : OtherState
-
-    data class RoomName(
-        val name: String?
-    ) : OtherState
-
-    object RoomPinnedEvents : OtherState
-
-    object RoomPowerLevels : OtherState
-
-    object RoomServerAcl : OtherState
-
-    data class RoomThirdPartyInvite(
-        val displayName: String?
-    ) : OtherState
-
-    object RoomTombstone : OtherState
-
-    data class RoomTopic(
-        val topic: String?
-    ) : OtherState
-
-    object SpaceChild : OtherState
-
-    object SpaceParent : OtherState
-
-    data class Custom(
-        val eventType: String
-    ) : OtherState
+    data object PolicyRuleRoom : OtherState
+    data object PolicyRuleServer : OtherState
+    data object PolicyRuleUser : OtherState
+    data object RoomAliases : OtherState
+    data class RoomAvatar(val url: String?) : OtherState
+    data object RoomCanonicalAlias : OtherState
+    data object RoomCreate : OtherState
+    data object RoomEncryption : OtherState
+    data object RoomGuestAccess : OtherState
+    data object RoomHistoryVisibility : OtherState
+    data object RoomJoinRules : OtherState
+    data class RoomName(val name: String?) : OtherState
+    data object RoomPinnedEvents : OtherState
+    data object RoomPowerLevels : OtherState
+    data object RoomServerAcl : OtherState
+    data class RoomThirdPartyInvite(val displayName: String?) : OtherState
+    data object RoomTombstone : OtherState
+    data class RoomTopic(val topic: String?) : OtherState
+    data object SpaceChild : OtherState
+    data object SpaceParent : OtherState
+    data class Custom(val eventType: String) : OtherState
 }

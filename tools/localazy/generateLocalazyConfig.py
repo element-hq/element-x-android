@@ -25,6 +25,9 @@ baseAction = {
     # Replacement done in all string values
     "replacements": {
         "...": "…"
+    },
+    "params": {
+        "force_underscore": "yes"
     }
 }
 

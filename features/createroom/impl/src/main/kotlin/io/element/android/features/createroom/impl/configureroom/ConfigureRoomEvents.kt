@@ -27,5 +27,5 @@ sealed interface ConfigureRoomEvents {
     data class RemoveFromSelection(val matrixUser: MatrixUser) : ConfigureRoomEvents
     data class CreateRoom(val config: CreateRoomConfig) : ConfigureRoomEvents
     data class HandleAvatarAction(val action: AvatarAction) : ConfigureRoomEvents
-    object CancelCreateRoom : ConfigureRoomEvents
+    data object CancelCreateRoom : ConfigureRoomEvents
 }

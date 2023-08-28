@@ -16,10 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import android.text.SpannableString
-import android.text.style.URLSpan
-import android.text.util.Linkify.PHONE_NUMBERS
-import android.text.util.Linkify.WEB_URLS
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,20 +24,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.util.LinkifyCompat
 import io.element.android.features.messages.impl.timeline.components.html.HtmlDocument
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.theme.LinkColor
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 
 @Composable
@@ -69,45 +61,16 @@ fun TimelineItemTextView(
         }
     } else {
         Box(modifier) {
-            val linkStyle = SpanStyle(
-                color = LinkColor,
-            )
-            val styledText = remember(content.body) {
-                content.body.linkify(linkStyle) + extraPadding.getStr(16.sp).toAnnotatedString()
+            val textWithPadding = remember(content.body) {
+                content.body + extraPadding.getStr(16.sp).toAnnotatedString()
             }
             ClickableLinkText(
-                text = styledText,
-                linkAnnotationTag = "URL",
+                text = textWithPadding,
                 onClick = onTextClicked,
                 onLongClick = onTextLongClicked,
                 interactionSource = interactionSource
             )
         }
-    }
-}
-
-private fun String.linkify(
-    linkStyle: SpanStyle,
-) = buildAnnotatedString {
-    append(this@linkify)
-    val spannable = SpannableString(this@linkify)
-    LinkifyCompat.addLinks(spannable, WEB_URLS or PHONE_NUMBERS)
-
-    val spans = spannable.getSpans(0, spannable.length, URLSpan::class.java)
-    for (span in spans) {
-        val start = spannable.getSpanStart(span)
-        val end = spannable.getSpanEnd(span)
-        addStyle(
-            start = start,
-            end = end,
-            style = linkStyle,
-        )
-        addStringAnnotation(
-            tag = "URL",
-            annotation = span.url,
-            start = start,
-            end = end
-        )
     }
 }
 
@@ -125,7 +88,7 @@ internal fun TimelineItemTextViewDarkPreview(@PreviewParameter(TimelineItemTextB
 fun ContentToPreview(content: TimelineItemTextBasedContent) {
     TimelineItemTextView(
         content = content,
-        interactionSource = MutableInteractionSource(),
+        interactionSource = remember { MutableInteractionSource() },
         extraPadding = ExtraPadding(nbChars = 8),
     )
 }

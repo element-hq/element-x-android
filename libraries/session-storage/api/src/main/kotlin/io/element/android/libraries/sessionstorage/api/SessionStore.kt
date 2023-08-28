@@ -23,6 +23,12 @@ interface SessionStore {
     fun isLoggedIn(): Flow<Boolean>
     fun sessionsFlow(): Flow<List<SessionData>>
     suspend fun storeData(sessionData: SessionData)
+
+    /**
+     * Will update the session data matching the userId, except the value of loginTimestamp.
+     * No op if userId is not found in DB.
+     */
+    suspend fun updateData(sessionData: SessionData)
     suspend fun getSession(sessionId: String): SessionData?
     suspend fun getAllSessions(): List<SessionData>
     suspend fun getLatestSession(): SessionData?

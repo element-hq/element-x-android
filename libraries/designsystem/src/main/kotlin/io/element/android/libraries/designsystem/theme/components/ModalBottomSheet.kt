@@ -100,7 +100,7 @@ private fun ContentToPreview() {
     ) {
         ModalBottomSheet(
             onDismissRequest = {},
-            sheetState = sheetStateForPreview,
+            sheetState = sheetStateForPreview(),
         ) {
             Text(
                 text = "Sheet Content",
