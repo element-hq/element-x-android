@@ -49,7 +49,7 @@ class SharedPrefsMigrationScreenStore @Inject constructor(
     }
 
     private fun SessionId.toKey(): String {
-        // Hash the sessionId to get ride of exotic char and take only the first 16 chars,
+        // Hash the sessionId to get rid of exotic char and take only the first 16 chars,
         // The risk of collision is not high.
         return IS_MIGRATION_SCREEN_SHOWN_PREFIX + value.hash().take(16)
     }
