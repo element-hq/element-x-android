@@ -20,9 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import io.element.android.emojibasebindings.EmojibaseDatasource
+import io.element.android.emojibasebindings.EmojibaseStore
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionState> {
@@ -30,13 +36,31 @@ class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionSt
     @Composable
     override fun present(): CustomReactionState {
         var selectedEventId by remember { mutableStateOf<EventId?>(null) }
-
-        fun handleEvents(event: CustomReactionEvents) {
-            when (event) {
-                is CustomReactionEvents.UpdateSelectedEvent -> selectedEventId = event.eventId
+        var emojiState: Async<EmojibaseStore> by remember {
+            mutableStateOf(Async.Uninitialized)
+        }
+        val localCoroutineScope = rememberCoroutineScope()
+        val context = LocalContext.current
+        fun handleShowCustomReactionSheet(eventId: EventId) {
+            selectedEventId = eventId
+            emojiState = Async.Loading()
+            localCoroutineScope.launch {
+                emojiState = Async.Success(EmojibaseDatasource().load(context))
             }
         }
 
-        return CustomReactionState(selectedEventId = selectedEventId, eventSink = ::handleEvents)
+        fun handleDismissCustomReactionSheet() {
+            selectedEventId = null
+            emojiState = Async.Uninitialized
+        }
+
+        fun handleEvents(event: CustomReactionEvents) {
+            when (event) {
+                is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event.eventId)
+                is CustomReactionEvents.DismissCustomReactionSheet -> handleDismissCustomReactionSheet()
+            }
+        }
+
+        return CustomReactionState(selectedEventId = selectedEventId, emojiProvider = emojiState, eventSink = ::handleEvents)
     }
 }

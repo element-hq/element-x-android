@@ -38,10 +38,10 @@ class CustomReactionPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.selectedEventId).isNull()
 
-            initialState.eventSink(CustomReactionEvents.UpdateSelectedEvent(AN_EVENT_ID))
+            initialState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(AN_EVENT_ID))
             assertThat(awaitItem().selectedEventId).isEqualTo(AN_EVENT_ID)
 
-            initialState.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
+            initialState.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
             assertThat(awaitItem().selectedEventId).isNull()
         }
     }

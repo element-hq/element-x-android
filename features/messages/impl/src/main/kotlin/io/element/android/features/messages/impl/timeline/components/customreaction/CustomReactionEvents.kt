@@ -19,5 +19,6 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 import io.element.android.libraries.matrix.api.core.EventId
 
 sealed interface CustomReactionEvents {
-    data class UpdateSelectedEvent(val eventId: EventId?) : CustomReactionEvents
+    data class ShowCustomReactionSheet(val eventId: EventId) : CustomReactionEvents
+    object DismissCustomReactionSheet : CustomReactionEvents
 }

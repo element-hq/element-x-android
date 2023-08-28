@@ -22,8 +22,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.vanniktech.emoji.Emoji
-import io.element.android.features.messages.impl.timeline.components.EmojiPicker
+import io.element.android.emojibasebindings.Emoji
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
 
@@ -38,18 +37,19 @@ fun CustomReactionBottomSheet(
     val coroutineScope = rememberCoroutineScope()
 
     fun onDismiss() {
-        state.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
+        state.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
     }
 
     fun onEmojiSelectedDismiss(emoji: Emoji) {
         sheetState.hide(coroutineScope) {
-            state.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
+            state.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
             onEmojiSelected(emoji)
         }
     }
 
-    val isVisible = state.selectedEventId != null
-    if (isVisible) {
+    val emojiProvider = state.emojiProvider.dataOrNull()
+    val selectedEventId = state.selectedEventId
+    if (emojiProvider != null && selectedEventId != null) {
         ModalBottomSheet(
             onDismissRequest = ::onDismiss,
             sheetState = sheetState,
@@ -57,6 +57,7 @@ fun CustomReactionBottomSheet(
         ) {
             EmojiPicker(
                 onEmojiSelected = ::onEmojiSelectedDismiss,
+                emojiProvider = emojiProvider,
                 modifier = Modifier.fillMaxSize()
             )
         }

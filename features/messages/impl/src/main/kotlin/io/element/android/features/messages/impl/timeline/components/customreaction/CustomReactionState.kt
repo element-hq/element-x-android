@@ -16,9 +16,12 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
+import io.element.android.emojibasebindings.EmojibaseStore
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.EventId
 
 data class CustomReactionState(
     val selectedEventId: EventId?,
+    val emojiProvider: Async<EmojibaseStore>,
     val eventSink: (CustomReactionEvents) -> Unit,
 )
