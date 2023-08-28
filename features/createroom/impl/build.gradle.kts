@@ -60,7 +60,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.robolectric)
-    testImplementation(projects.features.analytics.test)
+    testImplementation(projects.services.analytics.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.mediaupload.test)

@@ -75,7 +75,7 @@ class MessagesFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Messages : NavTarget
+        data object Messages : NavTarget
 
         @Parcelize
         data class MediaViewer(
@@ -100,7 +100,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
 
         @Parcelize
-        object SendLocation : NavTarget
+        data object SendLocation : NavTarget
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()

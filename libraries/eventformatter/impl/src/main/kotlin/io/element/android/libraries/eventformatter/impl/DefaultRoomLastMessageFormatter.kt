@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
@@ -94,6 +95,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is StateContent -> {
                 stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
             }
+            is PollContent, // TODO Polls: handle last message
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
                 prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
             }

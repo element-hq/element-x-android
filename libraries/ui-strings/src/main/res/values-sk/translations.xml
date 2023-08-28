@@ -40,6 +40,7 @@
   <string name="action_open_with">"Otvoriť pomocou"</string>
   <string name="action_quick_reply">"Rýchla odpoveď"</string>
   <string name="action_quote">"Citovať"</string>
+  <string name="action_react">"Reagovať"</string>
   <string name="action_remove">"Odstrániť"</string>
   <string name="action_reply">"Odpovedať"</string>
   <string name="action_report_bug">"Nahlásiť chybu"</string>
@@ -94,6 +95,9 @@
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Ľudia"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
+  <string name="common_poll_final_votes">"Výsledné hlasovanie: %1$s"</string>
+  <string name="common_poll_total_votes">"Celkový počet hlasov: %1$s"</string>
+  <string name="common_poll_undisclosed_text">"Výsledky sa zobrazia po ukončení ankety"</string>
   <string name="common_privacy_policy">"Zásady ochrany osobných údajov"</string>
   <string name="common_reactions">"Reakcie"</string>
   <string name="common_refreshing">"Obnovuje sa…"</string>
@@ -143,8 +147,8 @@
   <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
   <string name="error_failed_locating_user">"%1$s nemohol získať prístup k vašej polohe. Skúste to prosím neskôr."</string>
-  <string name="error_missing_location_auth_android">"Ak chcete odoslať polohu, povoľte %1$s prístup k vašej polohe z obrazovky nastavení."</string>
-  <string name="error_missing_location_rationale_android">"Ak chcete odoslať polohu, povoľte %1$s prístup k vašej polohe v nasledujúcom dialógovom okne."</string>
+  <string name="error_missing_location_auth_android">"%1$s nemá povolenie na prístup k vašej polohe. Prístup môžete zapnúť v Nastaveniach."</string>
+  <string name="error_missing_location_rationale_android">"%1$s nemá povolenie na prístup k vašej polohe. Povoľte prístup nižšie."</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
@@ -158,6 +162,11 @@
     <item quantity="few">"%1$d členovia"</item>
     <item quantity="other">"%1$d členov"</item>
   </plurals>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"1 hlas"</item>
+    <item quantity="few">"%d hlasy"</item>
+    <item quantity="other">"%d hlasov"</item>
+  </plurals>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
   <string name="rageshake_dialog_content">"Zdá sa, že zúrivo trasiete telefónom. Chcete otvoriť obrazovku s nahlásením chýb?"</string>
   <string name="report_content_explanation">"Táto správa bude nahlásená správcovi vášho domovského servera. Nebude môcť prečítať žiadne šifrované správy."</string>
@@ -169,14 +178,35 @@
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
-  <string name="screen_migration_message">"Ide o jednorazový proces, ďakujeme za trpezlivosť."</string>
-  <string name="screen_migration_title">"Nastavenie vášho účtu."</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Ďalšie nastavenia"</string>
+  <string name="screen_notification_settings_calls_label">"Audio a video hovory"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Nezhoda konfigurácie"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Zjednodušili sme Nastavenia oznámení, aby ste ľahšie našli možnosti.
+
+Niektoré vlastné nastavenia, ktoré ste si nastavili v minulosti, sa tu nezobrazujú, ale sú stále aktívne.
+
+Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</string>
+  <string name="screen_notification_settings_direct_chats">"Priame konverzácie"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Vlastné nastavenie pre konverzácie"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Pri aktualizácii nastavenia oznámenia došlo k chybe."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Všetky správy"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Pri priamych rozhovoroch ma upozorniť na"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Pri skupinových rozhovoroch ma upozorniť na"</string>
   <string name="screen_notification_settings_enable_notifications">"Povoliť oznámenia na tomto zariadení"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurácia nebola opravená, skúste to prosím znova."</string>
+  <string name="screen_notification_settings_group_chats">"Skupinové rozhovory"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Zmienky"</string>
+  <string name="screen_notification_settings_mode_all">"Všetky"</string>
+  <string name="screen_notification_settings_mode_mentions">"Zmienky"</string>
+  <string name="screen_notification_settings_notification_section_title">"Upozorniť ma na"</string>
+  <string name="screen_notification_settings_room_mention_label">"Upozorniť ma na @miestnosť"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Ak chcete dostávať oznámenia, zmeňte prosím svoje %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"nastavenia systému"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémové oznámenia sú vypnuté"</string>
   <string name="screen_notification_settings_title">"Oznámenia"</string>
   <string name="screen_report_content_block_user_hint">"Označte, či chcete skryť všetky aktuálne a budúce správy od tohto používateľa"</string>
+  <string name="screen_settings_oidc_account">"Účet a zariadenia"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>
   <string name="screen_share_my_location_action">"Zdieľať moju polohu"</string>
   <string name="screen_share_open_apple_maps">"Otvoriť v Apple Maps"</string>

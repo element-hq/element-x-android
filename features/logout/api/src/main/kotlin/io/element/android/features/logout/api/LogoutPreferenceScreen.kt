@@ -34,12 +34,12 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 @Composable
 fun LogoutPreferenceView(
     state: LogoutPreferenceState,
-    onSuccessLogout: () -> Unit = {}
+    onSuccessLogout: (logoutUrlResult: String?) -> Unit
 ) {
     val eventSink = state.eventSink
     if (state.logoutAction is Async.Success) {
         LaunchedEffect(state.logoutAction) {
-            onSuccessLogout()
+            onSuccessLogout(state.logoutAction.data)
         }
         return
     }
@@ -96,5 +96,8 @@ internal fun LogoutPreferenceViewDarkPreview() = ElementPreviewDark { ContentToP
 
 @Composable
 private fun ContentToPreview() {
-    LogoutPreferenceView(aLogoutPreferenceState())
+    LogoutPreferenceView(
+        aLogoutPreferenceState(),
+        onSuccessLogout = {}
+    )
 }

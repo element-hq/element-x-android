@@ -25,6 +25,7 @@ data class PreferencesRootState(
     val myUser: MatrixUser?,
     val version: String,
     val showCompleteVerification: Boolean,
+    val accountManagementUrl: String?,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
     val snackbarMessage: SnackbarMessage?,

@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -38,11 +40,27 @@ class CustomReactionPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.selectedEventId).isNull()
 
-            initialState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(AN_EVENT_ID))
+            initialState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(aTimelineItemEvent(eventId = AN_EVENT_ID)))
             assertThat(awaitItem().selectedEventId).isEqualTo(AN_EVENT_ID)
 
             initialState.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
             assertThat(awaitItem().selectedEventId).isNull()
+        }
+    }
+
+    @Test
+    fun `present - handle selected emojis`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.selectedEventId).isNull()
+            val reactions = aTimelineItemReactions(count = 1, isHighlighted = true)
+            val key = reactions.reactions.first().key
+            initialState.eventSink(CustomReactionEvents.UpdateSelectedEvent(aTimelineItemEvent(eventId = AN_EVENT_ID, timelineItemReactions = reactions)))
+            val stateWithSelectedEmojis = awaitItem()
+            assertThat(stateWithSelectedEmojis.selectedEventId).isEqualTo(AN_EVENT_ID)
+            assertThat(stateWithSelectedEmojis.selectedEmoji).contains(key)
         }
     }
 }

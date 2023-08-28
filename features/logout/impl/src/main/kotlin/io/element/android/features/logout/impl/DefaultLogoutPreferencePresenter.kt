@@ -40,7 +40,7 @@ class DefaultLogoutPreferencePresenter @Inject constructor(private val matrixCli
     @Composable
     override fun present(): LogoutPreferenceState {
         val localCoroutineScope = rememberCoroutineScope()
-        val logoutAction: MutableState<Async<Unit>> = remember {
+        val logoutAction: MutableState<Async<String?>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
 
@@ -56,7 +56,7 @@ class DefaultLogoutPreferencePresenter @Inject constructor(private val matrixCli
         )
     }
 
-    private fun CoroutineScope.logout(logoutAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.logout(logoutAction: MutableState<Async<String?>>) = launch {
         suspend {
             matrixClient.logout()
         }.runCatchingUpdatingState(logoutAction)

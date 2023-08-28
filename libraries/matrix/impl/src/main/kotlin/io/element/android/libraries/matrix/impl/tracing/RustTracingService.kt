@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.tracing
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingService
@@ -26,13 +27,13 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class RustTracingService @Inject constructor() : TracingService {
+class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) : TracingService {
 
     override fun setupTracing(tracingConfiguration: TracingConfiguration) {
         val filter = tracingConfiguration.filterConfiguration
         val rustTracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
             filter = tracingConfiguration.filterConfiguration.filter,
-            writeToStdoutOrSystem  = tracingConfiguration.writesToLogcat,
+            writeToStdoutOrSystem = tracingConfiguration.writesToLogcat,
             writeToFiles = when (val writeToFilesConfiguration = tracingConfiguration.writesToFilesConfiguration) {
                 is WriteToFilesConfiguration.Disabled -> null
                 is WriteToFilesConfiguration.Enabled -> TracingFileConfiguration(
@@ -46,6 +47,6 @@ class RustTracingService @Inject constructor() : TracingService {
     }
 
     override fun createTimberTree(): Timber.Tree {
-        return RustTracingTree()
+        return RustTracingTree(retrieveFromStackTrace = buildMeta.isDebuggable)
     }
 }

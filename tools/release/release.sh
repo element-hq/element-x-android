@@ -16,8 +16,8 @@
 # limitations under the License.
 #
 
-# exit when any command fails
-set -e
+# do not exit when any command fails (issue with git flow)
+set +e
 
 printf "\n================================================================================\n"
 printf "|                    Welcome to the release script!                            |\n"

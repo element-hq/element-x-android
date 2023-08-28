@@ -41,9 +41,9 @@ class RustSyncService(
         Timber.d("Start sync failed: $it")
     }
 
-    override fun stopSync() = runCatching {
+    override suspend fun stopSync() = runCatching {
         Timber.i("Stop sync")
-        innerSyncService.pause()
+        innerSyncService.stop()
     }.onFailure {
         Timber.d("Stop sync failed: $it")
     }

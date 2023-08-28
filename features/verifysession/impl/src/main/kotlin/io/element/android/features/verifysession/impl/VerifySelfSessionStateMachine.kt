@@ -125,19 +125,19 @@ class VerifySelfSessionStateMachine @Inject constructor(
 
     sealed interface State {
         /** The initial state, before verification started. */
-        object Initial : State
+        data object Initial : State
 
         /** Waiting for verification acceptance. */
-        object RequestingVerification : State
+        data object RequestingVerification : State
 
         /** Verification request accepted. Waiting for start. */
-        object VerificationRequestAccepted : State
+        data object VerificationRequestAccepted : State
 
         /** Waiting for SaS verification start. */
-        object StartingSasVerification : State
+        data object StartingSasVerification : State
 
         /** A SaS verification flow has been started. */
-        object SasVerificationStarted : State
+        data object SasVerificationStarted : State
 
         sealed class Verifying(open val emojis: List<VerificationEmoji>) : State {
             /** Verification accepted and emojis received. */
@@ -148,50 +148,50 @@ class VerifySelfSessionStateMachine @Inject constructor(
         }
 
         /** The verification is being canceled. */
-        object Canceling : State
+        data object Canceling : State
 
         /** The verification has been canceled, remotely or locally. */
-        object Canceled : State
+        data object Canceled : State
 
         /** Verification successful. */
-        object Completed : State
+        data object Completed : State
     }
 
     sealed interface Event {
         /** Request verification. */
-        object RequestVerification : Event
+        data object RequestVerification : Event
 
         /** The current verification request has been accepted. */
-        object DidAcceptVerificationRequest : Event
+        data object DidAcceptVerificationRequest : Event
 
         /** Start a SaS verification flow. */
-        object StartSasVerification : Event
+        data object StartSasVerification : Event
 
         /** Started a SaS verification flow. */
-        object DidStartSasVerification : Event
+        data object DidStartSasVerification : Event
 
         /** Has received emojis. */
         data class DidReceiveChallenge(val emojis: List<VerificationEmoji>) : Event
 
         /** Emojis match. */
-        object AcceptChallenge : Event
+        data object AcceptChallenge : Event
 
         /** Emojis do not match. */
-        object DeclineChallenge : Event
+        data object DeclineChallenge : Event
 
         /** Remote accepted challenge. */
-        object DidAcceptChallenge : Event
+        data object DidAcceptChallenge : Event
 
         /** Request cancellation. */
-        object Cancel : Event
+        data object Cancel : Event
 
         /** Verification cancelled. */
-        object DidCancel : Event
+        data object DidCancel : Event
 
         /** Request failed. */
-        object DidFail : Event
+        data object DidFail : Event
 
         /** Restart the verification flow. */
-        object Restart : Event
+        data object Restart : Event
     }
 }

@@ -28,8 +28,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -54,11 +52,12 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.designsystem.R as DrawableR
@@ -208,7 +207,7 @@ fun RoomListContent(
                         onLongClick = onRoomLongClicked,
                     )
                     if (index != state.roomList.lastIndex) {
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
             }
@@ -227,13 +226,7 @@ fun RoomListContent(
                 )
             }
         },
-        snackbarHost = {
-            SnackbarHost(snackbarHostState) { data ->
-                Snackbar(
-                    snackbarData = data,
-                )
-            }
-        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     )
 }
 

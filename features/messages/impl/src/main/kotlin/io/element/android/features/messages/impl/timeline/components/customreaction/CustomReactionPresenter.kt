@@ -29,20 +29,23 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.coroutines.launch
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.architecture.Presenter
+import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 
 class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionState> {
 
     @Composable
     override fun present(): CustomReactionState {
-        var selectedEventId by remember { mutableStateOf<EventId?>(null) }
+        var selectedEvent by remember { mutableStateOf<TimelineItem.Event?>(null) }
         var emojiState: Async<EmojibaseStore> by remember {
             mutableStateOf(Async.Uninitialized)
         }
         val localCoroutineScope = rememberCoroutineScope()
         val context = LocalContext.current
-        fun handleShowCustomReactionSheet(eventId: EventId) {
-            selectedEventId = eventId
+        fun handleShowCustomReactionSheet(event: TimelineItem.Event) {
+            selectedEvent = event
             emojiState = Async.Loading()
             localCoroutineScope.launch {
                 emojiState = Async.Success(EmojibaseDatasource().load(context))
@@ -50,17 +53,17 @@ class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionSt
         }
 
         fun handleDismissCustomReactionSheet() {
-            selectedEventId = null
+            selectedEvent = null
             emojiState = Async.Uninitialized
         }
 
         fun handleEvents(event: CustomReactionEvents) {
             when (event) {
-                is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event.eventId)
+                is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event)
                 is CustomReactionEvents.DismissCustomReactionSheet -> handleDismissCustomReactionSheet()
             }
         }
-
-        return CustomReactionState(selectedEventId = selectedEventId, emojiProvider = emojiState, eventSink = ::handleEvents)
+        val selectedEmoji = selectedEvent?.reactionsState?.reactions?.mapNotNull { if(it.isHighlighted) it.key else null }.orEmpty().toImmutableSet()
+        return CustomReactionState(selectedEventId = selectedEvent?.eventId, emojiProvider = emojiState, selectedEmoji = selectedEmoji, eventSink = ::handleEvents)
     }
 }

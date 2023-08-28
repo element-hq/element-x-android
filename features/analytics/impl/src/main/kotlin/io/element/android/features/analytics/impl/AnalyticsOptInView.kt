@@ -195,7 +195,7 @@ private fun AnalyticsOptInFooter(
         )
         TextButton(
             text = stringResource(id = CommonStrings.action_not_now),
-            buttonSize = ButtonSize.Medium,
+            size = ButtonSize.Medium,
             onClick = onTermsDeclined,
             modifier = Modifier.fillMaxWidth(),
         )

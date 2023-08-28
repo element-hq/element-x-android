@@ -17,5 +17,5 @@
 package io.element.android.appnav.loggedin
 
 // sealed interface LoggedInEvents {
-//     object MyEvent : LoggedInEvents
+//     data object MyEvent : LoggedInEvents
 // }

@@ -40,6 +40,7 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -152,44 +153,46 @@ class DefaultBugReporter @Inject constructor(
         // enumerate files to delete
         val mBugReportFiles: MutableList<File> = ArrayList()
 
-        var serverError: String? = null
-        var reportURL: String? = null
-        withContext(coroutineDispatchers.io) {
-            var bugDescription = theBugDescription
-            val crashCallStack = crashDataStore.crashInfo().first()
+        try {
 
-            if (crashCallStack.isNotEmpty() && withCrashLogs) {
-                bugDescription += "\n\n\n\n--------------------------------- crash call stack ---------------------------------\n"
-                bugDescription += crashCallStack
-            }
+            var serverError: String? = null
+            var reportURL: String? = null
+            withContext(coroutineDispatchers.io) {
+                var bugDescription = theBugDescription
+                val crashCallStack = crashDataStore.crashInfo().first()
 
-            val gzippedFiles = ArrayList<File>()
+                if (crashCallStack.isNotEmpty() && withCrashLogs) {
+                    bugDescription += "\n\n\n\n--------------------------------- crash call stack ---------------------------------\n"
+                    bugDescription += crashCallStack
+                }
 
-            if (withDevicesLogs) {
-                val files = getLogFiles()
-                files.mapNotNullTo(gzippedFiles) { f ->
-                    if (!mIsCancelled) {
-                        compressFile(f)
-                    } else {
-                        null
+                val gzippedFiles = ArrayList<File>()
+
+                if (withDevicesLogs) {
+                    val files = getLogFiles()
+                    files.mapNotNullTo(gzippedFiles) { f ->
+                        when {
+                            mIsCancelled -> null
+                            f.extension == "gz" -> f
+                            else -> compressFile(f)
+                        }
+                    }
+                    files.deleteAllExceptMostRecent()
+                }
+
+                if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
+                    val gzippedLogcat = saveLogCat(false)
+
+                    if (null != gzippedLogcat) {
+                        if (gzippedFiles.size == 0) {
+                            gzippedFiles.add(gzippedLogcat)
+                        } else {
+                            gzippedFiles.add(0, gzippedLogcat)
+                        }
                     }
                 }
-                files.deleteAllExceptMostRecent()
-            }
 
-            if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
-                val gzippedLogcat = saveLogCat(false)
-
-                if (null != gzippedLogcat) {
-                    if (gzippedFiles.size == 0) {
-                        gzippedFiles.add(gzippedLogcat)
-                    } else {
-                        gzippedFiles.add(0, gzippedLogcat)
-                    }
-                }
-            }
-
-            /*
+                /*
             activeSessionHolder.getSafeActiveSession()
                     ?.takeIf { !mIsCancelled && withKeyRequestHistory }
                     ?.cryptoService()
@@ -207,219 +210,240 @@ class DefaultBugReporter @Inject constructor(
                     ?.let { gzippedFiles.add(it) }
              */
 
-            val sessionData = sessionStore.getLatestSession()
-            val deviceId = sessionData?.deviceId ?: "undefined"
-            val userId = sessionData?.userId ?: "undefined"
-            var olmVersion = "undefined"
+                val sessionData = sessionStore.getLatestSession()
+                val deviceId = sessionData?.deviceId ?: "undefined"
+                val userId = sessionData?.userId ?: "undefined"
+                var olmVersion = "undefined"
 
-            if (!mIsCancelled) {
-                val text = when (reportType) {
-                    ReportType.BUG_REPORT -> bugDescription
-                    ReportType.SUGGESTION -> "[Suggestion] $bugDescription"
-                    ReportType.SPACE_BETA_FEEDBACK -> "[spaces-feedback] $bugDescription"
-                    ReportType.THREADS_BETA_FEEDBACK -> "[threads-feedback] $bugDescription"
-                    ReportType.AUTO_UISI_SENDER,
-                    ReportType.AUTO_UISI -> bugDescription
-                }
-
-                // build the multi part request
-                val builder = BugReporterMultipartBody.Builder()
-                    .addFormDataPart("text", text)
-                    .addFormDataPart("app", rageShakeAppNameForReport(reportType))
-                    .addFormDataPart("user_agent", userAgentProvider.provide())
-                    .addFormDataPart("user_id", userId)
-                    .addFormDataPart("can_contact", canContact.toString())
-                    .addFormDataPart("device_id", deviceId)
-                    // .addFormDataPart("version", versionProvider.getVersion(longFormat = true))
-                    // .addFormDataPart("branch_name", buildMeta.gitBranchName)
-                    // .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
-                    .addFormDataPart("olm_version", olmVersion)
-                    .addFormDataPart("device", Build.MODEL.trim())
-                    // .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
-                    .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
-                    // .addFormDataPart(
-                    //        "os", Build.VERSION.RELEASE + " (API " + sdkIntProvider.get() + ") " +
-                    //        Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
-                    // )
-                    .addFormDataPart("locale", Locale.getDefault().toString())
-                    // .addFormDataPart("app_language", vectorLocale.applicationLocale.toString())
-                    // .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
-                    // .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
-                    .addFormDataPart("server_version", serverVersion)
-                    .apply {
-                        customFields?.forEach { (name, value) ->
-                            addFormDataPart(name, value)
-                        }
+                if (!mIsCancelled) {
+                    val text = when (reportType) {
+                        ReportType.BUG_REPORT -> bugDescription
+                        ReportType.SUGGESTION -> "[Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK -> "[spaces-feedback] $bugDescription"
+                        ReportType.THREADS_BETA_FEEDBACK -> "[threads-feedback] $bugDescription"
+                        ReportType.AUTO_UISI_SENDER,
+                        ReportType.AUTO_UISI -> bugDescription
                     }
 
-                // add the gzipped files
-                for (file in gzippedFiles) {
-                    builder.addFormDataPart("compressed-log", file.name, file.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
-                }
-
-                mBugReportFiles.addAll(gzippedFiles)
-
-                if (withScreenshot) {
-                    screenshotHolder.getFileUri()
-                        ?.toUri()
-                        ?.toFile()
-                        ?.let { screenshotFile ->
-                            try {
-                                builder.addFormDataPart(
-                                    "file",
-                                    screenshotFile.name, screenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
-                                )
-                            } catch (e: Exception) {
-                                Timber.e(e, "## sendBugReport() : fail to write screenshot")
+                    // build the multi part request
+                    val builder = BugReporterMultipartBody.Builder()
+                        .addFormDataPart("text", text)
+                        .addFormDataPart("app", rageShakeAppNameForReport(reportType))
+                        .addFormDataPart("user_agent", userAgentProvider.provide())
+                        .addFormDataPart("user_id", userId)
+                        .addFormDataPart("can_contact", canContact.toString())
+                        .addFormDataPart("device_id", deviceId)
+                        // .addFormDataPart("version", versionProvider.getVersion(longFormat = true))
+                        // .addFormDataPart("branch_name", buildMeta.gitBranchName)
+                        // .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
+                        .addFormDataPart("olm_version", olmVersion)
+                        .addFormDataPart("device", Build.MODEL.trim())
+                        // .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
+                        .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
+                        // .addFormDataPart(
+                        //        "os", Build.VERSION.RELEASE + " (API " + sdkIntProvider.get() + ") " +
+                        //        Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
+                        // )
+                        .addFormDataPart("locale", Locale.getDefault().toString())
+                        // .addFormDataPart("app_language", vectorLocale.applicationLocale.toString())
+                        // .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
+                        // .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
+                        .addFormDataPart("server_version", serverVersion)
+                        .apply {
+                            customFields?.forEach { (name, value) ->
+                                addFormDataPart(name, value)
                             }
                         }
-                }
 
-                // add some github labels
-                builder.addFormDataPart("label", buildMeta.versionName)
-                // builder.addFormDataPart("label", buildMeta.flavorDescription)
-                // builder.addFormDataPart("label", buildMeta.gitBranchName)
-
-                // Possible values for BuildConfig.BUILD_TYPE: "debug", "nightly", "release".
-                // builder.addFormDataPart("label", BuildConfig.BUILD_TYPE)
-
-                when (reportType) {
-                    ReportType.BUG_REPORT -> {
-                        /* nop */
-                    }
-                    ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
-                    ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
-                    ReportType.THREADS_BETA_FEEDBACK -> builder.addFormDataPart("label", "threads-feedback")
-                    ReportType.AUTO_UISI -> {
-                        builder.addFormDataPart("label", "Z-UISI")
-                        builder.addFormDataPart("label", "android")
-                        builder.addFormDataPart("label", "uisi-recipient")
-                    }
-                    ReportType.AUTO_UISI_SENDER -> {
-                        builder.addFormDataPart("label", "Z-UISI")
-                        builder.addFormDataPart("label", "android")
-                        builder.addFormDataPart("label", "uisi-sender")
-                    }
-                }
-
-                if (crashCallStack.isNotEmpty() && withCrashLogs) {
-                    builder.addFormDataPart("label", "crash")
-                }
-
-                val requestBody = builder.build()
-
-                // add a progress listener
-                requestBody.setWriteListener { totalWritten, contentLength ->
-                    val percentage = if (-1L != contentLength) {
-                        if (totalWritten > contentLength) {
-                            100
-                        } else {
-                            (totalWritten * 100 / contentLength).toInt()
-                        }
-                    } else {
-                        0
-                    }
-
-                    if (mIsCancelled && null != mBugReportCall) {
-                        mBugReportCall!!.cancel()
-                    }
-
-                    Timber.v("## onWrite() : $percentage%")
-                    try {
-                        listener?.onProgress(percentage)
-                    } catch (e: Exception) {
-                        Timber.e(e, "## onProgress() : failed")
-                    }
-                }
-
-                // build the request
-                val request = Request.Builder()
-                    .url(context.getString(R.string.bug_report_url))
-                    .post(requestBody)
-                    .build()
-
-                var responseCode = HttpURLConnection.HTTP_INTERNAL_ERROR
-                var response: Response? = null
-                var errorMessage: String? = null
-
-                // trigger the request
-                try {
-                    mBugReportCall = okHttpClient.get().newCall(request)
-                    response = mBugReportCall!!.execute()
-                    responseCode = response.code
-                } catch (e: Exception) {
-                    Timber.e(e, "response")
-                    errorMessage = e.localizedMessage
-                }
-
-                // if the upload failed, try to retrieve the reason
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    if (null != errorMessage) {
-                        serverError = "Failed with error $errorMessage"
-                    } else if (response?.body == null) {
-                        serverError = "Failed with error $responseCode"
-                    } else {
+                    // add the gzipped files, don't cancel the whole upload if only some file failed to upload
+                    var uploadedSomeLogs = false
+                    for (file in gzippedFiles) {
                         try {
-                            val inputStream = response.body!!.byteStream()
+                            builder.addFormDataPart("compressed-log", file.name, file.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
+                            uploadedSomeLogs = true
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            Timber.e(e, "## sendBugReport() : fail to attach file ${file.name}")
+                        }
+                    }
 
-                            serverError = inputStream.use {
-                                buildString {
-                                    var ch = it.read()
-                                    while (ch != -1) {
-                                        append(ch.toChar())
-                                        ch = it.read()
+                    if (!uploadedSomeLogs) {
+                        error("Couldn't upload any logs")
+                    }
+
+                    mBugReportFiles.addAll(gzippedFiles)
+
+                    if (withScreenshot) {
+                        screenshotHolder.getFileUri()
+                            ?.toUri()
+                            ?.toFile()
+                            ?.let { screenshotFile ->
+                                try {
+                                    builder.addFormDataPart(
+                                        "file",
+                                        screenshotFile.name, screenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
+                                    )
+                                } catch (e: Exception) {
+                                    Timber.e(e, "## sendBugReport() : fail to write screenshot")
+                                }
+                            }
+                    }
+
+                    // add some github labels
+                    builder.addFormDataPart("label", buildMeta.versionName)
+                    // builder.addFormDataPart("label", buildMeta.flavorDescription)
+                    // builder.addFormDataPart("label", buildMeta.gitBranchName)
+
+                    // Possible values for BuildConfig.BUILD_TYPE: "debug", "nightly", "release".
+                    // builder.addFormDataPart("label", BuildConfig.BUILD_TYPE)
+
+                    when (reportType) {
+                        ReportType.BUG_REPORT -> {
+                            /* nop */
+                        }
+                        ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
+                        ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
+                        ReportType.THREADS_BETA_FEEDBACK -> builder.addFormDataPart("label", "threads-feedback")
+                        ReportType.AUTO_UISI -> {
+                            builder.addFormDataPart("label", "Z-UISI")
+                            builder.addFormDataPart("label", "android")
+                            builder.addFormDataPart("label", "uisi-recipient")
+                        }
+                        ReportType.AUTO_UISI_SENDER -> {
+                            builder.addFormDataPart("label", "Z-UISI")
+                            builder.addFormDataPart("label", "android")
+                            builder.addFormDataPart("label", "uisi-sender")
+                        }
+                    }
+
+                    if (crashCallStack.isNotEmpty() && withCrashLogs) {
+                        builder.addFormDataPart("label", "crash")
+                    }
+
+                    val requestBody = builder.build()
+
+                    // add a progress listener
+                    requestBody.setWriteListener { totalWritten, contentLength ->
+                        val percentage = if (-1L != contentLength) {
+                            if (totalWritten > contentLength) {
+                                100
+                            } else {
+                                (totalWritten * 100 / contentLength).toInt()
+                            }
+                        } else {
+                            0
+                        }
+
+                        if (mIsCancelled && null != mBugReportCall) {
+                            mBugReportCall!!.cancel()
+                        }
+
+                        Timber.v("## onWrite() : $percentage%")
+                        try {
+                            listener?.onProgress(percentage)
+                        } catch (e: Exception) {
+                            Timber.e(e, "## onProgress() : failed")
+                        }
+                    }
+
+                    // build the request
+                    val request = Request.Builder()
+                        .url(context.getString(R.string.bug_report_url))
+                        .post(requestBody)
+                        .build()
+
+                    var responseCode = HttpURLConnection.HTTP_INTERNAL_ERROR
+                    var response: Response? = null
+                    var errorMessage: String? = null
+
+                    // trigger the request
+                    try {
+                        mBugReportCall = okHttpClient.get().newCall(request)
+                        response = mBugReportCall!!.execute()
+                        responseCode = response.code
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        Timber.e(e, "response")
+                        errorMessage = e.localizedMessage
+                    }
+
+                    // if the upload failed, try to retrieve the reason
+                    if (responseCode != HttpURLConnection.HTTP_OK) {
+                        if (null != errorMessage) {
+                            serverError = "Failed with error $errorMessage"
+                        } else if (response?.body == null) {
+                            serverError = "Failed with error $responseCode"
+                        } else {
+                            try {
+                                val inputStream = response.body!!.byteStream()
+
+                                serverError = inputStream.use {
+                                    buildString {
+                                        var ch = it.read()
+                                        while (ch != -1) {
+                                            append(ch.toChar())
+                                            ch = it.read()
+                                        }
                                     }
                                 }
-                            }
 
-                            // check if the error message
-                            serverError?.let {
-                                try {
-                                    val responseJSON = JSONObject(it)
-                                    serverError = responseJSON.getString("error")
-                                } catch (e: JSONException) {
-                                    Timber.e(e, "doInBackground ; Json conversion failed")
+                                // check if the error message
+                                serverError?.let {
+                                    try {
+                                        val responseJSON = JSONObject(it)
+                                        serverError = responseJSON.getString("error")
+                                    } catch (e: CancellationException) {
+                                        throw e
+                                    } catch (e: JSONException) {
+                                        Timber.e(e, "doInBackground ; Json conversion failed")
+                                    }
                                 }
-                            }
 
-                            // should never happen
-                            if (null == serverError) {
-                                serverError = "Failed with error $responseCode"
+                                // should never happen
+                                if (null == serverError) {
+                                    serverError = "Failed with error $responseCode"
+                                }
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
+                                Timber.e(e, "## sendBugReport() : failed to parse error")
                             }
-                        } catch (e: Exception) {
-                            Timber.e(e, "## sendBugReport() : failed to parse error")
                         }
-                    }
-                } else {
-                    /*
+                    } else {
+                        /*
                     reportURL = response?.body?.string()?.let { stringBody ->
                         adapter.fromJson(stringBody)?.get("report_url")?.toString()
                     }
                      */
+                    }
                 }
             }
-        }
 
-        withContext(coroutineDispatchers.main) {
-            mBugReportCall = null
+            withContext(coroutineDispatchers.main) {
+                mBugReportCall = null
 
-            // delete when the bug report has been successfully sent
+                if (null != listener) {
+                    try {
+                        if (mIsCancelled) {
+                            listener.onUploadCancelled()
+                        } else if (null == serverError) {
+                            listener.onUploadSucceed(reportURL)
+                        } else {
+                            listener.onUploadFailed(serverError)
+                        }
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        Timber.e(e, "## onPostExecute() : failed")
+                    }
+                }
+            }
+        } finally {
+            // delete the generated files when the bug report process has finished
             for (file in mBugReportFiles) {
                 file.safeDelete()
-            }
-
-            if (null != listener) {
-                try {
-                    if (mIsCancelled) {
-                        listener.onUploadCancelled()
-                    } else if (null == serverError) {
-                        listener.onUploadSucceed(reportURL)
-                    } else {
-                        listener.onUploadFailed(serverError)
-                    }
-                } catch (e: Exception) {
-                    Timber.e(e, "## onPostExecute() : failed")
-                }
             }
         }
     }

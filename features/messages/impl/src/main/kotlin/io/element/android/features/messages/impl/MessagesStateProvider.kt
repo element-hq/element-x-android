@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import kotlinx.collections.immutable.persistentSetOf
 
 open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
@@ -71,6 +72,7 @@ fun aMessagesState() = MessagesState(
         selectedEventId = null,
         emojiProvider = Async.Uninitialized,
         eventSink = {},
+        selectedEmoji = persistentSetOf(),
     ),
     reactionSummaryState = ReactionSummaryState(
         target = null,

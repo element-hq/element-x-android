@@ -17,19 +17,25 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
-import androidx.compose.material3.MenuItemColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
+
+// Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=1032%3A44063&mode=design&t=rsNegTbEVLYAXL76-1
 
 @Composable
 fun DropdownMenuItem(
@@ -39,34 +45,37 @@ fun DropdownMenuItem(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
-    colors: MenuItemColors = MenuDefaults.itemColors(),
-    contentPadding: PaddingValues = MenuDefaults.DropdownMenuItemContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     androidx.compose.material3.DropdownMenuItem(
-        text = text,
+        text = {
+            CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+                text()
+            }
+        },
         onClick = onClick,
         modifier = modifier,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         enabled = enabled,
-        colors = colors,
-        contentPadding = contentPadding,
+        colors = DropDownMenuItemDefaults.colors(),
+        contentPadding = DropDownMenuItemDefaults.contentPadding,
         interactionSource = interactionSource
     )
 }
 
-@Composable
-fun DropdownMenuItemText(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = text,
-        color = ElementTheme.materialColors.primary,
-        style = ElementTheme.typography.fontBodyLgRegular,
-        modifier = modifier,
+internal object DropDownMenuItemDefaults {
+    @Composable
+    fun colors() = MenuDefaults.itemColors(
+        textColor = ElementTheme.colors.textPrimary,
+        leadingIconColor = ElementTheme.colors.iconPrimary,
+        trailingIconColor = ElementTheme.colors.iconSecondary,
+        disabledTextColor = ElementTheme.colors.textDisabled,
+        disabledLeadingIconColor = ElementTheme.colors.iconDisabled,
+        disabledTrailingIconColor = ElementTheme.colors.iconDisabled,
     )
+
+    val contentPadding = PaddingValues(all = 12.dp)
 }
 
 @Preview(group = PreviewGroup.Menus)
@@ -75,10 +84,36 @@ internal fun DropdownMenuItemPreview() = ElementThemedPreview { ContentToPreview
 
 @Composable
 private fun ContentToPreview() {
-    DropdownMenuItem(
-        text = { DropdownMenuItemText(text = "Item") },
-        onClick = {},
-        leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
-        trailingIcon = { Icon(Icons.Default.Share, contentDescription = null) },
-    )
+    Column {
+        DropdownMenuItem(
+            text = { Text(text = "Item") },
+            onClick = {},
+            trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
+        )
+        HorizontalDivider()
+        DropdownMenuItem(
+            text = { Text(text = "Item") },
+            onClick = {},
+            leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
+        )
+        DropdownMenuItem(
+            text = { Text(text = "Item") },
+            onClick = {},
+            leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
+            trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
+        )
+        DropdownMenuItem(
+            text = { Text(text = "Item") },
+            onClick = {},
+            enabled = false,
+            leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
+            trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
+        )
+        HorizontalDivider()
+        DropdownMenuItem(
+            text = { Text(text = "Multiline\nItem") },
+            onClick = {},
+            trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
+        )
+    }
 }

@@ -45,3 +45,7 @@ state: ex6mNJVFZ5jn9wL8
 
 Oidc client example: https://github.com/matrix-org/matrix-rust-sdk/blob/39ad8a46801fb4317a777ebf895822b3675b709c/examples/oidc_cli/src/main.rs
 Oidc sdk doc: https://github.com/matrix-org/matrix-rust-sdk/blob/39ad8a46801fb4317a777ebf895822b3675b709c/crates/matrix-sdk/src/oidc.rs
+
+
+Test server:
+synapse-oidc.lab.element.dev

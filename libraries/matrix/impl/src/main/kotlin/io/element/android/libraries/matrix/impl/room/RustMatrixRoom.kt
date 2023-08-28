@@ -28,7 +28,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -38,11 +40,15 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
+import io.element.android.libraries.matrix.impl.util.destroyAll
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -53,6 +59,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
@@ -168,12 +175,19 @@ class RustMatrixRoom(
         val currentState = _membersStateFlow.value
         val currentMembers = currentState.roomMembers()
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
-        runCatching {
-            innerRoom.members().parallelMap(RoomMemberMapper::map)
-        }.map {
-            _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
-        }.onFailure {
-            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = it)
+        var rustMembers: List<RoomMember>? = null
+        try {
+            rustMembers = innerRoom.members()
+            val mappedMembers = rustMembers.parallelMap(RoomMemberMapper::map)
+            _membersStateFlow.value = MatrixRoomMembersState.Ready(mappedMembers)
+            Result.success(Unit)
+        } catch (cancellationException: CancellationException) {
+            throw cancellationException
+        } catch (exception: Exception) {
+            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
+            Result.failure(exception)
+        } finally {
+            rustMembers?.destroyAll()
         }
     }
 
@@ -268,26 +282,26 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit> {
-        return sendAttachment {
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file, thumbnailFile)) {
             innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> {
-        return sendAttachment {
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file, thumbnailFile)) {
             innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> {
-        return sendAttachment {
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file)) {
             innerRoom.sendAudio(file.path, audioInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> {
-        return sendAttachment {
+    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file)) {
             innerRoom.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
@@ -366,19 +380,31 @@ class RustMatrixRoom(
                 description = description,
                 zoomLevel = zoomLevel?.toUByte(),
                 assetType = assetType?.toInner(),
-                txnId = genTransactionId()
+                txnId = genTransactionId(),
             )
         }
     }
 
-    //TODO handle cancellation, need refactoring of how we are catching errors
-    private suspend fun sendAttachment(handle: () -> SendAttachmentJoinHandle): Result<Unit> {
+    override suspend fun createPoll(
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind,
+    ): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.createPoll(
+                question = question,
+                answers = answers,
+                maxSelections = maxSelections.toUByte(),
+                pollKind = pollKind.toInner(),
+                txnId = genTransactionId(),
+            )
+        }
+    }
+
+    private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
         return runCatching {
-            handle().use {
-                it.join()
-            }
+            MediaUploadHandlerImpl(files, handle())
         }
     }
 }
-
-

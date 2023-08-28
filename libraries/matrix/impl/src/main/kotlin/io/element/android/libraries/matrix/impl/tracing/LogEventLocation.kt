@@ -22,8 +22,7 @@ package io.element.android.libraries.matrix.impl.tracing
  */
 data class LogEventLocation(
     val file: String,
-    val line: UInt,
-    val column: UInt,
+    val line: UInt?,
 ) {
 
     companion object {
@@ -32,9 +31,8 @@ data class LogEventLocation(
          */
         fun from(stackTraceElement: StackTraceElement): LogEventLocation {
             return LogEventLocation(
-                file = stackTraceElement.fileName,
-                line = stackTraceElement.lineNumber.toUInt(),
-                column = 0u,
+                file = stackTraceElement.fileName ?: "",
+                line = stackTraceElement.lineNumber.takeIf { it >= 0 }?.toUInt()
             )
         }
     }

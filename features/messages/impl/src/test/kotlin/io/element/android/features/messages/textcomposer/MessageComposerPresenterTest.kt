@@ -24,7 +24,6 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -55,6 +54,7 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -500,6 +500,23 @@ class MessageComposerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - CancelSendAttachment stops media upload`() = runTest {
+        val presenter = createPresenter(this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
+            val sendingState = awaitItem()
+            assertThat(sendingState.showAttachmentSourcePicker).isFalse()
+            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending.Processing::class.java)
+            sendingState.eventSink(MessageComposerEvents.CancelSendAttachment)
+            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.None)
+        }
+    }
+
     private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0) {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)
@@ -534,5 +551,6 @@ fun anEditMode(
     message: String = A_MESSAGE,
     transactionId: TransactionId? = null,
 ) = MessageComposerMode.Edit(eventId, message, transactionId)
+
 fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, null, AN_EVENT_ID, A_MESSAGE)
 fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)

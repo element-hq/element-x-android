@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -64,6 +64,7 @@ fun RoomInviteMembersView(
     onSendPressed: (List<MatrixUser>) -> Unit = {},
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             RoomInviteMembersTopBar(
                 onBackPressed = {
@@ -79,7 +80,7 @@ fun RoomInviteMembersView(
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
                 .consumeWindowInsets(padding),
@@ -208,7 +209,7 @@ private fun RoomInviteMembersSearchBar(
                     }
 
                     if (index < results.lastIndex) {
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
             }

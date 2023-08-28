@@ -17,6 +17,6 @@
 package io.element.android.features.login.api.oidc
 
 sealed interface OidcAction {
-    object GoBack : OidcAction
+    data object GoBack : OidcAction
     data class Success(val url: String) : OidcAction
 }

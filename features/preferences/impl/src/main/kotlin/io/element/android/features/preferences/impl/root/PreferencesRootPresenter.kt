@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +33,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -62,10 +60,15 @@ class PreferencesRootPresenter @Inject constructor(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
 
-        // Session verification status (unknown, not verified, verified)
-        val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
-        val sessionIsNotVerified by remember {
-            derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified }
+        // We should display the 'complete verification' option if the current session can be verified
+        val showCompleteVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
+
+        val accountManagementUrl: MutableState<String?> = remember {
+            mutableStateOf(null)
+        }
+
+        LaunchedEffect(Unit) {
+            initAccountManagementUrl(accountManagementUrl)
         }
 
         val logoutState = logoutPresenter.present()
@@ -74,7 +77,8 @@ class PreferencesRootPresenter @Inject constructor(
             logoutState = logoutState,
             myUser = matrixUser.value,
             version = versionFormatter.get(),
-            showCompleteVerification = sessionIsNotVerified,
+            showCompleteVerification = showCompleteVerification,
+            accountManagementUrl = accountManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             snackbarMessage = snackbarMessage,
@@ -83,5 +87,9 @@ class PreferencesRootPresenter @Inject constructor(
 
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
         matrixUser.value = matrixClient.getCurrentUser()
+    }
+
+    private fun CoroutineScope.initAccountManagementUrl(accountManagementUrl: MutableState<String?>) = launch {
+        accountManagementUrl.value = matrixClient.getAccountManagementUrl().getOrNull()
     }
 }

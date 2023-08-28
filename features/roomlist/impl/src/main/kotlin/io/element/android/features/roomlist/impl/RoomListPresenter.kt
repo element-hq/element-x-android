@@ -39,7 +39,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -73,11 +72,11 @@ class RoomListPresenter @Inject constructor(
         }
 
         // Session verification status (unknown, not verified, verified)
-        val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
+        val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
         var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
         // We combine both values to only display the prompt if the session is not verified and it wasn't dismissed
         val displayVerificationPrompt by remember {
-            derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified && !verificationPromptDismissed }
+            derivedStateOf { canVerifySession && !verificationPromptDismissed }
         }
 
         var displaySearchResults by rememberSaveable { mutableStateOf(false) }

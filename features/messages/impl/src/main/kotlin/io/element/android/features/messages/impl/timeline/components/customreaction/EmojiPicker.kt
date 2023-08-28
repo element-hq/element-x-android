@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -41,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.emojibasebindings.Emoji
@@ -52,18 +55,21 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EmojiPicker(
     onEmojiSelected: (Emoji) -> Unit,
-    emojiProvider: EmojibaseStore,
     modifier: Modifier = Modifier,
+    emojiProvider: EmojibaseStore,
+    selectedEmojis: ImmutableSet<String>,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val categories = remember { emojiProvider.categories }
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { emojiProvider.categories.size })
     Column(modifier) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -95,12 +101,20 @@ fun EmojiPicker(
                 modifier = Modifier.fillMaxSize(),
                 columns = GridCells.Adaptive(minSize = 40.dp),
                 contentPadding = PaddingValues(vertical = 10.dp, horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+
                 items(emojis, key = { it.unicode }) { item ->
+                    val backgroundColor = if (selectedEmojis.contains(item.unicode)) {
+                        ElementTheme.colors.bgActionPrimaryRest
+                    } else {
+                        Color.Transparent
+                    }
+
                     Box(
                         modifier = Modifier
                             .size(40.dp)
+                            .background(backgroundColor, CircleShape)
                             .clickable(
                                 enabled = true,
                                 onClick = { onEmojiSelected(item) },
@@ -136,7 +150,8 @@ internal fun EmojiPickerDarkPreview() {
 private fun ContentToPreview() {
     EmojiPicker(
         onEmojiSelected = {},
+        modifier = Modifier.fillMaxWidth(),
         emojiProvider = EmojibaseDatasource().load(LocalContext.current),
-        modifier = Modifier.fillMaxWidth()
+        selectedEmojis = persistentSetOf("😀", "😄", "😃")
     )
 }

@@ -25,7 +25,7 @@ class RoomMessageFactory {
         eventTimelineItem ?: return null
         val mappedTimelineItem = EventTimelineItemMapper().map(eventTimelineItem)
         return RoomMessage(
-            eventId = mappedTimelineItem.eventId!!,
+            eventId = mappedTimelineItem.eventId ?: return null,
             event = mappedTimelineItem,
             sender = mappedTimelineItem.sender,
             originServerTs = mappedTimelineItem.timestamp,

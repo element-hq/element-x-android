@@ -16,9 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
-import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
 
 sealed interface CustomReactionEvents {
-    data class ShowCustomReactionSheet(val eventId: EventId) : CustomReactionEvents
+    data class ShowCustomReactionSheet(val event: TimelineItem.Event?) : CustomReactionEvents
     object DismissCustomReactionSheet : CustomReactionEvents
 }
