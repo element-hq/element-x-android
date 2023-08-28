@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
+  <string name="screen_migration_title">"Dein Konto einrichten"</string>
   <string name="screen_welcome_bullet_1">"Anrufe, Umfragen, Suche und mehr werden später in diesem Jahr hinzugefügt."</string>
   <string name="screen_welcome_bullet_2">"Der Nachrichtenverlauf für verschlüsselte Räume wird in diesem Update nicht verfügbar sein."</string>
   <string name="screen_welcome_bullet_3">"Wir würden uns freuen, wenn du uns über die Einstellungsseite deine Meinung mitteilst."</string>

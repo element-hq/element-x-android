@@ -27,7 +27,7 @@ import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.appnav.LoggedInFlowNode
+import io.element.android.appnav.LoggedInAppScopeFlowNode
 import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.appnav.RootFlowNode
 import io.element.android.libraries.architecture.bindings
@@ -56,7 +56,7 @@ class MainNode(
     ),
     DaggerComponentOwner by mainDaggerComponentOwner {
 
-    private val loggedInFlowNodeCallback = object : LoggedInFlowNode.LifecycleCallback {
+    private val loggedInFlowNodeCallback = object : LoggedInAppScopeFlowNode.LifecycleCallback {
         override fun onFlowCreated(identifier: String, client: MatrixClient) {
             val component = bindings<SessionComponent.ParentBindings>().sessionComponentBuilder().client(client).build()
             mainDaggerComponentOwner.addComponent(identifier, component)

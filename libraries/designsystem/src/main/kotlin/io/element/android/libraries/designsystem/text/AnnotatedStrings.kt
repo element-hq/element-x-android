@@ -82,3 +82,22 @@ fun buildAnnotatedStringWithStyledPart(
         end = startIndex + coloredPart.length,
     )
 }
+
+/**
+ * Convert a string to an [AnnotatedString] with colored end period if present.
+ */
+fun withColoredPeriod(
+    text: String,
+) = buildAnnotatedString {
+    append(text)
+    if (text.endsWith(".")) {
+        addStyle(
+            style = SpanStyle(
+                // Light.colorGreen700
+                color = Color(0xff0bc491),
+            ),
+            start = text.length - 1,
+            end = text.length,
+        )
+    }
+}

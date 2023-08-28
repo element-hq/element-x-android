@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_migration_message">"Ce processus n’a besoin d’être fait qu’une seule fois, merci de patienter."</string>
+  <string name="screen_migration_title">"Configuration de votre compte."</string>
   <string name="screen_welcome_bullet_2">"L’historique des messages pour les salons chiffrés ne sera pas disponible dans cette mise à jour."</string>
   <string name="screen_welcome_bullet_3">"Nous serions ravis d’avoir votre avis, n’hésitez pas à nous le partager via la page des paramètres."</string>
   <string name="screen_welcome_button">"C’est parti !"</string>

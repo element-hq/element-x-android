@@ -16,32 +16,17 @@
 
 package io.element.android.features.login.impl.screens.waitlistscreen
 
-import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -50,15 +35,13 @@ import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.atomic.pages.SunsetPage
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 // Ref: https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?type=design&node-id=6761-148425
@@ -75,12 +58,7 @@ fun WaitListView(
             else -> Unit
         }
     }
-
-    Box(modifier = modifier) {
-        WaitListBackground()
-        WaitListContent(state, onCancelClicked)
-        WaitListError(state)
-    }
+    WaitListContent(state, onCancelClicked, modifier)
 }
 
 @Composable
@@ -102,135 +80,68 @@ private fun WaitListError(state: WaitListState) {
 }
 
 @Composable
-private fun WaitListBackground(
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.3f)
-                .background(Color.White)
-        )
-        Image(
-            modifier = Modifier
-                .fillMaxWidth(),
-            painter = painterResource(id = R.drawable.light_dark),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.7f)
-                .background(Color(0xFF121418))
-        )
-    }
-}
-
-@Composable
 private fun WaitListContent(
     state: WaitListState,
     onCancelClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ElementTheme(
-        darkTheme = true
+    Box(
+        modifier = modifier.fillMaxSize(),
     ) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-        ) {
-            if (state.loginAction !is Async.Success) {
-                CompositionLocalProvider(LocalContentColor provides Color.Black) {
-                    TextButton(
-                        text = stringResource(CommonStrings.action_cancel),
-                        onClick = onCancelClicked,
-                    )
-                }
+        val title = stringResource(
+            when (state.loginAction) {
+                is Async.Success -> R.string.screen_waitlist_title_success
+                else -> R.string.screen_waitlist_title
             }
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = BiasAbsoluteAlignment(
-                    horizontalBias = 0f,
-                    verticalBias = -0.05f
-                )
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (state.loginAction.isLoading()) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 2.dp,
-                            color = ElementTheme.colors.iconPrimary
-                        )
-                    } else {
-                        Spacer(modifier = Modifier.height(24.dp))
-                    }
-                    Spacer(modifier = Modifier.height(18.dp))
-                    val titleRes = when (state.loginAction) {
-                        is Async.Success -> R.string.screen_waitlist_title_success
-                        else -> R.string.screen_waitlist_title
-                    }
-                    Text(
-                        text = withColoredPeriod(titleRes),
-                        style = ElementTheme.typography.fontHeadingXlBold,
-                        textAlign = TextAlign.Center,
-                        color = ElementTheme.colors.textPrimary,
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    val subtitle = when (state.loginAction) {
-                        is Async.Success -> stringResource(
-                            id = R.string.screen_waitlist_message_success,
-                            state.appName,
-                        )
-                        else -> stringResource(
-                            id = R.string.screen_waitlist_message,
-                            state.appName,
-                            state.serverName,
-                        )
-                    }
-                    Text(
-                        modifier = Modifier.widthIn(max = 360.dp),
-                        text = subtitle,
-                        style = ElementTheme.typography.fontBodyLgRegular,
-                        textAlign = TextAlign.Center,
-                        color = ElementTheme.colors.textPrimary,
-                    )
-                }
-            }
-            if (state.loginAction is Async.Success) {
-                Button(
-                    text = stringResource(id = CommonStrings.action_continue),
-                    onClick = { state.eventSink.invoke(WaitListEvents.Continue) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 8.dp),
-                )
-            }
+        )
+        val subtitle = when (state.loginAction) {
+            is Async.Success -> stringResource(
+                id = R.string.screen_waitlist_message_success,
+                state.appName,
+            )
+            else -> stringResource(
+                id = R.string.screen_waitlist_message,
+                state.appName,
+                state.serverName,
+            )
         }
+        SunsetPage(
+            isLoading = state.loginAction.isLoading(),
+            title = title,
+            subtitle = subtitle,
+        ) {
+            OverallContent(state, onCancelClicked)
+        }
+        WaitListError(state)
     }
 }
 
 @Composable
-private fun withColoredPeriod(
-    @StringRes textRes: Int,
-) = buildAnnotatedString {
-    val text = stringResource(textRes)
-    append(text)
-    if (text.endsWith(".")) {
-        addStyle(
-            style = SpanStyle(
-                // Light.colorGreen700
-                color = Color(0xff0bc491),
-            ),
-            start = text.length - 1,
-            end = text.length,
-        )
+private fun OverallContent(
+    state: WaitListState,
+    onCancelClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        if (state.loginAction !is Async.Success) {
+            CompositionLocalProvider(LocalContentColor provides Color.Black) {
+                TextButton(
+                    text = stringResource(CommonStrings.action_cancel),
+                    onClick = onCancelClicked,
+                )
+            }
+        }
+        if (state.loginAction is Async.Success) {
+            Button(
+                text = stringResource(id = CommonStrings.action_continue),
+                onClick = { state.eventSink.invoke(WaitListEvents.Continue) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp),
+            )
+        }
+
     }
 }
 

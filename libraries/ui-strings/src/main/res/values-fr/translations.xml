@@ -165,8 +165,6 @@
   <string name="screen_media_picker_error_failed_selection">"Impossible de sélectionner un média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement du média avant son envoi, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Impossible d’envoyer le média, veuillez réessayer."</string>
-  <string name="screen_migration_message">"Ce processus n’a besoin d’être fait qu’une seule fois, merci de patienter."</string>
-  <string name="screen_migration_title">"Configuration de votre compte."</string>
   <string name="screen_notification_settings_enable_notifications">"Activer les notifications sur cet appareil"</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notifications système désactivées"</string>
