@@ -42,6 +42,11 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import kotlinx.parcelize.Parcelize
 
+/**
+ * `LoggedInAppScopeFlowNode` is a Node responsible to set up the Dagger
+ * [io.element.android.libraries.di.SessionScope]. It has only one child: [LoggedInFlowNode].
+ * This allow to inject objects with SessionScope in the constructor of [LoggedInFlowNode].
+ */
 @ContributesNode(AppScope::class)
 class LoggedInAppScopeFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
