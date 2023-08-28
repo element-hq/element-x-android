@@ -102,7 +102,8 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
                 }
-                createNode<LoggedInFlowNode>(buildContext, listOf(callback))
+                val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
+                createNode<LoggedInFlowNode>(buildContext, nodeLifecycleCallbacks + callback)
             }
         }
     }
