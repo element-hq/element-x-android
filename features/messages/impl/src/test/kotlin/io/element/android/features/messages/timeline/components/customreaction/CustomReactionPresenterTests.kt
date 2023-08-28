@@ -57,7 +57,7 @@ class CustomReactionPresenterTests {
             assertThat(initialState.selectedEventId).isNull()
             val reactions = aTimelineItemReactions(count = 1, isHighlighted = true)
             val key = reactions.reactions.first().key
-            initialState.eventSink(CustomReactionEvents.UpdateSelectedEvent(aTimelineItemEvent(eventId = AN_EVENT_ID, timelineItemReactions = reactions)))
+            initialState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(aTimelineItemEvent(eventId = AN_EVENT_ID, timelineItemReactions = reactions)))
             val stateWithSelectedEmojis = awaitItem()
             assertThat(stateWithSelectedEmojis.selectedEventId).isEqualTo(AN_EVENT_ID)
             assertThat(stateWithSelectedEmojis.selectedEmoji).contains(key)
