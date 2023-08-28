@@ -28,19 +28,19 @@ import androidx.compose.material.icons.outlined.EmojiSymbols
 import androidx.compose.material.icons.outlined.EmojiTransportation
 import androidx.compose.ui.graphics.vector.ImageVector
 import io.element.android.emojibasebindings.EmojibaseCategory
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @get:StringRes
 val EmojibaseCategory.title: Int get() =
     when(this){
-        EmojibaseCategory.People -> R.string.emoji_picker_category_people
-        EmojibaseCategory.Nature -> R.string.emoji_picker_category_nature
-        EmojibaseCategory.Foods -> R.string.emoji_picker_category_foods
-        EmojibaseCategory.Activity -> R.string.emoji_picker_category_activity
-        EmojibaseCategory.Places -> R.string.emoji_picker_category_places
-        EmojibaseCategory.Objects -> R.string.emoji_picker_category_objects
-        EmojibaseCategory.Symbols -> R.string.emoji_picker_category_symbols
-        EmojibaseCategory.Flags -> R.string.emoji_picker_category_flags
+        EmojibaseCategory.People -> CommonStrings.emoji_picker_category_people
+        EmojibaseCategory.Nature -> CommonStrings.emoji_picker_category_nature
+        EmojibaseCategory.Foods -> CommonStrings.emoji_picker_category_foods
+        EmojibaseCategory.Activity -> CommonStrings.emoji_picker_category_activity
+        EmojibaseCategory.Places -> CommonStrings.emoji_picker_category_places
+        EmojibaseCategory.Objects -> CommonStrings.emoji_picker_category_objects
+        EmojibaseCategory.Symbols -> CommonStrings.emoji_picker_category_symbols
+        EmojibaseCategory.Flags -> CommonStrings.emoji_picker_category_flags
     }
 
 val EmojibaseCategory.icon: ImageVector
