@@ -18,7 +18,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.analytics.test"
+    namespace = "io.element.android.services.analytics.test"
 }
 
 dependencies {

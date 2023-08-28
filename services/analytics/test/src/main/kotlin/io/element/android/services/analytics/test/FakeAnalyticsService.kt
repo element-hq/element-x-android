@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.analytics.test
+package io.element.android.services.analytics.test
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen

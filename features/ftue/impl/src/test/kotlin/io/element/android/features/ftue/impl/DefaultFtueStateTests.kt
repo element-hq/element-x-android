@@ -17,7 +17,6 @@
 package io.element.android.features.ftue.impl
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.ftue.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.features.ftue.impl.migration.MigrationScreenStore
 import io.element.android.features.ftue.impl.state.DefaultFtueState
@@ -27,6 +26,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel

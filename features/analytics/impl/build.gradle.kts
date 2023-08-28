@@ -50,6 +50,6 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.analytics.test)
+    testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.analytics.impl)
 }
