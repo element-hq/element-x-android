@@ -26,7 +26,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class AnalyticsAnalyticsSettingsPresenterTest {
+class AnalyticsSettingsPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val analyticsPresenter = DefaultAnalyticsPreferencesPresenter(FakeAnalyticsService(), aBuildMeta())
