@@ -1,3 +1,11 @@
+Changes in Element X v0.1.5 (2023-08-28)
+========================================
+
+Bugfixes 🐛
+----------
+ - Fix crash when opening any room. ([#1160](https://github.com/vector-im/element-x-android/issues/1160))
+
+
 Changes in Element X v0.1.4 (2023-08-28)
 ========================================
 
