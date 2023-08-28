@@ -57,9 +57,9 @@ fun CustomReactionBottomSheet(
         ) {
             EmojiPicker(
                 onEmojiSelected = ::onEmojiSelectedDismiss,
-                modifier = Modifier.fillMaxSize(),
                 emojiProvider = emojiProvider,
                 selectedEmojis = state.selectedEmoji,
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }

@@ -16,9 +16,7 @@
 
 package io.element.android.features.messages.impl
 
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList

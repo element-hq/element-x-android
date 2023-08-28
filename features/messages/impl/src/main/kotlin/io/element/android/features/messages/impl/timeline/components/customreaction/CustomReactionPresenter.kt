@@ -27,10 +27,8 @@ import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.coroutines.launch
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 
@@ -59,11 +57,16 @@ class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionSt
 
         fun handleEvents(event: CustomReactionEvents) {
             when (event) {
-                is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event)
+                is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event.event)
                 is CustomReactionEvents.DismissCustomReactionSheet -> handleDismissCustomReactionSheet()
             }
         }
         val selectedEmoji = selectedEvent?.reactionsState?.reactions?.mapNotNull { if(it.isHighlighted) it.key else null }.orEmpty().toImmutableSet()
-        return CustomReactionState(selectedEventId = selectedEvent?.eventId, emojiProvider = emojiState, selectedEmoji = selectedEmoji, eventSink = ::handleEvents)
+        return CustomReactionState(
+            selectedEventId = selectedEvent?.eventId,
+            emojiProvider = emojiState,
+            selectedEmoji = selectedEmoji,
+            eventSink = ::handleEvents
+        )
     }
 }
