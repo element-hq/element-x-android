@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -83,6 +84,7 @@ class FakeMatrixRoom(
     private var forwardEventResult = Result.success(Unit)
     private var reportContentResult = Result.success(Unit)
     private var sendLocationResult = Result.success(Unit)
+    private var createPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
     val editMessageCalls = mutableListOf<String>()
 
@@ -103,6 +105,9 @@ class FakeMatrixRoom(
 
     private val _sentLocations = mutableListOf<SendLocationInvocation>()
     val sentLocations: List<SendLocationInvocation> = _sentLocations
+
+    private val _createPollInvocations = mutableListOf<CreatePollInvocation>()
+    val createPollInvocations: List<CreatePollInvocation> = _createPollInvocations
 
     var invitedUserId: UserId? = null
         private set
@@ -305,6 +310,16 @@ class FakeMatrixRoom(
         return sendLocationResult
     }
 
+    override suspend fun createPoll(
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind
+    ): Result<Unit> = simulateLongTask {
+        _createPollInvocations.add(CreatePollInvocation(question, answers, maxSelections, pollKind))
+        return createPollResult
+    }
+
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
     }
@@ -397,6 +412,10 @@ class FakeMatrixRoom(
         sendLocationResult = result
     }
 
+    fun givenCreatePollResult(result: Result<Unit>) {
+        createPollResult = result
+    }
+
     fun givenProgressCallbackValues(values: List<Pair<Long, Long>>) {
         progressCallbackValues = values
     }
@@ -408,4 +427,11 @@ data class SendLocationInvocation(
     val description: String?,
     val zoomLevel: Int?,
     val assetType: AssetType?,
+)
+
+data class CreatePollInvocation(
+    val question: String,
+    val answers: List<String>,
+    val maxSelections: Int,
+    val pollKind: PollKind,
 )

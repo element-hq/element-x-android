@@ -20,5 +20,8 @@ enum class PollKind {
     Disclosed,
 
     /** Results should be only revealed when the poll is ended. */
-    Undisclosed
+    Undisclosed,
 }
+
+val PollKind.isDisclosed: Boolean
+    get() = this == PollKind.Disclosed

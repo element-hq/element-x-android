@@ -23,3 +23,8 @@ fun RustPollKind.map(): PollKind = when (this) {
     RustPollKind.DISCLOSED -> PollKind.Disclosed
     RustPollKind.UNDISCLOSED -> PollKind.Undisclosed
 }
+
+fun PollKind.toInner(): RustPollKind = when (this) {
+    PollKind.Disclosed -> RustPollKind.DISCLOSED
+    PollKind.Undisclosed -> RustPollKind.UNDISCLOSED
+}

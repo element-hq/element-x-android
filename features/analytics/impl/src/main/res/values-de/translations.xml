@@ -5,6 +5,6 @@
   <string name="screen_analytics_prompt_read_terms">"Du kannst alle unsere Nutzerbedingungen %1$s lesen."</string>
   <string name="screen_analytics_prompt_read_terms_content_link">"hier"</string>
   <string name="screen_analytics_prompt_settings">"Du kannst dies jederzeit deaktivieren"</string>
-  <string name="screen_analytics_prompt_third_party_sharing">"Wir geben "<b>"keine"</b>" Informationen an Dritte weiter"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Wir geben deine Daten nicht an Dritte weiter"</string>
   <string name="screen_analytics_prompt_title">"Hilf uns, %1$s zu verbessern"</string>
 </resources>

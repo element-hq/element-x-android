@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
@@ -249,7 +251,7 @@ internal fun ListSupportingTextDefaultPaddingPreview() {
 internal fun ListSupportingTextSmallPaddingPreview() {
     ElementThemedPreview {
         Column {
-            ListItem(headlineContent = { Text("A title") }, leadingContent = { Icon(Icons.Default.Share, null) })
+            ListItem(headlineContent = { Text("A title") }, leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Outlined.Share)))
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
                 contentPadding = ListSupportingTextDefaults.Padding.SmallLeadingContent,
@@ -263,7 +265,7 @@ internal fun ListSupportingTextSmallPaddingPreview() {
 internal fun ListSupportingTextLargePaddingPreview() {
     ElementThemedPreview {
         Column {
-            ListItem(headlineContent = { Text("A title") }, leadingContent = { Switch(checked = true, onCheckedChange = null) })
+            ListItem(headlineContent = { Text("A title") }, leadingContent = ListItemContent.Switch(checked = true, onChange = {}))
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
                 contentPadding = ListSupportingTextDefaults.Padding.LargeLeadingContent,

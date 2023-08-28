@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.verification
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface SessionVerificationService {
@@ -36,6 +37,11 @@ interface SessionVerificationService {
      * or [SessionVerifiedStatus.Verified].
      */
     val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus>
+
+    /**
+     * Returns whether the current session needs to be verified and the SDK is ready to start the verification.
+     */
+    val canVerifySessionFlow: Flow<Boolean>
 
     /**
      * Request verification of the current session.

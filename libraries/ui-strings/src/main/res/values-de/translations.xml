@@ -8,7 +8,7 @@
   <string name="action_back">"Zurück"</string>
   <string name="action_cancel">"Abbrechen"</string>
   <string name="action_choose_photo">"Foto auswählen"</string>
-  <string name="action_clear">"Löschen"</string>
+  <string name="action_clear">"Zurücksetzen"</string>
   <string name="action_close">"Schließen"</string>
   <string name="action_complete_verification">"Verifizierung abschließen"</string>
   <string name="action_confirm">"Bestätigen"</string>
@@ -37,9 +37,10 @@
   <string name="action_no">"Nein"</string>
   <string name="action_not_now">"Nicht jetzt"</string>
   <string name="action_ok">"OK"</string>
-  <string name="action_open_with">"Öffne mit"</string>
+  <string name="action_open_with">"Öffnen mit"</string>
   <string name="action_quick_reply">"Schnellantwort"</string>
   <string name="action_quote">"Zitieren"</string>
+  <string name="action_react">"Reagieren"</string>
   <string name="action_remove">"Entfernen"</string>
   <string name="action_reply">"Antworten"</string>
   <string name="action_report_bug">"Fehler melden"</string>
@@ -56,7 +57,7 @@
   <string name="action_start">"Starten"</string>
   <string name="action_start_chat">"Chat starten"</string>
   <string name="action_start_verification">"Verifizierung starten"</string>
-  <string name="action_static_map_load">"Tippe, um die Karte zu laden"</string>
+  <string name="action_static_map_load">"Zum Karte laden tippen"</string>
   <string name="action_take_photo">"Foto aufnehmen"</string>
   <string name="action_view_source">"Quelltext anzeigen"</string>
   <string name="action_yes">"Ja"</string>
@@ -80,25 +81,28 @@
   <string name="common_forward_message">"Nachricht weiterleiten"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Bild"</string>
-  <string name="common_invite_unknown_profile">"Wir können die Matrix-ID dieses Benutzers nicht validieren. Die Einladung wurde möglicherweise nicht empfangen."</string>
-  <string name="common_leaving_room">"Raum verlassen"</string>
+  <string name="common_invite_unknown_profile">"Diese Matrix-ID kann nicht gefunden werden, daher wird die Einladung möglicherweise nicht empfangen."</string>
+  <string name="common_leaving_room">"Verlasse Raum"</string>
   <string name="common_link_copied_to_clipboard">"Link in Zwischenablage kopiert"</string>
-  <string name="common_loading">"Wird geladen…"</string>
+  <string name="common_loading">"Lädt…"</string>
   <string name="common_message">"Nachricht"</string>
   <string name="common_message_layout">"Nachrichtenlayout"</string>
-  <string name="common_message_removed">"Nachricht wurde entfernt"</string>
+  <string name="common_message_removed">"Nachricht entfernt"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Stummschalten"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_password">"Passwort"</string>
   <string name="common_people">"Personen"</string>
-  <string name="common_permalink">"Permalink"</string>
+  <string name="common_permalink">"Dauerlink"</string>
+  <string name="common_poll_final_votes">"Endgültige Stimmen: %1$s"</string>
+  <string name="common_poll_total_votes">"Stimmen insgesamt: %1$s"</string>
+  <string name="common_poll_undisclosed_text">"Ergebnisse werden nach Ende der Umfrage angezeigt"</string>
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reactions">"Reaktionen"</string>
   <string name="common_refreshing">"Aktualisiere…"</string>
   <string name="common_replying_to">"Auf %1$s antworten"</string>
-  <string name="common_report_a_bug">"Melde einen Fehler"</string>
+  <string name="common_report_a_bug">"Einen Fehler melden"</string>
   <string name="common_report_submitted">"Bericht gesendet"</string>
   <string name="common_room_name">"Raumname"</string>
   <string name="common_room_name_placeholder">"z.B. dein Projektname"</string>
@@ -106,12 +110,12 @@
   <string name="common_search_results">"Suchergebnisse"</string>
   <string name="common_security">"Sicherheit"</string>
   <string name="common_select_your_server">"Wählen deinen Server"</string>
-  <string name="common_sending">"Senden…"</string>
+  <string name="common_sending">"Sendet…"</string>
   <string name="common_server_not_supported">"Server wird nicht unterstützt"</string>
   <string name="common_server_url">"Server-URL"</string>
   <string name="common_settings">"Einstellungen"</string>
   <string name="common_shared_location">"Geteilter Standort"</string>
-  <string name="common_starting_chat">"Chat wird gestartet…"</string>
+  <string name="common_starting_chat">"Starte Chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Erfolg"</string>
   <string name="common_suggestions">"Vorschläge"</string>
@@ -120,7 +124,7 @@
   <string name="common_topic">"Thema"</string>
   <string name="common_topic_placeholder">"Worum geht es in diesem Raum?"</string>
   <string name="common_unable_to_decrypt">"Entschlüsselung nicht möglich"</string>
-  <string name="common_unable_to_invite_message">"Wir konnten Einladungen nicht erfolgreich an einen oder mehrere Benutzer senden."</string>
+  <string name="common_unable_to_invite_message">"Einladungen konnten nicht an einen oder mehrere Benutzer gesendet werden."</string>
   <string name="common_unable_to_invite_title">"Einladung(en) können nicht gesendet werden"</string>
   <string name="common_unmute">"Stummschaltung aufheben"</string>
   <string name="common_unsupported_event">"Nicht unterstütztes Ereignis"</string>
@@ -128,7 +132,7 @@
   <string name="common_verification_cancelled">"Verifizierung abgebrochen"</string>
   <string name="common_verification_complete">"Verifizierung abgeschlossen"</string>
   <string name="common_video">"Video"</string>
-  <string name="common_waiting">"Warten…"</string>
+  <string name="common_waiting">"Warte…"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_warning">"Warnung"</string>
   <string name="emoji_picker_category_activity">"Aktivitäten"</string>
@@ -139,10 +143,12 @@
   <string name="emoji_picker_category_people">"Smileys &amp; Personen"</string>
   <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
   <string name="emoji_picker_category_symbols">"Symbole"</string>
-  <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>
+  <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Dauerlinks"</string>
   <string name="error_failed_loading_map">"%1$s konnte die Karte nicht laden. Bitte versuche es später erneut."</string>
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
   <string name="error_failed_locating_user">"%1$s konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut."</string>
+  <string name="error_missing_location_auth_android">"%1$s hat keine Berechtigung, auf deinen Standort zuzugreifen. Du kannst den Zugriff in den Einstellungen aktivieren."</string>
+  <string name="error_missing_location_rationale_android">"%1$s hat keine Berechtigung, auf deinen Standort zuzugreifen. Aktiviere den Zugriff unten."</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, ein Fehler ist aufgetreten."</string>
   <string name="invite_friends_rich_title">"🔐️ Besuche mich auf %1$s"</string>
@@ -155,9 +161,13 @@
     <item quantity="one">"%1$d Mitglied"</item>
     <item quantity="other">"%1$d Mitglieder"</item>
   </plurals>
-  <string name="preference_rageshake">"Rageshake zum Melden von Fehlern"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d Stimme"</item>
+    <item quantity="other">"%d Stimmen"</item>
+  </plurals>
+  <string name="preference_rageshake">"Schütteln zum Melden von Fehlern"</string>
   <string name="rageshake_dialog_content">"Du scheinst frustriert das Telefon zu schütteln. Möchtest du den Fehlerberichtsbildschirm öffnen?"</string>
-  <string name="report_content_explanation">"Diese Nachricht wird an deinen Heimserver-Admin gemeldet werden. Er wird nicht in der Lage sein, verschlüsselte Nachrichten zu lesen."</string>
+  <string name="report_content_explanation">"Diese Nachricht wird an deinen Heimserver-Admin gemeldet. Er wird nicht in der Lage sein, verschlüsselte Nachrichten zu lesen."</string>
   <string name="report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
   <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Dies ist der Beginn dieser Konversation."</string>
@@ -168,7 +178,35 @@
   <string name="screen_media_upload_preview_error_failed_sending">"Hochladen von Medien fehlgeschlagen, bitte versuchen Sie es erneut."</string>
   <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
   <string name="screen_migration_title">"Dein Konto einrichten"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Zusätzliche Einstellungen"</string>
+  <string name="screen_notification_settings_calls_label">"Audio- und Videoanrufe"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Konfigurationskonflikt"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Wir haben die Benachrichtigungseinstellungen vereinfacht, damit Optionen leichter zu finden sind.
+
+Einige benutzerdefinierte Einstellungen, die du in der Vergangenheit ausgewählt hast, werden hier nicht angezeigt, sind aber immer noch aktiv.
+
+Wenn du fortfährst, ändern sich möglicherweise einige deine Einstellungen."</string>
+  <string name="screen_notification_settings_direct_chats">"Direkte Chats"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Benutzerdefinierte Einstellung pro Chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Beim Aktualisieren der Benachrichtigungseinstellung ist ein Fehler aufgetreten."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Alle Nachrichten"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Bei direkten Chats, benachrichtigen mich für"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Bei Gruppenchats, benachrichtigte mich für"</string>
+  <string name="screen_notification_settings_enable_notifications">"Benachrichtigungen auf diesem Gerät aktivieren"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Die Konfiguration wurde nicht korrigiert. Bitte versuche es erneut."</string>
+  <string name="screen_notification_settings_group_chats">"Gruppenchats"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Erwähnungen"</string>
+  <string name="screen_notification_settings_mode_all">"Alle"</string>
+  <string name="screen_notification_settings_mode_mentions">"Erwähnungen"</string>
+  <string name="screen_notification_settings_notification_section_title">"Benachrichtige mich für"</string>
+  <string name="screen_notification_settings_room_mention_label">"Benachrichtige mich bei @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Um Benachrichtigungen zu erhalten, ändern bitte deine %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"Systemeinstellungen"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Systembenachrichtigungen deaktiviert"</string>
+  <string name="screen_notification_settings_title">"Benachrichtigungen"</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
+  <string name="screen_settings_oidc_account">"Konto und Geräte"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>
   <string name="screen_share_my_location_action">"Meinen Standort teilen"</string>
   <string name="screen_share_open_apple_maps">"In Apple Maps öffnen"</string>

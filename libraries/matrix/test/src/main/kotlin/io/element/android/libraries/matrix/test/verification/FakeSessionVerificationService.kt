@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -27,13 +28,13 @@ class FakeSessionVerificationService : SessionVerificationService {
     private val _isReady = MutableStateFlow(false)
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     private var _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
+    private var _canVerifySessionFlow = MutableStateFlow(true)
     private var emojiList = emptyList<VerificationEmoji>()
     var shouldFail = false
 
-    override val verificationFlowState: StateFlow<VerificationFlowState>
-        get() = _verificationFlowState
-
+    override val verificationFlowState: StateFlow<VerificationFlowState> =_verificationFlowState
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
+    override val canVerifySessionFlow: Flow<Boolean> = _canVerifySessionFlow
 
     override val isReady: StateFlow<Boolean> = _isReady
 
@@ -75,6 +76,10 @@ class FakeSessionVerificationService : SessionVerificationService {
 
     fun givenVerificationFlowState(state: VerificationFlowState) {
         _verificationFlowState.value = state
+    }
+
+    fun givenCanVerifySession(canVerify: Boolean) {
+        _canVerifySessionFlow.value = canVerify
     }
 
     fun givenIsReady(value: Boolean) {
