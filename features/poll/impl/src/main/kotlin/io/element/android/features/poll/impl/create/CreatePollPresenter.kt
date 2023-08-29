@@ -91,13 +91,8 @@ class CreatePollPresenter @AssistedInject constructor(
                     answers = answers.filterIndexed { index, _ -> index != event.index }
                 }
                 is CreatePollEvents.SetAnswer -> {
-                    val text = if (event.text.length > MAX_ANSWER_LENGTH) {
-                        event.text.substring(0, MAX_ANSWER_LENGTH)
-                    } else {
-                        event.text
-                    }
                     answers = answers.toMutableList().apply {
-                        this[event.index] = text
+                        this[event.index] = event.text.take(MAX_ANSWER_LENGTH)
                     }
                 }
                 is CreatePollEvents.SetPollKind -> {
