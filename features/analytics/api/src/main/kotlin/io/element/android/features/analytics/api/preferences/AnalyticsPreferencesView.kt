@@ -17,6 +17,7 @@
 package io.element.android.features.analytics.api.preferences
 
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,6 +31,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private const val LINK_TAG = "link"
@@ -70,7 +72,11 @@ fun AnalyticsPreferencesView(
                         ?.let { stringAnnotation ->
                             onOpenAnalyticsPolicy(stringAnnotation.item)
                         }
-                }
+                },
+                style = ElementTheme.typography.fontBodyMdRegular
+                    .copy(
+                        color = MaterialTheme.colorScheme.secondary,
+                    ),
             )
         },
         leadingContent = null,
