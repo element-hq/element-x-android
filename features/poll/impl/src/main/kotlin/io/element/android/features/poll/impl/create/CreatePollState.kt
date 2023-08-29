@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.featureflag.api
+package io.element.android.features.poll.impl.create
 
-enum class FeatureFlags(
-    override val key: String,
-    override val title: String,
-    override val description: String? = null,
-    override val defaultValue: Boolean = true
-) : Feature {
-    LocationSharing(
-        key = "feature.locationsharing",
-        title = "Allow user to share location",
-    ),
-    Polls(
-        key = "feature.polls",
-        title = "Polls",
-        description = "Create poll and render poll events in the timeline",
-        defaultValue = false,
-    )
-}
+import io.element.android.libraries.matrix.api.poll.PollKind
+import kotlinx.collections.immutable.ImmutableList
+
+data class CreatePollState(
+    val canCreate: Boolean,
+    val canAddAnswer: Boolean,
+    val question: String,
+    val answers: ImmutableList<Answer>,
+    val pollKind: PollKind,
+    val showConfirmation: Boolean,
+    val eventSink: (CreatePollEvents) -> Unit = {},
+)
+
+data class Answer(
+    val text: String,
+    val canDelete: Boolean,
+)

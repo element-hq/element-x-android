@@ -97,6 +97,7 @@ fun MessagesView(
     onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onSendLocationClicked: () -> Unit,
+    onCreatePollClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
@@ -175,6 +176,7 @@ fun MessagesView(
                 onReactionLongClicked = ::onEmojiReactionLongClicked,
                 onMoreReactionsClicked = ::onMoreReactionsClicked,
                 onSendLocationClicked = onSendLocationClicked,
+                onCreatePollClicked = onCreatePollClicked,
                 onSwipeToReply = { targetEvent ->
                     state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
                 },
@@ -267,6 +269,7 @@ private fun MessagesViewContent(
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
+    onCreatePollClicked: () -> Unit,
     modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
 ) {
@@ -295,6 +298,7 @@ private fun MessagesViewContent(
             MessageComposerView(
                 state = state.composerState,
                 onSendLocationClicked = onSendLocationClicked,
+                onCreatePollClicked = onCreatePollClicked,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(Alignment.Bottom)
@@ -401,5 +405,6 @@ private fun ContentToPreview(state: MessagesState) {
         onPreviewAttachments = {},
         onUserDataClicked = {},
         onSendLocationClicked = {},
+        onCreatePollClicked = {},
     )
 }

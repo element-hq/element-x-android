@@ -58,6 +58,7 @@ class MessagesNode @AssistedInject constructor(
         fun onForwardEventClicked(eventId: EventId)
         fun onReportMessage(eventId: EventId, senderId: UserId)
         fun onSendLocationClicked()
+        fun onCreatePollClicked()
     }
 
     init {
@@ -99,6 +100,10 @@ class MessagesNode @AssistedInject constructor(
         callback?.onSendLocationClicked()
     }
 
+    private fun onCreatePollClicked() {
+        callback?.onCreatePollClicked()
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -110,6 +115,7 @@ class MessagesNode @AssistedInject constructor(
             onPreviewAttachments = this::onPreviewAttachments,
             onUserDataClicked = this::onUserDataClicked,
             onSendLocationClicked = this::onSendLocationClicked,
+            onCreatePollClicked = this::onCreatePollClicked,
             modifier = modifier,
         )
     }
