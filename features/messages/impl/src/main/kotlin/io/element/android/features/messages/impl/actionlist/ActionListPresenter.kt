@@ -99,6 +99,16 @@ class ActionListPresenter @Inject constructor(
                 }
                 is TimelineItemPollContent -> {
                     buildList {
+                        val isMineOrCanRedact = timelineItem.isMine || userCanRedact
+
+                        // TODO Poll: Reply to poll
+                        // if (timelineItem.isRemote) {
+                        //     // Can only reply or forward messages already uploaded to the server
+                        //     add(TimelineItemAction.Reply)
+                        // }
+                        if (!timelineItem.content.isEnded && timelineItem.isRemote && isMineOrCanRedact) {
+                            add(TimelineItemAction.EndPoll)
+                        }
                         if (timelineItem.content.canBeCopied()) {
                             add(TimelineItemAction.Copy)
                         }
@@ -108,7 +118,7 @@ class ActionListPresenter @Inject constructor(
                         if (!timelineItem.isMine) {
                             add(TimelineItemAction.ReportContent)
                         }
-                        if (timelineItem.isMine || userCanRedact) {
+                        if (isMineOrCanRedact) {
                             add(TimelineItemAction.Redact)
                         }
                     }

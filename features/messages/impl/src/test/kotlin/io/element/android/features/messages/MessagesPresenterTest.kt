@@ -72,6 +72,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -556,6 +557,24 @@ class MessagesPresenterTest {
             val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedact }.last()
             assertThat(initialState.userHasPermissionToRedact).isTrue()
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - handle poll end`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EndPoll, aMessageEvent()))
+            waitForPredicate { room.endPollInvocations.size == 1 }
+            cancelAndIgnoreRemainingEvents()
+            assertThat(room.endPollInvocations.size).isEqualTo(1)
+            assertThat(room.endPollInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
+            assertThat(room.endPollInvocations.first().text).isEqualTo("The poll with event id: \$anEventId has ended.")
+            // TODO Polls: Test poll end analytic
         }
     }
 

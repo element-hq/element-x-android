@@ -202,6 +202,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
+            TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent)
         }
     }
 
@@ -308,6 +309,11 @@ class MessagesPresenter @AssistedInject constructor(
     private fun handleReportAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
         navigator.onReportContentClicked(event.eventId, event.senderId)
+    }
+
+    private suspend fun handleEndPollAction(event: TimelineItem.Event) {
+        event.eventId?.let { room.endPoll(it, "The poll with event id: $it has ended.") }
+        // TODO Polls: Send poll end analytic
     }
 
     private suspend fun handleCopyContents(event: TimelineItem.Event) {

@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -83,6 +84,15 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                     ),
                     displayEmojiReactions = false,
                 ),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent(content = aTimelineItemPollContent()).copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    ),
+                    displayEmojiReactions = false,
+                ),
             )
         }
 }
@@ -95,6 +105,7 @@ fun anActionListState() = ActionListState(
 
 fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {
     return persistentListOf(
+        TimelineItemAction.EndPoll,
         TimelineItemAction.Reply,
         TimelineItemAction.Forward,
         TimelineItemAction.Copy,
