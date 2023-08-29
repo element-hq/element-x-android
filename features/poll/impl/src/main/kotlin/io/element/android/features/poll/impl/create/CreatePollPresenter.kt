@@ -38,10 +38,10 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-private const val MIN_ANSWERS = 2;
-private const val MAX_ANSWERS = 20;
-private const val MAX_ANSWER_LENGTH = 240;
-private const val MAX_SELECTIONS = 1;
+private const val MIN_ANSWERS = 2
+private const val MAX_ANSWERS = 20
+private const val MAX_ANSWER_LENGTH = 240
+private const val MAX_SELECTIONS = 1
 
 class CreatePollPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
@@ -82,7 +82,7 @@ class CreatePollPresenter @AssistedInject constructor(
                         // analyticsService.capture(PollCreate()) // TODO: Send PollCreate analytics.
                         navigateUp()
                     } else {
-                        Timber.e("Cannot create poll")
+                        Timber.d("Cannot create poll")
                     }
                 }
                 is CreatePollEvents.AddAnswer -> {
@@ -159,7 +159,7 @@ private val pollKindSaver: Saver<MutableState<PollKind>, Boolean> = Saver(
     },
     restore = {
         mutableStateOf(
-            when {
+            when(it) {
                 true -> PollKind.Undisclosed
                 else -> PollKind.Disclosed
             }

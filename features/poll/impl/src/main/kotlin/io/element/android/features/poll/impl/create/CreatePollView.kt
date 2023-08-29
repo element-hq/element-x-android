@@ -18,10 +18,10 @@ package io.element.android.features.poll.impl.create
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -91,89 +91,88 @@ fun CreatePollView(
             )
         },
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
+                .imePadding()
                 .fillMaxSize(),
         ) {
-            LazyColumn {
-                item {
-                    Text(
-                        text = stringResource(id = R.string.screen_create_poll_question_desc),
-                        modifier = Modifier.padding(start = 32.dp),
-                        style = ElementTheme.typography.fontBodyMdRegular,
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = {
-                            OutlinedTextField(
-                                value = state.question,
-                                onValueChange = {
-                                    state.eventSink(CreatePollEvents.SetQuestion(it))
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                                placeholder = {
-                                    Text(text = stringResource(id = R.string.screen_create_poll_question_hint))
-                                },
-                            )
-                        }
-                    )
-                }
-                itemsIndexed(state.answers) { index, answer ->
-                    ListItem(
-                        headlineContent = {
-                            OutlinedTextField(
-                                value = answer.text,
-                                onValueChange = {
-                                    state.eventSink(CreatePollEvents.SetAnswer(index, it))
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                                placeholder = {
-                                    Text(text = stringResource(id = R.string.screen_create_poll_answer_hint, index + 1))
-                                },
-                            )
-                        },
-                        // TODO animate this when https://issuetracker.google.com/issues/150812265 is done.
-                        // TODO modifier = Modifier.animateItemPlacement(),
-                        trailingContent = ListItemContent.Custom {
-                            Icon(
-                                resourceId = VectorIcons.Delete,
-                                contentDescription = null,
-                                modifier = Modifier.clickable(answer.canDelete) {
-                                    state.eventSink(CreatePollEvents.RemoveAnswer(index))
-                                },
-                            )
-                        },
-                        style = if (answer.canDelete) ListItemStyle.Destructive else ListItemStyle.Default,
-                    )
-                }
-                if (state.canAddAnswer) {
-                    item {
-                        ListItem(
-                            headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_add_option_btn)) },
-                            leadingContent = ListItemContent.Icon(
-                                iconSource = IconSource.Vector(Icons.Default.Add),
-                            ),
-                            style = ListItemStyle.Primary,
-                            onClick = { state.eventSink(CreatePollEvents.AddAnswer) },
+            item {
+                Text(
+                    text = stringResource(id = R.string.screen_create_poll_question_desc),
+                    modifier = Modifier.padding(start = 32.dp),
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = {
+                        OutlinedTextField(
+                            value = state.question,
+                            onValueChange = {
+                                state.eventSink(CreatePollEvents.SetQuestion(it))
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = {
+                                Text(text = stringResource(id = R.string.screen_create_poll_question_hint))
+                            },
                         )
                     }
-                }
-                item {
-                    HorizontalDivider()
-                }
+                )
+            }
+            itemsIndexed(state.answers) { index, answer ->
+                ListItem(
+                    headlineContent = {
+                        OutlinedTextField(
+                            value = answer.text,
+                            onValueChange = {
+                                state.eventSink(CreatePollEvents.SetAnswer(index, it))
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = {
+                                Text(text = stringResource(id = R.string.screen_create_poll_answer_hint, index + 1))
+                            },
+                        )
+                    },
+                    // TODO animate this when https://issuetracker.google.com/issues/150812265 is done.
+                    // TODO modifier = Modifier.animateItemPlacement(),
+                    trailingContent = ListItemContent.Custom {
+                        Icon(
+                            resourceId = VectorIcons.Delete,
+                            contentDescription = null,
+                            modifier = Modifier.clickable(answer.canDelete) {
+                                state.eventSink(CreatePollEvents.RemoveAnswer(index))
+                            },
+                        )
+                    },
+                    style = if (answer.canDelete) ListItemStyle.Destructive else ListItemStyle.Default,
+                )
+            }
+            if (state.canAddAnswer) {
                 item {
                     ListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
-                        supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
-                        trailingContent = ListItemContent.Switch(
-                            checked = state.pollKind == PollKind.Undisclosed,
-                            onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
+                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_add_option_btn)) },
+                        leadingContent = ListItemContent.Icon(
+                            iconSource = IconSource.Vector(Icons.Default.Add),
                         ),
+                        style = ListItemStyle.Primary,
+                        onClick = { state.eventSink(CreatePollEvents.AddAnswer) },
                     )
                 }
+            }
+            item {
+                HorizontalDivider()
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
+                    supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
+                    trailingContent = ListItemContent.Switch(
+                        checked = state.pollKind == PollKind.Undisclosed,
+                        onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
+                    ),
+                )
             }
         }
     }
