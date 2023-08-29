@@ -71,7 +71,6 @@ fun AnalyticsPreferencesView(
                         }
                 }
             )
-            Text(text = subtitle)
         },
         leadingContent = null,
         trailingContent = ListItemContent.Switch(checked = state.isEnabled, onChange = ::onEnabledChanged),
