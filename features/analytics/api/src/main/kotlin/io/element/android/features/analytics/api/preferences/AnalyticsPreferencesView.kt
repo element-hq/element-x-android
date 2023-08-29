@@ -79,7 +79,9 @@ fun buildAnnotatedStringWithColoredPart(
         style = SpanStyle(
             color = color,
             textDecoration = if (underline) TextDecoration.Underline else null
-        ), start = startIndex, end = startIndex + coloredPart.length
+        ),
+        start = startIndex,
+        end = startIndex + coloredPart.length,
     )
 }
 
