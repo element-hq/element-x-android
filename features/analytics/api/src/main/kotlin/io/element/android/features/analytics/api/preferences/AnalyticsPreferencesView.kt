@@ -18,7 +18,6 @@ package io.element.android.features.analytics.api.preferences
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -28,9 +27,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.LinkColor
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -50,13 +51,16 @@ fun AnalyticsPreferencesView(
     )
     val subtitle = "$firstPart\n\n$secondPart"
 
-    PreferenceSwitch(
+    ListItem(
+        headlineContent = {
+            Text(stringResource(id = CommonStrings.screen_analytics_settings_share_data))
+        },
+        supportingContent = {
+            Text(text = subtitle)
+        },
+        leadingContent = null,
+        trailingContent = ListItemContent.Switch(checked = state.isEnabled, onChange = ::onEnabledChanged),
         modifier = modifier,
-        title = stringResource(id = CommonStrings.screen_analytics_settings_share_data),
-        subtitle = subtitle,
-        isChecked = state.isEnabled,
-        onCheckedChange = ::onEnabledChanged,
-        switchAlignment = Alignment.Top,
     )
 }
 
