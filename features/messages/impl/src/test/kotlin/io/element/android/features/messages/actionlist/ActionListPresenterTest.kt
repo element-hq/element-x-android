@@ -26,10 +26,14 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
+import io.element.android.features.poll.api.PollAnswerItem
+import io.element.android.libraries.matrix.api.poll.PollAnswer
+import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.collections.immutable.persistentListOf
@@ -367,6 +371,57 @@ class ActionListPresenterTest {
                 )
             )
             assertThat(successState.displayEmojiReactions).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - compute for poll message`() = runTest {
+        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = TimelineItemPollContent(
+                    question = "Some question?",
+                    answerItems = listOf(
+                        PollAnswerItem(
+                            answer = PollAnswer("id_1", "Answer1"),
+                            isSelected = false,
+                            isEnabled = false,
+                            isWinner = false,
+                            isDisclosed = false,
+                            votesCount = 0,
+                            percentage = 0.0f,
+                        ),
+                        PollAnswerItem(
+                            answer = PollAnswer("id_2", "Answer2"),
+                            isSelected = false,
+                            isEnabled = false,
+                            isWinner = false,
+                            isDisclosed = false,
+                            votesCount = 0,
+                            percentage = 0.0f,
+                        ),
+                    ),
+                    votes = mapOf(),
+                    pollKind = PollKind.Disclosed,
+                    isEnded = false,
+                )
+            )
+
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            assertThat(successState.displayEmojiReactions).isTrue()
         }
     }
 }
