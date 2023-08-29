@@ -28,8 +28,8 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.appnav.LoggedInAppScopeFlowNode
-import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.appnav.RootFlowNode
+import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
@@ -45,15 +45,14 @@ class MainNode(
     buildContext: BuildContext,
     private val mainDaggerComponentOwner: MainDaggerComponentsOwner,
     plugins: List<Plugin>,
-) :
-    ParentNode<MainNode.RootNavTarget>(
-        navModel = PermanentNavModel(
-            navTargets = setOf(RootNavTarget),
-            savedStateMap = buildContext.savedStateMap,
-        ),
-        buildContext = buildContext,
-        plugins = plugins,
+) : ParentNode<MainNode.RootNavTarget>(
+    navModel = PermanentNavModel(
+        navTargets = setOf(RootNavTarget),
+        savedStateMap = buildContext.savedStateMap,
     ),
+    buildContext = buildContext,
+    plugins = plugins,
+),
     DaggerComponentOwner by mainDaggerComponentOwner {
 
     private val loggedInFlowNodeCallback = object : LoggedInAppScopeFlowNode.LifecycleCallback {
