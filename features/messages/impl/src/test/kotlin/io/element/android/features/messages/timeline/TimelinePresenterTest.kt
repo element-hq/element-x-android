@@ -25,7 +25,7 @@ import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
@@ -36,8 +36,10 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.tests.testutils.awaitWithLatch
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -248,6 +250,22 @@ class TimelinePresenterTest {
         }
     }
 
+    @Test
+    fun `present - PollAnswerSelected event calls into rust room api and analytics`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createTimelinePresenter(room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(TimelineEvents.PollAnswerSelected(AN_EVENT_ID, "anAnswerId"))
+        }
+        delay(1)
+        assertThat(room.sendPollResponseInvocations.size).isEqualTo(1)
+        assertThat(room.sendPollResponseInvocations.first().answers).isEqualTo(listOf("anAnswerId"))
+        assertThat(room.sendPollResponseInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
+    }
+
     private fun TestScope.createTimelinePresenter(
         timeline: MatrixTimeline = FakeMatrixTimeline(),
         timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory()
@@ -255,6 +273,17 @@ class TimelinePresenterTest {
         return TimelinePresenter(
             timelineItemsFactory = timelineItemsFactory,
             room = FakeMatrixRoom(matrixTimeline = timeline),
+            dispatchers = testCoroutineDispatchers(),
+            appScope = this
+        )
+    }
+
+    private fun TestScope.createTimelinePresenter(
+        room: MatrixRoom,
+    ): TimelinePresenter {
+        return TimelinePresenter(
+            timelineItemsFactory = aTimelineItemsFactory(),
+            room = room,
             dispatchers = testCoroutineDispatchers(),
             appScope = this
         )

@@ -87,6 +87,13 @@ class TimelinePresenter @Inject constructor(
                         lastReadReceiptId = lastReadReceiptId
                     )
                 }
+                is TimelineEvents.PollAnswerSelected -> appScope.launch {
+                    room.sendPollResponse(
+                        pollStartId = event.pollStartId,
+                        answers = listOf(event.answerId),
+                    )
+                    // TODO Polls: Send poll vote analytic
+                }
             }
         }
 
