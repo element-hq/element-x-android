@@ -49,7 +49,11 @@ fun AnalyticsPreferencesView(
         CommonStrings.screen_analytics_settings_read_terms,
         CommonStrings.screen_analytics_settings_read_terms_content_link
     )
-    val subtitle = "$firstPart\n\n$secondPart"
+    val subtitle = buildAnnotatedString {
+        append(firstPart)
+        append("\n\n")
+        append(secondPart)
+    }
 
     ListItem(
         headlineContent = {
