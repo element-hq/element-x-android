@@ -269,19 +269,26 @@ printf "\n======================================================================
 printf "The file ${signedBundlePath} has been signed and can be uploaded to the PlayStore!\n"
 
 printf "\n================================================================================\n"
-read -p "Do you want to install the application to your device? Make sure there is a connected device first. (yes/no) default to yes " doDeploy
-doDeploy=${doDeploy:-yes}
+read -p "Do you want to build the APKs from the app bundle? You need to do this step if you want to install the application to your device. (yes/no) default to yes " doBuildApks
+doBuildApks=${doBuildApks:-yes}
 
-if [ ${doDeploy} == "yes" ]; then
+if [ ${doBuildApks} == "yes" ]; then
   printf "Building apks...\n"
   bundletool build-apks --bundle=${signedBundlePath} --output=${targetPath}/elementx.apks \
       --ks=./app/signature/debug.keystore --ks-pass=pass:android --ks-key-alias=androiddebugkey --key-pass=pass:android \
       --overwrite
-  printf "Installing apk for your device...\n"
-  bundletool install-apks --apks=${targetPath}/elementx.apks
-  read -p "Please run the application on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
+
+  read -p "Do you want to install the application to your device? Make sure there is one (and only one!) connected device first. (yes/no) default to yes " doDeploy
+  doDeploy=${doDeploy:-yes}
+  if [ ${doDeploy} == "yes" ]; then
+    printf "Installing apk for your device...\n"
+    bundletool install-apks --apks=${targetPath}/elementx.apks
+    read -p "Please run the application on your phone to check that the upgrade went well. Press enter when it's done."
+  else
+    printf "APK will not be deployed!\n"
+  fi
 else
-  printf "Apk will not be deployed!\n"
+  printf "APKs will not be generated!\n"
 fi
 
 printf "\n================================================================================\n"
