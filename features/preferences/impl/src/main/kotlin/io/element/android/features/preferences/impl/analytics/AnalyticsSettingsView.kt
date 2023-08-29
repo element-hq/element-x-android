@@ -31,6 +31,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun AnalyticsSettingsView(
     state: AnalyticsSettingsState,
     onBackPressed: () -> Unit,
+    onOpenAnalyticsPolicy: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferenceView(
@@ -40,6 +41,7 @@ fun AnalyticsSettingsView(
     ) {
         AnalyticsPreferencesView(
             state = state.analyticsState,
+            onOpenAnalyticsPolicy = onOpenAnalyticsPolicy,
         )
     }
 }
@@ -59,5 +61,6 @@ private fun ContentToPreview(state: AnalyticsSettingsState) {
     AnalyticsSettingsView(
         state = state,
         onBackPressed = {},
+        onOpenAnalyticsPolicy = {},
     )
 }

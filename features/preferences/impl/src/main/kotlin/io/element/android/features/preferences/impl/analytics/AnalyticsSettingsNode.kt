@@ -16,15 +16,19 @@
 
 package io.element.android.features.preferences.impl.analytics
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.theme.ElementTheme
 
 @ContributesNode(SessionScope::class)
 class AnalyticsSettingsNode @AssistedInject constructor(
@@ -33,12 +37,19 @@ class AnalyticsSettingsNode @AssistedInject constructor(
     private val presenter: AnalyticsSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    private fun onOpenAnalyticsPolicy(activity: Activity, darkTheme: Boolean, url: String) {
+        activity.openUrlInChromeCustomTab(null, darkTheme, url)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
+        val activity = LocalContext.current as Activity
+        val isDark = ElementTheme.colors.isLight.not()
         val state = presenter.present()
         AnalyticsSettingsView(
             state = state,
             onBackPressed = ::navigateUp,
+            onOpenAnalyticsPolicy = { onOpenAnalyticsPolicy(activity, darkTheme = isDark, it) },
             modifier = modifier
         )
     }

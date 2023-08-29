@@ -17,6 +17,7 @@
 package io.element.android.features.analytics.api.preferences
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +40,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun AnalyticsPreferencesView(
     state: AnalyticsPreferencesState,
     modifier: Modifier = Modifier,
+    onOpenAnalyticsPolicy: (url: String) -> Unit,
 ) {
     fun onEnabledChanged(isEnabled: Boolean) {
         state.eventSink(AnalyticsOptInEvents.EnableAnalytics(isEnabled = isEnabled))
@@ -47,7 +49,8 @@ fun AnalyticsPreferencesView(
     val firstPart = stringResource(id = CommonStrings.screen_analytics_settings_help_us_improve, state.applicationName)
     val secondPart = buildAnnotatedStringWithColoredPart(
         CommonStrings.screen_analytics_settings_read_terms,
-        CommonStrings.screen_analytics_settings_read_terms_content_link
+        CommonStrings.screen_analytics_settings_read_terms_content_link,
+        link = state.policyUrl,
     )
     val subtitle = buildAnnotatedString {
         append(firstPart)
@@ -60,6 +63,16 @@ fun AnalyticsPreferencesView(
             Text(stringResource(id = CommonStrings.screen_analytics_settings_share_data))
         },
         supportingContent = {
+            ClickableText(
+                text = subtitle,
+                onClick = {
+                    subtitle
+                        .getStringAnnotations("link", it, it)
+                        .firstOrNull()?.let { stringAnnotation ->
+                            onOpenAnalyticsPolicy(stringAnnotation.item)
+                        }
+                }
+            )
             Text(text = subtitle)
         },
         leadingContent = null,
@@ -68,12 +81,14 @@ fun AnalyticsPreferencesView(
     )
 }
 
+// TODO Use buildAnnotatedStringWithStyledPart.
 @Composable
 fun buildAnnotatedStringWithColoredPart(
     @StringRes fullTextRes: Int,
     @StringRes coloredTextRes: Int,
     color: Color = LinkColor,
     underline: Boolean = true,
+    link: String? = null,
 ) = buildAnnotatedString {
     val coloredPart = stringResource(coloredTextRes)
     val fullText = stringResource(fullTextRes, coloredPart)
@@ -87,6 +102,14 @@ fun buildAnnotatedStringWithColoredPart(
         start = startIndex,
         end = startIndex + coloredPart.length,
     )
+    if (link != null) {
+        addStringAnnotation(
+            tag = "link",
+            annotation = link,
+            start = startIndex,
+            end = startIndex + coloredPart.length
+        )
+    }
 }
 
 @Preview
@@ -101,5 +124,8 @@ internal fun AnalyticsPreferencesViewDarkPreview(@PreviewParameter(AnalyticsPref
 
 @Composable
 private fun ContentToPreview(state: AnalyticsPreferencesState) {
-    AnalyticsPreferencesView(state)
+    AnalyticsPreferencesView(
+        state = state,
+        onOpenAnalyticsPolicy = {},
+    )
 }
