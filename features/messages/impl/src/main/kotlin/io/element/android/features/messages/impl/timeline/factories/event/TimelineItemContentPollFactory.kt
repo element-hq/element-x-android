@@ -23,6 +23,7 @@ import io.element.android.features.poll.api.PollAnswerItem
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.isDisclosed
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import javax.inject.Inject
@@ -32,7 +33,10 @@ class TimelineItemContentPollFactory @Inject constructor(
     private val featureFlagService: FeatureFlagService,
 ) {
 
-    suspend fun create(content: PollContent): TimelineItemEventContent {
+    suspend fun create(
+        content: PollContent,
+        eventId: EventId?,
+    ): TimelineItemEventContent {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.Polls)) return TimelineItemUnknownContent
 
         // Todo Move this computation to the matrix rust sdk
@@ -67,6 +71,7 @@ class TimelineItemContentPollFactory @Inject constructor(
         }
 
         return TimelineItemPollContent(
+            startEventId = eventId,
             question = content.question,
             answerItems = answerItems,
             votes = content.votes,

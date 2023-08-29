@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.poll.api.PollContentView
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import kotlinx.collections.immutable.toImmutableList
 
@@ -34,6 +35,7 @@ fun TimelineItemPollView(
     modifier: Modifier = Modifier,
 ) {
     PollContentView(
+        startEventId = content.startEventId,
         question = content.question,
         answerItems = content.answerItems.toImmutableList(),
         pollKind = content.pollKind,

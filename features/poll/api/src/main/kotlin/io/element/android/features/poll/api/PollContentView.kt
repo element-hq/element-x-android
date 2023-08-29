@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.theme.ElementTheme
@@ -43,6 +44,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun PollContentView(
+    startEventId: EventId?,
     question: String,
     answerItems: ImmutableList<PollAnswerItem>,
     pollKind: PollKind,
@@ -58,7 +60,11 @@ fun PollContentView(
     ) {
         PollTitle(title = question)
 
-        PollAnswers(answerItems = answerItems, onAnswerSelected = onAnswerSelected)
+        PollAnswers(
+            startEventId = startEventId,
+            answerItems = answerItems,
+            onAnswerSelected = onAnswerSelected
+        )
 
         when {
             isPollEnded || pollKind == PollKind.Disclosed -> DisclosedPollBottomNotice(answerItems)
@@ -90,6 +96,7 @@ internal fun PollTitle(
 
 @Composable
 internal fun PollAnswers(
+    startEventId: EventId?,
     answerItems: ImmutableList<PollAnswerItem>,
     onAnswerSelected: (PollAnswer) -> Unit,
     modifier: Modifier = Modifier,
@@ -98,6 +105,7 @@ internal fun PollAnswers(
     answerItems.forEach { answerItem ->
         PollAnswerView(
             modifier = modifier,
+            startEventId = startEventId,
             answerItem = answerItem,
             onClick = { onAnswerSelected(answerItem.answer) }
         )
@@ -134,6 +142,7 @@ fun ColumnScope.UndisclosedPollBottomNotice(modifier: Modifier = Modifier) {
 @Composable
 internal fun PollContentUndisclosedPreview() = ElementPreview {
     PollContentView(
+        startEventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isDisclosed = false),
         pollKind = PollKind.Undisclosed,
@@ -146,6 +155,7 @@ internal fun PollContentUndisclosedPreview() = ElementPreview {
 @Composable
 internal fun PollContentDisclosedPreview() = ElementPreview {
     PollContentView(
+        startEventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),
         pollKind = PollKind.Disclosed,
@@ -158,6 +168,7 @@ internal fun PollContentDisclosedPreview() = ElementPreview {
 @Composable
 internal fun PollContentEndedPreview() = ElementPreview {
     PollContentView(
+        startEventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isEnded = true),
         pollKind = PollKind.Disclosed,

@@ -48,7 +48,7 @@ import io.element.android.libraries.ui.strings.CommonPlurals
 @Composable
 fun PollAnswerView(
     answerItem: PollAnswerItem,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -56,7 +56,7 @@ fun PollAnswerView(
             .fillMaxWidth()
             .selectable(
                 selected = answerItem.isSelected,
-                enabled = answerItem.isEnabled,
+                enabled = if(onClick == null) false else answerItem.isEnabled,
                 onClick = onClick,
                 role = Role.RadioButton,
             )

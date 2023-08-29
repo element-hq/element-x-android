@@ -18,18 +18,21 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.poll.api.aPollAnswerItemList
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
 
 open class TimelineItemPollContentProvider : PreviewParameterProvider<TimelineItemPollContent> {
     override val values: Sequence<TimelineItemPollContent>
         get() = sequenceOf(
             aTimelineItemPollContent(),
+            aTimelineItemPollContent().copy(startEventId = null),
             aTimelineItemPollContent().copy(pollKind = PollKind.Undisclosed),
         )
 }
 
 fun aTimelineItemPollContent(): TimelineItemPollContent {
     return TimelineItemPollContent(
+        startEventId = EventId("\$anEventId"),
         pollKind = PollKind.Disclosed,
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),
