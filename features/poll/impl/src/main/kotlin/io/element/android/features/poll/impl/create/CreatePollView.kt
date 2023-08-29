@@ -135,8 +135,6 @@ fun CreatePollView(
                             },
                         )
                     },
-                    // TODO animate this when https://issuetracker.google.com/issues/150812265 is done.
-                    // TODO modifier = Modifier.animateItemPlacement(),
                     trailingContent = ListItemContent.Custom {
                         Icon(
                             resourceId = VectorIcons.Delete,

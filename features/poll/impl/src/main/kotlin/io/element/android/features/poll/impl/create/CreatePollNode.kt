@@ -26,14 +26,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
-import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
 class CreatePollNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: CreatePollPresenter.Factory,
-    analyticsService: AnalyticsService,
+    // analyticsService: AnalyticsService, // TODO Polls: add analytics
 ) : Node(buildContext, plugins = plugins) {
 
     private val presenter = presenterFactory.create(backNavigator = ::navigateUp)
@@ -41,7 +40,7 @@ class CreatePollNode @AssistedInject constructor(
     init {
         lifecycle.subscribe(
             onResume = {
-                // TODO:("Add analytics")
+                // TODO Polls: add analytics
                 // analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.PollView))
             }
         )

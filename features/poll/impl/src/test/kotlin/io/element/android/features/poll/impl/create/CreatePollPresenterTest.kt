@@ -20,7 +20,6 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
-import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.test.room.CreatePollInvocation
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -32,11 +31,11 @@ class CreatePollPresenterTest {
 
     private var navUpInvocationsCount = 0
     private val fakeMatrixRoom = FakeMatrixRoom()
-    private val fakeAnalyticsService = FakeAnalyticsService()
+    // private val fakeAnalyticsService = FakeAnalyticsService() // TODO Polls: add analytics
 
     private val presenter = CreatePollPresenter(
         room = fakeMatrixRoom,
-        analyticsService = fakeAnalyticsService,
+        // analyticsService = fakeAnalyticsService,  // TODO Polls: add analytics
         navigateUp = { navUpInvocationsCount++ },
     )
 

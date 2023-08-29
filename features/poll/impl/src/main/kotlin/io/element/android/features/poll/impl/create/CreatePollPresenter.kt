@@ -32,7 +32,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -45,9 +44,9 @@ private const val MAX_SELECTIONS = 1
 
 class CreatePollPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
-    private val analyticsService: AnalyticsService,
+    // private val analyticsService: AnalyticsService, // TODO Polls: add analytics
     @Assisted private val navigateUp: () -> Unit,
-    // private val messageComposerContext: MessageComposerContext, // TODO
+    // private val messageComposerContext: MessageComposerContext, // TODO Polls: add analytics
 ) : Presenter<CreatePollState> {
 
     @AssistedFactory
@@ -79,7 +78,7 @@ class CreatePollPresenter @AssistedInject constructor(
                             maxSelections = MAX_SELECTIONS,
                             pollKind = pollKind,
                         )
-                        // analyticsService.capture(PollCreate()) // TODO: Send PollCreate analytics.
+                        // analyticsService.capture(PollCreate()) // TODO Polls: add analytics
                         navigateUp()
                     } else {
                         Timber.d("Cannot create poll")
