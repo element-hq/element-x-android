@@ -150,7 +150,7 @@ printf "Running towncrier...\n"
 yes | towncrier build --version "v${version}"
 
 printf "\n================================================================================\n"
-read -p "Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things. Do not commit your change. Press enter when it's done."
+read -p "Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things. Do not commit your change. Press enter to continue. "
 
 # Get the changes to use it to create the GitHub release
 changelogUrlEncoded=`git diff CHANGES.md | grep ^+ | tail -n +2 | cut -c2- | jq -sRr @uri | sed s/\(/%28/g | sed s/\)/%29/g`
@@ -168,7 +168,7 @@ fastlaneFile="4${versionMajor2Digits}${versionMinor2Digits}${versionPatch2Digits
 fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
 printf "Main changes in this version: TODO.\nFull changelog: https://github.com/vector-im/element-x-android/releases" > ${fastlanePathFile}
 
-read -p "I have created the file ${fastlanePathFile}, please edit it and press enter when it's done."
+read -p "I have created the file ${fastlanePathFile}, please edit it and press enter to continue. "
 git add ${fastlanePathFile}
 git commit -a -m "Adding fastlane file for version ${version}"
 
@@ -200,7 +200,7 @@ sed "s/private const val versionPatch = .*/private const val versionPatch = ${ne
 rm ${versionsFileBak}
 
 printf "\n================================================================================\n"
-read -p "I have updated the versions to prepare the next release, please check that the change are correct and press enter so I can commit."
+read -p "I have updated the versions to prepare the next release, please check that the change are correct and press enter so I can commit. "
 
 printf "Committing...\n"
 git commit -a -m 'version++'
@@ -263,7 +263,7 @@ printf "Version name: "
 bundletool dump manifest --bundle=${signedBundlePath} --xpath=/manifest/@android:versionName
 
 printf "\n"
-read -p "Does it look correct? Press enter when it's done."
+read -p "Does it look correct? Press enter to continue. "
 
 printf "\n================================================================================\n"
 printf "The file ${signedBundlePath} has been signed and can be uploaded to the PlayStore!\n"
@@ -283,7 +283,7 @@ if [ ${doBuildApks} == "yes" ]; then
   if [ ${doDeploy} == "yes" ]; then
     printf "Installing apk for your device...\n"
     bundletool install-apks --apks=${targetPath}/elementx.apks
-    read -p "Please run the application on your phone to check that the upgrade went well. Press enter when it's done."
+    read -p "Please run the application on your phone to check that the upgrade went well. Press enter to continue. "
   else
     printf "APK will not be deployed!\n"
   fi
@@ -299,7 +299,7 @@ printf "Then\n"
 printf " - copy paste the section of the file CHANGES.md for this release (if not there yet)\n"
 printf " - click on the 'Generate releases notes' button\n"
 printf " - Add the file ${signedBundlePath} to the GitHub release.\n"
-read -p ". Press enter when it's done. "
+read -p ". Press enter to continue. "
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
@@ -307,7 +307,7 @@ message="@room Element X Android ${version} is ready to be tested. You can get i
 printf "${message}\n\n"
 
 if [[ -z "${elementBotToken}" ]]; then
-  read -p "ELEMENT_BOT_MATRIX_TOKEN is not defined in the environment. Cannot send the message for you. Please send it manually, and press enter when it's done "
+  read -p "ELEMENT_BOT_MATRIX_TOKEN is not defined in the environment. Cannot send the message for you. Please send it manually, and press enter to continue. "
 else
   read -p "Send this message to the room (yes/no) default to yes? " doSend
   doSend=${doSend:-yes}
