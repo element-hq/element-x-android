@@ -35,30 +35,40 @@ import io.element.android.libraries.designsystem.components.button.ButtonVisuals
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Snackbar
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.sync.Mutex
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A global dispatcher of [SnackbarMessage] to be displayed in [Snackbar] via a [SnackbarHostState].
  */
 class SnackbarDispatcher {
-    private val _snackbarMessage = MutableSharedFlow<SnackbarMessage?>(
-        replay = 1,
-        extraBufferCapacity = 10,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val snackbarMessage: Flow<SnackbarMessage?> = _snackbarMessage
-
-    suspend fun post(message: SnackbarMessage) {
-        _snackbarMessage.emit(message)
+    private val queueMutex = Mutex()
+    private val snackBarMessageQueue = ArrayDeque<SnackbarMessage>()
+    val snackbarMessage: Flow<SnackbarMessage?> = flow {
+        while (currentCoroutineContext().isActive) {
+            queueMutex.lock()
+            emit(snackBarMessageQueue.firstOrNull())
+        }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    suspend fun post(message: SnackbarMessage) {
+        if (snackBarMessageQueue.isEmpty()) {
+            snackBarMessageQueue.add(message)
+            if (queueMutex.isLocked) queueMutex.unlock()
+        } else {
+            snackBarMessageQueue.add(message)
+        }
+    }
+
     fun clear() {
-        _snackbarMessage.resetReplayCache()
+        if (snackBarMessageQueue.isNotEmpty()) {
+            snackBarMessageQueue.removeFirstOrNull()
+            if (queueMutex.isLocked) queueMutex.unlock()
+        }
     }
 }
 
