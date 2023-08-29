@@ -303,7 +303,7 @@ read -p ". Press enter when it's done. "
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
-message="@room Element X Android ${version} is ready to be tested. You can get it from https://github.com/vector-im/element-x-android/releases/tag/v${version}. Please report any feedback here. Thanks!"
+message="@room Element X Android ${version} is ready to be tested. You can get it from https://github.com/vector-im/element-x-android/releases/tag/v${version}. Installation instructions can be found [here](https://github.com/vector-im/element-x-android/blob/develop/docs/install_from_github_release.md). Please report any feedback. Thanks!"
 printf "${message}\n\n"
 
 if [[ -z "${elementBotToken}" ]]; then
