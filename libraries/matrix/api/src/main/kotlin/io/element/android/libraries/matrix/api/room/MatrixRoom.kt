@@ -157,6 +157,10 @@ interface MatrixRoom : Closeable {
         pollKind: PollKind,
     ): Result<Unit>
 
+    suspend fun answerPoll(eventId: EventId, answerId: String): Result<Unit>
+
+    suspend fun endPoll(eventId: EventId): Result<Unit>
+
     override fun close() = destroy()
 }
 
