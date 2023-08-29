@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.poll.api.PollAnswerItem
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -39,12 +40,6 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-private const val A_POLL_QUESTION = "What is your favorite food?"
-private val A_POLL_ANSWER_1 = PollAnswer("id_1", "Pizza")
-private val A_POLL_ANSWER_2 = PollAnswer("id_2", "Pasta")
-private val A_POLL_ANSWER_3 = PollAnswer("id_3", "French Fries")
-private val A_POLL_ANSWER_4 = PollAnswer("id_4", "Hamburger")
-
 internal class TimelineItemContentPollFactoryTest {
 
     private val factory = TimelineItemContentPollFactory(
@@ -53,101 +48,82 @@ internal class TimelineItemContentPollFactoryTest {
     )
 
     @Test
-    fun `Disclosed poll - not ended states`() = runTest {
-        // No votes
-        Truth.assertThat(
-            factory.create(aPollContent(PollKind.Disclosed))
-        ).isEqualTo(aTimelineItemPollContent(PollKind.Disclosed))
+    fun `Disclosed poll - not ended, no votes`() = runTest {
+        Truth.assertThat(factory.create(aPollContent())).isEqualTo(aTimelineItemPollContent())
+    }
 
-        // Some votes, according one from current user
-        val votes = mapOf(
-            A_POLL_ANSWER_1.id to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4),
-            A_POLL_ANSWER_2.id to listOf(A_USER_ID, A_USER_ID_5, A_USER_ID_6, A_USER_ID_7, A_USER_ID_8, A_USER_ID_9),
-            A_POLL_ANSWER_3.id to emptyList(),
-            A_POLL_ANSWER_4.id to listOf(A_USER_ID_10),
-        )
+    @Test
+    fun `Disclosed poll - not ended, some votes, including one from current user`() = runTest {
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(PollKind.Disclosed).copy(votes = votes))
+            factory.create(aPollContent(votes = votes))
         )
             .isEqualTo(
-                aTimelineItemPollContent(PollKind.Disclosed).copy(
+                aTimelineItemPollContent(
                     answerItems = listOf(
-                        aPollAnswerItem(A_POLL_ANSWER_1).copy(votesCount = 3, percentage = 0.3f),
-                        aPollAnswerItem(A_POLL_ANSWER_2).copy(isSelected = true, votesCount = 6, percentage = 0.6f),
-                        aPollAnswerItem(A_POLL_ANSWER_3).copy(votesCount = 0, percentage = 0f),
-                        aPollAnswerItem(A_POLL_ANSWER_4).copy(votesCount = 1, percentage = 0.1f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_1, votesCount = 3, percentage = 0.3f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_2, isSelected = true, votesCount = 6, percentage = 0.6f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_3),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_4, votesCount = 1, percentage = 0.1f),
                     ),
-                    votes = votes,
                 )
             )
     }
 
     @Test
-    fun `Disclosed poll - ended states`() = runTest {
-        // No votes, no winner
+    fun `Disclosed poll - ended, no votes, no winner`() = runTest {
         Truth.assertThat(
-            factory.create(aPollContent(PollKind.Disclosed).copy(endTime = 1UL))
+            factory.create(aPollContent(endTime = 1UL))
         ).isEqualTo(
-            aTimelineItemPollContent(PollKind.Disclosed).let {
+            aTimelineItemPollContent().let {
                 it.copy(
-                    answerItems = it.answerItems.map { answerItem ->
-                        answerItem.copy(isEnabled = false, isWinner = false)
-                    },
+                    answerItems = it.answerItems.map { answerItem -> answerItem.copy(isEnabled = false) },
                     isEnded = true,
                 )
             }
         )
+    }
 
-        // Some votes, according one from current user (winner)
-        var votes = mapOf(
-            A_POLL_ANSWER_1.id to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4),
-            A_POLL_ANSWER_2.id to listOf(A_USER_ID, A_USER_ID_5, A_USER_ID_6, A_USER_ID_7, A_USER_ID_8, A_USER_ID_9),
-            A_POLL_ANSWER_3.id to emptyList(),
-            A_POLL_ANSWER_4.id to listOf(A_USER_ID_10),
-        )
+    @Test
+    fun `Disclosed poll - ended, some votes, including one from current user (winner)`() = runTest {
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(PollKind.Disclosed).copy(votes = votes, endTime = 1UL))
+            factory.create(aPollContent(votes = votes, endTime = 1UL))
         )
             .isEqualTo(
-                aTimelineItemPollContent(PollKind.Disclosed).copy(
+                aTimelineItemPollContent(
                     answerItems = listOf(
-                        aPollAnswerItem(A_POLL_ANSWER_1).copy(isEnabled = false, votesCount = 3, percentage = 0.3f),
-                        aPollAnswerItem(A_POLL_ANSWER_2).copy(isSelected = true, isEnabled = false, isWinner = true, votesCount = 6, percentage = 0.6f),
-                        aPollAnswerItem(A_POLL_ANSWER_3).copy(isEnabled = false, votesCount = 0, percentage = 0f),
-                        aPollAnswerItem(A_POLL_ANSWER_4).copy(isEnabled = false, votesCount = 1, percentage = 0.1f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_1, isEnabled = false, votesCount = 3, percentage = 0.3f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_2, isSelected = true, isEnabled = false, isWinner = true, votesCount = 6, percentage = 0.6f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_3, isEnabled = false),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_4, isEnabled = false, votesCount = 1, percentage = 0.1f),
                     ),
-                    votes = votes,
-                    isEnded = true,
-                )
-            )
-
-        // Some votes, according one from current user (not winner) and two winning votes
-        votes = mapOf(
-            A_POLL_ANSWER_1.id to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4, A_USER_ID_5),
-            A_POLL_ANSWER_2.id to listOf(A_USER_ID, A_USER_ID_6),
-            A_POLL_ANSWER_3.id to emptyList(),
-            A_POLL_ANSWER_4.id to listOf(A_USER_ID_7, A_USER_ID_8, A_USER_ID_9, A_USER_ID_10),
-        )
-        Truth.assertThat(
-            factory.create(aPollContent(PollKind.Disclosed).copy(votes = votes, endTime = 1UL))
-        )
-            .isEqualTo(
-                aTimelineItemPollContent(PollKind.Disclosed).copy(
-                    answerItems = listOf(
-                        aPollAnswerItem(A_POLL_ANSWER_1).copy(isEnabled = false, isWinner = true, votesCount = 4, percentage = 0.4f),
-                        aPollAnswerItem(A_POLL_ANSWER_2).copy(isSelected = true, isEnabled = false, votesCount = 2, percentage = 0.2f),
-                        aPollAnswerItem(A_POLL_ANSWER_3).copy(isEnabled = false, votesCount = 0, percentage = 0f),
-                        aPollAnswerItem(A_POLL_ANSWER_4).copy(isEnabled = false, isWinner = true, votesCount = 4, percentage = 0.4f),
-                    ),
-                    votes = votes,
                     isEnded = true,
                 )
             )
     }
 
     @Test
-    fun `Undisclosed poll - not ended states`() = runTest {
-        // No votes
+    fun `Disclosed poll - ended, some votes, including one from current user (not winner) and two winning votes`() = runTest {
+        val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }
+        Truth.assertThat(
+            factory.create(aPollContent(votes = votes, endTime = 1UL))
+        )
+            .isEqualTo(
+                aTimelineItemPollContent(
+                    answerItems = listOf(
+                        aPollAnswerItem(answer = A_POLL_ANSWER_1, isEnabled = false, isWinner = true, votesCount = 4, percentage = 0.4f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_2, isSelected = true, isEnabled = false, votesCount = 2, percentage = 0.2f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_3, isEnabled = false),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_4, isEnabled = false, isWinner = true, votesCount = 4, percentage = 0.4f),
+                    ),
+                    isEnded = true,
+                )
+            )
+    }
+
+    @Test
+    fun `Undisclosed poll - not ended, no votes`() = runTest {
         Truth.assertThat(
             factory.create(aPollContent(PollKind.Undisclosed).copy())
         ).isEqualTo(
@@ -155,38 +131,35 @@ internal class TimelineItemContentPollFactoryTest {
                 it.copy(answerItems = it.answerItems.map { answerItem -> answerItem.copy(isDisclosed = false) })
             }
         )
+    }
 
-        // Some votes, according one from current user
-        val votes = mapOf(
-            A_POLL_ANSWER_1.id to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4),
-            A_POLL_ANSWER_2.id to listOf(A_USER_ID, A_USER_ID_5, A_USER_ID_6, A_USER_ID_7, A_USER_ID_8, A_USER_ID_9),
-            A_POLL_ANSWER_3.id to emptyList(),
-            A_POLL_ANSWER_4.id to listOf(A_USER_ID_10),
-        )
+    @Test
+    fun `Undisclosed poll - not ended, some votes, including one from current user`() = runTest {
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(PollKind.Undisclosed).copy(votes = votes))
+            factory.create(aPollContent(pollKind = PollKind.Undisclosed, votes = votes))
         )
             .isEqualTo(
-                aTimelineItemPollContent(PollKind.Undisclosed).copy(
+                aTimelineItemPollContent(
+                    pollKind = PollKind.Undisclosed,
                     answerItems = listOf(
-                        aPollAnswerItem(A_POLL_ANSWER_1).copy(isDisclosed = false, votesCount = 3, percentage = 0.3f),
-                        aPollAnswerItem(A_POLL_ANSWER_2).copy(isDisclosed = false, isSelected = true, votesCount = 6, percentage = 0.6f),
-                        aPollAnswerItem(A_POLL_ANSWER_3).copy(isDisclosed = false, votesCount = 0, percentage = 0f),
-                        aPollAnswerItem(A_POLL_ANSWER_4).copy(isDisclosed = false, votesCount = 1, percentage = 0.1f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_1, isDisclosed = false, votesCount = 3, percentage = 0.3f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_2, isDisclosed = false, isSelected = true, votesCount = 6, percentage = 0.6f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_3, isDisclosed = false),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_4, isDisclosed = false, votesCount = 1, percentage = 0.1f),
                     ),
-                    votes = votes,
                 )
             )
     }
 
     @Test
-    fun `Undisclosed poll - ended states`() = runTest {
-        // No votes, no winner
+    fun `Undisclosed poll - ended, no votes, no winner`() = runTest {
         Truth.assertThat(
-            factory.create(aPollContent(PollKind.Undisclosed).copy(endTime = 1UL))
+            factory.create(aPollContent(pollKind = PollKind.Undisclosed, endTime = 1UL))
         ).isEqualTo(
-            aTimelineItemPollContent(PollKind.Undisclosed).let {
+            aTimelineItemPollContent().let {
                 it.copy(
+                    pollKind = PollKind.Undisclosed,
                     answerItems = it.answerItems.map { answerItem ->
                         answerItem.copy(isDisclosed = true, isEnabled = false, isWinner = false)
                     },
@@ -194,95 +167,113 @@ internal class TimelineItemContentPollFactoryTest {
                 )
             }
         )
+    }
 
-        // Some votes, according one from current user (winner)
-        var votes = mapOf(
-            A_POLL_ANSWER_1.id to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4),
-            A_POLL_ANSWER_2.id to listOf(A_USER_ID, A_USER_ID_5, A_USER_ID_6, A_USER_ID_7, A_USER_ID_8, A_USER_ID_9),
-            A_POLL_ANSWER_3.id to emptyList(),
-            A_POLL_ANSWER_4.id to listOf(A_USER_ID_10),
-        )
+    @Test
+    fun `Undisclosed poll - ended, some votes, including one from current user (winner)`() = runTest {
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(PollKind.Undisclosed).copy(votes = votes, endTime = 1UL))
+            factory.create(aPollContent(pollKind = PollKind.Undisclosed, votes = votes, endTime = 1UL))
         )
             .isEqualTo(
-                aTimelineItemPollContent(PollKind.Undisclosed).copy(
+                aTimelineItemPollContent(
+                    pollKind = PollKind.Undisclosed,
                     answerItems = listOf(
-                        aPollAnswerItem(A_POLL_ANSWER_1).copy(isDisclosed = true, isEnabled = false, votesCount = 3, percentage = 0.3f),
-                        aPollAnswerItem(A_POLL_ANSWER_2).copy(
-                            isDisclosed = true,
-                            isSelected = true,
-                            isEnabled = false,
-                            isWinner = true,
-                            votesCount = 6,
-                            percentage = 0.6f
-                        ),
-                        aPollAnswerItem(A_POLL_ANSWER_3).copy(isDisclosed = true, isEnabled = false, votesCount = 0, percentage = 0f),
-                        aPollAnswerItem(A_POLL_ANSWER_4).copy(isDisclosed = true, isEnabled = false, votesCount = 1, percentage = 0.1f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_1, isEnabled = false, votesCount = 3, percentage = 0.3f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_2, isSelected = true, isEnabled = false, isWinner = true, votesCount = 6, percentage = 0.6f),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_3, isEnabled = false),
+                        aPollAnswerItem(answer = A_POLL_ANSWER_4, isEnabled = false, votesCount = 1, percentage = 0.1f),
                     ),
-                    votes = votes,
-                    isEnded = true,
-                )
-            )
-
-        // Some votes, according one from current user (not winner) and two winning votes
-        votes = mapOf(
-            A_POLL_ANSWER_1.id to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4, A_USER_ID_5),
-            A_POLL_ANSWER_2.id to listOf(A_USER_ID, A_USER_ID_6),
-            A_POLL_ANSWER_3.id to emptyList(),
-            A_POLL_ANSWER_4.id to listOf(A_USER_ID_7, A_USER_ID_8, A_USER_ID_9, A_USER_ID_10),
-        )
-        Truth.assertThat(
-            factory.create(aPollContent(PollKind.Undisclosed).copy(votes = votes, endTime = 1UL))
-        )
-            .isEqualTo(
-                aTimelineItemPollContent(PollKind.Undisclosed).copy(
-                    answerItems = listOf(
-                        aPollAnswerItem(A_POLL_ANSWER_1).copy(isDisclosed = true, isEnabled = false, isWinner = true, votesCount = 4, percentage = 0.4f),
-                        aPollAnswerItem(A_POLL_ANSWER_2).copy(isDisclosed = true, isSelected = true, isEnabled = false, votesCount = 2, percentage = 0.2f),
-                        aPollAnswerItem(A_POLL_ANSWER_3).copy(isDisclosed = true, isEnabled = false, votesCount = 0, percentage = 0f),
-                        aPollAnswerItem(A_POLL_ANSWER_4).copy(isDisclosed = true, isEnabled = false, isWinner = true, votesCount = 4, percentage = 0.4f),
-                    ),
-                    votes = votes,
                     isEnded = true,
                 )
             )
     }
 
-    private fun aPollContent(pollKind: PollKind): PollContent = PollContent(
+    @Test
+    fun `Undisclosed poll - ended, some votes, including one from current user (not winner) and two winning votes`() = runTest {
+        val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }
+        Truth.assertThat(
+            factory.create(aPollContent(PollKind.Undisclosed).copy(votes = votes, endTime = 1UL))
+        )
+            .isEqualTo(
+                aTimelineItemPollContent(
+                    pollKind = PollKind.Undisclosed,
+                    answerItems = listOf(
+                        aPollAnswerItem(A_POLL_ANSWER_1, isEnabled = false, isWinner = true, votesCount = 4, percentage = 0.4f),
+                        aPollAnswerItem(A_POLL_ANSWER_2, isSelected = true, isEnabled = false, votesCount = 2, percentage = 0.2f),
+                        aPollAnswerItem(A_POLL_ANSWER_3, isEnabled = false),
+                        aPollAnswerItem(A_POLL_ANSWER_4, isEnabled = false, isWinner = true, votesCount = 4, percentage = 0.4f),
+                    ),
+                    isEnded = true,
+                )
+            )
+    }
+
+    private fun aPollContent(
+        pollKind: PollKind = PollKind.Disclosed,
+        votes: Map<String, List<UserId>> = emptyMap(),
+        endTime: ULong? = null,
+    ): PollContent = PollContent(
         question = A_POLL_QUESTION,
         kind = pollKind,
         maxSelections = 1UL,
-        answers = listOf(
-            A_POLL_ANSWER_1,
-            A_POLL_ANSWER_2,
-            A_POLL_ANSWER_3,
-            A_POLL_ANSWER_4,
-        ),
-        votes = emptyMap(),
-        endTime = null,
+        answers = listOf(A_POLL_ANSWER_1, A_POLL_ANSWER_2, A_POLL_ANSWER_3, A_POLL_ANSWER_4),
+        votes = votes,
+        endTime = endTime,
     )
 
-    private fun aTimelineItemPollContent(pollKind: PollKind) = TimelineItemPollContent(
-        question = A_POLL_QUESTION,
-        answerItems = listOf(
+    private fun aTimelineItemPollContent(
+        pollKind: PollKind = PollKind.Disclosed,
+        answerItems: List<PollAnswerItem> = listOf(
             aPollAnswerItem(A_POLL_ANSWER_1),
             aPollAnswerItem(A_POLL_ANSWER_2),
             aPollAnswerItem(A_POLL_ANSWER_3),
             aPollAnswerItem(A_POLL_ANSWER_4),
         ),
-        votes = emptyMap(),
+        isEnded: Boolean = false,
+    ) = TimelineItemPollContent(
+        question = A_POLL_QUESTION,
+        answerItems = answerItems,
         pollKind = pollKind,
-        isEnded = false,
+        isEnded = isEnded,
     )
 
-    private fun aPollAnswerItem(answer: PollAnswer) = PollAnswerItem(
+    private fun aPollAnswerItem(
+        answer: PollAnswer,
+        isSelected: Boolean = false,
+        isEnabled: Boolean = true,
+        isWinner: Boolean = false,
+        isDisclosed: Boolean = true,
+        votesCount: Int = 0,
+        percentage: Float = 0f,
+    ) = PollAnswerItem(
         answer = answer,
-        isSelected = false,
-        isEnabled = true,
-        isWinner = false,
-        isDisclosed = true,
-        votesCount = 0,
-        percentage = 0f,
+        isSelected = isSelected,
+        isEnabled = isEnabled,
+        isWinner = isWinner,
+        isDisclosed = isDisclosed,
+        votesCount = votesCount,
+        percentage = percentage,
     )
+
+    private companion object TestData {
+        private const val A_POLL_QUESTION = "What is your favorite food?"
+        private val A_POLL_ANSWER_1 = PollAnswer("id_1", "Pizza")
+        private val A_POLL_ANSWER_2 = PollAnswer("id_2", "Pasta")
+        private val A_POLL_ANSWER_3 = PollAnswer("id_3", "French Fries")
+        private val A_POLL_ANSWER_4 = PollAnswer("id_4", "Hamburger")
+
+        private val MY_USER_WINNING_VOTES = mapOf(
+            A_POLL_ANSWER_1 to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4),
+            A_POLL_ANSWER_2 to listOf(A_USER_ID /* my vote */, A_USER_ID_5, A_USER_ID_6, A_USER_ID_7, A_USER_ID_8, A_USER_ID_9), // winner
+            A_POLL_ANSWER_3 to emptyList(),
+            A_POLL_ANSWER_4 to listOf(A_USER_ID_10),
+        )
+        private val OTHER_WINNING_VOTES = mapOf(
+            A_POLL_ANSWER_1 to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4, A_USER_ID_5), // winner
+            A_POLL_ANSWER_2 to listOf(A_USER_ID /* my vote */, A_USER_ID_6),
+            A_POLL_ANSWER_3 to emptyList(),
+            A_POLL_ANSWER_4 to listOf(A_USER_ID_7, A_USER_ID_8, A_USER_ID_9, A_USER_ID_10), // winner
+        )
+    }
 }

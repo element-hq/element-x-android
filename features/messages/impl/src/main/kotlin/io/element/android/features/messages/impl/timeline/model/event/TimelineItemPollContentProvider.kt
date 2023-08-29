@@ -34,6 +34,5 @@ fun aTimelineItemPollContent(): TimelineItemPollContent {
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),
         isEnded = false,
-        votes = emptyMap(),
     )
 }
