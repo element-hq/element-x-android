@@ -1,6 +1,6 @@
 # Installing Element X Android from a Github Release.
 
-This document explain how to install Element X Android from a Github Release.
+This document explains how to install Element X Android from a Github Release.
 
 <!--- TOC -->
 
