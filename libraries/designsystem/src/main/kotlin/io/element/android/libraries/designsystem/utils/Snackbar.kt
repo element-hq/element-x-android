@@ -34,34 +34,31 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.ButtonVisuals
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Snackbar
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.flow.MutableSharedFlow
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A global dispatcher of [SnackbarMessage] to be displayed in [Snackbar] via a [SnackbarHostState].
  */
 class SnackbarDispatcher {
-    private val mutex = Mutex()
-
-    private val _snackbarMessage = MutableStateFlow<SnackbarMessage?>(null)
-    val snackbarMessage: Flow<SnackbarMessage?> = _snackbarMessage.asStateFlow()
+    private val _snackbarMessage = MutableSharedFlow<SnackbarMessage?>(
+        replay = 1,
+        extraBufferCapacity = 10,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val snackbarMessage: Flow<SnackbarMessage?> = _snackbarMessage
 
     suspend fun post(message: SnackbarMessage) {
-        mutex.withLock {
-            _snackbarMessage.update { message }
-        }
+        _snackbarMessage.emit(message)
     }
 
-    suspend fun clear() {
-        mutex.withLock {
-            _snackbarMessage.update { null }
-        }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun clear() {
+        _snackbarMessage.resetReplayCache()
     }
 }
 
@@ -87,31 +84,51 @@ fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Helper method to display a [SnackbarMessage] in a [SnackbarHostState] handling cancellations.
+ */
 @Composable
 fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostState {
     val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessageText = snackbarMessage?.let {
         stringResource(id = snackbarMessage.messageResId)
-    }
+    } ?: return snackbarHostState
+
     val dispatcher = LocalSnackbarDispatcher.current
-    LaunchedEffect(snackbarMessage) {
-        if (snackbarMessageText == null) return@LaunchedEffect
-        launch {
-            snackbarHostState.showSnackbar(
-                message = snackbarMessageText,
-                duration = snackbarMessage.duration,
-            )
-            if (isActive) {
+    LaunchedEffect(snackbarMessageText) {
+        // If the message wasn't already displayed, do it now, and mark it as displayed
+        // This will prevent the message from appearing in any other active SnackbarHosts
+        if (snackbarMessage.isDisplayed.getAndSet(true) == false) {
+            try {
+                snackbarHostState.showSnackbar(
+                    message = snackbarMessageText,
+                    duration = snackbarMessage.duration,
+                )
+                // The snackbar item was displayed and dismissed, clear its message
                 dispatcher.clear()
+            } catch (e: CancellationException) {
+                // The snackbar was being displayed when the coroutine was cancelled,
+                // so we need to clear its message
+                dispatcher.clear()
+                throw e
             }
         }
     }
     return snackbarHostState
 }
 
+/**
+ * A message to be displayed in a [Snackbar].
+ */
 data class SnackbarMessage(
+    /** The message to be displayed. */
     @StringRes val messageResId: Int,
+    /** The duration of the message. The default value is [SnackbarDuration.Short]. */
     val duration: SnackbarDuration = SnackbarDuration.Short,
+    /** The action title to be displayed. */
     @StringRes val actionResId: Int? = null,
+    /** Used to track if the current message is already displayed or not. */
+    val isDisplayed: AtomicBoolean = AtomicBoolean(false),
+    /** The action to be performed when the action is clicked. */
     val action: () -> Unit = {},
 )
