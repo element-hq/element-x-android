@@ -66,7 +66,8 @@ fun AnalyticsPreferencesView(
                 onClick = {
                     subtitle
                         .getStringAnnotations(LINK_TAG, it, it)
-                        .firstOrNull()?.let { stringAnnotation ->
+                        .firstOrNull()
+                        ?.let { stringAnnotation ->
                             onOpenAnalyticsPolicy(stringAnnotation.item)
                         }
                 }
