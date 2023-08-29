@@ -143,7 +143,7 @@ git commit -a -m "Setting version for the release ${version}"
 
 printf "\n================================================================================\n"
 printf "Building the bundle locally first...\n"
-./gradlew clean bundleRelease
+./gradlew clean app:bundleRelease
 
 printf "\n================================================================================\n"
 printf "Running towncrier...\n"
