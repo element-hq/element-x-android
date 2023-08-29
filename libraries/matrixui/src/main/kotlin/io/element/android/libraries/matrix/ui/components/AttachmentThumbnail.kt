@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Attachment
 import androidx.compose.material.icons.outlined.GraphicEq
+import androidx.compose.material.icons.outlined.Poll
 import androidx.compose.material.icons.outlined.VideoCameraBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -87,6 +88,12 @@ fun AttachmentThumbnail(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
+                AttachmentThumbnailType.Poll -> {
+                    Icon(
+                        imageVector = Icons.Outlined.Poll,
+                        contentDescription = info.textContent,
+                    )
+                }
                 else -> Unit
             }
         }
@@ -95,7 +102,7 @@ fun AttachmentThumbnail(
 
 @Parcelize
 enum class AttachmentThumbnailType: Parcelable {
-    Image, Video, File, Audio, Location
+    Image, Video, File, Audio, Location, Poll
 }
 
 @Parcelize

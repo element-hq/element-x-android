@@ -278,7 +278,9 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemLocationContent -> AttachmentThumbnailInfo(
                 type = AttachmentThumbnailType.Location,
             )
-            is TimelineItemPollContent, // TODO Polls: handle reply to
+            is TimelineItemPollContent -> AttachmentThumbnailInfo(
+                type = AttachmentThumbnailType.Poll,
+            )
             is TimelineItemTextBasedContent,
             is TimelineItemRedactedContent,
             is TimelineItemStateContent,
