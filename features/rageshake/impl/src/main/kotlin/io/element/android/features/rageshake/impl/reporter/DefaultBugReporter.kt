@@ -268,8 +268,9 @@ class DefaultBugReporter @Inject constructor(
                         }
                     }
 
-                    if (!uploadedSomeLogs) {
-                        error("Couldn't upload any logs")
+                    if (gzippedFiles.isNotEmpty() && !uploadedSomeLogs) {
+                        listener?.onUploadFailed("Couldn't upload any logs")
+                        return@withContext
                     }
 
                     mBugReportFiles.addAll(gzippedFiles)
