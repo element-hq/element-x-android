@@ -119,7 +119,7 @@ fun ListItem(
 
     androidx.compose.material3.ListItem(
         headlineContent = decoratedHeadlineContent,
-        modifier = Modifier.clickable(enabled = enabled && onClick != null, onClick = onClick ?: {}).then(modifier),
+        modifier = if (onClick != null) Modifier.clickable(enabled = enabled, onClick = onClick).then(modifier) else modifier,
         overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,
@@ -134,9 +134,9 @@ fun ListItem(
  * The style to use for a [ListItem].
  */
 sealed interface ListItemStyle {
-    object Default : ListItemStyle
-    object Primary: ListItemStyle
-    object Destructive : ListItemStyle
+    data object Default : ListItemStyle
+    data object Primary: ListItemStyle
+    data object Destructive : ListItemStyle
 
     @Composable fun headlineColor() = when (this) {
         Default, Primary -> ListItemDefaultColors.headline

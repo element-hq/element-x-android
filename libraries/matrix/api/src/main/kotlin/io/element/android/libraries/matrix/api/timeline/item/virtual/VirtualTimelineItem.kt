@@ -22,7 +22,7 @@ sealed interface VirtualTimelineItem {
         val timestamp: Long
     ) : VirtualTimelineItem
 
-    object ReadMarker : VirtualTimelineItem
+    data object ReadMarker : VirtualTimelineItem
 
-    object EncryptedHistoryBanner : VirtualTimelineItem
+    data object EncryptedHistoryBanner : VirtualTimelineItem
 }

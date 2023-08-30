@@ -56,16 +56,17 @@ class PreferencesFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Root : NavTarget
+        data object Root : NavTarget
 
         @Parcelize
-        object DeveloperSettings : NavTarget
+        data object DeveloperSettings : NavTarget
 
         @Parcelize
-        object AnalyticsSettings : NavTarget
+        data object AnalyticsSettings : NavTarget
 
         @Parcelize
-        object About : NavTarget
+
+        data object About : NavTarget
 
         @Parcelize
         object NotificationSettings : NavTarget

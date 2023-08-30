@@ -32,6 +32,14 @@ const val A_PASSWORD = "password"
 
 val A_USER_ID = UserId("@alice:server.org")
 val A_USER_ID_2 = UserId("@bob:server.org")
+val A_USER_ID_3 = UserId("@carol:server.org")
+val A_USER_ID_4 = UserId("@david:server.org")
+val A_USER_ID_5 = UserId("@eve:server.org")
+val A_USER_ID_6 = UserId("@justin:server.org")
+val A_USER_ID_7 = UserId("@mallory:server.org")
+val A_USER_ID_8 = UserId("@susie:server.org")
+val A_USER_ID_9 = UserId("@victor:server.org")
+val A_USER_ID_10 = UserId("@walter:server.org")
 val A_SESSION_ID: SessionId = A_USER_ID
 val A_SESSION_ID_2: SessionId = A_USER_ID_2
 val A_SPACE_ID = SpaceId("!aSpaceId:domain")

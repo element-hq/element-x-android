@@ -17,9 +17,9 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 sealed interface ProfileTimelineDetails {
-    object Unavailable : ProfileTimelineDetails
+    data object Unavailable : ProfileTimelineDetails
 
-    object Pending : ProfileTimelineDetails
+    data object Pending : ProfileTimelineDetails
 
     data class Ready(
         val displayName: String?,

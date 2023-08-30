@@ -60,11 +60,11 @@ enum class Target(open val filter: String) {
 }
 
 sealed class LogLevel(val filter: String) {
-    object Warn : LogLevel("warn")
-    object Trace : LogLevel("trace")
-    object Info : LogLevel("info")
-    object Debug : LogLevel("debug")
-    object Error : LogLevel("error")
+    data object Warn : LogLevel("warn")
+    data object Trace : LogLevel("trace")
+    data object Info : LogLevel("info")
+    data object Debug : LogLevel("debug")
+    data object Error : LogLevel("error")
 }
 
 object TracingFilterConfigurations {

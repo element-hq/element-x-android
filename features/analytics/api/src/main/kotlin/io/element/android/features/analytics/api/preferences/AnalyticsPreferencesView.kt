@@ -16,22 +16,21 @@
 
 package io.element.android.features.analytics.api.preferences
 
-import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.components.LINK_TAG
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.theme.LinkColor
+import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListSupportingText
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -43,40 +42,33 @@ fun AnalyticsPreferencesView(
         state.eventSink(AnalyticsOptInEvents.EnableAnalytics(isEnabled = isEnabled))
     }
 
-    val firstPart = stringResource(id = CommonStrings.screen_analytics_settings_help_us_improve, state.applicationName)
-    val secondPart = buildAnnotatedStringWithColoredPart(
+    val supportingText = stringResource(
+        id = CommonStrings.screen_analytics_settings_help_us_improve,
+        state.applicationName
+    )
+    val linkText = buildAnnotatedStringWithStyledPart(
         CommonStrings.screen_analytics_settings_read_terms,
-        CommonStrings.screen_analytics_settings_read_terms_content_link
+        CommonStrings.screen_analytics_settings_read_terms_content_link,
+        tagAndLink = LINK_TAG to state.policyUrl,
     )
-    val subtitle = "$firstPart\n\n$secondPart"
-
-    PreferenceSwitch(
-        modifier = modifier,
-        title = stringResource(id = CommonStrings.screen_analytics_settings_share_data),
-        subtitle = subtitle,
-        isChecked = state.isEnabled,
-        onCheckedChange = ::onEnabledChanged,
-        switchAlignment = Alignment.Top,
-    )
-}
-
-@Composable
-fun buildAnnotatedStringWithColoredPart(
-    @StringRes fullTextRes: Int,
-    @StringRes coloredTextRes: Int,
-    color: Color = LinkColor,
-    underline: Boolean = true,
-) = buildAnnotatedString {
-    val coloredPart = stringResource(coloredTextRes)
-    val fullText = stringResource(fullTextRes, coloredPart)
-    val startIndex = fullText.indexOf(coloredPart)
-    append(fullText)
-    addStyle(
-        style = SpanStyle(
-            color = color,
-            textDecoration = if (underline) TextDecoration.Underline else null
-        ), start = startIndex, end = startIndex + coloredPart.length
-    )
+    Column(modifier) {
+        ListItem(
+            headlineContent = {
+                Text(stringResource(id = CommonStrings.screen_analytics_settings_share_data))
+            },
+            supportingContent = {
+                Text(supportingText)
+            },
+            leadingContent = null,
+            trailingContent = ListItemContent.Switch(
+                checked = state.isEnabled,
+            ),
+            onClick = {
+                onEnabledChanged(!state.isEnabled)
+            }
+        )
+        ListSupportingText(annotatedString = linkText)
+    }
 }
 
 @Preview
@@ -91,5 +83,7 @@ internal fun AnalyticsPreferencesViewDarkPreview(@PreviewParameter(AnalyticsPref
 
 @Composable
 private fun ContentToPreview(state: AnalyticsPreferencesState) {
-    AnalyticsPreferencesView(state)
+    AnalyticsPreferencesView(
+        state = state,
+    )
 }

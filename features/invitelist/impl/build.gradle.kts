@@ -53,7 +53,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.features.invitelist.test)
-    testImplementation(projects.features.analytics.test)
+    testImplementation(projects.services.analytics.test)
 
     ksp(libs.showkase.processor)
 }

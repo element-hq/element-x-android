@@ -24,16 +24,15 @@ open class TimelineItemPollContentProvider : PreviewParameterProvider<TimelineIt
     override val values: Sequence<TimelineItemPollContent>
         get() = sequenceOf(
             aTimelineItemPollContent(),
-            aTimelineItemPollContent().copy(isDisclosed = true),
+            aTimelineItemPollContent().copy(pollKind = PollKind.Undisclosed),
         )
 }
 
 fun aTimelineItemPollContent(): TimelineItemPollContent {
     return TimelineItemPollContent(
         pollKind = PollKind.Disclosed,
-        isDisclosed = false,
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),
-        votes = emptyMap(),
+        isEnded = false,
     )
 }

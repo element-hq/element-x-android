@@ -17,15 +17,13 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.features.poll.api.PollAnswerItem
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.poll.PollKind
 
 data class TimelineItemPollContent(
     val question: String,
     val answerItems: List<PollAnswerItem>,
-    val votes: Map<String, List<UserId>>,
     val pollKind: PollKind,
-    val isDisclosed: Boolean,
+    val isEnded: Boolean,
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemPollContent"
 }
