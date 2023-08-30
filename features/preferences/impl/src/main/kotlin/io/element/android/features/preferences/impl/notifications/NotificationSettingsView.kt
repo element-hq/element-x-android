@@ -55,10 +55,9 @@ fun NotificationSettingsView(
         }
 
         PreferenceSwitch(
-            modifier = modifier,
+            modifier = Modifier,
             title = stringResource(id = CommonStrings.screen_notification_settings_enable_notifications),
             isChecked = state.isEnabled,
-//            onCheckedChange = ::onEnabledChanged,
             switchAlignment = Alignment.Top,
         )
 
@@ -77,20 +76,18 @@ fun NotificationSettingsView(
 
             PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_mode_mentions)) {
                 PreferenceSwitch(
-                    modifier = modifier,
+                    modifier = Modifier,
                     title = stringResource(id = CommonStrings.screen_notification_settings_room_mention_label),
                     isChecked = state.notifyMeOnRoom,
-//            onCheckedChange = ::onEnabledChanged,
                     switchAlignment = Alignment.Top,
                 )
             }
 
             PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_additional_settings_section_title)) {
                 PreferenceSwitch(
-                    modifier = modifier,
+                    modifier = Modifier,
                     title = stringResource(id = CommonStrings.screen_notification_settings_calls_label),
                     isChecked = state.acceptCalls,
-//            onCheckedChange = ::onEnabledChanged,
                     switchAlignment = Alignment.Top,
                 )
             }

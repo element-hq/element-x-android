@@ -94,11 +94,13 @@ fun PreferencesRootView(
                 onClick = onOpenAnalytics,
             )
         }
-        PreferenceText(
-            title = stringResource(id = CommonStrings.screen_notification_settings_title),
-            icon = Icons.Outlined.Notifications,
-            onClick = onOpenNotificationSettings,
-        )
+        if(state.showNotificationSettings) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.screen_notification_settings_title),
+                icon = Icons.Outlined.Notifications,
+                onClick = onOpenNotificationSettings,
+            )
+        }
         PreferenceText(
             title = stringResource(id = CommonStrings.action_report_bug),
             icon = Icons.Outlined.BugReport,

@@ -69,7 +69,7 @@ class PreferencesFlowNode @AssistedInject constructor(
         data object About : NavTarget
 
         @Parcelize
-        object NotificationSettings : NavTarget
+        data object NotificationSettings : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
