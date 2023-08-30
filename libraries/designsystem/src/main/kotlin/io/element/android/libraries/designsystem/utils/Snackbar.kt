@@ -34,33 +34,40 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.ButtonVisuals
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Snackbar
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A global dispatcher of [SnackbarMessage] to be displayed in [Snackbar] via a [SnackbarHostState].
  */
 class SnackbarDispatcher {
-    private val mutex = Mutex()
-
-    private val _snackbarMessage = MutableStateFlow<SnackbarMessage?>(null)
-    val snackbarMessage: Flow<SnackbarMessage?> = _snackbarMessage.asStateFlow()
-
-    suspend fun post(message: SnackbarMessage) {
-        mutex.withLock {
-            _snackbarMessage.update { message }
+    private val queueMutex = Mutex()
+    private val snackBarMessageQueue = ArrayDeque<SnackbarMessage>()
+    val snackbarMessage: Flow<SnackbarMessage?> = flow {
+        while (currentCoroutineContext().isActive) {
+            queueMutex.lock()
+            emit(snackBarMessageQueue.firstOrNull())
         }
     }
 
-    suspend fun clear() {
-        mutex.withLock {
-            _snackbarMessage.update { null }
+    suspend fun post(message: SnackbarMessage) {
+        if (snackBarMessageQueue.isEmpty()) {
+            snackBarMessageQueue.add(message)
+            if (queueMutex.isLocked) queueMutex.unlock()
+        } else {
+            snackBarMessageQueue.add(message)
+        }
+    }
+
+    fun clear() {
+        if (snackBarMessageQueue.isNotEmpty()) {
+            snackBarMessageQueue.removeFirstOrNull()
+            if (queueMutex.isLocked) queueMutex.unlock()
         }
     }
 }
@@ -87,31 +94,51 @@ fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Helper method to display a [SnackbarMessage] in a [SnackbarHostState] handling cancellations.
+ */
 @Composable
 fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostState {
     val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessageText = snackbarMessage?.let {
         stringResource(id = snackbarMessage.messageResId)
-    }
+    } ?: return snackbarHostState
+
     val dispatcher = LocalSnackbarDispatcher.current
-    LaunchedEffect(snackbarMessage) {
-        if (snackbarMessageText == null) return@LaunchedEffect
-        launch {
-            snackbarHostState.showSnackbar(
-                message = snackbarMessageText,
-                duration = snackbarMessage.duration,
-            )
-            if (isActive) {
+    LaunchedEffect(snackbarMessageText) {
+        // If the message wasn't already displayed, do it now, and mark it as displayed
+        // This will prevent the message from appearing in any other active SnackbarHosts
+        if (snackbarMessage.isDisplayed.getAndSet(true) == false) {
+            try {
+                snackbarHostState.showSnackbar(
+                    message = snackbarMessageText,
+                    duration = snackbarMessage.duration,
+                )
+                // The snackbar item was displayed and dismissed, clear its message
                 dispatcher.clear()
+            } catch (e: CancellationException) {
+                // The snackbar was being displayed when the coroutine was cancelled,
+                // so we need to clear its message
+                dispatcher.clear()
+                throw e
             }
         }
     }
     return snackbarHostState
 }
 
+/**
+ * A message to be displayed in a [Snackbar].
+ * @param messageResId The message to be displayed.
+ * @param duration The duration of the message. The default value is [SnackbarDuration.Short].
+ * @param actionResId The action text to be displayed. The default value is `null`.
+ * @param isDisplayed Used to track if the current message is already displayed or not.
+ * @param action The action to be performed when the action is clicked.
+ */
 data class SnackbarMessage(
     @StringRes val messageResId: Int,
     val duration: SnackbarDuration = SnackbarDuration.Short,
     @StringRes val actionResId: Int? = null,
+    val isDisplayed: AtomicBoolean = AtomicBoolean(false),
     val action: () -> Unit = {},
 )

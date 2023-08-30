@@ -43,5 +43,11 @@ android {
 
         ksp(libs.showkase.processor)
         kspTest(libs.showkase.processor)
+
+        testImplementation(libs.test.junit)
+        testImplementation(libs.coroutines.test)
+        testImplementation(libs.molecule.runtime)
+        testImplementation(libs.test.truth)
+        testImplementation(libs.test.turbine)
     }
 }
