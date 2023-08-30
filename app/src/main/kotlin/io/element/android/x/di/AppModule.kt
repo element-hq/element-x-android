@@ -23,6 +23,8 @@ import androidx.preference.PreferenceManager
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.features.messages.impl.timeline.components.customreaction.DefaultEmojibaseProvider
+import io.element.android.features.messages.impl.timeline.components.customreaction.EmojibaseProvider
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -104,5 +106,11 @@ object AppModule {
     @SingleIn(AppScope::class)
     fun provideSnackbarDispatcher(): SnackbarDispatcher {
         return SnackbarDispatcher()
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun providesEmojibaseProvider(@ApplicationContext context: Context): EmojibaseProvider {
+        return DefaultEmojibaseProvider(context)
     }
 }

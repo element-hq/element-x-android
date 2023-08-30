@@ -67,8 +67,7 @@ fun aMessagesState() = MessagesState(
     ),
     actionListState = anActionListState(),
     customReactionState = CustomReactionState(
-        selectedEventId = null,
-        emojiProvider = Async.Uninitialized,
+        target = CustomReactionState.Target.None,
         eventSink = {},
         selectedEmoji = persistentSetOf(),
     ),

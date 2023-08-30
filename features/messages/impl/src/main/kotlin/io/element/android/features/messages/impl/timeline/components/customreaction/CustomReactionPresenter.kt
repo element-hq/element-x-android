@@ -17,42 +17,46 @@
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.emojibasebindings.EmojibaseStore
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.canReact
 import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 
-class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionState> {
+class CustomReactionPresenter @Inject constructor(
+    private val emojibaseProvider: EmojibaseProvider
+) : Presenter<CustomReactionState> {
 
     @Composable
     override fun present(): CustomReactionState {
-        var selectedEvent by remember { mutableStateOf<TimelineItem.Event?>(null) }
-        var emojiState: Async<EmojibaseStore> by remember {
-            mutableStateOf(Async.Uninitialized)
+        val target: MutableState<CustomReactionState.Target> = remember {
+            mutableStateOf(CustomReactionState.Target.None)
         }
+
         val localCoroutineScope = rememberCoroutineScope()
-        val context = LocalContext.current
         fun handleShowCustomReactionSheet(event: TimelineItem.Event) {
-            selectedEvent = event
-            emojiState = Async.Loading()
+            target.value = CustomReactionState.Target.Loading(event)
             localCoroutineScope.launch {
-                emojiState = Async.Success(EmojibaseDatasource().load(context))
+                target.value = CustomReactionState.Target.Success(
+                    event = event,
+                    emojibaseStore = emojibaseProvider.loadEmojibase()
+                )
             }
         }
 
         fun handleDismissCustomReactionSheet() {
-            selectedEvent = null
-            emojiState = Async.Uninitialized
+            target.value = CustomReactionState.Target.None
         }
 
         fun handleEvents(event: CustomReactionEvents) {
@@ -61,10 +65,10 @@ class CustomReactionPresenter @Inject constructor() : Presenter<CustomReactionSt
                 is CustomReactionEvents.DismissCustomReactionSheet -> handleDismissCustomReactionSheet()
             }
         }
-        val selectedEmoji = selectedEvent?.reactionsState?.reactions?.mapNotNull { if(it.isHighlighted) it.key else null }.orEmpty().toImmutableSet()
+        val event = (target.value as? CustomReactionState.Target.Success)?.event
+        val selectedEmoji = event?.reactionsState?.reactions?.mapNotNull { if(it.isHighlighted) it.key else null }.orEmpty().toImmutableSet()
         return CustomReactionState(
-            selectedEventId = selectedEvent?.eventId,
-            emojiProvider = emojiState,
+            target = target.value,
             selectedEmoji = selectedEmoji,
             eventSink = ::handleEvents
         )

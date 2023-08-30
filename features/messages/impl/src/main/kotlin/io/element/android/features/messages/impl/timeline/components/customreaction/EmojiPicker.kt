@@ -63,12 +63,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun EmojiPicker(
     onEmojiSelected: (Emoji) -> Unit,
-    emojiProvider: EmojibaseStore,
+    emojibaseStore: EmojibaseStore,
     selectedEmojis: ImmutableSet<String>,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val categories = remember { emojiProvider.categories }
+    val categories = remember { emojibaseStore.categories }
     val pagerState = rememberPagerState(pageCount = { EmojibaseCategory.values().size })
     Column(modifier) {
         TabRow(
@@ -149,7 +149,7 @@ internal fun EmojiPickerDarkPreview() {
 private fun ContentToPreview() {
     EmojiPicker(
         onEmojiSelected = {},
-        emojiProvider = EmojibaseDatasource().load(LocalContext.current),
+        emojibaseStore = EmojibaseDatasource().load(LocalContext.current),
         selectedEmojis = persistentSetOf("😀", "😄", "😃"),
         modifier = Modifier.fillMaxWidth(),
     )

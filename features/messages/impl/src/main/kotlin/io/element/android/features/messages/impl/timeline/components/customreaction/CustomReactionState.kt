@@ -17,13 +17,27 @@
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
 import io.element.android.emojibasebindings.EmojibaseStore
+import io.element.android.features.messages.impl.actionlist.ActionListState
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
 data class CustomReactionState(
-    val selectedEventId: EventId?,
-    val emojiProvider: Async<EmojibaseStore>,
+    val target: Target,
     val selectedEmoji: ImmutableSet<String>,
     val eventSink: (CustomReactionEvents) -> Unit,
-)
+) {
+    sealed interface Target {
+
+        data object None : Target
+        data class Loading(val event: TimelineItem.Event) : Target
+        data class Success(
+            val event: TimelineItem.Event,
+            val emojibaseStore: EmojibaseStore,
+        ) : Target
+    }
+}
+

@@ -23,33 +23,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import io.element.android.emojibasebindings.Emoji
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
+import io.element.android.libraries.matrix.api.core.EventId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomReactionBottomSheet(
     state: CustomReactionState,
-    onEmojiSelected: (Emoji) -> Unit,
+    onEmojiSelected: (EventId, Emoji) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
+    val target = state.target as? CustomReactionState.Target.Success
 
     fun onDismiss() {
         state.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
     }
 
     fun onEmojiSelectedDismiss(emoji: Emoji) {
+        if (target?.event?.eventId == null) return
         sheetState.hide(coroutineScope) {
             state.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
-            onEmojiSelected(emoji)
+            onEmojiSelected(target.event.eventId, emoji)
         }
     }
 
-    val emojiProvider = state.emojiProvider.dataOrNull()
-    val selectedEventId = state.selectedEventId
-    if (emojiProvider != null && selectedEventId != null) {
+    if (target?.emojibaseStore != null && target.event.eventId != null) {
         ModalBottomSheet(
             onDismissRequest = ::onDismiss,
             sheetState = sheetState,
@@ -57,7 +59,7 @@ fun CustomReactionBottomSheet(
         ) {
             EmojiPicker(
                 onEmojiSelected = ::onEmojiSelectedDismiss,
-                emojiProvider = emojiProvider,
+                emojibaseStore = target.emojibaseStore,
                 selectedEmojis = state.selectedEmoji,
                 modifier = Modifier.fillMaxSize(),
             )
