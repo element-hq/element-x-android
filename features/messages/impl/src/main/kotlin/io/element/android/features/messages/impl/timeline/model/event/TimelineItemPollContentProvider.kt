@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.poll.api.aPollAnswerItemList
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
 
 open class TimelineItemPollContentProvider : PreviewParameterProvider<TimelineItemPollContent> {
@@ -30,6 +31,7 @@ open class TimelineItemPollContentProvider : PreviewParameterProvider<TimelineIt
 
 fun aTimelineItemPollContent(): TimelineItemPollContent {
     return TimelineItemPollContent(
+        eventId = EventId("\$anEventId"),
         pollKind = PollKind.Disclosed,
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),

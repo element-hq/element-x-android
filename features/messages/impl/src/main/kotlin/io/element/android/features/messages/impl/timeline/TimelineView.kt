@@ -100,6 +100,9 @@ fun TimelineView(
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
+    fun onPollAnswerSelected(pollStartId: EventId, answerId: String) {
+        state.eventSink(TimelineEvents.PollAnswerSelected(pollStartId, answerId))
+    }
 
     Box(modifier = modifier) {
         LazyColumn(
@@ -125,6 +128,7 @@ fun TimelineView(
                     onReactionLongClick = onReactionLongClicked,
                     onMoreReactionsClick = onMoreReactionsClicked,
                     onTimestampClicked = onTimestampClicked,
+                    onPollAnswerSelected = ::onPollAnswerSelected,
                     onSwipeToReply = onSwipeToReply,
                 )
             }
@@ -162,6 +166,7 @@ fun TimelineItemRow(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
+    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
@@ -194,6 +199,7 @@ fun TimelineItemRow(
                     onMoreReactionsClick = onMoreReactionsClick,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = { onSwipeToReply(timelineItem) },
+                    onPollAnswerSelected = onPollAnswerSelected,
                     modifier = modifier,
                 )
             }
@@ -231,6 +237,7 @@ fun TimelineItemRow(
                                 onReactionClick = onReactionClick,
                                 onReactionLongClick = onReactionLongClick,
                                 onMoreReactionsClick = onMoreReactionsClick,
+                                onPollAnswerSelected = onPollAnswerSelected,
                                 onSwipeToReply = {},
                             )
                         }
