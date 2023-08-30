@@ -39,6 +39,7 @@ class AnalyticsPreferencesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isEnabled).isTrue()
+            assertThat(initialState.policyUrl).isNotEmpty()
         }
     }
 

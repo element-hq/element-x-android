@@ -120,6 +120,12 @@
         "screen_welcome_.*",
         "screen_migration_.*"
       ]
+    },
+    {
+      "name": ":features:poll:impl",
+      "includeRegex": [
+        "screen_create_poll_.*"
+      ]
     }
   ]
 }

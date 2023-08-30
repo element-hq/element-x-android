@@ -14,33 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl
+package io.element.android.features.poll.impl.create
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.poll.api.PollEntryPoint
+import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultPollEntryPoint @Inject constructor() : PollEntryPoint {
-
-    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): PollEntryPoint.NodeBuilder {
-        val plugins = ArrayList<Plugin>()
-
-        return object : PollEntryPoint.NodeBuilder {
-
-            override fun callback(callback: PollEntryPoint.Callback): PollEntryPoint.NodeBuilder {
-                plugins += callback
-                return this
-            }
-
-            override fun build(): Node {
-                return parentNode.createNode<PollFlowNode>(buildContext, plugins)
-            }
-        }
+class DefaultCreatePollEntryPoint @Inject constructor() : CreatePollEntryPoint {
+    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
+        return parentNode.createNode<CreatePollNode>(buildContext)
     }
 }

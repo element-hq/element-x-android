@@ -69,7 +69,6 @@ class TimelineItemContentPollFactory @Inject constructor(
         return TimelineItemPollContent(
             question = content.question,
             answerItems = answerItems,
-            votes = content.votes,
             pollKind = content.kind,
             isEnded = isEndedPoll,
         )
