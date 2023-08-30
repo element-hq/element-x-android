@@ -268,12 +268,12 @@ class DefaultBugReporter @Inject constructor(
                         }
                     }
 
+                    mBugReportFiles.addAll(gzippedFiles)
+
                     if (gzippedFiles.isNotEmpty() && !uploadedSomeLogs) {
-                        listener?.onUploadFailed("Couldn't upload any logs")
+                        serverError = "Couldn't upload any logs, please retry."
                         return@withContext
                     }
-
-                    mBugReportFiles.addAll(gzippedFiles)
 
                     if (withScreenshot) {
                         screenshotHolder.getFileUri()
