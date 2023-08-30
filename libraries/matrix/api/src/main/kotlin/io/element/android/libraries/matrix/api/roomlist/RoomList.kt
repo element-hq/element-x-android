@@ -29,7 +29,7 @@ import kotlin.time.Duration
  */
 interface RoomList {
     sealed class LoadingState {
-        object NotLoaded : LoadingState()
+        data object NotLoaded : LoadingState()
         data class Loaded(val numberOfRooms: Int) : LoadingState()
     }
 

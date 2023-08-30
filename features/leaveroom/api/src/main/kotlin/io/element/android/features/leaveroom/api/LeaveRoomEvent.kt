@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 
 sealed interface LeaveRoomEvent {
     data class ShowConfirmation(val roomId: RoomId) : LeaveRoomEvent
-    object HideConfirmation : LeaveRoomEvent
+    data object HideConfirmation : LeaveRoomEvent
     data class LeaveRoom(val roomId: RoomId) : LeaveRoomEvent
-    object HideError : LeaveRoomEvent
+    data object HideError : LeaveRoomEvent
 }

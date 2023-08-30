@@ -59,6 +59,7 @@ fun String.toAnnotatedString(): AnnotatedString = buildAnnotatedString {
  * @param color the color to apply to the string
  * @param underline whether to underline the string
  * @param bold whether to bold the string
+ * @param tagAndLink an optional pair of tag and link to add to the styled part of the string, as StringAnnotation
  */
 @Composable
 fun buildAnnotatedStringWithStyledPart(
@@ -67,6 +68,7 @@ fun buildAnnotatedStringWithStyledPart(
     color: Color = LinkColor,
     underline: Boolean = true,
     bold: Boolean = false,
+    tagAndLink: Pair<String, String>? = null,
 ) = buildAnnotatedString {
     val coloredPart = stringResource(coloredTextRes)
     val fullText = stringResource(fullTextRes, coloredPart)
@@ -81,4 +83,31 @@ fun buildAnnotatedStringWithStyledPart(
         start = startIndex,
         end = startIndex + coloredPart.length,
     )
+    if (tagAndLink != null) {
+        addStringAnnotation(
+            tag = tagAndLink.first,
+            annotation = tagAndLink.second,
+            start = startIndex,
+            end = startIndex + coloredPart.length
+        )
+    }
+}
+
+/**
+ * Convert a string to an [AnnotatedString] with colored end period if present.
+ */
+fun withColoredPeriod(
+    text: String,
+) = buildAnnotatedString {
+    append(text)
+    if (text.endsWith(".")) {
+        addStyle(
+            style = SpanStyle(
+                // Light.colorGreen700
+                color = Color(0xff0bc491),
+            ),
+            start = text.length - 1,
+            end = text.length,
+        )
+    }
 }

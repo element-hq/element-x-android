@@ -23,7 +23,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -67,14 +70,15 @@ internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) { Con
 
 @Composable
 private fun ContentToPreview() {
+    var checked by remember { mutableStateOf(false) }
     Column {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            RadioButton(selected = false, onClick = {})
-            RadioButton(selected = false, enabled = false, onClick = {})
+            RadioButton(selected = checked, enabled = true, onClick = { checked = !checked })
+            RadioButton(selected = checked, enabled = false, onClick = { checked = !checked })
         }
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            RadioButton(selected = true, onClick = {})
-            RadioButton(selected = true, enabled = false, onClick = {})
+            RadioButton(selected = !checked, enabled = true, onClick = { checked = !checked })
+            RadioButton(selected = !checked, enabled = false, onClick = { checked = !checked })
         }
     }
 }

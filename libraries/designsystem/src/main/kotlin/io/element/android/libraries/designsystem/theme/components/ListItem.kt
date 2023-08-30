@@ -19,6 +19,7 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material3.ListItemColors
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -29,9 +30,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.theme.ElementTheme
@@ -55,35 +58,27 @@ fun ListItem(
     headlineContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     supportingContent: @Composable (() -> Unit)? = null,
-    leadingContent: @Composable (() -> Unit)? = null,
-    trailingContent: @Composable (() -> Unit)? = null,
+    leadingContent: ListItemContent? = null,
+    trailingContent: ListItemContent? = null,
     style: ListItemStyle = ListItemStyle.Default,
     enabled: Boolean = true,
     onClick: (() -> Unit)? = null,
 ) {
-    val headlineColor = if (enabled) when (style) {
-        ListItemStyle.Destructive -> ElementTheme.colors.textCriticalPrimary
-        else -> ElementTheme.colors.textPrimary
-    } else {
-        // We cannot apply a disabled color by default: https://issuetracker.google.com/issues/280480132
-        ElementTheme.colors.textDisabled
-    }
+    val colors = ListItemDefaults.colors(
+        containerColor = Color.Transparent,
+        headlineColor = style.headlineColor(),
+        leadingIconColor = style.leadingIconColor(),
+        trailingIconColor = style.trailingIconColor(),
+        supportingColor = style.supportingTextColor(),
+        disabledHeadlineColor = ListItemDefaultColors.headlineDisabled,
+        disabledLeadingIconColor = ListItemDefaultColors.iconDisabled,
+        disabledTrailingIconColor = ListItemDefaultColors.iconDisabled,
+    )
 
-    val supportingContentColor = if (enabled) {
-        ElementTheme.materialColors.onSurfaceVariant
-    } else {
-        // We cannot apply a disabled color by default: https://issuetracker.google.com/issues/280480132
-        ElementTheme.colors.textDisabled
-    }
-
-    val leadingTrailingContentColor = if (enabled) when (style) {
-        ListItemStyle.Primary -> ElementTheme.colors.iconPrimary
-        ListItemStyle.Destructive -> ElementTheme.colors.iconCriticalPrimary
-        else -> ElementTheme.colors.iconTertiary
-    } else {
-        // We cannot apply a disabled color by default: https://issuetracker.google.com/issues/280480132
-        ElementTheme.colors.iconDisabled
-    }
+    // We cannot just pass the disabled colors, they must be set manually: https://issuetracker.google.com/issues/280480132
+    val headlineColor = if (enabled) colors.headlineColor else colors.disabledHeadlineColor
+    val leadingContentColor = if (enabled) colors.leadingIconColor else colors.disabledLeadingIconColor
+    val trailingContentColor = if (enabled) colors.trailingIconColor else colors.disabledTrailingIconColor
 
     val decoratedHeadlineContent: @Composable () -> Unit = {
         CompositionLocalProvider(
@@ -97,7 +92,6 @@ fun ListItem(
         {
             CompositionLocalProvider(
                 LocalTextStyle provides ElementTheme.materialTypography.bodyMedium,
-                LocalContentColor provides supportingContentColor,
             ) {
                 content()
             }
@@ -106,31 +100,31 @@ fun ListItem(
     val decoratedLeadingContent: (@Composable () -> Unit)? = leadingContent?.let { content ->
         {
             CompositionLocalProvider(
-                LocalContentColor provides leadingTrailingContentColor,
+                LocalContentColor provides leadingContentColor,
             ) {
-                content()
+                content.View()
             }
         }
     }
     val decoratedTrailingContent: (@Composable () -> Unit)? = trailingContent?.let { content ->
         {
             CompositionLocalProvider(
-                LocalContentColor provides leadingTrailingContentColor,
                 LocalTextStyle provides ElementTheme.typography.fontBodyMdRegular,
+                LocalContentColor provides trailingContentColor,
             ) {
-                content()
+                content.View()
             }
         }
     }
 
     androidx.compose.material3.ListItem(
         headlineContent = decoratedHeadlineContent,
-        modifier = modifier.clickable(enabled = enabled && onClick != null, onClick = onClick ?: {}),
+        modifier = if (onClick != null) Modifier.clickable(enabled = enabled, onClick = onClick).then(modifier) else modifier,
         overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,
         trailingContent = decoratedTrailingContent,
-        colors = ListItemDefaults.colors(), // These aren't really used since we need the workaround for the disabled state color
+        colors = colors,
         tonalElevation = 0.dp,
         shadowElevation = 0.dp,
     )
@@ -140,9 +134,50 @@ fun ListItem(
  * The style to use for a [ListItem].
  */
 sealed interface ListItemStyle {
-    object Default : ListItemStyle
-    object Primary: ListItemStyle
-    object Destructive : ListItemStyle
+    data object Default : ListItemStyle
+    data object Primary: ListItemStyle
+    data object Destructive : ListItemStyle
+
+    @Composable fun headlineColor() = when (this) {
+        Default, Primary -> ListItemDefaultColors.headline
+        Destructive -> ElementTheme.colors.textCriticalPrimary
+    }
+
+    @Composable fun supportingTextColor() = when (this) {
+        Default, Primary -> ListItemDefaultColors.supportingText
+        // FIXME once we have a defined color for this value
+        Destructive -> ElementTheme.colors.textCriticalPrimary.copy(alpha = 0.8f)
+    }
+
+    @Composable fun leadingIconColor() = when (this) {
+        Default -> ListItemDefaultColors.icon
+        Primary -> ElementTheme.colors.iconPrimary
+        Destructive -> ElementTheme.colors.iconCriticalPrimary
+    }
+
+    @Composable fun trailingIconColor() = when (this) {
+        Default -> ListItemDefaultColors.icon
+        Primary -> ElementTheme.colors.iconPrimary
+        Destructive -> ElementTheme.colors.iconCriticalPrimary
+    }
+}
+
+object ListItemDefaultColors {
+    val headline: Color @Composable get() = ElementTheme.colors.textPrimary
+    val headlineDisabled: Color @Composable get() = ElementTheme.colors.textDisabled
+    val supportingText: Color @Composable get() = ElementTheme.materialColors.onSurfaceVariant
+    val icon: Color @Composable get() = ElementTheme.colors.iconTertiary
+    val iconDisabled: Color @Composable get() = ElementTheme.colors.iconDisabled
+
+    val colors: ListItemColors @Composable get() = ListItemDefaults.colors(
+        headlineColor = headline,
+        supportingColor = supportingText,
+        leadingIconColor = icon,
+        trailingIconColor = icon,
+        disabledHeadlineColor = headlineDisabled,
+        disabledLeadingIconColor = iconDisabled,
+        disabledTrailingIconColor = iconDisabled,
+    )
 }
 
 // region: Simple list item
@@ -335,8 +370,9 @@ private object PreviewItems {
     @Composable
     fun ThreeLinesListItemPreview(
         modifier: Modifier = Modifier,
-        leadingContent: @Composable (() -> Unit)? = null,
-        trailingContent: @Composable (() -> Unit)? = null,
+        style: ListItemStyle = ListItemStyle.Default,
+        leadingContent: ListItemContent? = null,
+        trailingContent: ListItemContent? = null,
     ) {
         ElementThemedPreview {
             ListItem(
@@ -344,6 +380,7 @@ private object PreviewItems {
                 supportingContent = PreviewItems.text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
+                style = style,
                 modifier = modifier,
             )
         }
@@ -352,8 +389,9 @@ private object PreviewItems {
     @Composable
     fun TwoLinesListItemPreview(
         modifier: Modifier = Modifier,
-        leadingContent: @Composable (() -> Unit)? = null,
-        trailingContent: @Composable (() -> Unit)? = null,
+        style: ListItemStyle = ListItemStyle.Default,
+        leadingContent: ListItemContent? = null,
+        trailingContent: ListItemContent? = null,
     ) {
         ElementThemedPreview {
             ListItem(
@@ -361,6 +399,7 @@ private object PreviewItems {
                 supportingContent = PreviewItems.textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
+                style = style,
                 modifier = modifier,
             )
         }
@@ -369,9 +408,9 @@ private object PreviewItems {
     @Composable
     fun OneLineListItemPreview(
         modifier: Modifier = Modifier,
-        leadingContent: @Composable (() -> Unit)? = null,
-        trailingContent: @Composable (() -> Unit)? = null,
         style: ListItemStyle = ListItemStyle.Default,
+        leadingContent: ListItemContent? = null,
+        trailingContent: ListItemContent? = null,
         enabled: Boolean = true,
     ) {
         ElementThemedPreview {
@@ -402,25 +441,22 @@ private object PreviewItems {
     }
 
     @Composable
-    fun checkbox() = @Composable {
+    fun checkbox(): ListItemContent {
         var checked by remember { mutableStateOf(false) }
-        Checkbox(checked = checked, onCheckedChange = { checked = !checked })
+        return ListItemContent.Checkbox(checked = checked, onChange = { checked = !checked })
     }
 
     @Composable
-    fun radioButton() = @Composable {
+    fun radioButton(): ListItemContent {
         var checked by remember { mutableStateOf(false) }
-        RadioButton(selected = checked, onClick = { checked = !checked })
+        return ListItemContent.RadioButton(selected = checked, onClick = { checked = !checked })
     }
 
     @Composable
-    fun switch() = @Composable {
+    fun switch() : ListItemContent {
         var checked by remember { mutableStateOf(false) }
-        Switch(checked = checked, onCheckedChange = { checked = !checked })
+        return ListItemContent.Switch(checked = checked, onChange = { checked = !checked })
     }
 
-    @Composable
-    fun icon() = @Composable {
-        Icon(imageVector = Icons.Outlined.Share, contentDescription = null)
-    }
+    fun icon() = ListItemContent.Icon(iconSource = IconSource.Vector(Icons.Outlined.Share))
 }

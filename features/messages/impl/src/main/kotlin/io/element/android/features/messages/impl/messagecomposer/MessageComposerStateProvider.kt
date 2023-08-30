@@ -33,6 +33,7 @@ fun aMessageComposerState(
     mode: MessageComposerMode = MessageComposerMode.Normal(content = ""),
     showAttachmentSourcePicker: Boolean = false,
     canShareLocation: Boolean = true,
+    canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
 ) = MessageComposerState(
     text = text,
@@ -41,6 +42,7 @@ fun aMessageComposerState(
     mode = mode,
     showAttachmentSourcePicker = showAttachmentSourcePicker,
     canShareLocation = canShareLocation,
+    canCreatePoll = canCreatePoll,
     attachmentsState = attachmentsState,
     eventSink = {},
 )

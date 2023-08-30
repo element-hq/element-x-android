@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +37,7 @@ import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TimelineItemTextView(
@@ -45,31 +48,33 @@ fun TimelineItemTextView(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    val htmlDocument = content.htmlDocument
-    if (htmlDocument != null) {
-        // For now we ignore the extra padding for html content, so add some spacing
-        // below the content (as previous behavior)
-        Column(modifier = modifier) {
-            HtmlDocument(
-                document = htmlDocument,
-                modifier = Modifier,
-                onTextClicked = onTextClicked,
-                onTextLongClicked = onTextLongClicked,
-                interactionSource = interactionSource
-            )
-            Spacer(Modifier.height(16.dp))
-        }
-    } else {
-        Box(modifier) {
-            val textWithPadding = remember(content.body) {
-                content.body + extraPadding.getStr(16.sp).toAnnotatedString()
+    CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textPrimary) {
+        val htmlDocument = content.htmlDocument
+        if (htmlDocument != null) {
+            // For now we ignore the extra padding for html content, so add some spacing
+            // below the content (as previous behavior)
+            Column(modifier = modifier) {
+                HtmlDocument(
+                    document = htmlDocument,
+                    modifier = Modifier,
+                    onTextClicked = onTextClicked,
+                    onTextLongClicked = onTextLongClicked,
+                    interactionSource = interactionSource
+                )
+                Spacer(Modifier.height(16.dp))
             }
-            ClickableLinkText(
-                text = textWithPadding,
-                onClick = onTextClicked,
-                onLongClick = onTextLongClicked,
-                interactionSource = interactionSource
-            )
+        } else {
+            Box(modifier) {
+                val textWithPadding = remember(content.body) {
+                    content.body + extraPadding.getStr(16.sp).toAnnotatedString()
+                }
+                ClickableLinkText(
+                    text = textWithPadding,
+                    onClick = onTextClicked,
+                    onLongClick = onTextLongClicked,
+                    interactionSource = interactionSource
+                )
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ import io.element.android.libraries.textcomposer.TextComposer
 fun MessageComposerView(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
+    onCreatePollClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onFullscreenToggle() {
@@ -59,6 +60,7 @@ fun MessageComposerView(
         AttachmentsBottomSheet(
             state = state,
             onSendLocationClicked = onSendLocationClicked,
+            onCreatePollClicked = onCreatePollClicked,
         )
 
         TextComposer(
@@ -88,6 +90,7 @@ internal fun MessageComposerViewDarkPreview(@PreviewParameter(MessageComposerSta
 private fun ContentToPreview(state: MessageComposerState) {
     MessageComposerView(
         state = state,
-        onSendLocationClicked = {}
+        onSendLocationClicked = {},
+        onCreatePollClicked = {},
     )
 }

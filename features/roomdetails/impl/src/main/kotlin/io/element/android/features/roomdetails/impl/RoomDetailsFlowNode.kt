@@ -56,16 +56,16 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object RoomDetails : NavTarget
+        data object RoomDetails : NavTarget
 
         @Parcelize
-        object RoomMemberList : NavTarget
+        data object RoomMemberList : NavTarget
 
         @Parcelize
-        object RoomDetailsEdit : NavTarget
+        data object RoomDetailsEdit : NavTarget
 
         @Parcelize
-        object InviteMembers : NavTarget
+        data object InviteMembers : NavTarget
 
         @Parcelize
         object RoomNotificationSettings : NavTarget

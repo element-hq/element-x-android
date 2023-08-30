@@ -29,6 +29,7 @@ data class MessageComposerState(
     val mode: MessageComposerMode,
     val showAttachmentSourcePicker: Boolean,
     val canShareLocation: Boolean,
+    val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
     val eventSink: (MessageComposerEvents) -> Unit
 ) {
@@ -37,7 +38,7 @@ data class MessageComposerState(
 
 @Immutable
 sealed interface AttachmentsState {
-    object None : AttachmentsState
+    data object None : AttachmentsState
     data class Previewing(val attachments: ImmutableList<Attachment>) : AttachmentsState
     sealed interface Sending : AttachmentsState {
         data class Processing(val attachments: ImmutableList<Attachment>) : Sending

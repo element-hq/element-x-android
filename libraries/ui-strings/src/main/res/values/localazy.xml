@@ -181,14 +181,12 @@
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
-  <string name="screen_migration_message">"This is a one time process, thanks for waiting."</string>
-  <string name="screen_migration_title">"Setting up your account."</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
   <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Configuration mismatch"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"We’ve simplified Notifications Settings to make options easier to find. 
+  <string name="screen_notification_settings_configuration_mismatch_description">"We’ve simplified Notifications Settings to make options easier to find.
 
-Some custom settings you’ve chosen in the past are not shown here, but they’re still active. 
+Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
 
 If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_direct_chats">"Direct chats"</string>

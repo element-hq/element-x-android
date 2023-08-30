@@ -25,13 +25,13 @@ data class AttachmentsPreviewState(
 )
 
 sealed interface SendActionState {
-    object Idle : SendActionState
+    data object Idle : SendActionState
     sealed interface Sending : SendActionState {
-        object Processing : Sending
+        data object Processing : Sending
         data class Uploading(val progress: Float) : Sending
     }
 
     data class Failure(val error: Throwable) : SendActionState
-    object Done : SendActionState
+    data object Done : SendActionState
 }
 

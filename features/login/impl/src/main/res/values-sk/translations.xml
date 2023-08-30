@@ -9,7 +9,6 @@
   <string name="screen_account_provider_signin_title">"Chystáte sa prihlásiť do %s"</string>
   <string name="screen_account_provider_signup_subtitle">"Tu budú žiť vaše konverzácie — podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov."</string>
   <string name="screen_account_provider_signup_title">"Chystáte sa vytvoriť účet na %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
   <string name="screen_change_account_provider_other">"Iný"</string>
   <string name="screen_change_account_provider_subtitle">"Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet."</string>
   <string name="screen_change_account_provider_title">"Zmeniť poskytovateľa účtu"</string>

@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -68,9 +69,11 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -115,6 +118,7 @@ fun TimelineItemEventRow(
     onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
+    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -172,6 +176,7 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                        onPollAnswerSelected = onPollAnswerSelected,
                     )
                 }
             }
@@ -188,6 +193,7 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                onPollAnswerSelected = onPollAnswerSelected,
             )
         }
     }
@@ -229,6 +235,7 @@ private fun TimelineItemEventRowContent(
     onReactionClicked: (emoji: String) -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
+    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
@@ -286,7 +293,8 @@ private fun TimelineItemEventRowContent(
                 inReplyToClick = inReplyToClicked,
                 onTimestampClicked = {
                     onTimestampClicked(event)
-                }
+                },
+                onPollAnswerSelected = onPollAnswerSelected,
             )
         }
 
@@ -357,11 +365,16 @@ private fun MessageEventBubbleContent(
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
+    @SuppressLint("ModifierParameter") bubbleModifier: Modifier = Modifier, // need to rename this modifier to distinguish it from the following ones
 ) {
-    val isMediaItem = event.content is TimelineItemImageContent
-        || event.content is TimelineItemVideoContent
-        || event.content is TimelineItemLocationContent
+    val timestampPosition = when (event.content) {
+        is TimelineItemImageContent,
+        is TimelineItemVideoContent,
+        is TimelineItemLocationContent -> TimestampPosition.Overlay
+        is TimelineItemPollContent -> TimestampPosition.Below
+        else -> TimestampPosition.Default
+    }
     val replyToDetails = event.inReplyTo as? InReplyTo.Ready
 
     // Long clicks are not not automatically propagated from a `clickable`
@@ -378,102 +391,104 @@ private fun MessageEventBubbleContent(
             onClick = onMessageClick,
             onLongClick = onMessageLongClick,
             extraPadding = event.toExtraPadding(),
+            onPollAnswerSelected = onPollAnswerSelected,
             modifier = modifier,
         )
     }
 
     @Composable
     fun ContentAndTimestampView(
-        overlayTimestamp: Boolean,
+        timestampPosition: TimestampPosition,
         modifier: Modifier = Modifier,
         contentModifier: Modifier = Modifier,
         timestampModifier: Modifier = Modifier,
     ) {
-        if (overlayTimestamp) {
-            Box(modifier) {
-                ContentView(modifier = contentModifier)
-                TimelineEventTimestampView(
-                    event = event,
-                    onClick = onTimestampClicked,
-                    onLongClick = ::onTimestampLongClick,
-                    modifier = timestampModifier
-                        .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
-                        .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
-                        .align(Alignment.BottomEnd)
-                        .padding(horizontal = 4.dp, vertical = 2.dp) // Inner padding
-                )
-            }
-        } else {
-            Box(modifier) {
-                ContentView(modifier = contentModifier)
-                TimelineEventTimestampView(
-                    event = event,
-                    onClick = onTimestampClicked,
-                    onLongClick = ::onTimestampLongClick,
-                    modifier = timestampModifier
-                        .align(Alignment.BottomEnd)
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                )
-            }
+        when (timestampPosition) {
+            TimestampPosition.Overlay ->
+                Box(modifier) {
+                    ContentView(modifier = contentModifier)
+                    TimelineEventTimestampView(
+                        event = event,
+                        onClick = onTimestampClicked,
+                        onLongClick = ::onTimestampLongClick,
+                        modifier = timestampModifier
+                            .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
+                            .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
+                            .align(Alignment.BottomEnd)
+                            .padding(horizontal = 4.dp, vertical = 2.dp) // Inner padding
+                    )
+                }
+            TimestampPosition.Aligned ->
+                Box(modifier) {
+                    ContentView(modifier = contentModifier)
+                    TimelineEventTimestampView(
+                        event = event,
+                        onClick = onTimestampClicked,
+                        onLongClick = ::onTimestampLongClick,
+                        modifier = timestampModifier
+                            .align(Alignment.BottomEnd)
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+            TimestampPosition.Below ->
+                Column(modifier) {
+                    ContentView(modifier = contentModifier)
+                    TimelineEventTimestampView(
+                        event = event,
+                        onClick = onTimestampClicked,
+                        onLongClick = ::onTimestampLongClick,
+                        modifier = timestampModifier
+                            .align(Alignment.End)
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
         }
     }
 
-    /** Used only for media items, with no reply to metadata. It displays the contents with no paddings. */
-    @Composable
-    fun SimpleMediaItemLayout(modifier: Modifier = Modifier) {
-        ContentAndTimestampView(overlayTimestamp = true, modifier = modifier)
-    }
-
-    /** Used for every other type of message, groups the different components in a Column with some space between them. */
+    /** Groups the different components in a Column with some space between them. */
     @Composable
     fun CommonLayout(
         inReplyToDetails: InReplyTo.Ready?,
         modifier: Modifier = Modifier
     ) {
+        var modifierWithPadding: Modifier = Modifier
+        var contentModifier: Modifier = Modifier
         EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
-            if (inReplyToDetails != null) {
-                val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
-                val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
-                val text = textForInReplyTo(inReplyToDetails)
-                ReplyToContent(
-                    senderName = senderName,
-                    text = text,
-                    attachmentThumbnailInfo = attachmentThumbnailInfo,
-                    modifier = Modifier
-                        .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .clickable(enabled = true, onClick = inReplyToClick),
-                )
-            }
-            val modifierWithPadding = if (isMediaItem) {
-                Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-            } else {
-                Modifier
-            }
-
-            val contentModifier = if (isMediaItem) {
-                Modifier.clip(RoundedCornerShape(12.dp))
-            } else {
-                if (inReplyToDetails != null) {
-                    Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
-                } else {
-                    Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
+            when {
+                inReplyToDetails != null -> {
+                    val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
+                    val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
+                    val text = textForInReplyTo(inReplyToDetails)
+                    ReplyToContent(
+                        senderName = senderName,
+                        text = text,
+                        attachmentThumbnailInfo = attachmentThumbnailInfo,
+                        modifier = Modifier
+                            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .clickable(enabled = true, onClick = inReplyToClick),
+                    )
+                    if (timestampPosition == TimestampPosition.Overlay) {
+                        modifierWithPadding = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                        contentModifier = Modifier.clip(RoundedCornerShape(12.dp))
+                    } else {
+                        contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
+                    }
+                }
+                timestampPosition != TimestampPosition.Overlay -> {
+                    contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
                 }
             }
 
             ContentAndTimestampView(
-                overlayTimestamp = isMediaItem,
+                timestampPosition = timestampPosition,
                 contentModifier = contentModifier,
                 modifier = modifierWithPadding,
             )
         }
     }
 
-    if (isMediaItem && replyToDetails == null) {
-        SimpleMediaItemLayout()
-    } else {
-        CommonLayout(inReplyToDetails = replyToDetails, modifier = modifier)
-    }
+    CommonLayout(inReplyToDetails = replyToDetails, modifier = bubbleModifier)
 }
 
 @Composable
@@ -599,6 +614,7 @@ private fun ContentToPreview() {
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
+                onPollAnswerSelected = { _, _ -> },
             )
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
@@ -619,6 +635,7 @@ private fun ContentToPreview() {
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
+                onPollAnswerSelected = { _, _ -> },
             )
         }
     }
@@ -666,6 +683,7 @@ private fun ContentToPreviewWithReply() {
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
+                onPollAnswerSelected = { _, _ -> },
             )
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
@@ -687,6 +705,7 @@ private fun ContentToPreviewWithReply() {
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
+                onPollAnswerSelected = { _, _ -> },
             )
         }
     }
@@ -744,6 +763,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                     onMoreReactionsClick = {},
                     onTimestampClicked = {},
                     onSwipeToReply = {},
+                    onPollAnswerSelected = { _, _ -> },
                 )
             }
         }
@@ -784,6 +804,7 @@ private fun ContentWithManyReactionsToPreview() {
                 onMoreReactionsClick = {},
                 onSwipeToReply = {},
                 onTimestampClicked = {},
+                onPollAnswerSelected = { _, _ -> },
             )
         }
     }
@@ -808,5 +829,27 @@ internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
         onMoreReactionsClick = {},
         onSwipeToReply = {},
         onTimestampClicked = {},
+        onPollAnswerSelected = { _, _ -> },
+    )
+}
+
+// Note: no need for light/dark variant for this preview, we only look at the timestamp position
+@Preview
+@Composable
+internal fun TimelineItemEventTimestampBelowPreview() = ElementPreviewLight {
+    TimelineItemEventRow(
+        event = aTimelineItemEvent(content = aTimelineItemPollContent()),
+        isHighlighted = false,
+        canReply = true,
+        onClick = {},
+        onLongClick = {},
+        onUserDataClick = {},
+        inReplyToClick = {},
+        onReactionClick = { _, _ -> },
+        onReactionLongClick = { _, _ -> },
+        onMoreReactionsClick = {},
+        onSwipeToReply = {},
+        onTimestampClicked = {},
+        onPollAnswerSelected = { _, _ -> },
     )
 }

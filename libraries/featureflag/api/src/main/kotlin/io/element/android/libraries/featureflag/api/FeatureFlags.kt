@@ -29,7 +29,7 @@ enum class FeatureFlags(
     Polls(
         key = "feature.polls",
         title = "Polls",
-        description = "Render poll events in the timeline",
+        description = "Create poll and render poll events in the timeline",
         defaultValue = false,
     ),
     NotificationSettings(

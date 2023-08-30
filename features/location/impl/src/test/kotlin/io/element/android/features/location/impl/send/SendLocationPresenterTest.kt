@@ -21,7 +21,6 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import im.vector.app.features.analytics.plan.Composer
-import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
@@ -34,6 +33,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.SendLocationInvocation
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

@@ -20,7 +20,6 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
-import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
 import io.element.android.libraries.architecture.Async
@@ -44,6 +43,7 @@ import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 

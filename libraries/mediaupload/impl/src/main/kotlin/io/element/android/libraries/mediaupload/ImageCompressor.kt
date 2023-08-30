@@ -114,7 +114,7 @@ data class ImageCompressionResult(
 )
 
 sealed interface ResizeMode {
-    object None : ResizeMode
+    data object None : ResizeMode
     data class Approximate(val desiredWidth: Int, val desiredHeight: Int) : ResizeMode
     data class Strict(val maxWidth: Int, val maxHeight: Int) : ResizeMode
 }

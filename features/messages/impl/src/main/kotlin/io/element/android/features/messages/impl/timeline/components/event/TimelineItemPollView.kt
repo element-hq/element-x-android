@@ -21,22 +21,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
-import io.element.android.features.poll.api.ActivePollContentView
+import io.element.android.features.poll.api.PollContentView
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.matrix.api.poll.PollAnswer
+import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun TimelineItemPollView(
     content: TimelineItemPollContent,
-    onAnswerSelected: (PollAnswer) -> Unit,
+    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ActivePollContentView(
+    PollContentView(
+        eventId = content.eventId,
         question = content.question,
         answerItems = content.answerItems.toImmutableList(),
         pollKind = content.pollKind,
+        isPollEnded = content.isEnded,
         onAnswerSelected = onAnswerSelected,
         modifier = modifier,
     )
@@ -48,6 +50,6 @@ internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollConte
     ElementPreview {
         TimelineItemPollView(
             content = content,
-            onAnswerSelected = {},
+            onAnswerSelected = { _, _ -> },
         )
     }

@@ -24,6 +24,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Collections
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
@@ -52,6 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 internal fun AttachmentsBottomSheet(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
+    onCreatePollClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val localView = LocalView.current
@@ -85,6 +87,7 @@ internal fun AttachmentsBottomSheet(
             AttachmentSourcePickerMenu(
                 state = state,
                 onSendLocationClicked = onSendLocationClicked,
+                onCreatePollClicked = onCreatePollClicked,
             )
         }
     }
@@ -95,6 +98,7 @@ internal fun AttachmentsBottomSheet(
 internal fun AttachmentSourcePickerMenu(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
+    onCreatePollClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -131,6 +135,16 @@ internal fun AttachmentSourcePickerMenu(
                 text = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
             )
         }
+        if (state.canCreatePoll) {
+            ListItem(
+                modifier = Modifier.clickable {
+                    state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
+                    onCreatePollClicked()
+                },
+                icon = { Icon(Icons.Default.BarChart, null) },
+                text = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
+            )
+        }
     }
 }
 
@@ -142,5 +156,6 @@ internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
             canShareLocation = true,
         ),
         onSendLocationClicked = {},
+        onCreatePollClicked = {},
     )
 }

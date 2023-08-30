@@ -20,6 +20,6 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 sealed interface AttachmentsPreviewEvents {
-    object SendAttachment : AttachmentsPreviewEvents
-    object ClearSendState : AttachmentsPreviewEvents
+    data object SendAttachment : AttachmentsPreviewEvents
+    data object ClearSendState : AttachmentsPreviewEvents
 }

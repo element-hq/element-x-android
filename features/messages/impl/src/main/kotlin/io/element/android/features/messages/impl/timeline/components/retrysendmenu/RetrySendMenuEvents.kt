@@ -20,7 +20,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 
 sealed interface RetrySendMenuEvents {
     data class EventSelected(val event: TimelineItem.Event) : RetrySendMenuEvents
-    object RetrySend : RetrySendMenuEvents
-    object RemoveFailed : RetrySendMenuEvents
-    object Dismiss: RetrySendMenuEvents
+    data object RetrySend : RetrySendMenuEvents
+    data object RemoveFailed : RetrySendMenuEvents
+    data object Dismiss: RetrySendMenuEvents
 }

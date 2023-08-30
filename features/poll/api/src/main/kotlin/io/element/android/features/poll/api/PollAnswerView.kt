@@ -16,110 +16,166 @@
 
 package io.element.android.features.poll.api
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.RadioButtonUnchecked
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import androidx.constraintlayout.compose.Visibility
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconToggleButton
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.toEnabledColor
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonPlurals
 
-@Suppress("DestructuringDeclarationWithTooManyEntries") // This is necessary to declare the constraints ids
 @Composable
 fun PollAnswerView(
     answerItem: PollAnswerItem,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ConstraintLayout(
+    Row(
         modifier
-            .wrapContentHeight()
             .fillMaxWidth()
             .selectable(
                 selected = answerItem.isSelected,
+                enabled = answerItem.isEnabled,
                 onClick = onClick,
                 role = Role.RadioButton,
             )
     ) {
-        val (radioButton, answerText, votesText, progressBar) = createRefs()
-        RadioButton(
-            modifier = Modifier.constrainAs(radioButton) {
-                top.linkTo(answerText.top)
-                bottom.linkTo(answerText.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(answerText.start)
-            },
-            selected = answerItem.isSelected,
-            onClick = null // null recommended for accessibility with screenreaders
-        )
-        Text(
-            modifier = Modifier.constrainAs(answerText) {
-                width = Dimension.fillToConstraints
-                top.linkTo(parent.top)
-                start.linkTo(radioButton.end, margin = 8.dp)
-                end.linkTo(votesText.start)
-                bottom.linkTo(progressBar.top)
-            },
-            text = answerItem.answer.text,
-        )
-        Text(
-            modifier = Modifier.constrainAs(votesText) {
-                start.linkTo(answerText.end)
-                end.linkTo(parent.end)
-                bottom.linkTo(answerText.bottom)
-                visibility = if (answerItem.isDisclosed) Visibility.Visible else Visibility.Gone
-            },
-            text = pluralStringResource(
-                id = CommonPlurals.common_poll_votes_count,
-                count = answerItem.votesCount,
-                answerItem.votesCount
+        IconToggleButton(
+            modifier = Modifier.size(22.dp),
+            checked = answerItem.isSelected,
+            enabled = answerItem.isEnabled,
+            colors = IconButtonDefaults.iconToggleButtonColors(
+                contentColor = ElementTheme.colors.iconSecondary,
+                checkedContentColor = ElementTheme.colors.iconPrimary,
+                disabledContentColor = ElementTheme.colors.iconDisabled,
             ),
-            style = ElementTheme.typography.fontBodySmRegular,
-            color = ElementTheme.colors.textSecondary,
-        )
-        LinearProgressIndicator(
-            progress = answerItem.progress,
-            modifier = Modifier
-                .constrainAs(progressBar) {
-                    start.linkTo(answerText.start)
-                    end.linkTo(votesText.end)
-                    top.linkTo(answerText.bottom, margin = 10.dp)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                    visibility = if (answerItem.isDisclosed) Visibility.Visible else Visibility.Gone
-
+            onCheckedChange = { onClick() },
+        ) {
+            Icon(
+                imageVector = if (answerItem.isSelected) {
+                    Icons.Default.CheckCircle
+                } else {
+                    Icons.Default.RadioButtonUnchecked
                 },
-            strokeCap = StrokeCap.Round,
-        )
+                contentDescription = null,
+            )
+        }
+        Spacer(modifier = Modifier.width(12.dp))
+        Column {
+            Row {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = answerItem.answer.text,
+                    style = if (answerItem.isWinner) ElementTheme.typography.fontBodyLgMedium else ElementTheme.typography.fontBodyLgRegular,
+                )
+                if (answerItem.isDisclosed) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Bottom),
+                        text = pluralStringResource(
+                            id = CommonPlurals.common_poll_votes_count,
+                            count = answerItem.votesCount,
+                            answerItem.votesCount
+                        ),
+                        style = if (answerItem.isWinner) ElementTheme.typography.fontBodySmMedium else ElementTheme.typography.fontBodySmRegular,
+                        color = if (answerItem.isWinner) ElementTheme.colors.textPrimary else ElementTheme.colors.textSecondary,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth(),
+                color = if (answerItem.isWinner) ElementTheme.colors.textSuccessPrimary else answerItem.isEnabled.toEnabledColor(),
+                progress = when {
+                    answerItem.isDisclosed -> answerItem.percentage
+                    answerItem.isSelected -> 1f
+                    else -> 0f
+                },
+                strokeCap = StrokeCap.Round,
+            )
+        }
     }
 }
 
-@DayNightPreviews
+@Preview
 @Composable
-internal fun PollAnswerViewNoResultsPreview() = ElementPreview {
+internal fun PollAnswerDisclosedNotSelectedPreview() = ElementThemedPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(),
+        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = false),
         onClick = { },
     )
 }
 
-@DayNightPreviews
+@Preview
 @Composable
-internal fun PollAnswerViewWithResultPreview() = ElementPreview {
+internal fun PollAnswerDisclosedSelectedPreview() = ElementThemedPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = true),
+        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true),
+        onClick = { }
+    )
+}
+
+@Preview
+@Composable
+internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementThemedPreview {
+    PollAnswerView(
+        answerItem = aPollAnswerItem(isDisclosed = false, isSelected = false),
+        onClick = { },
+    )
+}
+
+@Preview
+@Composable
+internal fun PollAnswerUndisclosedSelectedPreview() = ElementThemedPreview {
+    PollAnswerView(
+        answerItem = aPollAnswerItem(isDisclosed = false, isSelected = true),
+        onClick = { }
+    )
+}
+
+@Preview
+@Composable
+internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementThemedPreview {
+    PollAnswerView(
+        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = false, isEnabled = false, isWinner = true),
+        onClick = { }
+    )
+}
+
+@Preview
+@Composable
+internal fun PollAnswerEndedWinnerSelectedPreview() = ElementThemedPreview {
+    PollAnswerView(
+        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true, isEnabled = false, isWinner = true),
+        onClick = { }
+    )
+}
+
+@Preview
+@Composable
+internal fun PollAnswerEndedSelectedPreview() = ElementThemedPreview {
+    PollAnswerView(
+        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true, isEnabled = false, isWinner = false),
         onClick = { }
     )
 }

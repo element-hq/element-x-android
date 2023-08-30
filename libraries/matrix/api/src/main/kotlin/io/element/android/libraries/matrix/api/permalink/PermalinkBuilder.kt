@@ -84,7 +84,7 @@ object PermalinkBuilder {
 }
 
 sealed class PermalinkBuilderError : Throwable() {
-    object InvalidRoomAlias : PermalinkBuilderError()
-    object InvalidRoomId : PermalinkBuilderError()
-    object InvalidUserId : PermalinkBuilderError()
+    data object InvalidRoomAlias : PermalinkBuilderError()
+    data object InvalidRoomId : PermalinkBuilderError()
+    data object InvalidUserId : PermalinkBuilderError()
 }

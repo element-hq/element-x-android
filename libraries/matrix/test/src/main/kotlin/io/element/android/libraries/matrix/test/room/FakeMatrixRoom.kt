@@ -87,6 +87,8 @@ class FakeMatrixRoom(
     private var reportContentResult = Result.success(Unit)
     private var sendLocationResult = Result.success(Unit)
     private var createPollResult = Result.success(Unit)
+    private var sendPollResponseResult = Result.success(Unit)
+    private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
     val editMessageCalls = mutableListOf<String>()
 
@@ -110,6 +112,12 @@ class FakeMatrixRoom(
 
     private val _createPollInvocations = mutableListOf<CreatePollInvocation>()
     val createPollInvocations: List<CreatePollInvocation> = _createPollInvocations
+
+    private val _sendPollResponseInvocations = mutableListOf<SendPollResponseInvocation>()
+    val sendPollResponseInvocations: List<SendPollResponseInvocation> = _sendPollResponseInvocations
+
+    private val _endPollInvocations = mutableListOf<EndPollInvocation>()
+    val endPollInvocations: List<EndPollInvocation> = _endPollInvocations
 
     var invitedUserId: UserId? = null
         private set
@@ -329,6 +337,22 @@ class FakeMatrixRoom(
         return createPollResult
     }
 
+    override suspend fun sendPollResponse(
+        pollStartId: EventId,
+        answers: List<String>
+    ): Result<Unit> = simulateLongTask {
+        _sendPollResponseInvocations.add(SendPollResponseInvocation(pollStartId, answers))
+        return sendPollResponseResult
+    }
+
+    override suspend fun endPoll(
+        pollStartId: EventId,
+        text: String
+    ): Result<Unit> = simulateLongTask {
+        _endPollInvocations.add(EndPollInvocation(pollStartId, text))
+        return endPollResult
+    }
+
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
     }
@@ -425,6 +449,14 @@ class FakeMatrixRoom(
         createPollResult = result
     }
 
+    fun givenSendPollResponseResult(result: Result<Unit>) {
+        sendPollResponseResult = result
+    }
+
+    fun givenEndPollResult(result: Result<Unit>) {
+        endPollResult = result
+    }
+
     fun givenProgressCallbackValues(values: List<Pair<Long, Long>>) {
         progressCallbackValues = values
     }
@@ -443,4 +475,14 @@ data class CreatePollInvocation(
     val answers: List<String>,
     val maxSelections: Int,
     val pollKind: PollKind,
+)
+
+data class SendPollResponseInvocation(
+    val pollStartId: EventId,
+    val answers: List<String>,
+)
+
+data class EndPollInvocation(
+    val pollStartId: EventId,
+    val text: String,
 )

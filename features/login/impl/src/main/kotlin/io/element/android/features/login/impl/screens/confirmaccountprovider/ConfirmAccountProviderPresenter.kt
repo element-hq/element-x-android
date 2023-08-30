@@ -68,9 +68,9 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(Unit) {
-            launch {
-                defaultOidcActionFlow.collect {
-                    onOidcAction(it, loginFlowAction)
+            defaultOidcActionFlow.collect { oidcAction ->
+                if (oidcAction != null) {
+                    onOidcAction(oidcAction, loginFlowAction)
                 }
             }
         }
@@ -113,10 +113,9 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
     }
 
     private suspend fun onOidcAction(
-        oidcAction: OidcAction?,
+        oidcAction: OidcAction,
         loginFlowAction: MutableState<Async<LoginFlow>>,
     ) {
-        oidcAction ?: return
         loginFlowAction.value = Async.Loading()
         when (oidcAction) {
             OidcAction.GoBack -> {
