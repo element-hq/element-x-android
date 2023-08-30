@@ -33,13 +33,6 @@ fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int
 }
 
 /**
- * Reads the EXIF metadata from the [inputStream] and rotates the current [Bitmap] to match it.
- * @return The resulting [Bitmap] or `null` if no metadata was found.
- */
-fun Bitmap.rotateToMetadataOrientation(inputStream: InputStream): Result<Bitmap> =
-    runCatching { rotateToMetadataOrientation(this, ExifInterface(inputStream)) }
-
-/**
  * Scales the current [Bitmap] to fit the ([maxWidth], [maxHeight]) bounds while keeping aspect ratio.
  * @throws IllegalStateException if [maxWidth] or [maxHeight] <= 0.
  */
@@ -77,8 +70,11 @@ fun BitmapFactory.Options.calculateInSampleSize(desiredWidth: Int, desiredHeight
     return inSampleSize
 }
 
-private fun rotateToMetadataOrientation(bitmap: Bitmap, exifInterface: ExifInterface): Bitmap {
-    val orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+/**
+ * Decodes the [inputStream] into a [Bitmap] and applies the needed rotation based on [orientation].
+ * This orientation value must be one of `ExifInterface.ORIENTATION_*` constants.
+ */
+fun Bitmap.rotateToMetadataOrientation(orientation: Int): Bitmap {
     val matrix = Matrix()
     when (orientation) {
         ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
@@ -94,8 +90,8 @@ private fun rotateToMetadataOrientation(bitmap: Bitmap, exifInterface: ExifInter
             matrix.preRotate(90f)
             matrix.preScale(-1f, 1f)
         }
-        else -> return bitmap
+        else -> return this
     }
 
-    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }
