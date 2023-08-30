@@ -78,8 +78,8 @@ fun ClickableLinkText(
 @Composable
 fun ClickableLinkText(
     annotatedString: AnnotatedString,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     linkify: Boolean = true,
     linkAnnotationTag: String = LINK_TAG,
     onClick: () -> Unit = {},
