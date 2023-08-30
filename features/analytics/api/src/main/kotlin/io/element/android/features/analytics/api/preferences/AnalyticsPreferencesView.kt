@@ -42,18 +42,16 @@ fun AnalyticsPreferencesView(
         state.eventSink(AnalyticsOptInEvents.EnableAnalytics(isEnabled = isEnabled))
     }
 
+    val supportingText = stringResource(
+        id = CommonStrings.screen_analytics_settings_help_us_improve,
+        state.applicationName
+    )
     val linkText = buildAnnotatedStringWithStyledPart(
         CommonStrings.screen_analytics_settings_read_terms,
         CommonStrings.screen_analytics_settings_read_terms_content_link,
         tagAndLink = LINK_TAG to state.policyUrl,
     )
-    val supportingText = stringResource(
-        id = CommonStrings.screen_analytics_settings_help_us_improve,
-        state.applicationName
-    )
-
     Column(modifier) {
-
         ListItem(
             headlineContent = {
                 Text(stringResource(id = CommonStrings.screen_analytics_settings_share_data))
@@ -69,10 +67,8 @@ fun AnalyticsPreferencesView(
                 onEnabledChanged(!state.isEnabled)
             }
         )
-
         ListSupportingText(annotatedString = linkText)
     }
-
 }
 
 @Preview
