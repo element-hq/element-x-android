@@ -24,7 +24,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -79,7 +78,7 @@ fun ClickableLinkText(
 @Composable
 fun ClickableLinkText(
     annotatedString: AnnotatedString,
-    interactionSource: MutableInteractionSource,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     modifier: Modifier = Modifier,
     linkify: Boolean = true,
     linkAnnotationTag: String = LINK_TAG,
@@ -136,7 +135,6 @@ fun ClickableLinkText(
             layoutResult.value = it
         },
         inlineContent = inlineContent,
-        color = MaterialTheme.colorScheme.primary,
     )
 }
 
