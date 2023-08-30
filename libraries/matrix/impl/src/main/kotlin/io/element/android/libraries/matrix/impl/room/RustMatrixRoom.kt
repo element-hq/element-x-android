@@ -239,7 +239,7 @@ class RustMatrixRoom(
     override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, message: String): Result<Unit> = withContext(roomDispatcher) {
         if (originalEventId != null) {
             runCatching {
-                innerRoom.edit(/* TODO use content */ message, originalEventId.value, transactionId?.value)
+                innerRoom.edit(messageEventContentFromMarkdown(message), originalEventId.value, transactionId?.value)
             }
         } else {
             runCatching {
@@ -250,10 +250,8 @@ class RustMatrixRoom(
     }
 
     override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> = withContext(roomDispatcher) {
-        val transactionId = genTransactionId()
-        // val content = messageEventContentFromMarkdown(message)
         runCatching {
-            innerRoom.sendReply(/* TODO use content */ message, eventId.value, transactionId)
+            innerRoom.sendReply(messageEventContentFromMarkdown(message), eventId.value, genTransactionId())
         }
     }
 
@@ -421,6 +419,32 @@ class RustMatrixRoom(
                 answers = answers,
                 maxSelections = maxSelections.toUByte(),
                 pollKind = pollKind.toInner(),
+                txnId = genTransactionId(),
+            )
+        }
+    }
+
+    override suspend fun sendPollResponse(
+        pollStartId: EventId,
+        answers: List<String>
+    ): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.sendPollResponse(
+                pollStartId = pollStartId.value,
+                answers = answers,
+                txnId = genTransactionId(),
+            )
+        }
+    }
+
+    override suspend fun endPoll(
+        pollStartId: EventId,
+        text: String
+    ): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.endPoll(
+                pollStartId = pollStartId.value,
+                text = text,
                 txnId = genTransactionId(),
             )
         }

@@ -22,10 +22,12 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.poll.api.PollAnswerItem
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_10
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -49,14 +51,14 @@ internal class TimelineItemContentPollFactoryTest {
 
     @Test
     fun `Disclosed poll - not ended, no votes`() = runTest {
-        Truth.assertThat(factory.create(aPollContent())).isEqualTo(aTimelineItemPollContent())
+        Truth.assertThat(factory.create(aPollContent(), eventId = null)).isEqualTo(aTimelineItemPollContent())
     }
 
     @Test
     fun `Disclosed poll - not ended, some votes, including one from current user`() = runTest {
         val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(votes = votes))
+            factory.create(aPollContent(votes = votes), eventId = null)
         )
             .isEqualTo(
                 aTimelineItemPollContent(
@@ -73,7 +75,7 @@ internal class TimelineItemContentPollFactoryTest {
     @Test
     fun `Disclosed poll - ended, no votes, no winner`() = runTest {
         Truth.assertThat(
-            factory.create(aPollContent(endTime = 1UL))
+            factory.create(aPollContent(endTime = 1UL), eventId = null)
         ).isEqualTo(
             aTimelineItemPollContent().let {
                 it.copy(
@@ -88,7 +90,7 @@ internal class TimelineItemContentPollFactoryTest {
     fun `Disclosed poll - ended, some votes, including one from current user (winner)`() = runTest {
         val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(votes = votes, endTime = 1UL))
+            factory.create(aPollContent(votes = votes, endTime = 1UL), eventId = null)
         )
             .isEqualTo(
                 aTimelineItemPollContent(
@@ -107,7 +109,7 @@ internal class TimelineItemContentPollFactoryTest {
     fun `Disclosed poll - ended, some votes, including one from current user (not winner) and two winning votes`() = runTest {
         val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(votes = votes, endTime = 1UL))
+            factory.create(aPollContent(votes = votes, endTime = 1UL), eventId = null)
         )
             .isEqualTo(
                 aTimelineItemPollContent(
@@ -125,9 +127,9 @@ internal class TimelineItemContentPollFactoryTest {
     @Test
     fun `Undisclosed poll - not ended, no votes`() = runTest {
         Truth.assertThat(
-            factory.create(aPollContent(PollKind.Undisclosed).copy())
+            factory.create(aPollContent(PollKind.Undisclosed).copy(), eventId = null)
         ).isEqualTo(
-            aTimelineItemPollContent(PollKind.Undisclosed).let {
+            aTimelineItemPollContent(pollKind = PollKind.Undisclosed).let {
                 it.copy(answerItems = it.answerItems.map { answerItem -> answerItem.copy(isDisclosed = false) })
             }
         )
@@ -137,7 +139,7 @@ internal class TimelineItemContentPollFactoryTest {
     fun `Undisclosed poll - not ended, some votes, including one from current user`() = runTest {
         val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(pollKind = PollKind.Undisclosed, votes = votes))
+            factory.create(aPollContent(pollKind = PollKind.Undisclosed, votes = votes), eventId = null)
         )
             .isEqualTo(
                 aTimelineItemPollContent(
@@ -155,7 +157,7 @@ internal class TimelineItemContentPollFactoryTest {
     @Test
     fun `Undisclosed poll - ended, no votes, no winner`() = runTest {
         Truth.assertThat(
-            factory.create(aPollContent(pollKind = PollKind.Undisclosed, endTime = 1UL))
+            factory.create(aPollContent(pollKind = PollKind.Undisclosed, endTime = 1UL), eventId = null)
         ).isEqualTo(
             aTimelineItemPollContent().let {
                 it.copy(
@@ -173,7 +175,7 @@ internal class TimelineItemContentPollFactoryTest {
     fun `Undisclosed poll - ended, some votes, including one from current user (winner)`() = runTest {
         val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(pollKind = PollKind.Undisclosed, votes = votes, endTime = 1UL))
+            factory.create(aPollContent(pollKind = PollKind.Undisclosed, votes = votes, endTime = 1UL), eventId = null)
         )
             .isEqualTo(
                 aTimelineItemPollContent(
@@ -193,7 +195,7 @@ internal class TimelineItemContentPollFactoryTest {
     fun `Undisclosed poll - ended, some votes, including one from current user (not winner) and two winning votes`() = runTest {
         val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }
         Truth.assertThat(
-            factory.create(aPollContent(PollKind.Undisclosed).copy(votes = votes, endTime = 1UL))
+            factory.create(aPollContent(PollKind.Undisclosed).copy(votes = votes, endTime = 1UL), eventId = null)
         )
             .isEqualTo(
                 aTimelineItemPollContent(
@@ -207,6 +209,15 @@ internal class TimelineItemContentPollFactoryTest {
                     isEnded = true,
                 )
             )
+    }
+
+    @Test
+    fun `eventId is populated`() = runTest {
+        Truth.assertThat(factory.create(aPollContent(), eventId = null))
+            .isEqualTo(aTimelineItemPollContent(eventId = null))
+
+        Truth.assertThat(factory.create(aPollContent(), eventId = AN_EVENT_ID))
+            .isEqualTo(aTimelineItemPollContent(eventId = AN_EVENT_ID))
     }
 
     private fun aPollContent(
@@ -223,6 +234,7 @@ internal class TimelineItemContentPollFactoryTest {
     )
 
     private fun aTimelineItemPollContent(
+        eventId: EventId? = null,
         pollKind: PollKind = PollKind.Disclosed,
         answerItems: List<PollAnswerItem> = listOf(
             aPollAnswerItem(A_POLL_ANSWER_1),
@@ -232,6 +244,7 @@ internal class TimelineItemContentPollFactoryTest {
         ),
         isEnded: Boolean = false,
     ) = TimelineItemPollContent(
+        eventId = eventId,
         question = A_POLL_QUESTION,
         answerItems = answerItems,
         pollKind = pollKind,

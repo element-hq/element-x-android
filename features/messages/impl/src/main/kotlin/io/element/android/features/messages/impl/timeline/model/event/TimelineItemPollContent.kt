@@ -17,9 +17,11 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.features.poll.api.PollAnswerItem
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
 
 data class TimelineItemPollContent(
+    val eventId: EventId?,
     val question: String,
     val answerItems: List<PollAnswerItem>,
     val pollKind: PollKind,
