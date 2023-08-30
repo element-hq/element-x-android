@@ -129,16 +129,16 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
 
 /**
  * A message to be displayed in a [Snackbar].
+ * @param messageResId The message to be displayed.
+ * @param duration The duration of the message. The default value is [SnackbarDuration.Short].
+ * @param actionResId The action text to be displayed. The default value is `null`.
+ * @param isDisplayed Used to track if the current message is already displayed or not.
+ * @param action The action to be performed when the action is clicked.
  */
 data class SnackbarMessage(
-    /** The message to be displayed. */
     @StringRes val messageResId: Int,
-    /** The duration of the message. The default value is [SnackbarDuration.Short]. */
     val duration: SnackbarDuration = SnackbarDuration.Short,
-    /** The action title to be displayed. */
     @StringRes val actionResId: Int? = null,
-    /** Used to track if the current message is already displayed or not. */
     val isDisplayed: AtomicBoolean = AtomicBoolean(false),
-    /** The action to be performed when the action is clicked. */
     val action: () -> Unit = {},
 )
