@@ -23,6 +23,7 @@ val oidcConfiguration: OidcConfiguration = OidcConfiguration(
     clientName = "Element",
     redirectUri = OidcConfig.redirectUri,
     clientUri = "https://element.io",
+    logoUri = "https://element.io/mobile-icon.png",
     tosUri = "https://element.io/user-terms-of-service",
     policyUri = "https://element.io/privacy",
     /**
