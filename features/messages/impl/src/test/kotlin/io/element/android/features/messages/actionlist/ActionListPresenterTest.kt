@@ -405,7 +405,6 @@ class ActionListPresenterTest {
                             percentage = 0.0f,
                         ),
                     ),
-                    votes = mapOf(),
                     pollKind = PollKind.Disclosed,
                     isEnded = false,
                 )
