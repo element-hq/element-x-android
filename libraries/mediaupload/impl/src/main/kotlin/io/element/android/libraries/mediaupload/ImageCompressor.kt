@@ -19,6 +19,7 @@ package io.element.android.libraries.mediaupload
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.exifinterface.media.ExifInterface
 import io.element.android.libraries.androidutils.bitmap.calculateInSampleSize
 import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation
@@ -44,7 +45,7 @@ class ImageCompressor @Inject constructor(
         inputStream: InputStream,
         resizeMode: ResizeMode,
         format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
-        orientation: Int = 0,
+        orientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         desiredQuality: Int = 80,
     ): Result<ImageCompressionResult> = withContext(Dispatchers.IO) {
         runCatching {
