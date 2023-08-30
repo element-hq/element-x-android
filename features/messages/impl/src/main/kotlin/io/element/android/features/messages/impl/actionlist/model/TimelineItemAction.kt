@@ -35,5 +35,5 @@ sealed class TimelineItemAction(
     data object Edit : TimelineItemAction(CommonStrings.action_edit, VectorIcons.Edit)
     data object Developer : TimelineItemAction(CommonStrings.action_view_source, VectorIcons.DeveloperMode)
     data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, VectorIcons.ReportContent, destructive = true)
-    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, VectorIcons.Reply)
+    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, VectorIcons.EndPoll)
 }
