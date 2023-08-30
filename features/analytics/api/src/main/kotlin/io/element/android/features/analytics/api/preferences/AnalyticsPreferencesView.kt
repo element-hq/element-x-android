@@ -37,7 +37,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun AnalyticsPreferencesView(
     state: AnalyticsPreferencesState,
     modifier: Modifier = Modifier,
-    onOpenAnalyticsPolicy: (url: String) -> Unit,
 ) {
     fun onEnabledChanged(isEnabled: Boolean) {
         state.eventSink(AnalyticsOptInEvents.EnableAnalytics(isEnabled = isEnabled))
@@ -90,6 +89,5 @@ internal fun AnalyticsPreferencesViewDarkPreview(@PreviewParameter(AnalyticsPref
 private fun ContentToPreview(state: AnalyticsPreferencesState) {
     AnalyticsPreferencesView(
         state = state,
-        onOpenAnalyticsPolicy = {},
     )
 }
