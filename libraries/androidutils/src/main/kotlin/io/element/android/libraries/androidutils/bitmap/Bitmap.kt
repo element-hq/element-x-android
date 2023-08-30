@@ -22,7 +22,6 @@ import android.graphics.Matrix
 import androidx.core.graphics.scale
 import androidx.exifinterface.media.ExifInterface
 import java.io.File
-import java.io.InputStream
 import kotlin.math.min
 
 fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
