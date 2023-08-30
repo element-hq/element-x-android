@@ -18,19 +18,12 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import io.element.android.emojibasebindings.EmojibaseStore
-import io.element.android.features.messages.impl.actionlist.ActionListState
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.canReact
 import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 

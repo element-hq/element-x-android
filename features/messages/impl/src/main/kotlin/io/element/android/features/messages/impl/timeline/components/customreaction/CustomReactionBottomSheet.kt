@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import io.element.android.emojibasebindings.Emoji
-import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.matrix.api.core.EventId

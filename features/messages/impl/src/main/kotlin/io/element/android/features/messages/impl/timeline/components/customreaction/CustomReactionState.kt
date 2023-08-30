@@ -17,12 +17,7 @@
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
 import io.element.android.emojibasebindings.EmojibaseStore
-import io.element.android.features.messages.impl.actionlist.ActionListState
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.core.EventId
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
 data class CustomReactionState(
