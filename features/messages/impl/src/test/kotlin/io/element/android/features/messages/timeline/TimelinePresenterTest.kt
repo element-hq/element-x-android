@@ -264,6 +264,7 @@ class TimelinePresenterTest {
         assertThat(room.sendPollResponseInvocations.size).isEqualTo(1)
         assertThat(room.sendPollResponseInvocations.first().answers).isEqualTo(listOf("anAnswerId"))
         assertThat(room.sendPollResponseInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
+        // TODO Polls: Test poll vote analytic
     }
 
     private fun TestScope.createTimelinePresenter(
