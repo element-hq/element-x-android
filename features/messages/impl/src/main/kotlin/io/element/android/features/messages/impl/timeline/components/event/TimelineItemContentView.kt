@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.libraries.matrix.api.core.EventId
 
 @Composable
 fun TimelineItemEventContentView(
@@ -39,6 +40,7 @@ fun TimelineItemEventContentView(
     extraPadding: ExtraPadding,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (content) {
@@ -93,7 +95,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemPollContent -> TimelineItemPollView(
             content = content,
-            onAnswerSelected = {},
+            onAnswerSelected = onPollAnswerSelected,
             modifier = modifier,
         )
     }

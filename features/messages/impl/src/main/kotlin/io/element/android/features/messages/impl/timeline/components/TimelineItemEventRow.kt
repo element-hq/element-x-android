@@ -118,6 +118,7 @@ fun TimelineItemEventRow(
     onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
+    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -175,6 +176,7 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                        onPollAnswerSelected = onPollAnswerSelected,
                     )
                 }
             }
@@ -191,6 +193,7 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                onPollAnswerSelected = onPollAnswerSelected,
             )
         }
     }
@@ -232,6 +235,7 @@ private fun TimelineItemEventRowContent(
     onReactionClicked: (emoji: String) -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
+    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
@@ -289,7 +293,8 @@ private fun TimelineItemEventRowContent(
                 inReplyToClick = inReplyToClicked,
                 onTimestampClicked = {
                     onTimestampClicked(event)
-                }
+                },
+                onPollAnswerSelected = onPollAnswerSelected,
             )
         }
 
@@ -360,6 +365,7 @@ private fun MessageEventBubbleContent(
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
+    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     @SuppressLint("ModifierParameter") bubbleModifier: Modifier = Modifier, // need to rename this modifier to distinguish it from the following ones
 ) {
     val timestampPosition = when (event.content) {
@@ -385,6 +391,7 @@ private fun MessageEventBubbleContent(
             onClick = onMessageClick,
             onLongClick = onMessageLongClick,
             extraPadding = event.toExtraPadding(),
+            onPollAnswerSelected = onPollAnswerSelected,
             modifier = modifier,
         )
     }
@@ -607,6 +614,7 @@ private fun ContentToPreview() {
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
+                onPollAnswerSelected = { _, _ -> },
             )
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
@@ -627,6 +635,7 @@ private fun ContentToPreview() {
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
+                onPollAnswerSelected = { _, _ -> },
             )
         }
     }
@@ -674,6 +683,7 @@ private fun ContentToPreviewWithReply() {
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
+                onPollAnswerSelected = { _, _ -> },
             )
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
@@ -695,6 +705,7 @@ private fun ContentToPreviewWithReply() {
                 onMoreReactionsClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
+                onPollAnswerSelected = { _, _ -> },
             )
         }
     }
@@ -752,6 +763,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
                     onMoreReactionsClick = {},
                     onTimestampClicked = {},
                     onSwipeToReply = {},
+                    onPollAnswerSelected = { _, _ -> },
                 )
             }
         }
@@ -792,6 +804,7 @@ private fun ContentWithManyReactionsToPreview() {
                 onMoreReactionsClick = {},
                 onSwipeToReply = {},
                 onTimestampClicked = {},
+                onPollAnswerSelected = { _, _ -> },
             )
         }
     }
@@ -816,6 +829,7 @@ internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
         onMoreReactionsClick = {},
         onSwipeToReply = {},
         onTimestampClicked = {},
+        onPollAnswerSelected = { _, _ -> },
     )
 }
 
@@ -836,5 +850,6 @@ internal fun TimelineItemEventTimestampBelowPreview() = ElementPreviewLight {
         onMoreReactionsClick = {},
         onSwipeToReply = {},
         onTimestampClicked = {},
+        onPollAnswerSelected = { _, _ -> },
     )
 }

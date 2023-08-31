@@ -48,7 +48,7 @@ class MessageSummaryFormatterImpl @Inject constructor(
             is TimelineItemLocationContent -> context.getString(CommonStrings.common_shared_location)
             is TimelineItemEncryptedContent -> context.getString(CommonStrings.common_unable_to_decrypt)
             is TimelineItemRedactedContent -> context.getString(CommonStrings.common_message_removed)
-            is TimelineItemPollContent, // Todo Polls: handle summary
+            is TimelineItemPollContent -> event.content.question
             is TimelineItemUnknownContent -> context.getString(CommonStrings.common_unsupported_event)
             is TimelineItemImageContent -> context.getString(CommonStrings.common_image)
             is TimelineItemVideoContent -> context.getString(CommonStrings.common_video)

@@ -23,7 +23,8 @@ val oidcConfiguration: OidcConfiguration = OidcConfiguration(
     clientName = "Element",
     redirectUri = OidcConfig.redirectUri,
     clientUri = "https://element.io",
-    tosUri = "https://element.io/user-terms-of-service",
+    logoUri = "https://element.io/mobile-icon.png",
+    tosUri = "https://element.io/acceptable-use-policy-terms",
     policyUri = "https://element.io/privacy",
     /**
      * Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
