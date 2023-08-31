@@ -30,7 +30,6 @@ enum class FeatureFlags(
         key = "feature.polls",
         title = "Polls",
         description = "Create poll and render poll events in the timeline",
-        defaultValue = false,
     ),
     UseEncryptionSync(
         key = "feature.useencryptionsync",
