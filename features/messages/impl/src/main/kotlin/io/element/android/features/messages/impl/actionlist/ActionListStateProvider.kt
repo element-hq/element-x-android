@@ -116,9 +116,11 @@ fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {
 }
 fun aTimelineItemPollActionList(): ImmutableList<TimelineItemAction> {
     return persistentListOf(
-        TimelineItemAction.Reply,
         TimelineItemAction.EndPoll,
+        TimelineItemAction.Reply,
+        TimelineItemAction.Copy,
         TimelineItemAction.Developer,
+        TimelineItemAction.ReportContent,
         TimelineItemAction.Redact,
     )
 }

@@ -27,5 +27,5 @@ object VectorIcons {
     val ReportContent = R.drawable.ic_report_content
     val Groups = R.drawable.ic_groups
     val Share = R.drawable.ic_share
-    val EndPoll = R.drawable.ic_done_24
+    val EndPoll = R.drawable.ic_poll_end
 }
