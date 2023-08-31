@@ -20,7 +20,6 @@ import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.features.messages.impl.timeline.components.customreaction.EmojibaseProvider
 
 class FakeEmojibaseProvider: EmojibaseProvider {
-    override fun loadEmojibase(): EmojibaseStore {
-        return EmojibaseStore(mapOf())
-    }
+    override val emojibaseStore: EmojibaseStore
+        get() = EmojibaseStore(mapOf())
 }
