@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.components.customreaction
+package io.element.android.features.messages.timeline.components.customreaction
 
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.emojibasebindings.EmojibaseStore
+import io.element.android.features.messages.impl.timeline.components.customreaction.EmojibaseProvider
 
-sealed interface CustomReactionEvents {
-    data class ShowCustomReactionSheet(val event: TimelineItem.Event) : CustomReactionEvents
-    object DismissCustomReactionSheet : CustomReactionEvents
+class FakeEmojibaseProvider: EmojibaseProvider {
+    override val emojibaseStore: EmojibaseStore
+        get() = EmojibaseStore(mapOf())
 }
