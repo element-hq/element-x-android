@@ -22,7 +22,7 @@ git clone git@github.com:vector-im/element-x-android.git
 ```
 or
 ```bash
-git clone https://github.com/vector-im/element-x-android.gi
+git clone https://github.com/vector-im/element-x-android.git
 ```
 
 You will also need to install [bundletool](https://developer.android.com/studio/command-line/bundletool). On MacOS, you can run the following command:
