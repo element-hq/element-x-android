@@ -71,7 +71,7 @@ fun CreatePollView(
     val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
     BackHandler(onBack = navBack)
     if (state.showConfirmation) ConfirmationDialog(
-        content = stringResource(id = R.string.screen_create_poll_confirmation),
+        content = stringResource(id = R.string.screen_create_poll_discard_confirmation),
         onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
         onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
     )
