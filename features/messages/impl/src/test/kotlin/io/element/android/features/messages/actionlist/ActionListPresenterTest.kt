@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.poll.api.PollAnswerItem
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -384,6 +385,7 @@ class ActionListPresenterTest {
             val messageEvent = aMessageEvent(
                 isMine = true,
                 content = TimelineItemPollContent(
+                    eventId = EventId("\$anEventId"),
                     question = "Some question?",
                     answerItems = listOf(
                         PollAnswerItem(

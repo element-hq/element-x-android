@@ -70,6 +70,7 @@ fun TimelineItemStateEventRow(
                 onClick = onClick,
                 onLongClick = onLongClick,
                 extraPadding = noExtraPadding,
+                onPollAnswerSelected = { _, _ -> error("Polls are not supported in state events") },
                 modifier = Modifier.defaultTimelineContentPadding()
             )
         }
