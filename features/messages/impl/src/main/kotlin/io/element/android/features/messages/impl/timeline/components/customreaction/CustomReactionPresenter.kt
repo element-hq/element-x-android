@@ -43,7 +43,7 @@ class CustomReactionPresenter @Inject constructor(
             localCoroutineScope.launch {
                 target.value = CustomReactionState.Target.Success(
                     event = event,
-                    emojibaseStore = emojibaseProvider.loadEmojibase()
+                    emojibaseStore = emojibaseProvider.emojibaseStore
                 )
             }
         }

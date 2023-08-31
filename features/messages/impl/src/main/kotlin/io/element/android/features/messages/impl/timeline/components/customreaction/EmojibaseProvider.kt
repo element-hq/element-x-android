@@ -19,5 +19,5 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 import io.element.android.emojibasebindings.EmojibaseStore
 
 interface EmojibaseProvider {
-    fun loadEmojibase(): EmojibaseStore
+    val emojibaseStore: EmojibaseStore
 }
