@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,8 +27,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.login.api.oidc.OidcAction
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.oidc.customtab.DefaultOidcActionFlow
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -40,7 +44,9 @@ import java.net.URL
 class ConfirmAccountProviderPresenter @AssistedInject constructor(
     @Assisted private val params: Params,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val authenticationService: MatrixAuthenticationService
+    private val authenticationService: MatrixAuthenticationService,
+    private val defaultOidcActionFlow: DefaultOidcActionFlow,
+    private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<ConfirmAccountProviderState> {
 
     data class Params(
@@ -59,6 +65,14 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
 
         val loginFlowAction: MutableState<Async<LoginFlow>> = remember {
             mutableStateOf(Async.Uninitialized)
+        }
+
+        LaunchedEffect(Unit) {
+            defaultOidcActionFlow.collect { oidcAction ->
+                if (oidcAction != null) {
+                    onOidcAction(oidcAction, loginFlowAction)
+                }
+            }
         }
 
         fun handleEvents(event: ConfirmAccountProviderEvents) {
@@ -96,5 +110,33 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                 }
             }.getOrThrow()
         }.runCatchingUpdatingState(loginFlowAction, errorTransform = ChangeServerError::from)
+    }
+
+    private suspend fun onOidcAction(
+        oidcAction: OidcAction,
+        loginFlowAction: MutableState<Async<LoginFlow>>,
+    ) {
+        loginFlowAction.value = Async.Loading()
+        when (oidcAction) {
+            OidcAction.GoBack -> {
+                authenticationService.cancelOidcLogin()
+                    .onSuccess {
+                        loginFlowAction.value = Async.Uninitialized
+                    }
+                    .onFailure { failure ->
+                        loginFlowAction.value = Async.Failure(failure)
+                    }
+            }
+            is OidcAction.Success -> {
+                authenticationService.loginWithOidc(oidcAction.url)
+                    .onSuccess { _ ->
+                        defaultLoginUserStory.setLoginFlowIsDone(true)
+                    }
+                    .onFailure { failure ->
+                        loginFlowAction.value = Async.Failure(failure)
+                    }
+            }
+        }
+        defaultOidcActionFlow.reset()
     }
 }

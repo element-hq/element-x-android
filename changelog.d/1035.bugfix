@@ -1,1 +1,0 @@
-Use `for` instead of `forEach` in `DefaultDiffCacheInvalidator` to improve performance.

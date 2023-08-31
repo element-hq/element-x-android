@@ -21,8 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -39,6 +39,7 @@ class AnalyticsPreferencesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isEnabled).isTrue()
+            assertThat(initialState.policyUrl).isNotEmpty()
         }
     }
 

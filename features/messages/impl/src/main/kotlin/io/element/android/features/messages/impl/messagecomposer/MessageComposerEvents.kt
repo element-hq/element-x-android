@@ -21,19 +21,21 @@ import io.element.android.libraries.textcomposer.MessageComposerMode
 
 @Immutable
 sealed interface MessageComposerEvents {
-    object ToggleFullScreenState : MessageComposerEvents
+    data object ToggleFullScreenState : MessageComposerEvents
     data class FocusChanged(val hasFocus: Boolean) : MessageComposerEvents
     data class SendMessage(val message: String) : MessageComposerEvents
-    object CloseSpecialMode : MessageComposerEvents
+    data object CloseSpecialMode : MessageComposerEvents
     data class SetMode(val composerMode: MessageComposerMode) : MessageComposerEvents
     data class UpdateText(val text: String) : MessageComposerEvents
-    object AddAttachment : MessageComposerEvents
-    object DismissAttachmentMenu : MessageComposerEvents
+    data object AddAttachment : MessageComposerEvents
+    data object DismissAttachmentMenu : MessageComposerEvents
     sealed interface PickAttachmentSource : MessageComposerEvents {
-        object FromGallery : PickAttachmentSource
-        object FromFiles : PickAttachmentSource
-        object PhotoFromCamera : PickAttachmentSource
-        object VideoFromCamera : PickAttachmentSource
-        object Location : PickAttachmentSource
+        data object FromGallery : PickAttachmentSource
+        data object FromFiles : PickAttachmentSource
+        data object PhotoFromCamera : PickAttachmentSource
+        data object VideoFromCamera : PickAttachmentSource
+        data object Location : PickAttachmentSource
+        data object Poll : PickAttachmentSource
     }
+    data object CancelSendAttachment : MessageComposerEvents
 }

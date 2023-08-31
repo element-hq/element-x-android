@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.Config
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesPresenter
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 import io.element.android.libraries.core.meta.BuildMeta
@@ -51,6 +52,7 @@ class DefaultAnalyticsPreferencesPresenter @Inject constructor(
         return AnalyticsPreferencesState(
             applicationName = buildMeta.applicationName,
             isEnabled = isEnabled.value,
+            policyUrl = Config.POLICY_LINK,
             eventSink = ::handleEvents
         )
     }

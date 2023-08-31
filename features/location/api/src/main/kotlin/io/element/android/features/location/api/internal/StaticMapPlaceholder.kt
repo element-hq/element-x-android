@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.features.location.api.R
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
@@ -44,34 +45,34 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal fun StaticMapPlaceholder(
     showProgress: Boolean,
     contentDescription: String?,
+    width: Dp,
+    height: Dp,
     modifier: Modifier = Modifier,
     onLoadMapClick: () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
+        modifier = modifier
+            .size(width = width, height = height)
+            .then(if (showProgress) Modifier else Modifier.clickable(onClick = onLoadMapClick))
     ) {
         Image(
             painter = painterResource(id = R.drawable.blurred_map),
             contentDescription = contentDescription,
-            modifier = modifier,
             contentScale = ContentScale.FillBounds,
+            modifier = Modifier.size(width = width, height = height)
         )
         if (showProgress) {
             CircularProgressIndicator()
         } else {
-            Box(
-                modifier = modifier.clickable(onClick = onLoadMapClick),
-                contentAlignment = Alignment.Center,
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = null
-                    )
-                    Text(text = stringResource(id = CommonStrings.action_static_map_load))
-                }
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = null
+                )
+                Text(text = stringResource(id = CommonStrings.action_static_map_load))
             }
         }
     }
@@ -85,7 +86,8 @@ internal fun StaticMapPlaceholderPreview(
     StaticMapPlaceholder(
         showProgress = values,
         contentDescription = null,
-        modifier = Modifier.size(400.dp),
+        width = 400.dp,
+        height = 400.dp,
         onLoadMapClick = {},
     )
 }

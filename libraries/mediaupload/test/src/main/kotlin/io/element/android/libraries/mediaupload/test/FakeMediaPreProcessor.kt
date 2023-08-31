@@ -25,6 +25,9 @@ import java.io.File
 
 class FakeMediaPreProcessor : MediaPreProcessor {
 
+    var processCallCount = 0
+        private set
+
     private var result: Result<MediaUploadInfo> = Result.success(
         MediaUploadInfo.AnyFile(
             File("test"),
@@ -43,6 +46,7 @@ class FakeMediaPreProcessor : MediaPreProcessor {
         deleteOriginal: Boolean,
         compressIfPossible: Boolean
     ): Result<MediaUploadInfo> = simulateLongTask {
+        processCallCount++
         result
     }
 

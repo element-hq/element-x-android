@@ -47,9 +47,13 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 @SingleIn(RoomScope::class)
@@ -79,6 +83,11 @@ class MessageComposerPresenter @Inject constructor(
             canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
         }
 
+        val canCreatePoll = remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            canCreatePoll.value = featureFlagService.isFeatureEnabled(FeatureFlags.Polls)
+        }
+
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
             handlePickedMedia(attachmentsState, uri, mimeType)
         }
@@ -100,6 +109,7 @@ class MessageComposerPresenter @Inject constructor(
         val text: MutableState<String> = rememberSaveable {
             mutableStateOf("")
         }
+        val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
@@ -112,7 +122,12 @@ class MessageComposerPresenter @Inject constructor(
 
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
-                is AttachmentsState.Sending.Processing -> localCoroutineScope.sendAttachment(attachmentStateValue.attachments.first(), attachmentsState)
+                is AttachmentsState.Sending.Processing -> {
+                    ongoingSendAttachmentJob.value = localCoroutineScope.sendAttachment(
+                        attachmentStateValue.attachments.first(),
+                        attachmentsState,
+                    )
+                }
                 else -> Unit
             }
         }
@@ -169,6 +184,16 @@ class MessageComposerPresenter @Inject constructor(
                     showAttachmentSourcePicker = false
                     // Navigation to the location picker screen is done at the view layer
                 }
+                MessageComposerEvents.PickAttachmentSource.Poll -> {
+                    showAttachmentSourcePicker = false
+                    // Navigation to the create poll screen is done at the view layer
+                }
+                is MessageComposerEvents.CancelSendAttachment -> {
+                    ongoingSendAttachmentJob.value?.let {
+                        it.cancel()
+                        ongoingSendAttachmentJob.value == null
+                    }
+                }
             }
         }
 
@@ -179,6 +204,7 @@ class MessageComposerPresenter @Inject constructor(
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             canShareLocation = canShareLocation.value,
+            canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             eventSink = ::handleEvents
         )
@@ -212,13 +238,13 @@ class MessageComposerPresenter @Inject constructor(
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
         attachmentState: MutableState<AttachmentsState>,
-    ) = launch {
-        when (attachment) {
-            is Attachment.Media -> {
+    ) = when (attachment) {
+        is Attachment.Media -> {
+            launch {
                 sendMedia(
                     uri = attachment.localMedia.uri,
                     mimeType = attachment.localMedia.info.mimeType,
-                    attachmentState = attachmentState
+                    attachmentState = attachmentState,
                 )
             }
         }
@@ -259,20 +285,27 @@ class MessageComposerPresenter @Inject constructor(
         uri: Uri,
         mimeType: String,
         attachmentState: MutableState<AttachmentsState>,
-    ) {
+    ) = runCatching {
+        val context = coroutineContext
         val progressCallback = object : ProgressCallback {
             override fun onProgress(current: Long, total: Long) {
-                attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total.toFloat())
+                if (context.isActive) {
+                    attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total.toFloat())
+                }
             }
         }
-        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback)
-            .onSuccess {
-                attachmentState.value = AttachmentsState.None
-            }
-            .onFailure {
-                val snackbarMessage = SnackbarMessage(sendAttachmentError(it))
-                snackbarDispatcher.post(snackbarMessage)
-                attachmentState.value = AttachmentsState.None
-            }
+        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback).getOrThrow()
+    }
+    .onSuccess {
+        attachmentState.value = AttachmentsState.None
+    }
+    .onFailure { cause ->
+        attachmentState.value = AttachmentsState.None
+        if (cause is CancellationException) {
+            throw cause
+        } else {
+            val snackbarMessage = SnackbarMessage(sendAttachmentError(cause))
+            snackbarDispatcher.post(snackbarMessage)
+        }
     }
 }

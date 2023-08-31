@@ -24,13 +24,13 @@ data class SendLocationState(
     val eventSink: (SendLocationEvents) -> Unit = {},
 ) {
     sealed interface Mode {
-        object SenderLocation : Mode
-        object PinLocation : Mode
+        data object SenderLocation : Mode
+        data object PinLocation : Mode
     }
 
     sealed interface Dialog {
-        object None : Dialog
-        object PermissionRationale : Dialog
-        object PermissionDenied : Dialog
+        data object None : Dialog
+        data object PermissionRationale : Dialog
+        data object PermissionDenied : Dialog
     }
 }

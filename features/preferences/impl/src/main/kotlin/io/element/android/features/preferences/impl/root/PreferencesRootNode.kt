@@ -16,8 +16,10 @@
 
 package io.element.android.features.preferences.impl.root
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -25,7 +27,9 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
+import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class PreferencesRootNode @AssistedInject constructor(
@@ -62,9 +66,16 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenAbout() }
     }
 
+    private fun onManageAccountClicked(activity: Activity, accountManagementUrl: String?) {
+        accountManagementUrl?.let {
+            activity.openUrlInChromeCustomTab(null, false, it)
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        val activity = LocalContext.current as Activity
         PreferencesRootView(
             state = state,
             modifier = modifier,
@@ -73,7 +84,16 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenAnalytics = this::onOpenAnalytics,
             onOpenAbout = this::onOpenAbout,
             onVerifyClicked = this::onVerifyClicked,
-            onOpenDeveloperSettings = this::onOpenDeveloperSettings
+            onOpenDeveloperSettings = this::onOpenDeveloperSettings,
+            onSuccessLogout = { onSuccessLogout(activity, it) },
+            onManageAccountClicked = { onManageAccountClicked(activity, state.accountManagementUrl) },
         )
+    }
+
+    private fun onSuccessLogout(activity: Activity, url: String?) {
+        Timber.d("Success logout with result url: $url")
+        url?.let {
+            activity.openUrlInChromeCustomTab(null, false, it)
+        }
     }
 }

@@ -25,7 +25,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.StateFlow
@@ -81,13 +83,13 @@ interface MatrixRoom : Closeable {
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
-    suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit>
+    suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
-    suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit>
+    suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
-    suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit>
+    suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
-    suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit>
+    suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
     suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit>
 
@@ -139,6 +141,37 @@ interface MatrixRoom : Closeable {
         zoomLevel: Int? = null,
         assetType: AssetType? = null,
     ): Result<Unit>
+
+    /**
+     * Create a poll in the room.
+     *
+     * @param question The question to ask.
+     * @param answers The list of answers.
+     * @param maxSelections The maximum number of answers that can be selected.
+     * @param pollKind The kind of poll to create.
+     */
+    suspend fun createPoll(
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind,
+    ): Result<Unit>
+
+    /**
+     * Send a response to a poll.
+     *
+     * @param pollStartId The event ID of the poll start event.
+     * @param answers The list of answer ids to send.
+     */
+    suspend fun sendPollResponse(pollStartId: EventId, answers: List<String>): Result<Unit>
+
+    /**
+     * Ends a poll in the room.
+     *
+     * @param pollStartId The event ID of the poll start event.
+     * @param text Fallback text of the poll end event.
+     */
+    suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
 
     override fun close() = destroy()
 }

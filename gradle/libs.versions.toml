@@ -3,9 +3,9 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.0.2"
-kotlin = "1.8.22"
-ksp = "1.8.22-1.0.11"
+android_gradle_plugin = "8.1.1"
+kotlin = "1.9.10"
+ksp = "1.9.10-1.0.13"
 molecule = "1.2.0"
 
 # AndroidX
@@ -18,18 +18,18 @@ recyclerview = "1.3.1"
 lifecycle = "2.6.1"
 activity = "1.7.2"
 startup = "1.1.1"
-media3 = "1.1.0"
-browser = "1.5.0"
+media3 = "1.1.1"
+browser = "1.6.0"
 
 # Compose
-compose_bom = "2023.06.01"
-composecompiler = "1.4.8"
+compose_bom = "2023.08.00"
+composecompiler = "1.5.3"
 
 # Coroutines
-coroutines = "1.7.2"
+coroutines = "1.7.3"
 
 # Accompanist
-accompanist = "0.30.1"
+accompanist = "0.32.0"
 
 # Test
 test_core = "1.5.0"
@@ -37,18 +37,18 @@ test_core = "1.5.0"
 #other
 coil = "2.4.0"
 datetime = "0.4.0"
-serialization_json = "1.5.1"
+serialization_json = "1.6.0"
 showkase = "1.0.0-beta18"
 jsoup = "1.16.1"
 appyx = "1.3.0"
-dependencycheck = "8.3.1"
-dependencyanalysis = "1.20.0"
+dependencycheck = "8.4.0"
+dependencyanalysis = "1.21.0"
 stem = "2.3.0"
 sqldelight = "1.5.5"
-telephoto = "0.5.0"
+telephoto = "0.6.0-SNAPSHOT"
 
 # DI
-dagger = "2.47"
+dagger = "2.48"
 anvil = "2.4.7-1-8"
 
 # Auto service
@@ -65,7 +65,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.2.2"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.2.3"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -82,16 +82,17 @@ androidx_browser = { module = "androidx.browser:browser", version.ref = "browser
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.1"
-androidx_security_crypto = "androidx.security:security-crypto:1.0.0"
+androidx_security_crypto = "androidx.security:security-crypto:1.1.0-alpha06"
 androidx_media3_exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
-androidx_preference = "androidx.preference:preference:1.2.0"
+androidx_preference = "androidx.preference:preference:1.2.1"
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
+androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha06"
 
 # Coroutines
 coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -123,7 +124,7 @@ test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.5.2"
 test_uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 test_junitext = "androidx.test.ext:junit:1.1.5"
-test_mockk = "io.mockk:mockk:1.13.5"
+test_mockk = "io.mockk:mockk:1.13.7"
 test_barista = "com.adevinta.android:barista:4.3.0"
 test_hamcrest = "org.hamcrest:hamcrest:2.2"
 test_orchestrator = "androidx.test:orchestrator:1.4.2"
@@ -145,7 +146,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.42"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.48"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
@@ -158,8 +159,8 @@ vanniktech_emoji = "com.vanniktech:emoji-google:0.16.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.0"
 maplibre = "org.maplibre.gl:android-sdk:10.2.0"
-maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.0"
-maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.0"
+maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.1"
+maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.1"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
@@ -200,7 +201,7 @@ ktlint = "org.jlleitschuh.gradle.ktlint:11.5.1"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyanalysis" }
-paparazzi = "app.cash.paparazzi:1.2.0"
+paparazzi = "app.cash.paparazzi:1.3.1"
 sonarqube = "org.sonarqube:4.2.1.3168"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }

@@ -40,22 +40,22 @@ sealed interface TimelineItemGroupPosition {
     /**
      * The event is part of a group of events from the same sender and is the first sent Event.
      */
-    object First : TimelineItemGroupPosition
+    data object First : TimelineItemGroupPosition
 
     /**
      * The event is part of a group of events from the same sender and is neither the first nor the last sent Event.
      */
-    object Middle : TimelineItemGroupPosition
+    data object Middle : TimelineItemGroupPosition
 
     /**
      * The event is part of a group of events from the same sender and is the last sent Event.
      */
-    object Last : TimelineItemGroupPosition
+    data object Last : TimelineItemGroupPosition
 
     /**
      * The event is not part of a group of events. Sender of previous event is different, and sender of next event is different.
      */
-    object None : TimelineItemGroupPosition
+    data object None : TimelineItemGroupPosition
 
     /**
      * Return true if the previous sender of the event is a different sender.

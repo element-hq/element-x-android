@@ -18,7 +18,6 @@ package io.element.android.features.analytics.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Poll
 import androidx.compose.material.icons.rounded.Check
@@ -37,7 +36,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.Config
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem
@@ -56,7 +55,6 @@ import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithSt
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 import io.element.android.libraries.designsystem.utils.LogCompositions
@@ -98,6 +96,8 @@ fun AnalyticsOptInView(
     )
 }
 
+private const val LINK_TAG = "link"
+
 @Composable
 private fun AnalyticsOptInHeader(
     state: AnalyticsOptInState,
@@ -114,21 +114,29 @@ private fun AnalyticsOptInHeader(
             subTitle = stringResource(id = R.string.screen_analytics_prompt_help_us_improve),
             iconImageVector = Icons.Filled.Poll
         )
-        Text(
-            text = buildAnnotatedStringWithStyledPart(
-                R.string.screen_analytics_prompt_read_terms,
-                R.string.screen_analytics_prompt_read_terms_content_link,
-                color = Color.Unspecified,
-                underline = false,
-                bold = true,
-            ),
+        val text = buildAnnotatedStringWithStyledPart(
+            R.string.screen_analytics_prompt_read_terms,
+            R.string.screen_analytics_prompt_read_terms_content_link,
+            color = Color.Unspecified,
+            underline = false,
+            bold = true,
+            tagAndLink = LINK_TAG to Config.POLICY_LINK,
+        )
+        ClickableText(
+            text = text,
+            onClick = {
+                text
+                    .getStringAnnotations(LINK_TAG, it, it)
+                    .firstOrNull()
+                    ?.let { _ -> onClickTerms() }
+            },
             modifier = Modifier
-                .clip(shape = RoundedCornerShape(8.dp))
-                .clickable { onClickTerms() }
                 .padding(8.dp),
-            style = ElementTheme.typography.fontBodyMdRegular,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.secondary,
+            style = ElementTheme.typography.fontBodyMdRegular
+                .copy(
+                    color = MaterialTheme.colorScheme.secondary,
+                    textAlign = TextAlign.Center,
+                )
         )
     }
 }
@@ -195,7 +203,7 @@ private fun AnalyticsOptInFooter(
         )
         TextButton(
             text = stringResource(id = CommonStrings.action_not_now),
-            buttonSize = ButtonSize.Medium,
+            size = ButtonSize.Medium,
             onClick = onTermsDeclined,
             modifier = Modifier.fillMaxWidth(),
         )

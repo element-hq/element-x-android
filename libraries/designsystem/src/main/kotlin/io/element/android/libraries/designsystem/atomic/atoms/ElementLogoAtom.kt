@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.designsystem.atomic.atoms
 
-import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,24 +26,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.RoundRect
-import androidx.compose.ui.graphics.ClipOp
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.clipPath
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
+import io.element.android.libraries.designsystem.modifiers.blurCompat
+import io.element.android.libraries.designsystem.modifiers.blurredShapeShadow
+import io.element.android.libraries.designsystem.modifiers.canUseBlurMaskFilter
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.theme.ElementTheme
@@ -53,6 +44,7 @@ import io.element.android.libraries.theme.ElementTheme
 fun ElementLogoAtom(
     size: ElementLogoAtomSize,
     modifier: Modifier = Modifier,
+    useBlurredShadow: Boolean = canUseBlurMaskFilter(),
     darkTheme: Boolean = isSystemInDarkTheme(),
 ) {
     val blur = if (darkTheme) 160.dp else 24.dp
@@ -66,22 +58,35 @@ fun ElementLogoAtom(
             .border(size.borderWidth, borderColor, RoundedCornerShape(size.cornerRadius)),
         contentAlignment = Alignment.Center,
     ) {
-        Box(
-            Modifier
-                .size(size.outerSize)
-                .shapeShadow(
-                    color = shadowColor,
-                    cornerRadius = size.cornerRadius,
-                    blurRadius = size.shadowRadius,
-                    offsetY = 8.dp,
-                )
-        )
+        if (useBlurredShadow) {
+            Box(
+                Modifier
+                    .size(size.outerSize)
+                    .blurredShapeShadow(
+                        color = shadowColor,
+                        cornerRadius = size.cornerRadius,
+                        blurRadius = size.shadowRadius,
+                        offsetY = 8.dp,
+                    )
+            )
+        } else {
+            Box(
+                Modifier
+                    .size(size.outerSize)
+                    .shadow(
+                        elevation = size.shadowRadius,
+                        shape = RoundedCornerShape(size.cornerRadius),
+                        clip = false,
+                        ambientColor = shadowColor
+                    )
+            )
+        }
         Box(
             Modifier
                 .clip(RoundedCornerShape(size.cornerRadius))
                 .size(size.outerSize)
                 .background(backgroundColor)
-                .blur(blur)
+                .blurCompat(blur)
         )
         Image(
             modifier = Modifier.size(size.logoSize),
@@ -100,7 +105,7 @@ sealed class ElementLogoAtomSize(
     val shadowColorLight: Color,
     val shadowRadius: Dp,
 ) {
-    object Medium : ElementLogoAtomSize(
+    data object Medium : ElementLogoAtomSize(
         outerSize = 120.dp,
         logoSize = 83.5.dp,
         cornerRadius = 33.dp,
@@ -110,7 +115,7 @@ sealed class ElementLogoAtomSize(
         shadowRadius = 32.dp,
     )
 
-    object Large : ElementLogoAtomSize(
+    data object Large : ElementLogoAtomSize(
         outerSize = 158.dp,
         logoSize = 110.dp,
         cornerRadius = 44.dp,
@@ -120,44 +125,6 @@ sealed class ElementLogoAtomSize(
         shadowRadius = 60.dp,
     )
 }
-
-fun Modifier.shapeShadow(
-    color: Color = Color.Black,
-    cornerRadius: Dp = 0.dp,
-    offsetX: Dp = 0.dp,
-    offsetY: Dp = 0.dp,
-    blurRadius: Dp = 0.dp,
-) = then(
-    drawBehind {
-        drawIntoCanvas { canvas ->
-            val path = Path().apply {
-                addRoundRect(RoundRect(Rect(Offset.Zero, size), CornerRadius(cornerRadius.toPx())))
-            }
-
-            clipPath(path, ClipOp.Difference) {
-                val paint = Paint()
-                val frameworkPaint = paint.asFrameworkPaint()
-                if (blurRadius != 0.dp) {
-                    frameworkPaint.maskFilter = BlurMaskFilter(blurRadius.toPx(), BlurMaskFilter.Blur.NORMAL)
-                }
-                frameworkPaint.color = color.toArgb()
-
-                val leftPixel = offsetX.toPx()
-                val topPixel = offsetY.toPx()
-                val rightPixel = size.width + topPixel
-                val bottomPixel = size.height + leftPixel
-
-                canvas.drawRect(
-                    left = leftPixel,
-                    top = topPixel,
-                    right = rightPixel,
-                    bottom = bottomPixel,
-                    paint = paint,
-                )
-            }
-        }
-    }
-)
 
 @Composable
 @DayNightPreviews
@@ -172,7 +139,19 @@ internal fun ElementLogoAtomLargePreview() {
 }
 
 @Composable
-private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize) {
+@DayNightPreviews
+internal fun ElementLogoAtomMediumNoBlurShadowPreview() {
+    ContentToPreview(ElementLogoAtomSize.Medium, useBlurredShadow = false)
+}
+
+@Composable
+@DayNightPreviews
+internal fun ElementLogoAtomLargeNoBlurShadowPreview() {
+    ContentToPreview(ElementLogoAtomSize.Large, useBlurredShadow = false)
+}
+
+@Composable
+private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize, useBlurredShadow: Boolean = true) {
     ElementPreview {
         Box(
             Modifier
@@ -180,7 +159,7 @@ private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize) {
                 .background(ElementTheme.colors.bgSubtlePrimary),
             contentAlignment = Alignment.Center
         ) {
-            ElementLogoAtom(elementLogoAtomSize)
+            ElementLogoAtom(elementLogoAtomSize, useBlurredShadow = useBlurredShadow)
         }
     }
 }

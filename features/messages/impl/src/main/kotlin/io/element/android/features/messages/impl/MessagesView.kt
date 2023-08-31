@@ -35,7 +35,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -53,6 +52,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
@@ -78,6 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
@@ -96,11 +97,16 @@ fun MessagesView(
     onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onSendLocationClicked: () -> Unit,
+    onCreatePollClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
 
-    AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
+    AttachmentStateView(
+        state = state.composerState.attachmentsState,
+        onPreviewAttachments = onPreviewAttachments,
+        onCancel = { state.composerState.eventSink(MessageComposerEvents.CancelSendAttachment) },
+    )
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
@@ -170,6 +176,7 @@ fun MessagesView(
                 onReactionLongClicked = ::onEmojiReactionLongClicked,
                 onMoreReactionsClicked = ::onMoreReactionsClicked,
                 onSendLocationClicked = onSendLocationClicked,
+                onCreatePollClicked = onCreatePollClicked,
                 onSwipeToReply = { targetEvent ->
                     state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
                 },
@@ -229,7 +236,8 @@ private fun ReinviteDialog(state: MessagesState) {
 @Composable
 private fun AttachmentStateView(
     state: AttachmentsState,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit
+    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
+    onCancel: () -> Unit,
 ) {
     when (state) {
         AttachmentsState.None -> Unit
@@ -242,7 +250,9 @@ private fun AttachmentStateView(
                     is AttachmentsState.Sending.Uploading -> ProgressDialogType.Determinate(state.progress)
                     is AttachmentsState.Sending.Processing -> ProgressDialogType.Indeterminate
                 },
-                text = stringResource(id = CommonStrings.common_sending)
+                text = stringResource(id = CommonStrings.common_sending),
+                isCancellable = true,
+                onDismissRequest = onCancel,
             )
         }
     }
@@ -259,6 +269,7 @@ private fun MessagesViewContent(
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
+    onCreatePollClicked: () -> Unit,
     modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
 ) {
@@ -287,6 +298,7 @@ private fun MessagesViewContent(
             MessageComposerView(
                 state = state.composerState,
                 onSendLocationClicked = onSendLocationClicked,
+                onCreatePollClicked = onCreatePollClicked,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(Alignment.Bottom)
@@ -393,5 +405,6 @@ private fun ContentToPreview(state: MessagesState) {
         onPreviewAttachments = {},
         onUserDataClicked = {},
         onSendLocationClicked = {},
+        onCreatePollClicked = {},
     )
 }

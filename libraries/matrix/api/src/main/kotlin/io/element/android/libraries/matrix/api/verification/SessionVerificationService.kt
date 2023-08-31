@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.verification
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface SessionVerificationService {
@@ -36,6 +37,11 @@ interface SessionVerificationService {
      * or [SessionVerifiedStatus.Verified].
      */
     val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus>
+
+    /**
+     * Returns whether the current session needs to be verified and the SDK is ready to start the verification.
+     */
+    val canVerifySessionFlow: Flow<Boolean>
 
     /**
      * Request verification of the current session.
@@ -71,35 +77,35 @@ interface SessionVerificationService {
 /** Verification status of the current session. */
 sealed interface SessionVerifiedStatus {
     /** Unknown status, we couldn't read the actual value from the SDK. */
-    object Unknown : SessionVerifiedStatus
+    data object Unknown : SessionVerifiedStatus
 
     /** Not verified session status. */
-    object NotVerified : SessionVerifiedStatus
+    data object NotVerified : SessionVerifiedStatus
 
     /** Verified session status. */
-    object Verified : SessionVerifiedStatus
+    data object Verified : SessionVerifiedStatus
 }
 
 /** States produced by the [SessionVerificationService]. */
 sealed interface VerificationFlowState {
     /** Initial state. */
-    object Initial : VerificationFlowState
+    data object Initial : VerificationFlowState
 
     /** Session verification request was accepted by another device. */
-    object AcceptedVerificationRequest : VerificationFlowState
+    data object AcceptedVerificationRequest : VerificationFlowState
 
     /** Short Authentication String (SAS) verification started between the 2 devices. */
-    object StartedSasVerification : VerificationFlowState
+    data object StartedSasVerification : VerificationFlowState
 
     /** Verification data for the SAS verification (emojis) received. */
     data class ReceivedVerificationData(val emoji: List<VerificationEmoji>) : VerificationFlowState
 
     /** Verification completed successfully. */
-    object Finished : VerificationFlowState
+    data object Finished : VerificationFlowState
 
     /** Verification was cancelled by either device. */
-    object Canceled : VerificationFlowState
+    data object Canceled : VerificationFlowState
 
     /** Verification failed with an error. */
-    object Failed : VerificationFlowState
+    data object Failed : VerificationFlowState
 }

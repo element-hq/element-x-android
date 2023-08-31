@@ -72,15 +72,14 @@ class RootFlowNode @AssistedInject constructor(
     private val bugReportEntryPoint: BugReportEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
-) :
-    BackstackNode<RootFlowNode.NavTarget>(
-        backstack = BackStack(
-            initialElement = NavTarget.SplashScreen,
-            savedStateMap = buildContext.savedStateMap,
-        ),
-        buildContext = buildContext,
-        plugins = plugins
-    ) {
+) : BackstackNode<RootFlowNode.NavTarget>(
+    backstack = BackStack(
+        initialElement = NavTarget.SplashScreen,
+        savedStateMap = buildContext.savedStateMap,
+    ),
+    buildContext = buildContext,
+    plugins = plugins
+) {
 
     override fun onBuilt() {
         matrixClientsHolder.restoreWithSavedState(buildContext.savedStateMap)
@@ -170,10 +169,10 @@ class RootFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object SplashScreen : NavTarget
+        data object SplashScreen : NavTarget
 
         @Parcelize
-        object NotLoggedInFlow : NavTarget
+        data object NotLoggedInFlow : NavTarget
 
         @Parcelize
         data class LoggedInFlow(
@@ -182,7 +181,7 @@ class RootFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        object BugReport : NavTarget
+        data object BugReport : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -191,14 +190,14 @@ class RootFlowNode @AssistedInject constructor(
                 val matrixClient = matrixClientsHolder.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
                     Timber.w("Couldn't find any session, go through SplashScreen")
                 }
-                val inputs = LoggedInFlowNode.Inputs(matrixClient)
-                val callback = object : LoggedInFlowNode.Callback {
+                val inputs = LoggedInAppScopeFlowNode.Inputs(matrixClient)
+                val callback = object : LoggedInAppScopeFlowNode.Callback {
                     override fun onOpenBugReport() {
                         backstack.push(NavTarget.BugReport)
                     }
                 }
                 val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
-                createNode<LoggedInFlowNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
+                createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
             }
             NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
             NavTarget.SplashScreen -> splashNode(buildContext)
@@ -233,6 +232,7 @@ class RootFlowNode @AssistedInject constructor(
     private suspend fun navigateTo(deeplinkData: DeeplinkData) {
         Timber.d("Navigating to $deeplinkData")
         attachSession(deeplinkData.sessionId)
+            .attachSession()
             .apply {
                 when (deeplinkData) {
                     is DeeplinkData.Root -> attachRoot()
@@ -246,7 +246,7 @@ class RootFlowNode @AssistedInject constructor(
         oidcActionFlow.post(oidcAction)
     }
 
-    private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
+    private suspend fun attachSession(sessionId: SessionId): LoggedInAppScopeFlowNode {
         //TODO handle multi-session
         return waitForChildAttached { navTarget ->
             navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId

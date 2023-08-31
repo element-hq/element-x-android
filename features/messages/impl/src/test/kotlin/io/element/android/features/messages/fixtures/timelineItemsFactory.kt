@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentMessageFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentProfileChangeFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRedactedFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRoomMembershipFactory
@@ -35,6 +36,7 @@ import io.element.android.features.messages.impl.timeline.util.FileExtensionExtr
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -42,6 +44,7 @@ import kotlinx.coroutines.test.TestScope
 
 internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
     val timelineEventFormatter = aTimelineEventFormatter()
+    val matrixClient = FakeMatrixClient()
     return TimelineItemsFactory(
         dispatchers = testCoroutineDispatchers(),
         eventItemFactory = TimelineItemEventFactory(
@@ -49,14 +52,15 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter(), FileExtensionExtractorWithoutValidation()),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
+                pollFactory = TimelineItemContentPollFactory(matrixClient, FakeFeatureFlagService()),
                 utdFactory = TimelineItemContentUTDFactory(),
                 roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
                 profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
                 stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
                 failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
-                failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory()
+                failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
             ),
-            matrixClient = FakeMatrixClient(),
+            matrixClient = matrixClient,
         ),
         virtualItemFactory = TimelineItemVirtualFactory(
             daySeparatorFactory = TimelineItemDaySeparatorFactory(

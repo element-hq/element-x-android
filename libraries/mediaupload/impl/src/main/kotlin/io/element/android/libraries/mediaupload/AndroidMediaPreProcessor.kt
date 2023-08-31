@@ -119,10 +119,17 @@ class AndroidMediaPreProcessor @Inject constructor(
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
 
         suspend fun processImageWithCompression(): MediaUploadInfo {
+            // Read the orientation metadata from its own stream. Trying to reuse this stream for compression will fail.
+            val orientation = contentResolver.openInputStream(uri).use { input ->
+                val exifInterface = input?.let { ExifInterface(it) }
+                exifInterface?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            } ?: ExifInterface.ORIENTATION_UNDEFINED
+
             val compressionResult = contentResolver.openInputStream(uri).use { input ->
                 imageCompressor.compressToTmpFile(
                     inputStream = requireNotNull(input),
                     resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
+                    orientation = orientation,
                 ).getOrThrow()
             }
             val thumbnailResult: ThumbnailResult = thumbnailFactory.createImageThumbnail(compressionResult.file)

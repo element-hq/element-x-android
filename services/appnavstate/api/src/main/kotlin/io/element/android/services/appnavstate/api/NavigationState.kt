@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
  * So we assume if we don't get the same owner, we can skip the onLeaving action as we already replaced it.
  */
 sealed class NavigationState(open val owner: String) {
-    object Root : NavigationState("ROOT")
+    data object Root : NavigationState("ROOT")
 
     data class Session(
         override val owner: String,

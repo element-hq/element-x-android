@@ -27,6 +27,7 @@ internal fun SessionData.toDbModel(): DbSessionData {
         accessToken = accessToken,
         refreshToken = refreshToken,
         homeserverUrl = homeserverUrl,
+        oidcData = oidcData,
         slidingSyncProxy = slidingSyncProxy,
         loginTimestamp = loginTimestamp?.time,
     )
@@ -39,6 +40,7 @@ internal fun DbSessionData.toApiModel(): SessionData {
         accessToken = accessToken,
         refreshToken = refreshToken,
         homeserverUrl = homeserverUrl,
+        oidcData = oidcData,
         slidingSyncProxy = slidingSyncProxy,
         loginTimestamp = loginTimestamp?.let { Date(it) }
     )

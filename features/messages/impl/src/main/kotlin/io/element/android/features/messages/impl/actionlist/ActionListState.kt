@@ -28,7 +28,7 @@ data class ActionListState(
     val eventSink: (ActionListEvents) -> Unit,
 ) {
     sealed interface Target {
-        object None : Target
+        data object None : Target
         data class Loading(val event: TimelineItem.Event) : Target
         data class Success(
             val event: TimelineItem.Event,

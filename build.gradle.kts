@@ -1,9 +1,11 @@
+import com.google.devtools.ksp.gradle.KspTask
 import kotlinx.kover.api.KoverTaskExtension
+import org.apache.tools.ant.taskdefs.optional.ReplaceRegExp
 import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 buildscript {
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10")
         classpath("com.google.gms:google-services:4.3.15")
     }
 }
@@ -34,6 +36,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kapt) apply false
     alias(libs.plugins.dependencycheck) apply false
+    alias(libs.plugins.dependencyanalysis)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
@@ -59,7 +62,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.1.12")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.2.1")
     }
 
     // KtLint
@@ -97,6 +100,22 @@ allprojects {
         // You can override by passing `-PallWarningsAsErrors=true` in the command line
         // Or add a line with "allWarningsAsErrors=true" in your ~/.gradle/gradle.properties file
         kotlinOptions.allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
+    }
+
+    // Detect unused dependencies
+    apply {
+        plugin("com.autonomousapps.dependency-analysis")
+    }
+}
+
+// See https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/wiki/Customizing-plugin-behavior
+dependencyAnalysis {
+    issues {
+        all {
+            onUnusedDependencies {
+                exclude("com.jakewharton.timber:timber")
+            }
+        }
     }
 }
 
@@ -150,7 +169,7 @@ allprojects {
             maxHeapSize = "1g"
         } else {
             // Disable screenshot tests by default
-            exclude("**/ScreenshotTest*")
+            exclude("ui/S.class")
         }
     }
 }
@@ -325,6 +344,7 @@ tasks.register("runQualityChecks") {
         tasks.findByPath("$path:lint")?.let { dependsOn(it) }
         tasks.findByName("detekt")?.let { dependsOn(it) }
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
+        // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }
     dependsOn(":app:knitCheck")
 }
@@ -342,4 +362,22 @@ subprojects {
     tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziDebug")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziRelease")?.dependsOn(removeOldScreenshotsTask)
+}
+
+// Workaround for https://github.com/airbnb/Showkase/issues/335
+subprojects {
+    tasks.withType<KspTask>() {
+        doLast {
+            fileTree(buildDir).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
+                ReplaceRegExp().apply {
+                    setMatch("^public fun Showkase.getMetadata")
+                    setReplace("@Suppress(\"DEPRECATION\") public fun Showkase.getMetadata")
+                    setFlags("g")
+                    setByLine(true)
+                    setFile(file)
+                    execute()
+                }
+            }
+        }
+    }
 }

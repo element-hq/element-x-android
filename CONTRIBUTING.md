@@ -1,4 +1,4 @@
-# Contributing to Element Android
+# Contributing to Element X Android
 
 <!--- TOC -->
 

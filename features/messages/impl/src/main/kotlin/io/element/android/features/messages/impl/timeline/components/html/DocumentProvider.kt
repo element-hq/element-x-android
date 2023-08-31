@@ -50,5 +50,7 @@ open class DocumentProvider : PreviewParameterProvider<Document> {
             // "<pre>pre</pre>",
             "<mx-reply><blockquote><a href=\\\"https://matrix.to/#/!roomId/\$eventId?via=matrix.org\\\">In reply to</a> " +
                 "<a href=\\\"https://matrix.to/#/@alice:matrix.org\\\">@alice:matrix.org</a><br>original message</blockquote></mx-reply>reply",
+            "<ol><li>Testing <a href='#'>link</a> item.</li><li>And <a href='#'>another</a> item.</li></ol>",
+            "<ul><li>Testing <a href='#'>link</a> item.</li><li>And <a href='#'>another</a> item.</li></ul>",
         ).map { Jsoup.parse(it) }
 }

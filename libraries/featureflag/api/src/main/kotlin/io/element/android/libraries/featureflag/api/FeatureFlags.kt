@@ -25,5 +25,17 @@ enum class FeatureFlags(
     LocationSharing(
         key = "feature.locationsharing",
         title = "Allow user to share location",
+    ),
+    Polls(
+        key = "feature.polls",
+        title = "Polls",
+        description = "Create poll and render poll events in the timeline",
+        defaultValue = false,
+    ),
+    UseEncryptionSync(
+        key = "feature.useencryptionsync",
+        title = "Use encryption sync",
+        description = "Use the encryption sync API for decrypting notifications.",
+        defaultValue = true,
     )
 }

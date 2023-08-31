@@ -37,8 +37,6 @@ plugins {
 android {
     namespace = "io.element.android.x"
 
-    testOptions { unitTests.isIncludeAndroidResources = true }
-
     defaultConfig {
         applicationId = "io.element.android.x"
         targetSdk = Versions.targetSdk

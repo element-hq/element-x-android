@@ -35,8 +35,7 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
+            android:exported="false">
 
             <meta-data
                 android:name='androidx.lifecycle.ProcessLifecycleInitializer'

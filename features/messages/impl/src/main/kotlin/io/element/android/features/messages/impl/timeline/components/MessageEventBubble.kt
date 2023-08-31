@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -152,7 +153,7 @@ private fun ContentToPreview(state: BubbleState) {
     ) {
         MessageEventBubble(
             state = state,
-            interactionSource = MutableInteractionSource(),
+            interactionSource = remember { MutableInteractionSource() },
         ) {
             // Render the state as a text to better understand the previews
             Box(

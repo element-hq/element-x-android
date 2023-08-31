@@ -27,9 +27,9 @@ sealed class ElementLegal(
     @StringRes val titleRes: Int,
     val url: String,
 ) {
-    object Copyright : ElementLegal(CommonStrings.common_copyright, COPYRIGHT_URL)
-    object AcceptableUsePolicy : ElementLegal(CommonStrings.common_acceptable_use_policy, USE_POLICY_URL)
-    object PrivacyPolicy : ElementLegal(CommonStrings.common_privacy_policy, PRIVACY_URL)
+    data object Copyright : ElementLegal(CommonStrings.common_copyright, COPYRIGHT_URL)
+    data object AcceptableUsePolicy : ElementLegal(CommonStrings.common_acceptable_use_policy, USE_POLICY_URL)
+    data object PrivacyPolicy : ElementLegal(CommonStrings.common_privacy_policy, PRIVACY_URL)
 }
 
 fun getAllLegals(): List<ElementLegal> {

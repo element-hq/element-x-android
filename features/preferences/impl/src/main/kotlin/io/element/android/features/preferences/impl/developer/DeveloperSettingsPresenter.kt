@@ -83,7 +83,8 @@ class DeveloperSettingsPresenter @Inject constructor(
                     features,
                     enabledFeatures,
                     event.feature,
-                    event.isEnabled
+                    event.isEnabled,
+                    triggerClearCache = { handleEvents(DeveloperSettingsEvents.ClearCache) }
                 )
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
             }
@@ -110,6 +111,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                     FeatureUiModel(
                         key = feature.key,
                         title = feature.title,
+                        description = feature.description,
                         isEnabled = isEnabled
                     )
                 }
@@ -121,11 +123,16 @@ class DeveloperSettingsPresenter @Inject constructor(
         features: SnapshotStateMap<String, Feature>,
         enabledFeatures: SnapshotStateMap<String, Boolean>,
         featureUiModel: FeatureUiModel,
-        enabled: Boolean
+        enabled: Boolean,
+        triggerClearCache: () -> Unit,
     ) = launch {
         val feature = features[featureUiModel.key] ?: return@launch
         if (featureFlagService.setFeatureEnabled(feature, enabled)) {
             enabledFeatures[featureUiModel.key] = enabled
+        }
+
+        if (featureUiModel.key == FeatureFlags.UseEncryptionSync.key) {
+            triggerClearCache()
         }
     }
 

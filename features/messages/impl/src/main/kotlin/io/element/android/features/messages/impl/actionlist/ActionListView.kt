@@ -62,6 +62,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -73,7 +74,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toSp
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
@@ -176,7 +177,7 @@ private fun SheetContent(
                             .padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.height(14.dp))
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 if (state.displayEmojiReactions) {
@@ -187,7 +188,7 @@ private fun SheetContent(
                             onCustomReactionClicked = onCustomReactionClicked,
                             modifier = Modifier.fillMaxWidth(),
                         )
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 items(
@@ -236,6 +237,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     val textContent = remember(event.content) { formatter.format(event) }
 
     when (event.content) {
+        is TimelineItemPollContent, // TODO Polls: handle summary
         is TimelineItemTextBasedContent,
         is TimelineItemStateContent,
         is TimelineItemEncryptedContent,

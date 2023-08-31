@@ -39,7 +39,9 @@ import androidx.compose.ui.unit.dp
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
-import io.element.android.features.location.impl.MapDefaults
+import io.element.android.features.location.impl.common.MapDefaults
+import io.element.android.features.location.impl.common.PermissionDeniedDialog
+import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -70,6 +72,20 @@ fun ShowLocationView(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
+    when (state.permissionDialog) {
+        ShowLocationState.Dialog.None -> Unit
+        ShowLocationState.Dialog.PermissionDenied -> PermissionDeniedDialog(
+            onContinue = { state.eventSink(ShowLocationEvents.OpenAppSettings) },
+            onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
+            appName = state.appName,
+        )
+        ShowLocationState.Dialog.PermissionRationale -> PermissionRationaleDialog(
+            onContinue = { state.eventSink(ShowLocationEvents.RequestPermissions) },
+            onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
+            appName = state.appName,
+        )
+    }
+
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.Builder()
             .target(LatLng(state.location.lat, state.location.lon))
@@ -116,14 +132,12 @@ fun ShowLocationView(
             )
         },
         floatingActionButton = {
-            if (state.hasLocationPermission) {
-                FloatingActionButton(
-                    onClick = { state.eventSink(ShowLocationEvents.TrackMyLocation(true)) },
-                ) {
-                    when (state.isTrackMyLocation) {
-                        false -> Icon(imageVector = Icons.Default.LocationSearching, contentDescription = null)
-                        true -> Icon(imageVector = Icons.Default.MyLocation, contentDescription = null)
-                    }
+            FloatingActionButton(
+                onClick = { state.eventSink(ShowLocationEvents.TrackMyLocation(true)) },
+            ) {
+                when (state.isTrackMyLocation) {
+                    false -> Icon(imageVector = Icons.Default.LocationSearching, contentDescription = null)
+                    true -> Icon(imageVector = Icons.Default.MyLocation, contentDescription = null)
                 }
             }
         },

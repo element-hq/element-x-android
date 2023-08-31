@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
@@ -93,6 +94,22 @@ class ActionListPresenter @Inject constructor(
                         add(TimelineItemAction.Copy)
                         if (buildMeta.isDebuggable) {
                             add(TimelineItemAction.Developer)
+                        }
+                    }
+                }
+                is TimelineItemPollContent -> {
+                    buildList {
+                        if (timelineItem.content.canBeCopied()) {
+                            add(TimelineItemAction.Copy)
+                        }
+                        if (buildMeta.isDebuggable) {
+                            add(TimelineItemAction.Developer)
+                        }
+                        if (!timelineItem.isMine) {
+                            add(TimelineItemAction.ReportContent)
+                        }
+                        if (timelineItem.isMine || userCanRedact) {
+                            add(TimelineItemAction.Redact)
                         }
                     }
                 }

@@ -41,7 +41,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.Checkbox
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -149,11 +149,11 @@ internal fun CheckableUnresolvedUserRowPreview() =
         val matrixUser = aMatrixUser()
         Column {
             CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
-            Divider()
+            HorizontalDivider()
             CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
-            Divider()
+            HorizontalDivider()
             CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
-            Divider()
+            HorizontalDivider()
             CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
         }
     }

@@ -17,11 +17,16 @@
 package io.element.android.features.ftue.impl
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.analytics.test.FakeAnalyticsService
+import io.element.android.features.ftue.impl.migration.InMemoryMigrationScreenStore
+import io.element.android.features.ftue.impl.migration.MigrationScreenStore
 import io.element.android.features.ftue.impl.state.DefaultFtueState
 import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.welcome.state.FakeWelcomeState
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -45,12 +50,14 @@ class DefaultFtueStateTests {
     fun `given all checks being true, should display flow is false`() = runTest {
         val welcomeState = FakeWelcomeState()
         val analyticsService = FakeAnalyticsService()
+        val migrationScreenStore = InMemoryMigrationScreenStore()
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
 
-        val state = createState(coroutineScope, welcomeState, analyticsService)
+        val state = createState(coroutineScope, welcomeState, analyticsService, migrationScreenStore)
 
         welcomeState.setWelcomeScreenShown()
         analyticsService.setDidAskUserConsent()
+        migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
         state.updateState()
 
         assertThat(state.shouldDisplayFlow.value).isFalse()
@@ -63,16 +70,21 @@ class DefaultFtueStateTests {
     fun `traverse flow`() = runTest {
         val welcomeState = FakeWelcomeState()
         val analyticsService = FakeAnalyticsService()
+        val migrationScreenStore = InMemoryMigrationScreenStore()
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
 
-        val state = createState(coroutineScope, welcomeState, analyticsService)
+        val state = createState(coroutineScope, welcomeState, analyticsService, migrationScreenStore)
         val steps = mutableListOf<FtueStep?>()
 
-        // First step, welcome screen
+        // First step, migration screen
+        steps.add(state.getNextStep(steps.lastOrNull()))
+        migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
+
+        // Second step, welcome screen
         steps.add(state.getNextStep(steps.lastOrNull()))
         welcomeState.setWelcomeScreenShown()
 
-        // Second step, analytics opt in
+        // Third step, analytics opt in
         steps.add(state.getNextStep(steps.lastOrNull()))
         analyticsService.setDidAskUserConsent()
 
@@ -80,6 +92,7 @@ class DefaultFtueStateTests {
         steps.add(state.getNextStep(steps.lastOrNull()))
 
         assertThat(steps).containsExactly(
+            FtueStep.MigrationScreen,
             FtueStep.WelcomeScreen,
             FtueStep.AnalyticsOptIn,
             null, // Final state
@@ -93,7 +106,16 @@ class DefaultFtueStateTests {
     fun `if a check for a step is true, start from the next one`() = runTest {
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val analyticsService = FakeAnalyticsService()
-        val state = createState(coroutineScope = coroutineScope, analyticsService = analyticsService)
+        val migrationScreenStore = InMemoryMigrationScreenStore()
+
+        val state = createState(
+            coroutineScope = coroutineScope,
+            analyticsService = analyticsService,
+            migrationScreenStore = migrationScreenStore,
+        )
+
+        migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
+        assertThat(state.getNextStep()).isEqualTo(FtueStep.WelcomeScreen)
 
         state.setWelcomeScreenShown()
         assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
@@ -108,7 +130,14 @@ class DefaultFtueStateTests {
     private fun createState(
         coroutineScope: CoroutineScope,
         welcomeState: FakeWelcomeState = FakeWelcomeState(),
-        analyticsService: AnalyticsService = FakeAnalyticsService()
-    ) = DefaultFtueState(coroutineScope, analyticsService, welcomeState)
-
+        analyticsService: AnalyticsService = FakeAnalyticsService(),
+        migrationScreenStore: MigrationScreenStore = InMemoryMigrationScreenStore(),
+        matrixClient: MatrixClient = FakeMatrixClient(),
+    ) = DefaultFtueState(
+        coroutineScope = coroutineScope,
+        analyticsService = analyticsService,
+        welcomeScreenState = welcomeState,
+        migrationScreenStore = migrationScreenStore,
+        matrixClient = matrixClient,
+    )
 }
