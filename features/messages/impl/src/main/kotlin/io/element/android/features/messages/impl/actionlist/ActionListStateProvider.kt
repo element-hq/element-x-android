@@ -89,7 +89,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(content = aTimelineItemPollContent()).copy(
                             reactionsState = reactionsState
                         ),
-                        actions = aTimelineItemActionList(),
+                        actions = aTimelineItemPollActionList(),
                     ),
                     displayEmojiReactions = false,
                 ),
@@ -105,7 +105,6 @@ fun anActionListState() = ActionListState(
 
 fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {
     return persistentListOf(
-        TimelineItemAction.EndPoll,
         TimelineItemAction.Reply,
         TimelineItemAction.Forward,
         TimelineItemAction.Copy,
@@ -113,5 +112,13 @@ fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {
         TimelineItemAction.Redact,
         TimelineItemAction.ReportContent,
         TimelineItemAction.Developer,
+    )
+}
+fun aTimelineItemPollActionList(): ImmutableList<TimelineItemAction> {
+    return persistentListOf(
+        TimelineItemAction.Reply,
+        TimelineItemAction.EndPoll,
+        TimelineItemAction.Developer,
+        TimelineItemAction.Redact,
     )
 }
