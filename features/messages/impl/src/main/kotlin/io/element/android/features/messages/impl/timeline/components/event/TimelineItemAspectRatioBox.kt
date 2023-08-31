@@ -37,8 +37,7 @@ fun TimelineItemAspectRatioBox(
     contentAlignment: Alignment = Alignment.TopStart,
     content: @Composable (BoxScope.() -> Unit),
 ) {
-    val safeAspectRatio = (aspectRatio.takeIf { it?.isFinite() == true } ?: DEFAULT_ASPECT_RATIO)
-        .coerceIn(MIN_ASPECT_RATIO, MAX_ASPECT_RATIO)
+    val safeAspectRatio = (aspectRatio ?: DEFAULT_ASPECT_RATIO).coerceIn(MIN_ASPECT_RATIO, MAX_ASPECT_RATIO)
     Box(
         modifier = modifier
             .heightIn(max = MAX_HEIGHT_IN_DP.dp)
