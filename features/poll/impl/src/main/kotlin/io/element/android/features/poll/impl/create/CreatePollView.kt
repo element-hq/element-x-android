@@ -25,12 +25,19 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.poll.impl.R
@@ -68,6 +75,10 @@ fun CreatePollView(
         onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
         onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
     )
+    val questionFocusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        questionFocusRequester.requestFocus()
+    }
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -113,10 +124,13 @@ fun CreatePollView(
                             onValueChange = {
                                 state.eventSink(CreatePollEvents.SetQuestion(it))
                             },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .focusRequester(questionFocusRequester)
+                                .fillMaxWidth(),
                             placeholder = {
                                 Text(text = stringResource(id = R.string.screen_create_poll_question_hint))
                             },
+                            keyboardOptions = keyboardOptions,
                         )
                     }
                 )
@@ -133,6 +147,7 @@ fun CreatePollView(
                             placeholder = {
                                 Text(text = stringResource(id = R.string.screen_create_poll_answer_hint, index + 1))
                             },
+                            keyboardOptions = keyboardOptions,
                         )
                     },
                     trailingContent = ListItemContent.Custom {
@@ -185,3 +200,8 @@ internal fun CreatePollViewPreview(
         state = state,
     )
 }
+
+private val keyboardOptions = KeyboardOptions.Default.copy(
+    capitalization = KeyboardCapitalization.Sentences,
+    imeAction = ImeAction.Next,
+)
