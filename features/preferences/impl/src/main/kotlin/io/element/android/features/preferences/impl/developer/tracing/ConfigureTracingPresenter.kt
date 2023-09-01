@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.collections.immutable.toImmutableMap
 import javax.inject.Inject
 
 class ConfigureTracingPresenter @Inject constructor(
@@ -46,7 +47,7 @@ class ConfigureTracingPresenter @Inject constructor(
         }
 
         return ConfigureTracingState(
-            targetsToLogLevel = modifiedMap.value,
+            targetsToLogLevel = modifiedMap.value.toImmutableMap(),
             eventSink = ::handleEvents
         )
     }

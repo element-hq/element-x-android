@@ -16,6 +16,7 @@
 
 package io.element.android.features.preferences.impl.developer.tracing
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -58,6 +59,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableMap
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +77,6 @@ fun ConfigureTracingView(
         contentWindowInsets = WindowInsets.statusBars,
         topBar = {
             TopAppBar(
-                modifier = modifier,
                 navigationIcon = {
                     BackButton(onClick = onBackPressed)
                 },
@@ -158,7 +159,7 @@ fun CrateListContent(
 
 @Composable
 private fun TargetAndLogLevelListView(
-    data: Map<Target, LogLevel>,
+    data: ImmutableMap<Target, LogLevel>,
     onLogLevelChange: (Target, LogLevel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -205,32 +206,34 @@ fun LogLevelDropdownMenu(
     modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    DropdownMenuItem(
-        modifier = modifier.widthIn(max = 120.dp),
-        text = { Text(text = logLevel.filter) },
-        onClick = { expanded = !expanded },
-        trailingIcon = {
-            if (expanded) {
-                Icon(Icons.Default.ArrowDropUp, contentDescription = null)
-            } else {
-                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-            }
-        },
-    )
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { expanded = false },
-    ) {
-        LogLevel.values().forEach { logLevel ->
-            DropdownMenuItem(
-                text = {
-                    Text(text = logLevel.filter)
-                },
-                onClick = {
-                    expanded = false
-                    onLogLevelChange(logLevel)
+    Box(modifier = modifier) {
+        DropdownMenuItem(
+            modifier = Modifier.widthIn(max = 120.dp),
+            text = { Text(text = logLevel.filter) },
+            onClick = { expanded = !expanded },
+            trailingIcon = {
+                if (expanded) {
+                    Icon(Icons.Default.ArrowDropUp, contentDescription = null)
+                } else {
+                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
                 }
-            )
+            },
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            LogLevel.values().forEach { logLevel ->
+                DropdownMenuItem(
+                    text = {
+                        Text(text = logLevel.filter)
+                    },
+                    onClick = {
+                        expanded = false
+                        onLogLevelChange(logLevel)
+                    }
+                )
+            }
         }
     }
 }

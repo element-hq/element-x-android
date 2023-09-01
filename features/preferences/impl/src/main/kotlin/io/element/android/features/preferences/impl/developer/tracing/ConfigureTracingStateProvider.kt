@@ -19,6 +19,7 @@ package io.element.android.features.preferences.impl.developer.tracing
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
+import kotlinx.collections.immutable.persistentMapOf
 
 open class ConfigureTracingStateProvider : PreviewParameterProvider<ConfigureTracingState> {
     override val values: Sequence<ConfigureTracingState>
@@ -28,7 +29,7 @@ open class ConfigureTracingStateProvider : PreviewParameterProvider<ConfigureTra
 }
 
 fun aConfigureTracingState() = ConfigureTracingState(
-    targetsToLogLevel = mapOf(
+    targetsToLogLevel = persistentMapOf(
         Target.COMMON to LogLevel.INFO,
         Target.MATRIX_SDK_FFI to LogLevel.WARN,
         Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.ERROR,

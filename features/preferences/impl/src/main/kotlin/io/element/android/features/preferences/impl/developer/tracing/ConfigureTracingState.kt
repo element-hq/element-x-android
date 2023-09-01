@@ -18,8 +18,9 @@ package io.element.android.features.preferences.impl.developer.tracing
 
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
+import kotlinx.collections.immutable.ImmutableMap
 
 data class ConfigureTracingState(
-    val targetsToLogLevel: Map<Target, LogLevel>,
+    val targetsToLogLevel: ImmutableMap<Target, LogLevel>,
     val eventSink: (ConfigureTracingEvents) -> Unit
 )
