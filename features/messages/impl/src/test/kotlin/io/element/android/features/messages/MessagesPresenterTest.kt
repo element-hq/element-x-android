@@ -78,6 +78,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class MessagesPresenterTest {
 
@@ -374,13 +375,13 @@ class MessagesPresenterTest {
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
             initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
-            val focusedState = consumeItemsUntilPredicate { state ->
+            val focusedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 state.showReinvitePrompt
             }.last()
             assertThat(focusedState.showReinvitePrompt).isTrue()
             // If it's dismissed then we stop showing the alert
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
-            val dismissedState = consumeItemsUntilPredicate { state ->
+            val dismissedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 !state.showReinvitePrompt
             }.last()
             assertThat(dismissedState.showReinvitePrompt).isFalse()
@@ -464,7 +465,9 @@ class MessagesPresenterTest {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
-            val loadingState = awaitItem()
+            val loadingState = consumeItemsUntilPredicate { state ->
+                state.inviteProgress.isLoading()
+            }.last()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
             val newState = awaitItem()
             assertThat(newState.inviteProgress.isSuccess()).isTrue()
