@@ -22,7 +22,9 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <application>
+    <application
+        android:usesCleartextTraffic="true"
+        >
         <activity android:name="io.element.android.features.call.ElementCallActivity" android:label="EAX Call" android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

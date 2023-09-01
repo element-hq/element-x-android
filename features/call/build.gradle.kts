@@ -24,4 +24,5 @@ android {
 
 dependencies {
     implementation(projects.libraries.architecture)
+    implementation(libs.androidx.webkit)
 }
