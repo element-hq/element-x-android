@@ -32,3 +32,6 @@
 -dontwarn org.conscrypt.**
 -dontwarn org.bouncycastle.**
 -dontwarn org.openjsse.**
+
+# Moshi from EmojiBase
+-dontwarn com.google.devtools.ksp.processing.SymbolProcessorProvider
