@@ -35,6 +35,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun DeveloperSettingsView(
     state: DeveloperSettingsState,
     onOpenShowkase: () -> Unit,
+    onOpenConfigureTracing: () -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -46,6 +47,12 @@ fun DeveloperSettingsView(
         // Note: this is OK to hardcode strings in this debug screen.
         PreferenceCategory(title = "Feature flags") {
             FeatureListContent(state)
+        }
+        PreferenceCategory(title = "Rust SDK") {
+            PreferenceText(
+                title = "Configure tracing",
+                onClick = onOpenConfigureTracing,
+            )
         }
         PreferenceCategory(title = "Showkase") {
             PreferenceText(
@@ -109,6 +116,7 @@ private fun ContentToPreview(state: DeveloperSettingsState) {
     DeveloperSettingsView(
         state = state,
         onOpenShowkase = {},
+        onOpenConfigureTracing = {},
         onBackPressed = {}
     )
 }

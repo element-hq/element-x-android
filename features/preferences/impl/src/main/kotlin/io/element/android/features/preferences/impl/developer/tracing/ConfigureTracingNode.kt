@@ -14,53 +14,32 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.developer
+package io.element.android.features.preferences.impl.developer.tracing
 
-import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import com.airbnb.android.showkase.models.Showkase
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.designsystem.showkase.getBrowserIntent
-import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.AppScope
 
-@ContributesNode(SessionScope::class)
-class DeveloperSettingsNode @AssistedInject constructor(
+@ContributesNode(AppScope::class)
+class ConfigureTracingNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: DeveloperSettingsPresenter,
+    private val presenter: ConfigureTracingPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
-    interface Callback : Plugin {
-        fun openConfigureTracing()
-    }
-
-    private fun onOpenConfigureTracing() {
-        plugins<Callback>().forEach { it.openConfigureTracing() }
-    }
 
     @Composable
     override fun View(modifier: Modifier) {
-        val activity = LocalContext.current as Activity
-        fun openShowkase() {
-            val intent = Showkase.getBrowserIntent(activity)
-            activity.startActivity(intent)
-        }
-
         val state = presenter.present()
-        DeveloperSettingsView(
+        ConfigureTracingView(
             state = state,
-            modifier = modifier,
-            onOpenShowkase = ::openShowkase,
-            onOpenConfigureTracing = ::onOpenConfigureTracing,
-            onBackPressed = ::navigateUp
+            onBackPressed = ::navigateUp,
+            modifier = modifier
         )
     }
 }

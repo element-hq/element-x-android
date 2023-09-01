@@ -21,22 +21,27 @@ data class TracingFilterConfiguration(
 ) {
 
     // Order should matters
-    private val targetsToLogLevel: MutableMap<Target, LogLevel> = mutableMapOf(
-        Target.COMMON to LogLevel.Info,
-        Target.HYPER to LogLevel.Warn,
-        Target.MATRIX_SDK_CRYPTO to LogLevel.Debug,
-        Target.MATRIX_SDK_HTTP_CLIENT to LogLevel.Debug,
-        Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.Trace,
-        Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.Trace,
-        Target.MATRIX_SDK_UI_TIMELINE to LogLevel.Info,
+    private val targetsToLogLevel: Map<Target, LogLevel> = mapOf(
+        Target.COMMON to LogLevel.INFO,
+        Target.HYPER to LogLevel.WARN,
+        Target.MATRIX_SDK_CRYPTO to LogLevel.DEBUG,
+        Target.MATRIX_SDK_HTTP_CLIENT to LogLevel.DEBUG,
+        Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.TRACE,
+        Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.TRACE,
+        Target.MATRIX_SDK_UI_TIMELINE to LogLevel.INFO,
     )
+
+    fun getLogLevel(target: Target): LogLevel? {
+        return overrides[target] ?: targetsToLogLevel[target]
+    }
 
     val filter: String
         get() {
+            val fullMap = targetsToLogLevel.toMutableMap()
             overrides.forEach { (target, logLevel) ->
-                targetsToLogLevel[target] = logLevel
+                fullMap[target] = logLevel
             }
-            return targetsToLogLevel.map {
+            return fullMap.map {
                 if (it.key.filter.isEmpty()) {
                     it.value.filter
                 } else {
@@ -59,25 +64,25 @@ enum class Target(open val filter: String) {
     MATRIX_SDK_UI_TIMELINE("matrix_sdk_ui::timeline"),
 }
 
-sealed class LogLevel(val filter: String) {
-    data object Warn : LogLevel("warn")
-    data object Trace : LogLevel("trace")
-    data object Info : LogLevel("info")
-    data object Debug : LogLevel("debug")
-    data object Error : LogLevel("error")
+enum class LogLevel(open val filter: String) {
+    ERROR("error"),
+    WARN("warn"),
+    INFO("info"),
+    DEBUG("debug"),
+    TRACE("trace"),
 }
 
 object TracingFilterConfigurations {
     val release = TracingFilterConfiguration(
         overrides = mapOf(
-            Target.COMMON to LogLevel.Info,
-            Target.ELEMENT to LogLevel.Debug
+            Target.COMMON to LogLevel.INFO,
+            Target.ELEMENT to LogLevel.DEBUG
         ),
     )
     val debug = TracingFilterConfiguration(
         overrides = mapOf(
-            Target.COMMON to LogLevel.Info,
-            Target.ELEMENT to LogLevel.Trace
+            Target.COMMON to LogLevel.INFO,
+            Target.ELEMENT to LogLevel.TRACE
         )
     )
 
