@@ -141,7 +141,7 @@ fun MessagesView(
     }
 
     fun onMoreReactionsClicked(event: TimelineItem.Event) {
-        state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event))
+        state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
     }
 
     Scaffold(
@@ -194,18 +194,17 @@ fun MessagesView(
         state = state.actionListState,
         onActionSelected = ::onActionSelected,
         onCustomReactionClicked = { event ->
-            state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event))
+            if (event.eventId == null) return@ActionListView
+            state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
         },
         onEmojiReactionClicked = ::onEmojiReactionClicked,
     )
 
     CustomReactionBottomSheet(
         state = state.customReactionState,
-        onEmojiSelected = { emoji ->
-            state.customReactionState.selectedEventId?.let { eventId ->
+        onEmojiSelected = { eventId, emoji ->
                 state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
-                state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
-            }
+                state.customReactionState.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
         }
     )
 

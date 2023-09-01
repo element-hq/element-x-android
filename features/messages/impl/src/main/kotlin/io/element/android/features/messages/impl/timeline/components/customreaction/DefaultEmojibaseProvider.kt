@@ -16,9 +16,14 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import android.content.Context
+import io.element.android.emojibasebindings.EmojibaseDatasource
+import io.element.android.emojibasebindings.EmojibaseStore
 
-sealed interface CustomReactionEvents {
-    data class ShowCustomReactionSheet(val event: TimelineItem.Event) : CustomReactionEvents
-    object DismissCustomReactionSheet : CustomReactionEvents
+class DefaultEmojibaseProvider(val context: Context): EmojibaseProvider {
+
+    override val emojibaseStore: EmojibaseStore by lazy {
+        EmojibaseDatasource().load(context)
+    }
+
 }

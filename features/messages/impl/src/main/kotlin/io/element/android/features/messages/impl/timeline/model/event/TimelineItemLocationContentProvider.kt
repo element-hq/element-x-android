@@ -18,6 +18,10 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
+import io.element.android.features.poll.api.PollAnswerItem
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.poll.PollAnswer
+import io.element.android.libraries.matrix.api.poll.PollKind
 
 open class TimelineItemLocationContentProvider : PreviewParameterProvider<TimelineItemLocationContent> {
     override val values: Sequence<TimelineItemLocationContent>
@@ -35,4 +39,33 @@ fun aTimelineItemLocationContent(description: String? = null) = TimelineItemLoca
         accuracy = 5000f,
     ),
     description = description,
+)
+
+fun aTimelineItemPollContent(
+    isEnded: Boolean = false,
+) = TimelineItemPollContent(
+    eventId = EventId("\$anEventId"),
+    question = "Some question?",
+    answerItems = listOf(
+        PollAnswerItem(
+            answer = PollAnswer("id_1", "Answer1"),
+            isSelected = false,
+            isEnabled = false,
+            isWinner = false,
+            isDisclosed = false,
+            votesCount = 0,
+            percentage = 0.0f,
+        ),
+        PollAnswerItem(
+            answer = PollAnswer("id_2", "Answer2"),
+            isSelected = false,
+            isEnabled = false,
+            isWinner = false,
+            isDisclosed = false,
+            votesCount = 0,
+            percentage = 0.0f,
+        ),
+    ),
+    pollKind = PollKind.Disclosed,
+    isEnded = isEnded,
 )

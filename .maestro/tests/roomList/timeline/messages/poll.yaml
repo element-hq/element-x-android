@@ -1,0 +1,13 @@
+appId: ${APP_ID}
+---
+- takeScreenshot: build/maestro/530-Timeline
+- tapOn: "Add attachment"
+- tapOn: "Poll"
+- tapOn: "What is the poll about?"
+- inputText: "I am a poll"
+- tapOn: "Option 1"
+- inputText: "Answer 1"
+- tapOn: "Option 2"
+- inputText: "Answer 2"
+- tapOn: "Create"
+- takeScreenshot: build/maestro/531-Timeline

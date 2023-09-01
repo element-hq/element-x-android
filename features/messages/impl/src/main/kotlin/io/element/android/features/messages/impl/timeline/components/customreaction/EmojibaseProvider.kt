@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.x.initializer
+package io.element.android.features.messages.impl.timeline.components.customreaction
 
-import androidx.startup.Initializer
-import com.vanniktech.emoji.EmojiManager
-import com.vanniktech.emoji.google.GoogleEmojiProvider
+import io.element.android.emojibasebindings.EmojibaseStore
 
-class EmojiInitializer : Initializer<Unit> {
-    override fun create(context: android.content.Context) {
-        EmojiManager.install(GoogleEmojiProvider())
-    }
-
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
+interface EmojibaseProvider {
+    val emojibaseStore: EmojibaseStore
 }

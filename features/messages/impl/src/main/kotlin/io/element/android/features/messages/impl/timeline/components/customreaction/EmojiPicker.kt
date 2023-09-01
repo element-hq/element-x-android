@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.components
+package io.element.android.features.messages.impl.timeline.components.customreaction
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -41,11 +41,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vanniktech.emoji.Emoji
-import com.vanniktech.emoji.google.GoogleEmojiProvider
+import io.element.android.emojibasebindings.Emoji
+import io.element.android.emojibasebindings.EmojibaseCategory
+import io.element.android.emojibasebindings.EmojibaseDatasource
+import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -59,24 +63,23 @@ import kotlinx.coroutines.launch
 @Composable
 fun EmojiPicker(
     onEmojiSelected: (Emoji) -> Unit,
+    emojibaseStore: EmojibaseStore,
     selectedEmojis: ImmutableSet<String>,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
-
-    val emojiProvider = remember { GoogleEmojiProvider() }
-    val categories = remember { emojiProvider.categories }
-    val pagerState = rememberPagerState(pageCount = { emojiProvider.categories.size })
+    val categories = remember { emojibaseStore.categories }
+    val pagerState = rememberPagerState(pageCount = { EmojibaseCategory.values().size })
     Column(modifier) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
         ) {
-            categories.forEachIndexed { index, category ->
+            EmojibaseCategory.values().forEachIndexed { index, category ->
                 Tab(
                     text = {
                         Icon(
-                            resourceId = emojiProvider.getIcon(category),
-                            contentDescription = category.categoryNames["en"]
+                            imageVector = category.icon,
+                            contentDescription = stringResource(id = category.title)
                         )
                     },
                     selected = pagerState.currentPage == index,
@@ -91,14 +94,16 @@ fun EmojiPicker(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
         ) { index ->
-            val category = categories[index]
+            val category = EmojibaseCategory.values()[index]
+            val emojis = categories[category] ?: listOf()
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
                 columns = GridCells.Adaptive(minSize = 40.dp),
                 contentPadding = PaddingValues(vertical = 10.dp, horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(category.emojis, key = { it.unicode }) { item ->
+
+                items(emojis, key = { it.unicode }) { item ->
                     val backgroundColor = if (selectedEmojis.contains(item.unicode)) {
                         ElementTheme.colors.bgActionPrimaryRest
                     } else {
@@ -144,7 +149,8 @@ internal fun EmojiPickerDarkPreview() {
 private fun ContentToPreview() {
     EmojiPicker(
         onEmojiSelected = {},
+        emojibaseStore = EmojibaseDatasource().load(LocalContext.current),
+        selectedEmojis = persistentSetOf("😀", "😄", "😃"),
         modifier = Modifier.fillMaxWidth(),
-        selectedEmojis = persistentSetOf("😀", "😄", "😃")
     )
 }

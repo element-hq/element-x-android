@@ -62,6 +62,7 @@
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_view_source">"View Source"</string>
   <string name="action_yes">"Yes"</string>
+  <string name="action_end_poll">"End poll"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_analytics">"Analytics"</string>

@@ -36,5 +36,11 @@ enum class FeatureFlags(
         key = "feature.notificationsettings",
         title = "Show notification settings",
         defaultValue = false,
+    ),
+    UseEncryptionSync(
+        key = "feature.useencryptionsync",
+        title = "Use encryption sync",
+        description = "Use the encryption sync API for decrypting notifications.",
+        defaultValue = true,
     )
 }

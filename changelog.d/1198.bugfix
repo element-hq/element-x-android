@@ -1,0 +1,1 @@
+Re-enable `SyncService.withEncryptionSync` to improve decryption of notifications.
