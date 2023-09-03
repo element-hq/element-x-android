@@ -89,6 +89,8 @@ class SemanticColors(
     textPrimary: Color,
     textSecondary: Color,
     textSuccessPrimary: Color,
+    messageFromOtherBackground: Color,
+    messageFromMeBackground: Color,
     isLight: Boolean,
 ) {
     var isLight by mutableStateOf(isLight)
@@ -252,6 +254,12 @@ Elevation: Default (Level 1). */
     /** Accent text colour for success state elements. */
     var textSuccessPrimary by mutableStateOf(textSuccessPrimary)
         private set
+    /** Bubble messages from others. */
+    var messageFromOtherBackground by mutableStateOf(messageFromOtherBackground)
+        private set
+    /** Bubble messages from me. */
+    var messageFromMeBackground by mutableStateOf(messageFromMeBackground)
+        private set
 
     fun copy(
         bgActionPrimaryDisabled: Color = this.bgActionPrimaryDisabled,
@@ -306,6 +314,8 @@ Elevation: Default (Level 1). */
         textPrimary: Color = this.textPrimary,
         textSecondary: Color = this.textSecondary,
         textSuccessPrimary: Color = this.textSuccessPrimary,
+        messageFromOtherBackground: Color = this.messageFromOtherBackground,
+        messageFromMeBackground: Color = this.messageFromMeBackground,
         isLight: Boolean = this.isLight,
     ) = SemanticColors(
         bgActionPrimaryDisabled = bgActionPrimaryDisabled,
@@ -360,6 +370,8 @@ Elevation: Default (Level 1). */
         textPrimary = textPrimary,
         textSecondary = textSecondary,
         textSuccessPrimary = textSuccessPrimary,
+        messageFromOtherBackground = messageFromOtherBackground,
+        messageFromMeBackground = messageFromMeBackground,
         isLight = isLight,
     )
 
@@ -416,6 +428,8 @@ Elevation: Default (Level 1). */
         textPrimary = other.textPrimary
         textSecondary = other.textSecondary
         textSuccessPrimary = other.textSuccessPrimary
+        messageFromOtherBackground = other.messageFromOtherBackground
+        messageFromMeBackground = other.messageFromMeBackground
         isLight = other.isLight
     }
 }

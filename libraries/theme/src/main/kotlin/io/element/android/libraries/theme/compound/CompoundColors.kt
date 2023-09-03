@@ -73,6 +73,8 @@ internal val compoundColorsLight = SemanticColors(
     iconSuccessPrimary = LightDesignTokens.colorGreen900,
     iconInfoPrimary = LightDesignTokens.colorBlue900,
     iconOnSolidPrimary = LightDesignTokens.colorThemeBg,
+    messageFromOtherBackground = LightDesignTokens.colorGray300,
+    messageFromMeBackground = LightDesignTokens.colorGray400,
     isLight = true,
 )
 
@@ -130,5 +132,7 @@ internal val compoundColorsDark = SemanticColors(
     iconSuccessPrimary = DarkDesignTokens.colorGreen900,
     iconInfoPrimary = DarkDesignTokens.colorBlue900,
     iconOnSolidPrimary = DarkDesignTokens.colorThemeBg,
+    messageFromOtherBackground = DarkDesignTokens.colorGray400,
+    messageFromMeBackground = DarkDesignTokens.colorGray500,
     isLight = false,
 )
