@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -121,7 +122,7 @@ private fun DefaultRoomListTopBar(
                     fontSize = 28.dp.applyScaleDown().toSp()
                 )
             Text(
-                style = fontStyle,
+                style = fontStyle, color = MaterialTheme.colorScheme.primary,
                 text = stringResource(id = R.string.screen_roomlist_main_space_title)
             )
         },
