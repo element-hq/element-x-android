@@ -356,6 +356,7 @@ private fun RoomAvatarAndNameRow(
         Text(
             text = roomName,
             style = ElementTheme.typography.fontBodyLgMedium,
+            color = MaterialTheme.colorScheme.primary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
