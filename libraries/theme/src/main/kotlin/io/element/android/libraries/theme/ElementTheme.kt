@@ -92,7 +92,7 @@ internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLigh
 @Composable
 fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, /* true to enable MaterialYou */
+    dynamicColor: Boolean = true, /* true to enable MaterialYou */
     compoundColors: SemanticColors = if (darkTheme) compoundColorsDark else compoundColorsLight,
     materialLightColors: ColorScheme = materialColorSchemeLight,
     materialDarkColors: ColorScheme = materialColorSchemeDark,
