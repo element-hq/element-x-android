@@ -119,7 +119,7 @@ internal fun RoomMemberHeaderSection(
         }
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
-            Text(text = userName, style = ElementTheme.typography.fontHeadingLgBold)
+            Text(text = userName, style = ElementTheme.typography.fontHeadingLgBold, color = MaterialTheme.colorScheme.primary, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(6.dp))
         }
         Text(
