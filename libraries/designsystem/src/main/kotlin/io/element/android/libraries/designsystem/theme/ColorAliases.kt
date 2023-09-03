@@ -45,26 +45,6 @@ val SemanticColors.unreadIndicator
 val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
-// This color is not present in Semantic color, so put hard-coded value for now
-val SemanticColors.messageFromMeBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGray400
-        Color(0xFFE1E6EC)
-    } else {
-        // We want DarkDesignTokens.colorGray500
-        Color(0xFF323539)
-    }
-
-// This color is not present in Semantic color, so put hard-coded value for now
-val SemanticColors.messageFromOtherBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGray300
-        Color(0xFFF0F2F5)
-    } else {
-        // We want DarkDesignTokens.colorGray400
-        Color(0xFF26282D)
-    }
-
 // Temporary color, which is not in the token right now
 val SemanticColors.temporaryColorBgSpecial
     get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
