@@ -38,7 +38,7 @@ android {
     namespace = "io.element.android.x"
 
     defaultConfig {
-        applicationId = "io.element.android.x"
+        applicationId = "ashlee.animent.android.x"
         targetSdk = Versions.targetSdk
         versionCode = Versions.versionCode
         versionName = Versions.versionName
