@@ -49,7 +49,7 @@ val SemanticColors.placeholderBackground
 val SemanticColors.messageFromMeBackground
     get() = if (isLight) {
         // We want LightDesignTokens.colorGray400
-        Color(0xffbad5fc)
+        Color(0xFFE1E6EC)
     } else {
         // We want DarkDesignTokens.colorGray500
         Color(0xFF323539)
