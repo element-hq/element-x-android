@@ -237,6 +237,7 @@ internal fun RoomHeaderSection(
         Text(
             text = roomName,
             style = ElementTheme.typography.fontHeadingLgBold,
+            color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
         )
         if (roomAlias != null) {
