@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -117,7 +118,7 @@ fun PreferencesRootView(
             textAlign = TextAlign.Center,
             text = state.version,
             style = ElementTheme.typography.fontBodySmRegular,
-            color = ElementTheme.materialColors.secondary,
+            color = MaterialTheme.colorScheme.secondary,
         )
     }
 }

@@ -18,6 +18,7 @@ package io.element.android.features.location.impl.common
 
 import android.Manifest
 import android.view.Gravity
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
@@ -43,7 +44,7 @@ object MapDefaults {
             zoomGesturesEnabled = true,
             logoGravity = Gravity.TOP,
             attributionGravity = Gravity.TOP,
-            attributionTintColor = ElementTheme.colors.iconPrimary
+            attributionTintColor = MaterialTheme.colorScheme.primary
         )
 
     val symbolManagerSettings: MapSymbolManagerSettings

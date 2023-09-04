@@ -63,13 +63,13 @@ fun MessagesReactionButton(
     modifier: Modifier = Modifier,
 ) {
     val buttonColor = if (content.isHighlighted) {
-        ElementTheme.colors.bgSubtlePrimary
+        MaterialTheme.colorScheme.primaryContainer
     } else {
-        ElementTheme.colors.bgSubtleSecondary
+        MaterialTheme.colorScheme.secondaryContainer
     }
 
     val borderColor = if (content.isHighlighted) {
-        ElementTheme.colors.borderInteractivePrimary
+        MaterialTheme.colorScheme.outline
     } else {
         buttonColor
     }
@@ -124,7 +124,7 @@ private fun TextContent(
         .height(reactionEmojiLineHeight.toDp()),
     text = text,
     style = ElementTheme.typography.fontBodyMdRegular,
-    color = ElementTheme.materialColors.primary
+    color = MaterialTheme.colorScheme.primary
 )
 
 @Composable
@@ -134,7 +134,7 @@ private fun IconContent(
 ) = Icon(
     imageVector = imageVector,
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
-    tint = ElementTheme.materialColors.secondary,
+    tint = MaterialTheme.colorScheme.secondary,
     modifier = modifier
         .size(addEmojiSize)
 

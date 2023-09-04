@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +73,7 @@ fun LoadingRoomNodeView(
                 if (state is LoadingRoomState.Error) {
                     Text(
                         text = stringResource(id = CommonStrings.error_unknown),
-                        color = ElementTheme.colors.textSecondary,
+                        color = MaterialTheme.colorScheme.secondary,
                         style = ElementTheme.typography.fontBodyMdRegular,
                     )
                 } else {

@@ -156,10 +156,10 @@ object ElementSearchBarDefaults {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun inactiveColors() = SearchBarDefaults.colors(
-        containerColor = ElementTheme.materialColors.surfaceVariant,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         inputFieldColors = TextFieldDefaults.colors(
-            unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
-            focusedPlaceholderColor = ElementTheme.colors.textDisabled,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
             unfocusedLeadingIconColor = MaterialTheme.colorScheme.primary,
             focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
             unfocusedTrailingIconColor = MaterialTheme.colorScheme.primary,
@@ -172,8 +172,8 @@ object ElementSearchBarDefaults {
     fun activeColors() = SearchBarDefaults.colors(
         containerColor = Color.Transparent,
         inputFieldColors = TextFieldDefaults.colors(
-            unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
-            focusedPlaceholderColor = ElementTheme.colors.textDisabled,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
             unfocusedLeadingIconColor = MaterialTheme.colorScheme.primary,
             focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
             unfocusedTrailingIconColor = MaterialTheme.colorScheme.primary,

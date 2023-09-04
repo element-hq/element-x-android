@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -88,7 +89,7 @@ private fun InitialsAvatar(
     modifier: Modifier = Modifier,
 ) {
     // Use temporary color for default avatar background
-    val avatarColor = ElementTheme.colors.bgActionPrimaryDisabled
+    val avatarColor = MaterialTheme.colorScheme.primaryContainer
     Box(
         modifier.background(color = avatarColor),
     ) {

@@ -171,7 +171,7 @@ internal fun ButtonInternal(
         ButtonStyle.Filled -> null
         ButtonStyle.Outlined -> BorderStroke(
             width = 1.dp,
-            color = ElementTheme.colors.borderInteractiveSecondary
+            color = MaterialTheme.colorScheme.outline
         )
         ButtonStyle.Text -> null
     }
@@ -249,22 +249,22 @@ internal enum class ButtonStyle {
     @Composable
     fun getColors(): ButtonColors = when (this) {
         Filled -> ButtonDefaults.buttonColors(
-            containerColor = ElementTheme.materialColors.primary,
-            contentColor = ElementTheme.materialColors.onPrimary,
-            disabledContainerColor = ElementTheme.colors.bgActionPrimaryDisabled,
-            disabledContentColor = ElementTheme.colors.textOnSolidPrimary
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Outlined -> ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
-            contentColor = ElementTheme.materialColors.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             disabledContainerColor = Color.Transparent,
-            disabledContentColor = ElementTheme.colors.textDisabled,
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text -> ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
-            contentColor = if (LocalContentColor.current.isSpecified) LocalContentColor.current else ElementTheme.materialColors.primary,
+            contentColor = if (LocalContentColor.current.isSpecified) LocalContentColor.current else MaterialTheme.colorScheme.onPrimaryContainer,
             disabledContainerColor = Color.Transparent,
-            disabledContentColor = ElementTheme.colors.textDisabled,
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

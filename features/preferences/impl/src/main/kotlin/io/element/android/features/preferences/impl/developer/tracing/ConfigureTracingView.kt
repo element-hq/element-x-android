@@ -34,6 +34,7 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,7 +95,7 @@ fun ConfigureTracingView(
                     ) {
                         Icon(
                             imageVector = Icons.Default.MoreVert,
-                            tint = ElementTheme.materialColors.secondary,
+                            tint = MaterialTheme.colorScheme.secondary,
                             contentDescription = null,
                         )
                     }
@@ -111,7 +112,7 @@ fun ConfigureTracingView(
                             leadingIcon = {
                                 Icon(
                                     Icons.Outlined.Delete,
-                                    tint = ElementTheme.materialColors.secondary,
+                                    tint = MaterialTheme.colorScheme.secondary,
                                     contentDescription = null,
                                 )
                             }

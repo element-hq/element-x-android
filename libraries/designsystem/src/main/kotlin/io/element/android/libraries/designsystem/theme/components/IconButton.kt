@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -44,7 +45,7 @@ fun IconButton(
 ) {
     val colors = IconButtonDefaults.iconButtonColors(
         contentColor = LocalContentColor.current,
-        disabledContentColor = ElementTheme.colors.iconDisabled,
+        disabledContentColor = MaterialTheme.colorScheme.surfaceVariant,
     )
     androidx.compose.material3.IconButton(
         onClick = onClick,
@@ -64,7 +65,7 @@ internal fun IconButtonPreview() =
 @Composable
 private fun ContentToPreview() {
     Column {
-        CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconPrimary) {
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.primary) {
             Row {
                 IconButton(onClick = {}) {
                     Icon(imageVector = Icons.Filled.Close, contentDescription = "")
@@ -74,7 +75,7 @@ private fun ContentToPreview() {
                 }
             }
         }
-        CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconSecondary) {
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.secondary) {
             Row {
                 IconButton(onClick = {}) {
                     Icon(imageVector = Icons.Filled.Close, contentDescription = "")

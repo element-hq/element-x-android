@@ -23,6 +23,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -156,7 +157,7 @@ private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize, useBlurre
         Box(
             Modifier
                 .size(elementLogoAtomSize.outerSize + elementLogoAtomSize.shadowRadius * 2)
-                .background(ElementTheme.colors.bgSubtlePrimary),
+                .background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center
         ) {
             ElementLogoAtom(elementLogoAtomSize, useBlurredShadow = useBlurredShadow)

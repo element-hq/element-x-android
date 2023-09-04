@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +60,7 @@ fun SyncStateView(
         ) {
             Row(
                 modifier = Modifier
-                        .background(color = ElementTheme.colors.bgSubtleSecondary)
+                        .background(color = MaterialTheme.colorScheme.secondaryContainer)
                         .padding(horizontal = 24.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -68,12 +69,12 @@ fun SyncStateView(
                     modifier = Modifier
                             .progressSemantics()
                             .size(12.dp),
-                    color = ElementTheme.colors.textPrimary,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                     strokeWidth = 1.5.dp,
                 )
                 Text(
                     text = stringResource(id = CommonStrings.common_syncing),
-                    color = ElementTheme.colors.textPrimary,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                     style = ElementTheme.typography.fontBodyMdMedium
                 )
             }

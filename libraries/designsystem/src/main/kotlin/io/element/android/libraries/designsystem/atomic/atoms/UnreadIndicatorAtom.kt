@@ -20,6 +20,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,7 +37,7 @@ import io.element.android.libraries.theme.ElementTheme
 fun UnreadIndicatorAtom(
     modifier: Modifier = Modifier,
     size: Dp = 12.dp,
-    color: Color = ElementTheme.colors.unreadIndicator,
+    color: Color = MaterialTheme.colorScheme.tertiary,
     isVisible: Boolean = true,
 ) {
     Box(

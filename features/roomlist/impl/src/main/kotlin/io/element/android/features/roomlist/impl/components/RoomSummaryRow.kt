@@ -145,7 +145,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
         text = room.timestamp ?: "",
         style = ElementTheme.typography.fontBodySmRegular,
         color = if (room.hasUnread) {
-            ElementTheme.colors.unreadIndicator
+            MaterialTheme.colorScheme.tertiary
         } else {
             MaterialTheme.roomListRoomMessageDate()
         },

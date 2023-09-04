@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,24 +68,24 @@ fun Checkbox(
 @Composable
 private fun compoundCheckBoxColors(): CheckboxColors {
     return CheckboxDefaults.colors(
-        checkedColor = ElementTheme.materialColors.primary,
-        uncheckedColor = ElementTheme.colors.borderInteractivePrimary,
-        checkmarkColor = ElementTheme.materialColors.onPrimary,
-        disabledUncheckedColor = ElementTheme.colors.borderDisabled,
-        disabledCheckedColor = ElementTheme.colors.iconDisabled,
-        disabledIndeterminateColor = ElementTheme.colors.iconDisabled,
+        checkedColor = MaterialTheme.colorScheme.primary,
+        uncheckedColor = MaterialTheme.colorScheme.outline,
+        checkmarkColor = MaterialTheme.colorScheme.onPrimary,
+        disabledUncheckedColor = MaterialTheme.colorScheme.outlineVariant,
+        disabledCheckedColor = MaterialTheme.colorScheme.surfaceVariant,
+        disabledIndeterminateColor = MaterialTheme.colorScheme.surfaceVariant,
     )
 }
 
 @Composable
 private fun compoundErrorCheckBoxColors(): CheckboxColors {
     return CheckboxDefaults.colors(
-        checkedColor = ElementTheme.materialColors.error,
-        uncheckedColor = ElementTheme.materialColors.error,
-        checkmarkColor = ElementTheme.materialColors.onPrimary,
-        disabledUncheckedColor = ElementTheme.colors.borderDisabled,
-        disabledCheckedColor = ElementTheme.colors.iconDisabled,
-        disabledIndeterminateColor = ElementTheme.colors.iconDisabled,
+        checkedColor = MaterialTheme.colorScheme.error,
+        uncheckedColor = MaterialTheme.colorScheme.error,
+        checkmarkColor = MaterialTheme.colorScheme.onPrimary,
+        disabledUncheckedColor = MaterialTheme.colorScheme.outlineVariant,
+        disabledCheckedColor = MaterialTheme.colorScheme.surfaceVariant,
+        disabledIndeterminateColor = MaterialTheme.colorScheme.surfaceVariant,
     )
 }
 

@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAbsoluteAlignment
@@ -80,7 +81,7 @@ fun SunsetPage(
                             CircularProgressIndicator(
                                 modifier = Modifier.size(24.dp),
                                 strokeWidth = 2.dp,
-                                color = ElementTheme.colors.iconPrimary
+                                color = MaterialTheme.colorScheme.primary
                             )
                         } else {
                             Spacer(modifier = Modifier.height(24.dp))
@@ -90,7 +91,7 @@ fun SunsetPage(
                             text = withColoredPeriod(title),
                             style = ElementTheme.typography.fontHeadingXlBold,
                             textAlign = TextAlign.Center,
-                            color = ElementTheme.colors.textPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
@@ -98,7 +99,7 @@ fun SunsetPage(
                             text = subtitle,
                             style = ElementTheme.typography.fontBodyLgRegular,
                             textAlign = TextAlign.Center,
-                            color = ElementTheme.colors.textPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }

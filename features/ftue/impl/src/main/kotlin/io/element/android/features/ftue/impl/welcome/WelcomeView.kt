@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddComment
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.NewReleases
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,22 +77,22 @@ fun WelcomeView(
                     modifier = Modifier.testTag(TestTags.welcomeScreenTitle),
                     text = stringResource(R.string.screen_welcome_title, applicationName),
                     style = ElementTheme.typography.fontHeadingMdBold,
-                    color = ElementTheme.colors.textPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(R.string.screen_welcome_subtitle),
                     style = ElementTheme.typography.fontBodyMdRegular,
-                    color = ElementTheme.colors.textPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 InfoListOrganism(
                     items = listItems(),
                     textStyle = ElementTheme.typography.fontBodyMdMedium,
-                    iconTint = ElementTheme.colors.iconSecondary,
-                    backgroundColor = ElementTheme.colors.bgCanvasDefault.copy(alpha = 0.7f),
+                    iconTint = MaterialTheme.colorScheme.secondary,
+                    backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
             }

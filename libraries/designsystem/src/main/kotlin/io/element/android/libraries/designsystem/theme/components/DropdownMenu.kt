@@ -19,6 +19,7 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
@@ -43,7 +44,7 @@ fun DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
         modifier = modifier
-            .background(color = ElementTheme.colors.bgCanvasDefault)
+            .background(color = MaterialTheme.colorScheme.background)
             .widthIn(min = minMenuWidth),
         offset = offset,
         properties = properties,
