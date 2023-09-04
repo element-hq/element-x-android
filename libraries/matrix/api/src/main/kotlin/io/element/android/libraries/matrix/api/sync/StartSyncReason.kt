@@ -16,21 +16,10 @@
 
 package io.element.android.libraries.matrix.api.sync
 
-import kotlinx.coroutines.flow.StateFlow
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 
-interface SyncService {
-    /**
-     * Tries to start the sync. If already syncing it has no effect.
-     */
-    suspend fun startSync(reason: StartSyncReason): Result<Unit>
-
-    /**
-     * Tries to stop the sync. If service is not syncing it has no effect.
-     */
-    suspend fun stopSync(reason: StartSyncReason): Result<Unit>
-
-    /**
-     * Flow of [SyncState]. Will be updated as soon as the current [SyncState] changes.
-     */
-    val syncState: StateFlow<SyncState>
+sealed interface StartSyncReason {
+    data object AppInForeground : StartSyncReason
+    data class Notification(val roomId: RoomId, val eventId: EventId) : StartSyncReason
 }
