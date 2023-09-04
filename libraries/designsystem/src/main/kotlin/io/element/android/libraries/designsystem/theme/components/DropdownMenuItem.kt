@@ -67,12 +67,12 @@ fun DropdownMenuItem(
 internal object DropDownMenuItemDefaults {
     @Composable
     fun colors() = MenuDefaults.itemColors(
-        textColor = ElementTheme.colors.textPrimary,
-        leadingIconColor = ElementTheme.colors.iconPrimary,
-        trailingIconColor = ElementTheme.colors.iconSecondary,
-        disabledTextColor = ElementTheme.colors.textDisabled,
-        disabledLeadingIconColor = ElementTheme.colors.iconDisabled,
-        disabledTrailingIconColor = ElementTheme.colors.iconDisabled,
+        textColor = MaterialTheme.colorScheme.primary,
+        leadingIconColor = MaterialTheme.colorScheme.primary,
+        trailingIconColor = MaterialTheme.colorScheme.secondary,
+        disabledTextColor = MaterialTheme.colorScheme.surfaceVariant,
+        disabledLeadingIconColor = MaterialTheme.colorScheme.surfaceVariant,
+        disabledTrailingIconColor = MaterialTheme.colorScheme.surfaceVariant,
     )
 
     val contentPadding = PaddingValues(all = 12.dp)

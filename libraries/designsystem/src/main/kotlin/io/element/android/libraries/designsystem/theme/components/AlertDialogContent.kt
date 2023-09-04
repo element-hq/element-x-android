@@ -362,7 +362,7 @@ private fun AlertDialogFlowRow(
 internal fun DialogPreview(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
-            .background(ElementTheme.materialColors.onSurfaceVariant)
+            .background(MaterialTheme.colorScheme.onSurfaceVariant)
             .sizeIn(minWidth = DialogMinWidth, maxWidth = DialogMaxWidth)
             .padding(20.dp),
         propagateMinConstraints = true
@@ -384,22 +384,22 @@ internal object DialogContentDefaults {
     val containerColor: Color
         @Composable
         @ReadOnlyComposable
-        get()= ElementTheme.colors.bgCanvasDefault
+        get()= MaterialTheme.colorScheme.background
 
     val textContentColor: Color
         @Composable
         @ReadOnlyComposable
-        get()= ElementTheme.materialColors.onSurfaceVariant
+        get()= MaterialTheme.colorScheme.onSurfaceVariant
 
     val titleContentColor: Color
         @Composable
         @ReadOnlyComposable
-        get()= ElementTheme.materialColors.onSurface
+        get()= MaterialTheme.colorScheme.onSurface
 
     val iconContentColor: Color
         @Composable
         @ReadOnlyComposable
-        get()= ElementTheme.materialColors.primary
+        get()= MaterialTheme.colorScheme.primary
 }
 
 // Paddings for each of the dialog's parts. Taken from M3 source code.

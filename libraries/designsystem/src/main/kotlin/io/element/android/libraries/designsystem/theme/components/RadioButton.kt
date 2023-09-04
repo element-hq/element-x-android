@@ -20,6 +20,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.runtime.Composable
@@ -58,9 +59,9 @@ fun RadioButton(
 @Composable
 internal fun compoundRadioButtonColors(): RadioButtonColors {
     return RadioButtonDefaults.colors(
-        unselectedColor = ElementTheme.colors.borderInteractivePrimary,
-        disabledUnselectedColor = ElementTheme.colors.borderDisabled,
-        disabledSelectedColor = ElementTheme.colors.iconDisabled,
+        unselectedColor = MaterialTheme.colorScheme.outline,
+        disabledUnselectedColor = MaterialTheme.colorScheme.outlineVariant,
+        disabledSelectedColor = MaterialTheme.colorScheme.surfaceVariant,
     )
 }
 

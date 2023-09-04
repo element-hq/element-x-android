@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
@@ -62,12 +63,12 @@ fun Switch(
 
 @Composable
 internal fun compoundSwitchColors() = SwitchDefaults.colors(
-    uncheckedThumbColor = ElementTheme.colors.bgActionPrimaryRest,
+    uncheckedThumbColor = MaterialTheme.colorScheme.primary,
     uncheckedTrackColor = Color.Transparent,
-    disabledUncheckedBorderColor = ElementTheme.colors.borderDisabled,
-    disabledUncheckedThumbColor = ElementTheme.colors.iconDisabled,
-    disabledCheckedTrackColor = ElementTheme.colors.iconDisabled,
-    disabledCheckedBorderColor = ElementTheme.colors.iconDisabled,
+    disabledUncheckedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+    disabledUncheckedThumbColor = MaterialTheme.colorScheme.surfaceVariant,
+    disabledCheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+    disabledCheckedBorderColor = MaterialTheme.colorScheme.surfaceVariant,
 )
 
 @Preview(group = PreviewGroup.Toggles)
