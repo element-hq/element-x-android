@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.sync
 
-import io.element.android.libraries.matrix.api.sync.StartSyncReason
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.CoroutineScope
@@ -26,8 +25,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.SyncServiceInterface
 import org.matrix.rustcomponents.sdk.SyncServiceState
 import timber.log.Timber
@@ -36,36 +33,19 @@ class RustSyncService(
     private val innerSyncService: SyncServiceInterface,
     sessionCoroutineScope: CoroutineScope
 ) : SyncService {
-    private val mutex = Mutex()
-    private val startSyncReasonSet = mutableSetOf<StartSyncReason>()
 
-    override suspend fun startSync(reason: StartSyncReason): Result<Unit> {
-        return mutex.withLock {
-            startSyncReasonSet.add(reason)
-            runCatching {
-                Timber.d("Start sync")
-                innerSyncService.start()
-            }.onFailure {
-                Timber.e("Start sync failed: $it")
-            }
-        }
+    override suspend fun startSync() = runCatching {
+        Timber.i("Start sync")
+        innerSyncService.start()
+    }.onFailure {
+        Timber.d("Start sync failed: $it")
     }
 
-    override suspend fun stopSync(reason: StartSyncReason): Result<Unit> {
-        return mutex.withLock {
-            startSyncReasonSet.remove(reason)
-            if (startSyncReasonSet.isEmpty()) {
-                runCatching {
-                    Timber.d("Stop sync")
-                    innerSyncService.stop()
-                }.onFailure {
-                    Timber.e("Stop sync failed: $it")
-                }
-            } else {
-                Timber.d("Stop sync skipped, still $startSyncReasonSet")
-                Result.success(Unit)
-            }
-        }
+    override suspend fun stopSync() = runCatching {
+        Timber.i("Stop sync")
+        innerSyncService.stop()
+    }.onFailure {
+        Timber.d("Stop sync failed: $it")
     }
 
     override val syncState: StateFlow<SyncState> =
