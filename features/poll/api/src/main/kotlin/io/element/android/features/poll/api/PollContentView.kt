@@ -31,10 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.theme.ElementTheme
@@ -43,22 +45,27 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun PollContentView(
+    eventId: EventId?,
     question: String,
     answerItems: ImmutableList<PollAnswerItem>,
     pollKind: PollKind,
     isPollEnded: Boolean,
-    onAnswerSelected: (PollAnswer) -> Unit,
+    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    fun onAnswerSelected(pollAnswer: PollAnswer) {
+        eventId?.let { onAnswerSelected(it, pollAnswer.id) }
+    }
+
     Column(
         modifier = modifier
             .selectableGroup()
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        PollTitle(title = question)
+        PollTitle(title = question, isPollEnded = isPollEnded)
 
-        PollAnswers(answerItems = answerItems, onAnswerSelected = onAnswerSelected)
+        PollAnswers(answerItems = answerItems, onAnswerSelected = ::onAnswerSelected)
 
         when {
             isPollEnded || pollKind == PollKind.Disclosed -> DisclosedPollBottomNotice(answerItems)
@@ -70,17 +77,26 @@ fun PollContentView(
 @Composable
 internal fun PollTitle(
     title: String,
+    isPollEnded: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Icon(
-            modifier = Modifier.size(22.dp),
-            imageVector = Icons.Outlined.Poll,
-            contentDescription = null
-        )
+        if (isPollEnded) {
+            Icon(
+                resourceId = VectorIcons.EndPoll,
+                contentDescription = null,
+                modifier = Modifier.size(22.dp)
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Outlined.Poll,
+                contentDescription = null,
+                modifier = Modifier.size(22.dp)
+            )
+        }
         Text(
             text = title,
             style = ElementTheme.typography.fontBodyLgMedium
@@ -134,11 +150,12 @@ fun ColumnScope.UndisclosedPollBottomNotice(modifier: Modifier = Modifier) {
 @Composable
 internal fun PollContentUndisclosedPreview() = ElementPreview {
     PollContentView(
+        eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isDisclosed = false),
         pollKind = PollKind.Undisclosed,
         isPollEnded = false,
-        onAnswerSelected = { },
+        onAnswerSelected = { _, _ -> },
     )
 }
 
@@ -146,11 +163,12 @@ internal fun PollContentUndisclosedPreview() = ElementPreview {
 @Composable
 internal fun PollContentDisclosedPreview() = ElementPreview {
     PollContentView(
+        eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),
         pollKind = PollKind.Disclosed,
         isPollEnded = false,
-        onAnswerSelected = { },
+        onAnswerSelected = { _, _ -> },
     )
 }
 
@@ -158,10 +176,11 @@ internal fun PollContentDisclosedPreview() = ElementPreview {
 @Composable
 internal fun PollContentEndedPreview() = ElementPreview {
     PollContentView(
+        eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isEnded = true),
         pollKind = PollKind.Disclosed,
-        isPollEnded = false,
-        onAnswerSelected = { },
+        isPollEnded = true,
+        onAnswerSelected = { _, _ -> },
     )
 }

@@ -124,9 +124,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
             permissionAlreadyAsked = isAlreadyAsked,
             permissionAlreadyDenied = isAlreadyDenied,
             eventSink = ::handleEvents
-        ).also {
-            Timber.tag(loggerTag.value).d("New state: $it")
-        }
+        )
     }
 
     /*

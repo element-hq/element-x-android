@@ -22,34 +22,35 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.vanniktech.emoji.Emoji
-import io.element.android.features.messages.impl.timeline.components.EmojiPicker
+import io.element.android.emojibasebindings.Emoji
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
+import io.element.android.libraries.matrix.api.core.EventId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomReactionBottomSheet(
     state: CustomReactionState,
-    onEmojiSelected: (Emoji) -> Unit,
+    onEmojiSelected: (EventId, Emoji) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
+    val target = state.target as? CustomReactionState.Target.Success
 
     fun onDismiss() {
-        state.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
+        state.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
     }
 
     fun onEmojiSelectedDismiss(emoji: Emoji) {
+        if (target?.event?.eventId == null) return
         sheetState.hide(coroutineScope) {
-            state.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
-            onEmojiSelected(emoji)
+            state.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
+            onEmojiSelected(target.event.eventId, emoji)
         }
     }
 
-    val isVisible = state.selectedEventId != null
-    if (isVisible) {
+    if (target?.emojibaseStore != null && target.event.eventId != null) {
         ModalBottomSheet(
             onDismissRequest = ::onDismiss,
             sheetState = sheetState,
@@ -57,8 +58,9 @@ fun CustomReactionBottomSheet(
         ) {
             EmojiPicker(
                 onEmojiSelected = ::onEmojiSelectedDismiss,
-                modifier = Modifier.fillMaxSize(),
+                emojibaseStore = target.emojibaseStore,
                 selectedEmojis = state.selectedEmoji,
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }

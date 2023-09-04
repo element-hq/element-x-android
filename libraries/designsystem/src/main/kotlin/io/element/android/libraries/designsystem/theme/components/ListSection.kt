@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -30,9 +29,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -103,17 +104,21 @@ fun ListSupportingText(
  * @param modifier The modifier to be applied to the text.
  * @param contentPadding The padding to apply to the text. Default is [ListSupportingTextDefaults.Padding.Default].
  */
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun ListSupportingText(
     annotatedString: AnnotatedString,
     modifier: Modifier = Modifier,
     contentPadding: ListSupportingTextDefaults.Padding = ListSupportingTextDefaults.Padding.Default,
 ) {
-    Text(
-        text = annotatedString,
-        modifier = modifier.padding(contentPadding.paddingValues()),
-        style = ElementTheme.typography.fontBodySmRegular,
-        color = ElementTheme.colors.textSecondary,
+    val style = ElementTheme.typography.fontBodySmRegular
+        .copy(color = ElementTheme.colors.textSecondary)
+    val paddedModifier = modifier.padding(contentPadding.paddingValues())
+    ClickableLinkText(
+        annotatedString = annotatedString,
+        modifier = paddedModifier,
+        style = style,
+        linkify = false,
     )
 }
 

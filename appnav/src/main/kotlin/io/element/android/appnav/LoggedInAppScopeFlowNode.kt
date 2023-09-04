@@ -23,16 +23,15 @@ import coil.Coil
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
-import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
@@ -51,9 +50,9 @@ import kotlinx.parcelize.Parcelize
 class LoggedInAppScopeFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BackstackNode<LoggedInAppScopeFlowNode.NavTarget>(
-    backstack = BackStack(
-        initialElement = NavTarget.Root,
+) : ParentNode<LoggedInAppScopeFlowNode.NavTarget>(
+    navModel = PermanentNavModel(
+        navTargets = setOf(NavTarget),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -63,10 +62,8 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
         fun onOpenBugReport()
     }
 
-    sealed interface NavTarget : Parcelable {
-        @Parcelize
-        data object Root : NavTarget
-    }
+    @Parcelize
+    object NavTarget : Parcelable
 
     interface LifecycleCallback : NodeLifecycleCallback {
         fun onFlowCreated(identifier: String, client: MatrixClient)
@@ -95,31 +92,24 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
-        return when (navTarget) {
-            NavTarget.Root -> {
-                val callback = object : LoggedInFlowNode.Callback {
-                    override fun onOpenBugReport() {
-                        plugins<Callback>().forEach { it.onOpenBugReport() }
-                    }
-                }
-                val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
-                createNode<LoggedInFlowNode>(buildContext, nodeLifecycleCallbacks + callback)
+        val callback = object : LoggedInFlowNode.Callback {
+            override fun onOpenBugReport() {
+                plugins<Callback>().forEach { it.onOpenBugReport() }
             }
         }
+        val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
+        return createNode<LoggedInFlowNode>(buildContext, nodeLifecycleCallbacks + callback)
     }
 
     suspend fun attachSession(): LoggedInFlowNode {
-        return waitForChildAttached { navTarget ->
-            navTarget is NavTarget.Root
-        }
+        return waitForChildAttached { _ -> true }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         Children(
-            navModel = backstack,
+            navModel = navModel,
             modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }

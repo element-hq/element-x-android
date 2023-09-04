@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.x.initializer
+package io.element.android.libraries.matrix.api.sync
 
-import androidx.startup.Initializer
-import com.vanniktech.emoji.EmojiManager
-import com.vanniktech.emoji.google.GoogleEmojiProvider
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 
-class EmojiInitializer : Initializer<Unit> {
-    override fun create(context: android.content.Context) {
-        EmojiManager.install(GoogleEmojiProvider())
-    }
-
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
+sealed interface StartSyncReason {
+    data object AppInForeground : StartSyncReason
+    data class Notification(val roomId: RoomId, val eventId: EventId) : StartSyncReason
 }

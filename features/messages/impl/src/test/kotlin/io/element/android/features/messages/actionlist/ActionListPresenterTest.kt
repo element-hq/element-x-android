@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -367,6 +368,57 @@ class ActionListPresenterTest {
                 )
             )
             assertThat(successState.displayEmojiReactions).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - compute for poll message`() = runTest {
+        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = aTimelineItemPollContent(),
+            )
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.EndPoll,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            assertThat(successState.displayEmojiReactions).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - compute for ended poll message`() = runTest {
+        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = aTimelineItemPollContent(isEnded = true),
+            )
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            assertThat(successState.displayEmojiReactions).isTrue()
         }
     }
 }

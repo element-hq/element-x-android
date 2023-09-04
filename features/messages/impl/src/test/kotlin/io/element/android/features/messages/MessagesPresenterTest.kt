@@ -41,6 +41,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.media.FakeLocalMediaFactory
+import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
@@ -72,6 +73,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -559,6 +561,24 @@ class MessagesPresenterTest {
         }
     }
 
+    @Test
+    fun `present - handle poll end`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EndPoll, aMessageEvent()))
+            waitForPredicate { room.endPollInvocations.size == 1 }
+            cancelAndIgnoreRemainingEvents()
+            assertThat(room.endPollInvocations.size).isEqualTo(1)
+            assertThat(room.endPollInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
+            assertThat(room.endPollInvocations.first().text).isEqualTo("The poll with event id: \$anEventId has ended.")
+            // TODO Polls: Test poll end analytic
+        }
+    }
+
     private fun TestScope.createMessagePresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         matrixRoom: MatrixRoom = FakeMatrixRoom(),
@@ -584,7 +604,7 @@ class MessagesPresenterTest {
         )
         val buildMeta = aBuildMeta()
         val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
-        val customReactionPresenter = CustomReactionPresenter()
+        val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
         return MessagesPresenter(

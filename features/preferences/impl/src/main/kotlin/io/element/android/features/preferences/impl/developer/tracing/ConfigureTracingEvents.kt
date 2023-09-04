@@ -14,24 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.api
+package io.element.android.features.preferences.impl.developer.tracing
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.tracing.LogLevel
+import io.element.android.libraries.matrix.api.tracing.Target
 
-interface PollEntryPoint : FeatureEntryPoint {
-
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
-
-    interface NodeBuilder {
-        fun callback(callback: Callback): NodeBuilder
-        fun build(): Node
-    }
-
-    interface Callback : Plugin {
-        // Add your callbacks
-    }
+sealed interface ConfigureTracingEvents {
+    data class UpdateFilter(val target: Target, val logLevel: LogLevel) : ConfigureTracingEvents
+    data object ResetFilters : ConfigureTracingEvents
 }
-

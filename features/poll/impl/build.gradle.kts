@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
@@ -40,6 +38,8 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
+    implementation(projects.services.analytics.api)
+    implementation(projects.libraries.uiStrings)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -47,6 +47,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.services.analytics.test)
 
     ksp(libs.showkase.processor)
 }

@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
@@ -93,6 +94,32 @@ class ActionListPresenter @Inject constructor(
                         add(TimelineItemAction.Copy)
                         if (buildMeta.isDebuggable) {
                             add(TimelineItemAction.Developer)
+                        }
+                    }
+                }
+                is TimelineItemPollContent -> {
+                    buildList {
+                        val isMineOrCanRedact = timelineItem.isMine || userCanRedact
+
+                        // TODO Poll: Reply to poll
+                        // if (timelineItem.isRemote) {
+                        //     // Can only reply or forward messages already uploaded to the server
+                        //     add(TimelineItemAction.Reply)
+                        // }
+                        if (!timelineItem.content.isEnded && timelineItem.isRemote && isMineOrCanRedact) {
+                            add(TimelineItemAction.EndPoll)
+                        }
+                        if (timelineItem.content.canBeCopied()) {
+                            add(TimelineItemAction.Copy)
+                        }
+                        if (buildMeta.isDebuggable) {
+                            add(TimelineItemAction.Developer)
+                        }
+                        if (!timelineItem.isMine) {
+                            add(TimelineItemAction.ReportContent)
+                        }
+                        if (isMineOrCanRedact) {
+                            add(TimelineItemAction.Redact)
                         }
                     }
                 }
