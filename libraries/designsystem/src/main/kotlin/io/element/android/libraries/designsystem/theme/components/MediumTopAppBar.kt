@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -50,7 +51,7 @@ fun MediumTopAppBar(
         modifier = modifier,
         navigationIcon = navigationIcon,
         actions = {
-            CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textActionPrimary) {
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.primary) {
                 actions()
             }
         },
