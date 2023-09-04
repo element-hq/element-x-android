@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import javax.inject.Inject
@@ -57,6 +59,21 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is ImageMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
+                    body = messageType.body,
+                    mediaSource = messageType.source,
+                    thumbnailSource = messageType.info?.thumbnailSource,
+                    mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                    blurhash = messageType.info?.blurhash,
+                    width = messageType.info?.width?.toInt(),
+                    height = messageType.info?.height?.toInt(),
+                    aspectRatio = aspectRatio,
+                    formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
+                    fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+                )
+            }
+            is StickerMessageType -> {
+                val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
+                TimelineItemStickerContent(
                     body = messageType.body,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,

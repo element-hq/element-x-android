@@ -17,13 +17,35 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
+import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import javax.inject.Inject
 
 class TimelineItemContentStickerFactory @Inject constructor() {
 
-    fun create(@Suppress("UNUSED_PARAMETER") content: StickerContent): TimelineItemEventContent {
-        return TimelineItemUnknownContent
+    fun create(stickerContent: StickerContent): TimelineItemEventContent {
+        val mediaSource = MediaSource(url = stickerContent.url)
+        // TODO: FIXME: figure tf out what that is needed for
+        val formattedFileSize = "tf?"
+        val fileExtension = "png"
+        val mimeType = MimeTypes.Png
+        return TimelineItemImageContent(
+            body = stickerContent.body,
+            mediaSource = mediaSource,
+            thumbnailSource = null,
+            formattedFileSize = formattedFileSize,
+            fileExtension = fileExtension,
+            mimeType = mimeType,
+            blurhash = null,
+            width = null,
+            height = null,
+            aspectRatio = null
+        )
     }
 }

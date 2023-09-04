@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
@@ -51,6 +52,7 @@ class MessageSummaryFormatterImpl @Inject constructor(
             is TimelineItemPollContent -> event.content.question
             is TimelineItemUnknownContent -> context.getString(CommonStrings.common_unsupported_event)
             is TimelineItemImageContent -> context.getString(CommonStrings.common_image)
+            is TimelineItemStickerContent -> context.getString(CommonStrings.common_sticker)
             is TimelineItemVideoContent -> context.getString(CommonStrings.common_video)
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)

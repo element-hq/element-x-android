@@ -149,6 +149,12 @@ data class ImageMessageType(
     val info: ImageInfo?
 ) : MessageType
 
+data class StickerMessageType(
+    val body: String,
+    val source: MediaSource,
+    val info: ImageInfo?
+) : MessageType
+
 data class LocationMessageType(
     val body: String,
     val geoUri: String,

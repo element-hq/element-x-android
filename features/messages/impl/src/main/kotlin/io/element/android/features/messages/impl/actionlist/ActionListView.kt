@@ -65,6 +65,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
@@ -256,6 +257,20 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
             content = { ContentForBody(stringResource(CommonStrings.common_shared_location)) }
         }
         is TimelineItemImageContent -> {
+            icon = {
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        thumbnailSource = event.content.mediaSource,
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.Image,
+                        blurHash = event.content.blurhash,
+                    )
+                )
+            }
+            content = { ContentForBody(event.content.body) }
+        }
+        is TimelineItemStickerContent -> {
             icon = {
                 AttachmentThumbnail(
                     modifier = imageModifier,

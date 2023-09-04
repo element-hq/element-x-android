@@ -70,6 +70,7 @@ import io.element.android.features.messages.impl.timeline.model.bubble.BubbleSta
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -92,6 +93,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
@@ -370,6 +372,7 @@ private fun MessageEventBubbleContent(
 ) {
     val timestampPosition = when (event.content) {
         is TimelineItemImageContent,
+        is TimelineItemStickerContent,
         is TimelineItemVideoContent,
         is TimelineItemLocationContent -> TimestampPosition.Overlay
         is TimelineItemPollContent -> TimestampPosition.Below
@@ -542,6 +545,12 @@ private fun ReplyToContent(
 private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): AttachmentThumbnailInfo? {
     val messageContent = inReplyTo.content as? MessageContent ?: return null
     return when (val type = messageContent.type) {
+        is StickerMessageType -> AttachmentThumbnailInfo(
+            thumbnailSource = type.info?.thumbnailSource,
+            textContent = messageContent.body,
+            type = AttachmentThumbnailType.Image,
+            blurHash = type.info?.blurhash,
+        )
         is ImageMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource,
             textContent = messageContent.body,
