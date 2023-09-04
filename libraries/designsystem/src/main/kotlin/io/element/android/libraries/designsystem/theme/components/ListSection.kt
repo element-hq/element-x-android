@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -66,11 +67,11 @@ fun ListSectionHeader(
             Text(
                 text = title,
                 style = ElementTheme.typography.fontBodyLgMedium,
-                color = ElementTheme.colors.textPrimary,
+                color = MaterialTheme.colorScheme.primary,
             )
             CompositionLocalProvider(
                 LocalTextStyle provides ElementTheme.typography.fontBodySmRegular,
-                LocalContentColor provides ElementTheme.colors.textSecondary,
+                LocalContentColor provides MaterialTheme.colorScheme.secondary,
             ) {
                 description()
             }
@@ -94,7 +95,7 @@ fun ListSupportingText(
         text = text,
         modifier = modifier.padding(contentPadding.paddingValues()),
         style = ElementTheme.typography.fontBodySmRegular,
-        color = ElementTheme.colors.textSecondary,
+        color = MaterialTheme.colorScheme.secondary,
     )
 }
 
@@ -112,7 +113,7 @@ fun ListSupportingText(
     contentPadding: ListSupportingTextDefaults.Padding = ListSupportingTextDefaults.Padding.Default,
 ) {
     val style = ElementTheme.typography.fontBodySmRegular
-        .copy(color = ElementTheme.colors.textSecondary)
+        .copy(color = MaterialTheme.colorScheme.secondary)
     val paddedModifier = modifier.padding(contentPadding.paddingValues())
     ClickableLinkText(
         annotatedString = annotatedString,

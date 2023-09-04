@@ -168,7 +168,7 @@ fun AggregatedReactionButton(
 ) {
 
     val buttonColor = if (isHighlighted) {
-        ElementTheme.colors.bgActionPrimaryRest
+        MaterialTheme.colorScheme.primaryContainer
     } else {
         Color.Transparent
     }

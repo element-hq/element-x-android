@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Poll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -129,7 +130,7 @@ internal fun ColumnScope.DisclosedPollBottomNotice(
     Text(
         modifier = modifier.align(Alignment.End),
         style = ElementTheme.typography.fontBodyXsRegular,
-        color = ElementTheme.colors.textSecondary,
+        color = MaterialTheme.colorScheme.secondary,
         text = stringResource(CommonStrings.common_poll_total_votes, votesCount),
     )
 }
@@ -141,7 +142,7 @@ fun ColumnScope.UndisclosedPollBottomNotice(modifier: Modifier = Modifier) {
             .align(Alignment.Start)
             .padding(start = 34.dp),
         style = ElementTheme.typography.fontBodyXsRegular,
-        color = ElementTheme.colors.textSecondary,
+        color = MaterialTheme.colorScheme.secondary,
         text = stringResource(CommonStrings.common_poll_undisclosed_text),
     )
 }

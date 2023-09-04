@@ -41,20 +41,20 @@ fun TimelineEncryptedHistoryBannerView(modifier: Modifier = Modifier) {
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp)
             .clip(MaterialTheme.shapes.small)
-            .border(1.dp, ElementTheme.colors.borderInfoSubtle, MaterialTheme.shapes.small)
-            .background(ElementTheme.colors.bgInfoSubtle)
+            .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Info,
             contentDescription = "Info",
-            tint = ElementTheme.colors.iconInfoPrimary
+            tint = MaterialTheme.colorScheme.primary
         )
         Text(
             text = stringResource(R.string.screen_room_encrypted_history_banner),
             style = ElementTheme.typography.fontBodyMdMedium,
-            color = ElementTheme.colors.textInfoPrimary
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }

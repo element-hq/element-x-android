@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -48,7 +49,7 @@ fun TimelineItemTextView(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textPrimary) {
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.primary) {
         val htmlDocument = content.htmlDocument
         if (htmlDocument != null) {
             // For now we ignore the extra padding for html content, so add some spacing

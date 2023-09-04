@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,9 +67,9 @@ fun PollAnswerView(
             checked = answerItem.isSelected,
             enabled = answerItem.isEnabled,
             colors = IconButtonDefaults.iconToggleButtonColors(
-                contentColor = ElementTheme.colors.iconSecondary,
-                checkedContentColor = ElementTheme.colors.iconPrimary,
-                disabledContentColor = ElementTheme.colors.iconDisabled,
+                contentColor = MaterialTheme.colorScheme.secondary,
+                checkedContentColor = MaterialTheme.colorScheme.primary,
+                disabledContentColor = MaterialTheme.colorScheme.onSurface,
             ),
             onCheckedChange = { onClick() },
         ) {
@@ -98,7 +99,7 @@ fun PollAnswerView(
                             answerItem.votesCount
                         ),
                         style = if (answerItem.isWinner) ElementTheme.typography.fontBodySmMedium else ElementTheme.typography.fontBodySmRegular,
-                        color = if (answerItem.isWinner) ElementTheme.colors.textPrimary else ElementTheme.colors.textSecondary,
+                        color = if (answerItem.isWinner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
                     )
                 }
             }

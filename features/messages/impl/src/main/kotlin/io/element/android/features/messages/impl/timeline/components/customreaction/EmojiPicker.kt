@@ -34,6 +34,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
@@ -105,7 +106,7 @@ fun EmojiPicker(
 
                 items(emojis, key = { it.unicode }) { item ->
                     val backgroundColor = if (selectedEmojis.contains(item.unicode)) {
-                        ElementTheme.colors.bgActionPrimaryRest
+                        MaterialTheme.colorScheme.primaryContainer
                     } else {
                         Color.Transparent
                     }

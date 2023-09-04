@@ -181,8 +181,8 @@ private fun AnalyticsOptInContent(
                 ),
             ),
             textStyle = ElementTheme.typography.fontBodyMdMedium,
-            iconTint = ElementTheme.colors.textPrimary,
-            backgroundColor = ElementTheme.colors.temporaryColorBgSpecial
+            iconTint = MaterialTheme.colorScheme.primary,
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant
         )
     }
 }
