@@ -400,7 +400,7 @@ private fun EmojiButton(
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (isHighlighted) {
-        ElementTheme.colors.bgActionPrimaryRest
+        MaterialTheme.colorScheme.primaryContainer
     } else {
         Color.Transparent
     }
