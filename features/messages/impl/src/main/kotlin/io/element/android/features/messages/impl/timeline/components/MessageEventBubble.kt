@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -99,9 +100,9 @@ fun MessageEventBubble(
 
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor = if (state.isMine) {
-        ElementTheme.colors.messageFromMeBackground
+        MaterialTheme.colorScheme.secondaryContainer
     } else {
-        ElementTheme.colors.messageFromOtherBackground
+        MaterialTheme.colorScheme.surfaceVariant
     }
     val bubbleShape = bubbleShape()
     Box(
@@ -163,6 +164,7 @@ private fun ContentToPreview(state: BubbleState) {
                 Text(
                     text = "${state.groupPosition.javaClass.simpleName} m:${state.isMine.to01()} h:${state.isHighlighted.to01()}",
                     style = ElementTheme.typography.fontBodyXsRegular,
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

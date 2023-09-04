@@ -132,10 +132,10 @@ fun TextComposer(
         )
         val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
         val minHeight = 42.dp.applyScaleUp()
-        val bgColor = ElementTheme.colors.bgSubtleSecondary
+        val bgColor = MaterialTheme.colorScheme.secondaryContainer
         // Change border color depending on focus
         var hasFocus by remember { mutableStateOf(false) }
-        val borderColor = if (hasFocus) ElementTheme.colors.borderDisabled else bgColor
+        val borderColor = if (hasFocus) MaterialTheme.colorScheme.outline else bgColor
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -166,7 +166,7 @@ fun TextComposer(
                         capitalization = KeyboardCapitalization.Sentences,
                     ),
                     textStyle = defaultTypography.copy(color = MaterialTheme.colorScheme.primary),
-                    cursorBrush = SolidColor(ElementTheme.colors.iconAccentTertiary),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.tertiary),
                     decorationBox = { innerTextField ->
                         TextFieldDefaults.DecorationBox(
                             value = text,
@@ -183,13 +183,13 @@ fun TextComposer(
                             ),
                             interactionSource = remember { MutableInteractionSource() },
                             placeholder = {
-                                Text(stringResource(CommonStrings.common_message), style = defaultTypography)
+                                Text(stringResource(CommonStrings.common_message), style = defaultTypography, color = MaterialTheme.colorScheme.tertiary)
                             },
                             colors = TextFieldDefaults.colors(
                                 unfocusedTextColor = MaterialTheme.colorScheme.secondary,
                                 focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
-                                focusedPlaceholderColor = ElementTheme.colors.textDisabled,
+                                unfocusedPlaceholderColor = MaterialTheme.colorScheme.outline,
+                                focusedPlaceholderColor = MaterialTheme.colorScheme.outline,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent,
@@ -265,7 +265,7 @@ private fun EditingModeView(
         Icon(
             resourceId = VectorIcons.Edit,
             contentDescription = stringResource(CommonStrings.common_editing),
-            tint = ElementTheme.materialColors.secondary,
+            tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
                 .padding(vertical = 8.dp)
                 .size(16.dp.applyScaleUp()),
@@ -274,7 +274,7 @@ private fun EditingModeView(
             stringResource(CommonStrings.common_editing),
             style = ElementTheme.typography.fontBodySmRegular,
             textAlign = TextAlign.Start,
-            color = ElementTheme.materialColors.secondary,
+            color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
                 .padding(vertical = 8.dp)
                 .weight(1f)
@@ -282,7 +282,7 @@ private fun EditingModeView(
         Icon(
             imageVector = Icons.Default.Close,
             contentDescription = stringResource(CommonStrings.action_close),
-            tint = ElementTheme.materialColors.secondary,
+            tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
                 .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 12.dp)
                 .size(16.dp.applyScaleUp())
@@ -330,14 +330,14 @@ private fun ReplyToModeView(
                 modifier = Modifier.fillMaxWidth(),
                 style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
-                color = ElementTheme.materialColors.primary,
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = text.orEmpty(),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 textAlign = TextAlign.Start,
-                color = ElementTheme.materialColors.secondary,
+                color = MaterialTheme.colorScheme.secondary,
                 maxLines = if (attachmentThumbnailInfo != null) 1 else 2,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -369,7 +369,7 @@ private fun AttachmentButton(
             .size(30.dp.applyScaleUp())
             .clickable(onClick = onClick),
         shape = CircleShape,
-        color = ElementTheme.colors.iconPrimary
+        color = MaterialTheme.colorScheme.primary
     ) {
         Image(
             modifier = Modifier.size(12.5f.dp.applyScaleUp()),
@@ -395,7 +395,7 @@ private fun BoxScope.SendButton(
     Box(
         modifier = modifier
             .clip(CircleShape)
-            .background(if (canSendMessage) ElementTheme.colors.iconAccentTertiary else Color.Transparent)
+            .background(if (canSendMessage) MaterialTheme.colorScheme.onSecondaryContainer else Color.Transparent)
             .size(30.dp.applyScaleUp())
             .align(Alignment.BottomEnd)
             .applyIf(composerMode !is MessageComposerMode.Edit, ifTrue = {
@@ -423,7 +423,7 @@ private fun BoxScope.SendButton(
             resourceId = iconId,
             contentDescription = contentDescription,
             // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
-            tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled
+            tint = if (canSendMessage) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.secondary
         )
     }
 }
