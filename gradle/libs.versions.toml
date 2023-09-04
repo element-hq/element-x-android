@@ -167,7 +167,7 @@ sentry = "io.sentry:sentry-android:6.28.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:42b2faa417c1e95f430bf8f6e379adba25ad5ef8"
 
 # Emojibase
-matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.0.5"
+matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"
 
 # Di
 inject = "javax.inject:javax.inject:1"
