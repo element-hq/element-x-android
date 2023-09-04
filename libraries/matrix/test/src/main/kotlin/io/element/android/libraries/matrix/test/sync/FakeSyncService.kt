@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.test.sync
 
+import io.element.android.libraries.matrix.api.sync.StartSyncReason
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,12 +30,12 @@ class FakeSyncService : SyncService {
         syncStateFlow.value = SyncState.Error
     }
 
-    override suspend fun startSync(): Result<Unit> {
+    override suspend fun startSync(reason: StartSyncReason): Result<Unit> {
         syncStateFlow.value = SyncState.Running
         return Result.success(Unit)
     }
 
-    override suspend fun stopSync(): Result<Unit> {
+    override suspend fun stopSync(reason: StartSyncReason): Result<Unit> {
         syncStateFlow.value = SyncState.Terminated
         return Result.success(Unit)
     }
