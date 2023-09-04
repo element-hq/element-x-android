@@ -16,17 +16,3 @@
 
 package io.element.android.libraries.permissions.impl
 
-import kotlinx.coroutines.flow.Flow
-
-interface PermissionsStore {
-    suspend fun setPermissionDenied(permission: String, value: Boolean)
-    fun isPermissionDenied(permission: String): Flow<Boolean>
-
-    suspend fun setPermissionAsked(permission: String, value: Boolean)
-    fun isPermissionAsked(permission: String): Flow<Boolean>
-
-    suspend fun resetPermission(permission: String)
-
-    // To debug
-    suspend fun resetStore()
-}

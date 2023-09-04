@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.permissions.impl
 
+import io.element.android.libraries.permissions.api.PermissionsStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -43,6 +44,5 @@ class InMemoryPermissionsStore(
         setPermissionDenied(permission, false)
     }
 
-    override suspend fun resetStore() {
-    }
+    override suspend fun resetStore() = Unit
 }

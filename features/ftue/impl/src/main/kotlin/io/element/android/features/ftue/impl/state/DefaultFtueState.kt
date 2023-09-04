@@ -16,6 +16,8 @@
 
 package io.element.android.features.ftue.impl.state
 
+import android.Manifest
+import android.os.Build
 import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueState
@@ -23,6 +25,7 @@ import io.element.android.features.ftue.impl.migration.MigrationScreenStore
 import io.element.android.features.ftue.impl.welcome.state.WelcomeScreenState
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +41,7 @@ class DefaultFtueState @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val welcomeScreenState: WelcomeScreenState,
     private val migrationScreenStore: MigrationScreenStore,
+    private val permissionStateProvider: PermissionStateProvider,
     private val matrixClient: MatrixClient,
 ) : FtueState {
 
@@ -47,6 +51,9 @@ class DefaultFtueState @Inject constructor(
         welcomeScreenState.reset()
         analyticsService.reset()
         migrationScreenStore.reset()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionStateProvider.resetPermission(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 
     init {
@@ -63,7 +70,10 @@ class DefaultFtueState @Inject constructor(
             FtueStep.MigrationScreen -> if (shouldDisplayWelcomeScreen()) FtueStep.WelcomeScreen else getNextStep(
                 FtueStep.WelcomeScreen
             )
-            FtueStep.WelcomeScreen -> if (needsAnalyticsOptIn()) FtueStep.AnalyticsOptIn else getNextStep(
+            FtueStep.WelcomeScreen ->  if (shouldAskNotificationPermissions()) FtueStep.NotificationsOptIn else getNextStep(
+                FtueStep.NotificationsOptIn
+            )
+            FtueStep.NotificationsOptIn ->  if (needsAnalyticsOptIn()) FtueStep.AnalyticsOptIn else getNextStep(
                 FtueStep.AnalyticsOptIn
             )
             FtueStep.AnalyticsOptIn -> null
@@ -73,6 +83,7 @@ class DefaultFtueState @Inject constructor(
         return listOf(
             shouldDisplayMigrationScreen(),
             shouldDisplayWelcomeScreen(),
+            shouldAskNotificationPermissions(),
             needsAnalyticsOptIn()
         ).any { it }
     }
@@ -90,6 +101,15 @@ class DefaultFtueState @Inject constructor(
         return welcomeScreenState.isWelcomeScreenNeeded()
     }
 
+    private fun shouldAskNotificationPermissions(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permission = Manifest.permission.POST_NOTIFICATIONS
+            val isPermissionDenied = runBlocking { permissionStateProvider.isPermissionDenied(permission).first() }
+            val isPermissionGranted = permissionStateProvider.isPermissionGranted(permission)
+            !isPermissionGranted && !isPermissionDenied
+        } else false
+    }
+
     fun setWelcomeScreenShown() {
         welcomeScreenState.setWelcomeScreenShown()
         updateState()
@@ -104,5 +124,6 @@ class DefaultFtueState @Inject constructor(
 sealed interface FtueStep {
     data object MigrationScreen : FtueStep
     data object WelcomeScreen : FtueStep
+    data object NotificationsOptIn : FtueStep
     data object AnalyticsOptIn : FtueStep
 }

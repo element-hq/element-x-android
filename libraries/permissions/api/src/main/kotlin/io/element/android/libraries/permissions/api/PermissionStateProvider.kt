@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.loggedin
+package io.element.android.libraries.permissions.api
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import kotlinx.coroutines.flow.Flow
 
-open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
-    override val values: Sequence<LoggedInState>
-        get() = sequenceOf(
-            aLoggedInState(false),
-            aLoggedInState(true),
-            // Add other state here
-        )
+interface PermissionStateProvider {
+    fun isPermissionGranted(permission: String): Boolean
+    suspend fun setPermissionDenied(permission: String, value: Boolean)
+    fun isPermissionDenied(permission: String): Flow<Boolean>
+
+    suspend fun setPermissionAsked(permission: String, value: Boolean)
+    fun isPermissionAsked(permission: String): Flow<Boolean>
+
+    suspend fun resetPermission(permission: String)
 }
-
-fun aLoggedInState(
-    showSyncSpinner: Boolean = true,
-) = LoggedInState(
-    showSyncSpinner = showSyncSpinner,
-)
