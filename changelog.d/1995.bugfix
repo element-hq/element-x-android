@@ -1,1 +1,0 @@
-Crash with `aspectRatio` modifier when `Float.NaN` was used as input.

@@ -1,3 +1,26 @@
+Changes in Element X v0.1.6 (2023-09-04)
+========================================
+
+Features ✨
+----------
+ - Enable the Polls feature. Allows to create, view, vote and end polls. ([#1196](https://github.com/vector-im/element-x-android/issues/1196))
+- Create poll. ([#1143](https://github.com/vector-im/element-x-android/issues/1143))
+
+Bugfixes 🐛
+----------
+- Ensure notification for Event from encrypted room get decrypted content. ([#1178](https://github.com/vector-im/element-x-android/issues/1178))
+ - Make sure Snackbars are only displayed once. ([#928](https://github.com/vector-im/element-x-android/issues/928))
+ - Fix the orientation of sent images. ([#1135](https://github.com/vector-im/element-x-android/issues/1135))
+ - Bug reporter crashes when 'send logs' is disabled. ([#1168](https://github.com/vector-im/element-x-android/issues/1168))
+ - Add missing link to the terms on the analytics setting screen. ([#1177](https://github.com/vector-im/element-x-android/issues/1177))
+ - Re-enable `SyncService.withEncryptionSync` to improve decryption of notifications. ([#1198](https://github.com/vector-im/element-x-android/issues/1198))
+ - Crash with `aspectRatio` modifier when `Float.NaN` was used as input. ([#1995](https://github.com/vector-im/element-x-android/issues/1995))
+
+Other changes
+-------------
+ - Remove unnecessary year in copyright mention. ([#1187](https://github.com/vector-im/element-x-android/issues/1187))
+
+
 Changes in Element X v0.1.5 (2023-08-28)
 ========================================
 
