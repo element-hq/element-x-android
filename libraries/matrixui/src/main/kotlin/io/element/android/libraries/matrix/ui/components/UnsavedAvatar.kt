@@ -70,7 +70,7 @@ fun UnsavedAvatar(
             contentDescription = null,
         )
     } else {
-        Box(modifier = commonModifier.background(ElementTheme.colors.temporaryColorBgSpecial)) {
+        Box(modifier = commonModifier.background(MaterialTheme.colorScheme.surfaceVariant)) {
             Icon(
                 imageVector = Icons.Outlined.AddAPhoto,
                 contentDescription = "",
