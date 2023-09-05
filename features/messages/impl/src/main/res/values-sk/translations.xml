@@ -5,11 +5,6 @@
     <item quantity="few">"%1$d zmeny miestnosti"</item>
     <item quantity="other">"%1$d zmien miestnosti"</item>
   </plurals>
-  <plurals name="screen_room_timeline_more_reactions">
-    <item quantity="one">"%1$d ďalší"</item>
-    <item quantity="few">"%1$d ďalšie"</item>
-    <item quantity="other">"%1$d ďalších"</item>
-  </plurals>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Odfotiť"</string>
   <string name="screen_room_attachment_source_camera_video">"Nahrať video"</string>

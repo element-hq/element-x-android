@@ -75,6 +75,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.libraries.designsystem.colors.avatarColors
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -327,6 +328,7 @@ private fun MessageSenderInformation(
 ) {
     val avatarStrokeColor = MaterialTheme.colorScheme.background
     val avatarSize = senderAvatar.size.dp
+    val avatarColors = avatarColors(senderAvatar.id)
     Box(
         modifier = modifier
     ) {
@@ -344,13 +346,13 @@ private fun MessageSenderInformation(
         }
         // Content
         Row {
-            Avatar(senderAvatar)
+            Avatar(senderAvatar, initialAvatarColors = avatarColors)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = sender,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.primary,
+                color = avatarColors.foreground,
                 style = ElementTheme.typography.fontBodyMdMedium,
             )
         }
