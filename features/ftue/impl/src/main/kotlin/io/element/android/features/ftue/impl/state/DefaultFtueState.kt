@@ -27,6 +27,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -37,6 +38,7 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultFtueState @Inject constructor(
+    private val sdkVersionProvider: BuildVersionSdkIntProvider,
     private val coroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
     private val welcomeScreenState: WelcomeScreenState,
@@ -51,7 +53,7 @@ class DefaultFtueState @Inject constructor(
         welcomeScreenState.reset()
         analyticsService.reset()
         migrationScreenStore.reset()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             permissionStateProvider.resetPermission(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
@@ -102,7 +104,7 @@ class DefaultFtueState @Inject constructor(
     }
 
     private fun shouldAskNotificationPermissions(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        return if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             val permission = Manifest.permission.POST_NOTIFICATIONS
             val isPermissionDenied = runBlocking { permissionStateProvider.isPermissionDenied(permission).first() }
             val isPermissionGranted = permissionStateProvider.isPermissionGranted(permission)

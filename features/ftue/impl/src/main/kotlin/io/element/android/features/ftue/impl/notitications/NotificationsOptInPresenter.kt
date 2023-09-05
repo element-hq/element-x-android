@@ -29,6 +29,7 @@ import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsStore
 import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -37,6 +38,7 @@ class NotificationsOptInPresenter @AssistedInject constructor(
     @Assisted private val callback: NotificationsOptInNode.Callback,
     private val appCoroutineScope: CoroutineScope,
     private val permissionStateProvider: PermissionStateProvider,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : Presenter<NotificationsOptInState> {
 
     @AssistedFactory
@@ -46,7 +48,7 @@ class NotificationsOptInPresenter @AssistedInject constructor(
 
     private val postNotificationPermissionsPresenter by lazy {
         // Ask for POST_NOTIFICATION PERMISSION on Android 13+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             permissionsPresenterFactory.create(Manifest.permission.POST_NOTIFICATIONS)
         } else {
             NoopPermissionsPresenter()
@@ -67,7 +69,7 @@ class NotificationsOptInPresenter @AssistedInject constructor(
                     }
                 }
                 NotificationsOptInEvents.NotNowClicked -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                         appCoroutineScope.setPermissionDenied()
                     }
                     callback.onNotificationsOptInFinished()

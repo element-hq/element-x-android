@@ -16,16 +16,23 @@
 
 package io.element.android.libraries.permissions.impl
 
-import io.element.android.libraries.permissions.api.PermissionsStore
+import io.element.android.libraries.permissions.api.PermissionStateProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class InMemoryPermissionsStore(
+class FakePermissionStateProvider(
+    private var permissionGranted: Boolean = true,
     permissionDenied: Boolean = false,
     permissionAsked: Boolean = false,
-) : PermissionsStore {
+): PermissionStateProvider {
     private val permissionDeniedFlow = MutableStateFlow(permissionDenied)
     private val permissionAskedFlow = MutableStateFlow(permissionAsked)
+
+    fun setPermissionGranted(permission: String) {
+        permissionGranted = true
+    }
+
+    override fun isPermissionGranted(permission: String): Boolean = permissionGranted
 
     override suspend fun setPermissionDenied(permission: String, value: Boolean) {
         permissionDeniedFlow.value = value
@@ -43,6 +50,4 @@ class InMemoryPermissionsStore(
         setPermissionAsked(permission, false)
         setPermissionDenied(permission, false)
     }
-
-    override suspend fun resetStore() = Unit
 }
