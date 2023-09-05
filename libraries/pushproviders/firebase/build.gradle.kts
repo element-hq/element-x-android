@@ -38,7 +38,11 @@ dependencies {
     implementation(projects.libraries.pushproviders.api)
 
     api(platform(libs.google.firebase.bom))
-    api("com.google.firebase:firebase-messaging-ktx")
+    api("com.google.firebase:firebase-messaging-ktx") {
+        exclude(group = "com.google.firebase", module = "firebase-core")
+        exclude(group = "com.google.firebase", module = "firebase-analytics")
+        exclude(group = "com.google.firebase", module = "firebase-measurement-connector")
+    }
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
