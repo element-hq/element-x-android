@@ -119,14 +119,6 @@ class FtueFlowNode @AssistedInject constructor(
                 }
                 createNode<MigrationScreenNode>(buildContext, listOf(callback))
             }
-            NavTarget.NotificationsOptIn -> {
-                val callback = object : NotificationsOptInNode.Callback {
-                    override fun onNotificationsOptInFinished() {
-                        lifecycleScope.launch { moveToNextStep() }
-                    }
-                }
-                createNode<NotificationsOptInNode>(buildContext, listOf(callback))
-            }
             NavTarget.WelcomeScreen -> {
                 val callback = object : WelcomeNode.Callback {
                     override fun onContinueClicked() {
@@ -135,6 +127,14 @@ class FtueFlowNode @AssistedInject constructor(
                     }
                 }
                 createNode<WelcomeNode>(buildContext, listOf(callback))
+            }
+            NavTarget.NotificationsOptIn -> {
+                val callback = object : NotificationsOptInNode.Callback {
+                    override fun onNotificationsOptInFinished() {
+                        lifecycleScope.launch { moveToNextStep() }
+                    }
+                }
+                createNode<NotificationsOptInNode>(buildContext, listOf(callback))
             }
             NavTarget.AnalyticsOptIn -> {
                 analyticsEntryPoint.createNode(this, buildContext)
@@ -147,11 +147,11 @@ class FtueFlowNode @AssistedInject constructor(
             FtueStep.MigrationScreen -> {
                 backstack.newRoot(NavTarget.MigrationScreen)
             }
-            FtueStep.NotificationsOptIn -> {
-                backstack.newRoot(NavTarget.NotificationsOptIn)
-            }
             FtueStep.WelcomeScreen -> {
                 backstack.newRoot(NavTarget.WelcomeScreen)
+            }
+            FtueStep.NotificationsOptIn -> {
+                backstack.newRoot(NavTarget.NotificationsOptIn)
             }
             FtueStep.AnalyticsOptIn -> {
                 backstack.replace(NavTarget.AnalyticsOptIn)
