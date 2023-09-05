@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,20 +36,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.colors.AvatarColors
+import io.element.android.libraries.designsystem.colors.avatarColors
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Surface
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -125,24 +125,21 @@ private fun NotificationsOptInContent(
         ) {
             NotificationRow(
                 avatarLetter = "M",
-                avatarBackgroundColor = Color(0xFFE3F5F8),
-                avatarForegroundColor = Color(0xFF004077),
+                avatarColors = avatarColors("5"),
                 firstRowPercent = 1f,
                 secondRowPercent = 0.4f
             )
 
             NotificationRow(
                 avatarLetter = "A",
-                avatarBackgroundColor = Color(0xFFFAEEFB),
-                avatarForegroundColor = Color(0xFF671481),
+                avatarColors = avatarColors("1"),
                 firstRowPercent = 1f,
                 secondRowPercent = 1f
             )
 
             NotificationRow(
                 avatarLetter = "T",
-                avatarBackgroundColor = Color(0xFFFFEFE4),
-                avatarForegroundColor = Color(0xFF850000),
+                avatarColors = avatarColors("4"),
                 firstRowPercent = 0.65f,
                 secondRowPercent = 0f
             )
@@ -153,8 +150,7 @@ private fun NotificationsOptInContent(
 @Composable
 private fun NotificationRow(
     avatarLetter: String,
-    avatarBackgroundColor: Color,
-    avatarForegroundColor: Color,
+    avatarColors: AvatarColors,
     firstRowPercent: Float,
     secondRowPercent: Float,
     modifier: Modifier = Modifier
@@ -170,9 +166,10 @@ private fun NotificationRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(Modifier.size(32.dp).clip(CircleShape).background(avatarBackgroundColor), contentAlignment = Alignment.Center) {
-                Text(avatarLetter, style = TextStyle.Default.copy(color = avatarForegroundColor, fontSize = 18.sp, fontWeight = FontWeight.Bold))
-            }
+            Avatar(
+                avatarData = AvatarData(id = "", name = avatarLetter, size = AvatarSize.NotificationsOptIn),
+                initialAvatarColors = avatarColors,
+            )
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
                     modifier = Modifier
@@ -199,8 +196,10 @@ private fun NotificationRow(
 internal fun NotificationsOptInViewPreview(
     @PreviewParameter(NotificationsOptInStateProvider::class) state: NotificationsOptInState
 ) {
-    NotificationsOptInView(
-        onBack = {},
-        state = state,
-    )
+    ElementPreview {
+        NotificationsOptInView(
+            onBack = {},
+            state = state,
+        )
+    }
 }
