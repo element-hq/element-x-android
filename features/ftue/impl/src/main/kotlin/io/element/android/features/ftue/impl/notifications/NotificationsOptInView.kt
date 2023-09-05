@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -86,8 +87,8 @@ private fun NotificationsOptInHeader(
 ) {
     IconTitleSubtitleMolecule(
         modifier = modifier,
-        title = "Allow notifications and never miss a message",
-        subTitle = "You can change your settings later.",
+        title = stringResource(R.string.screen_notification_optin_title),
+        subTitle = stringResource(R.string.screen_notification_optin_subtitle),
         iconImageVector = Icons.Default.Notifications,
     )
 }
