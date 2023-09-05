@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Přidat volbu"</string>
+  <string name="screen_create_poll_anonymous_desc">"Zobrazit výsledky až po skončení hlasování"</string>
+  <string name="screen_create_poll_anonymous_headline">"Anonymní hlasování"</string>
+  <string name="screen_create_poll_answer_hint">"Volba %1$d"</string>
+  <string name="screen_create_poll_question_desc">"Otázka nebo téma"</string>
+  <string name="screen_create_poll_question_hint">"Čeho se hlasování týká?"</string>
+  <string name="screen_create_poll_title">"Vytvořit hlasování"</string>
+</resources>

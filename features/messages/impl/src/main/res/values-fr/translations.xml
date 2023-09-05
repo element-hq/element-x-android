@@ -4,10 +4,6 @@
     <item quantity="one">"%1$d changement dans la conversation"</item>
     <item quantity="other">"%1$d changements dans la conversation"</item>
   </plurals>
-  <plurals name="screen_room_timeline_more_reactions">
-    <item quantity="one">"%1$d de plus"</item>
-    <item quantity="other">"%1$d de plus"</item>
-  </plurals>
   <string name="screen_room_attachment_source_camera">"Appareil photo"</string>
   <string name="screen_room_attachment_source_camera_photo">"Prendre une photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Enregistrer une vidéo"</string>
