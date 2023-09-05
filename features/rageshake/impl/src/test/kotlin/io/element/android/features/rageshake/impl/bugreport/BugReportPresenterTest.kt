@@ -26,13 +26,20 @@ import io.element.android.features.rageshake.test.screenshot.A_SCREENSHOT_URI
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 const val A_SHORT_DESCRIPTION = "bug!"
 const val A_LONG_DESCRIPTION = "I have seen a bug!"
 
 class BugReportPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val presenter = BugReportPresenter(

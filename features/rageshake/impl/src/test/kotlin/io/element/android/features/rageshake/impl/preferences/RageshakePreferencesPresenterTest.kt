@@ -24,10 +24,17 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.features.rageshake.test.rageshake.A_SENSITIVITY
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class RageshakePreferencesPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state available`() = runTest {
         val presenter = DefaultRageshakePreferencesPresenter(

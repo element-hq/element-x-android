@@ -29,12 +29,18 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomMemberDetailsPresenterTests {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - returns the room member's data, then updates it if needed`() = runTest {

@@ -55,14 +55,20 @@ import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
 class MessageComposerPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private val pickerProvider = FakePickerProvider().apply {
         givenResult(mockk()) // Uri is not available in JVM, so the only way to have a non-null Uri is using Mockk

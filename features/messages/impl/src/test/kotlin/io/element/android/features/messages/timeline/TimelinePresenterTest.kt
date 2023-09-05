@@ -37,15 +37,22 @@ import io.element.android.libraries.matrix.test.room.aMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitWithLatch
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 import java.util.Date
 
 class TimelinePresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createTimelinePresenter()

@@ -70,6 +70,7 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -77,9 +78,14 @@ import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class MessagesPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private val mockMediaUrl: Uri = mockk("localMediaUri")
 

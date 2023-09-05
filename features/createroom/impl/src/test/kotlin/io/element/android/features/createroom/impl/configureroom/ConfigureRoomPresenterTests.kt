@@ -38,6 +38,7 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -47,6 +48,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -57,6 +59,10 @@ private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 
 @RunWith(RobolectricTestRunner::class)
 class ConfigureRoomPresenterTests {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private lateinit var presenter: ConfigureRoomPresenter
     private lateinit var userListDataStore: UserListDataStore

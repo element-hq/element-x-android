@@ -57,4 +57,5 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
+    testImplementation(projects.tests.testutils)
 }

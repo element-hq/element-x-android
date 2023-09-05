@@ -57,6 +57,7 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.libraries.permissions.impl)
     testImplementation(projects.libraries.permissions.test)
+    testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)
 }

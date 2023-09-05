@@ -40,12 +40,18 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private fun aRoomDetailsPresenter(room: MatrixRoom, leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake()): RoomDetailsPresenter {
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
