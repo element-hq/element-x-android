@@ -104,7 +104,6 @@ class RustMatrixClient constructor(
         .use { builder ->
             builder
                 .filterByPushRules()
-                .retryDecryption()
                 .finish()
         }
 

@@ -56,11 +56,7 @@ class RustMatrixClientFactory @Inject constructor(
 
         client.restoreSession(sessionData.toSession())
 
-        val syncService = client.syncService().apply {
-                // if (featureFlagsService.isFeatureEnabled(FeatureFlags.UseEncryptionSync)) {
-                    withEncryptionSync(withCrossProcessLock = false, appIdentifier = null)
-                // }
-            }
+        val syncService = client.syncService()
             .finish()
 
         RustMatrixClient(
