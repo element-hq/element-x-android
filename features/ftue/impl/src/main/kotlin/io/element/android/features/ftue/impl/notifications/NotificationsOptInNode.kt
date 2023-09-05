@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.notitications
+package io.element.android.features.ftue.impl.notifications
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

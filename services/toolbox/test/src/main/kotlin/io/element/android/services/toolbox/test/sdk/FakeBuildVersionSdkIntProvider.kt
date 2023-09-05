@@ -16,7 +16,6 @@
 
 package io.element.android.services.toolbox.test.sdk
 
-import android.os.Build
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 
 class FakeBuildVersionSdkIntProvider(

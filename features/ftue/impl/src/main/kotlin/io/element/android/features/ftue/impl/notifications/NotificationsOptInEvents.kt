@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.notitications
+package io.element.android.features.ftue.impl.notifications
 
-import io.element.android.libraries.permissions.api.PermissionsState
-
-data class NotificationsOptInState(
-    val notificationsPermissionState: PermissionsState,
-    val eventSink: (NotificationsOptInEvents) -> Unit
-)
+sealed interface NotificationsOptInEvents {
+    data object ContinueClicked : NotificationsOptInEvents
+    data object NotNowClicked : NotificationsOptInEvents
+}

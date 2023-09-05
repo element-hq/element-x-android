@@ -21,13 +21,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
-import io.element.android.features.ftue.impl.notitications.NotificationsOptInEvents
-import io.element.android.features.ftue.impl.notitications.NotificationsOptInNode
-import io.element.android.features.ftue.impl.notitications.NotificationsOptInPresenter
 import io.element.android.libraries.permissions.api.PermissionStateProvider
-import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.permissions.api.aPermissionsState
 import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
@@ -35,7 +30,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

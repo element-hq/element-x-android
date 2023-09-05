@@ -28,7 +28,7 @@ class FakePermissionStateProvider(
     private val permissionDeniedFlow = MutableStateFlow(permissionDenied)
     private val permissionAskedFlow = MutableStateFlow(permissionAsked)
 
-    fun setPermissionGranted(permission: String) {
+    fun setPermissionGranted() {
         permissionGranted = true
     }
 

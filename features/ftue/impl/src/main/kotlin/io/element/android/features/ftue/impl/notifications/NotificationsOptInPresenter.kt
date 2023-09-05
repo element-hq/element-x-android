@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.notitications
+package io.element.android.features.ftue.impl.notifications
 
 import android.Manifest
 import android.os.Build
@@ -27,7 +27,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.permissions.api.PermissionsStore
 import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope

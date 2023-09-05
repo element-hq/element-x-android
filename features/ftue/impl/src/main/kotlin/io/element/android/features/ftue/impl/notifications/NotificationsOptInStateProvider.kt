@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.notitications
+package io.element.android.features.ftue.impl.notifications
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.permissions.api.aPermissionsState

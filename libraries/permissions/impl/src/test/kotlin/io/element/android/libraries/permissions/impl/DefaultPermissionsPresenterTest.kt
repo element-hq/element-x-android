@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalPermissionsApi::class)
 
-package io.element.android.libraries.permissions.test
+package io.element.android.libraries.permissions.impl
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -25,9 +25,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.permissions.api.PermissionsEvents
-import io.element.android.libraries.permissions.impl.DefaultPermissionsPresenter
-import io.element.android.libraries.permissions.impl.FakeComposablePermissionStateProvider
-import io.element.android.libraries.permissions.impl.FakePermissionState
+import io.element.android.libraries.permissions.test.InMemoryPermissionsStore
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 

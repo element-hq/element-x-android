@@ -17,7 +17,6 @@
 package io.element.android.libraries.permissions.impl
 
 import android.content.Context
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey

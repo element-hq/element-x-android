@@ -29,7 +29,6 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
-import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -69,7 +68,7 @@ class DefaultFtueStateTests {
         welcomeState.setWelcomeScreenShown()
         analyticsService.setDidAskUserConsent()
         migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
-        permissionStateProvider.setPermissionGranted("notifications")
+        permissionStateProvider.setPermissionGranted()
         state.updateState()
 
         assertThat(state.shouldDisplayFlow.value).isFalse()
@@ -105,7 +104,7 @@ class DefaultFtueStateTests {
 
         // Third step, notifications opt in
         steps.add(state.getNextStep(steps.lastOrNull()))
-        permissionStateProvider.setPermissionGranted("notifications")
+        permissionStateProvider.setPermissionGranted()
 
         // Fourth step, analytics opt in
         steps.add(state.getNextStep(steps.lastOrNull()))
@@ -143,7 +142,7 @@ class DefaultFtueStateTests {
         // Skip first 3 steps
         migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
         state.setWelcomeScreenShown()
-        permissionStateProvider.setPermissionGranted("notifications")
+        permissionStateProvider.setPermissionGranted()
 
         assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
 

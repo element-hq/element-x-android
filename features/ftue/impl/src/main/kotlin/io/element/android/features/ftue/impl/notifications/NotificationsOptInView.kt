@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.notitications
+package io.element.android.features.ftue.impl.notifications
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -41,15 +41,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -168,7 +166,7 @@ private fun NotificationRow(
         shadowElevation = 2.dp,
     ) {
         Row(
-            modifier = modifier.padding(16.dp),
+            modifier = Modifier.padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -196,18 +194,11 @@ private fun NotificationRow(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-fun NotificationsOptInViewLightPreview(@PreviewParameter(NotificationsOptInStateProvider::class) state: NotificationsOptInState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-fun NotificationsOptInViewDarkPreview(@PreviewParameter(NotificationsOptInStateProvider::class) state: NotificationsOptInState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: NotificationsOptInState) {
+internal fun NotificationsOptInViewPreview(
+    @PreviewParameter(NotificationsOptInStateProvider::class) state: NotificationsOptInState
+) {
     NotificationsOptInView(
         onBack = {},
         state = state,
