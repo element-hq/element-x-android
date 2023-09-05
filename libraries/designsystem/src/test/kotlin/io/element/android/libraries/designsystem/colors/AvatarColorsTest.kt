@@ -24,11 +24,8 @@ import org.junit.Test
 class AvatarColorsTest {
 
     @Test
-    fun `ensure list size`() {
-        // avatarColorsDark and avatarColorsLight size must not be modified.
-        // 8 is used as a hard-coded modulo in `String.toHash()` extension.
-        assertThat(avatarColorsDark.size).isEqualTo(8)
-        assertThat(avatarColorsLight.size).isEqualTo(8)
+    fun `ensure the size of the avatar color are equal for light and dark theme`() {
+        assertThat(avatarColorsDark.size).isEqualTo(avatarColorsLight.size)
     }
 
     @Test

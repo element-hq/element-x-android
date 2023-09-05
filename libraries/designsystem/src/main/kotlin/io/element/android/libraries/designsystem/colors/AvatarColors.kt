@@ -42,6 +42,6 @@ fun avatarColors(userId: String): AvatarColors {
 }
 
 internal fun String.toHash(): Int {
-    return toList().sumOf { it.code } % 8
+    return toList().sumOf { it.code } % avatarColorsLight.size
 }
 
