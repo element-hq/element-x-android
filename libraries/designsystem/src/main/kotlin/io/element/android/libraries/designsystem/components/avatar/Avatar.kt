@@ -46,7 +46,7 @@ import timber.log.Timber
 fun Avatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
-    avatarColors: AvatarColors? = null,
+    initialAvatarColors: AvatarColors? = null,
     contentDescription: String? = null,
 ) {
     val commonModifier = modifier
@@ -55,7 +55,7 @@ fun Avatar(
     if (avatarData.url.isNullOrBlank()) {
         InitialsAvatar(
             avatarData = avatarData,
-            avatarColors = avatarColors,
+            avatarColors = initialAvatarColors,
             modifier = commonModifier,
         )
     } else {
@@ -91,7 +91,7 @@ private fun InitialsAvatar(
     avatarColors: AvatarColors?,
     modifier: Modifier = Modifier,
 ) {
-    // Use temporary color for default avatar background
+    // Use temporary color for default avatar background, if avatarColors is not provided
     val avatarColor = ElementTheme.colors.bgActionPrimaryDisabled
     Box(
         modifier.background(color = avatarColors?.background ?: avatarColor)
