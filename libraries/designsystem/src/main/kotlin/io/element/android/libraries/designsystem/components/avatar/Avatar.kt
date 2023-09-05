@@ -97,7 +97,7 @@ private fun InitialsAvatar(
         modifier.background(color = avatarColors?.background ?: avatarColor)
     ) {
         val fontSize = avatarData.size.dp.toSp() / 2
-        val originalFont = ElementTheme.typography.fontBodyMdRegular
+        val originalFont = ElementTheme.typography.fontHeadingMdBold
         val ratio = fontSize.value / originalFont.fontSize.value
         val lineHeight = originalFont.lineHeight * ratio
         Text(
