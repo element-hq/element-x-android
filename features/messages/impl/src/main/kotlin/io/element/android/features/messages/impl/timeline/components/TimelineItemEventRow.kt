@@ -346,7 +346,7 @@ private fun MessageSenderInformation(
         }
         // Content
         Row {
-            Avatar(senderAvatar)
+            Avatar(senderAvatar, avatarColors = avatarColors)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = sender,

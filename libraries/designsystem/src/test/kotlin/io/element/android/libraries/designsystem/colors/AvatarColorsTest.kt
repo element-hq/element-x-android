@@ -37,4 +37,16 @@ class AvatarColorsTest {
         assertThat("@bob:domain.org".toHash()).isEqualTo(3)
         assertThat("@charlie:domain.org".toHash()).isEqualTo(0)
     }
+
+    @Test
+    fun `compute string hash reverse`() {
+        assertThat("0".toHash()).isEqualTo(0)
+        assertThat("1".toHash()).isEqualTo(1)
+        assertThat("2".toHash()).isEqualTo(2)
+        assertThat("3".toHash()).isEqualTo(3)
+        assertThat("4".toHash()).isEqualTo(4)
+        assertThat("5".toHash()).isEqualTo(5)
+        assertThat("6".toHash()).isEqualTo(6)
+        assertThat("7".toHash()).isEqualTo(7)
+    }
 }
