@@ -26,8 +26,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
-import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -43,7 +41,7 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionsState.permission).isEmpty()
+            assertThat(initialState.showSyncSpinner).isFalse()
         }
     }
 
@@ -68,11 +66,6 @@ class LoggedInPresenterTest {
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = FakeMatrixClient(roomListService = roomListService),
-            permissionsPresenterFactory = object : PermissionsPresenter.Factory {
-                override fun create(permission: String): PermissionsPresenter {
-                    return NoopPermissionsPresenter()
-                }
-            },
             networkMonitor = FakeNetworkMonitor(networkStatus),
             pushService = object : PushService {
                 override fun notificationStyleChanged() {

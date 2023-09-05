@@ -14,21 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.loggedin
+package io.element.android.features.ftue.impl.notifications
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.permissions.api.PermissionsState
 
-open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
-    override val values: Sequence<LoggedInState>
-        get() = sequenceOf(
-            aLoggedInState(false),
-            aLoggedInState(true),
-            // Add other state here
-        )
-}
-
-fun aLoggedInState(
-    showSyncSpinner: Boolean = true,
-) = LoggedInState(
-    showSyncSpinner = showSyncSpinner,
+data class NotificationsOptInState(
+    val notificationsPermissionState: PermissionsState,
+    val eventSink: (NotificationsOptInEvents) -> Unit
 )

@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package io.element.android.appnav.loggedin
-
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-
-open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
-    override val values: Sequence<LoggedInState>
-        get() = sequenceOf(
-            aLoggedInState(false),
-            aLoggedInState(true),
-            // Add other state here
-        )
+plugins {
+    id("io.element.android-library")
 }
 
-fun aLoggedInState(
-    showSyncSpinner: Boolean = true,
-) = LoggedInState(
-    showSyncSpinner = showSyncSpinner,
-)
+android {
+    namespace = "io.element.android.services.toolbox.test"
+}
+
+dependencies {
+    api(projects.services.toolbox.api)
+}

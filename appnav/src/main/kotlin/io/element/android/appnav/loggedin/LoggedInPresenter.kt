@@ -16,8 +16,6 @@
 
 package io.element.android.appnav.loggedin
 
-import android.Manifest
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,8 +28,6 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.libraries.push.api.PushService
 import kotlinx.coroutines.delay
 import javax.inject.Inject
@@ -40,19 +36,9 @@ private const val DELAY_BEFORE_SHOWING_SYNC_SPINNER_IN_MILLIS = 1500L
 
 class LoggedInPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
-    private val permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val networkMonitor: NetworkMonitor,
     private val pushService: PushService,
 ) : Presenter<LoggedInState> {
-
-    private val postNotificationPermissionsPresenter by lazy {
-        // Ask for POST_NOTIFICATION PERMISSION on Android 13+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissionsPresenterFactory.create(Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            NoopPermissionsPresenter()
-        }
-    }
 
     @Composable
     override fun present(): LoggedInState {
@@ -66,7 +52,6 @@ class LoggedInPresenter @Inject constructor(
 
         val roomListState by matrixClient.roomListService.state.collectAsState()
         val networkStatus by networkMonitor.connectivity.collectAsState()
-        val permissionsState = postNotificationPermissionsPresenter.present()
         var showSyncSpinner by remember {
             mutableStateOf(false)
         }
@@ -82,7 +67,6 @@ class LoggedInPresenter @Inject constructor(
         }
         return LoggedInState(
             showSyncSpinner = showSyncSpinner,
-            permissionsState = permissionsState,
         )
     }
 }
