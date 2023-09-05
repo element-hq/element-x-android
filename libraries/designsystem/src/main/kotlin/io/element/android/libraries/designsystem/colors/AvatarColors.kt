@@ -28,7 +28,7 @@ data class AvatarColors(
 )
 
 @Composable
-fun AvatarColors(userId: String): AvatarColors {
+fun avatarColors(userId: String): AvatarColors {
     val hash = userId.toHash()
     val colors = if (ElementTheme.isLightTheme) {
         avatarColorsLight[hash]
