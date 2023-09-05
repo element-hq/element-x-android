@@ -16,32 +16,25 @@
 
 package io.element.android.libraries.designsystem.colors
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.theme.ElementTheme
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.theme.colors.avatarColorsDark
 import io.element.android.libraries.theme.colors.avatarColorsLight
+import org.junit.Test
 
-data class AvatarColor(
-    val background: Color,
-    val foreground: Color,
-)
+class AvatarColorsTest {
 
-@Composable
-fun AvatarColor(userId: String): AvatarColor {
-    val hash = userId.toHash()
-    val colors = if (ElementTheme.isLightTheme) {
-        avatarColorsLight[hash % avatarColorsLight.size]
-    } else {
-        avatarColorsDark[hash % avatarColorsDark.size]
+    @Test
+    fun `ensure list size`() {
+        // avatarColorsDark and avatarColorsLight size must not be modified.
+        // 8 is used as a hard-coded modulo in `String.toHash()` extension.
+        assertThat(avatarColorsDark.size).isEqualTo(8)
+        assertThat(avatarColorsLight.size).isEqualTo(8)
     }
-    return AvatarColor(
-        background = colors.first,
-        foreground = colors.second,
-    )
-}
 
-private fun String.toHash(): Int {
-    return toList().sumOf { it.code } % 8 + 1
+    @Test
+    fun `compute string hash`() {
+        assertThat("@alice:domain.org".toHash()).isEqualTo(6)
+        assertThat("@bob:domain.org".toHash()).isEqualTo(3)
+        assertThat("@charlie:domain.org".toHash()).isEqualTo(0)
+    }
 }
-
