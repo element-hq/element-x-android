@@ -17,19 +17,19 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Composable
-import io.element.android.libraries.textcomposer.TextComposerState
-import io.element.android.libraries.textcomposer.rememberTextComposerState
+import io.element.android.wysiwyg.compose.RichTextEditorState
+import io.element.android.wysiwyg.compose.rememberRichTextEditorState
 import javax.inject.Inject
 
-interface TextComposerStateFactory {
+interface RichTextEditorStateFactory {
     @Composable
-    fun create(): TextComposerState
+    fun create(): RichTextEditorState
 }
 
-class DefaultTextComposerStateFactory @Inject constructor() : TextComposerStateFactory {
+class DefaultRichTextEditorStateFactory @Inject constructor() : RichTextEditorStateFactory {
     @Composable
-    override fun create(): TextComposerState {
-        return rememberTextComposerState()
+    override fun create(): RichTextEditorState {
+        return rememberRichTextEditorState()
     }
 }
 

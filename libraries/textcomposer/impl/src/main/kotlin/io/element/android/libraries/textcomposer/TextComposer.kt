@@ -48,7 +48,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -78,13 +77,14 @@ import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
+import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.coroutines.android.awaitFrame
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TextComposer(
-    state: TextComposerState,
+    state: RichTextEditorState,
     composerMode: MessageComposerMode,
+    canSendMessage: Boolean,
     modifier: Modifier = Modifier,
     onRequestFocus: () -> Unit = {},
     onSendMessage: (Message) -> Unit = {},
@@ -166,7 +166,7 @@ fun TextComposer(
                     }
 
                     RichTextEditor(
-                        state = (state.inner as RealInnerTextComposerState).richTextEditorState,
+                        state = state,
                         modifier = Modifier
                             .fillMaxWidth(),
                         style = RichTextEditorDefaults.style(
@@ -186,7 +186,7 @@ fun TextComposer(
                 }
 
                 SendButton(
-                    canSendMessage = state.canSendMessage,
+                    canSendMessage = canSendMessage,
                     onClick = { onSendMessage(Message(html = state.messageHtml, markdown = state.messageMarkdown)) },
                     composerMode = composerMode,
                     modifier = Modifier.padding(end = 6.dp.applyScaleUp(), bottom = 6.dp.applyScaleUp())
@@ -412,19 +412,22 @@ private fun BoxScope.SendButton(
 internal fun TextComposerSimplePreview() = ElementPreview {
     Column {
         TextComposer(
-            previewTextComposerState(""),
+            RichTextEditorState("", fake = true),
+            canSendMessage = false,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
         )
         TextComposer(
-            previewTextComposerState("A message"),
+            RichTextEditorState("A message", fake = true),
+            canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
         )
         TextComposer(
-            previewTextComposerState("A message\nWith several lines\nTo preview larger textfields and long lines with overflow"),
+            RichTextEditorState("A message\nWith several lines\nTo preview larger textfields and long lines with overflow", fake = true),
+            canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
@@ -436,7 +439,8 @@ internal fun TextComposerSimplePreview() = ElementPreview {
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
-        previewTextComposerState("A message"),
+        RichTextEditorState("A message", fake = true),
+        canSendMessage = true,
         onSendMessage = {},
         composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
         onResetComposerMode = {},
@@ -448,7 +452,8 @@ internal fun TextComposerEditPreview() = ElementPreview {
 internal fun TextComposerReplyPreview() = ElementPreview {
     Column {
         TextComposer(
-            previewTextComposerState(""),
+            RichTextEditorState("", fake = true),
+            canSendMessage = false,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
@@ -461,7 +466,8 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
         )
         TextComposer(
-            previewTextComposerState("A message"),
+            RichTextEditorState("A message", fake = true),
+            canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
@@ -477,7 +483,8 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
         )
         TextComposer(
-            previewTextComposerState("A message"),
+            RichTextEditorState("A message", fake = true),
+            canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
@@ -493,7 +500,8 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
         )
         TextComposer(
-            previewTextComposerState("A message"),
+            RichTextEditorState("A message", fake = true),
+            canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",
@@ -509,7 +517,8 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
         )
         TextComposer(
-            previewTextComposerState("A message"),
+            RichTextEditorState("A message", fake = true),
+            canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 senderName = "Alice",

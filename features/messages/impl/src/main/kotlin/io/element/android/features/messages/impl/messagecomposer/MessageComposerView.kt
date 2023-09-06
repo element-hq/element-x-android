@@ -61,8 +61,9 @@ fun MessageComposerView(
         )
 
         TextComposer(
-            state = state.composerState,
-            onRequestFocus = { state.composerState.requestFocus() },
+            state = state.richTextEditorState,
+            canSendMessage = state.canSendMessage,
+            onRequestFocus = { state.richTextEditorState.requestFocus() },
             onSendMessage = ::sendMessage,
             composerMode = state.mode,
             onResetComposerMode = ::onCloseSpecialMode,

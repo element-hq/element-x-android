@@ -33,7 +33,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
 
     implementation(libs.matrix.richtexteditor)
-    implementation(libs.matrix.richtexteditor.compose)
+    api(libs.matrix.richtexteditor.compose)
 
     ksp(libs.showkase.processor)
 }

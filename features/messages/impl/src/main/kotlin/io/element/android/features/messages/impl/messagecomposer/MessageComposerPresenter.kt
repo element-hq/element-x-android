@@ -47,8 +47,8 @@ import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.MessageComposerMode
-import io.element.android.libraries.textcomposer.TextComposerState
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -70,7 +70,7 @@ class MessageComposerPresenter @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContextImpl,
-    private val textComposerStateFactory: TextComposerStateFactory,
+    private val richTextEditorStateFactory: RichTextEditorStateFactory,
 ) : Presenter<MessageComposerState> {
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -107,9 +107,9 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val composerState = textComposerStateFactory.create()
-        val hasFocus = remember(composerState.hasFocus) {
-            derivedStateOf { composerState.hasFocus }
+        val richTextEditorState = richTextEditorStateFactory.create()
+        val hasFocus = remember(richTextEditorState.hasFocus) {
+            derivedStateOf { richTextEditorState.hasFocus }
         }
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
@@ -118,7 +118,7 @@ class MessageComposerPresenter @Inject constructor(
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
                 is MessageComposerMode.Edit ->
-                    composerState.setHtml(modeValue.defaultContent)
+                    richTextEditorState.setHtml(modeValue.defaultContent)
                 else -> Unit
             }
         }
@@ -140,14 +140,14 @@ class MessageComposerPresenter @Inject constructor(
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
 
                 MessageComposerEvents.CloseSpecialMode -> {
-                    composerState.setHtml("")
+                    richTextEditorState.setHtml("")
                     messageComposerContext.composerMode = MessageComposerMode.Normal("")
                 }
 
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
                     message = event.message,
                     updateComposerMode = { messageComposerContext.composerMode = it },
-                    composerState = composerState,
+                    richTextEditorState = richTextEditorState,
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
@@ -201,7 +201,7 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         return MessageComposerState(
-            composerState = composerState,
+            richTextEditorState = richTextEditorState,
             isFullScreen = isFullScreen.value,
             hasFocus = hasFocus.value,
             mode = messageComposerContext.composerMode,
@@ -216,11 +216,11 @@ class MessageComposerPresenter @Inject constructor(
     private fun CoroutineScope.sendMessage(
         message: Message,
         updateComposerMode: (newComposerMode: MessageComposerMode) -> Unit,
-        composerState: TextComposerState,
+        richTextEditorState: RichTextEditorState,
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
         // Reset composer right away
-        composerState.setHtml("")
+        richTextEditorState.setHtml("")
         updateComposerMode(MessageComposerMode.Normal(""))
         when (capturedMode) {
             is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html)

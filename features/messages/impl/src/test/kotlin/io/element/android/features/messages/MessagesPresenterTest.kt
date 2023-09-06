@@ -40,7 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.media.FakeLocalMediaFactory
-import io.element.android.features.messages.textcomposer.TestTextComposerStateFactory
+import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
@@ -380,7 +380,7 @@ class MessagesPresenterTest {
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
-            initialState.composerState.composerState.requestFocus()
+            initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = consumeItemsUntilPredicate { state ->
                 state.showReinvitePrompt
             }.last()
@@ -404,7 +404,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.composerState.requestFocus()
+            initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -420,7 +420,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.composerState.requestFocus()
+            initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -602,7 +602,7 @@ class MessagesPresenterTest {
             snackbarDispatcher = SnackbarDispatcher(),
             analyticsService = FakeAnalyticsService(),
             messageComposerContext = MessageComposerContextImpl(),
-            textComposerStateFactory = TestTextComposerStateFactory(),
+            richTextEditorStateFactory = TestRichTextEditorStateFactory(),
 
         )
         val timelinePresenter = TimelinePresenter(

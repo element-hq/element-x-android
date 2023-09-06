@@ -18,8 +18,7 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.textcomposer.MessageComposerMode
-import io.element.android.libraries.textcomposer.previewTextComposerState
-import io.element.android.libraries.textcomposer.TextComposerState
+import io.element.android.wysiwyg.compose.RichTextEditorState
 
 open class MessageComposerStateProvider : PreviewParameterProvider<MessageComposerState> {
     override val values: Sequence<MessageComposerState>
@@ -29,7 +28,7 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 }
 
 fun aMessageComposerState(
-    composerState: TextComposerState = previewTextComposerState(text = ""),
+    composerState: RichTextEditorState = RichTextEditorState("", fake = true),
     isFullScreen: Boolean = false,
     hasFocus: Boolean = false,
     mode: MessageComposerMode = MessageComposerMode.Normal(content = ""),
@@ -38,7 +37,7 @@ fun aMessageComposerState(
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
 ) = MessageComposerState(
-    composerState = composerState,
+    richTextEditorState = composerState,
     isFullScreen = isFullScreen,
     hasFocus = hasFocus,
     mode = mode,

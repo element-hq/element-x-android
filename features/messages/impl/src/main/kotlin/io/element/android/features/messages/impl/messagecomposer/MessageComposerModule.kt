@@ -26,6 +26,6 @@ import io.element.android.libraries.di.AppScope
 interface MessageComposerModule {
     @Binds
     fun bindsTextComposerStateFactory(
-        impl: DefaultTextComposerStateFactory
-    ): TextComposerStateFactory
+        impl: DefaultRichTextEditorStateFactory
+    ): RichTextEditorStateFactory
 }

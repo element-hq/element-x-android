@@ -17,13 +17,13 @@
 package io.element.android.features.messages.textcomposer
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.messages.impl.messagecomposer.TextComposerStateFactory
-import io.element.android.libraries.textcomposer.TextComposerState
-import io.element.android.libraries.textcomposer.test.rememberFakeTextComposerState
+import io.element.android.features.messages.impl.messagecomposer.RichTextEditorStateFactory
+import io.element.android.wysiwyg.compose.RichTextEditorState
+import io.element.android.wysiwyg.compose.rememberRichTextEditorState
 
-class TestTextComposerStateFactory : TextComposerStateFactory {
+class TestRichTextEditorStateFactory : RichTextEditorStateFactory {
     @Composable
-    override fun create(): TextComposerState {
-        return rememberFakeTextComposerState()
+    override fun create(): RichTextEditorState {
+        return rememberRichTextEditorState("", fake = true)
     }
 }
