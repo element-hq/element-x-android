@@ -16,6 +16,7 @@
 
 package io.element.android.features.ftue.impl
 
+import android.os.Build
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ftue.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.features.ftue.impl.migration.MigrationScreenStore
@@ -25,8 +26,10 @@ import io.element.android.features.ftue.impl.welcome.state.FakeWelcomeState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -51,13 +54,21 @@ class DefaultFtueStateTests {
         val welcomeState = FakeWelcomeState()
         val analyticsService = FakeAnalyticsService()
         val migrationScreenStore = InMemoryMigrationScreenStore()
+        val permissionStateProvider = FakePermissionStateProvider(permissionGranted = true)
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
 
-        val state = createState(coroutineScope, welcomeState, analyticsService, migrationScreenStore)
+        val state = createState(
+            coroutineScope = coroutineScope,
+            welcomeState = welcomeState,
+            analyticsService = analyticsService,
+            migrationScreenStore = migrationScreenStore,
+            permissionStateProvider = permissionStateProvider
+        )
 
         welcomeState.setWelcomeScreenShown()
         analyticsService.setDidAskUserConsent()
         migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
+        permissionStateProvider.setPermissionGranted()
         state.updateState()
 
         assertThat(state.shouldDisplayFlow.value).isFalse()
@@ -71,9 +82,16 @@ class DefaultFtueStateTests {
         val welcomeState = FakeWelcomeState()
         val analyticsService = FakeAnalyticsService()
         val migrationScreenStore = InMemoryMigrationScreenStore()
+        val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
 
-        val state = createState(coroutineScope, welcomeState, analyticsService, migrationScreenStore)
+        val state = createState(
+            coroutineScope = coroutineScope,
+            welcomeState = welcomeState,
+            analyticsService = analyticsService,
+            migrationScreenStore = migrationScreenStore,
+            permissionStateProvider = permissionStateProvider
+        )
         val steps = mutableListOf<FtueStep?>()
 
         // First step, migration screen
@@ -84,7 +102,11 @@ class DefaultFtueStateTests {
         steps.add(state.getNextStep(steps.lastOrNull()))
         welcomeState.setWelcomeScreenShown()
 
-        // Third step, analytics opt in
+        // Third step, notifications opt in
+        steps.add(state.getNextStep(steps.lastOrNull()))
+        permissionStateProvider.setPermissionGranted()
+
+        // Fourth step, analytics opt in
         steps.add(state.getNextStep(steps.lastOrNull()))
         analyticsService.setDidAskUserConsent()
 
@@ -94,6 +116,7 @@ class DefaultFtueStateTests {
         assertThat(steps).containsExactly(
             FtueStep.MigrationScreen,
             FtueStep.WelcomeScreen,
+            FtueStep.NotificationsOptIn,
             FtueStep.AnalyticsOptIn,
             null, // Final state
         )
@@ -107,8 +130,37 @@ class DefaultFtueStateTests {
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val analyticsService = FakeAnalyticsService()
         val migrationScreenStore = InMemoryMigrationScreenStore()
+        val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
 
         val state = createState(
+            coroutineScope = coroutineScope,
+            analyticsService = analyticsService,
+            migrationScreenStore = migrationScreenStore,
+            permissionStateProvider = permissionStateProvider,
+        )
+
+        // Skip first 3 steps
+        migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
+        state.setWelcomeScreenShown()
+        permissionStateProvider.setPermissionGranted()
+
+        assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
+
+        analyticsService.setDidAskUserConsent()
+        assertThat(state.getNextStep(FtueStep.WelcomeScreen)).isNull()
+
+        // Cleanup
+        coroutineScope.cancel()
+    }
+
+    @Test
+    fun `if version is older than 13 we don't display the notification opt in screen`() = runTest {
+        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
+        val analyticsService = FakeAnalyticsService()
+        val migrationScreenStore = InMemoryMigrationScreenStore()
+
+        val state = createState(
+            sdkIntVersion = Build.VERSION_CODES.M,
             coroutineScope = coroutineScope,
             analyticsService = analyticsService,
             migrationScreenStore = migrationScreenStore,
@@ -132,12 +184,16 @@ class DefaultFtueStateTests {
         welcomeState: FakeWelcomeState = FakeWelcomeState(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         migrationScreenStore: MigrationScreenStore = InMemoryMigrationScreenStore(),
+        permissionStateProvider: FakePermissionStateProvider = FakePermissionStateProvider(permissionGranted = false),
         matrixClient: MatrixClient = FakeMatrixClient(),
+        sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU, // First version where notification permission is required
     ) = DefaultFtueState(
+        sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkIntVersion),
         coroutineScope = coroutineScope,
         analyticsService = analyticsService,
         welcomeScreenState = welcomeState,
         migrationScreenStore = migrationScreenStore,
+        permissionStateProvider = permissionStateProvider,
         matrixClient = matrixClient,
     )
 }

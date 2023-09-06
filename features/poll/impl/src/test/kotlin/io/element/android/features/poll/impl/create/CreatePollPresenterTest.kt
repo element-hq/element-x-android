@@ -23,11 +23,17 @@ import com.google.common.truth.Truth
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.test.room.CreatePollInvocation
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class CreatePollPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private var navUpInvocationsCount = 0
     private val fakeMatrixRoom = FakeMatrixRoom()

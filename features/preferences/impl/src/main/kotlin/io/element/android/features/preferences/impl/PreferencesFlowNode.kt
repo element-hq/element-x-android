@@ -33,6 +33,7 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
+import io.element.android.features.preferences.impl.developer.tracing.ConfigureTracingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -59,6 +60,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object DeveloperSettings : NavTarget
+
+        @Parcelize
+        data object ConfigureTracing : NavTarget
 
         @Parcelize
         data object AnalyticsSettings : NavTarget
@@ -94,7 +98,15 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.DeveloperSettings -> {
-                createNode<DeveloperSettingsNode>(buildContext)
+                val callback = object : DeveloperSettingsNode.Callback {
+                    override fun openConfigureTracing() {
+                        backstack.push(NavTarget.ConfigureTracing)
+                    }
+                }
+                createNode<DeveloperSettingsNode>(buildContext, listOf(callback))
+            }
+            NavTarget.ConfigureTracing -> {
+                createNode<ConfigureTracingNode>(buildContext)
             }
             NavTarget.About -> {
                 createNode<AboutNode>(buildContext)

@@ -48,8 +48,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.permissions.api)
-    implementation(projects.libraries.permissions.noop)
 
     implementation(libs.coil)
 

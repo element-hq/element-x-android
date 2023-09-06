@@ -92,6 +92,7 @@ internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLigh
 @Composable
 fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    lightStatusBar: Boolean = !darkTheme,
     dynamicColor: Boolean = false, /* true to enable MaterialYou */
     compoundColors: SemanticColors = if (darkTheme) compoundColorsDark else compoundColorsLight,
     materialLightColors: ColorScheme = materialColorSchemeLight,
@@ -111,8 +112,19 @@ fun ElementTheme(
         darkTheme -> materialDarkColors
         else -> materialLightColors
     }
+    val statusBarColorScheme = if (lightStatusBar) {
+        when {
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                val context = LocalContext.current
+                dynamicLightColorScheme(context)
+            }
+            else -> materialLightColors
+        }
+    } else {
+        colorScheme
+    }
     SideEffect {
-        systemUiController.applyTheme(colorScheme = colorScheme, darkTheme = darkTheme)
+        systemUiController.applyTheme(colorScheme = statusBarColorScheme, darkTheme = darkTheme && !lightStatusBar)
     }
     CompositionLocalProvider(
         LocalCompoundColors provides currentCompoundColor,
@@ -132,6 +144,7 @@ fun ElementTheme(
  */
 @Composable
 fun ForcedDarkElementTheme(
+    lightStatusBar: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
@@ -142,7 +155,7 @@ fun ForcedDarkElementTheme(
             systemUiController.applyTheme(colorScheme, wasDarkTheme)
         }
     }
-    ElementTheme(darkTheme = true, content = content)
+    ElementTheme(darkTheme = true, lightStatusBar = lightStatusBar, content = content)
 }
 
 private fun SystemUiController.applyTheme(

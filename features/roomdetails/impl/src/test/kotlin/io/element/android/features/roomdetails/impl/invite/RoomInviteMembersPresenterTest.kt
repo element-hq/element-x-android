@@ -36,13 +36,19 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.test.FakeUserRepository
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 internal class RoomInviteMembersPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - initial state has no results and no search`() = runTest {

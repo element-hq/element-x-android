@@ -47,14 +47,19 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
 
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
     private fun aRoomDetailsPresenter(
         room: MatrixRoom,
         leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake(),
@@ -62,6 +67,7 @@ class RoomDetailsPresenterTests {
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
+
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
                 return RoomMemberDetailsPresenter(matrixClient, room, roomMemberId)

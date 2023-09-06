@@ -26,6 +26,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.permissions.api.PermissionsStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -34,7 +35,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 @ContributesBinding(AppScope::class)
 class DefaultPermissionsStore @Inject constructor(
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
 ) : PermissionsStore {
     private val store = context.dataStore
 
