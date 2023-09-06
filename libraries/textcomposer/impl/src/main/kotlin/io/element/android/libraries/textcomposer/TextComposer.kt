@@ -46,7 +46,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -82,6 +84,7 @@ import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.view.models.InlineFormat
+import io.element.android.wysiwyg.view.models.LinkAction
 import kotlinx.coroutines.android.awaitFrame
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
@@ -395,6 +398,26 @@ private fun TextFormatting(
                 imageVector = ImageVector.vectorResource(VectorIcons.CodeBlock),
                 contentDescription = stringResource(CommonStrings.rich_text_editor_code_block)
             )
+
+            var linkDialogAction by remember { mutableStateOf<LinkAction?>(null) }
+
+            linkDialogAction?.let {
+                TextComposerLinkDialog(
+                    onDismissRequest = { linkDialogAction = null },
+                    onCreateLinkRequest = state::insertLink,
+                    onSaveLinkRequest = state::setLink,
+                    onRemoveLinkRequest = state::removeLink,
+                    linkAction = it,
+                )
+            }
+
+            FormattingOption(
+                state = state.actions[ComposerAction.LINK].toButtonState(),
+                onClick = { linkDialogAction = state.linkAction },
+                imageVector = ImageVector.vectorResource(VectorIcons.Link),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_link)
+            )
+
             FormattingOption(
                 state = state.actions[ComposerAction.QUOTE].toButtonState(),
                 onClick = { state.toggleQuote() },
