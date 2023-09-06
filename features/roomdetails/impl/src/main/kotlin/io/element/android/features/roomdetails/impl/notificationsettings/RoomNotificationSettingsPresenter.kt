@@ -75,8 +75,6 @@ class RoomNotificationSettingsPresenter @Inject constructor(
             }
         }
 
-        Timber.d("NotifState: $roomNotificationSettingsState")
-
         return RoomNotificationSettingsState(
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             defaultRoomNotificationMode = defaultRoomNotificationMode.value,

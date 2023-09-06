@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.delay
@@ -59,6 +61,7 @@ class FakeMatrixRoom(
     override val isDirect: Boolean = false,
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
+    val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
     canRedact: Boolean = false,
 ) : MatrixRoom {
@@ -69,7 +72,6 @@ class FakeMatrixRoom(
     private var userAvatarUrlResult = Result.success<String?>(null)
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
     private var joinRoomResult = Result.success(Unit)
-    private var updateRoomNotificationSettingsResult: Result<Unit> = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
     private var canRedactResult = Result.success(canRedact)
@@ -146,7 +148,9 @@ class FakeMatrixRoom(
     }
 
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
-        updateRoomNotificationSettingsResult
+        val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, activeMemberCount).getOrThrow()
+        roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(notificationSettings)
+        return Result.success(Unit)
     }
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
