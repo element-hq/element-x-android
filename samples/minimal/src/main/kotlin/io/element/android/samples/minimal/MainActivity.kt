@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
-import io.element.android.libraries.featureflag.impl.DefaultFeatureFlagService
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
@@ -56,7 +55,6 @@ class MainActivity : ComponentActivity() {
                 sessionStore = sessionStore,
                 userAgentProvider = userAgentProvider,
                 clock = DefaultSystemClock(),
-                featureFlagsService = DefaultFeatureFlagService(emptySet())
             )
         )
     }
