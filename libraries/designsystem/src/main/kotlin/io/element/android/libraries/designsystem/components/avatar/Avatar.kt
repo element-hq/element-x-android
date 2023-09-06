@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import io.element.android.libraries.designsystem.colors.AvatarColors
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
@@ -45,6 +46,7 @@ import timber.log.Timber
 fun Avatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
+    initialAvatarColors: AvatarColors? = null,
     contentDescription: String? = null,
 ) {
     val commonModifier = modifier
@@ -53,6 +55,7 @@ fun Avatar(
     if (avatarData.url.isNullOrBlank()) {
         InitialsAvatar(
             avatarData = avatarData,
+            avatarColors = initialAvatarColors,
             modifier = commonModifier,
         )
     } else {
@@ -85,22 +88,23 @@ private fun ImageAvatar(
 @Composable
 private fun InitialsAvatar(
     avatarData: AvatarData,
+    avatarColors: AvatarColors?,
     modifier: Modifier = Modifier,
 ) {
-    // Use temporary color for default avatar background
+    // Use temporary color for default avatar background, if avatarColors is not provided
     val avatarColor = ElementTheme.colors.bgActionPrimaryDisabled
     Box(
-        modifier.background(color = avatarColor),
+        modifier.background(color = avatarColors?.background ?: avatarColor)
     ) {
         val fontSize = avatarData.size.dp.toSp() / 2
-        val originalFont = ElementTheme.typography.fontBodyMdRegular
+        val originalFont = ElementTheme.typography.fontHeadingMdBold
         val ratio = fontSize.value / originalFont.fontSize.value
         val lineHeight = originalFont.lineHeight * ratio
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = avatarData.initial,
             style = originalFont.copy(fontSize = fontSize, lineHeight = lineHeight, letterSpacing = 0.sp),
-            color = Color.White,
+            color = avatarColors?.foreground ?: Color.White,
         )
     }
 }
