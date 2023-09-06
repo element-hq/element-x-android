@@ -27,11 +27,17 @@ import io.element.android.features.location.impl.common.permissions.PermissionsP
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenterFake
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class ShowLocationPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private val permissionsPresenterFake = PermissionsPresenterFake()
     private val fakeLocationActions = FakeLocationActions()

@@ -23,11 +23,18 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class AnalyticsOptInPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - enable`() = runTest {
         val analyticsService = FakeAnalyticsService(isEnabled = false)

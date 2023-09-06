@@ -26,12 +26,19 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.test.InMemoryPermissionsStore
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 const val A_PERMISSION = "A_PERMISSION"
 
 class DefaultPermissionsPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val permissionsStore = InMemoryPermissionsStore()
