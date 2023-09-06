@@ -261,6 +261,8 @@ koverMerged {
                 includes += "*Presenter"
                 excludes += "*Fake*Presenter"
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
+                // Some options can't be tested at the moment
+                excludes += "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*"
             }
             bound {
                 minValue = 85

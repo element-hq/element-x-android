@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.permissions.impl
+package io.element.android.services.toolbox.test.sdk
 
-import kotlinx.coroutines.flow.Flow
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 
-interface PermissionsStore {
-    suspend fun setPermissionDenied(permission: String, value: Boolean)
-    fun isPermissionDenied(permission: String): Flow<Boolean>
-
-    suspend fun setPermissionAsked(permission: String, value: Boolean)
-    fun isPermissionAsked(permission: String): Flow<Boolean>
-
-    suspend fun resetPermission(permission: String)
-
-    // To debug
-    suspend fun resetStore()
+class FakeBuildVersionSdkIntProvider(
+    private val sdkInt: Int
+) : BuildVersionSdkIntProvider {
+    override fun get(): Int = sdkInt
 }

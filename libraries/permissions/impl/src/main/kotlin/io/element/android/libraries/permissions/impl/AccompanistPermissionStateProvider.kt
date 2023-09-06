@@ -26,13 +26,13 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
-interface PermissionStateProvider {
+interface ComposablePermissionStateProvider {
     @Composable
     fun provide(permission: String, onPermissionResult: (Boolean) -> Unit): PermissionState
 }
 
 @ContributesBinding(AppScope::class)
-class AccompanistPermissionStateProvider @Inject constructor() : PermissionStateProvider {
+class AccompanistPermissionStateProvider @Inject constructor() : ComposablePermissionStateProvider {
     @Composable
     override fun provide(permission: String, onPermissionResult: (Boolean) -> Unit): PermissionState {
         return rememberPermissionState(

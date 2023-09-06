@@ -25,10 +25,16 @@ import io.element.android.features.messages.impl.timeline.components.retrysendme
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class RetrySendMenuPresenterTests {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private val room = FakeMatrixRoom()
     private val presenter = RetrySendMenuPresenter(room)

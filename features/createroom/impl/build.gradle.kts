@@ -65,6 +65,7 @@ dependencies {
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.usersearch.test)
+    testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)
 }

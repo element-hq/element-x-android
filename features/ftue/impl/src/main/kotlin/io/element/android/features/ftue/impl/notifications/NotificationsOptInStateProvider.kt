@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.sync
+package io.element.android.features.ftue.impl.notifications
 
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.permissions.api.aPermissionsState
 
-sealed interface StartSyncReason {
-    data object AppInForeground : StartSyncReason
-    data class Notification(val roomId: RoomId, val eventId: EventId) : StartSyncReason
+open class NotificationsOptInStateProvider : PreviewParameterProvider<NotificationsOptInState> {
+    override val values: Sequence<NotificationsOptInState>
+        get() = sequenceOf(
+            aNotificationsOptInState(),
+            // Add other states here
+        )
 }
+
+fun aNotificationsOptInState() = NotificationsOptInState(
+    notificationsPermissionState = aPermissionsState(),
+    eventSink = {}
+)

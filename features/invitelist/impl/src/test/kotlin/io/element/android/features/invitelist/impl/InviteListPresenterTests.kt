@@ -44,10 +44,15 @@ import io.element.android.libraries.push.api.notifications.NotificationDrawerMan
 import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class InviteListPresenterTests {
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - starts empty, adds invites when received`() = runTest {

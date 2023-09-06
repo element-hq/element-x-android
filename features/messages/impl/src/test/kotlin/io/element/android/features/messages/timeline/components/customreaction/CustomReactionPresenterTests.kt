@@ -26,10 +26,16 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class CustomReactionPresenterTests {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private val presenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
 

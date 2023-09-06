@@ -4,9 +4,6 @@
     <item quantity="one">"%1$d room change"</item>
     <item quantity="other">"%1$d room changes"</item>
   </plurals>
-  <plurals name="screen_room_timeline_more_reactions">
-    <item quantity="other">"%1$d more"</item>
-  </plurals>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Record a video"</string>
@@ -14,6 +11,7 @@
   <string name="screen_room_attachment_source_gallery">"Photo &amp; Video Library"</string>
   <string name="screen_room_attachment_source_location">"Location"</string>
   <string name="screen_room_attachment_source_poll">"Poll"</string>
+  <string name="screen_room_attachment_text_formatting">"Text Formatting"</string>
   <string name="screen_room_encrypted_history_banner">"Message history is currently unavailable in this room"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_invite_again_alert_message">"Would you like to invite them back?"</string>

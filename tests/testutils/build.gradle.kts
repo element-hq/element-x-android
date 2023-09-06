@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
 }
 
@@ -31,4 +31,5 @@ dependencies {
     implementation(libs.coroutines.test)
     implementation(projects.libraries.core)
     implementation(libs.test.turbine)
+    implementation(libs.molecule.runtime)
 }
