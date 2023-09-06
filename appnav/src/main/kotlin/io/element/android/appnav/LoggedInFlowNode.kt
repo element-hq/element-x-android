@@ -60,7 +60,6 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.sync.StartSyncReason
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -125,7 +124,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             onStop = {
                 //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                 coroutineScope.launch {
-                    syncService.stopSync(StartSyncReason.AppInForeground)
+                    syncService.stopSync()
                 }
             },
             onDestroy = {
@@ -151,7 +150,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .collect { (syncState, networkStatus) ->
                         Timber.d("Sync state: $syncState, network status: $networkStatus")
                         if (syncState != SyncState.Running && networkStatus == NetworkStatus.Online) {
-                            syncService.startSync(StartSyncReason.AppInForeground)
+                            syncService.startSync()
                         }
                     }
             }
