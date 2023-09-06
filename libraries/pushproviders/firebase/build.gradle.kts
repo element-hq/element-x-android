@@ -20,6 +20,13 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.pushproviders.firebase"
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            consumerProguardFiles("consumer-proguard-rules.pro")
+        }
+    }
 }
 
 anvil {
