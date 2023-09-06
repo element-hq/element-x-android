@@ -39,7 +39,6 @@ import io.element.android.libraries.eventformatter.impl.StateContentFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.sync.StartSyncReason
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -110,12 +109,12 @@ class RoomListScreen(
         DisposableEffect(Unit) {
             Timber.w("Start sync!")
             runBlocking {
-                matrixClient.syncService().startSync(StartSyncReason.AppInForeground)
+                matrixClient.syncService().startSync()
             }
             onDispose {
                 Timber.w("Stop sync!")
                 runBlocking {
-                    matrixClient.syncService().stopSync(StartSyncReason.AppInForeground)
+                    matrixClient.syncService().stopSync()
                 }
             }
         }
