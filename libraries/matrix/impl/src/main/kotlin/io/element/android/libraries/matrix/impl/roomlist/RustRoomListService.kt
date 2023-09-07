@@ -53,9 +53,9 @@ class RustRoomListService(
     private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
 
     private val allRoomsLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, roomSummaryDetailsFactory, shouldFetchFullRoom = false)
+    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, roomSummaryDetailsFactory)
     private val invitesLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, roomSummaryDetailsFactory, shouldFetchFullRoom = true)
+    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, roomSummaryDetailsFactory)
 
     init {
         sessionCoroutineScope.launch(dispatcher) {

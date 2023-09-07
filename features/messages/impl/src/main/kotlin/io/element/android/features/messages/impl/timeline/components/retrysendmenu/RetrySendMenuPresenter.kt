@@ -66,7 +66,7 @@ class RetrySendMenuPresenter @Inject constructor(
 
         return RetrySendMenuState(
             selectedEvent = selectedEvent,
-            eventSink = ::handleEvent,
+            eventSink = { handleEvent(it) },
         )
     }
 }

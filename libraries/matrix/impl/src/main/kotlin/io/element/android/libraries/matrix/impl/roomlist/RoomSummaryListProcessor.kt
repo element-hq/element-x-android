@@ -22,11 +22,10 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
-import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.util.UUID
 
@@ -34,7 +33,6 @@ class RoomSummaryListProcessor(
     private val roomSummaries: MutableStateFlow<List<RoomSummary>>,
     private val roomListService: RoomListService,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
-    private val shouldFetchFullRoom: Boolean = false,
 ) {
 
     private val roomSummariesByIdentifier = HashMap<String, RoomSummary>()
@@ -120,22 +118,14 @@ class RoomSummaryListProcessor(
 
     private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
-            roomListItem.fullRoomOrNull().use { fullRoom ->
+            roomListItem.roomInfo().use { roomInfo ->
                 RoomSummary.Filled(
-                    details = roomSummaryDetailsFactory.create(roomListItem, fullRoom)
+                    details = roomSummaryDetailsFactory.create(roomInfo)
                 )
             }
         } ?: buildEmptyRoomSummary()
         roomSummariesByIdentifier[builtRoomSummary.identifier()] = builtRoomSummary
         return builtRoomSummary
-    }
-
-    private fun RoomListItem.fullRoomOrNull(): Room? {
-        return if (shouldFetchFullRoom) {
-            fullRoom()
-        } else {
-            null
-        }
     }
 
     private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) =

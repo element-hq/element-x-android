@@ -45,7 +45,7 @@
       ]
     },
     {
-      "name": ":libraries:textcomposer",
+      "name": ":libraries:textcomposer:impl",
       "includeRegex": [
         "rich_text_editor_.*"
       ]

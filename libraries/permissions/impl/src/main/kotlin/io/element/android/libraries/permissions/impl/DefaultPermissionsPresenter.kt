@@ -124,7 +124,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
             showDialog = showDialog.value,
             permissionAlreadyAsked = isAlreadyAsked,
             permissionAlreadyDenied = isAlreadyDenied,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 

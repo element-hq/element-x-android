@@ -66,7 +66,7 @@ import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
-import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import timber.log.Timber
 import java.io.File
 
@@ -227,31 +227,32 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendMessage(message: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun sendMessage(body: String, htmlBody: String): Result<Unit> = withContext(roomDispatcher) {
         val transactionId = genTransactionId()
-        messageEventContentFromMarkdown(message).use { content ->
+        messageEventContentFromHtml(body, htmlBody).use { content ->
             runCatching {
                 innerRoom.send(content, transactionId)
             }
         }
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, message: String): Result<Unit> = withContext(roomDispatcher) {
-        if (originalEventId != null) {
-            runCatching {
-                innerRoom.edit(messageEventContentFromMarkdown(message), originalEventId.value, transactionId?.value)
-            }
-        } else {
-            runCatching {
-                transactionId?.let { cancelSend(it) }
-                innerRoom.send(messageEventContentFromMarkdown(message), genTransactionId())
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String): Result<Unit> =
+        withContext(roomDispatcher) {
+            if (originalEventId != null) {
+                runCatching {
+                    innerRoom.edit(messageEventContentFromHtml(body, htmlBody), originalEventId.value, transactionId?.value)
+                }
+            } else {
+                runCatching {
+                    transactionId?.let { cancelSend(it) }
+                    innerRoom.send(messageEventContentFromHtml(body, htmlBody), genTransactionId())
+                }
             }
         }
-    }
 
-    override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.sendReply(messageEventContentFromMarkdown(message), eventId.value, genTransactionId())
+            innerRoom.sendReply(messageEventContentFromHtml(body, htmlBody), eventId.value, genTransactionId())
         }
     }
 
