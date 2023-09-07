@@ -20,7 +20,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -88,7 +88,7 @@ private fun ContentToPreview() {
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
-            trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
+            trailingIcon = { Icon(Icons.AutoMirrored.Default.ArrowRight, contentDescription = null) },
         )
         HorizontalDivider()
         DropdownMenuItem(
@@ -100,20 +100,20 @@ private fun ContentToPreview() {
             text = { Text(text = "Item") },
             onClick = {},
             leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
-            trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
+            trailingIcon = { Icon(Icons.AutoMirrored.Default.ArrowRight, contentDescription = null) },
         )
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
             enabled = false,
             leadingIcon = { Icon(Icons.Default.BugReport, contentDescription = null) },
-            trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
+            trailingIcon = { Icon(Icons.AutoMirrored.Default.ArrowRight, contentDescription = null) },
         )
         HorizontalDivider()
         DropdownMenuItem(
             text = { Text(text = "Multiline\nItem") },
             onClick = {},
-            trailingIcon = { Icon(Icons.Default.ArrowRight, contentDescription = null) },
+            trailingIcon = { Icon(Icons.AutoMirrored.Default.ArrowRight, contentDescription = null) },
         )
     }
 }

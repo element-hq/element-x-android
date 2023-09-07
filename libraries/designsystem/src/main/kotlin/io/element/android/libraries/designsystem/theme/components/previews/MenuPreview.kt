@@ -17,7 +17,7 @@
 package io.element.android.libraries.designsystem.theme.components.previews
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,7 +51,7 @@ internal fun MenuPreview() {
 
                 val trailingIcon: @Composable (() -> Unit)? = if (i in 3..4) {
                     @Composable {
-                        Icon(Icons.Filled.ArrowRight, contentDescription = "Favorite")
+                        Icon(Icons.AutoMirrored.Filled.ArrowRight, contentDescription = "Favorite")
                     }
                 } else {
                     null

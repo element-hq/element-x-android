@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Announcement
+import androidx.compose.material.icons.automirrored.filled.Announcement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -100,14 +100,14 @@ private fun ContentToPreview() {
     Column {
         PreferenceCheckbox(
             title = "Checkbox",
-            icon = Icons.Default.Announcement,
+            icon = Icons.AutoMirrored.Default.Announcement,
             enabled = true,
             isChecked = true
         )
         PreferenceCheckbox(
             title = "Checkbox with supporting text",
             supportingText = "Supporting text",
-            icon = Icons.Default.Announcement,
+            icon = Icons.AutoMirrored.Default.Announcement,
             enabled = true,
             isChecked = true
         )

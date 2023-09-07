@@ -26,7 +26,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Announcement
+import androidx.compose.material.icons.automirrored.filled.Announcement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -107,7 +107,7 @@ private fun ContentToPreview() {
     PreferenceSwitch(
         title = "Switch",
         subtitle = "Subtitle Switch",
-        icon = Icons.Default.Announcement,
+        icon = Icons.AutoMirrored.Default.Announcement,
         enabled = true,
         isChecked = true
     )

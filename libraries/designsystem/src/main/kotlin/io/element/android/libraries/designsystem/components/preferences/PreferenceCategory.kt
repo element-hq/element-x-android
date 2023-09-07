@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Announcement
+import androidx.compose.material.icons.automirrored.filled.Announcement
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -83,7 +83,7 @@ private fun ContentToPreview() {
         )
         PreferenceSwitch(
             title = "Switch",
-            icon = Icons.Default.Announcement,
+            icon = Icons.AutoMirrored.Filled.Announcement,
             isChecked = true
         )
         PreferenceSlide(

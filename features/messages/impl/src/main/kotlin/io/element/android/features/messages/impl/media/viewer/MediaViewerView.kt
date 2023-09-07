@@ -29,8 +29,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
@@ -176,7 +176,7 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.OpenWith)
                 },
             ) {
-                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = stringResource(id = CommonStrings.action_open_with))
+                Icon(imageVector = Icons.AutoMirrored.Default.OpenInNew, contentDescription = stringResource(id = CommonStrings.action_open_with))
             }
             IconButton(
                 enabled = actionsEnabled,

@@ -29,7 +29,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Announcement
+import androidx.compose.material.icons.automirrored.filled.Announcement
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -128,13 +128,13 @@ private fun ContentToPreview() {
             PreferenceDivider()
             PreferenceSwitch(
                 title = "Switch",
-                icon = Icons.Default.Announcement,
+                icon = Icons.AutoMirrored.Default.Announcement,
                 isChecked = true,
             )
             PreferenceDivider()
             PreferenceCheckbox(
                 title = "Checkbox",
-                icon = Icons.Default.Announcement,
+                icon = Icons.AutoMirrored.Default.Announcement,
                 isChecked = true,
             )
             PreferenceDivider()

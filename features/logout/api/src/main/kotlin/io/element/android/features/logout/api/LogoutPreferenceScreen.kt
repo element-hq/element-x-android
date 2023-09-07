@@ -17,7 +17,7 @@
 package io.element.android.features.logout.api
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -81,7 +81,7 @@ fun LogoutPreferenceContent(
 ) {
     PreferenceText(
         title = stringResource(id = R.string.screen_signout_preference_item),
-        icon = Icons.Filled.Logout,
+        icon = Icons.AutoMirrored.Filled.Logout,
         onClick = onClick
     )
 }
