@@ -16,21 +16,26 @@
 
 package io.element.android.libraries.featureflag.api
 
+/**
+ * To enable or disable a FeatureFlags, change the `defaultValue` value.
+ * It will impact all the build types.
+ */
 enum class FeatureFlags(
     override val key: String,
     override val title: String,
     override val description: String? = null,
-    override val defaultValue: Boolean = true
+    override val defaultValue: Boolean
 ) : Feature {
     LocationSharing(
         key = "feature.locationsharing",
         title = "Allow user to share location",
+        defaultValue = true,
     ),
     Polls(
         key = "feature.polls",
         title = "Polls",
         description = "Create poll and render poll events in the timeline",
-        defaultValue = false,
+        defaultValue = true,
     ),
     NotificationSettings(
         key = "feature.notificationsettings",

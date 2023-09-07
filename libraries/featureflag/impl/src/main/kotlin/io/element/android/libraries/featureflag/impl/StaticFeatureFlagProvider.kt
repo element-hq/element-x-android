@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 /**
  * This provider is used for release build.
- * Change the value return by [isFeatureEnabled] to enable/disable features.
+ * [isFeatureEnabled] just returns the default value of the FeatureFlags.
  */
 class StaticFeatureFlagProvider @Inject constructor() :
     FeatureFlagProvider {
@@ -31,11 +31,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
 
     override suspend fun isFeatureEnabled(feature: Feature): Boolean {
         return if (feature is FeatureFlags) {
-            when (feature) {
-                FeatureFlags.LocationSharing -> true
-                FeatureFlags.Polls -> false
-                FeatureFlags.NotificationSettings -> false
-            }
+            feature.defaultValue
         } else {
             false
         }
