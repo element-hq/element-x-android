@@ -20,11 +20,14 @@ import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import javax.inject.Inject
 
-class BuildtimeFeatureFlagProvider @Inject constructor() :
+/**
+ * This provider is used for release build.
+ * Change the value return by [isFeatureEnabled] to enable/disable features.
+ */
+class StaticFeatureFlagProvider @Inject constructor() :
     FeatureFlagProvider {
 
-    override val priority: Int
-        get() = LOW_PRIORITY
+    override val priority = LOW_PRIORITY
 
     override suspend fun isFeatureEnabled(feature: Feature): Boolean {
         return if (feature is FeatureFlags) {

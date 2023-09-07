@@ -30,12 +30,13 @@ import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_featureflag")
 
-class PreferencesFeatureFlagProvider @Inject constructor(@ApplicationContext context: Context) : RuntimeFeatureFlagProvider {
-
+/**
+ * Note: this will be used only in the nightly and in the debug build.
+ */
+class PreferencesFeatureFlagProvider @Inject constructor(@ApplicationContext context: Context) : MutableFeatureFlagProvider {
     private val store = context.dataStore
 
-    override val priority: Int
-        get() = MEDIUM_PRIORITY
+    override val priority = MEDIUM_PRIORITY
 
     override suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean) {
         store.edit { prefs ->

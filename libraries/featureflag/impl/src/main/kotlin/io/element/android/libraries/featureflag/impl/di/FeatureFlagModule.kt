@@ -22,7 +22,7 @@ import dagger.Provides
 import dagger.multibindings.ElementsIntoSet
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.featureflag.impl.BuildtimeFeatureFlagProvider
+import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
 import io.element.android.libraries.featureflag.impl.FeatureFlagProvider
 import io.element.android.libraries.featureflag.impl.PreferencesFeatureFlagProvider
 
@@ -35,14 +35,18 @@ object FeatureFlagModule {
     @ElementsIntoSet
     fun providesFeatureFlagProvider(
         buildType: BuildType,
-        runtimeFeatureFlagProvider: PreferencesFeatureFlagProvider,
-        buildtimeFeatureFlagProvider: BuildtimeFeatureFlagProvider,
+        mutableFeatureFlagProvider: PreferencesFeatureFlagProvider,
+        staticFeatureFlagProvider: StaticFeatureFlagProvider,
     ): Set<FeatureFlagProvider> {
         val providers = HashSet<FeatureFlagProvider>()
-        if (buildType == BuildType.RELEASE) {
-            providers.add(buildtimeFeatureFlagProvider)
-        } else {
-            providers.add(runtimeFeatureFlagProvider)
+        when (buildType) {
+            BuildType.RELEASE -> {
+                providers.add(staticFeatureFlagProvider)
+            }
+            BuildType.NIGHTLY,
+            BuildType.DEBUG -> {
+                providers.add(mutableFeatureFlagProvider)
+            }
         }
         return providers
     }
