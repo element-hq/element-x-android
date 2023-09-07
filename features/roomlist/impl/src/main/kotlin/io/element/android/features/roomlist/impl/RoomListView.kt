@@ -219,8 +219,7 @@ fun RoomListContent(
                 onClick = onCreateRoomClicked
             ) {
                 Icon(
-                    // Correct icon alignment for better rendering.
-                    modifier = Modifier.padding(start = 1.dp, bottom = 1.dp),
+                    // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
                     resourceId = DrawableR.drawable.ic_edit_square,
                     contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
                 )
