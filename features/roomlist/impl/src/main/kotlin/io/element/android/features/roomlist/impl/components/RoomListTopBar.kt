@@ -108,6 +108,7 @@ fun RoomListTopBar(
 
     DefaultRoomListTopBar(
         matrixUser = matrixUser,
+        areSearchResultsDisplayed = areSearchResultsDisplayed,
         onOpenSettings = onOpenSettings,
         onSearchClicked = onToggleSearch,
         onMenuActionClicked = onMenuActionClicked,
@@ -120,6 +121,7 @@ fun RoomListTopBar(
 @Composable
 private fun DefaultRoomListTopBar(
     matrixUser: MatrixUser?,
+    areSearchResultsDisplayed: Boolean,
     scrollBehavior: TopAppBarScrollBehavior,
     onOpenSettings: () -> Unit,
     onSearchClicked: () -> Unit,
@@ -154,6 +156,7 @@ private fun DefaultRoomListTopBar(
                         appBarHeight.toDp()
                     ) else DpSize.Unspecified,
                     bottomEdgeMaskAlpha = 1f - collapsedFraction,
+                    alpha = if (areSearchResultsDisplayed) 0f else 1f,
                 )
                 .statusBarsPadding(),
             colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -193,7 +196,6 @@ private fun DefaultRoomListTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        tint = ElementTheme.materialColors.secondary,
                         contentDescription = stringResource(CommonStrings.action_search),
                     )
                 }
@@ -202,7 +204,6 @@ private fun DefaultRoomListTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
-                        tint = ElementTheme.materialColors.secondary,
                         contentDescription = null,
                     )
                 }
@@ -266,6 +267,7 @@ internal fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRo
 private fun DefaultRoomListTopBarPreview() {
     DefaultRoomListTopBar(
         matrixUser = MatrixUser(UserId("@id:domain"), "Alice"),
+        areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
         onOpenSettings = {},
         onSearchClicked = {},

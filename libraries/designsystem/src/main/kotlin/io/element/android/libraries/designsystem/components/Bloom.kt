@@ -32,7 +32,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -100,6 +103,7 @@ import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.text.toDp
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -366,20 +370,20 @@ fun Modifier.bloom(
             listOf(0f, 1f)
         )
         val bottomEdgeGradientBrush = ShaderBrush(bottomEdgeGradient)
-        onDrawWithContent {
+        onDrawBehind {
             if (dstSize != IntSize.Zero) {
                 val circleClipPath = Path().apply {
                     addOval(Rect(dstOffset.toOffset(), radius - 1))
                 }
-                if (clipToPixelSize != IntSize.Zero) {
-                    val path = Path().apply {
-                        addRect(Rect(Offset.Zero, clipToPixelSize.toSize()))
-                    }
-                    drawContext.canvas.clipPath(path, ClipOp.Intersect)
-                }
-                // Clip external path if needed
                 clipPath(circleClipPath, clipOp = ClipOp.Intersect) {
                     drawWithLayer {
+                        // Clip external path if needed
+                        if (clipToPixelSize != IntSize.Zero) {
+                            val path = Path().apply {
+                                addRect(Rect(Offset.Zero, clipToPixelSize.toSize()))
+                            }
+                            drawContext.canvas.clipPath(path, ClipOp.Intersect)
+                        }
                         // Draw background color for blending
                         drawRect(background, size = pixelSize.toSize())
                         // 25% opacity, hard light blend mode
@@ -416,7 +420,6 @@ fun Modifier.bloom(
                     alpha = bottomEdgeMaskAlpha
                 )
             }
-            drawContent()
         }
     }
 }
@@ -541,6 +544,11 @@ internal fun BloomModifierPreview() {
                                 contentScale = ContentScale.Crop,
                                 contentDescription = null
                             )
+                        },
+                        actions = {
+                            IconButton(onClick = {}) {
+                                Icon(imageVector = Icons.Default.Share, contentDescription = null)
+                            }
                         },
                         title = {
                             Text("Title")
