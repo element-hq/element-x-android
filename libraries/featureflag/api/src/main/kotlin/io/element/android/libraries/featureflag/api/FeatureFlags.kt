@@ -18,7 +18,7 @@ package io.element.android.libraries.featureflag.api
 
 /**
  * To enable or disable a FeatureFlags, change the `defaultValue` value.
- * Warning: to enable a flog for the release app, you MUST update the file
+ * Warning: to enable a flag for the release app, you MUST update the file
  * [io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider]
  */
 enum class FeatureFlags(
