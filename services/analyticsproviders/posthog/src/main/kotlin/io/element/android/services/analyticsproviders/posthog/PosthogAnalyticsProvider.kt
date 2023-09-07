@@ -71,7 +71,7 @@ class PosthogAnalyticsProvider @Inject constructor(
     }
 
     override fun trackError(throwable: Throwable) {
-        TODO("Not yet implemented")
+        // Not implemented
     }
 
     private fun createPosthog(): PostHog = postHogFactory.createPosthog()
