@@ -30,8 +30,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.push.api.PushService
 import javax.inject.Inject
 
-private const val DELAY_BEFORE_SHOWING_SYNC_SPINNER_IN_MILLIS = 1500L
-
 class LoggedInPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val networkMonitor: NetworkMonitor,
