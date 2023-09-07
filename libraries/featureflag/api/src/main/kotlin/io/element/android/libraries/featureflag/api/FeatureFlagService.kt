@@ -28,7 +28,8 @@ interface FeatureFlagService {
      * @param feature the feature to enable or disable
      * @param enabled true to enable the feature
      *
-     * @return true if the method succeeds, ie if a RuntimeFeatureFlagProvider is registered
+     * @return true if the method succeeds, ie if a [io.element.android.libraries.featureflag.impl.MutableFeatureFlagProvider]
+     * is registered
      */
     suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean): Boolean
 }

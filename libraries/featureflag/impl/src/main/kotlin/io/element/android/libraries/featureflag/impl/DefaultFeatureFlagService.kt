@@ -38,7 +38,7 @@ class DefaultFeatureFlagService @Inject constructor(
     }
 
     override suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean): Boolean {
-        return providers.filterIsInstance(RuntimeFeatureFlagProvider::class.java)
+        return providers.filterIsInstance(MutableFeatureFlagProvider::class.java)
             .sortedBy(FeatureFlagProvider::priority)
             .firstOrNull()
             ?.setFeatureEnabled(feature, enabled)
