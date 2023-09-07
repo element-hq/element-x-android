@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -42,6 +43,7 @@ import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
+import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
@@ -99,6 +101,7 @@ class RustMatrixClient constructor(
         client = client,
         dispatchers = dispatchers,
     )
+
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
     private val notificationClient = client.notificationClient(notificationProcessSetup)
         .use { builder ->
@@ -106,8 +109,10 @@ class RustMatrixClient constructor(
                 .filterByPushRules()
                 .finish()
         }
+    private val notificationSettings = client.getNotificationSettings()
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
+    private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -173,6 +178,7 @@ class RustMatrixClient constructor(
                 sessionId = sessionId,
                 roomListItem = roomListItem,
                 innerRoom = fullRoom,
+                roomNotificationSettingsService = notificationSettingsService,
                 sessionCoroutineScope = sessionCoroutineScope,
                 coroutineDispatchers = dispatchers,
                 systemClock = clock,
@@ -277,9 +283,13 @@ class RustMatrixClient constructor(
 
     override fun notificationService(): NotificationService = notificationService
 
+    override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
+
     override fun close() {
         sessionCoroutineScope.cancel()
         client.setDelegate(null)
+        notificationSettings.setDelegate(null)
+        notificationSettings.destroy()
         verificationService.destroy()
         syncService.destroy()
         innerRoomListService.destroy()

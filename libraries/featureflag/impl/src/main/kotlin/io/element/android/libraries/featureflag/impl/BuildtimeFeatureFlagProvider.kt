@@ -31,6 +31,7 @@ class BuildtimeFeatureFlagProvider @Inject constructor() :
             when (feature) {
                 FeatureFlags.LocationSharing -> true
                 FeatureFlags.Polls -> false
+                FeatureFlags.NotificationSettings -> false
             }
         } else {
             false
