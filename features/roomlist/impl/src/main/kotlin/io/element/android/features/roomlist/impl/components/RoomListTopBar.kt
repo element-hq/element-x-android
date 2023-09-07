@@ -20,6 +20,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -152,7 +154,8 @@ private fun DefaultRoomListTopBar(
                         appBarHeight.toDp()
                     ) else DpSize.Unspecified,
                     bottomEdgeMaskAlpha = 1f - collapsedFraction,
-                ),
+                )
+                .statusBarsPadding(),
             colors = TopAppBarDefaults.mediumTopAppBarColors(
                 containerColor = Color.Transparent,
                 scrolledContainerColor = Color.Transparent,

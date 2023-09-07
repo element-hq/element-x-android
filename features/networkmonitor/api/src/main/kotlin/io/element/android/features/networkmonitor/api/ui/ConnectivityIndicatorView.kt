@@ -18,6 +18,9 @@ package io.element.android.features.networkmonitor.api.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -27,9 +30,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
@@ -37,12 +43,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -54,7 +62,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun ConnectivityIndicatorView(
     isOnline: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    addStatusBarPadding: Boolean = true,
 ) {
     val isIndicatorVisible = remember { MutableTransitionState(!isOnline) }.apply { targetState = !isOnline }
     val isStatusBarPaddingVisible = remember { MutableTransitionState(isOnline) }.apply { targetState = isOnline }
@@ -68,13 +77,45 @@ fun ConnectivityIndicatorView(
         Indicator(modifier)
     }
 
-    // Show missing status bar padding when the indicator is not visible
+    if (addStatusBarPadding) {
+        // Show missing status bar padding when the indicator is not visible
+        AnimatedVisibility(
+            visibleState = isStatusBarPaddingVisible,
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically(),
+        ) {
+            StatusBarPaddingSpacer(modifier)
+        }
+    }
+}
+
+@Composable
+fun ConnectivityIndicatorContainer(
+    isOnline: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable (Dp) -> Unit,
+) {
+    val isIndicatorVisible = remember { MutableTransitionState(!isOnline) }.apply { targetState = !isOnline }
+
+    val statusBarTopPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val target = remember(isOnline) { if (isOnline) 0.dp else statusBarTopPadding }
+    val animationState by animateDpAsState(
+        targetValue = target,
+        animationSpec = spring(
+            stiffness = Spring.StiffnessMediumLow,
+            visibilityThreshold = 1.dp,
+        ),
+    )
+
+    content(animationState)
+
+    // Display the network indicator with an animation
     AnimatedVisibility(
-        visibleState = isStatusBarPaddingVisible,
+        visibleState = isIndicatorVisible,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
-        StatusBarPaddingSpacer(modifier)
+        Indicator(modifier)
     }
 }
 

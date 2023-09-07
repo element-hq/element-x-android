@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -33,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +54,7 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import io.element.android.features.leaveroom.api.LeaveRoomView
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.features.roomlist.impl.components.RequestVerificationHeader
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
@@ -71,6 +74,8 @@ import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import io.element.android.libraries.designsystem.R as DrawableR
 
 @Composable
@@ -85,8 +90,19 @@ fun RoomListView(
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+    var hasNetworkConnectionTest by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        launch {
+            while (isActive) {
+                hasNetworkConnectionTest = !hasNetworkConnectionTest
+                kotlinx.coroutines.delay(4000)
+            }
+        }
+    }
+    ConnectivityIndicatorContainer(
+//            isOnline = state.hasNetworkConnection,
+            isOnline = hasNetworkConnectionTest,
+        ) { topPadding ->
         Box {
             fun onRoomLongClicked(
                 roomListRoomSummary: RoomListRoomSummary
@@ -105,6 +121,7 @@ fun RoomListView(
             LeaveRoomView(state = state.leaveRoomState)
 
             RoomListContent(
+                modifier = Modifier.padding(top = topPadding),
                 state = state,
                 onVerifyClicked = onVerifyClicked,
                 onRoomClicked = onRoomClicked,
