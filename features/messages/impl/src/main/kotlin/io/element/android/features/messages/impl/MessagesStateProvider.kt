@@ -55,7 +55,9 @@ fun aMessagesState() = MessagesState(
     userHasPermissionToSendMessage = true,
     userHasPermissionToRedact = false,
     composerState = aMessageComposerState().copy(
-        richTextEditorState = RichTextEditorState("Hello", fake = true),
+        richTextEditorState = RichTextEditorState("Hello", fake = true).apply {
+            requestFocus()
+        },
         isFullScreen = false,
         mode = MessageComposerMode.Normal("Hello"),
     ),

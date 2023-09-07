@@ -412,21 +412,33 @@ private fun BoxScope.SendButton(
 internal fun TextComposerSimplePreview() = ElementPreview {
     Column {
         TextComposer(
-            RichTextEditorState("", fake = true),
+            RichTextEditorState("", fake = true).apply { requestFocus() },
             canSendMessage = false,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
         )
         TextComposer(
-            RichTextEditorState("A message", fake = true),
+            RichTextEditorState("A message", fake = true).apply { requestFocus() },
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
         )
         TextComposer(
-            RichTextEditorState("A message\nWith several lines\nTo preview larger textfields and long lines with overflow", fake = true),
+            RichTextEditorState(
+                "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+                fake = true
+            ).apply {
+                requestFocus()
+            },
+            canSendMessage = true,
+            onSendMessage = {},
+            composerMode = MessageComposerMode.Normal(""),
+            onResetComposerMode = {},
+        )
+        TextComposer(
+            RichTextEditorState("A message without focus", fake = true),
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
@@ -439,7 +451,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
-        RichTextEditorState("A message", fake = true),
+        RichTextEditorState("A message", fake = true).apply { requestFocus() },
         canSendMessage = true,
         onSendMessage = {},
         composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
@@ -517,7 +529,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
         )
         TextComposer(
-            RichTextEditorState("A message", fake = true),
+            RichTextEditorState("A message", fake = true).apply { requestFocus() },
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(

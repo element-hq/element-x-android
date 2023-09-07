@@ -108,9 +108,6 @@ class MessageComposerPresenter @Inject constructor(
             mutableStateOf(false)
         }
         val richTextEditorState = richTextEditorStateFactory.create()
-        val hasFocus = remember(richTextEditorState.hasFocus) {
-            derivedStateOf { richTextEditorState.hasFocus }
-        }
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
@@ -203,7 +200,6 @@ class MessageComposerPresenter @Inject constructor(
         return MessageComposerState(
             richTextEditorState = richTextEditorState,
             isFullScreen = isFullScreen.value,
-            hasFocus = hasFocus.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             canShareLocation = canShareLocation.value,

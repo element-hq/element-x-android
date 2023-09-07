@@ -26,7 +26,6 @@ import kotlinx.collections.immutable.ImmutableList
 data class MessageComposerState(
     val richTextEditorState: RichTextEditorState,
     val isFullScreen: Boolean,
-    val hasFocus: Boolean,
     val mode: MessageComposerMode,
     val showAttachmentSourcePicker: Boolean,
     val canShareLocation: Boolean,
@@ -35,6 +34,7 @@ data class MessageComposerState(
     val eventSink: (MessageComposerEvents) -> Unit,
 ) {
     val canSendMessage: Boolean = richTextEditorState.messageHtml.isNotEmpty()
+    val hasFocus: Boolean = richTextEditorState.hasFocus
 }
 
 @Immutable

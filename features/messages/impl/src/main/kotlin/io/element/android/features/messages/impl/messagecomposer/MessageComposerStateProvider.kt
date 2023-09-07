@@ -28,18 +28,17 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 }
 
 fun aMessageComposerState(
+    requestFocus: Boolean = true,
     composerState: RichTextEditorState = RichTextEditorState("", fake = true),
     isFullScreen: Boolean = false,
-    hasFocus: Boolean = false,
     mode: MessageComposerMode = MessageComposerMode.Normal(content = ""),
     showAttachmentSourcePicker: Boolean = false,
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
 ) = MessageComposerState(
-    richTextEditorState = composerState,
+    richTextEditorState = composerState.apply { if(requestFocus) requestFocus() },
     isFullScreen = isFullScreen,
-    hasFocus = hasFocus,
     mode = mode,
     showAttachmentSourcePicker = showAttachmentSourcePicker,
     canShareLocation = canShareLocation,
