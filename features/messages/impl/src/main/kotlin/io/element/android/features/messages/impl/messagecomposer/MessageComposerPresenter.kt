@@ -110,6 +110,7 @@ class MessageComposerPresenter @Inject constructor(
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
+        var showTextFormatting: Boolean by remember { mutableStateOf(false) }
 
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
@@ -190,6 +191,10 @@ class MessageComposerPresenter @Inject constructor(
                         ongoingSendAttachmentJob.value == null
                     }
                 }
+                is MessageComposerEvents.ToggleTextFormatting -> {
+                    showAttachmentSourcePicker = false
+                    showTextFormatting = event.enabled
+                }
                 is MessageComposerEvents.Error -> {
                     analyticsService.trackError(event.error)
                 }
@@ -201,6 +206,7 @@ class MessageComposerPresenter @Inject constructor(
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
+            showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,

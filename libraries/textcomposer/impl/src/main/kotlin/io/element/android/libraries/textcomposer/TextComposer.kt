@@ -18,14 +18,13 @@ package io.element.android.libraries.textcomposer
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -35,12 +34,14 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material.icons.rounded.Cancel
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,21 +52,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension.Companion.fillToConstraints
+import androidx.constraintlayout.compose.Visibility
 import io.element.android.libraries.designsystem.VectorIcons
-import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
@@ -73,12 +76,17 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.textcomposer.components.FormattingOption
+import io.element.android.libraries.textcomposer.components.FormattingOptionState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import io.element.android.wysiwyg.view.models.InlineFormat
 import kotlinx.coroutines.android.awaitFrame
+import uniffi.wysiwyg_composer.ActionState
+import uniffi.wysiwyg_composer.ComposerAction
 
 @Composable
 fun TextComposer(
@@ -86,112 +94,130 @@ fun TextComposer(
     composerMode: MessageComposerMode,
     canSendMessage: Boolean,
     modifier: Modifier = Modifier,
+    showTextFormatting: Boolean = false,
     onRequestFocus: () -> Unit = {},
     onSendMessage: (Message) -> Unit = {},
     onResetComposerMode: () -> Unit = {},
     onAddAttachment: () -> Unit = {},
+    onDismissTextFormatting: () -> Unit = {},
     onError: (Throwable) -> Unit = {},
 ) {
-    Row(
-        modifier.padding(
-            horizontal = 12.dp,
-            vertical = 8.dp
-        ), verticalAlignment = Alignment.Bottom
-    ) {
-        AttachmentButton(onClick = onAddAttachment, modifier = Modifier.padding(vertical = 6.dp))
-        Spacer(modifier = Modifier.width(12.dp))
-        val roundCornerSmall = 20.dp.applyScaleUp()
-        val roundCornerLarge = 28.dp.applyScaleUp()
+    val onSendClicked = {
+        onSendMessage(Message(html = state.messageHtml, markdown = state.messageMarkdown))
+    }
 
-        val roundedCornerSize = remember(state.lineCount, composerMode) {
-            if (state.lineCount > 1 || composerMode is MessageComposerMode.Special) {
-                roundCornerSmall
-            } else {
-                roundCornerLarge
-            }
-        }
-        val roundedCornerSizeState = animateDpAsState(
-            targetValue = roundedCornerSize,
-            animationSpec = tween(
-                durationMillis = 100,
+    Column(
+        modifier = modifier
+            .padding(
+                start = 3.dp,
+                end = 6.dp,
+                top = 8.dp,
+                bottom = 5.dp,
             )
-        )
-        val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
-        val minHeight = 42.dp.applyScaleUp()
-        val colors = ElementTheme.colors
-        val bgColor = colors.bgSubtleSecondary
-
-        val borderColor by remember(state.hasFocus, colors) {
-            derivedStateOf {
-                if (state.hasFocus) colors.borderDisabled else bgColor
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(roundedCorners)
-                .background(color = bgColor)
-                .border(1.dp, borderColor, roundedCorners)
+            .fillMaxWidth(),
+    ) {
+        ConstraintLayout(
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            if (composerMode is MessageComposerMode.Special) {
-                ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
+            val (composeOptions, textInput, sendButton) = createRefs()
+            val showComposerOptionsButton by remember(showTextFormatting) {
+                derivedStateOf { !showTextFormatting }
             }
-            val defaultTypography = ElementTheme.typography.fontBodyLgRegular
-
-            Box {
-                Box(
-                    modifier = Modifier
-                        .heightIn(min = minHeight)
-                        .background(color = bgColor, shape = roundedCorners)
-                        .padding(
-                            PaddingValues(
-                                top = 4.dp.applyScaleUp(),
-                                bottom = 4.dp.applyScaleUp(),
-                                start = 12.dp.applyScaleUp(),
-                                end = 42.dp.applyScaleUp()
-                            )
-                        ),
-                    contentAlignment = Alignment.CenterStart,
-                ) {
-
-                    // Placeholder
-                    if (state.messageHtml.isEmpty()) {
-                        Text(
-                            stringResource(CommonStrings.common_message),
-                            style = defaultTypography.copy(
-                                color = ElementTheme.colors.textDisabled,
-                            ),
-                        )
-                    }
-
-                    RichTextEditor(
-                        state = state,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        style = RichTextEditorDefaults.style(
-                            text = RichTextEditorDefaults.textStyle(
-                                color = if (state.hasFocus) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.secondary
-                                }
-                            ),
-                            cursor = RichTextEditorDefaults.cursorStyle(
-                                color = ElementTheme.colors.iconAccentTertiary,
-                            )
-                        ),
-                        onError = onError
-                    )
-                }
-
-                SendButton(
-                    canSendMessage = canSendMessage,
-                    onClick = { onSendMessage(Message(html = state.messageHtml, markdown = state.messageMarkdown)) },
-                    composerMode = composerMode,
-                    modifier = Modifier.padding(end = 6.dp.applyScaleUp(), bottom = 6.dp.applyScaleUp())
+            IconButton(
+                modifier = Modifier
+                    .size(48.dp)
+                    .constrainAs(composeOptions) {
+                        start.linkTo(parent.start)
+                        bottom.linkTo(parent.bottom)
+                        visibility = if (showComposerOptionsButton) Visibility.Visible else Visibility.Gone
+                    },
+                onClick = onAddAttachment
+            ) {
+                Icon(
+                    modifier = Modifier.size(30.dp.applyScaleUp()),
+                    painter = rememberVectorPainter(Icons.Rounded.AddCircle),
+                    contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
+                    tint = ElementTheme.colors.iconPrimary,
                 )
             }
+            val roundCornerSmall = 20.dp.applyScaleUp()
+            val roundCornerLarge = 28.dp.applyScaleUp()
+
+            val roundedCornerSize = remember(state.lineCount, composerMode) {
+                if (state.lineCount > 1 || composerMode is MessageComposerMode.Special) {
+                    roundCornerSmall
+                } else {
+                    roundCornerLarge
+                }
+            }
+            val roundedCornerSizeState = animateDpAsState(
+                targetValue = roundedCornerSize,
+                animationSpec = tween(
+                    durationMillis = 100,
+                )
+            )
+            val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
+            val colors = ElementTheme.colors
+            val bgColor = colors.bgSubtleSecondary
+
+            val borderColor by remember(state.hasFocus, colors) {
+                derivedStateOf {
+                    if (state.hasFocus) colors.borderDisabled else bgColor
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .constrainAs(textInput) {
+                        start.linkTo(composeOptions.end, margin = 3.dp, goneMargin = 9.dp)
+                        end.linkTo(sendButton.start, margin = 6.dp, goneMargin = 6.dp)
+                        bottom.linkTo(parent.bottom)
+                        width = fillToConstraints
+                    }
+                    .padding(vertical = 3.dp)
+                    .fillMaxWidth()
+                    .clip(roundedCorners)
+                    .background(color = bgColor)
+                    .border(1.dp, borderColor, roundedCorners)
+            ) {
+                if (composerMode is MessageComposerMode.Special) {
+                    ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
+                }
+
+                TextInput(
+                    state = state,
+                    roundedCorners = roundedCorners,
+                    bgColor = bgColor,
+                    onError = onError,
+                )
+            }
+
+            SendButton(
+                canSendMessage = canSendMessage,
+                onClick = onSendClicked,
+                composerMode = composerMode,
+                modifier = Modifier
+                    .constrainAs(sendButton) {
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                        visibility = if (!showTextFormatting) Visibility.Visible else Visibility.Gone
+                    }
+            )
+        }
+
+        if (showTextFormatting) {
+            TextFormatting(
+                state = state,
+                onDismiss = onDismissTextFormatting,
+                sendButton = { modifier ->
+                    SendButton(
+                        canSendMessage = canSendMessage,
+                        onClick = onSendClicked,
+                        composerMode = composerMode,
+                        modifier = modifier
+                    )
+                },
+            )
         }
     }
 
@@ -207,6 +233,192 @@ fun TextComposer(
         }
     }
 }
+
+@Composable
+private fun TextInput(
+    state: RichTextEditorState,
+    roundedCorners: RoundedCornerShape,
+    bgColor: Color,
+    modifier: Modifier = Modifier,
+    onError: (Throwable) -> Unit = {},
+) {
+    val minHeight = 42.dp.applyScaleUp()
+    val defaultTypography = ElementTheme.typography.fontBodyLgRegular
+    Box(
+        modifier = modifier
+            .heightIn(min = minHeight)
+            .background(color = bgColor, shape = roundedCorners)
+            .padding(
+                PaddingValues(
+                    top = 4.dp.applyScaleUp(),
+                    bottom = 4.dp.applyScaleUp(),
+                    start = 12.dp.applyScaleUp(),
+                    end = 42.dp.applyScaleUp()
+                )
+            ),
+        contentAlignment = Alignment.CenterStart,
+    ) {
+
+        // Placeholder
+        if (state.messageHtml.isEmpty()) {
+            Text(
+                stringResource(CommonStrings.common_message),
+                style = defaultTypography.copy(
+                    color = ElementTheme.colors.textDisabled,
+                ),
+            )
+        }
+
+        RichTextEditor(
+            state = state,
+            modifier = Modifier
+                .fillMaxWidth(),
+            style = RichTextEditorDefaults.style(
+                text = RichTextEditorDefaults.textStyle(
+                    color = if (state.hasFocus) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.secondary
+                    }
+                ),
+                cursor = RichTextEditorDefaults.cursorStyle(
+                    color = ElementTheme.colors.iconAccentTertiary,
+                )
+            ),
+            onError = onError
+        )
+    }
+}
+
+@Composable
+private fun TextFormatting(
+    state: RichTextEditorState,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+    sendButton: @Composable (modifier: Modifier) -> Unit,
+) {
+    ConstraintLayout(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        val (close, formatting, send) = createRefs()
+
+        IconButton(
+            modifier = Modifier
+                .size(48.dp)
+                .constrainAs(close) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                },
+            onClick = onDismiss
+        ) {
+            Icon(
+                modifier = Modifier.size(30.dp.applyScaleUp()),
+                painter = rememberVectorPainter(Icons.Rounded.Cancel),
+                contentDescription = stringResource(CommonStrings.action_close),
+                tint = ElementTheme.colors.iconPrimary,
+            )
+        }
+
+        val scrollState = rememberScrollState()
+        Row(
+            modifier = Modifier
+                .constrainAs(formatting) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(close.end, margin = 3.dp)
+                    end.linkTo(send.start, margin = 20.dp)
+                    width = fillToConstraints
+                }
+                .horizontalScroll(scrollState),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            FormattingOption(
+                state = state.actions[ComposerAction.BOLD].toButtonState(),
+                onClick = { state.toggleInlineFormat(InlineFormat.Bold) },
+                imageVector = ImageVector.vectorResource(VectorIcons.Bold),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_format_bold)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.ITALIC].toButtonState(),
+                onClick = { state.toggleInlineFormat(InlineFormat.Italic) },
+                imageVector = ImageVector.vectorResource(VectorIcons.Italic),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_format_italic)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.UNDERLINE].toButtonState(),
+                onClick = { state.toggleInlineFormat(InlineFormat.Underline) },
+                imageVector = ImageVector.vectorResource(VectorIcons.Underline),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_format_underline)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.STRIKE_THROUGH].toButtonState(),
+                onClick = { state.toggleInlineFormat(InlineFormat.StrikeThrough) },
+                imageVector = ImageVector.vectorResource(VectorIcons.Strikethrough),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_format_strikethrough)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.UNORDERED_LIST].toButtonState(),
+                onClick = { state.toggleList(ordered = false) },
+                imageVector = ImageVector.vectorResource(VectorIcons.BulletList),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_bullet_list)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.ORDERED_LIST].toButtonState(),
+                onClick = { state.toggleList(ordered = true) },
+                imageVector = ImageVector.vectorResource(VectorIcons.NumberedList),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_numbered_list)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.INDENT].toButtonState(),
+                onClick = { state.indent() },
+                imageVector = ImageVector.vectorResource(VectorIcons.IndentIncrease),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_indent)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.UNINDENT].toButtonState(),
+                onClick = { state.unindent() },
+                imageVector = ImageVector.vectorResource(VectorIcons.IndentDecrease),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_unindent)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.INLINE_CODE].toButtonState(),
+                onClick = { state.toggleInlineFormat(InlineFormat.InlineCode) },
+                imageVector = ImageVector.vectorResource(VectorIcons.InlineCode),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_inline_code)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.CODE_BLOCK].toButtonState(),
+                onClick = { state.toggleCodeBlock() },
+                imageVector = ImageVector.vectorResource(VectorIcons.CodeBlock),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_code_block)
+            )
+            FormattingOption(
+                state = state.actions[ComposerAction.QUOTE].toButtonState(),
+                onClick = { state.toggleQuote() },
+                imageVector = ImageVector.vectorResource(VectorIcons.Quote),
+                contentDescription = stringResource(CommonStrings.rich_text_editor_quote)
+            )
+        }
+
+        sendButton(
+            Modifier.constrainAs(send) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                end.linkTo(parent.end)
+            },
+        )
+    }
+}
+
+private fun ActionState?.toButtonState(): FormattingOptionState =
+    when (this) {
+        ActionState.ENABLED -> FormattingOptionState.Default
+        ActionState.REVERSED -> FormattingOptionState.Selected
+        ActionState.DISABLED, null -> FormattingOptionState.Disabled
+    }
 
 @Composable
 private fun ComposerModeView(
@@ -341,53 +553,17 @@ private fun ReplyToModeView(
 }
 
 @Composable
-private fun AttachmentButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        modifier
-            .size(30.dp.applyScaleUp())
-            .clickable(onClick = onClick),
-        shape = CircleShape,
-        color = ElementTheme.colors.iconPrimary
-    ) {
-        Image(
-            modifier = Modifier.size(12.5f.dp.applyScaleUp()),
-            painter = painterResource(R.drawable.ic_add_attachment),
-            contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
-            contentScale = ContentScale.Inside,
-            colorFilter = ColorFilter.tint(
-                LocalContentColor.current
-            )
-        )
-    }
-}
-
-@Composable
-private fun BoxScope.SendButton(
+private fun SendButton(
     canSendMessage: Boolean,
     onClick: () -> Unit,
     composerMode: MessageComposerMode,
     modifier: Modifier = Modifier,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    Box(
+    IconButton(
         modifier = modifier
-            .clip(CircleShape)
-            .background(if (canSendMessage) ElementTheme.colors.iconAccentTertiary else Color.Transparent)
-            .size(30.dp.applyScaleUp())
-            .align(Alignment.BottomEnd)
-            .applyIf(composerMode !is MessageComposerMode.Edit, ifTrue = {
-                padding(start = 1.dp.applyScaleUp()) // Center the arrow in the circle
-            })
-            .clickable(
-                enabled = canSendMessage,
-                interactionSource = interactionSource,
-                indication = rememberRipple(bounded = false),
-                onClick = onClick,
-            ),
-        contentAlignment = Alignment.Center,
+            .size(48.dp.applyScaleUp()),
+        onClick = onClick,
+        enabled = canSendMessage,
     ) {
         val iconId = when (composerMode) {
             is MessageComposerMode.Edit -> R.drawable.ic_tick
@@ -397,13 +573,22 @@ private fun BoxScope.SendButton(
             is MessageComposerMode.Edit -> stringResource(CommonStrings.action_edit)
             else -> stringResource(CommonStrings.action_send)
         }
-        Icon(
-            modifier = Modifier.size(16.dp.applyScaleUp()),
-            resourceId = iconId,
-            contentDescription = contentDescription,
-            // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
-            tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled
-        )
+        Box(
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(36.dp.applyScaleUp())
+                .background(if (canSendMessage) ElementTheme.colors.iconAccentTertiary else Color.Transparent)
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(16.dp.applyScaleUp())
+                    .align(Alignment.Center),
+                resourceId = iconId,
+                contentDescription = contentDescription,
+                // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
+                tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled
+            )
+        }
     }
 }
 
@@ -443,6 +628,31 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
+        )
+    }
+}
+
+@DayNightPreviews
+@Composable
+internal fun TextComposerFormattingPreview() = ElementPreview {
+    Column {
+        TextComposer(
+            RichTextEditorState("", fake = true),
+            canSendMessage = false,
+            showTextFormatting = true,
+            composerMode = MessageComposerMode.Normal(""),
+        )
+        TextComposer(
+            RichTextEditorState("A message", fake = true),
+            canSendMessage = true,
+            showTextFormatting = true,
+            composerMode = MessageComposerMode.Normal(""),
+        )
+        TextComposer(
+            RichTextEditorState("A message\nWith several lines\nTo preview larger textfields and long lines with overflow", fake = true),
+            canSendMessage = true,
+            showTextFormatting = true,
+            composerMode = MessageComposerMode.Normal(""),
         )
     }
 }
