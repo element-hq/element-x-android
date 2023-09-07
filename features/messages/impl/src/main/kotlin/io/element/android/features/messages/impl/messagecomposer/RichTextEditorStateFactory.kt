@@ -17,6 +17,8 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Composable
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.compose.rememberRichTextEditorState
 import javax.inject.Inject
@@ -26,6 +28,7 @@ interface RichTextEditorStateFactory {
     fun create(): RichTextEditorState
 }
 
+@ContributesBinding(AppScope::class)
 class DefaultRichTextEditorStateFactory @Inject constructor() : RichTextEditorStateFactory {
     @Composable
     override fun create(): RichTextEditorState {
