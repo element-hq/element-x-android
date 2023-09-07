@@ -70,7 +70,7 @@ class ActionListPresenter @Inject constructor(
         return ActionListState(
             target = target.value,
             displayEmojiReactions = displayEmojiReactions,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 

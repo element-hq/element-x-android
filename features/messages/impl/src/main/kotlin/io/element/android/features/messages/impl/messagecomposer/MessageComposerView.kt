@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.TextComposer
 
 @Composable
@@ -36,7 +37,7 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.ToggleFullScreenState)
     }
 
-    fun sendMessage(message: String) {
+    fun sendMessage(message: Message) {
         state.eventSink(MessageComposerEvents.SendMessage(message))
     }
 
@@ -48,12 +49,8 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.CloseSpecialMode)
     }
 
-    fun onComposerTextChange(text: String) {
-        state.eventSink(MessageComposerEvents.UpdateText(text))
-    }
-
-    fun onFocusChanged(hasFocus: Boolean) {
-        state.eventSink(MessageComposerEvents.FocusChanged(hasFocus))
+    fun onError(error: Throwable) {
+        state.eventSink(MessageComposerEvents.Error(error))
     }
 
     Box(modifier = modifier) {
@@ -64,14 +61,14 @@ fun MessageComposerView(
         )
 
         TextComposer(
+            state = state.richTextEditorState,
+            canSendMessage = state.canSendMessage,
+            onRequestFocus = { state.richTextEditorState.requestFocus() },
             onSendMessage = ::sendMessage,
             composerMode = state.mode,
             onResetComposerMode = ::onCloseSpecialMode,
-            onComposerTextChange = ::onComposerTextChange,
             onAddAttachment = ::onAddAttachment,
-            onFocusChanged = ::onFocusChanged,
-            composerCanSendMessage = state.isSendButtonVisible,
-            composerText = state.text
+            onError = ::onError,
         )
     }
 }

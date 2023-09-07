@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model.event
+package io.element.android.features.messages.textcomposer
 
-import org.jsoup.nodes.Document
+import androidx.compose.runtime.Composable
+import io.element.android.features.messages.impl.messagecomposer.RichTextEditorStateFactory
+import io.element.android.wysiwyg.compose.RichTextEditorState
+import io.element.android.wysiwyg.compose.rememberRichTextEditorState
 
-sealed interface TimelineItemTextBasedContent : TimelineItemEventContent {
-    val body: String
-    val htmlDocument: Document?
-    val isEdited: Boolean
-    val htmlBody: String?
-        get() = htmlDocument?.body()?.html()
+class TestRichTextEditorStateFactory : RichTextEditorStateFactory {
+    @Composable
+    override fun create(): RichTextEditorState {
+        return rememberRichTextEditorState("", fake = true)
+    }
 }
