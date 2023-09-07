@@ -56,10 +56,14 @@ interface MatrixRoom : Closeable {
      */
     val membersStateFlow: StateFlow<MatrixRoomMembersState>
 
+    val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState>
+
     /**
      * Try to load the room members and update the membersFlow.
      */
     suspend fun updateMembers(): Result<Unit>
+
+    suspend fun updateRoomNotificationSettings(): Result<Unit>
 
     val syncUpdateFlow: StateFlow<Long>
 
@@ -75,11 +79,11 @@ interface MatrixRoom : Closeable {
 
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
-    suspend fun sendMessage(message: String): Result<Unit>
+    suspend fun sendMessage(body: String, htmlBody: String): Result<Unit>
 
-    suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, message: String): Result<Unit>
+    suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String): Result<Unit>
 
-    suspend fun replyMessage(eventId: EventId, message: String): Result<Unit>
+    suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 

@@ -144,22 +144,6 @@ sonar {
 }
 
 allprojects {
-    val projectDir = projectDir.toString()
-    sonar {
-        properties {
-            // Note: folders `kotlin` are not supported (yet), I asked on their side: https://community.sonarsource.com/t/82824
-            // As a workaround provide the path in `sonar.sources` property.
-            if (File("$projectDir/src/main/kotlin").exists()) {
-                property("sonar.sources", "src/main/kotlin")
-            }
-            if (File("$projectDir/src/test/kotlin").exists()) {
-                property("sonar.tests", "src/test/kotlin")
-            }
-        }
-    }
-}
-
-allprojects {
     tasks.withType<Test> {
         maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
 

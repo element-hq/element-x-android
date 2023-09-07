@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,7 +62,7 @@ class TimelinePresenter @Inject constructor(
             mutableStateOf(null)
         }
 
-        val lastReadReceiptIndex = rememberSaveable { mutableStateOf(Int.MAX_VALUE) }
+        val lastReadReceiptIndex = rememberSaveable { mutableIntStateOf(Int.MAX_VALUE) }
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
         val timelineItems by timelineItemsFactory.collectItemsAsState()
@@ -119,7 +120,7 @@ class TimelinePresenter @Inject constructor(
             paginationState = paginationState,
             timelineItems = timelineItems,
             hasNewItems = hasNewItems.value,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 

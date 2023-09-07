@@ -61,7 +61,7 @@ class ReactionSummaryPresenter @Inject constructor(
         }
         return ReactionSummaryState(
             target = targetWithAvatars.value,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 

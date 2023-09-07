@@ -22,4 +22,6 @@ sealed interface TimelineItemTextBasedContent : TimelineItemEventContent {
     val body: String
     val htmlDocument: Document?
     val isEdited: Boolean
+    val htmlBody: String?
+        get() = htmlDocument?.body()?.html()
 }

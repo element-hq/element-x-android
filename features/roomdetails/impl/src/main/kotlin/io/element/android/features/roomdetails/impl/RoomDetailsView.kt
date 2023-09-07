@@ -27,12 +27,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAddAlt
 import androidx.compose.material.icons.outlined.Share
@@ -75,6 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -87,6 +91,7 @@ fun RoomDetailsView(
     onShareRoom: () -> Unit,
     onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
+    openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -120,7 +125,10 @@ fun RoomDetailsView(
                         roomName = state.roomName,
                         roomAlias = state.roomAlias
                     )
-                    MainActionsSection(onShareRoom = onShareRoom)
+                    MainActionsSection(
+                        state = state,
+                        onShareRoom = onShareRoom
+                    )
                 }
 
                 is RoomDetailsType.Dm -> {
@@ -140,6 +148,12 @@ fun RoomDetailsView(
                     roomTopic = state.roomTopic,
                     onActionClicked = onActionClicked,
                 )
+            }
+
+            if (state.canShowNotificationSettings && state.roomNotificationSettings != null) {
+                NotificationSection(
+                    isDefaultMode = state.roomNotificationSettings.isDefault,
+                    openRoomNotificationSettings = openRoomNotificationSettings)
             }
 
             if (state.roomType is RoomDetailsType.Room) {
@@ -211,8 +225,21 @@ internal fun RoomDetailsTopBar(
 }
 
 @Composable
-internal fun MainActionsSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
+internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        val roomNotificationSettings = state.roomNotificationSettings
+        if (state.canShowNotificationSettings && roomNotificationSettings != null) {
+            if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
+                MainActionButton(title = stringResource(CommonStrings.common_unmute), icon = Icons.Outlined.NotificationsOff, onClick = {
+                    state.eventSink(RoomDetailsEvent.UnmuteNotification)
+                })
+            } else {
+                MainActionButton(title = stringResource(CommonStrings.common_mute), icon = Icons.Outlined.Notifications, onClick = {
+                    state.eventSink(RoomDetailsEvent.MuteNotification)
+                })
+            }
+        }
+        Spacer(modifier = Modifier.width(20.dp))
         MainActionButton(title = stringResource(R.string.screen_room_details_share_room_title), icon = Icons.Outlined.Share, onClick = onShareRoom)
     }
 }
@@ -278,6 +305,27 @@ internal fun TopicSection(
                 ),
             )
         }
+    }
+}
+
+@Composable
+internal fun NotificationSection(
+    isDefaultMode: Boolean,
+    openRoomNotificationSettings: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val subtitle = if (isDefaultMode) {
+        stringResource(R.string.screen_room_details_notification_mode_default)
+    } else {
+        stringResource(R.string.screen_room_details_notification_mode_custom)
+    }
+    PreferenceCategory(modifier = modifier) {
+        PreferenceText(
+            title = stringResource(R.string.screen_room_details_notification_title),
+            subtitle = subtitle,
+            icon = Icons.Outlined.Notifications,
+            onClick = openRoomNotificationSettings,
+        )
     }
 }
 
@@ -353,6 +401,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onShareRoom = {},
         onShareMember = {},
         openRoomMemberList = {},
+        openRoomNotificationSettings = {},
         invitePeople = {},
     )
 }

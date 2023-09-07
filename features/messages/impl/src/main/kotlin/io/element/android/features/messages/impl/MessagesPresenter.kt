@@ -60,7 +60,6 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -177,7 +176,7 @@ class MessagesPresenter @AssistedInject constructor(
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 
@@ -216,7 +215,8 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.reinviteOtherUser(inviteProgress: MutableState<Async<Unit>>) = launch(dispatchers.io) {
-        suspend {
+        inviteProgress.value = Async.Loading()
+        runCatching {
             room.updateMembers()
 
             val memberList = when (val memberState = room.membersStateFlow.value) {
@@ -229,7 +229,14 @@ class MessagesPresenter @AssistedInject constructor(
             room.inviteUserById(member.userId).onFailure { t ->
                 Timber.e(t, "Failed to reinvite DM partner")
             }.getOrThrow()
-        }.runCatchingUpdatingState(inviteProgress)
+        }.fold(
+            onSuccess = {
+                inviteProgress.value = Async.Success(Unit)
+            },
+            onFailure = {
+                inviteProgress.value = Async.Failure(it)
+            }
+        )
     }
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {
@@ -244,7 +251,9 @@ class MessagesPresenter @AssistedInject constructor(
     private fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.eventId,
-            (targetEvent.content as? TimelineItemTextBasedContent)?.body.orEmpty(),
+            (targetEvent.content as? TimelineItemTextBasedContent)?.let {
+                it.htmlBody ?: it.body
+            }.orEmpty(),
             targetEvent.transactionId,
         )
         composerState.eventSink(

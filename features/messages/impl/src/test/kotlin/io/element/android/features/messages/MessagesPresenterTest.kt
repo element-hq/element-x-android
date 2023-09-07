@@ -30,7 +30,6 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
@@ -41,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.media.FakeLocalMediaFactory
+import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
@@ -51,6 +51,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -80,6 +81,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class MessagesPresenterTest {
 
@@ -323,6 +325,7 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
             assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            skipItems(1) // back paginating
         }
     }
 
@@ -379,14 +382,14 @@ class MessagesPresenterTest {
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
-            val focusedState = consumeItemsUntilPredicate { state ->
+            initialState.composerState.richTextEditorState.requestFocus()
+            val focusedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 state.showReinvitePrompt
             }.last()
             assertThat(focusedState.showReinvitePrompt).isTrue()
             // If it's dismissed then we stop showing the alert
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
-            val dismissedState = consumeItemsUntilPredicate { state ->
+            val dismissedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 !state.showReinvitePrompt
             }.last()
             assertThat(dismissedState.showReinvitePrompt).isFalse()
@@ -403,7 +406,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -419,7 +422,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -470,7 +473,9 @@ class MessagesPresenterTest {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
-            val loadingState = awaitItem()
+            val loadingState = consumeItemsUntilPredicate { state ->
+                state.inviteProgress.isLoading()
+            }.last()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
             val newState = awaitItem()
             assertThat(newState.inviteProgress.isSuccess()).isTrue()
@@ -595,12 +600,14 @@ class MessagesPresenterTest {
             appCoroutineScope = this,
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
-            featureFlagService = FakeFeatureFlagService(),
+            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.NotificationSettings.key to true)),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
             mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
             snackbarDispatcher = SnackbarDispatcher(),
             analyticsService = FakeAnalyticsService(),
             messageComposerContext = MessageComposerContextImpl(),
+            richTextEditorStateFactory = TestRichTextEditorStateFactory(),
+
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
