@@ -18,7 +18,8 @@ package io.element.android.libraries.featureflag.api
 
 /**
  * To enable or disable a FeatureFlags, change the `defaultValue` value.
- * It will impact all the build types.
+ * Warning: to enable a flog for the release app, you MUST update the file
+ * [io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider]
  */
 enum class FeatureFlags(
     override val key: String,
@@ -40,6 +41,7 @@ enum class FeatureFlags(
     NotificationSettings(
         key = "feature.notificationsettings",
         title = "Show notification settings",
+        // Do not forget to edit StaticFeatureFlagProvider when enabling the feature.
         defaultValue = false,
     ),
 }
