@@ -131,6 +131,6 @@ class PendingIntentFactory @Inject constructor(
 
     fun createInviteListPendingIntent(sessionId: SessionId): PendingIntent {
         val intent = intentProvider.getInviteListIntent(sessionId)
-        return PendingIntentCompat.getActivity(context, 0, intent, 0, false)
+        return PendingIntentCompat.getActivity(context, 0, intent, 0, false)!!
     }
 }
