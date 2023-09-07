@@ -51,6 +51,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -80,6 +81,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class MessagesPresenterTest {
 
@@ -380,13 +382,13 @@ class MessagesPresenterTest {
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
             initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
-            val focusedState = consumeItemsUntilPredicate { state ->
+            val focusedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 state.showReinvitePrompt
             }.last()
             assertThat(focusedState.showReinvitePrompt).isTrue()
             // If it's dismissed then we stop showing the alert
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
-            val dismissedState = consumeItemsUntilPredicate { state ->
+            val dismissedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 !state.showReinvitePrompt
             }.last()
             assertThat(dismissedState.showReinvitePrompt).isFalse()
@@ -470,7 +472,9 @@ class MessagesPresenterTest {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
-            val loadingState = awaitItem()
+            val loadingState = consumeItemsUntilPredicate { state ->
+                state.inviteProgress.isLoading()
+            }.last()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
             val newState = awaitItem()
             assertThat(newState.inviteProgress.isSuccess()).isTrue()
@@ -595,7 +599,7 @@ class MessagesPresenterTest {
             appCoroutineScope = this,
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
-            featureFlagService = FakeFeatureFlagService(),
+            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.NotificationSettings.key to true)),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
             mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
             snackbarDispatcher = SnackbarDispatcher(),

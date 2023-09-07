@@ -27,16 +27,19 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.delay
@@ -58,6 +61,7 @@ class FakeMatrixRoom(
     override val isDirect: Boolean = false,
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
+    val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
     canRedact: Boolean = false,
 ) : MatrixRoom {
@@ -136,8 +140,17 @@ class FakeMatrixRoom(
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
+    override val roomNotificationSettingsStateFlow: MutableStateFlow<MatrixRoomNotificationSettingsState> =
+        MutableStateFlow(MatrixRoomNotificationSettingsState.Unknown)
+
     override suspend fun updateMembers(): Result<Unit> = simulateLongTask {
         updateMembersResult
+    }
+
+    override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
+        val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, activeMemberCount).getOrThrow()
+        roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(notificationSettings)
+        return Result.success(Unit)
     }
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)

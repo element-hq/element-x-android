@@ -56,10 +56,14 @@ interface MatrixRoom : Closeable {
      */
     val membersStateFlow: StateFlow<MatrixRoomMembersState>
 
+    val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState>
+
     /**
      * Try to load the room members and update the membersFlow.
      */
     suspend fun updateMembers(): Result<Unit>
+
+    suspend fun updateRoomNotificationSettings(): Result<Unit>
 
     val syncUpdateFlow: StateFlow<Long>
 
