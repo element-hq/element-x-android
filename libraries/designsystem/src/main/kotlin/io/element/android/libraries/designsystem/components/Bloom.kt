@@ -321,10 +321,10 @@ fun Modifier.bloom(
     } ?: return@composed this
     val pixelSize = blurSize.toIntSize()
     val clipToPixelSize = clipToSize.toIntSize()
-    val topLayerOpacity = if (isSystemInDarkTheme()) 0.2f else 0.75f
-    val bottomLayerOpacity = if (isSystemInDarkTheme()) 0.15f else 0.2f
-    val topLayerBlendMode = if (isSystemInDarkTheme()) BlendMode.SrcOver else BlendMode.Saturation
-    val bottomLayerBlendMode = BlendMode.Hardlight
+    val topLayerOpacity = if (isSystemInDarkTheme()) 0.2f else 0.8f
+    val bottomLayerOpacity = if (isSystemInDarkTheme()) 0.5f else 0.2f
+    val topLayerBlendMode = BlendMode.Color
+    val bottomLayerBlendMode = if (isSystemInDarkTheme()) BlendMode.Exclusion else BlendMode.Hardlight
     val bottomEdgeMaskHeightPixels = bottomEdgeMaskHeight.roundToPx()
     drawWithCache {
         val dstSize = if (pixelSize != IntSize.Zero) {

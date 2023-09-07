@@ -97,7 +97,7 @@ fun ConnectivityIndicatorContainer(
 ) {
     val isIndicatorVisible = remember { MutableTransitionState(!isOnline) }.apply { targetState = !isOnline }
 
-    val statusBarTopPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val statusBarTopPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 6.dp
     val target = remember(isOnline) { if (isOnline) 0.dp else statusBarTopPadding }
     val animationState by animateDpAsState(
         targetValue = target,
