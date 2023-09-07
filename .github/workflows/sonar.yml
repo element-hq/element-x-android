@@ -1,4 +1,4 @@
-name: Code Quality Checks
+name: Sonar
 
 on:
   workflow_dispatch:
