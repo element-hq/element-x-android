@@ -20,6 +20,7 @@ import android.Manifest
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,6 +32,7 @@ import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class NotificationsOptInPresenter @AssistedInject constructor(
     private val permissionsPresenterFactory: PermissionsPresenter.Factory,
@@ -56,15 +58,15 @@ class NotificationsOptInPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): NotificationsOptInState {
-        val notificationPremissionsState = postNotificationPermissionsPresenter.present()
+        val notificationsPermissionsState = postNotificationPermissionsPresenter.present()
 
         fun handleEvents(event: NotificationsOptInEvents) {
             when (event) {
                 NotificationsOptInEvents.ContinueClicked -> {
-                    if (notificationPremissionsState.permissionGranted) {
+                    if (notificationsPermissionsState.permissionGranted) {
                         callback.onNotificationsOptInFinished()
                     } else {
-                        notificationPremissionsState.eventSink(PermissionsEvents.OpenSystemDialog)
+                        notificationsPermissionsState.eventSink(PermissionsEvents.OpenSystemDialog)
                     }
                 }
                 NotificationsOptInEvents.NotNowClicked -> {
@@ -76,8 +78,15 @@ class NotificationsOptInPresenter @AssistedInject constructor(
             }
         }
 
+        LaunchedEffect(notificationsPermissionsState) {
+            if (notificationsPermissionsState.permissionGranted
+                || notificationsPermissionsState.permissionAlreadyDenied) {
+                callback.onNotificationsOptInFinished()
+            }
+        }
+
         return NotificationsOptInState(
-            notificationsPermissionState = notificationPremissionsState,
+            notificationsPermissionState = notificationsPermissionsState,
             eventSink = ::handleEvents
         )
     }

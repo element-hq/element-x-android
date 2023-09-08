@@ -64,12 +64,6 @@ fun NotificationsOptInView(
 ) {
     BackHandler(onBack = onBack)
 
-    if (state.notificationsPermissionState.permissionAlreadyDenied) {
-        LaunchedEffect(Unit) {
-            state.eventSink(NotificationsOptInEvents.NotNowClicked)
-        }
-    }
-
     HeaderFooterPage(
         modifier = modifier
             .systemBarsPadding()
