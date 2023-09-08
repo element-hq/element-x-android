@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.ui.media
 
+import android.content.Context
 import coil.ImageLoader
 import coil.decode.DataSource
 import coil.decode.ImageSource
@@ -32,8 +33,10 @@ import okio.Buffer
 import okio.Path.Companion.toOkioPath
 import timber.log.Timber
 import java.nio.ByteBuffer
+import kotlin.math.roundToLong
 
 internal class CoilMediaFetcher(
+    private val context: Context,
     private val mediaLoader: MatrixMediaLoader,
     private val mediaData: MediaRequestData?,
     private val options: Options
@@ -78,10 +81,11 @@ internal class CoilMediaFetcher(
     }
 
     private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail, options: Options): FetchResult? {
+        val density = context.resources.displayMetrics.density
         return mediaLoader.loadMediaThumbnail(
             source = mediaSource,
-            width = kind.width,
-            height = kind.height
+            width = (kind.width.toFloat() * density).roundToLong(),
+            height = (kind.height.toFloat() * density).roundToLong(),
         ).map { byteArray ->
             byteArray.asSourceResult(options)
         }.getOrNull()
@@ -102,6 +106,7 @@ internal class CoilMediaFetcher(
     }
 
     class MediaRequestDataFactory(
+        private val context: Context,
         private val client: MatrixClient
     ) :
         Fetcher.Factory<MediaRequestData> {
@@ -111,6 +116,7 @@ internal class CoilMediaFetcher(
             imageLoader: ImageLoader
         ): Fetcher {
             return CoilMediaFetcher(
+                context = context,
                 mediaLoader = client.mediaLoader,
                 mediaData = data,
                 options = options
@@ -119,6 +125,7 @@ internal class CoilMediaFetcher(
     }
 
     class AvatarFactory(
+        private val context: Context,
         private val client: MatrixClient
     ) :
         Fetcher.Factory<AvatarData> {
@@ -129,6 +136,7 @@ internal class CoilMediaFetcher(
             imageLoader: ImageLoader
         ): Fetcher {
             return CoilMediaFetcher(
+                context = context,
                 mediaLoader = client.mediaLoader,
                 mediaData = data.toMediaRequestData(),
                 options = options
