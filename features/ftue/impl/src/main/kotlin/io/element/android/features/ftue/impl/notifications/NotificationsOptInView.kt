@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.colors.AvatarColors
-import io.element.android.libraries.designsystem.colors.avatarColors
+import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -119,21 +119,21 @@ private fun NotificationsOptInContent(
         ) {
             NotificationRow(
                 avatarLetter = "M",
-                avatarColors = avatarColors("5"),
+                avatarColors = AvatarColorsProvider.provide("5", ElementTheme.isLightTheme),
                 firstRowPercent = 1f,
                 secondRowPercent = 0.4f
             )
 
             NotificationRow(
                 avatarLetter = "A",
-                avatarColors = avatarColors("1"),
+                avatarColors = AvatarColorsProvider.provide("1", ElementTheme.isLightTheme),
                 firstRowPercent = 1f,
                 secondRowPercent = 1f
             )
 
             NotificationRow(
                 avatarLetter = "T",
-                avatarColors = avatarColors("4"),
+                avatarColors = AvatarColorsProvider.provide("4", ElementTheme.isLightTheme),
                 firstRowPercent = 0.65f,
                 secondRowPercent = 0f
             )

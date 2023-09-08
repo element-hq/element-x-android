@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.colors.AvatarColors
-import io.element.android.libraries.designsystem.colors.avatarColors
+import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
@@ -53,7 +53,7 @@ fun Avatar(
         .size(avatarData.size.dp)
         .clip(CircleShape)
     if (avatarData.url.isNullOrBlank()) {
-        val avatarColors = initialAvatarColors ?: avatarColors(avatarData.id)
+        val avatarColors = initialAvatarColors ?: AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
         InitialsAvatar(
             avatarData = avatarData,
             avatarColors = avatarColors,

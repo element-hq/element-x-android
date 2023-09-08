@@ -16,9 +16,8 @@
 
 package io.element.android.libraries.designsystem.colors
 
-import androidx.compose.runtime.Composable
+import androidx.collection.LruCache
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.colors.avatarColorsDark
 import io.element.android.libraries.theme.colors.avatarColorsLight
 
@@ -27,18 +26,37 @@ data class AvatarColors(
     val foreground: Color,
 )
 
-@Composable
-fun avatarColors(userId: String): AvatarColors {
-    val hash = userId.toHash()
-    val colors = if (ElementTheme.isLightTheme) {
-        avatarColorsLight[hash]
-    } else {
-        avatarColorsDark[hash]
+object AvatarColorsProvider {
+    private val cache = LruCache<String, AvatarColors>(200)
+    private var currentThemeIsLight = true
+
+    fun provide(id: String, isLightTheme: Boolean): AvatarColors {
+        if (currentThemeIsLight != isLightTheme) {
+            currentThemeIsLight = isLightTheme
+            cache.evictAll()
+        }
+        val valueFromCache = cache.get(id)
+        return if (valueFromCache != null) {
+            valueFromCache
+        } else {
+            val colors = avatarColors(id, isLightTheme)
+            cache.put(id, colors)
+            colors
+        }
     }
-    return AvatarColors(
-        background = colors.first,
-        foreground = colors.second,
-    )
+
+    private fun avatarColors(id: String, isLightTheme: Boolean): AvatarColors {
+        val hash = id.toHash()
+        val colors = if (isLightTheme) {
+            avatarColorsLight[hash]
+        } else {
+            avatarColorsDark[hash]
+        }
+        return AvatarColors(
+            background = colors.first,
+            foreground = colors.second,
+        )
+    }
 }
 
 internal fun String.toHash(): Int {
