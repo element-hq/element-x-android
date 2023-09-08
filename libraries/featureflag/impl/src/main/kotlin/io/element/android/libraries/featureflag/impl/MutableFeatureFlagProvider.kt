@@ -18,6 +18,6 @@ package io.element.android.libraries.featureflag.impl
 
 import io.element.android.libraries.featureflag.api.Feature
 
-interface RuntimeFeatureFlagProvider : FeatureFlagProvider {
+interface MutableFeatureFlagProvider : FeatureFlagProvider {
     suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean)
 }

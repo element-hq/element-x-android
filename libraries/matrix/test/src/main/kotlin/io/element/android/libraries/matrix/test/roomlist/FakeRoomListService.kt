@@ -29,6 +29,7 @@ class FakeRoomListService : RoomListService {
     private val allRoomsLoadingStateFlow = MutableStateFlow<RoomList.LoadingState>(RoomList.LoadingState.NotLoaded)
     private val inviteRoomsLoadingStateFlow = MutableStateFlow<RoomList.LoadingState>(RoomList.LoadingState.NotLoaded)
     private val roomListStateFlow = MutableStateFlow<RoomListService.State>(RoomListService.State.Idle)
+    private val syncIndicatorStateFlow = MutableStateFlow<RoomListService.SyncIndicator>(RoomListService.SyncIndicator.Hide)
 
     suspend fun postAllRooms(roomSummaries: List<RoomSummary>) {
         allRoomSummariesFlow.emit(roomSummaries)
@@ -72,4 +73,6 @@ class FakeRoomListService : RoomListService {
     }
 
     override val state: StateFlow<RoomListService.State> = roomListStateFlow
+
+    override val syncIndicator: StateFlow<RoomListService.SyncIndicator> = syncIndicatorStateFlow
 }

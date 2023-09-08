@@ -18,7 +18,7 @@ package io.element.android.libraries.featureflag.impl
 
 import io.element.android.libraries.featureflag.api.Feature
 
-class FakeRuntimeFeatureFlagProvider(override val priority: Int) : RuntimeFeatureFlagProvider {
+class FakeMutableFeatureFlagProvider(override val priority: Int) : MutableFeatureFlagProvider {
 
     private val enabledFeatures = HashMap<String, Boolean>()
 
