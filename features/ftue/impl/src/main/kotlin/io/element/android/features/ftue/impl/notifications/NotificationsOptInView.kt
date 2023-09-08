@@ -42,8 +42,6 @@ import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.colors.AvatarColors
-import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -67,7 +65,7 @@ fun NotificationsOptInView(
         modifier = modifier
             .systemBarsPadding()
             .fillMaxSize(),
-        header = { NotificationsOptInHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),) },
+        header = { NotificationsOptInHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)) },
         footer = { NotificationsOptInFooter(state) },
     ) {
         NotificationsOptInContent(modifier = Modifier.fillMaxWidth())
@@ -119,21 +117,21 @@ private fun NotificationsOptInContent(
         ) {
             NotificationRow(
                 avatarLetter = "M",
-                avatarColors = AvatarColorsProvider.provide("5", ElementTheme.isLightTheme),
+                avatarColorsId = "5",
                 firstRowPercent = 1f,
                 secondRowPercent = 0.4f
             )
 
             NotificationRow(
                 avatarLetter = "A",
-                avatarColors = AvatarColorsProvider.provide("1", ElementTheme.isLightTheme),
+                avatarColorsId = "1",
                 firstRowPercent = 1f,
                 secondRowPercent = 1f
             )
 
             NotificationRow(
                 avatarLetter = "T",
-                avatarColors = AvatarColorsProvider.provide("4", ElementTheme.isLightTheme),
+                avatarColorsId = "4",
                 firstRowPercent = 0.65f,
                 secondRowPercent = 0f
             )
@@ -144,7 +142,7 @@ private fun NotificationsOptInContent(
 @Composable
 private fun NotificationRow(
     avatarLetter: String,
-    avatarColors: AvatarColors,
+    avatarColorsId: String,
     firstRowPercent: Float,
     secondRowPercent: Float,
     modifier: Modifier = Modifier
@@ -161,8 +159,7 @@ private fun NotificationRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Avatar(
-                avatarData = AvatarData(id = "", name = avatarLetter, size = AvatarSize.NotificationsOptIn),
-                initialAvatarColors = avatarColors,
+                avatarData = AvatarData(id = avatarColorsId, name = avatarLetter, size = AvatarSize.NotificationsOptIn),
             )
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
@@ -174,7 +171,8 @@ private fun NotificationRow(
                 )
                 if (secondRowPercent > 0f) {
                     Box(
-                        modifier = Modifier.clip(CircleShape)
+                        modifier = Modifier
+                            .clip(CircleShape)
                             .fillMaxWidth(secondRowPercent)
                             .height(10.dp)
                             .background(ElementTheme.colors.borderInteractiveSecondary)

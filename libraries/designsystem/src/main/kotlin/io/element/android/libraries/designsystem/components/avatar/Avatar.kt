@@ -32,7 +32,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import io.element.android.libraries.designsystem.colors.AvatarColors
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -46,17 +45,14 @@ import timber.log.Timber
 fun Avatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
-    initialAvatarColors: AvatarColors? = null,
     contentDescription: String? = null,
 ) {
     val commonModifier = modifier
         .size(avatarData.size.dp)
         .clip(CircleShape)
     if (avatarData.url.isNullOrBlank()) {
-        val avatarColors = initialAvatarColors ?: AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
         InitialsAvatar(
             avatarData = avatarData,
-            avatarColors = avatarColors,
             modifier = commonModifier,
         )
     } else {
@@ -89,9 +85,9 @@ private fun ImageAvatar(
 @Composable
 private fun InitialsAvatar(
     avatarData: AvatarData,
-    avatarColors: AvatarColors,
     modifier: Modifier = Modifier,
 ) {
+    val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
     Box(
         modifier.background(color = avatarColors.background)
     ) {

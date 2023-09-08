@@ -24,11 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.colors.avatarColorsLight
 
 @DayNightPreviews
@@ -44,7 +42,7 @@ internal fun UserAvatarPreview() = ElementPreview {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Note: it's OK, since the hash of "0" is 0, the hash of "1" is 1, etc.
-                Avatar(anAvatarData(), initialAvatarColors = AvatarColorsProvider.provide("$it", ElementTheme.isLightTheme))
+                Avatar(anAvatarData(id = "$it"))
                 Text(text = "Color index $it")
             }
         }
