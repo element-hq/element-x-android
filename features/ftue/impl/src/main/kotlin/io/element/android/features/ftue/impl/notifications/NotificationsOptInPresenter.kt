@@ -32,7 +32,6 @@ import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class NotificationsOptInPresenter @AssistedInject constructor(
     private val permissionsPresenterFactory: PermissionsPresenter.Factory,
