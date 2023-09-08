@@ -88,8 +88,8 @@ fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
 fun RoomListService.syncIndicator(): Flow<RoomListServiceSyncIndicator> =
     mxCallbackFlow {
         val listener = object : RoomListServiceSyncIndicatorListener {
-            override fun onUpdate(indicator: RoomListServiceSyncIndicator) {
-                trySendBlocking(indicator)
+            override fun onUpdate(syncIndicator: RoomListServiceSyncIndicator) {
+                trySendBlocking(syncIndicator)
             }
         }
         tryOrNull {
