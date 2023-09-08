@@ -207,12 +207,12 @@ fun TextComposer(
             TextFormatting(
                 state = state,
                 onDismiss = onDismissTextFormatting,
-                sendButton = { modifier ->
+                sendButton = {
                     SendButton(
                         canSendMessage = canSendMessage,
                         onClick = onSendClicked,
                         composerMode = composerMode,
-                        modifier = modifier
+                        modifier = it
                     )
                 },
             )

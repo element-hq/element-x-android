@@ -32,10 +32,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.SemanticColors
 
-internal enum class FormattingOptionState {
-    Default, Selected, Disabled
-}
-
 @Composable
 internal fun FormattingOption(
     state: FormattingOptionState,
