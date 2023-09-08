@@ -36,6 +36,7 @@ sealed interface MessageComposerEvents {
         data object Location : PickAttachmentSource
         data object Poll : PickAttachmentSource
     }
+    data class ToggleTextFormatting(val enabled: Boolean) : MessageComposerEvents
     data object CancelSendAttachment : MessageComposerEvents
     data class Error(val error: Throwable) : MessageComposerEvents
 }

@@ -49,6 +49,10 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.CloseSpecialMode)
     }
 
+    fun onDismissTextFormatting() {
+        state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = false))
+    }
+
     fun onError(error: Throwable) {
         state.eventSink(MessageComposerEvents.Error(error))
     }
@@ -66,8 +70,10 @@ fun MessageComposerView(
             onRequestFocus = { state.richTextEditorState.requestFocus() },
             onSendMessage = ::sendMessage,
             composerMode = state.mode,
+            showTextFormatting = state.showTextFormatting,
             onResetComposerMode = ::onCloseSpecialMode,
             onAddAttachment = ::onAddAttachment,
+            onDismissTextFormatting = ::onDismissTextFormatting,
             onError = ::onError,
         )
     }

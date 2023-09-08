@@ -539,6 +539,29 @@ class MessageComposerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - ToggleTextFormatting toggles text formatting`() = runTest {
+        val presenter = createPresenter(this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.showTextFormatting).isFalse()
+            initialState.eventSink(MessageComposerEvents.AddAttachment)
+            val composerOptions = awaitItem()
+            assertThat(composerOptions.showAttachmentSourcePicker).isTrue()
+            composerOptions.eventSink(MessageComposerEvents.ToggleTextFormatting(true))
+            awaitItem() // composer options closed
+            val showTextFormatting = awaitItem()
+            assertThat(showTextFormatting.showAttachmentSourcePicker).isFalse()
+            assertThat(showTextFormatting.showTextFormatting).isTrue()
+            showTextFormatting.eventSink(MessageComposerEvents.ToggleTextFormatting(false))
+            val finished = awaitItem()
+            assertThat(finished.showTextFormatting).isFalse()
+        }
+    }
+
     private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0) {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)
