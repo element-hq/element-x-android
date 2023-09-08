@@ -38,6 +38,7 @@ import org.matrix.rustcomponents.sdk.RoomListInput
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListServiceState
+import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 
@@ -106,6 +107,15 @@ class RustRoomListService(
         }
     }
 
+    override val syncIndicator: StateFlow<RoomListService.SyncIndicator> =
+        innerRoomListService.syncIndicator()
+            .map { it.toSyncIndicator() }
+            .onEach { syncIndicator ->
+                Timber.d("SyncIndicator = $syncIndicator")
+            }
+            .distinctUntilChanged()
+            .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RoomListService.SyncIndicator.Hide)
+
     override val state: StateFlow<RoomListService.State> =
         innerRoomListService.stateFlow()
             .map { it.toRoomListState() }
@@ -131,6 +141,13 @@ private fun RoomListServiceState.toRoomListState(): RoomListService.State {
         RoomListServiceState.RUNNING -> RoomListService.State.Running
         RoomListServiceState.ERROR -> RoomListService.State.Error
         RoomListServiceState.TERMINATED -> RoomListService.State.Terminated
+    }
+}
+
+private fun RoomListServiceSyncIndicator.toSyncIndicator(): RoomListService.SyncIndicator {
+    return when (this) {
+        RoomListServiceSyncIndicator.SHOW -> RoomListService.SyncIndicator.Show
+        RoomListServiceSyncIndicator.HIDE -> RoomListService.SyncIndicator.Hide
     }
 }
 
