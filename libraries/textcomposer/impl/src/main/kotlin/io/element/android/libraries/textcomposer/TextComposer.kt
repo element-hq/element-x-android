@@ -40,8 +40,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.rounded.AddCircle
-import androidx.compose.material.icons.rounded.Cancel
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -54,7 +52,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -136,7 +133,7 @@ fun TextComposer(
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp.applyScaleUp()),
-                    painter = rememberVectorPainter(Icons.Rounded.AddCircle),
+                    resourceId = R.drawable.ic_plus, // TODO Replace with design system icon when available
                     contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
                     tint = ElementTheme.colors.iconPrimary,
                 )
@@ -316,7 +313,7 @@ private fun TextFormatting(
         ) {
             Icon(
                 modifier = Modifier.size(30.dp.applyScaleUp()),
-                painter = rememberVectorPainter(Icons.Rounded.Cancel),
+                resourceId = R.drawable.ic_cancel, // TODO Replace with design system icon when available
                 contentDescription = stringResource(CommonStrings.action_close),
                 tint = ElementTheme.colors.iconPrimary,
             )
