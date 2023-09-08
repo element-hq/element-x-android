@@ -19,6 +19,7 @@ package io.element.android.libraries.designsystem.components
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.text.TextPaint
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Image
@@ -83,6 +84,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
@@ -98,6 +101,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
+import io.element.android.libraries.designsystem.colors.avatarColors
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -227,7 +231,6 @@ fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
     }
 }
 
-@OptIn(ExperimentalTextApi::class)
 @Composable
 private fun initialsBitmap(
     text: String,
@@ -236,27 +239,29 @@ private fun initialsBitmap(
     width: Dp = 32.dp,
     height: Dp = 32.dp,
 ): ImageBitmap = with(LocalDensity.current) {
-    val backgroundPaint = Paint().also { it.color = backgroundColor }
+    val backgroundPaint = remember(backgroundColor) {
+        Paint().also { it.color = backgroundColor }
+    }
     val resolver: FontFamily.Resolver = LocalFontFamilyResolver.current
-
-    val style = ElementTheme.typography.fontBodyLgMedium
-    val typeface: Typeface = remember(resolver, style) {
+    val fontSize = remember { 16.sp }
+    val typeface: Typeface = remember(resolver) {
         resolver.resolve(
-            fontFamily = style.fontFamily,
-            fontWeight = style.fontWeight ?: FontWeight.Normal,
-            fontStyle = style.fontStyle ?: FontStyle.Normal,
-            fontSynthesis = style.fontSynthesis ?: FontSynthesis.All,
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Normal,
         )
     }.value as Typeface
-    val textPaint = TextPaint().apply {
-        color = textColor.toArgb()
-        textSize = 16.sp.toPx()
-        this.typeface = typeface
+    val textPaint = remember(textColor, typeface) {
+        TextPaint().apply {
+            color = textColor.toArgb()
+            textSize = fontSize.toPx()
+            this.typeface = typeface
+        }
     }
     val textMeasurer = rememberTextMeasurer()
-    val result = textMeasurer.measure(text, TextStyle.Default.copy(fontSize = 16.sp))
-    val centerPx = IntOffset(width.roundToPx()/2, height.roundToPx()/2)
-    remember {
+    val result = remember(text) { textMeasurer.measure(text, TextStyle.Default.copy(fontSize = fontSize)) }
+    val centerPx = remember(width, height) { IntOffset(width.roundToPx()/2, height.roundToPx()/2) }
+    remember(text, width, height, backgroundColor, textColor) {
         val bitmap = Bitmap.createBitmap(width.roundToPx(), height.roundToPx(), Bitmap.Config.ARGB_8888).asImageBitmap()
         androidx.compose.ui.graphics.Canvas(bitmap).also { canvas ->
             canvas.drawCircle(centerPx.toOffset(), width.toPx() / 2, backgroundPaint)
@@ -278,32 +283,57 @@ fun Modifier.asyncBloom(
     @FloatRange(from = 0.0, to = 1.0)
     alpha: Float = 1f,
 ) = composed {
+    // Bloom only works on API 29+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
     avatarData ?: return@composed this
 
-    val painter = rememberAsyncImagePainter(
-        ImageRequest.Builder(LocalContext.current)
-            .data(avatarData)
-            .allowHardware(false)
-            .build()
-    )
-    var blurHash by remember { mutableStateOf<String?>(null) }
+    if (avatarData.url != null) {
+        val painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current)
+                .data(avatarData)
+                // Needed to be able to read pixels from the Bitmap for the hash
+                .allowHardware(false)
+                .build()
+        )
+        var blurHash by remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(avatarData) {
-        val drawable = painter.imageLoader.execute(painter.request).drawable ?: return@LaunchedEffect
-        val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@LaunchedEffect
-        blurHash = BlurHash.encode(bitmap, blurHashComponents, blurHashComponents)
+        LaunchedEffect(avatarData) {
+            val drawable = painter.imageLoader.execute(painter.request).drawable ?: return@LaunchedEffect
+            val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@LaunchedEffect
+            blurHash = BlurHash.encode(bitmap, blurHashComponents, blurHashComponents)
+        }
+
+        bloom(
+            hash = blurHash,
+            background = background,
+            blurSize = blurSize,
+            offset = offset,
+            clipToSize = clipToSize,
+            bottomEdgeMaskHeight = bottomEdgeMaskHeight,
+            bottomEdgeMaskAlpha = bottomEdgeMaskAlpha,
+            alpha = alpha,
+        )
+    } else {
+        val avatarColors = avatarColors(avatarData.id)
+        val initialsBitmap = initialsBitmap(
+            text = avatarData.initial,
+            textColor =  avatarColors.foreground,
+            backgroundColor = avatarColors.background,
+        )
+        val hash = remember(avatarData, avatarColors) {
+            BlurHash.encode(initialsBitmap.asAndroidBitmap(), blurHashComponents, blurHashComponents)
+        }
+        bloom(
+            hash = hash,
+            background = background,
+            blurSize = blurSize,
+            offset = offset,
+            clipToSize = clipToSize,
+            bottomEdgeMaskHeight = bottomEdgeMaskHeight,
+            bottomEdgeMaskAlpha = bottomEdgeMaskAlpha,
+            alpha = alpha,
+        )
     }
-
-    bloom(
-        hash = blurHash,
-        background = background,
-        blurSize = blurSize,
-        offset = offset,
-        clipToSize = clipToSize,
-        bottomEdgeMaskHeight = bottomEdgeMaskHeight,
-        bottomEdgeMaskAlpha = bottomEdgeMaskAlpha,
-        alpha = alpha,
-    )
 }
 
 fun Modifier.bloom(
@@ -318,6 +348,8 @@ fun Modifier.bloom(
     @FloatRange(from = 0.0, to = 1.0)
     alpha: Float = 1f,
 ) = composed {
+    // Bloom only works on API 29+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
     if (hash == null) return@composed this
 
     val hashedBitmap = remember(hash) {
@@ -573,15 +605,27 @@ internal fun BloomModifierPreview() {
     }
 }
 
+class InitialsColorStateProvider : PreviewParameterProvider<Int> {
+    override val values: Sequence<Int>
+        get() = sequenceOf(0, 1, 2, 3, 4, 5, 6, 7)
+}
+
 @DayNightPreviews
 @Composable
-internal fun BloomInitialsPreview() {
+internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::class) color: Int) {
     ElementPreview {
-        val bitmap = initialsBitmap(text = "F", backgroundColor = Color(0xFFFFDFC8), textColor = Color(0xFF850000))
-        Bloom(
-            bitmap = bitmap.asAndroidBitmap(),
-            background = ElementTheme.materialColors.background,
-            modifier = Modifier.size(256.dp),
+        val avatarColors = avatarColors("$color")
+        val bitmap = initialsBitmap(text = "F", backgroundColor = avatarColors.background, textColor = avatarColors.foreground)
+        val hash = BlurHash.encode(bitmap.asAndroidBitmap(), blurHashComponents, blurHashComponents)
+        Box(
+            modifier = Modifier.size(256.dp)
+                .bloom(
+                    hash = hash,
+                    background = ElementTheme.materialColors.background,
+                    blurSize = DpSize(256.dp, 256.dp),
+//                    offset = DpOffset.Zero,
+                ),
+            contentAlignment = Alignment.Center
 //            blurSize = DpSize(128.dp, 128.dp)
         ) {
             Image(
