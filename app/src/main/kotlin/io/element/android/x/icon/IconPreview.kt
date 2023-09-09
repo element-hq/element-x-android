@@ -32,8 +32,8 @@ internal fun IconPreview(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
-        Image(painter = painterResource(id = R.mipmap.ic_launcher_background), contentDescription = null)
-        Image(painter = painterResource(id = R.mipmap.ic_launcher_foreground), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_launcher_bunny), contentDescription = null)
     }
 }
 
@@ -43,7 +43,7 @@ internal fun RoundIconPreview(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.clip(shape = CircleShape)) {
-        Image(painter = painterResource(id = R.mipmap.ic_launcher_background), contentDescription = null)
-        Image(painter = painterResource(id = R.mipmap.ic_launcher_foreground), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_launcher_bunny), contentDescription = null)
     }
 }
