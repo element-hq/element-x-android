@@ -16,32 +16,10 @@
 
 package io.element.android.libraries.designsystem.colors
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.colors.avatarColorsDark
-import io.element.android.libraries.theme.colors.avatarColorsLight
 
 data class AvatarColors(
     val background: Color,
     val foreground: Color,
 )
-
-@Composable
-fun avatarColors(userId: String): AvatarColors {
-    val hash = userId.toHash()
-    val colors = if (ElementTheme.isLightTheme) {
-        avatarColorsLight[hash]
-    } else {
-        avatarColorsDark[hash]
-    }
-    return AvatarColors(
-        background = colors.first,
-        foreground = colors.second,
-    )
-}
-
-internal fun String.toHash(): Int {
-    return toList().sumOf { it.code } % avatarColorsLight.size
-}
 
