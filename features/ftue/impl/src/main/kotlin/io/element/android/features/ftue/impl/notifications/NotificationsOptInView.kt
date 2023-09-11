@@ -32,7 +32,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,12 +62,6 @@ fun NotificationsOptInView(
     modifier: Modifier = Modifier,
 ) {
     BackHandler(onBack = onBack)
-
-    if (state.notificationsPermissionState.permissionAlreadyDenied) {
-        LaunchedEffect(Unit) {
-            state.eventSink(NotificationsOptInEvents.NotNowClicked)
-        }
-    }
 
     HeaderFooterPage(
         modifier = modifier
