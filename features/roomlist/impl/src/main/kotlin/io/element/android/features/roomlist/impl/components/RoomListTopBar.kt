@@ -138,7 +138,6 @@ private fun DefaultRoomListTopBar(
     val avatarData by remember(matrixUser) {
         derivedStateOf {
             matrixUser?.getAvatarData(size = AvatarSize.CurrentUserTopBar)
-                ?.copy(url = null)
         }
     }
 
