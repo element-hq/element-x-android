@@ -25,7 +25,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -41,6 +43,8 @@ import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -58,14 +62,18 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun OnBoardingView(
     state: OnBoardingState,
     modifier: Modifier = Modifier,
-    onSignInWithQrCode: () -> Unit = {},
-    onSignIn: () -> Unit = {},
-    onCreateAccount: () -> Unit = {},
+    onSignInWithQrCode: () -> Unit,
+    onSignIn: () -> Unit,
+    onCreateAccount: () -> Unit,
+    onOpenDeveloperSettings: () -> Unit,
 ) {
     OnBoardingPage(
         modifier = modifier,
         content = {
-            OnBoardingContent()
+            OnBoardingContent(
+                state = state,
+                onOpenDeveloperSettings = onOpenDeveloperSettings
+            )
         },
         footer = {
             OnBoardingButtons(
@@ -79,7 +87,11 @@ fun OnBoardingView(
 }
 
 @Composable
-private fun OnBoardingContent(modifier: Modifier = Modifier) {
+private fun OnBoardingContent(
+    state: OnBoardingState,
+    onOpenDeveloperSettings: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -119,6 +131,17 @@ private fun OnBoardingContent(modifier: Modifier = Modifier) {
                     color = ElementTheme.materialColors.secondary,
                     style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
                     textAlign = TextAlign.Center
+                )
+            }
+        }
+        if (state.isDebugBuild) {
+            IconButton(
+                modifier = Modifier.align(Alignment.TopEnd),
+                onClick = onOpenDeveloperSettings,
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = stringResource(CommonStrings.common_settings)
                 )
             }
         }
@@ -172,5 +195,11 @@ private fun OnBoardingButtons(
 internal fun OnBoardingScreenPreview(
     @PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState
 ) = ElementPreview {
-    OnBoardingView(state)
+    OnBoardingView(
+        state = state,
+        onSignInWithQrCode = {},
+        onSignIn = {},
+        onCreateAccount = {},
+        onOpenDeveloperSettings = {}
+    )
 }
