@@ -20,12 +20,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
@@ -55,10 +51,9 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.colors.avatarColors
-import io.element.android.libraries.designsystem.components.asyncBloom
+import io.element.android.libraries.designsystem.components.avatarBloom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.bloom
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.applyScaleDown
@@ -143,23 +138,23 @@ private fun DefaultRoomListTopBar(
 
     val statusBarPadding = with (LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
 
-    Box {
+    Box(modifier = modifier) {
         MediumTopAppBar(
-            modifier = modifier
+            modifier = Modifier
                 .onSizeChanged {
                     appBarHeight = it.height
                 }
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .asyncBloom(
+                .avatarBloom(
                     avatarData = avatarData,
                     background = ElementTheme.materialColors.background,
-                    blurSize = DpSize(320.dp, 320.dp),
+                    blurSize = DpSize(430.dp, 430.dp),
                     offset = DpOffset(24.dp, 24.dp + statusBarPadding),
                     clipToSize = if (appBarHeight > 0) DpSize(
-                        256.dp,
+                        430.dp,
                         appBarHeight.toDp()
                     ) else DpSize.Unspecified,
-                    bottomEdgeMaskAlpha = 1f - collapsedFraction,
+                    bottomSoftEdgeAlpha = 1f - collapsedFraction,
                     alpha = if (areSearchResultsDisplayed) 0f else 1f,
                 )
                 .statusBarsPadding(),

@@ -77,15 +77,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
@@ -93,144 +92,274 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toOffset
 import androidx.compose.ui.unit.toSize
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.colors.avatarColors
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.text.roundToPx
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlin.math.max
 
-@Composable
-fun Bloom(
-    bitmap: Bitmap,
-    background: Color,
-    modifier: Modifier = Modifier,
-    size: DpSize = DpSize.Zero,
-    content: @Composable () -> Unit,
-) {
-    val hash = remember(bitmap) { BlurHash.encode(bitmap, blurHashComponents, blurHashComponents) }
-    Bloom(
-        hash = hash,
-        background = background,
-        blurSize = size,
-        content = content,
-        modifier = modifier
+/**
+ * Default bloom configuration values.
+ */
+object BloomDefaults {
+    /**
+     * Number of components to use with BlurHash to generate the blur effect.
+     * Larger values mean more detailed blurs.
+     */
+    const val HASH_COMPONENTS = 5
+
+    /** Default bloom layers. */
+    @Composable
+    fun defaultLayers() = persistentListOf(
+        // Bottom layer
+        if (isSystemInDarkTheme()) {
+            BloomLayer(0.5f, BlendMode.Exclusion)
+        } else {
+            BloomLayer(0.2f, BlendMode.Hardlight)
+        },
+        // Top layer
+        BloomLayer(if (isSystemInDarkTheme()) 0.2f else 0.8f, BlendMode.Color),
     )
 }
 
-@Composable
-fun Bloom(
-    hash: String,
+/**
+ * Bloom layer configuration.
+ * @param alpha The alpha value to apply to the layer.
+ * @param blendMode The blend mode to apply to the layer.
+ */
+data class BloomLayer(
+    val alpha: Float,
+    val blendMode: BlendMode,
+)
+
+/**
+ * Bloom effect modifier. Applies a bloom effect to the component.
+ * @param hash The BlurHash to use as the bloom source.
+ * @param background The background color to use for the bloom effect. Since we use blend modes it must be non-transparent.
+ * @param blurSize The size of the bloom effect. If not specified the bloom effect will be the size of the component.
+ * @param offset The offset to use for the bloom effect. If not specified the bloom effect will be centered on the component.
+ * @param clipToSize The size to use for clipping the bloom effect. If not specified the bloom effect will not be clipped.
+ * @param layerConfiguration The configuration for the bloom layers. If not specified the default layers configuration will be used.
+ * @param bottomSoftEdgeHeight The height of the bottom soft edge. If not specified the bottom soft edge will not be drawn.
+ * @param bottomSoftEdgeAlpha The alpha value to apply to the bottom soft edge.
+ * @param alpha The alpha value to apply to the bloom effect.
+ */
+fun Modifier.bloom(
+    hash: String?,
     background: Color,
-    modifier: Modifier = Modifier,
-    blurSize: DpSize = DpSize.Zero,
-    clipToSize: DpSize = DpSize.Zero,
-    drawContents: Boolean = true,
-    @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f,
-    content: @Composable () -> Unit = {},
-) {
+    blurSize: DpSize = DpSize.Unspecified,
+    offset: DpOffset = DpOffset.Unspecified,
+    clipToSize: DpSize = DpSize.Unspecified,
+    layerConfiguration: ImmutableList<BloomLayer>? = null,
+    bottomSoftEdgeHeight: Dp = 40.dp,
+    @FloatRange(from = 0.0, to = 1.0)
+    bottomSoftEdgeAlpha: Float = 1.0f,
+    @FloatRange(from = 0.0, to = 1.0)
+    alpha: Float = 1f,
+) = composed {
+    val defaultLayers = BloomDefaults.defaultLayers()
+    val layers = layerConfiguration ?: defaultLayers
+    // Bloom only works on API 29+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
+    if (hash == null) return@composed this
+
     val hashedBitmap = remember(hash) {
-        BlurHash.decode(hash, blurHashComponents, blurHashComponents)?.asImageBitmap()
-    } ?: return
-    val pixelSize = blurSize.toIntSize()
-    val clipToPixelSize = clipToSize.toIntSize()
-    val topLayerOpacity = if (isSystemInDarkTheme()) 0.2f else 0.75f
-    val bottomLayerOpacity = if (isSystemInDarkTheme()) 0.15f else 0.2f
-    val topLayerBlendMode = if (isSystemInDarkTheme()) BlendMode.SrcOver else BlendMode.Saturation
-    val bottomLayerBlendMode = BlendMode.Hardlight
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .drawWithCache {
-                val dstSize = if (blurSize == DpSize.Zero) {
-                    IntSize(size.width.toInt(), size.height.toInt())
-                } else {
-                    pixelSize
+        BlurHash.decode(hash, BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)?.asImageBitmap()
+    } ?: return@composed this
+    val density = LocalDensity.current
+    val pixelSize = remember(blurSize, density) { blurSize.toIntSize(density) }
+    val clipToPixelSize = remember(clipToSize, density) { clipToSize.toIntSize(density) }
+    val bottomSoftEdgeHeightPixels = remember(bottomSoftEdgeHeight, density) { with(density) { bottomSoftEdgeHeight.roundToPx() } }
+    drawWithCache {
+        val dstSize = if (pixelSize != IntSize.Zero) {
+            pixelSize
+        } else {
+            IntSize(size.width.toInt(), size.height.toInt())
+        }
+        // Calculate where to place the center of the bloom effect
+        val centerOffset = if (offset.isSpecified) {
+            IntOffset(
+                offset.x.roundToPx(),
+                offset.y.roundToPx(),
+            )
+        } else {
+            IntOffset(
+                size.center.x.toInt(),
+                size.center.y.toInt(),
+            )
+        }
+        // Calculate the offset to draw the different layers and apply clipping
+        // This offset is applied to place the top left corner of the bloom effect
+        val layersOffset = if (offset.isSpecified) {
+            // Offsets the layers so the center of the bloom effect is at the provided offset value
+            IntOffset(
+                centerOffset.x - dstSize.width / 2,
+                centerOffset.y - dstSize.height / 2,
+            )
+        } else {
+            // Places the layers at the center of the component
+            IntOffset.Zero
+        }
+        val radius = max(dstSize.width, dstSize.height).toFloat() / 2
+        val circularGradientShader = RadialGradientShader(
+            centerOffset.toOffset(),
+            radius,
+            listOf(Color.Red, Color.Transparent),
+            listOf(0f, 1f)
+        )
+        val circularGradientBrush = ShaderBrush(circularGradientShader)
+        val bottomEdgeGradient = LinearGradientShader(
+            from = IntOffset(0, clipToPixelSize.height - bottomSoftEdgeHeightPixels).toOffset(),
+            to = IntOffset(0, clipToPixelSize.height).toOffset(),
+            listOf(Color.Transparent, background),
+            listOf(0f, 1f)
+        )
+        val bottomEdgeGradientBrush = ShaderBrush(bottomEdgeGradient)
+        onDrawBehind {
+            if (dstSize != IntSize.Zero) {
+                val circleClipPath = Path().apply {
+                    addOval(Rect(centerOffset.toOffset(), radius - 1))
                 }
-                val centerOffset = IntOffset(size.center.x.toInt(), size.center.y.toInt())
-                val radius = max(dstSize.width, dstSize.height).toFloat() / 2
-                val shader = RadialGradientShader(
-                    centerOffset.toOffset(),
-                    radius,
-                    listOf(Color.Red, Color.Transparent),
-                    listOf(0f, 1f)
-                )
-                val brush = ShaderBrush(shader)
-                val dstOffset = if (blurSize == DpSize.Zero) IntOffset.Zero else IntOffset(
-                    centerOffset.x - pixelSize.width / 2,
-                    centerOffset.y - pixelSize.height / 2
-                )
-                onDrawWithContent {
-                    if (dstSize != IntSize.Zero) {
-                        val circleClipPath = Path().apply {
-                            addOval(Rect(drawContext.size.center, radius - 1))
-                        }
+                // Clip the external radius of bloom gradient too, otherwise we have a 1px border
+                clipPath(circleClipPath, clipOp = ClipOp.Intersect) {
+                    // Draw the bloom layers
+                    drawWithLayer {
+                        // Clip rect to the provided size if needed
                         if (clipToPixelSize != IntSize.Zero) {
-                            val path = Path().apply {
-                                addRect(Rect(Offset.Zero, clipToPixelSize.toSize()))
-                            }
-                            drawContext.canvas.clipPath(path, ClipOp.Intersect)
+                            drawContext.canvas.clipRect(Rect(Offset.Zero, clipToPixelSize.toSize()), ClipOp.Intersect)
                         }
-                        // Clip external path if needed
-                        clipPath(circleClipPath, clipOp = ClipOp.Intersect) {
-                            drawWithLayer {
-                                // Draw background color for blending
-                                drawRect(background, size = pixelSize.toSize())
-                                // 25% opacity, hard light blend mode
-                                drawImage(
-                                    hashedBitmap,
-                                    srcSize = IntSize(blurHashComponents, blurHashComponents),
-                                    dstSize = dstSize,
-                                    dstOffset = dstOffset,
-                                    alpha = bottomLayerOpacity * alpha,
-                                    blendMode = bottomLayerBlendMode,
-                                )
-                                // 25% opacity, default blend mode
-                                drawImage(
-                                    hashedBitmap,
-                                    srcSize = IntSize(blurHashComponents, blurHashComponents),
-                                    dstSize = dstSize,
-                                    dstOffset = dstOffset,
-                                    alpha = topLayerOpacity * alpha,
-                                    blendMode = topLayerBlendMode,
-                                )
-                                // Erase the outer radius using the gradient brush
-                                drawCircle(brush, radius, blendMode = BlendMode.DstIn)
-                            }
+                        // Draw background color for blending
+                        drawRect(background, size = pixelSize.toSize())
+                        // Draw layers
+                        for (layer in layers) {
+                            drawImage(
+                                hashedBitmap,
+                                srcSize = IntSize(BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS),
+                                dstSize = dstSize,
+                                dstOffset = layersOffset,
+                                alpha = layer.alpha * alpha,
+                                blendMode = layer.blendMode,
+                            )
                         }
-                        if (drawContents) {
-                            drawContent()
-                        }
+                        // Mask the layers erasing the outer radius using the gradient brush
+                        drawCircle(
+                            circularGradientBrush,
+                            radius,
+                            centerOffset.toOffset(),
+                            blendMode = BlendMode.DstIn
+                        )
                     }
                 }
+                // Draw the bottom soft edge
+                drawRect(
+                    bottomEdgeGradientBrush,
+                    topLeft = IntOffset(0, clipToPixelSize.height - bottomSoftEdgeHeight.roundToPx()).toOffset(),
+                    size = IntSize(pixelSize.width, bottomSoftEdgeHeight.roundToPx()).toSize(),
+                    alpha = bottomSoftEdgeAlpha
+                )
             }
-    ) {
-        content()
+        }
     }
 }
 
-fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
-    with(drawContext.canvas.nativeCanvas) {
-        val checkPoint = saveLayer(null, null)
-        block()
-        restoreToCount(checkPoint)
+/**
+ * Bloom effect modifier for avatars. Applies a bloom effect to the component.
+ * @param avatarData The avatar data to use as the bloom source.
+ *  If the avatar data has a URL it will be used as the bloom source, otherwise the initials will be used. If `null` is passed, no bloom effect will be applied.
+ * @param background The background color to use for the bloom effect. Since we use blend modes it must be non-transparent.
+ * @param blurSize The size of the bloom effect. If not specified the bloom effect will be the size of the component.
+ * @param offset The offset to use for the bloom effect. If not specified the bloom effect will be centered on the component.
+ * @param clipToSize The size to use for clipping the bloom effect. If not specified the bloom effect will not be clipped.
+ * @param bottomSoftEdgeHeight The height of the bottom soft edge. If not specified the bottom soft edge will not be drawn.
+ * @param bottomSoftEdgeAlpha The alpha value to apply to the bottom soft edge.
+ * @param alpha The alpha value to apply to the bloom effect.
+ */
+fun Modifier.avatarBloom(
+    avatarData: AvatarData?,
+    background: Color,
+    blurSize: DpSize = DpSize.Unspecified,
+    offset: DpOffset = DpOffset.Unspecified,
+    clipToSize: DpSize = DpSize.Unspecified,
+    bottomSoftEdgeHeight: Dp = 40.dp,
+    @FloatRange(from = 0.0, to = 1.0)
+    bottomSoftEdgeAlpha: Float = 1.0f,
+    @FloatRange(from = 0.0, to = 1.0)
+    alpha: Float = 1f,
+) = composed {
+    // Bloom only works on API 29+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
+    avatarData ?: return@composed this
+
+    if (avatarData.url != null) {
+        // Request the avatar contents to use as the bloom source
+        val painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current)
+                .data(avatarData)
+                // Needed to be able to read pixels from the Bitmap for the hash
+                .allowHardware(false)
+                .build()
+        )
+        var blurHash by remember { mutableStateOf<String?>(null) }
+
+        LaunchedEffect(avatarData) {
+            val drawable = painter.imageLoader.execute(painter.request).drawable ?: return@LaunchedEffect
+            val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@LaunchedEffect
+            blurHash = BlurHash.encode(bitmap, BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+        }
+
+        bloom(
+            hash = blurHash,
+            background = background,
+            blurSize = blurSize,
+            offset = offset,
+            clipToSize = clipToSize,
+            bottomSoftEdgeHeight = bottomSoftEdgeHeight,
+            bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
+            alpha = alpha,
+        )
+    } else {
+        // There is no URL so we'll generate an avatar with the initials and use that as the bloom source
+        val avatarColors = avatarColors(avatarData.id)
+        val initialsBitmap = initialsBitmap(
+            width = avatarData.size.dp,
+            height = avatarData.size.dp,
+            text = avatarData.initial,
+            textColor =  avatarColors.foreground,
+            backgroundColor = avatarColors.background,
+        )
+        val hash = remember(avatarData, avatarColors) {
+            BlurHash.encode(initialsBitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+        }
+        bloom(
+            hash = hash,
+            background = background,
+            blurSize = blurSize,
+            offset = offset,
+            clipToSize = clipToSize,
+            bottomSoftEdgeHeight = bottomSoftEdgeHeight,
+            bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
+            alpha = alpha,
+        )
     }
 }
 
+// Used to create a Bitmap version of the initials avatar
 @Composable
 private fun initialsBitmap(
     text: String,
@@ -243,7 +372,7 @@ private fun initialsBitmap(
         Paint().also { it.color = backgroundColor }
     }
     val resolver: FontFamily.Resolver = LocalFontFamilyResolver.current
-    val fontSize = remember { 16.sp }
+    val fontSize = remember { height.toSp() / 2 }
     val typeface: Typeface = remember(resolver) {
         resolver.resolve(
             fontFamily = FontFamily.Default,
@@ -260,204 +389,19 @@ private fun initialsBitmap(
     }
     val textMeasurer = rememberTextMeasurer()
     val result = remember(text) { textMeasurer.measure(text, TextStyle.Default.copy(fontSize = fontSize)) }
-    val centerPx = remember(width, height) { IntOffset(width.roundToPx()/2, height.roundToPx()/2) }
+    val centerPx = remember(width, height) { IntOffset(width.roundToPx() / 2, height.roundToPx() / 2) }
     remember(text, width, height, backgroundColor, textColor) {
         val bitmap = Bitmap.createBitmap(width.roundToPx(), height.roundToPx(), Bitmap.Config.ARGB_8888).asImageBitmap()
         androidx.compose.ui.graphics.Canvas(bitmap).also { canvas ->
             canvas.drawCircle(centerPx.toOffset(), width.toPx() / 2, backgroundPaint)
-            canvas.nativeCanvas.drawText(text, centerPx.x.toFloat() - (result.size.width)/2, centerPx.y * 2f - (result.size.height/2) - 4, textPaint)
+            canvas.nativeCanvas.drawText(text, centerPx.x.toFloat() - result.size.width/2, centerPx.y * 2f - result.size.height/2 - 4, textPaint)
         }
         bitmap
     }
 }
 
-fun Modifier.asyncBloom(
-    avatarData: AvatarData?,
-    background: Color,
-    blurSize: DpSize = DpSize.Unspecified,
-    offset: DpOffset = DpOffset.Unspecified,
-    clipToSize: DpSize = DpSize.Unspecified,
-    bottomEdgeMaskHeight: Dp = 40.dp,
-    @FloatRange(from = 0.0, to = 1.0)
-    bottomEdgeMaskAlpha: Float = 1.0f,
-    @FloatRange(from = 0.0, to = 1.0)
-    alpha: Float = 1f,
-) = composed {
-    // Bloom only works on API 29+
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
-    avatarData ?: return@composed this
-
-    if (avatarData.url != null) {
-        val painter = rememberAsyncImagePainter(
-            ImageRequest.Builder(LocalContext.current)
-                .data(avatarData)
-                // Needed to be able to read pixels from the Bitmap for the hash
-                .allowHardware(false)
-                .build()
-        )
-        var blurHash by remember { mutableStateOf<String?>(null) }
-
-        LaunchedEffect(avatarData) {
-            val drawable = painter.imageLoader.execute(painter.request).drawable ?: return@LaunchedEffect
-            val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@LaunchedEffect
-            blurHash = BlurHash.encode(bitmap, blurHashComponents, blurHashComponents)
-        }
-
-        bloom(
-            hash = blurHash,
-            background = background,
-            blurSize = blurSize,
-            offset = offset,
-            clipToSize = clipToSize,
-            bottomEdgeMaskHeight = bottomEdgeMaskHeight,
-            bottomEdgeMaskAlpha = bottomEdgeMaskAlpha,
-            alpha = alpha,
-        )
-    } else {
-        val avatarColors = avatarColors(avatarData.id)
-        val initialsBitmap = initialsBitmap(
-            text = avatarData.initial,
-            textColor =  avatarColors.foreground,
-            backgroundColor = avatarColors.background,
-        )
-        val hash = remember(avatarData, avatarColors) {
-            BlurHash.encode(initialsBitmap.asAndroidBitmap(), blurHashComponents, blurHashComponents)
-        }
-        bloom(
-            hash = hash,
-            background = background,
-            blurSize = blurSize,
-            offset = offset,
-            clipToSize = clipToSize,
-            bottomEdgeMaskHeight = bottomEdgeMaskHeight,
-            bottomEdgeMaskAlpha = bottomEdgeMaskAlpha,
-            alpha = alpha,
-        )
-    }
-}
-
-fun Modifier.bloom(
-    hash: String?,
-    background: Color,
-    blurSize: DpSize = DpSize.Unspecified,
-    offset: DpOffset = DpOffset.Unspecified,
-    clipToSize: DpSize = DpSize.Unspecified,
-    bottomEdgeMaskHeight: Dp = 40.dp,
-    @FloatRange(from = 0.0, to = 1.0)
-    bottomEdgeMaskAlpha: Float = 1.0f,
-    @FloatRange(from = 0.0, to = 1.0)
-    alpha: Float = 1f,
-) = composed {
-    // Bloom only works on API 29+
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
-    if (hash == null) return@composed this
-
-    val hashedBitmap = remember(hash) {
-        BlurHash.decode(hash, blurHashComponents, blurHashComponents)?.asImageBitmap()
-    } ?: return@composed this
-    val pixelSize = blurSize.toIntSize()
-    val clipToPixelSize = clipToSize.toIntSize()
-    val topLayerOpacity = if (isSystemInDarkTheme()) 0.2f else 0.8f
-    val bottomLayerOpacity = if (isSystemInDarkTheme()) 0.5f else 0.2f
-    val topLayerBlendMode = BlendMode.Color
-    val bottomLayerBlendMode = if (isSystemInDarkTheme()) BlendMode.Exclusion else BlendMode.Hardlight
-    val bottomEdgeMaskHeightPixels = bottomEdgeMaskHeight.roundToPx()
-    drawWithCache {
-        val dstSize = if (pixelSize != IntSize.Zero) {
-            pixelSize
-        } else {
-            IntSize(size.width.toInt(), size.height.toInt())
-        }
-        val centerOffset = if (offset != DpOffset.Unspecified) {
-            IntOffset(
-                offset.x.roundToPx() - dstSize.width / 2,
-                offset.y.roundToPx() - dstSize.height / 2
-            )
-        } else {
-            IntOffset.Zero
-        }
-        val dstOffset = if (offset != DpOffset.Unspecified) {
-            IntOffset(
-                offset.x.roundToPx(),
-                offset.y.roundToPx(),
-            )
-        } else {
-            IntOffset(
-                size.center.x.toInt(),
-                size.center.y.toInt(),
-            )
-        }
-        val radius = max(dstSize.width, dstSize.height).toFloat() / 2
-        val circularGradientShader = RadialGradientShader(
-            dstOffset.toOffset(),
-            radius,
-            listOf(Color.Red, Color.Transparent),
-            listOf(0f, 1f)
-        )
-        val circularGradientBrush = ShaderBrush(circularGradientShader)
-        val bottomEdgeGradient = LinearGradientShader(
-            from = IntOffset(0, clipToPixelSize.height - bottomEdgeMaskHeightPixels).toOffset(),
-            to = IntOffset(0, clipToPixelSize.height).toOffset(),
-            listOf(Color.Transparent, background),
-            listOf(0f, 1f)
-        )
-        val bottomEdgeGradientBrush = ShaderBrush(bottomEdgeGradient)
-        onDrawBehind {
-            if (dstSize != IntSize.Zero) {
-                val circleClipPath = Path().apply {
-                    addOval(Rect(dstOffset.toOffset(), radius - 1))
-                }
-                clipPath(circleClipPath, clipOp = ClipOp.Intersect) {
-                    drawWithLayer {
-                        // Clip external path if needed
-                        if (clipToPixelSize != IntSize.Zero) {
-                            val path = Path().apply {
-                                addRect(Rect(Offset.Zero, clipToPixelSize.toSize()))
-                            }
-                            drawContext.canvas.clipPath(path, ClipOp.Intersect)
-                        }
-                        // Draw background color for blending
-                        drawRect(background, size = pixelSize.toSize())
-                        // 25% opacity, hard light blend mode
-                        drawImage(
-                            hashedBitmap,
-                            srcSize = IntSize(blurHashComponents, blurHashComponents),
-                            dstSize = dstSize,
-                            dstOffset = centerOffset,
-                            alpha = bottomLayerOpacity * alpha,
-                            blendMode = bottomLayerBlendMode,
-                        )
-                        // 25% opacity, default blend mode
-                        drawImage(
-                            hashedBitmap,
-                            srcSize = IntSize(blurHashComponents, blurHashComponents),
-                            dstSize = dstSize,
-                            dstOffset = centerOffset,
-                            alpha = topLayerOpacity * alpha,
-                            blendMode = topLayerBlendMode,
-                        )
-                        // Erase the outer radius using the gradient brush
-                        drawCircle(
-                            circularGradientBrush,
-                            radius,
-                            dstOffset.toOffset(),
-                            blendMode = BlendMode.DstIn
-                        )
-                    }
-                }
-                drawRect(
-                    bottomEdgeGradientBrush,
-                    topLeft = IntOffset(0, clipToPixelSize.height - bottomEdgeMaskHeight.roundToPx()).toOffset(),
-                    size = IntSize(pixelSize.width, bottomEdgeMaskHeight.roundToPx()).toSize(),
-                    alpha = bottomEdgeMaskAlpha
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun DpSize.toIntSize() = with(LocalDensity.current) {
+// Translates DP sizes into pixel sizes, taking into account unspecified values
+private fun DpSize.toIntSize(density: Density) = with(density) {
     if (isSpecified) {
         IntSize(width.roundToPx(), height.roundToPx())
     } else {
@@ -465,85 +409,25 @@ private fun DpSize.toIntSize() = with(LocalDensity.current) {
     }
 }
 
-private val blurHashComponents = 5
-
-@OptIn(ExperimentalMaterial3Api::class)
-@DayNightPreviews
-@Composable
-internal fun BloomPreview() {
-    val manuBlurhash = "eVG[A{wJGbS6\$LuPR%ozX9n3C8Se-TxFI;RQsCvzoJozskW=ROWBW?"
-    val nadBlurhash = "eePn{tI?xExEja}ooKWWodjtNJoKR,j@a|sBWpS3WDbGazoKWWWWj@"
-    var topAppBarHeight by remember { mutableIntStateOf(-1) }
-    val topAppBarState = rememberTopAppBarState(
-        //    initialHeightOffsetLimit = -52.dp.toPx(), initialHeightOffset = -52.dp.toPx()
-    )
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
-    ElementPreview {
-        Scaffold(
-            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                Box {
-                    Bloom(
-                        modifier = Modifier.size(48.dp),
-                        hash = nadBlurhash,
-                        background = ElementTheme.materialColors.background,
-                        blurSize = DpSize(192.dp, 192.dp),
-                        clipToSize = if (topAppBarHeight > 0) DpSize(192.dp, topAppBarHeight.toDp()) else DpSize.Zero,
-//            drawContents = false,
-//            clipToSize = DpSize(192.dp, 64.dp),
-                    )
-                    MediumTopAppBar(
-                        modifier = Modifier.onSizeChanged { size ->
-                            topAppBarHeight = size.height
-                        },
-                        colors = TopAppBarDefaults.largeTopAppBarColors(
-                            containerColor = Color.Transparent,
-                            scrolledContainerColor = Color.Black.copy(alpha = 0.05f),
-                        ),
-                        navigationIcon = {
-                            Image(
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .size(32.dp)
-                                    .clip(CircleShape),
-                                painter = painterResource(id = R.drawable.sample_avatar),
-                                contentScale = ContentScale.Crop,
-                                contentDescription = null
-                            )
-                        },
-                        title = {
-                            Text("Title")
-                        },
-                        scrollBehavior = scrollBehavior,
-                    )
-                }
-            },
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .consumeWindowInsets(paddingValues)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-            ) {
-                for (i in 0..20) {
-                    Text("Content", modifier = Modifier.padding(vertical = 20.dp))
-                }
-            }
-        }
+/**
+ * Helper to draw to a canvas using layers. This allows us to apply clipping to those layers only.
+ */
+fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
+    with(drawContext.canvas.nativeCanvas) {
+        val checkPoint = saveLayer(null, null)
+        block()
+        restoreToCount(checkPoint)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @DayNightPreviews
+@ShowkaseComposable(group = PreviewGroup.Bloom)
 @Composable
-internal fun BloomModifierPreview() {
-    val manuBlurhash = "eVG[A{wJGbS6\$LuPR%ozX9n3C8Se-TxFI;RQsCvzoJozskW=ROWBW?"
-    val nadBlurhash = "eePn{tI?xExEja}ooKWWodjtNJoKR,j@a|sBWpS3WDbGazoKWWWWj@"
+internal fun BloomPreview() {
+    val blurhash = "eePn{tI?xExEja}ooKWWodjtNJoKR,j@a|sBWpS3WDbGazoKWWWWj@"
     var topAppBarHeight by remember { mutableIntStateOf(-1) }
-    val topAppBarState = rememberTopAppBarState(
-        //    initialHeightOffsetLimit = -52.dp.toPx(), initialHeightOffset = -52.dp.toPx()
-    )
+    val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
     ElementPreview {
         Scaffold(
@@ -556,11 +440,11 @@ internal fun BloomModifierPreview() {
                                 topAppBarHeight = size.height
                             }
                             .bloom(
-                                hash = nadBlurhash,
+                                hash = blurhash,
                                 background = ElementTheme.materialColors.background,
-                                blurSize = DpSize(256.dp, 256.dp),
+                                blurSize = DpSize(430.dp, 430.dp),
                                 offset = DpOffset(24.dp, 24.dp),
-                                clipToSize = if (topAppBarHeight > 0) DpSize(256.dp, topAppBarHeight.toDp()) else DpSize.Zero,
+                                clipToSize = if (topAppBarHeight > 0) DpSize(430.dp, topAppBarHeight.toDp()) else DpSize.Zero,
                             ),
                         colors = TopAppBarDefaults.largeTopAppBarColors(
                             containerColor = Color.Transparent,
@@ -597,7 +481,7 @@ internal fun BloomModifierPreview() {
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
             ) {
-                for (i in 0..20) {
+                repeat(20) {
                     Text("Content", modifier = Modifier.padding(vertical = 20.dp))
                 }
             }
@@ -612,21 +496,20 @@ class InitialsColorStateProvider : PreviewParameterProvider<Int> {
 
 @DayNightPreviews
 @Composable
+@ShowkaseComposable(group = PreviewGroup.Bloom)
 internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::class) color: Int) {
     ElementPreview {
         val avatarColors = avatarColors("$color")
         val bitmap = initialsBitmap(text = "F", backgroundColor = avatarColors.background, textColor = avatarColors.foreground)
-        val hash = BlurHash.encode(bitmap.asAndroidBitmap(), blurHashComponents, blurHashComponents)
+        val hash = BlurHash.encode(bitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
         Box(
             modifier = Modifier.size(256.dp)
                 .bloom(
                     hash = hash,
                     background = ElementTheme.materialColors.background,
                     blurSize = DpSize(256.dp, 256.dp),
-//                    offset = DpOffset.Zero,
                 ),
             contentAlignment = Alignment.Center
-//            blurSize = DpSize(128.dp, 128.dp)
         ) {
             Image(
                 modifier = Modifier

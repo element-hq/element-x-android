@@ -59,11 +59,14 @@ import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * A view that displays a connectivity indicator when the device is offline, adding a default
+ * padding to make sure the status bar is not overlapped.
+ */
 @Composable
 fun ConnectivityIndicatorView(
     isOnline: Boolean,
     modifier: Modifier = Modifier,
-    addStatusBarPadding: Boolean = true,
 ) {
     val isIndicatorVisible = remember { MutableTransitionState(!isOnline) }.apply { targetState = !isOnline }
     val isStatusBarPaddingVisible = remember { MutableTransitionState(isOnline) }.apply { targetState = isOnline }
@@ -77,23 +80,25 @@ fun ConnectivityIndicatorView(
         Indicator(modifier)
     }
 
-    if (addStatusBarPadding) {
-        // Show missing status bar padding when the indicator is not visible
-        AnimatedVisibility(
-            visibleState = isStatusBarPaddingVisible,
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically(),
-        ) {
-            StatusBarPaddingSpacer(modifier)
-        }
+    // Show missing status bar padding when the indicator is not visible
+    AnimatedVisibility(
+        visibleState = isStatusBarPaddingVisible,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically(),
+    ) {
+        StatusBarPaddingSpacer(modifier)
     }
 }
 
+/**
+ * A view that displays a connectivity indicator when the device is offline, passing the padding
+ * needed to make sure the status bar is not overlapped to its content views.
+ */
 @Composable
 fun ConnectivityIndicatorContainer(
     isOnline: Boolean,
     modifier: Modifier = Modifier,
-    content: @Composable (Dp) -> Unit,
+    content: @Composable (statusBarPadding: Dp) -> Unit,
 ) {
     val isIndicatorVisible = remember { MutableTransitionState(!isOnline) }.apply { targetState = !isOnline }
 
@@ -105,6 +110,7 @@ fun ConnectivityIndicatorContainer(
             stiffness = Spring.StiffnessMediumLow,
             visibilityThreshold = 1.dp,
         ),
+        label = "insets-animation",
     )
 
     content(animationState)
