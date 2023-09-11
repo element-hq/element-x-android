@@ -29,7 +29,6 @@ class TargetLogLevelMapBuilder @Inject constructor(
     fun getDefaultMap(): Map<Target, LogLevel> {
         return Target.entries.associateWith { target ->
             defaultConfig.getLogLevel(target)
-                ?: LogLevel.INFO
         }
     }
 
@@ -37,7 +36,6 @@ class TargetLogLevelMapBuilder @Inject constructor(
         return Target.entries.associateWith { target ->
             tracingConfigurationStore.getLogLevel(target)
                 ?: defaultConfig.getLogLevel(target)
-                ?: LogLevel.INFO
         }
     }
 }

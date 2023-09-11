@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.onboarding.impl
+package io.element.android.features.preferences.api
 
-data class OnBoardingState(
-    val isDebugBuild: Boolean,
-    val canLoginWithQrCode: Boolean,
-    val canCreateAccount: Boolean,
-)
+import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
+
+interface ConfigureTracingEntryPoint : SimpleFeatureEntryPoint

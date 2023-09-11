@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.onboarding.api
+package io.element.android.features.preferences.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.preferences.api.ConfigureTracingEntryPoint
+import io.element.android.features.preferences.impl.developer.tracing.ConfigureTracingNode
+import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
 
-interface OnBoardingEntryPoint : FeatureEntryPoint {
-
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
-
-    interface NodeBuilder {
-        fun callback(callback: Callback): NodeBuilder
-        fun build(): Node
-    }
-
-    interface Callback : Plugin {
-        fun onSignUp()
-        fun onSignIn()
-        fun onOpenDeveloperSettings()
+@ContributesBinding(AppScope::class)
+class DefaultConfigureTracingEntryPoint @Inject constructor() : ConfigureTracingEntryPoint {
+    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
+        return parentNode.createNode<ConfigureTracingNode>(buildContext)
     }
 }
