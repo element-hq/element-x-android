@@ -76,6 +76,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -90,6 +91,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.toOffset
@@ -113,6 +115,7 @@ import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 /**
  * Default bloom configuration values.
@@ -186,6 +189,7 @@ fun Modifier.bloom(
     val pixelSize = remember(blurSize, density) { blurSize.toIntSize(density) }
     val clipToPixelSize = remember(clipToSize, density) { clipToSize.toIntSize(density) }
     val bottomSoftEdgeHeightPixels = remember(bottomSoftEdgeHeight, density) { with(density) { bottomSoftEdgeHeight.roundToPx() } }
+    val isRTL = LocalLayoutDirection.current == LayoutDirection.Rtl
     drawWithCache {
         val dstSize = if (pixelSize != IntSize.Zero) {
             pixelSize
@@ -194,10 +198,17 @@ fun Modifier.bloom(
         }
         // Calculate where to place the center of the bloom effect
         val centerOffset = if (offset.isSpecified) {
-            IntOffset(
-                offset.x.roundToPx(),
-                offset.y.roundToPx(),
-            )
+            if (isRTL) {
+                IntOffset(
+                    size.width.roundToInt() - offset.x.roundToPx(),
+                    size.height.roundToInt() - offset.y.roundToPx(),
+                )
+            } else {
+                IntOffset(
+                    offset.x.roundToPx(),
+                    offset.y.roundToPx(),
+                )
+            }
         } else {
             IntOffset(
                 size.center.x.toInt(),
