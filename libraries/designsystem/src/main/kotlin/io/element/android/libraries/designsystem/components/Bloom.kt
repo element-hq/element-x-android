@@ -159,6 +159,7 @@ data class BloomLayer(
  * @param offset The offset to use for the bloom effect. If not specified the bloom effect will be centered on the component.
  * @param clipToSize The size to use for clipping the bloom effect. If not specified the bloom effect will not be clipped.
  * @param layerConfiguration The configuration for the bloom layers. If not specified the default layers configuration will be used.
+ * @param bottomSoftEdgeColor The color to use for the bottom soft edge. If not specified the [background] color will be used.
  * @param bottomSoftEdgeHeight The height of the bottom soft edge. If not specified the bottom soft edge will not be drawn.
  * @param bottomSoftEdgeAlpha The alpha value to apply to the bottom soft edge.
  * @param alpha The alpha value to apply to the bloom effect.
@@ -298,6 +299,7 @@ fun Modifier.bloom(
  * @param blurSize The size of the bloom effect. If not specified the bloom effect will be the size of the component.
  * @param offset The offset to use for the bloom effect. If not specified the bloom effect will be centered on the component.
  * @param clipToSize The size to use for clipping the bloom effect. If not specified the bloom effect will not be clipped.
+ * @param bottomSoftEdgeColor The color to use for the bottom soft edge. If not specified the [background] color will be used.
  * @param bottomSoftEdgeHeight The height of the bottom soft edge. If not specified the bottom soft edge will not be drawn.
  * @param bottomSoftEdgeAlpha The alpha value to apply to the bottom soft edge.
  * @param alpha The alpha value to apply to the bloom effect.
