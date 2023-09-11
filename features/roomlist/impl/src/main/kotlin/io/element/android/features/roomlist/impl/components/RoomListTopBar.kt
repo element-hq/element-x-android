@@ -80,8 +80,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import io.element.android.libraries.designsystem.R as CommonR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -202,7 +201,7 @@ private fun DefaultRoomListTopBar(
                     onClick = onSearchClicked,
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Search,
+                        resourceId = CommonR.drawable.ic_search,
                         contentDescription = stringResource(CommonStrings.action_search),
                     )
                 }
