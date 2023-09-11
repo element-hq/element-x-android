@@ -34,84 +34,91 @@ import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.EncryptedMessage as RustEncryptedMessage
 import org.matrix.rustcomponents.sdk.MembershipChange as RustMembershipChange
 import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
 
 class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
 
-    fun map(content: TimelineItemContent): EventContent = content.use {
-        when (val kind = it.kind()) {
-            is TimelineItemContentKind.FailedToParseMessageLike -> {
-                FailedToParseMessageLikeContent(
-                    eventType = kind.eventType,
-                    error = kind.error
-                )
+    fun map(content: TimelineItemContent): EventContent {
+        return content.use { _ ->
+            content.kind().use { kind ->
+                map(content, kind)
             }
-            is TimelineItemContentKind.FailedToParseState -> {
-                FailedToParseStateContent(
-                    eventType = kind.eventType,
-                    stateKey = kind.stateKey,
-                    error = kind.error
-                )
-            }
-            TimelineItemContentKind.Message -> {
-                val message = it.asMessage()
-                if (message == null) {
-                    UnknownContent
-                } else {
-                    eventMessageMapper.map(message)
-                }
-            }
-            is TimelineItemContentKind.ProfileChange -> {
-                ProfileChangeContent(
-                    displayName = kind.displayName,
-                    prevDisplayName = kind.prevDisplayName,
-                    avatarUrl = kind.avatarUrl,
-                    prevAvatarUrl = kind.prevAvatarUrl
-                )
-            }
-            TimelineItemContentKind.RedactedMessage -> {
-                RedactedContent
-            }
-            is TimelineItemContentKind.RoomMembership -> {
-                RoomMembershipContent(
-                    UserId(kind.userId),
-                    kind.change?.map()
-                )
-            }
-            is TimelineItemContentKind.State -> {
-                StateContent(
-                    stateKey = kind.stateKey,
-                    content = kind.content.map()
-                )
-            }
-            is TimelineItemContentKind.Sticker -> {
-                StickerContent(
-                    body = kind.body,
-                    info = kind.info.map(),
-                    url = kind.url,
-                )
-            }
-            is TimelineItemContentKind.Poll -> {
-                PollContent(
-                    question = kind.question,
-                    kind = kind.kind.map(),
-                    maxSelections = kind.maxSelections,
-                    answers = kind.answers.map { answer -> answer.map() },
-                    votes = kind.votes.mapValues { vote ->
-                        vote.value.map { userId -> UserId(userId) }
-                    },
-                    endTime = kind.endTime,
-                )
-            }
-            is TimelineItemContentKind.UnableToDecrypt -> {
-                UnableToDecryptContent(
-                    data = kind.msg.map()
-                )
-            }
-            else -> UnknownContent
         }
+    }
+
+    private fun map(content: TimelineItemContent, kind: TimelineItemContentKind) = when (kind) {
+        is TimelineItemContentKind.FailedToParseMessageLike -> {
+            FailedToParseMessageLikeContent(
+                eventType = kind.eventType,
+                error = kind.error
+            )
+        }
+        is TimelineItemContentKind.FailedToParseState -> {
+            FailedToParseStateContent(
+                eventType = kind.eventType,
+                stateKey = kind.stateKey,
+                error = kind.error
+            )
+        }
+        TimelineItemContentKind.Message -> {
+            val message = content.asMessage()
+            if (message == null) {
+                UnknownContent
+            } else {
+                eventMessageMapper.map(message)
+            }
+        }
+        is TimelineItemContentKind.ProfileChange -> {
+            ProfileChangeContent(
+                displayName = kind.displayName,
+                prevDisplayName = kind.prevDisplayName,
+                avatarUrl = kind.avatarUrl,
+                prevAvatarUrl = kind.prevAvatarUrl
+            )
+        }
+        TimelineItemContentKind.RedactedMessage -> {
+            RedactedContent
+        }
+        is TimelineItemContentKind.RoomMembership -> {
+            RoomMembershipContent(
+                UserId(kind.userId),
+                kind.change?.map()
+            )
+        }
+        is TimelineItemContentKind.State -> {
+            StateContent(
+                stateKey = kind.stateKey,
+                content = kind.content.map()
+            )
+        }
+        is TimelineItemContentKind.Sticker -> {
+            StickerContent(
+                body = kind.body,
+                info = kind.info.map(),
+                url = kind.url,
+            )
+        }
+        is TimelineItemContentKind.Poll -> {
+            PollContent(
+                question = kind.question,
+                kind = kind.kind.map(),
+                maxSelections = kind.maxSelections,
+                answers = kind.answers.map { answer -> answer.map() },
+                votes = kind.votes.mapValues { vote ->
+                    vote.value.map { userId -> UserId(userId) }
+                },
+                endTime = kind.endTime,
+            )
+        }
+        is TimelineItemContentKind.UnableToDecrypt -> {
+            UnableToDecryptContent(
+                data = kind.msg.map()
+            )
+        }
+        else -> UnknownContent
     }
 }
 
