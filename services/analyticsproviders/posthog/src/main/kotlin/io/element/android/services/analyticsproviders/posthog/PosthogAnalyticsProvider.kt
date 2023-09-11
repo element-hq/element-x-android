@@ -35,7 +35,7 @@ import javax.inject.Inject
 class PosthogAnalyticsProvider @Inject constructor(
     private val postHogFactory: PostHogFactory,
 ) : AnalyticsProvider {
-    override val name = PosthogConfig.name
+    override val name = "Posthog"
 
     private var posthog: PostHog? = null
     private var analyticsId: String? = null
