@@ -26,14 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import io.element.android.libraries.designsystem.colors.AvatarColors
+import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
@@ -46,7 +45,6 @@ import timber.log.Timber
 fun Avatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
-    initialAvatarColors: AvatarColors? = null,
     contentDescription: String? = null,
 ) {
     val commonModifier = modifier
@@ -55,7 +53,6 @@ fun Avatar(
     if (avatarData.url.isNullOrBlank()) {
         InitialsAvatar(
             avatarData = avatarData,
-            avatarColors = initialAvatarColors,
             modifier = commonModifier,
         )
     } else {
@@ -88,13 +85,11 @@ private fun ImageAvatar(
 @Composable
 private fun InitialsAvatar(
     avatarData: AvatarData,
-    avatarColors: AvatarColors?,
     modifier: Modifier = Modifier,
 ) {
-    // Use temporary color for default avatar background, if avatarColors is not provided
-    val avatarColor = ElementTheme.colors.bgActionPrimaryDisabled
+    val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
     Box(
-        modifier.background(color = avatarColors?.background ?: avatarColor)
+        modifier.background(color = avatarColors.background)
     ) {
         val fontSize = avatarData.size.dp.toSp() / 2
         val originalFont = ElementTheme.typography.fontHeadingMdBold
@@ -104,7 +99,7 @@ private fun InitialsAvatar(
             modifier = Modifier.align(Alignment.Center),
             text = avatarData.initial,
             style = originalFont.copy(fontSize = fontSize, lineHeight = lineHeight, letterSpacing = 0.sp),
-            color = avatarColors?.foreground ?: Color.White,
+            color = avatarColors.foreground,
         )
     }
 }

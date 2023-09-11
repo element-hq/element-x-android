@@ -23,6 +23,7 @@ import io.element.android.features.createroom.impl.userlist.aListOfSelectedUsers
 import io.element.android.features.createroom.impl.userlist.aUserListState
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.toImmutableList
 
 open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListState> {
@@ -36,7 +37,11 @@ open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListSta
                 selectionMode = SelectionMode.Multiple,
             ),
             aUserListState().copy(
-                searchResults = SearchBarResultState.Results(aMatrixUserList().toImmutableList()),
+                searchResults = SearchBarResultState.Results(aMatrixUserList()
+                    .mapIndexed { index, matrixUser ->
+                        UserSearchResult(matrixUser, index % 2 == 0)
+                    }
+                    .toImmutableList()),
                 selectedUsers = aListOfSelectedUsers(),
                 isSearchActive = true,
                 selectionMode = SelectionMode.Multiple,

@@ -27,6 +27,7 @@ import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -99,6 +100,7 @@ class NotificationsOptInPresenterTests {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `set permission denied on not now clicked in API 33`() = runTest(StandardTestDispatcher()) {
         val permissionPresenter = FakePermissionsPresenter()
