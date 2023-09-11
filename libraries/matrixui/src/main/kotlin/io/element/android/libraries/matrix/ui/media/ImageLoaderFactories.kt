@@ -46,8 +46,8 @@ class LoggedInImageLoaderFactory @Inject constructor(
                 }
                 add(AvatarDataKeyer())
                 add(MediaRequestDataKeyer())
-                add(CoilMediaFetcher.AvatarFactory(matrixClient))
-                add(CoilMediaFetcher.MediaRequestDataFactory(matrixClient))
+                add(CoilMediaFetcher.AvatarFactory(context, matrixClient))
+                add(CoilMediaFetcher.MediaRequestDataFactory(context, matrixClient))
             }
             .build()
     }

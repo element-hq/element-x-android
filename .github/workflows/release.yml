@@ -18,7 +18,7 @@ jobs:
       group: ${{ github.ref == 'refs/head/main' && format('build-release-main-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use JDK 17
         uses: actions/setup-java@v3
         with:
