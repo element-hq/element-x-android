@@ -36,7 +36,7 @@ import java.nio.ByteBuffer
 import kotlin.math.roundToLong
 
 internal class CoilMediaFetcher(
-    private val context: Context,
+    private val scalingFunction: (Float) -> Float,
     private val mediaLoader: MatrixMediaLoader,
     private val mediaData: MediaRequestData?,
     private val options: Options
@@ -81,11 +81,10 @@ internal class CoilMediaFetcher(
     }
 
     private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail, options: Options): FetchResult? {
-        val density = context.resources.displayMetrics.density
         return mediaLoader.loadMediaThumbnail(
             source = mediaSource,
-            width = (kind.width.toFloat() * density).roundToLong(),
-            height = (kind.height.toFloat() * density).roundToLong(),
+            width = scalingFunction(kind.width.toFloat()).roundToLong(),
+            height = scalingFunction(kind.height.toFloat()).roundToLong(),
         ).map { byteArray ->
             byteArray.asSourceResult(options)
         }.getOrNull()
@@ -116,7 +115,7 @@ internal class CoilMediaFetcher(
             imageLoader: ImageLoader
         ): Fetcher {
             return CoilMediaFetcher(
-                context = context,
+                scalingFunction = { context.resources.displayMetrics.density * it },
                 mediaLoader = client.mediaLoader,
                 mediaData = data,
                 options = options
@@ -136,7 +135,7 @@ internal class CoilMediaFetcher(
             imageLoader: ImageLoader
         ): Fetcher {
             return CoilMediaFetcher(
-                context = context,
+                scalingFunction = { context.resources.displayMetrics.density * it },
                 mediaLoader = client.mediaLoader,
                 mediaData = data.toMediaRequestData(),
                 options = options
