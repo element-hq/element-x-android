@@ -125,7 +125,7 @@ object BloomDefaults {
      * Number of components to use with BlurHash to generate the blur effect.
      * Larger values mean more detailed blurs.
      */
-    const val HASH_COMPONENTS = 5
+    const val HASH_COMPONENTS = 8
 
     /** Default bloom layers. */
     @Composable
