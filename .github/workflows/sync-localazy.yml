@@ -11,7 +11,7 @@ jobs:
     # Skip in forks
     if: github.repository == 'vector-im/element-x-android'
     steps:
-      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+      - uses: actions/checkout@v4
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
