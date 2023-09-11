@@ -16,8 +16,7 @@
 
 package io.element.android.services.analyticsproviders.posthog
 
-object PosthogConfig {
-    const val name = "Posthog"
-    const val postHogHost = "https://posthog.element.dev"
-    const val postHogApiKey = "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN"
-}
+internal data class PosthogEndpointConfig(
+    val host: String,
+    val apiKey: String,
+)

@@ -32,10 +32,10 @@ import javax.inject.Inject
 // private val IGNORED_OPTIONS: Options? = null
 
 @ContributesMultibinding(AppScope::class)
-class PosthogAnalyticsProvider @Inject constructor(
+internal class PosthogAnalyticsProvider @Inject constructor(
     private val postHogFactory: PostHogFactory,
 ) : AnalyticsProvider {
-    override val name = PosthogConfig.name
+    override val name = "Posthog"
 
     private var posthog: PostHog? = null
     private var analyticsId: String? = null
