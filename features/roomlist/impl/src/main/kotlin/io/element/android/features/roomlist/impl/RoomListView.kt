@@ -18,13 +18,13 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -45,7 +45,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.features.leaveroom.api.LeaveRoomView
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.roomlist.impl.components.RequestVerificationHeader
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
@@ -76,8 +76,10 @@ fun RoomListView(
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+    ConnectivityIndicatorContainer(
+        modifier = modifier,
+        isOnline = state.hasNetworkConnection,
+    ) { topPadding ->
         Box {
             fun onRoomLongClicked(
                 roomListRoomSummary: RoomListRoomSummary
@@ -96,6 +98,7 @@ fun RoomListView(
             LeaveRoomView(state = state.leaveRoomState)
 
             RoomListContent(
+                modifier = Modifier.padding(top = topPadding),
                 state = state,
                 onVerifyClicked = onVerifyClicked,
                 onRoomClicked = onRoomClicked,
@@ -111,6 +114,8 @@ fun RoomListView(
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
                 modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(top = topPadding)
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             )
