@@ -20,7 +20,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import javax.inject.Inject
 
-internal class PosthogEndpointConfigProvider @Inject constructor(
+class PosthogEndpointConfigProvider @Inject constructor(
     private val buildMeta: BuildMeta,
 ) {
     fun provide(): PosthogEndpointConfig {

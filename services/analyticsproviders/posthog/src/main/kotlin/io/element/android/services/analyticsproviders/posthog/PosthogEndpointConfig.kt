@@ -16,7 +16,7 @@
 
 package io.element.android.services.analyticsproviders.posthog
 
-internal data class PosthogEndpointConfig(
+data class PosthogEndpointConfig(
     val host: String,
     val apiKey: String,
 )

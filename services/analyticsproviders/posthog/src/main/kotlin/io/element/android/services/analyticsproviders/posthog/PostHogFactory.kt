@@ -22,7 +22,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
 
-internal class PostHogFactory @Inject constructor(
+class PostHogFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
     private val posthogEndpointConfigProvider: PosthogEndpointConfigProvider,
