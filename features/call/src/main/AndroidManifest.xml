@@ -45,6 +45,15 @@
 <!--                <data android:host="pr1420&#45;&#45;element-call.netlify.app" />-->
                 <data android:host="call.element.io" />
             </intent-filter>
+            <!-- Custom scheme to handle urls from other domains in the format: element://call?url=https%3A%2F%2Felement.io -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="element" />
+                <data android:host="call" />
+            </intent-filter>
         </activity>
         <service android:name=".CallForegroundService" android:enabled="true" android:foregroundServiceType="mediaPlayback" />
     </application>

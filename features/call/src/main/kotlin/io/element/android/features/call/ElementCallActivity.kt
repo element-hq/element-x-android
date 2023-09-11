@@ -21,6 +21,7 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -29,7 +30,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.theme.ElementTheme
+import java.net.URLDecoder
 
 class ElementCallActivity : ComponentActivity() {
 
@@ -62,7 +63,11 @@ class ElementCallActivity : ComponentActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         val fallbackUrl = "https://call.element.io"
-        urlState.value = intent.dataString
+
+        urlState.value = intent?.dataString?.let(::parseUrl) ?: run {
+            finish()
+            return
+        }
 
         val requestPermissionsLauncher = registerPermissionResultLauncher()
 
@@ -109,7 +114,7 @@ class ElementCallActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        val intentUrl = intent?.dataString ?: return
+        val intentUrl = intent?.dataString?.let(::parseUrl) ?: return
         urlState.value = intentUrl
     }
 
@@ -129,6 +134,20 @@ class ElementCallActivity : ComponentActivity() {
         super.onDestroy()
         releaseAudioFocus()
         CallForegroundService.stop(this)
+    }
+
+    private fun parseUrl(url: String?): String? {
+        if (url == null) return null
+        val parsedUrl = Uri.parse(url)
+        val scheme = parsedUrl.scheme ?: return null
+        return when {
+            scheme in sequenceOf("http", "https") -> url
+            scheme == "element" && parsedUrl.host == "call" -> {
+                parsedUrl.getQueryParameter("url")?.let { URLDecoder.decode(it, "utf-8") }
+            }
+            // This should never be possible, but we still need to take into account the possibility
+            else -> null
+        }
     }
 
     private fun registerPermissionResultLauncher(): ActivityResultLauncher<Array<String>> {
