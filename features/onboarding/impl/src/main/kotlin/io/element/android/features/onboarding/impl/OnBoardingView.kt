@@ -61,11 +61,11 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun OnBoardingView(
     state: OnBoardingState,
-    modifier: Modifier = Modifier,
     onSignInWithQrCode: () -> Unit,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     OnBoardingPage(
         modifier = modifier,
