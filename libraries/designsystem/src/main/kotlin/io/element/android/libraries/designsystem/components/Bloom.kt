@@ -101,7 +101,7 @@ import coil.request.ImageRequest
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
-import io.element.android.libraries.designsystem.colors.avatarColors
+import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -346,7 +346,7 @@ fun Modifier.avatarBloom(
         )
     } else {
         // There is no URL so we'll generate an avatar with the initials and use that as the bloom source
-        val avatarColors = avatarColors(avatarData.id)
+        val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
         val initialsBitmap = initialsBitmap(
             width = avatarData.size.dp,
             height = avatarData.size.dp,
@@ -510,7 +510,7 @@ class InitialsColorStateProvider : PreviewParameterProvider<Int> {
 @ShowkaseComposable(group = PreviewGroup.Bloom)
 internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::class) color: Int) {
     ElementPreview {
-        val avatarColors = avatarColors("$color")
+        val avatarColors = AvatarColorsProvider.provide("$color", ElementTheme.isLightTheme)
         val bitmap = initialsBitmap(text = "F", backgroundColor = avatarColors.background, textColor = avatarColors.foreground)
         val hash = BlurHash.encode(bitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
         Box(

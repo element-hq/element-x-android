@@ -51,7 +51,6 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
-import io.element.android.libraries.designsystem.colors.avatarColors
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatarBloom
@@ -196,7 +195,6 @@ private fun DefaultRoomListTopBar(
                     ) {
                         Avatar(
                             avatarData = it,
-                            initialAvatarColors = avatarColors(it.id),
                             contentDescription = stringResource(CommonStrings.common_settings),
                         )
                     }
