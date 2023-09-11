@@ -125,7 +125,7 @@ object BloomDefaults {
      * Number of components to use with BlurHash to generate the blur effect.
      * Larger values mean more detailed blurs.
      */
-    const val HASH_COMPONENTS = 8
+    const val HASH_COMPONENTS = 5
 
     /** Default bloom layers. */
     @Composable
@@ -170,6 +170,7 @@ fun Modifier.bloom(
     offset: DpOffset = DpOffset.Unspecified,
     clipToSize: DpSize = DpSize.Unspecified,
     layerConfiguration: ImmutableList<BloomLayer>? = null,
+    bottomSoftEdgeColor: Color = background,
     bottomSoftEdgeHeight: Dp = 40.dp,
     @FloatRange(from = 0.0, to = 1.0)
     bottomSoftEdgeAlpha: Float = 1.0f,
@@ -238,7 +239,7 @@ fun Modifier.bloom(
         val bottomEdgeGradient = LinearGradientShader(
             from = IntOffset(0, clipToPixelSize.height - bottomSoftEdgeHeightPixels).toOffset(),
             to = IntOffset(0, clipToPixelSize.height).toOffset(),
-            listOf(Color.Transparent, background),
+            listOf(Color.Transparent, bottomSoftEdgeColor),
             listOf(0f, 1f)
         )
         val bottomEdgeGradientBrush = ShaderBrush(bottomEdgeGradient)
@@ -307,6 +308,7 @@ fun Modifier.avatarBloom(
     blurSize: DpSize = DpSize.Unspecified,
     offset: DpOffset = DpOffset.Unspecified,
     clipToSize: DpSize = DpSize.Unspecified,
+    bottomSoftEdgeColor: Color = background,
     bottomSoftEdgeHeight: Dp = 40.dp,
     @FloatRange(from = 0.0, to = 1.0)
     bottomSoftEdgeAlpha: Float = 1.0f,
@@ -340,6 +342,7 @@ fun Modifier.avatarBloom(
             blurSize = blurSize,
             offset = offset,
             clipToSize = clipToSize,
+            bottomSoftEdgeColor = bottomSoftEdgeColor,
             bottomSoftEdgeHeight = bottomSoftEdgeHeight,
             bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
             alpha = alpha,
@@ -363,6 +366,7 @@ fun Modifier.avatarBloom(
             blurSize = blurSize,
             offset = offset,
             clipToSize = clipToSize,
+            bottomSoftEdgeColor = bottomSoftEdgeColor,
             bottomSoftEdgeHeight = bottomSoftEdgeHeight,
             bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
             alpha = alpha,
@@ -517,7 +521,13 @@ internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::
             modifier = Modifier.size(256.dp)
                 .bloom(
                     hash = hash,
-                    background = ElementTheme.materialColors.background,
+                    if (isSystemInDarkTheme()) {
+                        ElementTheme.materialColors.background
+                    } else {
+                        // Workaround to display a very subtle bloom for avatars with very soft colors
+                        Color(0xFFF9F9F9)
+                    },
+                    bottomSoftEdgeColor = ElementTheme.materialColors.background,
                     blurSize = DpSize(256.dp, 256.dp),
                 ),
             contentAlignment = Alignment.Center
