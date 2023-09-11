@@ -521,11 +521,11 @@ internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::
             modifier = Modifier.size(256.dp)
                 .bloom(
                     hash = hash,
-                    if (isSystemInDarkTheme()) {
-                        ElementTheme.materialColors.background
-                    } else {
+                    background = if (ElementTheme.isLightTheme) {
                         // Workaround to display a very subtle bloom for avatars with very soft colors
                         Color(0xFFF9F9F9)
+                    } else {
+                        ElementTheme.materialColors.background
                     },
                     bottomSoftEdgeColor = ElementTheme.materialColors.background,
                     blurSize = DpSize(256.dp, 256.dp),

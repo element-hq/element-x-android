@@ -17,7 +17,6 @@
 package io.element.android.features.roomlist.impl.components
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -159,12 +158,12 @@ private fun DefaultRoomListTopBar(
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .avatarBloom(
                     avatarData = avatarData,
-                    background = if (isSystemInDarkTheme()) {
-                        ElementTheme.materialColors.background
-                    } else {
+                    background = if (ElementTheme.isLightTheme) {
                         // Workaround to display a very subtle bloom for avatars with very soft colors
                         Color(0xFFF9F9F9)
-                   },
+                    } else {
+                        ElementTheme.materialColors.background
+                    },
                     blurSize = DpSize(avatarBloomSize, avatarBloomSize),
                     offset = DpOffset(24.dp, 24.dp + statusBarPadding),
                     clipToSize = if (appBarHeight > 0) DpSize(
