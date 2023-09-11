@@ -38,7 +38,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.MaterialTheme
@@ -48,6 +47,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.text.toDp
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -98,13 +99,18 @@ fun ConnectivityIndicatorView(
 fun ConnectivityIndicatorContainer(
     isOnline: Boolean,
     modifier: Modifier = Modifier,
-    content: @Composable (statusBarPadding: Dp) -> Unit,
+    content: @Composable (topPadding: Dp) -> Unit,
 ) {
     val isIndicatorVisible = remember { MutableTransitionState(!isOnline) }.apply { targetState = !isOnline }
 
-    val statusBarTopPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 6.dp
+    val statusBarTopPadding = if (LocalInspectionMode.current) {
+        // Needed to get valid UI previews
+        24.dp
+    } else {
+        WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 6.dp
+    }
     val target = remember(isOnline) { if (isOnline) 0.dp else statusBarTopPadding }
-    val animationState by animateDpAsState(
+    val animationStateOffset by animateDpAsState(
         targetValue = target,
         animationSpec = spring(
             stiffness = Spring.StiffnessMediumLow,
@@ -113,7 +119,7 @@ fun ConnectivityIndicatorContainer(
         label = "insets-animation",
     )
 
-    content(animationState)
+    content(animationStateOffset)
 
     // Display the network indicator with an animation
     AnimatedVisibility(
