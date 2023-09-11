@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analyticsproviders.posthog
+package io.element.android.features.preferences.api
 
-object PosthogConfig {
-    const val name = "Posthog"
-    const val postHogHost = "https://posthog.element.dev"
-    const val postHogApiKey = "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN"
-}
+import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
+
+interface ConfigureTracingEntryPoint : SimpleFeatureEntryPoint

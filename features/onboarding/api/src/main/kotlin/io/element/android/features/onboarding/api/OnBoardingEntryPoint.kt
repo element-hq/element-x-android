@@ -33,5 +33,6 @@ interface OnBoardingEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onSignUp()
         fun onSignIn()
+        fun onOpenDeveloperSettings()
     }
 }
