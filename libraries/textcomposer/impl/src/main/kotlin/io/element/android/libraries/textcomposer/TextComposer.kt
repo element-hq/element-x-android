@@ -77,6 +77,7 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.textcomposer.components.FormattingOption
 import io.element.android.libraries.textcomposer.components.FormattingOptionState
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.ElementTheme.materialColors
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
@@ -135,7 +136,7 @@ fun TextComposer(
                     modifier = Modifier.size(30.dp.applyScaleUp()),
                     resourceId = R.drawable.ic_plus, // TODO Replace with design system icon when available
                     contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
-                    tint = ElementTheme.colors.iconPrimary,
+                    tint = ElementTheme.materialColors.primary,
                 )
             }
             val roundCornerSmall = 20.dp.applyScaleUp()
@@ -155,12 +156,12 @@ fun TextComposer(
                 )
             )
             val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
-            val colors = ElementTheme.colors
-            val bgColor = colors.bgSubtleSecondary
+            val colors = ElementTheme.materialColors
+            val bgColor = materialColors.secondaryContainer
 
             val borderColor by remember(state.hasFocus, colors) {
                 derivedStateOf {
-                    if (state.hasFocus) colors.borderDisabled else bgColor
+                    if (state.hasFocus) colors.surfaceVariant else bgColor
                 }
             }
 
@@ -262,7 +263,7 @@ private fun TextInput(
             Text(
                 stringResource(CommonStrings.common_message),
                 style = defaultTypography.copy(
-                    color = ElementTheme.colors.textDisabled,
+                    color = ElementTheme.materialColors.secondary,
                 ),
             )
         }
@@ -280,7 +281,7 @@ private fun TextInput(
                     }
                 ),
                 cursor = RichTextEditorDefaults.cursorStyle(
-                    color = ElementTheme.colors.iconAccentTertiary,
+                    color = ElementTheme.materialColors.tertiary,
                 )
             ),
             onError = onError
@@ -315,7 +316,7 @@ private fun TextFormatting(
                 modifier = Modifier.size(30.dp.applyScaleUp()),
                 resourceId = R.drawable.ic_cancel, // TODO Replace with design system icon when available
                 contentDescription = stringResource(CommonStrings.action_close),
-                tint = ElementTheme.colors.iconPrimary,
+                tint = ElementTheme.materialColors.primary,
             )
         }
 
@@ -575,7 +576,7 @@ private fun SendButton(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(36.dp.applyScaleUp())
-                .background(if (canSendMessage) ElementTheme.colors.iconAccentTertiary else Color.Transparent)
+                .background(if (canSendMessage) ElementTheme.materialColors.tertiary else Color.Transparent)
         ) {
             Icon(
                 modifier = Modifier
@@ -584,7 +585,7 @@ private fun SendButton(
                 resourceId = iconId,
                 contentDescription = contentDescription,
                 // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
-                tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled
+                tint = if (canSendMessage) Color.White else ElementTheme.materialColors.surfaceVariant
             )
         }
     }
