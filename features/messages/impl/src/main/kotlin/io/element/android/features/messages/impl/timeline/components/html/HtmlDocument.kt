@@ -28,7 +28,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -61,10 +61,12 @@ import io.element.android.features.messages.impl.timeline.components.event.noExt
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.LinkColor
 import kotlinx.collections.immutable.persistentMapOf
 import org.jsoup.nodes.Document
@@ -92,7 +94,12 @@ fun HtmlDocument(
             onTextClicked = onTextClicked,
             onTextLongClicked = onTextLongClicked,
         )
-        Spacer(modifier = Modifier.width(extraPadding.getDpSize()))
+        Spacer(
+            modifier = Modifier.size(
+                width = extraPadding.getDpSize(),
+                height = ElementTheme.typography.fontBodyXsRegular.fontSize.toDp() * 1.25f
+            )
+        )
     }
 }
 
