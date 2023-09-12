@@ -75,8 +75,6 @@ class RoomNotificationSettingsPresenter @Inject constructor(
             }
         }
 
-        Timber.d("NotifState: $roomNotificationSettingsState")
-
         return RoomNotificationSettingsState(
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             defaultRoomNotificationMode = defaultRoomNotificationMode.value,
@@ -97,7 +95,7 @@ class RoomNotificationSettingsPresenter @Inject constructor(
     private fun CoroutineScope.getDefaultRoomNotificationMode(defaultRoomNotificationMode: MutableState<RoomNotificationMode?>) = launch {
         defaultRoomNotificationMode.value = notificationSettingsService.getDefaultRoomNotificationMode(
             room.isEncrypted,
-            room.activeMemberCount
+            room.isOneToOne
         ).getOrThrow()
     }
 

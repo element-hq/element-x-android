@@ -50,6 +50,12 @@ interface MatrixRoom : Closeable {
     val joinedMemberCount: Long
 
     /**
+     * A one-to-one is a room with exactly 2 members.
+     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
+     */
+    val isOneToOne: Boolean get() = joinedMemberCount == 2L
+
+    /**
      * The current loaded members as a StateFlow.
      * Initial value is [MatrixRoomMembersState.Unknown].
      * To update them you should call [updateMembers].
@@ -178,6 +184,7 @@ interface MatrixRoom : Closeable {
     suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
 
     override fun close() = destroy()
+
 }
 
 

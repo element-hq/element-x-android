@@ -34,11 +34,13 @@ import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
+import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -70,6 +72,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object NotificationSettings : NavTarget
+
+        @Parcelize
+        data class EditDefaultNotificationSetting(val isOneToOne: Boolean) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -112,7 +117,16 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<AnalyticsSettingsNode>(buildContext)
             }
             NavTarget.NotificationSettings -> {
-                createNode<NotificationSettingsNode>(buildContext)
+                val notificationSettingsCallback = object : NotificationSettingsNode.Callback {
+                    override fun editDefaultNotificationMode(isOneToOne: Boolean) {
+                        backstack.push(NavTarget.EditDefaultNotificationSetting(isOneToOne))
+                    }
+                }
+                createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
+            }
+            is NavTarget.EditDefaultNotificationSetting -> {
+                val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
+                createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input))
             }
         }
     }

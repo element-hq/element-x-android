@@ -17,6 +17,7 @@
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 open class NotificationSettingsStateProvider : PreviewParameterProvider<NotificationSettingsState> {
     override val values: Sequence<NotificationSettingsState>
@@ -26,8 +27,15 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
 }
 
 fun aNotificationSettingsState() = NotificationSettingsState(
-    isEnabled = true,
-    hasSystemPermission = false,
-    notifyMeOnRoom = true,
-    acceptCalls = true
+    matrixNotificationSettings = NotificationSettingsState.MatrixNotificationSettings.ValidNotificationSettingsState(
+        atRoomNotificationsEnabled = true,
+        callNotificationsEnabled = true,
+        defaultGroupNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+        defaultOneToOneNotificationMode = RoomNotificationMode.ALL_MESSAGES,
+    ),
+    appNotificationSettings = NotificationSettingsState.AppNotificationSettings(
+        systemNotificationsEnabled = false,
+        appNotificationsEnabled = true,
+    ),
+    eventSink = {}
 )

@@ -36,12 +36,16 @@ class FakeNotificationSettingsService : NotificationSettingsService {
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _roomNotificationSettingsStateFlow
 
-    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationSettings> {
+    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> {
         return getRoomNotificationSettingsResult
     }
 
-    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationMode> {
+    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode> {
         return getDefaultRoomNotificationMode
+    }
+
+    override suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> {
@@ -56,7 +60,24 @@ class FakeNotificationSettingsService : NotificationSettingsService {
         return muteRoomResult
     }
 
-    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<Unit> {
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<Unit> {
         return unmuteRoomResult
     }
+
+    override suspend fun isRoomMentionEnabled(): Result<Boolean> {
+        return Result.success(false)
+    }
+
+    override suspend fun setRoomMentionEnabled(enabled: Boolean): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun isCallEnabled(): Result<Boolean> {
+        return Result.success(false)
+    }
+
+    override suspend fun setCallEnabled(enabled: Boolean): Result<Unit> {
+        return Result.success(Unit)
+    }
+
 }

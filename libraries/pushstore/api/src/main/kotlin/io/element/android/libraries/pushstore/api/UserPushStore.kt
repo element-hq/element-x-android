@@ -15,6 +15,8 @@
  */
 
 package io.element.android.libraries.pushstore.api
+import kotlinx.coroutines.flow.Flow
+
 
 /**
  * Store data related to push about a user.
@@ -25,7 +27,7 @@ interface UserPushStore {
     suspend fun getCurrentRegisteredPushKey(): String?
     suspend fun setCurrentRegisteredPushKey(value: String)
 
-    suspend fun areNotificationEnabledForDevice(): Boolean
+    fun getNotificationEnabledForDevice(): Flow<Boolean>
     suspend fun setNotificationEnabledForDevice(enabled: Boolean)
 
     /**

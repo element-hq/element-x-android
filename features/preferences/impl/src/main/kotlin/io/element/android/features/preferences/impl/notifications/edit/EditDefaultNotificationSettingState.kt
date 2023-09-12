@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.libraries.pushstore.api"
-}
+package io.element.android.features.preferences.impl.notifications.edit
 
-dependencies {
-    implementation(libs.coroutines.core)
-    implementation(projects.libraries.matrix.api)
-}
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+
+data class EditDefaultNotificationSettingState(
+    val isOneToOne: Boolean,
+    val mode: RoomNotificationMode?,
+    val eventSink: (EditDefaultNotificationSettingStateEvents) -> Unit,
+)

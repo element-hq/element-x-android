@@ -16,10 +16,35 @@
 
 package io.element.android.features.preferences.impl.notifications
 
+import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+
+@Immutable
 data class NotificationSettingsState(
-    val hasSystemPermission: Boolean,
-    val isEnabled: Boolean,
-    val notifyMeOnRoom: Boolean,
-    val acceptCalls: Boolean
-//    val eventSink: (AnalyticsOptInEvents) -> Unit,
-)
+    val matrixNotificationSettings: MatrixNotificationSettings,
+    val appNotificationSettings: AppNotificationSettings,
+    val eventSink: (NotificationSettingsEvents) -> Unit,
+) {
+    sealed interface MatrixNotificationSettings {
+        data object Uninitialized :  MatrixNotificationSettings
+        data class ValidNotificationSettingsState(
+            val atRoomNotificationsEnabled: Boolean,
+            val callNotificationsEnabled: Boolean,
+            val defaultGroupNotificationMode: RoomNotificationMode?,
+            val defaultOneToOneNotificationMode: RoomNotificationMode?,
+        ) : MatrixNotificationSettings
+
+        data class InvalidNotificationSettingsState(
+            val fixFailed: Boolean
+        ) :  MatrixNotificationSettings
+    }
+
+    data class AppNotificationSettings(
+        val systemNotificationsEnabled: Boolean,
+        val appNotificationsEnabled: Boolean,
+    )
+}
+
+
+
+
