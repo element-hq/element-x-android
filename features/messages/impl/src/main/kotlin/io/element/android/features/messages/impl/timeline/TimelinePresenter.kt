@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -51,6 +53,7 @@ class TimelinePresenter @Inject constructor(
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline
@@ -93,7 +96,7 @@ class TimelinePresenter @Inject constructor(
                         pollStartId = event.pollStartId,
                         answers = listOf(event.answerId),
                     )
-                    // TODO Polls: Send poll vote analytic
+                    analyticsService.capture(PollVote())
                 }
             }
         }
@@ -116,7 +119,7 @@ class TimelinePresenter @Inject constructor(
 
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
-            canReply = userHasPermissionToSendMessage,
+            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             paginationState = paginationState,
             timelineItems = timelineItems,
             hasNewItems = hasNewItems.value,

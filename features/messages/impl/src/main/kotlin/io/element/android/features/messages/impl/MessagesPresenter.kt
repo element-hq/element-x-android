@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.PollEnd
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -75,6 +76,7 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -93,6 +95,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
+    private val analyticsService: AnalyticsService,
     @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
 
@@ -328,8 +331,10 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private suspend fun handleEndPollAction(event: TimelineItem.Event) {
-        event.eventId?.let { room.endPoll(it, "The poll with event id: $it has ended.") }
-        // TODO Polls: Send poll end analytic
+        event.eventId?.let {
+            room.endPoll(it, "The poll with event id: $it has ended.")
+            analyticsService.capture(PollEnd())
+        }
     }
 
     private suspend fun handleCopyContents(event: TimelineItem.Event) {

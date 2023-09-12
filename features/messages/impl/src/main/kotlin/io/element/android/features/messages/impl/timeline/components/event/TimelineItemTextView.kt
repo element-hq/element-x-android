@@ -18,9 +18,6 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -29,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.components.html.HtmlDocument
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -52,18 +48,14 @@ fun TimelineItemTextView(
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.primary) {
         val htmlDocument = content.htmlDocument
         if (htmlDocument != null) {
-            // For now we ignore the extra padding for html content, so add some spacing
-            // below the content (as previous behavior)
-            Column(modifier = modifier) {
-                HtmlDocument(
-                    document = htmlDocument,
-                    modifier = Modifier,
-                    onTextClicked = onTextClicked,
-                    onTextLongClicked = onTextLongClicked,
-                    interactionSource = interactionSource
-                )
-                Spacer(Modifier.height(16.dp))
-            }
+            HtmlDocument(
+                document = htmlDocument,
+                extraPadding = extraPadding,
+                modifier = modifier,
+                onTextClicked = onTextClicked,
+                onTextLongClicked = onTextLongClicked,
+                interactionSource = interactionSource
+            )
         } else {
             Box(modifier) {
                 val textWithPadding = remember(content.body) {
