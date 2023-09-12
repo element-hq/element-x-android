@@ -42,7 +42,7 @@ import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
 class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
 
     fun map(content: TimelineItemContent): EventContent {
-        return content.use { _ ->
+        return content.use {
             content.kind().use { kind ->
                 map(content, kind)
             }
