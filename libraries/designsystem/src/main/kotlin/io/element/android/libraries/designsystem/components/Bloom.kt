@@ -45,6 +45,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,8 +97,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.toOffset
 import androidx.compose.ui.unit.toSize
-import coil.compose.rememberAsyncImagePainter
+import coil.imageLoader
+import coil.request.DefaultRequestOptions
 import coil.request.ImageRequest
+import coil.size.Size
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
@@ -114,6 +117,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -321,21 +326,35 @@ fun Modifier.avatarBloom(
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
     avatarData ?: return@composed this
 
+    // Request the avatar contents to use as the bloom source
+    val context = LocalContext.current
+    val density = LocalDensity.current
     if (avatarData.url != null) {
-        // Request the avatar contents to use as the bloom source
-        val painter = rememberAsyncImagePainter(
-            ImageRequest.Builder(LocalContext.current)
+        val painterRequest = remember(avatarData) {
+            ImageRequest.Builder(context)
                 .data(avatarData)
+                // Allow cache and default dispatchers
+                .defaults(DefaultRequestOptions())
                 // Needed to be able to read pixels from the Bitmap for the hash
                 .allowHardware(false)
+                // Reduce size so it loads faster for large avatars
+                .size(with(density) { Size(64.dp.roundToPx(), 64.dp.roundToPx()) })
                 .build()
-        )
-        var blurHash by remember { mutableStateOf<String?>(null) }
+        }
 
+        // By making it saveable, we'll 'cache' the previous bloom effect until a new one is loaded
+        var blurHash by rememberSaveable(avatarData) { mutableStateOf<String?>(null) }
         LaunchedEffect(avatarData) {
-            val drawable = painter.imageLoader.execute(painter.request).drawable ?: return@LaunchedEffect
-            val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@LaunchedEffect
-            blurHash = BlurHash.encode(bitmap, BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+            withContext(Dispatchers.IO) {
+                val drawable =
+                    context.imageLoader.execute(painterRequest).drawable ?: return@withContext
+                val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@withContext
+                blurHash = BlurHash.encode(
+                    bitmap,
+                    BloomDefaults.HASH_COMPONENTS,
+                    BloomDefaults.HASH_COMPONENTS
+                )
+            }
         }
 
         bloom(
@@ -344,7 +363,6 @@ fun Modifier.avatarBloom(
             blurSize = blurSize,
             offset = offset,
             clipToSize = clipToSize,
-            bottomSoftEdgeColor = bottomSoftEdgeColor,
             bottomSoftEdgeHeight = bottomSoftEdgeHeight,
             bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
             alpha = alpha,
