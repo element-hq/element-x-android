@@ -620,7 +620,8 @@ class MessagesPresenterTest {
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
             dispatchers = coroutineDispatchers,
-            appScope = this
+            appScope = this,
+            analyticsService = analyticsService,
         )
         val buildMeta = aBuildMeta()
         val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
