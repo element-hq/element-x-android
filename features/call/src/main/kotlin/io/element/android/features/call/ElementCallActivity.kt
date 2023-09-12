@@ -149,6 +149,11 @@ class ElementCallActivity : ComponentActivity() {
         CallForegroundService.stop(this)
     }
 
+    override fun finish() {
+        // Also remove the task from recents
+        finishAndRemoveTask()
+    }
+
     private fun parseUrl(url: String?): String? {
         if (url == null) return null
         val parsedUrl = Uri.parse(url)
