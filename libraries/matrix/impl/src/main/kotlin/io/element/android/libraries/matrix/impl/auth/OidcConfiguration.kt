@@ -26,6 +26,9 @@ val oidcConfiguration: OidcConfiguration = OidcConfiguration(
     logoUri = "https://element.io/mobile-icon.png",
     tosUri = "https://element.io/acceptable-use-policy-terms",
     policyUri = "https://element.io/privacy",
+    contacts = listOf(
+        "support@element.io",
+    ),
     /**
      * Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
      */
