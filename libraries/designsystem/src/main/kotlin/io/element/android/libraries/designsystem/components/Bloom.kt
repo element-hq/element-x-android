@@ -45,6 +45,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,8 +97,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.toOffset
 import androidx.compose.ui.unit.toSize
-import coil.compose.rememberAsyncImagePainter
+import coil.imageLoader
+import coil.request.DefaultRequestOptions
 import coil.request.ImageRequest
+import coil.size.Size
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
@@ -114,6 +117,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -125,7 +130,7 @@ object BloomDefaults {
      * Number of components to use with BlurHash to generate the blur effect.
      * Larger values mean more detailed blurs.
      */
-    const val HASH_COMPONENTS = 8
+    const val HASH_COMPONENTS = 5
 
     /** Default bloom layers. */
     @Composable
@@ -159,6 +164,7 @@ data class BloomLayer(
  * @param offset The offset to use for the bloom effect. If not specified the bloom effect will be centered on the component.
  * @param clipToSize The size to use for clipping the bloom effect. If not specified the bloom effect will not be clipped.
  * @param layerConfiguration The configuration for the bloom layers. If not specified the default layers configuration will be used.
+ * @param bottomSoftEdgeColor The color to use for the bottom soft edge. If not specified the [background] color will be used.
  * @param bottomSoftEdgeHeight The height of the bottom soft edge. If not specified the bottom soft edge will not be drawn.
  * @param bottomSoftEdgeAlpha The alpha value to apply to the bottom soft edge.
  * @param alpha The alpha value to apply to the bloom effect.
@@ -170,6 +176,7 @@ fun Modifier.bloom(
     offset: DpOffset = DpOffset.Unspecified,
     clipToSize: DpSize = DpSize.Unspecified,
     layerConfiguration: ImmutableList<BloomLayer>? = null,
+    bottomSoftEdgeColor: Color = background,
     bottomSoftEdgeHeight: Dp = 40.dp,
     @FloatRange(from = 0.0, to = 1.0)
     bottomSoftEdgeAlpha: Float = 1.0f,
@@ -238,7 +245,7 @@ fun Modifier.bloom(
         val bottomEdgeGradient = LinearGradientShader(
             from = IntOffset(0, clipToPixelSize.height - bottomSoftEdgeHeightPixels).toOffset(),
             to = IntOffset(0, clipToPixelSize.height).toOffset(),
-            listOf(Color.Transparent, background),
+            listOf(Color.Transparent, bottomSoftEdgeColor),
             listOf(0f, 1f)
         )
         val bottomEdgeGradientBrush = ShaderBrush(bottomEdgeGradient)
@@ -297,6 +304,7 @@ fun Modifier.bloom(
  * @param blurSize The size of the bloom effect. If not specified the bloom effect will be the size of the component.
  * @param offset The offset to use for the bloom effect. If not specified the bloom effect will be centered on the component.
  * @param clipToSize The size to use for clipping the bloom effect. If not specified the bloom effect will not be clipped.
+ * @param bottomSoftEdgeColor The color to use for the bottom soft edge. If not specified the [background] color will be used.
  * @param bottomSoftEdgeHeight The height of the bottom soft edge. If not specified the bottom soft edge will not be drawn.
  * @param bottomSoftEdgeAlpha The alpha value to apply to the bottom soft edge.
  * @param alpha The alpha value to apply to the bloom effect.
@@ -307,6 +315,7 @@ fun Modifier.avatarBloom(
     blurSize: DpSize = DpSize.Unspecified,
     offset: DpOffset = DpOffset.Unspecified,
     clipToSize: DpSize = DpSize.Unspecified,
+    bottomSoftEdgeColor: Color = background,
     bottomSoftEdgeHeight: Dp = 40.dp,
     @FloatRange(from = 0.0, to = 1.0)
     bottomSoftEdgeAlpha: Float = 1.0f,
@@ -317,21 +326,35 @@ fun Modifier.avatarBloom(
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
     avatarData ?: return@composed this
 
+    // Request the avatar contents to use as the bloom source
+    val context = LocalContext.current
+    val density = LocalDensity.current
     if (avatarData.url != null) {
-        // Request the avatar contents to use as the bloom source
-        val painter = rememberAsyncImagePainter(
-            ImageRequest.Builder(LocalContext.current)
+        val painterRequest = remember(avatarData) {
+            ImageRequest.Builder(context)
                 .data(avatarData)
+                // Allow cache and default dispatchers
+                .defaults(DefaultRequestOptions())
                 // Needed to be able to read pixels from the Bitmap for the hash
                 .allowHardware(false)
+                // Reduce size so it loads faster for large avatars
+                .size(with(density) { Size(64.dp.roundToPx(), 64.dp.roundToPx()) })
                 .build()
-        )
-        var blurHash by remember { mutableStateOf<String?>(null) }
+        }
 
+        // By making it saveable, we'll 'cache' the previous bloom effect until a new one is loaded
+        var blurHash by rememberSaveable(avatarData) { mutableStateOf<String?>(null) }
         LaunchedEffect(avatarData) {
-            val drawable = painter.imageLoader.execute(painter.request).drawable ?: return@LaunchedEffect
-            val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@LaunchedEffect
-            blurHash = BlurHash.encode(bitmap, BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+            withContext(Dispatchers.IO) {
+                val drawable =
+                    context.imageLoader.execute(painterRequest).drawable ?: return@withContext
+                val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@withContext
+                blurHash = BlurHash.encode(
+                    bitmap,
+                    BloomDefaults.HASH_COMPONENTS,
+                    BloomDefaults.HASH_COMPONENTS
+                )
+            }
         }
 
         bloom(
@@ -363,6 +386,7 @@ fun Modifier.avatarBloom(
             blurSize = blurSize,
             offset = offset,
             clipToSize = clipToSize,
+            bottomSoftEdgeColor = bottomSoftEdgeColor,
             bottomSoftEdgeHeight = bottomSoftEdgeHeight,
             bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
             alpha = alpha,
@@ -517,7 +541,13 @@ internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::
             modifier = Modifier.size(256.dp)
                 .bloom(
                     hash = hash,
-                    background = ElementTheme.materialColors.background,
+                    background = if (ElementTheme.isLightTheme) {
+                        // Workaround to display a very subtle bloom for avatars with very soft colors
+                        Color(0xFFF9F9F9)
+                    } else {
+                        ElementTheme.materialColors.background
+                    },
+                    bottomSoftEdgeColor = ElementTheme.materialColors.background,
                     blurSize = DpSize(256.dp, 256.dp),
                 ),
             contentAlignment = Alignment.Center

@@ -24,9 +24,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Poll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,13 +84,13 @@ internal fun PollTitle(
     ) {
         if (isPollEnded) {
             Icon(
-                resourceId = VectorIcons.EndPoll,
+                resourceId = VectorIcons.PollEnd,
                 contentDescription = null,
                 modifier = Modifier.size(22.dp)
             )
         } else {
             Icon(
-                imageVector = Icons.Outlined.Poll,
+                resourceId = VectorIcons.Poll,
                 contentDescription = null,
                 modifier = Modifier.size(22.dp)
             )
@@ -130,7 +127,7 @@ internal fun ColumnScope.DisclosedPollBottomNotice(
     Text(
         modifier = modifier.align(Alignment.End),
         style = ElementTheme.typography.fontBodyXsRegular,
-        color = MaterialTheme.colorScheme.secondary,
+        color = ElementTheme.colors.textSecondary,
         text = stringResource(CommonStrings.common_poll_total_votes, votesCount),
     )
 }
@@ -142,7 +139,7 @@ fun ColumnScope.UndisclosedPollBottomNotice(modifier: Modifier = Modifier) {
             .align(Alignment.Start)
             .padding(start = 34.dp),
         style = ElementTheme.typography.fontBodyXsRegular,
-        color = MaterialTheme.colorScheme.secondary,
+        color = ElementTheme.colors.textSecondary,
         text = stringResource(CommonStrings.common_poll_undisclosed_text),
     )
 }

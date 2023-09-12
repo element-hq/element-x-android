@@ -153,7 +153,7 @@ class MessageComposerPresenter @Inject constructor(
                             inThread = messageComposerContext.composerMode.inThread,
                             isEditing = messageComposerContext.composerMode.isEditing,
                             isReply = messageComposerContext.composerMode.isReply,
-                            isLocation = false,
+                            messageType = Composer.MessageType.Text,
                         )
                     )
                 }
