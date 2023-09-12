@@ -44,7 +44,7 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     timelineItems = timelineItems,
     paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, hasMoreToLoadBackwards = true),
     highlightedEventId = null,
-    canReply = true,
+    userHasPermissionToSendMessage = true,
     hasNewItems = false,
     eventSink = {},
 )

@@ -116,7 +116,7 @@ class TimelinePresenter @Inject constructor(
 
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
-            canReply = userHasPermissionToSendMessage,
+            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             paginationState = paginationState,
             timelineItems = timelineItems,
             hasNewItems = hasNewItems.value,

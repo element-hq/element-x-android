@@ -20,5 +20,9 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 
 sealed interface ActionListEvents {
     data object Clear : ActionListEvents
-    data class ComputeForMessage(val event: TimelineItem.Event, val canRedact: Boolean) : ActionListEvents
+    data class ComputeForMessage(
+        val event: TimelineItem.Event,
+        val canRedact: Boolean,
+        val canSendMessage: Boolean,
+    ) : ActionListEvents
 }
