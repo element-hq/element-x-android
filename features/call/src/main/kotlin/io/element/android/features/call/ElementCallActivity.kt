@@ -18,6 +18,7 @@ package io.element.android.features.call
 
 import android.Manifest
 import android.content.Intent
+import android.content.res.Configuration
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
@@ -54,7 +55,8 @@ class ElementCallActivity : ComponentActivity() {
     private var audiofocusRequest: AudioFocusRequest? = null
     private var audioFocusChangeListener: AudioManager.OnAudioFocusChangeListener? = null
 
-    private var urlState = mutableStateOf<String?>(null)
+    private val isDarkMode = mutableStateOf(false)
+    private val urlState = mutableStateOf<String?>(null)
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,11 +64,13 @@ class ElementCallActivity : ComponentActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        val fallbackUrl = "https://call.element.io"
-
         urlState.value = intent?.dataString?.let(::parseUrl) ?: run {
             finish()
             return
+        }
+
+        if (savedInstanceState == null) {
+            updateUiMode(resources.configuration)
         }
 
         val requestPermissionsLauncher = registerPermissionResultLauncher()
@@ -75,7 +79,10 @@ class ElementCallActivity : ComponentActivity() {
         requestAudioFocus()
 
         setContent {
-            ElementTheme {
+            ElementTheme(
+                darkTheme = isDarkMode.value,
+                lightStatusBar = !isDarkMode.value,
+            ) {
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -94,7 +101,7 @@ class ElementCallActivity : ComponentActivity() {
                                 .padding(padding)
                                 .consumeWindowInsets(padding)
                                 .fillMaxSize(),
-                        url = urlState.value ?: fallbackUrl,
+                        url = urlState.value!!,
                         onPermissionsRequested = {
                             webkitPermissionRequest = it
                             // TODO: match permissions, don't blindly ask camera and audio
@@ -111,21 +118,32 @@ class ElementCallActivity : ComponentActivity() {
         }
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        updateUiMode(newConfig)
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        val intentUrl = intent?.dataString?.let(::parseUrl) ?: return
-        urlState.value = intentUrl
+        val intentUrl = intent?.dataString?.let(::parseUrl)
+        if (intentUrl == null) {
+            finish()
+            return
+        } else {
+            urlState.value = intentUrl
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         CallForegroundService.stop(this)
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (!isFinishing) {
+    override fun onStop() {
+        super.onStop()
+        if (!isFinishing && !isChangingConfigurations) {
             CallForegroundService.start(this)
         }
     }
@@ -170,6 +188,7 @@ class ElementCallActivity : ComponentActivity() {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun requestAudioFocus() {
         val audioAttributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
@@ -181,11 +200,7 @@ class ElementCallActivity : ComponentActivity() {
             audioManager.requestAudioFocus(request)
             audiofocusRequest = request
         } else {
-            val listener = object : AudioManager.OnAudioFocusChangeListener {
-                override fun onAudioFocusChange(focusChange: Int) {
-
-                }
-            }
+            val listener = AudioManager.OnAudioFocusChangeListener { }
             audioManager.requestAudioFocus(
                 listener,
                 AudioManager.STREAM_VOICE_CALL,
@@ -204,4 +219,16 @@ class ElementCallActivity : ComponentActivity() {
         }
     }
 
+    private fun updateUiMode(configuration: Configuration) {
+        val prevDarkMode = isDarkMode.value
+        val currentNightMode = configuration.uiMode and Configuration.UI_MODE_NIGHT_YES
+        isDarkMode.value = currentNightMode != 0
+        if (prevDarkMode != isDarkMode.value) {
+            if (isDarkMode.value) {
+                window.setBackgroundDrawableResource(android.R.drawable.screen_background_dark)
+            } else {
+                window.setBackgroundDrawableResource(android.R.drawable.screen_background_light)
+            }
+        }
+    }
 }
