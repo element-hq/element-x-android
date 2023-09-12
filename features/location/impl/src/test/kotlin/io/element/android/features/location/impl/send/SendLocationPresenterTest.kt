@@ -308,9 +308,8 @@ class SendLocationPresenterTest {
                 Composer(
                     inThread = false,
                     isEditing = false,
-                    isLocation = true,
                     isReply = false,
-                    locationType = Composer.LocationType.MyLocation,
+                    messageType = Composer.MessageType.LocationUser,
                 )
             )
         }
@@ -365,9 +364,8 @@ class SendLocationPresenterTest {
                 Composer(
                     inThread = false,
                     isEditing = false,
-                    isLocation = true,
                     isReply = false,
-                    locationType = Composer.LocationType.PinDrop,
+                    messageType = Composer.MessageType.LocationPin,
                 )
             )
         }
@@ -412,9 +410,8 @@ class SendLocationPresenterTest {
                 Composer(
                     inThread = false,
                     isEditing = true,
-                    isLocation = true,
                     isReply = false,
-                    locationType = Composer.LocationType.PinDrop,
+                    messageType = Composer.MessageType.LocationPin,
                 )
             )
         }
