@@ -18,10 +18,14 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -68,4 +72,11 @@ fun ExtraPadding.getStr(fontSize: TextUnit): String {
     val nbOfSpaces = (timestampFontSize.value / fontSize.value * nbChars).toInt() + 1
     // A space and some unbreakable spaces
     return " " + "\u00A0".repeat(nbOfSpaces)
+}
+
+@Composable
+fun ExtraPadding.getDpSize(): Dp {
+    if (nbChars == 0) return 0.dp
+    val timestampFontSize = ElementTheme.typography.fontBodyXsRegular.fontSize // 11.sp
+    return nbChars * timestampFontSize.toDp() / 3
 }
