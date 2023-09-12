@@ -158,13 +158,19 @@ private fun DefaultRoomListTopBar(
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .avatarBloom(
                     avatarData = avatarData,
-                    background = ElementTheme.materialColors.background,
+                    background = if (ElementTheme.isLightTheme) {
+                        // Workaround to display a very subtle bloom for avatars with very soft colors
+                        Color(0xFFF9F9F9)
+                    } else {
+                        ElementTheme.materialColors.background
+                    },
                     blurSize = DpSize(avatarBloomSize, avatarBloomSize),
                     offset = DpOffset(24.dp, 24.dp + statusBarPadding),
                     clipToSize = if (appBarHeight > 0) DpSize(
                         avatarBloomSize,
                         appBarHeight.toDp()
                     ) else DpSize.Unspecified,
+                    bottomSoftEdgeColor = ElementTheme.materialColors.background,
                     bottomSoftEdgeAlpha = 1f - collapsedFraction,
                     alpha = if (areSearchResultsDisplayed) 0f else 1f,
                 )
