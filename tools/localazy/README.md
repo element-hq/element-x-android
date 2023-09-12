@@ -26,13 +26,15 @@ Never edit manually the files `localazy.xml` or `translations.xml`!.
 
 For code clarity and in order to download strings to the correct module, here are some naming rules to follow as much as possible:
 
-- Keys for common strings, i.e. strings that can be used at multiple places must start by `action_` if this is a verb, or `common_` if not;
-- Keys for common accessibility strings must start by `a11y_`. Example: `a11y_hide_password`;
+- Keys for common strings, i.e. strings that can be used at multiple places must start by `action.` if this is a verb, or `common.` if not;
+- Keys for common accessibility strings must start by `a11y.`. Example: `a11y.hide_password`;
+- Keys for common strings should be named to match the string. Example: `action.copy_link` for the string `Copy link`;
+- When creating common strings, make sure to enable "Use dot (.) to create nested keys";
 - Keys for strings used in a single screen must start with `screen_` followed by the screen name, followed by a free name. Example: `screen_onboarding_welcome_title`;
 - Keys can have `_title` or `_subtitle` suffixes. Example: `screen_onboarding_welcome_title`, `screen_change_server_subtitle`;
 - For dialogs, keys can have `_dialog_title`, `_dialog_content`, and `_dialog_submit` suffixes. Example: `screen_signout_confirmation_dialog_title`, `screen_signout_confirmation_dialog_content`, `screen_signout_confirmation_dialog_submit`;
-- `a11y_` pattern can be used for strings that are only used for accessibility. Example: `a11y_hide_password`, `screen_roomlist_a11y_create_message`;
-- Strings for error message can start by `error_`, or contain `_error_` if used in a specific screen only. Example: `error_some_messages_have_not_been_sent`, `screen_change_server_error_invalid_homeserver`.
+- `a11y.` pattern can be used for strings that are only used for accessibility. Example: `a11y.hide_password`, `screen_roomlist_a11y_create_message`;
+- Strings for error message can start by `error_`, or contain `_error_` if used in a specific screen only. Example: `error_some_messages_have_not_been_sent`, `screen_change_server_error_invalid_homeserver`;
 
 *Note*: those rules applies for `strings` and for `plurals`.
 

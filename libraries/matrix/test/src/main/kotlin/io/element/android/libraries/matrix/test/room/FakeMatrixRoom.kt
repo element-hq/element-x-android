@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.delay
@@ -59,6 +61,7 @@ class FakeMatrixRoom(
     override val isDirect: Boolean = false,
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
+    val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
     canRedact: Boolean = false,
 ) : MatrixRoom {
@@ -90,7 +93,7 @@ class FakeMatrixRoom(
     private var sendPollResponseResult = Result.success(Unit)
     private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
-    val editMessageCalls = mutableListOf<String>()
+    val editMessageCalls = mutableListOf<Pair<String, String>>()
 
     var sendMediaCount = 0
         private set
@@ -146,7 +149,9 @@ class FakeMatrixRoom(
     }
 
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
-        updateRoomNotificationSettingsResult
+        val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, activeMemberCount).getOrThrow()
+        roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(notificationSettings)
+        return Result.success(Unit)
     }
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
@@ -167,7 +172,7 @@ class FakeMatrixRoom(
         userAvatarUrlResult
     }
 
-    override suspend fun sendMessage(message: String): Result<Unit> = simulateLongTask {
+    override suspend fun sendMessage(body: String, htmlBody: String) = simulateLongTask {
         Result.success(Unit)
     }
 
@@ -196,16 +201,16 @@ class FakeMatrixRoom(
         return cancelSendResult
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, message: String): Result<Unit> {
-        editMessageCalls += message
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String): Result<Unit> {
+        editMessageCalls += body to htmlBody
         return Result.success(Unit)
     }
 
-    var replyMessageParameter: String? = null
+    var replyMessageParameter: Pair<String, String>? = null
         private set
 
-    override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> {
-        replyMessageParameter = message
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String): Result<Unit> {
+        replyMessageParameter = body to htmlBody
         return Result.success(Unit)
     }
 

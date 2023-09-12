@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 coroutineDispatchers = Singleton.coroutineDispatchers,
                 sessionStore = sessionStore,
                 userAgentProvider = userAgentProvider,
-                clock = DefaultSystemClock()
+                clock = DefaultSystemClock(),
             )
         )
     }

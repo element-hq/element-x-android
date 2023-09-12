@@ -62,6 +62,7 @@ class ActionListPresenter @Inject constructor(
                 is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(
                     timelineItem = event.event,
                     userCanRedact = event.canRedact,
+                    userCanSendMessage = event.canSendMessage,
                     target = target,
                 )
             }
@@ -70,13 +71,14 @@ class ActionListPresenter @Inject constructor(
         return ActionListState(
             target = target.value,
             displayEmojiReactions = displayEmojiReactions,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 
     private fun CoroutineScope.computeForMessage(
         timelineItem: TimelineItem.Event,
         userCanRedact: Boolean,
+        userCanSendMessage: Boolean,
         target: MutableState<ActionListState.Target>
     ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
@@ -99,6 +101,17 @@ class ActionListPresenter @Inject constructor(
                 }
                 is TimelineItemPollContent -> {
                     buildList {
+                        val isMineOrCanRedact = timelineItem.isMine || userCanRedact
+
+                        // TODO Poll: Reply to poll. Ensure to update `fun TimelineItemEventContent.canBeReplied()`
+                        //  when touching this
+                        // if (timelineItem.isRemote) {
+                        //     // Can only reply or forward messages already uploaded to the server
+                        //     add(TimelineItemAction.Reply)
+                        // }
+                        if (!timelineItem.content.isEnded && timelineItem.isRemote && isMineOrCanRedact) {
+                            add(TimelineItemAction.EndPoll)
+                        }
                         if (timelineItem.content.canBeCopied()) {
                             add(TimelineItemAction.Copy)
                         }
@@ -108,7 +121,7 @@ class ActionListPresenter @Inject constructor(
                         if (!timelineItem.isMine) {
                             add(TimelineItemAction.ReportContent)
                         }
-                        if (timelineItem.isMine || userCanRedact) {
+                        if (isMineOrCanRedact) {
                             add(TimelineItemAction.Redact)
                         }
                     }
@@ -116,7 +129,9 @@ class ActionListPresenter @Inject constructor(
                 else -> buildList<TimelineItemAction> {
                     if (timelineItem.isRemote) {
                         // Can only reply or forward messages already uploaded to the server
-                        add(TimelineItemAction.Reply)
+                        if (userCanSendMessage) {
+                            add(TimelineItemAction.Reply)
+                        }
                         add(TimelineItemAction.Forward)
                     }
                     if (timelineItem.isMine && timelineItem.isTextMessage) {

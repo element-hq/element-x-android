@@ -67,6 +67,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.use
@@ -100,9 +101,13 @@ class RustMatrixClient constructor(
         client = client,
         dispatchers = dispatchers,
     )
-    private val notificationClient = client.notificationClient().use { builder ->
-        builder.filterByPushRules().finish()
-    }
+    private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
+    private val notificationClient = client.notificationClient(notificationProcessSetup)
+        .use { builder ->
+            builder
+                .filterByPushRules()
+                .finish()
+        }
     private val notificationSettings = client.getNotificationSettings()
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
@@ -288,6 +293,7 @@ class RustMatrixClient constructor(
         syncService.destroy()
         innerRoomListService.destroy()
         notificationClient.destroy()
+        notificationProcessSetup.destroy()
         client.destroy()
     }
 
@@ -325,6 +331,7 @@ class RustMatrixClient constructor(
             client.accountUrl()
         }
     }
+
     override suspend fun loadUserDisplayName(): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.displayName()

@@ -39,7 +39,7 @@ class DefaultFeatureFlagServiceTest {
 
     @Test
     fun `given service with a runtime provider when set enabled feature is called then it returns true`() = runTest {
-        val featureFlagProvider = FakeRuntimeFeatureFlagProvider(0)
+        val featureFlagProvider = FakeMutableFeatureFlagProvider(0)
         val featureFlagService = DefaultFeatureFlagService(setOf(featureFlagProvider))
         val result = featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, true)
         assertThat(result).isEqualTo(true)
@@ -47,7 +47,7 @@ class DefaultFeatureFlagServiceTest {
 
     @Test
     fun `given service with a runtime provider and feature enabled when feature is checked then it returns the correct value`() = runTest {
-        val featureFlagProvider = FakeRuntimeFeatureFlagProvider(0)
+        val featureFlagProvider = FakeMutableFeatureFlagProvider(0)
         val featureFlagService = DefaultFeatureFlagService(setOf(featureFlagProvider))
         featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, true)
         assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)).isEqualTo(true)
@@ -57,11 +57,11 @@ class DefaultFeatureFlagServiceTest {
 
     @Test
     fun `given service with 2 runtime providers when feature is checked then it uses the priority correctly`() = runTest {
-        val lowPriorityfeatureFlagProvider = FakeRuntimeFeatureFlagProvider(LOW_PRIORITY)
-        val highPriorityfeatureFlagProvider = FakeRuntimeFeatureFlagProvider(HIGH_PRIORITY)
-        val featureFlagService = DefaultFeatureFlagService(setOf(lowPriorityfeatureFlagProvider, highPriorityfeatureFlagProvider))
-        lowPriorityfeatureFlagProvider.setFeatureEnabled(FeatureFlags.LocationSharing, false)
-        highPriorityfeatureFlagProvider.setFeatureEnabled(FeatureFlags.LocationSharing, true)
+        val lowPriorityFeatureFlagProvider = FakeMutableFeatureFlagProvider(LOW_PRIORITY)
+        val highPriorityFeatureFlagProvider = FakeMutableFeatureFlagProvider(HIGH_PRIORITY)
+        val featureFlagService = DefaultFeatureFlagService(setOf(lowPriorityFeatureFlagProvider, highPriorityFeatureFlagProvider))
+        lowPriorityFeatureFlagProvider.setFeatureEnabled(FeatureFlags.LocationSharing, false)
+        highPriorityFeatureFlagProvider.setFeatureEnabled(FeatureFlags.LocationSharing, true)
         assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)).isEqualTo(true)
     }
 }

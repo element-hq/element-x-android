@@ -41,7 +41,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.textcomposer)
+    implementation(projects.libraries.textcomposer.impl)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.eventformatter.api)
@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.accompanist.systemui)
     implementation(libs.vanniktech.blurhash)
     implementation(libs.telephoto.zoomableimage)
-    implementation(libs.vanniktech.emoji)
+    implementation(libs.matrix.emojibase.bindings)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -76,6 +76,7 @@ dependencies {
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.mediapickers.test)
+    testImplementation(projects.libraries.textcomposer.test)
     testImplementation(libs.test.mockk)
 
     ksp(libs.showkase.processor)

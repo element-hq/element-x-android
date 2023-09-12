@@ -23,7 +23,6 @@ import io.element.android.x.di.AppComponent
 import io.element.android.x.di.DaggerAppComponent
 import io.element.android.x.info.logApplicationInfo
 import io.element.android.x.initializer.CrashInitializer
-import io.element.android.x.initializer.EmojiInitializer
 import io.element.android.x.initializer.TracingInitializer
 
 class ElementXApplication : Application(), DaggerComponentOwner {
@@ -39,7 +38,6 @@ class ElementXApplication : Application(), DaggerComponentOwner {
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
             initializeComponent(TracingInitializer::class.java)
-            initializeComponent(EmojiInitializer::class.java)
         }
         logApplicationInfo()
     }

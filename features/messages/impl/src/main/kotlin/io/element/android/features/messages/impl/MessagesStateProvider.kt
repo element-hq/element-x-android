@@ -30,6 +30,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentSetOf
 
 open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
@@ -54,7 +55,9 @@ fun aMessagesState() = MessagesState(
     userHasPermissionToSendMessage = true,
     userHasPermissionToRedact = false,
     composerState = aMessageComposerState().copy(
-        text = "Hello",
+        richTextEditorState = RichTextEditorState("Hello", fake = true).apply {
+            requestFocus()
+        },
         isFullScreen = false,
         mode = MessageComposerMode.Normal("Hello"),
     ),
@@ -67,7 +70,7 @@ fun aMessagesState() = MessagesState(
     ),
     actionListState = anActionListState(),
     customReactionState = CustomReactionState(
-        selectedEventId = null,
+        target = CustomReactionState.Target.None,
         eventSink = {},
         selectedEmoji = persistentSetOf(),
     ),

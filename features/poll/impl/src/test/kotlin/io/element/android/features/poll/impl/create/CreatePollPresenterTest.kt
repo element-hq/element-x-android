@@ -20,22 +20,34 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import im.vector.app.features.analytics.plan.Composer
+import im.vector.app.features.analytics.plan.PollCreation
+import io.element.android.features.messages.test.MessageComposerContextFake
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.test.room.CreatePollInvocation
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class CreatePollPresenterTest {
 
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
+
     private var navUpInvocationsCount = 0
     private val fakeMatrixRoom = FakeMatrixRoom()
-    // private val fakeAnalyticsService = FakeAnalyticsService() // TODO Polls: add analytics
+    private val fakeAnalyticsService = FakeAnalyticsService()
+    private val messageComposerContextFake = MessageComposerContextFake()
 
     private val presenter = CreatePollPresenter(
         room = fakeMatrixRoom,
-        // analyticsService = fakeAnalyticsService,  // TODO Polls: add analytics
+        analyticsService = fakeAnalyticsService,
+        messageComposerContext = messageComposerContextFake,
         navigateUp = { navUpInvocationsCount++ },
     )
 
@@ -96,6 +108,22 @@ class CreatePollPresenterTest {
                     answers = listOf("Answer 1", "Answer 2"),
                     maxSelections = 1,
                     pollKind = PollKind.Disclosed
+                )
+            )
+            Truth.assertThat(fakeAnalyticsService.capturedEvents.size).isEqualTo(2)
+            Truth.assertThat(fakeAnalyticsService.capturedEvents[0]).isEqualTo(
+                Composer(
+                    inThread = false,
+                    isEditing = false,
+                    isReply = false,
+                    messageType = Composer.MessageType.Poll,
+                )
+            )
+            Truth.assertThat(fakeAnalyticsService.capturedEvents[1]).isEqualTo(
+                PollCreation(
+                    action = PollCreation.Action.Create,
+                    isUndisclosed = false,
+                    numberOfAnswers = 2,
                 )
             )
         }

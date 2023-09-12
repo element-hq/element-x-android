@@ -3,9 +3,6 @@
   <plurals name="room_timeline_state_changes">
     <item quantity="other">"%1$d 個聊天室變更"</item>
   </plurals>
-  <plurals name="screen_room_timeline_more_reactions">
-    <item quantity="other">"還有 %1$d 個"</item>
-  </plurals>
   <string name="screen_room_attachment_source_camera">"照相機"</string>
   <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
   <string name="screen_room_attachment_source_camera_video">"錄影"</string>

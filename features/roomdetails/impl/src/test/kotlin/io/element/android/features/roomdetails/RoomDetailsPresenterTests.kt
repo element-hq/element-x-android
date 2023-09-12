@@ -36,27 +36,37 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
     private fun aRoomDetailsPresenter(
         room: MatrixRoom,
         leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake(),
-        dispatchers: CoroutineDispatchers
+        dispatchers: CoroutineDispatchers,
+        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
     ): RoomDetailsPresenter {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
                 return RoomMemberDetailsPresenter(matrixClient, room, roomMemberId)
@@ -352,6 +362,64 @@ class RoomDetailsPresenterTests {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `present - notification mode changes`() = runTest {
+        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val notificationSettingsService = FakeNotificationSettingsService()
+        val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
+        val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+
+            notificationSettingsService.setRoomNotificationMode(room.roomId, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            val updatedState = consumeItemsUntilPredicate {
+                it.roomNotificationSettings?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
+            }.last()
+            assertThat(updatedState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - mute room notifications`() = runTest {
+        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val notificationSettingsService = FakeNotificationSettingsService(initialMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+        val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
+        val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(RoomDetailsEvent.MuteNotification)
+            val updatedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) {
+                it.roomNotificationSettings?.mode ==  RoomNotificationMode.MUTE
+            }.last()
+            assertThat(updatedState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.MUTE)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - unmute room notifications`() = runTest {
+        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val notificationSettingsService = FakeNotificationSettingsService(
+            initialMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+            initialDefaultMode = RoomNotificationMode.ALL_MESSAGES
+        )
+        val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
+        val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(RoomDetailsEvent.UnmuteNotification)
+            val updatedState = consumeItemsUntilPredicate {
+                it.roomNotificationSettings?.mode ==  RoomNotificationMode.ALL_MESSAGES
+            }.last()
+            assertThat(updatedState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 }
 
 fun aMatrixRoom(
@@ -363,6 +431,7 @@ fun aMatrixRoom(
     isEncrypted: Boolean = true,
     isPublic: Boolean = true,
     isDirect: Boolean = false,
+    notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
 ) = FakeMatrixRoom(
     roomId = roomId,
     name = name,
@@ -372,5 +441,6 @@ fun aMatrixRoom(
     isEncrypted = isEncrypted,
     isPublic = isPublic,
     isDirect = isDirect,
+    notificationSettingsService = notificationSettingsService
 )
 

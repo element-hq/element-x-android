@@ -63,6 +63,7 @@ dependencies {
     implementation(projects.features.login.impl)
     implementation(projects.features.networkmonitor.impl)
     implementation(projects.services.toolbox.impl)
+    implementation(projects.libraries.featureflag.impl)
     implementation(libs.coroutines.core)
     coreLibraryDesugaring(libs.android.desugar)
 }

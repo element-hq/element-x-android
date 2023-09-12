@@ -1,4 +1,4 @@
-name: Code Quality Checks
+name: Sonar
 
 on:
   workflow_dispatch:
@@ -10,18 +10,18 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxMetaspaceSize=512m -Dkotlin.daemon.jvm.options="-Xmx2g" -Dkotlin.incremental=false
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon --warn
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 4 --no-daemon --warn
 
 jobs:
   sonar:
-    name: Project Check Suite
+    name: Sonar Quality Checks
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('sonar-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('sonar-develop-{0}', github.sha) || format('sonar-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -41,9 +41,3 @@ jobs:
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
         if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
         run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
-      - name: Prepare Danger
-        if: always()
-        run: |
-          npm install --save-dev @babel/core
-          npm install --save-dev @babel/plugin-transform-flow-strip-types
-          yarn add danger-plugin-lint-report --dev

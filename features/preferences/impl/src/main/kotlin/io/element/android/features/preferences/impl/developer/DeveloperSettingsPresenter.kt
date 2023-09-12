@@ -83,7 +83,8 @@ class DeveloperSettingsPresenter @Inject constructor(
                     features,
                     enabledFeatures,
                     event.feature,
-                    event.isEnabled
+                    event.isEnabled,
+                    triggerClearCache = { handleEvents(DeveloperSettingsEvents.ClearCache) }
                 )
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
             }
@@ -122,7 +123,8 @@ class DeveloperSettingsPresenter @Inject constructor(
         features: SnapshotStateMap<String, Feature>,
         enabledFeatures: SnapshotStateMap<String, Boolean>,
         featureUiModel: FeatureUiModel,
-        enabled: Boolean
+        enabled: Boolean,
+        @Suppress("UNUSED_PARAMETER") triggerClearCache: () -> Unit,
     ) = launch {
         val feature = features[featureUiModel.key] ?: return@launch
         if (featureFlagService.setFeatureEnabled(feature, enabled)) {

@@ -17,7 +17,6 @@
 package io.element.android.appnav.loggedin
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.permissions.api.createDummyPostNotificationPermissionsState
 
 open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
     override val values: Sequence<LoggedInState>
@@ -32,5 +31,4 @@ fun aLoggedInState(
     showSyncSpinner: Boolean = true,
 ) = LoggedInState(
     showSyncSpinner = showSyncSpinner,
-    permissionsState = createDummyPostNotificationPermissionsState(),
 )

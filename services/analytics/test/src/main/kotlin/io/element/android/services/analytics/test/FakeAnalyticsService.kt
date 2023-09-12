@@ -32,6 +32,7 @@ class FakeAnalyticsService(
     private val isEnabledFlow = MutableStateFlow(isEnabled)
     private val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
     val capturedEvents = mutableListOf<VectorAnalyticsEvent>()
+    val trackedErrors = mutableListOf<Throwable>()
 
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
 
@@ -66,6 +67,7 @@ class FakeAnalyticsService(
     }
 
     override fun trackError(throwable: Throwable) {
+        trackedErrors += throwable
     }
 
     override suspend fun reset() {

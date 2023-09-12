@@ -123,7 +123,13 @@ fun MessagesView(
     fun onMessageLongClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageLongClicked= ${event.id}")
         localView.hideKeyboard()
-        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event, state.userHasPermissionToRedact))
+        state.actionListState.eventSink(
+            ActionListEvents.ComputeForMessage(
+                event = event,
+                canRedact = state.userHasPermissionToRedact,
+                canSendMessage = state.userHasPermissionToSendMessage,
+            )
+        )
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
@@ -141,7 +147,7 @@ fun MessagesView(
     }
 
     fun onMoreReactionsClicked(event: TimelineItem.Event) {
-        state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event))
+        state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
     }
 
     Scaffold(
@@ -194,18 +200,17 @@ fun MessagesView(
         state = state.actionListState,
         onActionSelected = ::onActionSelected,
         onCustomReactionClicked = { event ->
-            state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event))
+            if (event.eventId == null) return@ActionListView
+            state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
         },
         onEmojiReactionClicked = ::onEmojiReactionClicked,
     )
 
     CustomReactionBottomSheet(
         state = state.customReactionState,
-        onEmojiSelected = { emoji ->
-            state.customReactionState.selectedEventId?.let { eventId ->
-                state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
-                state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
-            }
+        onEmojiSelected = { eventId, emoji ->
+            state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
+            state.customReactionState.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
         }
     )
 

@@ -17,7 +17,7 @@ jobs:
     name: Search for forbidden patterns
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
@@ -29,7 +29,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('check-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-develop-{0}', github.sha) || format('check-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -52,12 +52,6 @@ jobs:
           name: linting-report
           path: |
             */build/reports/**/*.*
-      - name: 🔊 Publish results to Sonar
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
-        run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
       - name: Prepare Danger
         if: always()
         run: |

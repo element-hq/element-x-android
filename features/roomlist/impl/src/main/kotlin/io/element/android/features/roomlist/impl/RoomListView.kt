@@ -18,11 +18,13 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -43,7 +45,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.features.leaveroom.api.LeaveRoomView
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.roomlist.impl.components.RequestVerificationHeader
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
@@ -52,8 +54,8 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
@@ -74,8 +76,10 @@ fun RoomListView(
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+    ConnectivityIndicatorContainer(
+        modifier = modifier,
+        isOnline = state.hasNetworkConnection,
+    ) { topPadding ->
         Box {
             fun onRoomLongClicked(
                 roomListRoomSummary: RoomListRoomSummary
@@ -94,6 +98,7 @@ fun RoomListView(
             LeaveRoomView(state = state.leaveRoomState)
 
             RoomListContent(
+                modifier = Modifier.padding(top = topPadding),
                 state = state,
                 onVerifyClicked = onVerifyClicked,
                 onRoomClicked = onRoomClicked,
@@ -109,6 +114,8 @@ fun RoomListView(
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
                 modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(top = topPadding)
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             )
@@ -210,6 +217,11 @@ fun RoomListContent(
                         HorizontalDivider()
                     }
                 }
+                // Add a last Spacer item to ensure that the FAB does not hide the last room item
+                // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
+                item {
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
             }
         },
         floatingActionButton = {
@@ -219,8 +231,7 @@ fun RoomListContent(
                 onClick = onCreateRoomClicked
             ) {
                 Icon(
-                    // Correct icon alignment for better rendering.
-                    modifier = Modifier.padding(start = 1.dp, bottom = 1.dp),
+                    // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
                     resourceId = DrawableR.drawable.ic_edit_square,
                     contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
                 )

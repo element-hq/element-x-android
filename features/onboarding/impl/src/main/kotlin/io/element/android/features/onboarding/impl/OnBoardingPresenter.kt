@@ -18,6 +18,8 @@ package io.element.android.features.onboarding.impl
 
 import androidx.compose.runtime.Composable
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import javax.inject.Inject
 
 /**
@@ -25,10 +27,12 @@ import javax.inject.Inject
  * When this presenter get more code in it, please remove the ignore rule in the kover configuration.
  */
 class OnBoardingPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
 ) : Presenter<OnBoardingState> {
     @Composable
     override fun present(): OnBoardingState {
         return OnBoardingState(
+            isDebugBuild = buildMeta.buildType != BuildType.RELEASE,
             canLoginWithQrCode = OnBoardingConfig.canLoginWithQrCode,
             canCreateAccount = OnBoardingConfig.canCreateAccount,
         )

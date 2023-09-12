@@ -20,19 +20,40 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class OnBoardingPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = OnBoardingPresenter()
+        val presenter = OnBoardingPresenter(aBuildMeta())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            assertThat(initialState.isDebugBuild).isTrue()
             assertThat(initialState.canLoginWithQrCode).isFalse()
             assertThat(initialState.canCreateAccount).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - initial state release`() = runTest {
+        val presenter = OnBoardingPresenter(aBuildMeta(buildType = BuildType.RELEASE))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.isDebugBuild).isFalse()
         }
     }
 }

@@ -17,7 +17,11 @@
 package io.element.android.x.initializer
 
 import android.content.Context
+import android.system.Os
+import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
+import io.element.android.features.preferences.impl.developer.tracing.SharedPrefTracingConfigurationStore
+import io.element.android.features.preferences.impl.developer.tracing.TargetLogLevelMapBuilder
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
@@ -34,8 +38,11 @@ class TracingInitializer : Initializer<Unit> {
         val bugReporter = appBindings.bugReporter()
         Timber.plant(tracingService.createTimberTree())
         val tracingConfiguration = if (BuildConfig.DEBUG) {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val store = SharedPrefTracingConfigurationStore(prefs)
+            val builder = TargetLogLevelMapBuilder(store)
             TracingConfiguration(
-                filterConfiguration = TracingFilterConfigurations.debug,
+                filterConfiguration = TracingFilterConfigurations.custom(builder.getCurrentMap()),
                 writesToLogcat = true,
                 writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
             )
@@ -51,6 +58,8 @@ class TracingInitializer : Initializer<Unit> {
         }
         bugReporter.cleanLogDirectoryIfNeeded()
         tracingService.setupTracing(tracingConfiguration)
+        // Also set env variable for rust back trace
+        Os.setenv("RUST_BACKTRACE", "1", true)
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = mutableListOf()

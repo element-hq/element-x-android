@@ -24,13 +24,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Poll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -62,7 +61,7 @@ fun PollContentView(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        PollTitle(title = question)
+        PollTitle(title = question, isPollEnded = isPollEnded)
 
         PollAnswers(answerItems = answerItems, onAnswerSelected = ::onAnswerSelected)
 
@@ -76,17 +75,26 @@ fun PollContentView(
 @Composable
 internal fun PollTitle(
     title: String,
+    isPollEnded: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Icon(
-            modifier = Modifier.size(22.dp),
-            imageVector = Icons.Outlined.Poll,
-            contentDescription = null
-        )
+        if (isPollEnded) {
+            Icon(
+                resourceId = VectorIcons.PollEnd,
+                contentDescription = null,
+                modifier = Modifier.size(22.dp)
+            )
+        } else {
+            Icon(
+                resourceId = VectorIcons.Poll,
+                contentDescription = null,
+                modifier = Modifier.size(22.dp)
+            )
+        }
         Text(
             text = title,
             style = ElementTheme.typography.fontBodyLgMedium
@@ -170,7 +178,7 @@ internal fun PollContentEndedPreview() = ElementPreview {
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isEnded = true),
         pollKind = PollKind.Disclosed,
-        isPollEnded = false,
+        isPollEnded = true,
         onAnswerSelected = { _, _ -> },
     )
 }

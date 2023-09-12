@@ -21,6 +21,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.PollEnd
 import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.InviteDialogAction
@@ -30,7 +31,6 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
@@ -41,6 +41,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.media.FakeLocalMediaFactory
+import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
+import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
@@ -50,6 +52,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -69,15 +72,23 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class MessagesPresenterTest {
+
+    @Rule
+    @JvmField
+    val warmUpRule = WarmUpRule()
 
     private val mockMediaUrl: Uri = mockk("localMediaUri")
 
@@ -315,6 +326,7 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
             assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            skipItems(1) // back paginating
         }
     }
 
@@ -371,14 +383,14 @@ class MessagesPresenterTest {
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
-            val focusedState = consumeItemsUntilPredicate { state ->
+            initialState.composerState.richTextEditorState.requestFocus()
+            val focusedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 state.showReinvitePrompt
             }.last()
             assertThat(focusedState.showReinvitePrompt).isTrue()
             // If it's dismissed then we stop showing the alert
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
-            val dismissedState = consumeItemsUntilPredicate { state ->
+            val dismissedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 !state.showReinvitePrompt
             }.last()
             assertThat(dismissedState.showReinvitePrompt).isFalse()
@@ -395,7 +407,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -411,7 +423,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.eventSink(MessageComposerEvents.FocusChanged(true))
+            initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -462,7 +474,9 @@ class MessagesPresenterTest {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
-            val loadingState = awaitItem()
+            val loadingState = consumeItemsUntilPredicate { state ->
+                state.inviteProgress.isLoading()
+            }.last()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
             val newState = awaitItem()
             assertThat(newState.inviteProgress.isSuccess()).isTrue()
@@ -559,32 +573,59 @@ class MessagesPresenterTest {
         }
     }
 
+    @Test
+    fun `present - handle poll end`() = runTest {
+        val room = FakeMatrixRoom()
+        val analyticsService = FakeAnalyticsService()
+        val presenter = createMessagePresenter(
+            matrixRoom = room,
+            analyticsService = analyticsService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EndPoll, aMessageEvent()))
+            waitForPredicate { room.endPollInvocations.size == 1 }
+            cancelAndIgnoreRemainingEvents()
+            assertThat(room.endPollInvocations.size).isEqualTo(1)
+            assertThat(room.endPollInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
+            assertThat(room.endPollInvocations.first().text).isEqualTo("The poll with event id: \$anEventId has ended.")
+            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollEnd())
+        }
+    }
+
     private fun TestScope.createMessagePresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         matrixRoom: MatrixRoom = FakeMatrixRoom(),
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
-            featureFlagService = FakeFeatureFlagService(),
+            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.NotificationSettings.key to true)),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
             mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
             snackbarDispatcher = SnackbarDispatcher(),
-            analyticsService = FakeAnalyticsService(),
+            analyticsService = analyticsService,
             messageComposerContext = MessageComposerContextImpl(),
+            richTextEditorStateFactory = TestRichTextEditorStateFactory(),
+
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
             dispatchers = coroutineDispatchers,
-            appScope = this
+            appScope = this,
+            analyticsService = analyticsService,
         )
         val buildMeta = aBuildMeta()
         val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
-        val customReactionPresenter = CustomReactionPresenter()
+        val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
         return MessagesPresenter(
@@ -600,6 +641,7 @@ class MessagesPresenterTest {
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
+            analyticsService = analyticsService,
             dispatchers = coroutineDispatchers,
         )
     }

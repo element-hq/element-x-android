@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.text.withColoredPeriod
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.ForcedDarkElementTheme
 
 @Composable
 fun SunsetPage(
@@ -53,9 +54,7 @@ fun SunsetPage(
     modifier: Modifier = Modifier,
     overallContent: @Composable () -> Unit,
 ) {
-    ElementTheme(
-        darkTheme = true
-    ) {
+    ForcedDarkElementTheme(lightStatusBar = true) {
         Box(
             modifier = modifier.fillMaxSize()
         ) {

@@ -21,47 +21,45 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.test.A_ROOM_NOTIFICATION_MODE
-import io.element.android.libraries.matrix.test.A_ROOM_NOTIFICATION_SETTINGS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 
-class FakeNotificationSettingsService : NotificationSettingsService {
+class FakeNotificationSettingsService(
+    initialMode: RoomNotificationMode = A_ROOM_NOTIFICATION_MODE,
+    initialDefaultMode: RoomNotificationMode = A_ROOM_NOTIFICATION_MODE
+) : NotificationSettingsService {
     private var _roomNotificationSettingsStateFlow = MutableStateFlow(Unit)
-    private val muteRoomResult: Result<Unit> = Result.success(Unit)
-    private val unmuteRoomResult: Result<Unit> = Result.success(Unit)
-    private val setRoomNotificationMode: Result<Unit> = Result.success(Unit)
-    private val restoreDefaultRoomNotificationMode: Result<Unit> = Result.success(Unit)
-    private val getRoomNotificationSettingsResult: Result<RoomNotificationSettings> = Result.success(A_ROOM_NOTIFICATION_SETTINGS)
-    private val getDefaultRoomNotificationMode: Result<RoomNotificationMode> = Result.success(A_ROOM_NOTIFICATION_MODE)
+    private var defaultRoomNotificationMode: RoomNotificationMode = initialDefaultMode
+    private var roomNotificationMode: RoomNotificationMode = initialMode
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _roomNotificationSettingsStateFlow
 
-    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> {
-        return getRoomNotificationSettingsResult
+    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationSettings> {
+        return Result.success(RoomNotificationSettings(mode = roomNotificationMode, isDefault = roomNotificationMode == defaultRoomNotificationMode))
     }
 
-    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode> {
-        return getDefaultRoomNotificationMode
-    }
-
-    override suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationMode> {
+        return Result.success(defaultRoomNotificationMode)
     }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> {
-        return setRoomNotificationMode
+        roomNotificationMode = mode
+        _roomNotificationSettingsStateFlow.emit(Unit)
+        return Result.success(Unit)
     }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> {
-        return restoreDefaultRoomNotificationMode
+        roomNotificationMode = defaultRoomNotificationMode
+        _roomNotificationSettingsStateFlow.emit(Unit)
+        return Result.success(Unit)
     }
 
     override suspend fun muteRoom(roomId: RoomId): Result<Unit> {
-        return muteRoomResult
+        return setRoomNotificationMode(roomId, RoomNotificationMode.MUTE)
     }
 
-    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<Unit> {
-        return unmuteRoomResult
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<Unit> {
+        return restoreDefaultRoomNotificationMode(roomId)
     }
 
     override suspend fun isRoomMentionEnabled(): Result<Boolean> {
@@ -79,5 +77,4 @@ class FakeNotificationSettingsService : NotificationSettingsService {
     override suspend fun setCallEnabled(enabled: Boolean): Result<Unit> {
         return Result.success(Unit)
     }
-
 }

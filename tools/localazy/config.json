@@ -45,7 +45,7 @@
       ]
     },
     {
-      "name": ":libraries:textcomposer",
+      "name": ":libraries:textcomposer:impl",
       "includeRegex": [
         "rich_text_editor_.*"
       ]
@@ -119,7 +119,8 @@
       "name": ":features:ftue:impl",
       "includeRegex": [
         "screen_welcome_.*",
-        "screen_migration_.*"
+        "screen_migration_.*",
+        "screen_notification_optin_.*"
       ]
     },
     {

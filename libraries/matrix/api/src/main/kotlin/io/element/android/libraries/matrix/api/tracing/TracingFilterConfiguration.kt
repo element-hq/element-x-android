@@ -19,24 +19,27 @@ package io.element.android.libraries.matrix.api.tracing
 data class TracingFilterConfiguration(
     val overrides: Map<Target, LogLevel> = emptyMap(),
 ) {
+    private val defaultLogLevel = LogLevel.INFO
 
     // Order should matters
-    private val targetsToLogLevel: MutableMap<Target, LogLevel> = mutableMapOf(
-        Target.COMMON to LogLevel.Info,
-        Target.HYPER to LogLevel.Warn,
-        Target.MATRIX_SDK_CRYPTO to LogLevel.Debug,
-        Target.MATRIX_SDK_HTTP_CLIENT to LogLevel.Debug,
-        Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.Trace,
-        Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.Trace,
-        Target.MATRIX_SDK_UI_TIMELINE to LogLevel.Info,
+    private val targetsToLogLevel: Map<Target, LogLevel> = mapOf(
+        Target.HYPER to LogLevel.WARN,
+        Target.MATRIX_SDK_CRYPTO to LogLevel.DEBUG,
+        Target.MATRIX_SDK_HTTP_CLIENT to LogLevel.DEBUG,
+        Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.TRACE,
+        Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.TRACE,
     )
+
+    fun getLogLevel(target: Target): LogLevel {
+        return overrides[target] ?: targetsToLogLevel[target] ?: defaultLogLevel
+    }
 
     val filter: String
         get() {
-            overrides.forEach { (target, logLevel) ->
-                targetsToLogLevel[target] = logLevel
+            val fullMap = Target.values().associateWith {
+                overrides[it] ?: targetsToLogLevel[it] ?: defaultLogLevel
             }
-            return targetsToLogLevel.map {
+            return fullMap.map {
                 if (it.key.filter.isEmpty()) {
                     it.value.filter
                 } else {
@@ -53,31 +56,32 @@ enum class Target(open val filter: String) {
     MATRIX_SDK_FFI("matrix_sdk_ffi"),
     MATRIX_SDK_UNIFFI_API("matrix_sdk_ffi::uniffi_api"),
     MATRIX_SDK_CRYPTO("matrix_sdk_crypto"),
+    MATRIX_SDK("matrix_sdk"),
     MATRIX_SDK_HTTP_CLIENT("matrix_sdk::http_client"),
+    MATRIX_SDK_CLIENT("matrix_sdk::client"),
+    MATRIX_SDK_OIDC("matrix_sdk::oidc"),
     MATRIX_SDK_SLIDING_SYNC("matrix_sdk::sliding_sync"),
     MATRIX_SDK_BASE_SLIDING_SYNC("matrix_sdk_base::sliding_sync"),
     MATRIX_SDK_UI_TIMELINE("matrix_sdk_ui::timeline"),
 }
 
-sealed class LogLevel(val filter: String) {
-    data object Warn : LogLevel("warn")
-    data object Trace : LogLevel("trace")
-    data object Info : LogLevel("info")
-    data object Debug : LogLevel("debug")
-    data object Error : LogLevel("error")
+enum class LogLevel(open val filter: String) {
+    ERROR("error"),
+    WARN("warn"),
+    INFO("info"),
+    DEBUG("debug"),
+    TRACE("trace"),
 }
 
 object TracingFilterConfigurations {
     val release = TracingFilterConfiguration(
         overrides = mapOf(
-            Target.COMMON to LogLevel.Info,
-            Target.ELEMENT to LogLevel.Debug
+            Target.ELEMENT to LogLevel.DEBUG
         ),
     )
     val debug = TracingFilterConfiguration(
         overrides = mapOf(
-            Target.COMMON to LogLevel.Info,
-            Target.ELEMENT to LogLevel.Trace
+            Target.ELEMENT to LogLevel.TRACE
         )
     )
 
