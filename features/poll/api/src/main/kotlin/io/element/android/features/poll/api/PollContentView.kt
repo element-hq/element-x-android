@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Poll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -86,13 +84,13 @@ internal fun PollTitle(
     ) {
         if (isPollEnded) {
             Icon(
-                resourceId = VectorIcons.EndPoll,
+                resourceId = VectorIcons.PollEnd,
                 contentDescription = null,
                 modifier = Modifier.size(22.dp)
             )
         } else {
             Icon(
-                imageVector = Icons.Outlined.Poll,
+                resourceId = VectorIcons.Poll,
                 contentDescription = null,
                 modifier = Modifier.size(22.dp)
             )
