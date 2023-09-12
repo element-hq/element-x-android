@@ -38,7 +38,7 @@ fun TimelineItemEventContent.canBeCopied(): Boolean =
  * Determine if the event content can be replied to.
  * Note: it should match the logic in [io.element.android.features.messages.impl.actionlist.ActionListPresenter].
  */
-fun TimelineItemEventContent.canBeReplied(): Boolean =
+fun TimelineItemEventContent.canBeRepliedTo(): Boolean =
     when (this) {
         is TimelineItemRedactedContent,
         is TimelineItemStateContent,

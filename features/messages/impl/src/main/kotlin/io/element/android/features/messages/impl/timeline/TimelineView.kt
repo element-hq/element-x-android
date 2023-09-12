@@ -63,7 +63,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.canBeReplied
+import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
@@ -190,7 +190,7 @@ fun TimelineItemRow(
                 TimelineItemEventRow(
                     event = timelineItem,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
-                    canReply = userHasPermissionToSendMessage && timelineItem.content.canBeReplied(),
+                    canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
                     onClick = { onClick(timelineItem) },
                     onLongClick = { onLongClick(timelineItem) },
                     onUserDataClick = onUserDataClick,
