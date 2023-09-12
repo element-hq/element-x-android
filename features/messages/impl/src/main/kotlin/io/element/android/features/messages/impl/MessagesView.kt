@@ -304,6 +304,7 @@ private fun MessagesViewContent(
                 state = state.composerState,
                 onSendLocationClicked = onSendLocationClicked,
                 onCreatePollClicked = onCreatePollClicked,
+                enableTextFormatting = state.enableTextFormatting,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(Alignment.Bottom)

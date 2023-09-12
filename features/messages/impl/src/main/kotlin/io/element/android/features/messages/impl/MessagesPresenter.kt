@@ -66,6 +66,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -95,6 +97,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
     private val analyticsService: AnalyticsService,
+    private val featureFlagService: FeatureFlagService,
     @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
 
@@ -143,6 +146,11 @@ class MessagesPresenter @AssistedInject constructor(
             timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
         }
 
+        var enableTextFormatting by remember { mutableStateOf(true) }
+        LaunchedEffect(Unit) {
+            enableTextFormatting = featureFlagService.isFeatureEnabled(FeatureFlags.RichTextEditor)
+        }
+
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> {
@@ -178,6 +186,7 @@ class MessagesPresenter @AssistedInject constructor(
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
+            enableTextFormatting = enableTextFormatting,
             eventSink = { handleEvents(it) }
         )
     }
@@ -250,11 +259,15 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+    private suspend fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.eventId,
             (targetEvent.content as? TimelineItemTextBasedContent)?.let {
-                it.htmlBody ?: it.body
+                if (featureFlagService.isFeatureEnabled(FeatureFlags.RichTextEditor)) {
+                    it.htmlBody ?: it.body
+                } else {
+                    it.body
+                }
             }.orEmpty(),
             targetEvent.transactionId,
         )

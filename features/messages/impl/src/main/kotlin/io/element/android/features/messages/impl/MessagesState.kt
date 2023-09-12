@@ -45,5 +45,6 @@ data class MessagesState(
     val snackbarMessage: SnackbarMessage?,
     val inviteProgress: Async<Unit>,
     val showReinvitePrompt: Boolean,
+    val enableTextFormatting: Boolean,
     val eventSink: (MessagesEvents) -> Unit
 )
