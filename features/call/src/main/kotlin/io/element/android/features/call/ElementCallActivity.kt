@@ -104,13 +104,8 @@ class ElementCallActivity : ComponentActivity() {
                         url = urlState.value!!,
                         onPermissionsRequested = {
                             webkitPermissionRequest = it
-                            // TODO: match permissions, don't blindly ask camera and audio
-                            requestPermissionsLauncher.launch(
-                                arrayOf(
-                                    Manifest.permission.CAMERA,
-                                    Manifest.permission.RECORD_AUDIO
-                                )
-                            )
+                            val androidPermissions = mapWebkitPermissions(it)
+                            requestPermissionsLauncher.launch(androidPermissions.toTypedArray())
                         }
                     )
                 }
@@ -211,6 +206,7 @@ class ElementCallActivity : ComponentActivity() {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun releaseAudioFocus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             audiofocusRequest?.let { audioManager.abandonAudioFocusRequest(it) }
@@ -228,6 +224,16 @@ class ElementCallActivity : ComponentActivity() {
                 window.setBackgroundDrawableResource(android.R.drawable.screen_background_dark)
             } else {
                 window.setBackgroundDrawableResource(android.R.drawable.screen_background_light)
+            }
+        }
+    }
+
+    private fun mapWebkitPermissions(permissionRequest: PermissionRequest): List<String> {
+        return permissionRequest.resources.mapNotNull { resource ->
+            when (resource) {
+                PermissionRequest.RESOURCE_AUDIO_CAPTURE -> Manifest.permission.RECORD_AUDIO
+                PermissionRequest.RESOURCE_VIDEO_CAPTURE -> Manifest.permission.CAMERA
+                else -> null
             }
         }
     }
