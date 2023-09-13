@@ -75,6 +75,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -84,6 +85,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -370,14 +372,6 @@ private fun MessageEventBubbleContent(
     onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     @SuppressLint("ModifierParameter") bubbleModifier: Modifier = Modifier, // need to rename this modifier to distinguish it from the following ones
 ) {
-    val timestampPosition = when (event.content) {
-        is TimelineItemImageContent,
-        is TimelineItemVideoContent,
-        is TimelineItemLocationContent -> TimestampPosition.Overlay
-        is TimelineItemPollContent -> TimestampPosition.Below
-        else -> TimestampPosition.Default
-    }
-    val replyToDetails = event.inReplyTo as? InReplyTo.Ready
 
     // Long clicks are not not automatically propagated from a `clickable`
     // to its `combinedClickable` parent so we do it manually
@@ -396,6 +390,21 @@ private fun MessageEventBubbleContent(
             onPollAnswerSelected = onPollAnswerSelected,
             modifier = modifier,
         )
+    }
+
+    @Composable
+    fun ThreadDecoration(
+        modifier: Modifier = Modifier
+    ) {
+        Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+            Icon(resourceId = R.drawable.ic_thread_decoration, contentDescription = null, tint = ElementTheme.colors.iconSecondary)
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "Thread",
+                style = ElementTheme.typography.fontBodyXsRegular,
+                color = ElementTheme.colors.textPrimary,
+            )
+        }
     }
 
     @Composable
@@ -450,47 +459,74 @@ private fun MessageEventBubbleContent(
     /** Groups the different components in a Column with some space between them. */
     @Composable
     fun CommonLayout(
+        timestampPosition: TimestampPosition,
+        showThreadDecoration: Boolean,
         inReplyToDetails: InReplyTo.Ready?,
         modifier: Modifier = Modifier
     ) {
-        var modifierWithPadding: Modifier = Modifier
-        var contentModifier: Modifier = Modifier
-        EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
-            when {
-                inReplyToDetails != null -> {
-                    val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
-                    val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
-                    val text = textForInReplyTo(inReplyToDetails)
-                    ReplyToContent(
-                        senderName = senderName,
-                        text = text,
-                        attachmentThumbnailInfo = attachmentThumbnailInfo,
-                        modifier = Modifier
-                            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .clickable(enabled = true, onClick = inReplyToClick),
-                    )
-                    if (timestampPosition == TimestampPosition.Overlay) {
-                        modifierWithPadding = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-                        contentModifier = Modifier.clip(RoundedCornerShape(12.dp))
-                    } else {
-                        contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
-                    }
-                }
-                timestampPosition != TimestampPosition.Overlay -> {
-                    contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
+        val modifierWithPadding: Modifier
+        val contentModifier: Modifier
+        when {
+            inReplyToDetails != null -> {
+                if (timestampPosition == TimestampPosition.Overlay) {
+                    modifierWithPadding = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                    contentModifier = Modifier.clip(RoundedCornerShape(12.dp))
+                } else {
+                    contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
+                    modifierWithPadding = Modifier
                 }
             }
+            timestampPosition != TimestampPosition.Overlay -> {
+                modifierWithPadding = Modifier
+                contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
+            }
+            else -> {
+                modifierWithPadding = Modifier
+                contentModifier = Modifier
+            }
+        }
 
+        EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
+            if (showThreadDecoration) {
+                ThreadDecoration(modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp))
+            }
+            if (inReplyToDetails != null) {
+                val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
+                val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
+                val text = textForInReplyTo(inReplyToDetails)
+                val topPadding = if (showThreadDecoration) 0.dp else 8.dp
+                ReplyToContent(
+                    senderName = senderName,
+                    text = text,
+                    attachmentThumbnailInfo = attachmentThumbnailInfo,
+                    modifier = Modifier
+                        .padding(top = topPadding, start = 8.dp, end = 8.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .clickable(enabled = true, onClick = inReplyToClick),
+                )
+            }
             ContentAndTimestampView(
                 timestampPosition = timestampPosition,
-                contentModifier = contentModifier,
                 modifier = modifierWithPadding,
+                contentModifier = contentModifier,
             )
         }
     }
 
-    CommonLayout(inReplyToDetails = replyToDetails, modifier = bubbleModifier)
+    val timestampPosition = when (event.content) {
+        is TimelineItemImageContent,
+        is TimelineItemVideoContent,
+        is TimelineItemLocationContent -> TimestampPosition.Overlay
+        is TimelineItemPollContent -> TimestampPosition.Below
+        else -> TimestampPosition.Default
+    }
+    val replyToDetails = event.inReplyTo as? InReplyTo.Ready
+    CommonLayout(
+        showThreadDecoration = false,
+        timestampPosition = timestampPosition,
+        inReplyToDetails = replyToDetails,
+        modifier = bubbleModifier
+    )
 }
 
 @Composable
