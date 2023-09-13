@@ -162,12 +162,7 @@ fun TextComposer(
             val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
             val colors = ElementTheme.colors
             val bgColor = colors.bgSubtleSecondary
-
-            val borderColor by remember(state.hasFocus, colors) {
-                derivedStateOf {
-                    if (state.hasFocus) colors.borderDisabled else bgColor
-                }
-            }
+            val borderColor = colors.borderDisabled
 
             Column(
                 modifier = Modifier
@@ -181,7 +176,7 @@ fun TextComposer(
                     .fillMaxWidth()
                     .clip(roundedCorners)
                     .background(color = bgColor)
-                    .border(1.dp, borderColor, roundedCorners)
+                    .border(0.5.dp, borderColor, roundedCorners)
             ) {
                 if (composerMode is MessageComposerMode.Special) {
                     ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
