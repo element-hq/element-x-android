@@ -183,9 +183,13 @@ fun TextComposer(
                 if (composerMode is MessageComposerMode.Special) {
                     ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
                 }
-
                 TextInput(
                     state = state,
+                    placeholder = if (composerMode.inThread) {
+                        stringResource(id = CommonStrings.action_reply_in_thread)
+                    } else {
+                        stringResource(id = CommonStrings.rich_text_editor_composer_placeholder)
+                    },
                     roundedCorners = roundedCorners,
                     bgColor = bgColor,
                     onError = onError,
@@ -237,6 +241,7 @@ fun TextComposer(
 @Composable
 private fun TextInput(
     state: RichTextEditorState,
+    placeholder: String,
     roundedCorners: RoundedCornerShape,
     bgColor: Color,
     modifier: Modifier = Modifier,
@@ -262,7 +267,7 @@ private fun TextInput(
         // Placeholder
         if (state.messageHtml.isEmpty()) {
             Text(
-                stringResource(CommonStrings.common_message),
+                placeholder,
                 style = defaultTypography.copy(
                     color = ElementTheme.colors.textDisabled,
                 ),
@@ -686,6 +691,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = false,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = false,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = null,
@@ -701,6 +707,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = true,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(
@@ -719,6 +726,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = false,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(
@@ -737,6 +745,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = false,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(
@@ -755,6 +764,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = false,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(

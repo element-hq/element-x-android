@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="Use_an_identity_server_to_invite_by_email.__default_Use_the_default____defaultIdentityServerName_s___default__or_manage_in__settings_Settings__settings_._web">"Use an identity server to invite by email. "<default>"Use the default (%(defaultIdentityServerName)s)"</default>" or manage in "<settings>"Settings"</settings>"."</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
@@ -37,6 +36,8 @@
   <string name="action_learn_more">"Learn more"</string>
   <string name="action_leave">"Leave"</string>
   <string name="action_leave_room">"Leave room"</string>
+  <string name="action_manage_account">"Manage account"</string>
+  <string name="action_manage_devices">"Manage devices"</string>
   <string name="action_next">"Next"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
@@ -47,6 +48,7 @@
   <string name="action_react">"React"</string>
   <string name="action_remove">"Remove"</string>
   <string name="action_reply">"Reply"</string>
+  <string name="action_reply_in_thread">"Reply in thread"</string>
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report Content"</string>
   <string name="action_retry">"Retry"</string>
@@ -65,8 +67,12 @@
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_view_source">"View Source"</string>
   <string name="action_yes">"Yes"</string>
+  <string name="call_foreground_service_channel_title_android">"Ongoing call"</string>
+  <string name="call_foreground_service_message_android">"Tap to return to the call"</string>
+  <string name="call_foreground_service_title_android">"☎️ Call in progress"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
+  <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_analytics">"Analytics"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Bubbles"</string>
@@ -85,6 +91,7 @@
   <string name="common_forward_message">"Forward message"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
+  <string name="common_in_reply_to">"In reply to %1$s"</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
@@ -99,15 +106,16 @@
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>
-  <string name="common_poll_final_votes">"Final votes: %1$s"</string>
   <string name="common_poll_total_votes">"Total votes: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Results will show after the poll has ended"</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
+  <string name="common_reaction">"Reaction"</string>
   <string name="common_reactions">"Reactions"</string>
   <string name="common_refreshing">"Refreshing…"</string>
   <string name="common_replying_to">"Replying to %1$s"</string>
   <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_submitted">"Report submitted"</string>
+  <string name="common_rich_text_editor">"Rich text editor"</string>
   <string name="common_room_name">"Room name"</string>
   <string name="common_room_name_placeholder">"e.g. your project name"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
@@ -126,6 +134,7 @@
   <string name="common_syncing">"Syncing"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
+  <string name="common_thread">"Thread"</string>
   <string name="common_topic">"Topic"</string>
   <string name="common_topic_placeholder">"What is this room about?"</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
@@ -162,10 +171,6 @@
   <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you won\'t be able to rejoin without an invite."</string>
   <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="__count_s_rooms_web">
-    <item quantity="one">"%(count)s room"</item>
-    <item quantity="other">"%(count)s rooms"</item>
-  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
     <item quantity="other">"%1$d members"</item>

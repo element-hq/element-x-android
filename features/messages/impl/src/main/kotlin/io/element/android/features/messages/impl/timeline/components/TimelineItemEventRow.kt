@@ -400,7 +400,7 @@ private fun MessageEventBubbleContent(
             Icon(resourceId = R.drawable.ic_thread_decoration, contentDescription = null, tint = ElementTheme.colors.iconSecondary)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "Thread",
+                text = stringResource(CommonStrings.common_thread),
                 style = ElementTheme.typography.fontBodyXsRegular,
                 color = ElementTheme.colors.textPrimary,
             )
