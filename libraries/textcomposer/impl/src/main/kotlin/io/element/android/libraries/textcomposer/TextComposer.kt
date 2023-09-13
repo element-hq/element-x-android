@@ -144,7 +144,7 @@ fun TextComposer(
             val roundCornerLarge = 28.dp.applyScaleUp()
 
             val roundedCornerSize = remember(state.lineCount, composerMode) {
-                if (state.lineCount > 1 || composerMode is MessageComposerMode.Special) {
+                if (composerMode is MessageComposerMode.Special) {
                     roundCornerSmall
                 } else {
                     roundCornerLarge
@@ -154,7 +154,8 @@ fun TextComposer(
                 targetValue = roundedCornerSize,
                 animationSpec = tween(
                     durationMillis = 100,
-                )
+                ),
+                label = "roundedCornerSizeAnimation"
             )
             val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
             val colors = ElementTheme.colors
@@ -272,6 +273,7 @@ private fun TextInput(
         RichTextEditor(
             state = state,
             modifier = Modifier
+                .padding(top = 6.dp, bottom = 6.dp)
                 .fillMaxWidth(),
             style = RichTextEditorDefaults.style(
                 text = RichTextEditorDefaults.textStyle(
