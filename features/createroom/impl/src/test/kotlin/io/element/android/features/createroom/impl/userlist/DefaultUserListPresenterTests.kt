@@ -33,8 +33,7 @@ import org.junit.Test
 
 class DefaultUserListPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private val userRepository = FakeUserRepository()

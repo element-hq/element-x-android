@@ -38,8 +38,7 @@ import org.junit.Test
 
 class SearchAccountProviderPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

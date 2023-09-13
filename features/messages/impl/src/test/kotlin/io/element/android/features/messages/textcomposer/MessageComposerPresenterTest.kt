@@ -69,8 +69,7 @@ import java.io.File
 
 class MessageComposerPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private val pickerProvider = FakePickerProvider().apply {

@@ -44,8 +44,7 @@ import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private lateinit var userRepository: FakeUserRepository

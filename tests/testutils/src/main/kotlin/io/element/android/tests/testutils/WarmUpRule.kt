@@ -32,17 +32,22 @@ import kotlin.time.Duration.Companion.seconds
  * Applying this test rule ensures that the slow initialisation is not done
  * inside runTest which has a short default timeout.
  */
-class WarmUpRule: TestRule {
-    override fun apply(base: Statement, description: Description): Statement = object: Statement() {
-        override fun evaluate() {
-            runTest(timeout = 60.seconds) {
-                moleculeFlow(RecompositionMode.Immediate) {
-                    // Do nothing
-                }.test {
-                    awaitItem() // Await a Unit composition
-                }
-            }
-            base.evaluate()
+class WarmUpRule : TestRule {
+    companion object {
+        init {
+            warmUpMolecule()
+        }
+    }
+
+    override fun apply(base: Statement, description: Description): Statement = base
+}
+
+private fun warmUpMolecule() {
+    runTest(timeout = 60.seconds) {
+        moleculeFlow(RecompositionMode.Immediate) {
+            // Do nothing
+        }.test {
+            awaitItem() // Await a Unit composition
         }
     }
 }

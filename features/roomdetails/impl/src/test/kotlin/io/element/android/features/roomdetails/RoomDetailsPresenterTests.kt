@@ -57,8 +57,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
     private fun aRoomDetailsPresenter(
         room: MatrixRoom,

@@ -363,6 +363,7 @@ fun Modifier.avatarBloom(
             blurSize = blurSize,
             offset = offset,
             clipToSize = clipToSize,
+            bottomSoftEdgeColor = bottomSoftEdgeColor,
             bottomSoftEdgeHeight = bottomSoftEdgeHeight,
             bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
             alpha = alpha,

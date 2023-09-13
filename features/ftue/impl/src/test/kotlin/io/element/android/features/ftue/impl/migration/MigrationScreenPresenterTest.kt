@@ -32,8 +32,7 @@ import org.junit.Test
 
 class MigrationScreenPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

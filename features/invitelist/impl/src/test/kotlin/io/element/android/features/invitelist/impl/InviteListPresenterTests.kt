@@ -50,8 +50,7 @@ import org.junit.Rule
 import org.junit.Test
 
 class InviteListPresenterTests {
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test
