@@ -109,7 +109,9 @@ fun ConnectivityIndicatorContainer(
     } else {
         WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 6.dp
     }
-    val target = remember(isOnline) { if (isOnline) 0.dp else statusBarTopPadding }
+    val target = remember(isIndicatorVisible.targetState, statusBarTopPadding) {
+        if (!isIndicatorVisible.targetState) 0.dp else statusBarTopPadding
+    }
     val animationStateOffset by animateDpAsState(
         targetValue = target,
         animationSpec = spring(
