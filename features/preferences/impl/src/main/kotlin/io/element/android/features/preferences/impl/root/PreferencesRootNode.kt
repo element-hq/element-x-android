@@ -47,6 +47,7 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenDeveloperSettings()
         fun onOpenNotificationSettings()
         fun onOpenAdvancedSettings()
+        fun onOpenUserProfile()
     }
 
     private fun onOpenBugReport() {
@@ -91,6 +92,10 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenNotificationSettings() }
     }
 
+    private fun onOpenUserProfile() {
+        plugins<Callback>().forEach { it.onOpenUserProfile() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -108,7 +113,8 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenAdvancedSettings = this::onOpenAdvancedSettings,
             onSuccessLogout = { onSuccessLogout(activity, it) },
             onManageAccountClicked = { onManageAccountClicked(activity, it, isDark) },
-            onOpenNotificationSettings = this::onOpenNotificationSettings
+            onOpenNotificationSettings = this::onOpenNotificationSettings,
+            onOpenUserProfile = this::onOpenUserProfile,
         )
     }
 
