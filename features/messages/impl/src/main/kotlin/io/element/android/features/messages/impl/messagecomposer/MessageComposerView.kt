@@ -31,6 +31,7 @@ fun MessageComposerView(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
     fun onFullscreenToggle() {
@@ -62,6 +63,7 @@ fun MessageComposerView(
             state = state,
             onSendLocationClicked = onSendLocationClicked,
             onCreatePollClicked = onCreatePollClicked,
+            enableTextFormatting = enableTextFormatting,
         )
 
         TextComposer(
@@ -74,6 +76,7 @@ fun MessageComposerView(
             onResetComposerMode = ::onCloseSpecialMode,
             onAddAttachment = ::onAddAttachment,
             onDismissTextFormatting = ::onDismissTextFormatting,
+            enableTextFormatting = enableTextFormatting,
             onError = ::onError,
         )
     }
@@ -95,5 +98,6 @@ private fun ContentToPreview(state: MessageComposerState) {
         state = state,
         onSendLocationClicked = {},
         onCreatePollClicked = {},
+        enableTextFormatting = true,
     )
 }

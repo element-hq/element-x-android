@@ -123,7 +123,13 @@ fun MessagesView(
     fun onMessageLongClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageLongClicked= ${event.id}")
         localView.hideKeyboard()
-        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event, state.userHasPermissionToRedact))
+        state.actionListState.eventSink(
+            ActionListEvents.ComputeForMessage(
+                event = event,
+                canRedact = state.userHasPermissionToRedact,
+                canSendMessage = state.userHasPermissionToSendMessage,
+            )
+        )
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
@@ -203,8 +209,8 @@ fun MessagesView(
     CustomReactionBottomSheet(
         state = state.customReactionState,
         onEmojiSelected = { eventId, emoji ->
-                state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
-                state.customReactionState.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
+            state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
+            state.customReactionState.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
         }
     )
 
@@ -298,6 +304,7 @@ private fun MessagesViewContent(
                 state = state.composerState,
                 onSendLocationClicked = onSendLocationClicked,
                 onCreatePollClicked = onCreatePollClicked,
+                enableTextFormatting = state.enableTextFormatting,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(Alignment.Bottom)

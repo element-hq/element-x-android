@@ -21,6 +21,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.PollEnd
 import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.InviteDialogAction
@@ -575,7 +576,11 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle poll end`() = runTest {
         val room = FakeMatrixRoom()
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val analyticsService = FakeAnalyticsService()
+        val presenter = createMessagePresenter(
+            matrixRoom = room,
+            analyticsService = analyticsService,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -586,7 +591,8 @@ class MessagesPresenterTest {
             assertThat(room.endPollInvocations.size).isEqualTo(1)
             assertThat(room.endPollInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
             assertThat(room.endPollInvocations.first().text).isEqualTo("The poll with event id: \$anEventId has ended.")
-            // TODO Polls: Test poll end analytic
+            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollEnd())
         }
     }
 
@@ -595,6 +601,7 @@ class MessagesPresenterTest {
         matrixRoom: MatrixRoom = FakeMatrixRoom(),
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
@@ -604,7 +611,7 @@ class MessagesPresenterTest {
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
             mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
             snackbarDispatcher = SnackbarDispatcher(),
-            analyticsService = FakeAnalyticsService(),
+            analyticsService = analyticsService,
             messageComposerContext = MessageComposerContextImpl(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
 
@@ -613,13 +620,15 @@ class MessagesPresenterTest {
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
             dispatchers = coroutineDispatchers,
-            appScope = this
+            appScope = this,
+            analyticsService = analyticsService,
         )
         val buildMeta = aBuildMeta()
         val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
+        val featureFlagsService = FakeFeatureFlagService(mapOf(FeatureFlags.RichTextEditor.key to true))
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -633,6 +642,8 @@ class MessagesPresenterTest {
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
+            analyticsService = analyticsService,
+            featureFlagService = featureFlagsService,
             dispatchers = coroutineDispatchers,
         )
     }

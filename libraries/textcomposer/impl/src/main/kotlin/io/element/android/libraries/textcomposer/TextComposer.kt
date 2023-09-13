@@ -91,6 +91,7 @@ fun TextComposer(
     state: RichTextEditorState,
     composerMode: MessageComposerMode,
     canSendMessage: Boolean,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     onRequestFocus: () -> Unit = {},
@@ -101,7 +102,8 @@ fun TextComposer(
     onError: (Throwable) -> Unit = {},
 ) {
     val onSendClicked = {
-        onSendMessage(Message(html = state.messageHtml, markdown = state.messageMarkdown))
+        val html = if (enableTextFormatting) state.messageHtml else null
+        onSendMessage(Message(html = html, markdown = state.messageMarkdown))
     }
 
     Column(
@@ -600,6 +602,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState("A message", fake = true).apply { requestFocus() },
@@ -607,6 +610,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState(
@@ -619,6 +623,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState("A message without focus", fake = true),
@@ -626,6 +631,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
     }
 }
@@ -639,18 +645,21 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             canSendMessage = false,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal(""),
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState("A message", fake = true),
             canSendMessage = true,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal(""),
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState("A message\nWith several lines\nTo preview larger textfields and long lines with overflow", fake = true),
             canSendMessage = true,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal(""),
+            enableTextFormatting = true,
         )
     }
 }
@@ -664,6 +673,7 @@ internal fun TextComposerEditPreview() = ElementPreview {
         onSendMessage = {},
         composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
         onResetComposerMode = {},
+        enableTextFormatting = true,
     )
 }
 
@@ -684,6 +694,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                     "To preview larger textfields and long lines with overflow"
             ),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState("A message", fake = true),
@@ -701,6 +712,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 defaultContent = "image.jpg"
             ),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState("A message", fake = true),
@@ -718,6 +730,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 defaultContent = "video.mp4"
             ),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState("A message", fake = true),
@@ -735,6 +748,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 defaultContent = "logs.txt"
             ),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
         TextComposer(
             RichTextEditorState("A message", fake = true).apply { requestFocus() },
@@ -752,6 +766,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 defaultContent = "Shared location"
             ),
             onResetComposerMode = {},
+            enableTextFormatting = true,
         )
     }
 }

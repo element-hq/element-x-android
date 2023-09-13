@@ -29,9 +29,13 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.Composer
+import im.vector.app.features.analytics.plan.PollCreation
+import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -44,9 +48,9 @@ private const val MAX_SELECTIONS = 1
 
 class CreatePollPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
-    // private val analyticsService: AnalyticsService, // TODO Polls: add analytics
+    private val analyticsService: AnalyticsService,
+    private val messageComposerContext: MessageComposerContext,
     @Assisted private val navigateUp: () -> Unit,
-    // private val messageComposerContext: MessageComposerContext, // TODO Polls: add analytics
 ) : Presenter<CreatePollState> {
 
     @AssistedFactory
@@ -78,7 +82,21 @@ class CreatePollPresenter @AssistedInject constructor(
                             maxSelections = MAX_SELECTIONS,
                             pollKind = pollKind,
                         )
-                        // analyticsService.capture(PollCreate()) // TODO Polls: add analytics
+                        analyticsService.capture(
+                            Composer(
+                                inThread = messageComposerContext.composerMode.inThread,
+                                isEditing = messageComposerContext.composerMode.isEditing,
+                                isReply = messageComposerContext.composerMode.isReply,
+                                messageType = Composer.MessageType.Poll,
+                            )
+                        )
+                        analyticsService.capture(
+                            PollCreation(
+                                action = PollCreation.Action.Create,
+                                isUndisclosed = pollKind == PollKind.Undisclosed,
+                                numberOfAnswers = answers.size,
+                            )
+                        )
                         navigateUp()
                     } else {
                         Timber.d("Cannot create poll")
@@ -153,7 +171,7 @@ private val pollKindSaver: Saver<MutableState<PollKind>, Boolean> = Saver(
     },
     restore = {
         mutableStateOf(
-            when(it) {
+            when (it) {
                 true -> PollKind.Undisclosed
                 else -> PollKind.Disclosed
             }

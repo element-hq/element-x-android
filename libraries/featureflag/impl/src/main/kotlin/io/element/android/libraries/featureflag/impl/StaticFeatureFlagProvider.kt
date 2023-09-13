@@ -35,6 +35,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.LocationSharing -> true
                 FeatureFlags.Polls -> true
                 FeatureFlags.NotificationSettings -> false
+                FeatureFlags.RichTextEditor -> true
             }
         } else {
             false
