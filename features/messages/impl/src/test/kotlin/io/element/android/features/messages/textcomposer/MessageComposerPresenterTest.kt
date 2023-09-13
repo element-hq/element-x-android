@@ -24,6 +24,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -57,6 +58,7 @@ import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -208,6 +210,15 @@ class MessageComposerPresenterTest {
             val messageSentState = awaitItem()
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
             assertThat(messageSentState.canSendMessage).isFalse()
+            waitForPredicate { analyticsService.capturedEvents.size == 1 }
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = false,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
         }
     }
 
@@ -240,6 +251,14 @@ class MessageComposerPresenterTest {
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
             assertThat(messageSentState.canSendMessage).isFalse()
             assertThat(fakeMatrixRoom.editMessageCalls.first()).isEqualTo(ANOTHER_MESSAGE to ANOTHER_MESSAGE)
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = true,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
         }
     }
 
@@ -272,6 +291,14 @@ class MessageComposerPresenterTest {
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
             assertThat(messageSentState.canSendMessage).isFalse()
             assertThat(fakeMatrixRoom.editMessageCalls.first()).isEqualTo(ANOTHER_MESSAGE to ANOTHER_MESSAGE)
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = true,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
         }
     }
 
@@ -304,6 +331,14 @@ class MessageComposerPresenterTest {
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
             assertThat(messageSentState.canSendMessage).isFalse()
             assertThat(fakeMatrixRoom.replyMessageParameter).isEqualTo(A_REPLY to A_REPLY)
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = false,
+                    isReply = true,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
         }
     }
 
