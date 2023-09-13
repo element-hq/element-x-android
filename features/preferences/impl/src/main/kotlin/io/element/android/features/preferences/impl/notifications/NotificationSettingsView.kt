@@ -154,16 +154,16 @@ private fun NotificationSettingsContentView(
                     onCheckedChange = onMentionNotificationsChanged
                 )
             }
-
-            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_additional_settings_section_title)) {
-                PreferenceSwitch(
-                    modifier = Modifier,
-                    title = stringResource(id = CommonStrings.screen_notification_settings_calls_label),
-                    isChecked = matrixSettings.callNotificationsEnabled,
-                    switchAlignment = Alignment.Top,
-                    onCheckedChange = onCallsNotificationsChanged
-                )
-            }
+        // We are removing the call notification toggle until call support has been added
+//            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_additional_settings_section_title)) {
+//                PreferenceSwitch(
+//                    modifier = Modifier,
+//                    title = stringResource(id = CommonStrings.screen_notification_settings_calls_label),
+//                    isChecked = matrixSettings.callNotificationsEnabled,
+//                    switchAlignment = Alignment.Top,
+//                    onCheckedChange = onCallsNotificationsChanged
+//                )
+//            }
         }
 }
 
