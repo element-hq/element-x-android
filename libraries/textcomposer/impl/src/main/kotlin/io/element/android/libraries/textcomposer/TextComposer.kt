@@ -74,6 +74,8 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.FormattingOption
 import io.element.android.libraries.textcomposer.components.FormattingOptionState
 import io.element.android.libraries.theme.ElementTheme
@@ -255,7 +257,8 @@ private fun TextInput(
                     start = 12.dp.applyScaleUp(),
                     end = 42.dp.applyScaleUp()
                 )
-            ),
+            )
+            .testTag(TestTags.richTextEditor),
         contentAlignment = Alignment.CenterStart,
     ) {
 
