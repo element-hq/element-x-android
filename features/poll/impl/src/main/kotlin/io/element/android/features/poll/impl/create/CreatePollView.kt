@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -77,6 +78,7 @@ fun CreatePollView(
         onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
     )
     val questionFocusRequester = remember { FocusRequester() }
+    val answerFocusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         questionFocusRequester.requestFocus()
     }
@@ -103,12 +105,14 @@ fun CreatePollView(
             )
         },
     ) { paddingValues ->
+        val lazyListState = rememberLazyListState()
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
                 .imePadding()
                 .fillMaxSize(),
+            state = lazyListState,
         ) {
             item {
                 Column {
@@ -137,6 +141,8 @@ fun CreatePollView(
                 }
             }
             itemsIndexed(state.answers) { index, answer ->
+                val isLastItem = index == state.answers.size - 1
+                val hasAdditionalOptions = state.answers.size > 2
                 ListItem(
                     headlineContent = {
                         OutlinedTextField(
@@ -144,7 +150,9 @@ fun CreatePollView(
                             onValueChange = {
                                 state.eventSink(CreatePollEvents.SetAnswer(index, it))
                             },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .then(if (isLastItem) Modifier.focusRequester(answerFocusRequester) else Modifier)
+                                .fillMaxWidth(),
                             placeholder = {
                                 Text(text = stringResource(id = R.string.screen_create_poll_answer_hint, index + 1))
                             },
@@ -162,6 +170,10 @@ fun CreatePollView(
                     },
                     style = if (answer.canDelete) ListItemStyle.Destructive else ListItemStyle.Default,
                 )
+                LaunchedEffect(isLastItem, hasAdditionalOptions) {
+                    lazyListState.animateScrollToItem(state.answers.size + 1)
+                    if (isLastItem && hasAdditionalOptions) answerFocusRequester.requestFocus()
+                }
             }
             if (state.canAddAnswer) {
                 item {
