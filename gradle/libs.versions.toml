@@ -46,7 +46,7 @@ dependencyanalysis = "1.21.0"
 stem = "2.3.0"
 sqldelight = "1.5.5"
 telephoto = "0.6.0"
-wysiwyg = "2.9.0"
+wysiwyg = "2.10.0"
 
 # DI
 dagger = "2.48"
@@ -149,7 +149,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.50"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.51"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }

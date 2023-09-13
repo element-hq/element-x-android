@@ -148,14 +148,6 @@ class MessageComposerPresenter @Inject constructor(
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
-                    analyticsService.capture(
-                        Composer(
-                            inThread = messageComposerContext.composerMode.inThread,
-                            isEditing = messageComposerContext.composerMode.isEditing,
-                            isReply = messageComposerContext.composerMode.isReply,
-                            messageType = Composer.MessageType.Text,
-                        )
-                    )
                 }
                 MessageComposerEvents.AddAttachment -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = true
@@ -238,6 +230,14 @@ class MessageComposerPresenter @Inject constructor(
                 message.html,
             )
         }
+        analyticsService.capture(
+            Composer(
+                inThread = capturedMode.inThread,
+                isEditing = capturedMode.isEditing,
+                isReply = capturedMode.isReply,
+                messageType = Composer.MessageType.Text, // Set proper type when we'll be sending other types of messages.
+            )
+        )
     }
 
     private fun CoroutineScope.sendAttachment(

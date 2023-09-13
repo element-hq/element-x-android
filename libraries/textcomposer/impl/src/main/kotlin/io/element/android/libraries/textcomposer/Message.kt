@@ -17,6 +17,6 @@
 package io.element.android.libraries.textcomposer
 
 data class Message(
-    val html: String,
+    val html: String?,
     val markdown: String,
 )

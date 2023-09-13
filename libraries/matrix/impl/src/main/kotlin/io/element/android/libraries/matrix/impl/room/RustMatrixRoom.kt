@@ -63,10 +63,12 @@ import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
+import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
+import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
 import java.io.File
 
@@ -227,32 +229,32 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun sendMessage(body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         val transactionId = genTransactionId()
-        messageEventContentFromHtml(body, htmlBody).use { content ->
+        messageEventContentFromParts(body, htmlBody).use { content ->
             runCatching {
                 innerRoom.send(content, transactionId)
             }
         }
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String): Result<Unit> =
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit> =
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
-                    innerRoom.edit(messageEventContentFromHtml(body, htmlBody), originalEventId.value, transactionId?.value)
+                    innerRoom.edit(messageEventContentFromParts(body, htmlBody), originalEventId.value, transactionId?.value)
                 }
             } else {
                 runCatching {
                     transactionId?.let { cancelSend(it) }
-                    innerRoom.send(messageEventContentFromHtml(body, htmlBody), genTransactionId())
+                    innerRoom.send(messageEventContentFromParts(body, htmlBody), genTransactionId())
                 }
             }
         }
 
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.sendReply(messageEventContentFromHtml(body, htmlBody), eventId.value, genTransactionId())
+            innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventId.value, genTransactionId())
         }
     }
 
@@ -456,4 +458,11 @@ class RustMatrixRoom(
             MediaUploadHandlerImpl(files, handle())
         }
     }
+
+    private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
+        if(htmlBody != null) {
+            messageEventContentFromHtml(body, htmlBody)
+        } else {
+            messageEventContentFromMarkdown(body)
+        }
 }
