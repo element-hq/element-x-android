@@ -16,9 +16,6 @@
 
 package io.element.android.features.preferences.impl.notifications
 
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
