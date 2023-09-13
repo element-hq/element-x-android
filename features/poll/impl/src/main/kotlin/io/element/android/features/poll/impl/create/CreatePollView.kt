@@ -34,6 +34,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -63,6 +64,8 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,6 +73,8 @@ fun CreatePollView(
     state: CreatePollState,
     modifier: Modifier = Modifier,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
     BackHandler(onBack = navBack)
     if (state.showConfirmation) ConfirmationDialog(
@@ -142,7 +147,6 @@ fun CreatePollView(
             }
             itemsIndexed(state.answers) { index, answer ->
                 val isLastItem = index == state.answers.size - 1
-                val hasAdditionalOptions = state.answers.size > 2
                 ListItem(
                     headlineContent = {
                         OutlinedTextField(
@@ -170,10 +174,6 @@ fun CreatePollView(
                     },
                     style = if (answer.canDelete) ListItemStyle.Destructive else ListItemStyle.Default,
                 )
-                LaunchedEffect(isLastItem, hasAdditionalOptions) {
-                    lazyListState.animateScrollToItem(state.answers.size + 1)
-                    if (isLastItem && hasAdditionalOptions) answerFocusRequester.requestFocus()
-                }
             }
             if (state.canAddAnswer) {
                 item {
@@ -183,7 +183,13 @@ fun CreatePollView(
                             iconSource = IconSource.Vector(Icons.Default.Add),
                         ),
                         style = ListItemStyle.Primary,
-                        onClick = { state.eventSink(CreatePollEvents.AddAnswer) },
+                        onClick = {
+                            state.eventSink(CreatePollEvents.AddAnswer)
+                            coroutineScope.launch(Dispatchers.Main) {
+                                lazyListState.animateScrollToItem(state.answers.size + 1)
+                                answerFocusRequester.requestFocus()
+                            }
+                        },
                     )
                 }
             }
