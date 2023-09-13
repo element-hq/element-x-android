@@ -24,6 +24,9 @@ import android.os.IBinder
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.PendingIntentCompat
+import androidx.core.graphics.drawable.IconCompat
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 class CallForegroundService : Service() {
 
@@ -51,12 +54,17 @@ class CallForegroundService : Service() {
         notificationManagerCompat = NotificationManagerCompat.from(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val foregroundServiceChannel = NotificationChannelCompat.Builder(
-                "foreground_service_channel",
+                "call_foreground_service_channel",
                 NotificationManagerCompat.IMPORTANCE_LOW,
-            ).setName("Foreground Service Channel").build()
+            ).setName(getString(R.string.call_foreground_service_channel_title_android)).build()
             notificationManagerCompat.createNotificationChannel(foregroundServiceChannel)
+            val callActivityIntent = Intent(this, ElementCallActivity::class.java)
+            val pendingIntent = PendingIntentCompat.getActivity(this, 0, callActivityIntent, 0, false)
             val notification = NotificationCompat.Builder(this, foregroundServiceChannel.id)
-                .setContentText("Call in progress")
+                .setSmallIcon(IconCompat.createWithResource(this, CommonDrawables.ic_notification_small))
+                .setContentTitle(getString(R.string.call_foreground_service_title_android))
+                .setContentText(getString(R.string.call_foreground_service_message_android))
+                .setContentIntent(pendingIntent)
                 .build()
             startForeground(1, notification)
         }

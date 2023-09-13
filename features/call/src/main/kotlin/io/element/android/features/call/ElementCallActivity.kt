@@ -39,6 +39,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -99,11 +100,13 @@ class ElementCallActivity : ComponentActivity() {
         super.onNewIntent(intent)
 
         val intentUrl = intent?.dataString?.let(::parseUrl)
-        if (intentUrl == null) {
-            finish()
-            return
-        } else {
-            urlState.value = intentUrl
+        when {
+            // New URL, update it and reload the webview
+            intentUrl != null -> urlState.value = intentUrl
+            // Re-opened the activity but we have no url to load or a cached one, finish the activity
+            intent?.dataString == null && urlState.value == null -> finish()
+            // Coming back from notification, do nothing
+            else -> return
         }
     }
 
@@ -223,7 +226,7 @@ private fun CallContents(
             modifier = modifier,
             topBar = {
                 TopAppBar(
-                    title = { Text("Element Call") },
+                    title = { Text(stringResource(R.string.element_call)) },
                     navigationIcon = {
                         BackButton(
                             imageVector = Icons.Default.Close,

@@ -17,9 +17,6 @@
 package io.element.android.features.call
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.util.AttributeSet
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
@@ -28,19 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
-
-class CallWebView : WebView {
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    override fun onWindowVisibilityChanged(visibility: Int) {
-        if (visibility != View.GONE) super.onWindowVisibilityChanged(View.VISIBLE)
-    }
-}
 
 @Composable
 fun CallWebView(
@@ -52,7 +36,7 @@ fun CallWebView(
     AndroidView(
         modifier = modifier,
         factory = { context ->
-            CallWebView(context).apply {
+            WebView(context).apply {
                 if (!isInpectionMode) {
                     setup(onPermissionsRequested)
                     loadUrl(url)

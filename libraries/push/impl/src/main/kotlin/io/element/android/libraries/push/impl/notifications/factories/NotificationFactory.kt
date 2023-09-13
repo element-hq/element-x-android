@@ -25,6 +25,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -67,7 +68,7 @@ class NotificationFactory @Inject constructor(
             else -> pendingIntentFactory.createOpenRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId)
         }
 
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = CommonDrawables.ic_notification_small
 
         val channelId = notificationChannels.getChannelIdForMessage(roomInfo.shouldBing)
         return NotificationCompat.Builder(context, channelId)
@@ -141,7 +142,7 @@ class NotificationFactory @Inject constructor(
         inviteNotifiableEvent: InviteNotifiableEvent
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = CommonDrawables.ic_notification_small
         val channelId = notificationChannels.getChannelIdForMessage(inviteNotifiableEvent.noisy)
         return NotificationCompat.Builder(context, channelId)
             .setOnlyAlertOnce(true)
@@ -185,7 +186,7 @@ class NotificationFactory @Inject constructor(
         simpleNotifiableEvent: SimpleNotifiableEvent,
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = CommonDrawables.ic_notification_small
 
         val channelId = notificationChannels.getChannelIdForMessage(simpleNotifiableEvent.noisy)
         return NotificationCompat.Builder(context, channelId)
@@ -220,7 +221,7 @@ class NotificationFactory @Inject constructor(
         fallbackNotifiableEvent: FallbackNotifiableEvent,
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = CommonDrawables.ic_notification_small
 
         val channelId = notificationChannels.getChannelIdForMessage(false)
         return NotificationCompat.Builder(context, channelId)
@@ -261,7 +262,7 @@ class NotificationFactory @Inject constructor(
         lastMessageTimestamp: Long
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = CommonDrawables.ic_notification_small
         val channelId = notificationChannels.getChannelIdForMessage(noisy)
         return NotificationCompat.Builder(context, channelId)
             .setOnlyAlertOnce(true)
@@ -301,7 +302,7 @@ class NotificationFactory @Inject constructor(
         return NotificationCompat.Builder(context, notificationChannels.getChannelIdForTest())
             .setContentTitle(buildMeta.applicationName)
             .setContentText(stringProvider.getString(R.string.notification_test_push_notification_content))
-            .setSmallIcon(R.drawable.ic_notification)
+            .setSmallIcon(CommonDrawables.ic_notification_small)
             .setLargeIcon(getBitmap(R.drawable.element_logo_green))
             .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
             .setPriority(NotificationCompat.PRIORITY_MAX)

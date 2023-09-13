@@ -28,7 +28,7 @@
     <application>
         <activity
             android:name=".ElementCallActivity"
-            android:label="Element Call"
+            android:label="@string/element_call"
             android:exported="true"
             android:taskAffinity="io.element.android.features.call"
             android:configChanges="screenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode"
