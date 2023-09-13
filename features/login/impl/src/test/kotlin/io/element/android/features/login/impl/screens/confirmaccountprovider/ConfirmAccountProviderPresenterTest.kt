@@ -39,8 +39,7 @@ import org.junit.Test
 
 class ConfirmAccountProviderPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

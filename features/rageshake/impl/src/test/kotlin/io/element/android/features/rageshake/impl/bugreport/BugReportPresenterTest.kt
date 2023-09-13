@@ -36,8 +36,7 @@ const val A_LONG_DESCRIPTION = "I have seen a bug!"
 
 class BugReportPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

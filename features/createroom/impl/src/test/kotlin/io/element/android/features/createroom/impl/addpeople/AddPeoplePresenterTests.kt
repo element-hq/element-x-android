@@ -32,8 +32,7 @@ import org.junit.Test
 
 class AddPeoplePresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private lateinit var presenter: AddPeoplePresenter

@@ -35,8 +35,7 @@ const val A_PERMISSION = "A_PERMISSION"
 
 class DefaultPermissionsPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

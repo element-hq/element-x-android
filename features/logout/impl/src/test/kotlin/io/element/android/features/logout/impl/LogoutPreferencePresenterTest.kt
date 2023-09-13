@@ -32,8 +32,7 @@ import org.junit.Test
 
 class LogoutPreferencePresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

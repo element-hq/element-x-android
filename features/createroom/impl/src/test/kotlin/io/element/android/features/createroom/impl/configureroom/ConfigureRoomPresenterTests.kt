@@ -60,8 +60,7 @@ private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 @RunWith(RobolectricTestRunner::class)
 class ConfigureRoomPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private lateinit var presenter: ConfigureRoomPresenter
