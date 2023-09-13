@@ -703,6 +703,22 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             enableTextFormatting = true,
         )
         TextComposer(
+            RichTextEditorState("", fake = true),
+            canSendMessage = false,
+            onSendMessage = {},
+            composerMode = MessageComposerMode.Reply(
+                isThreaded = true,
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = null,
+                defaultContent = "A message\n" +
+                    "With several lines\n" +
+                    "To preview larger textfields and long lines with overflow"
+            ),
+            onResetComposerMode = {},
+            enableTextFormatting = true,
+        )
+        TextComposer(
             RichTextEditorState("A message", fake = true),
             canSendMessage = true,
             onSendMessage = {},

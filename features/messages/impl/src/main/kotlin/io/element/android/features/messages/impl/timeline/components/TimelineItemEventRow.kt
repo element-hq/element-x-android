@@ -707,7 +707,7 @@ private fun ContentToPreviewWithReply() {
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
-                    inReplyTo = aInReplyToReady(replyContent, true),
+                    inReplyTo = aInReplyToReady(replyContent),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
                 isHighlighted = false,
@@ -729,7 +729,8 @@ private fun ContentToPreviewWithReply() {
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
-                    inReplyTo = aInReplyToReady(replyContent, false),
+                    inReplyTo = aInReplyToReady(replyContent),
+                    isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
                 isHighlighted = false,
@@ -751,11 +752,10 @@ private fun ContentToPreviewWithReply() {
 
 private fun aInReplyToReady(
     replyContent: String,
-    isThreaded: Boolean,
 ): InReplyTo.Ready {
     return InReplyTo.Ready(
         eventId = EventId("\$event"),
-        content = MessageContent(replyContent, null, false, isThreaded, TextMessageType(replyContent, null)),
+        content = MessageContent(replyContent, null, false, false, TextMessageType(replyContent, null)),
         senderId = UserId("@Sender:domain"),
         senderDisplayName = "Sender",
         senderAvatarUrl = null,
