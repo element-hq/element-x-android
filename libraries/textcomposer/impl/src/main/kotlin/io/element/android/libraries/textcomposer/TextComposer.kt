@@ -137,7 +137,7 @@ fun TextComposer(
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp.applyScaleUp()),
-                    resourceId = R.drawable.ic_plus, // TODO Replace with design system icon when available
+                    resourceId = VectorIcons.Plus,
                     contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
                     tint = ElementTheme.colors.iconPrimary,
                 )
@@ -320,7 +320,7 @@ private fun TextFormatting(
         ) {
             Icon(
                 modifier = Modifier.size(30.dp.applyScaleUp()),
-                resourceId = R.drawable.ic_cancel, // TODO Replace with design system icon when available
+                resourceId = VectorIcons.Cancel,
                 contentDescription = stringResource(CommonStrings.action_close),
                 tint = ElementTheme.colors.iconPrimary,
             )
