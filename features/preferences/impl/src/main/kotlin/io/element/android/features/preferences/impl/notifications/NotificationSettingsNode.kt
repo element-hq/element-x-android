@@ -49,7 +49,7 @@ class NotificationSettingsNode @AssistedInject constructor(
         val state = presenter.present()
         NotificationSettingsView(
             state = state,
-            onOpenEditDefault = { openEditDefault(it) },
+            onOpenEditDefault = { openEditDefault(isOneToOne = it) },
             onBackPressed = ::navigateUp,
             modifier = modifier,
         )

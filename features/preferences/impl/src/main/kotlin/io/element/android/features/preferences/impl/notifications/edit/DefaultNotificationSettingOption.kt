@@ -80,7 +80,7 @@ fun DefaultNotificationSettingOption(
 }
 @DayNightPreviews
 @Composable
-internal fun DefaultNotificationSettingOptionLightPreview() = ElementPreview { ContentToPreview() }
+internal fun DefaultNotificationSettingOptionPreview() = ElementPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

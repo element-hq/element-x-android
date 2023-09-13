@@ -46,7 +46,7 @@ class NotificationSettingsPresenter @Inject constructor(
 ) : Presenter<NotificationSettingsState> {
     @Composable
     override fun present(): NotificationSettingsState {
-        val userPushStore = userPushStoreFactory.create(matrixClient.sessionId)
+        val userPushStore = remember { userPushStoreFactory.create(matrixClient.sessionId) }
         val systemNotificationsEnabled: MutableState<Boolean> = remember {
             mutableStateOf(systemNotificationsEnabledProvider.notificationsEnabled())
         }

@@ -26,6 +26,10 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * A view that allows a user to edit the default notification setting for rooms. This can be set separately
+ * for one-to-one and group rooms, indicated by [EditDefaultNotificationSettingState.isOneToOne].
+ */
 @Composable
 fun EditDefaultNotificationSettingView(
     state: EditDefaultNotificationSettingState,
@@ -44,6 +48,7 @@ fun EditDefaultNotificationSettingView(
         title = stringResource(id = title)
     ) {
 
+        // Only ALL_MESSAGES and MENTIONS_AND_KEYWORDS_ONLY are valid global defaults.
         val validModes = listOf(RoomNotificationMode.ALL_MESSAGES, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
 
         val categoryTitle = if(state.isOneToOne) {

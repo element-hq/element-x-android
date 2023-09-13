@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -55,10 +56,13 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * A view that allows a user edit their global notification settings.
+ */
 @Composable
 fun NotificationSettingsView(
     state: NotificationSettingsState,
-    onOpenEditDefault: (Boolean) -> Unit,
+    onOpenEditDefault: (isOneToOne: Boolean) -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -113,11 +117,7 @@ private fun NotificationSettingsContentView(
                 subtitle = stringResource(id = CommonStrings.screen_notification_settings_system_notifications_action_required,
                     stringResource(id = CommonStrings.screen_notification_settings_system_notifications_action_required_content_link)),
                 onClick = {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    val uri: Uri = Uri.fromParts("package", context.packageName, null)
-                    intent.data = uri
-                    context.startActivity(intent)
+                    context.startNotificationSettingsIntent()
                 }
             )
         }
