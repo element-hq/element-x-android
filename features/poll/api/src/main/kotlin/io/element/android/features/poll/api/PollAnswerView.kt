@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconToggleButton
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.toEnabledColor
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonPlurals
@@ -111,6 +112,7 @@ fun PollAnswerView(
                     answerItem.isSelected -> 1f
                     else -> 0f
                 },
+                trackColor = ElementTheme.colors.progressIndicatorTrackColor,
                 strokeCap = StrokeCap.Round,
             )
         }
