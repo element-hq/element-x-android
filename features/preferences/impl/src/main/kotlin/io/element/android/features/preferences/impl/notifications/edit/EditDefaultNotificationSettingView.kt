@@ -21,7 +21,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.ui.strings.R
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -48,9 +47,9 @@ fun EditDefaultNotificationSettingView(
         val validModes = listOf(RoomNotificationMode.ALL_MESSAGES, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
 
         val categoryTitle = if(state.isOneToOne) {
-            R.string.screen_notification_settings_edit_screen_direct_section_header
+            CommonStrings.screen_notification_settings_edit_screen_direct_section_header
         } else {
-            R.string.screen_notification_settings_edit_screen_group_section_header
+            CommonStrings.screen_notification_settings_edit_screen_group_section_header
         }
         PreferenceCategory(title = stringResource(id = categoryTitle)) {
 

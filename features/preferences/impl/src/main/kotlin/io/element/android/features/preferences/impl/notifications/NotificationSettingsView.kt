@@ -54,7 +54,6 @@ import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.strings.R
 @Composable
 fun NotificationSettingsView(
     state: NotificationSettingsState,
@@ -171,8 +170,8 @@ private fun NotificationSettingsContentView(
 @Composable
 private fun getTitleForRoomNotificationMode(mode: RoomNotificationMode?) =
 when(mode) {
-    RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
-    RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
+    RoomNotificationMode.ALL_MESSAGES -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_all_messages)
+    RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_mentions_and_keywords)
     RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
     null -> ""
 }
@@ -197,7 +196,7 @@ private fun InvalidNotificationSettingsView(
             ) {
                 Row {
                     Text(
-                        stringResource(R.string.screen_notification_settings_configuration_mismatch),
+                        stringResource(CommonStrings.screen_notification_settings_configuration_mismatch),
                         modifier = Modifier.weight(1f),
                         style = ElementTheme.typography.fontBodyLgMedium,
                         color = MaterialTheme.colorScheme.primary,
@@ -206,7 +205,7 @@ private fun InvalidNotificationSettingsView(
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    stringResource(R.string.screen_notification_settings_configuration_mismatch_description),
+                    stringResource(CommonStrings.screen_notification_settings_configuration_mismatch_description),
                     style = ElementTheme.typography.fontBodyMdRegular,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
