@@ -70,7 +70,6 @@ class PreferencesFlowNode @AssistedInject constructor(
         data object AnalyticsSettings : NavTarget
 
         @Parcelize
-
         data object About : NavTarget
 
         @Parcelize

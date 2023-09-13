@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+
 @Composable
 fun NotificationSettingsView(
     state: NotificationSettingsState,
@@ -166,7 +167,6 @@ private fun NotificationSettingsContentView(
         }
 }
 
-
 @Composable
 private fun getTitleForRoomNotificationMode(mode: RoomNotificationMode?) =
 when(mode) {
@@ -245,7 +245,6 @@ private fun ContentToPreview(state: NotificationSettingsState) {
         onOpenEditDefault = {},
     )
 }
-
 
 @Preview
 @Composable

@@ -53,7 +53,7 @@ interface MatrixRoom : Closeable {
      * A one-to-one is a room with exactly 2 members.
      * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
      */
-    val isOneToOne: Boolean get() = joinedMemberCount == 2L
+    val isOneToOne: Boolean get() = activeMemberCount == 2L
 
     /**
      * The current loaded members as a StateFlow.
