@@ -191,7 +191,7 @@ private fun EditLinkDialog(
 
 @DayNightPreviews
 @Composable
-fun TextComposerLinkDialogCreateLinkPreview() {
+internal fun TextComposerLinkDialogCreateLinkPreview() {
     TextComposerLinkDialog(
         onDismissRequest = {},
         linkAction = LinkAction.InsertLink,
@@ -203,7 +203,7 @@ fun TextComposerLinkDialogCreateLinkPreview() {
 
 @DayNightPreviews
 @Composable
-fun TextComposerLinkDialogCreateLinkWithoutTextPreview() {
+internal fun TextComposerLinkDialogCreateLinkWithoutTextPreview() {
     TextComposerLinkDialog(
         onDismissRequest = {},
         linkAction = LinkAction.SetLink(null),
@@ -215,7 +215,7 @@ fun TextComposerLinkDialogCreateLinkWithoutTextPreview() {
 
 @DayNightPreviews
 @Composable
-fun TextComposerLinkDialogEditLinkPreview() {
+internal fun TextComposerLinkDialogEditLinkPreview() {
     TextComposerLinkDialog(
         onDismissRequest = {},
         linkAction = LinkAction.SetLink("https://element.io"),
