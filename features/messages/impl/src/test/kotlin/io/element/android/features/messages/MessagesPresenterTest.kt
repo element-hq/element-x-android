@@ -628,6 +628,7 @@ class MessagesPresenterTest {
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
+        val featureFlagsService = FakeFeatureFlagService(mapOf(FeatureFlags.RichTextEditor.key to true))
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -642,6 +643,7 @@ class MessagesPresenterTest {
             navigator = navigator,
             clipboardHelper = clipboardHelper,
             analyticsService = analyticsService,
+            featureFlagService = featureFlagsService,
             dispatchers = coroutineDispatchers,
         )
     }

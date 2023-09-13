@@ -44,4 +44,9 @@ enum class FeatureFlags(
         // Do not forget to edit StaticFeatureFlagProvider when enabling the feature.
         defaultValue = false,
     ),
+    RichTextEditor(
+        key = "feature.richtexteditor",
+        title = "Enable rich text editor",
+        defaultValue = true,
+    ),
 }

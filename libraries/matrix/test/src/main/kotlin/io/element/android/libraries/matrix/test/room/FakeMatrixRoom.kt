@@ -92,7 +92,7 @@ class FakeMatrixRoom(
     private var sendPollResponseResult = Result.success(Unit)
     private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
-    val editMessageCalls = mutableListOf<Pair<String, String>>()
+    val editMessageCalls = mutableListOf<Pair<String, String?>>()
 
     var sendMediaCount = 0
         private set
@@ -171,7 +171,7 @@ class FakeMatrixRoom(
         userAvatarUrlResult
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String) = simulateLongTask {
+    override suspend fun sendMessage(body: String, htmlBody: String?) = simulateLongTask {
         Result.success(Unit)
     }
 
@@ -200,15 +200,15 @@ class FakeMatrixRoom(
         return cancelSendResult
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String): Result<Unit> {
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit> {
         editMessageCalls += body to htmlBody
         return Result.success(Unit)
     }
 
-    var replyMessageParameter: Pair<String, String>? = null
+    var replyMessageParameter: Pair<String, String?>? = null
         private set
 
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String): Result<Unit> {
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> {
         replyMessageParameter = body to htmlBody
         return Result.success(Unit)
     }

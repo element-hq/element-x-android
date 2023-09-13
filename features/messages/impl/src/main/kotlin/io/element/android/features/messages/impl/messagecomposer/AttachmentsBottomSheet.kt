@@ -55,6 +55,7 @@ internal fun AttachmentsBottomSheet(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val localView = LocalView.current
@@ -87,6 +88,7 @@ internal fun AttachmentsBottomSheet(
         ) {
             AttachmentSourcePickerMenu(
                 state = state,
+                enableTextFormatting = enableTextFormatting,
                 onSendLocationClicked = onSendLocationClicked,
                 onCreatePollClicked = onCreatePollClicked,
             )
@@ -100,6 +102,7 @@ internal fun AttachmentSourcePickerMenu(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -146,11 +149,13 @@ internal fun AttachmentSourcePickerMenu(
                 text = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
             )
         }
-        ListItem(
-            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = true)) },
-            icon = { Icon(Icons.Default.FormatColorText, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
-        )
+        if (enableTextFormatting) {
+            ListItem(
+                modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = true)) },
+                icon = { Icon(Icons.Default.FormatColorText, null) },
+                text = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
+            )
+        }
     }
 }
 
@@ -163,5 +168,6 @@ internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
         ),
         onSendLocationClicked = {},
         onCreatePollClicked = {},
+        enableTextFormatting = true,
     )
 }
