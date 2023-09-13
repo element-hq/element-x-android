@@ -522,7 +522,7 @@ private fun MessageEventBubbleContent(
     }
     val replyToDetails = event.inReplyTo as? InReplyTo.Ready
     CommonLayout(
-        showThreadDecoration = false,
+        showThreadDecoration = event.isThreaded,
         timestampPosition = timestampPosition,
         inReplyToDetails = replyToDetails,
         modifier = bubbleModifier
@@ -707,7 +707,7 @@ private fun ContentToPreviewWithReply() {
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
-                    inReplyTo = aInReplyToReady(replyContent),
+                    inReplyTo = aInReplyToReady(replyContent, true),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
                 isHighlighted = false,
@@ -729,7 +729,7 @@ private fun ContentToPreviewWithReply() {
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
-                    inReplyTo = aInReplyToReady(replyContent),
+                    inReplyTo = aInReplyToReady(replyContent, false),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
                 isHighlighted = false,
@@ -750,11 +750,12 @@ private fun ContentToPreviewWithReply() {
 }
 
 private fun aInReplyToReady(
-    replyContent: String
+    replyContent: String,
+    isThreaded: Boolean,
 ): InReplyTo.Ready {
     return InReplyTo.Ready(
         eventId = EventId("\$event"),
-        content = MessageContent(replyContent, null, false, TextMessageType(replyContent, null)),
+        content = MessageContent(replyContent, null, false, isThreaded, TextMessageType(replyContent, null)),
         senderId = UserId("@Sender:domain"),
         senderDisplayName = "Sender",
         senderAvatarUrl = null,

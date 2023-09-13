@@ -68,6 +68,7 @@ class EventMessageMapper {
             body = it.body(),
             inReplyTo = inReplyToEvent,
             isEdited = it.isEdited(),
+            isThreaded = it.isThreaded(),
             type = type
         )
     }
