@@ -52,7 +52,7 @@ class CallForegroundService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val foregroundServiceChannel = NotificationChannelCompat.Builder(
                 "foreground_service_channel",
-                NotificationManagerCompat.IMPORTANCE_DEFAULT,
+                NotificationManagerCompat.IMPORTANCE_LOW,
             ).setName("Foreground Service Channel").build()
             notificationManagerCompat.createNotificationChannel(foregroundServiceChannel)
             val notification = NotificationCompat.Builder(this, foregroundServiceChannel.id)

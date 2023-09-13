@@ -16,6 +16,7 @@
 
 plugins {
     id("io.element.android-compose-library")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -26,4 +27,9 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
     implementation(libs.androidx.webkit)
+    ksp(libs.showkase.processor)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.robolectric)
 }

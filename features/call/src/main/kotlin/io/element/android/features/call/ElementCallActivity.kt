@@ -22,7 +22,6 @@ import android.content.res.Configuration
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -37,28 +36,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.theme.ElementTheme
-import java.net.URLDecoder
 
 class ElementCallActivity : ComponentActivity() {
 
     private lateinit var audioManager: AudioManager
 
-    private var webkitPermissionRequest: PermissionRequest? = null
+    private var requestPermissionCallback: RequestPermissionCallback? = null
 
     private var audiofocusRequest: AudioFocusRequest? = null
     private var audioFocusChangeListener: AudioManager.OnAudioFocusChangeListener? = null
 
-    private val isDarkMode = mutableStateOf(false)
+    private val requestPermissionsLauncher = registerPermissionResultLauncher()
+
+    private var isDarkMode = false
     private val urlState = mutableStateOf<String?>(null)
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,43 +74,18 @@ class ElementCallActivity : ComponentActivity() {
             updateUiMode(resources.configuration)
         }
 
-        val requestPermissionsLauncher = registerPermissionResultLauncher()
-
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         requestAudioFocus()
 
         setContent {
-            ElementTheme(
-                darkTheme = isDarkMode.value,
-                lightStatusBar = !isDarkMode.value,
-            ) {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = { Text("Element Call") },
-                            navigationIcon = {
-                                BackButton(
-                                    imageVector = Icons.Default.Close,
-                                    onClick = { onBackPressed() }
-                                )
-                            }
-                        )
-                    }
-                ) { padding ->
-                    CallWebView(
-                        modifier = Modifier
-                                .padding(padding)
-                                .consumeWindowInsets(padding)
-                                .fillMaxSize(),
-                        url = urlState.value!!,
-                        onPermissionsRequested = {
-                            webkitPermissionRequest = it
-                            val androidPermissions = mapWebkitPermissions(it)
-                            requestPermissionsLauncher.launch(androidPermissions.toTypedArray())
-                        }
-                    )
+            CallContents(
+                url = urlState.value!!,
+                onBackPressed = this::onBackPressed,
+                requestPermissions = { permissions, callback ->
+                    requestPermissionCallback = callback
+                    requestPermissionsLauncher.launch(permissions)
                 }
-            }
+            )
         }
     }
 
@@ -154,25 +130,13 @@ class ElementCallActivity : ComponentActivity() {
         finishAndRemoveTask()
     }
 
-    private fun parseUrl(url: String?): String? {
-        if (url == null) return null
-        val parsedUrl = Uri.parse(url)
-        val scheme = parsedUrl.scheme ?: return null
-        return when {
-            scheme in sequenceOf("http", "https") -> url
-            scheme == "element" && parsedUrl.host == "call" -> {
-                parsedUrl.getQueryParameter("url")?.let { URLDecoder.decode(it, "utf-8") }
-            }
-            // This should never be possible, but we still need to take into account the possibility
-            else -> null
-        }
-    }
+    private fun parseUrl(url: String?): String? = CallIntentDataParser.parse(url)
 
     private fun registerPermissionResultLauncher(): ActivityResultLauncher<Array<String>> {
         return registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
-            val request = webkitPermissionRequest ?: return@registerForActivityResult
+            val callback = requestPermissionCallback ?: return@registerForActivityResult
             val permissionsToGrant = mutableListOf<String>()
             permissions.forEach { (permission, granted) ->
                 if (granted) {
@@ -184,7 +148,7 @@ class ElementCallActivity : ComponentActivity() {
                     permissionsToGrant.add(webKitPermission)
                 }
             }
-            request.grant(permissionsToGrant.toTypedArray())
+            callback(permissionsToGrant.toTypedArray())
         }
     }
 
@@ -221,25 +185,78 @@ class ElementCallActivity : ComponentActivity() {
     }
 
     private fun updateUiMode(configuration: Configuration) {
-        val prevDarkMode = isDarkMode.value
+        val prevDarkMode = isDarkMode
         val currentNightMode = configuration.uiMode and Configuration.UI_MODE_NIGHT_YES
-        isDarkMode.value = currentNightMode != 0
-        if (prevDarkMode != isDarkMode.value) {
-            if (isDarkMode.value) {
+        isDarkMode = currentNightMode != 0
+        if (prevDarkMode != isDarkMode) {
+            if (isDarkMode) {
                 window.setBackgroundDrawableResource(android.R.drawable.screen_background_dark)
             } else {
                 window.setBackgroundDrawableResource(android.R.drawable.screen_background_light)
             }
         }
     }
+}
 
-    private fun mapWebkitPermissions(permissionRequest: PermissionRequest): List<String> {
-        return permissionRequest.resources.mapNotNull { resource ->
-            when (resource) {
-                PermissionRequest.RESOURCE_AUDIO_CAPTURE -> Manifest.permission.RECORD_AUDIO
-                PermissionRequest.RESOURCE_VIDEO_CAPTURE -> Manifest.permission.CAMERA
-                else -> null
-            }
+internal fun mapWebkitPermissions(permissions: Array<String>): List<String> {
+    return permissions.mapNotNull { permission ->
+        when (permission) {
+            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> Manifest.permission.RECORD_AUDIO
+            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> Manifest.permission.CAMERA
+            else -> null
         }
+    }
+}
+
+typealias RequestPermissionCallback = (Array<String>) -> Unit
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CallContents(
+    url: String,
+    requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ElementTheme {
+        Scaffold(
+            modifier = modifier,
+            topBar = {
+                TopAppBar(
+                    title = { Text("Element Call") },
+                    navigationIcon = {
+                        BackButton(
+                            imageVector = Icons.Default.Close,
+                            onClick = { onBackPressed() }
+                        )
+                    }
+                )
+            }
+        ) { padding ->
+            CallWebView(
+                modifier = Modifier
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .fillMaxSize(),
+                url = url,
+                onPermissionsRequested = { request ->
+                    val androidPermissions = mapWebkitPermissions(request.resources)
+                    val callback: RequestPermissionCallback = { request.grant(it) }
+                    requestPermissions(androidPermissions.toTypedArray(), callback)
+                }
+            )
+        }
+    }
+}
+
+@DayNightPreviews
+@Composable
+internal fun ElementCallActivityPreview() {
+    ElementTheme {
+        CallContents(
+            url = "https://call.element.io/some-actual-call?with=parameters",
+            requestPermissions = { _, _ -> },
+            onBackPressed = { },
+        )
     }
 }

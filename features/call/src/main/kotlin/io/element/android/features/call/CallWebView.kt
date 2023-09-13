@@ -26,6 +26,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 
 class CallWebView : WebView {
@@ -47,16 +48,21 @@ fun CallWebView(
     onPermissionsRequested: (PermissionRequest) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val isInpectionMode = LocalInspectionMode.current
     AndroidView(
         modifier = modifier,
         factory = { context ->
             CallWebView(context).apply {
-                setup(onPermissionsRequested)
-                loadUrl(url)
+                if (!isInpectionMode) {
+                    setup(onPermissionsRequested)
+                    loadUrl(url)
+                }
             }
         },
         update = { webView ->
-            webView.loadUrl(url)
+            if (!isInpectionMode) {
+                webView.loadUrl(url)
+            }
         }
     )
 }
