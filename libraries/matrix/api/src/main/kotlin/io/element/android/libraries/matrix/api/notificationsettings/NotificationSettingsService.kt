@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettin
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.withContext
 
 interface NotificationSettingsService {
     /**

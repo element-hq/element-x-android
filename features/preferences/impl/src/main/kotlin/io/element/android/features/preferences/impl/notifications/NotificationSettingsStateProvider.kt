@@ -27,13 +27,13 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
 }
 
 fun aNotificationSettingsState() = NotificationSettingsState(
-    matrixNotificationSettings = NotificationSettingsState.MatrixNotificationSettings.ValidNotificationSettingsState(
+    matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
         atRoomNotificationsEnabled = true,
         callNotificationsEnabled = true,
         defaultGroupNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
         defaultOneToOneNotificationMode = RoomNotificationMode.ALL_MESSAGES,
     ),
-    appNotificationSettings = NotificationSettingsState.AppNotificationSettings(
+    appSettings = NotificationSettingsState.AppSettings(
         systemNotificationsEnabled = false,
         appNotificationsEnabled = true,
     ),

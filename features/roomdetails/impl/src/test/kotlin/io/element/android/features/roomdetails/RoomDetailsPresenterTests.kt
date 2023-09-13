@@ -385,7 +385,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - mute room notifications`() = runTest {
         val leaveRoomPresenter = LeaveRoomPresenterFake()
-        val notificationSettingsService = FakeNotificationSettingsService(initialMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+        val notificationSettingsService = FakeNotificationSettingsService(initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -404,8 +404,8 @@ class RoomDetailsPresenterTests {
     fun `present - unmute room notifications`() = runTest {
         val leaveRoomPresenter = LeaveRoomPresenterFake()
         val notificationSettingsService = FakeNotificationSettingsService(
-            initialMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
-            initialDefaultMode = RoomNotificationMode.ALL_MESSAGES
+            initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+            initialEncryptedGroupDefaultMode = RoomNotificationMode.ALL_MESSAGES
         )
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)

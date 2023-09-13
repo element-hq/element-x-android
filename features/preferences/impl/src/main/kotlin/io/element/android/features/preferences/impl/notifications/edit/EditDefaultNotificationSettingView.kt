@@ -55,7 +55,7 @@ fun EditDefaultNotificationSettingView(
         PreferenceCategory(title = stringResource(id = categoryTitle)) {
 
             if (state.mode != null) {
-                Column(modifier = modifier.selectableGroup()) {
+                Column(modifier = Modifier.selectableGroup()) {
                     validModes.forEach { item ->
                         DefaultNotificationSettingOption(
                             mode = item,

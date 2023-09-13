@@ -74,23 +74,21 @@ fun NotificationSettingsView(
         title = stringResource(id = CommonStrings.screen_notification_settings_title)
     ) {
 
-        when (state.matrixNotificationSettings) {
-            is NotificationSettingsState.MatrixNotificationSettings.InvalidNotificationSettingsState -> InvalidNotificationSettingsView(
-                showError = state.matrixNotificationSettings.fixFailed,
+        when (state.matrixSettings) {
+            is NotificationSettingsState.MatrixSettings.Invalid -> InvalidNotificationSettingsView(
+                showError = state.matrixSettings.fixFailed,
                 onContinueClicked = { state.eventSink(NotificationSettingsEvents.FixConfigurationMismatch) },
                 onDismissError = { state.eventSink(NotificationSettingsEvents.ClearConfigurationMismatchError) },
-                modifier = modifier,
             )
-            NotificationSettingsState.MatrixNotificationSettings.Uninitialized -> return@PreferenceView
-            is NotificationSettingsState.MatrixNotificationSettings.ValidNotificationSettingsState -> NotificationSettingsContentView(
-                matrixSettings = state.matrixNotificationSettings,
-                systemSettings = state.appNotificationSettings,
+            NotificationSettingsState.MatrixSettings.Uninitialized -> return@PreferenceView
+            is NotificationSettingsState.MatrixSettings.Valid -> NotificationSettingsContentView(
+                matrixSettings = state.matrixSettings,
+                systemSettings = state.appSettings,
                 onNotificationsEnabledChanged = { state.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(it))},
                 onGroupChatsClicked = { onOpenEditDefault(false) },
                 onDirectChatsClicked = { onOpenEditDefault(true) },
                 onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
                 onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
-                modifier = modifier,
             )
         }
     }
@@ -98,8 +96,8 @@ fun NotificationSettingsView(
 
 @Composable
 private fun NotificationSettingsContentView(
-    matrixSettings: NotificationSettingsState.MatrixNotificationSettings.ValidNotificationSettingsState,
-    systemSettings: NotificationSettingsState.AppNotificationSettings,
+    matrixSettings: NotificationSettingsState.MatrixSettings.Valid,
+    systemSettings: NotificationSettingsState.AppSettings,
     onNotificationsEnabledChanged: (Boolean) -> Unit,
     onGroupChatsClicked: () -> Unit,
     onDirectChatsClicked: () -> Unit,
@@ -252,16 +250,16 @@ private fun ContentToPreview(state: NotificationSettingsState) {
 
 @Preview
 @Composable
-internal fun InvalidNotificationSettingsViewightPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) =
-    ElementPreviewLight { InvalidNotificationSettingsContentToPreview(state) }
+internal fun InvalidNotificationSettingsViewightPreview() =
+    ElementPreviewLight { InvalidNotificationSettingsContentToPreview() }
 
 @Preview
 @Composable
-internal fun InvalidNotificationSettingsViewDarkPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) =
-    ElementPreviewDark { InvalidNotificationSettingsContentToPreview(state) }
+internal fun InvalidNotificationSettingsViewDarkPreview() =
+    ElementPreviewDark { InvalidNotificationSettingsContentToPreview() }
 
 @Composable
-private fun InvalidNotificationSettingsContentToPreview(state: NotificationSettingsState) {
+private fun InvalidNotificationSettingsContentToPreview() {
     InvalidNotificationSettingsView(
         showError = false,
         onContinueClicked = {},

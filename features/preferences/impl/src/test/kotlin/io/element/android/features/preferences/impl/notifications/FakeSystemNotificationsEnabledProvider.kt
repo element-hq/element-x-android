@@ -16,12 +16,8 @@
 
 package io.element.android.features.preferences.impl.notifications
 
-sealed interface NotificationSettingsEvents {
-
-    data object RefreshSystemNotificationsEnabled : NotificationSettingsEvents
-    data class SetNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvents
-    data class SetAtRoomNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvents
-    data class SetCallNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvents
-    data object FixConfigurationMismatch : NotificationSettingsEvents
-    data object ClearConfigurationMismatchError : NotificationSettingsEvents
+class FakeSystemNotificationsEnabledProvider: SystemNotificationsEnabledProvider {
+    override fun notificationsEnabled(): Boolean {
+        return true
+    }
 }

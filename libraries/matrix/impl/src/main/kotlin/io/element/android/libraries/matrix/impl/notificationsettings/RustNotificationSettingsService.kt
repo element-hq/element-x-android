@@ -57,7 +57,11 @@ class RustNotificationSettingsService(
             notificationSettings.getDefaultRoomNotificationMode(isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::mapMode)
         }
 
-    override suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit> = withContext(dispatchers.io) {
+    override suspend fun setDefaultRoomNotificationMode(
+        isEncrypted: Boolean,
+        mode: RoomNotificationMode,
+        isOneToOne: Boolean
+    ): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
             notificationSettings.setDefaultRoomNotificationMode(isEncrypted, isOneToOne, mode.let(RoomNotificationSettingsMapper::mapMode))
         }

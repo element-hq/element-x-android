@@ -26,7 +26,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import kotlinx.coroutines.CoroutineScope
