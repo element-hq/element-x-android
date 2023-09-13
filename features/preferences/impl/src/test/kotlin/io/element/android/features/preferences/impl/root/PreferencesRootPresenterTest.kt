@@ -37,8 +37,7 @@ import org.junit.Test
 
 class PreferencesRootPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

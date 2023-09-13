@@ -29,8 +29,7 @@ import org.junit.Test
 
 class OnBoardingPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

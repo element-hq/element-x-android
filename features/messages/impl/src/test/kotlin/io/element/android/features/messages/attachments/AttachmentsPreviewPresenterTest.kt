@@ -43,8 +43,7 @@ import org.junit.Test
 
 class AttachmentsPreviewPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private val mediaPreProcessor = FakeMediaPreProcessor()

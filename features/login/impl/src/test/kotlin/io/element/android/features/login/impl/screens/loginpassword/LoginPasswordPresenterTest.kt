@@ -38,8 +38,7 @@ import org.junit.Test
 
 class LoginPasswordPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

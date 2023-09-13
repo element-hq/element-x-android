@@ -33,8 +33,7 @@ import org.junit.Test
 
 class ChangeServerPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test
