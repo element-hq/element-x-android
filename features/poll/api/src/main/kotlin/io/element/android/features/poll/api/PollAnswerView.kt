@@ -111,6 +111,7 @@ fun PollAnswerView(
                     answerItem.isSelected -> 1f
                     else -> 0f
                 },
+                trackColor = ElementTheme.colors.bgActionSecondaryRest,
                 strokeCap = StrokeCap.Round,
             )
         }
