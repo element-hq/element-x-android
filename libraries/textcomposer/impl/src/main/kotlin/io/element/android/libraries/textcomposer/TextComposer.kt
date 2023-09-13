@@ -263,7 +263,7 @@ private fun TextInput(
             Text(
                 stringResource(CommonStrings.common_message),
                 style = defaultTypography.copy(
-                    color = ElementTheme.colors.textDisabled,
+                    color = ElementTheme.colors.textSecondary,
                 ),
             )
         }
