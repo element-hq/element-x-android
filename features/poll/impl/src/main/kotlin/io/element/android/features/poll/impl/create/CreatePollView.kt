@@ -18,6 +18,7 @@ package io.element.android.features.poll.impl.create
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -110,30 +111,30 @@ fun CreatePollView(
                 .fillMaxSize(),
         ) {
             item {
-                Text(
-                    text = stringResource(id = R.string.screen_create_poll_question_desc),
-                    modifier = Modifier.padding(start = 32.dp),
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = {
-                        OutlinedTextField(
-                            value = state.question,
-                            onValueChange = {
-                                state.eventSink(CreatePollEvents.SetQuestion(it))
-                            },
-                            modifier = Modifier
-                                .focusRequester(questionFocusRequester)
-                                .fillMaxWidth(),
-                            placeholder = {
-                                Text(text = stringResource(id = R.string.screen_create_poll_question_hint))
-                            },
-                            keyboardOptions = keyboardOptions,
-                        )
-                    }
-                )
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.screen_create_poll_question_desc),
+                        modifier = Modifier.padding(start = 32.dp),
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                    )
+                    ListItem(
+                        headlineContent = {
+                            OutlinedTextField(
+                                value = state.question,
+                                onValueChange = {
+                                    state.eventSink(CreatePollEvents.SetQuestion(it))
+                                },
+                                modifier = Modifier
+                                    .focusRequester(questionFocusRequester)
+                                    .fillMaxWidth(),
+                                placeholder = {
+                                    Text(text = stringResource(id = R.string.screen_create_poll_question_hint))
+                                },
+                                keyboardOptions = keyboardOptions,
+                            )
+                        }
+                    )
+                }
             }
             itemsIndexed(state.answers) { index, answer ->
                 ListItem(
@@ -175,17 +176,17 @@ fun CreatePollView(
                 }
             }
             item {
-                HorizontalDivider()
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
-                    supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
-                    trailingContent = ListItemContent.Switch(
-                        checked = state.pollKind == PollKind.Undisclosed,
-                        onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
-                    ),
-                )
+                Column {
+                    HorizontalDivider()
+                    ListItem(
+                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
+                        supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
+                        trailingContent = ListItemContent.Switch(
+                            checked = state.pollKind == PollKind.Undisclosed,
+                            onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
+                        ),
+                    )
+                }
             }
         }
     }
