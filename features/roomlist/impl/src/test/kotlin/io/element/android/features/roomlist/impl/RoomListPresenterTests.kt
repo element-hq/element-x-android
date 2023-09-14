@@ -325,7 +325,9 @@ class RoomListPresenterTests {
             client.roomListService,
             lastMessageTimestampFormatter,
             roomLastMessageFormatter,
-            coroutineDispatchers = testCoroutineDispatchers()
+            coroutineDispatchers = testCoroutineDispatchers(),
+            notificationSettingsService = client.notificationSettingsService(),
+            appScope = this
         )
     )
 }
