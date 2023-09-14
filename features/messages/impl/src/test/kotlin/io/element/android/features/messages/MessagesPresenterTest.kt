@@ -65,7 +65,6 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -623,12 +622,11 @@ class MessagesPresenterTest {
             appScope = this,
             analyticsService = analyticsService,
         )
-        val buildMeta = aBuildMeta()
-        val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
+        val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
+        val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
-        val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
