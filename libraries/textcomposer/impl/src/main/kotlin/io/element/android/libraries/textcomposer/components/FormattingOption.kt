@@ -18,17 +18,26 @@ package io.element.android.libraries.textcomposer.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.VectorIcons
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.iconSuccessPrimaryBackground
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.SemanticColors
 
@@ -42,27 +51,65 @@ internal fun FormattingOption(
     colors: SemanticColors = ElementTheme.colors,
 ) {
     val backgroundColor = when (state) {
-        FormattingOptionState.Selected -> colors.bgActionPrimaryRest
+        FormattingOptionState.Selected -> colors.iconSuccessPrimaryBackground
         FormattingOptionState.Default,
         FormattingOptionState.Disabled -> Color.Transparent
     }
 
     val foregroundColor = when (state) {
-        FormattingOptionState.Selected -> colors.iconOnSolidPrimary
-        FormattingOptionState.Default -> colors.iconPrimary
+        FormattingOptionState.Selected -> colors.iconSuccessPrimary
+        FormattingOptionState.Default -> colors.iconSecondary
         FormattingOptionState.Disabled -> colors.iconDisabled
     }
     Box(
         modifier = modifier
-            .clickable { onClick() }
-            .size(44.dp.applyScaleUp())
-            .background(backgroundColor, shape = RoundedCornerShape(4.dp.applyScaleUp()))
+            .clickable(
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(
+                    bounded = false,
+                    radius = 20.dp,
+                ),
+            )
+            .size(48.dp.applyScaleUp())
     ) {
-        Icon(
-            modifier = Modifier.align(Alignment.Center),
-            imageVector = imageVector,
-            contentDescription = contentDescription,
-            tint = foregroundColor,
+        Box(
+            modifier = modifier
+                .size(36.dp.applyScaleUp())
+                .align(Alignment.Center)
+                .background(backgroundColor, shape = RoundedCornerShape(4.dp.applyScaleUp()))
+        ) {
+            Icon(
+                modifier = Modifier.align(Alignment.Center),
+                imageVector = imageVector,
+                contentDescription = contentDescription,
+                tint = foregroundColor,
+            )
+        }
+    }
+}
+
+@DayNightPreviews
+@Composable
+internal fun FormattingButtonPreview() = ElementPreview {
+    Row {
+        FormattingOption(
+            state = FormattingOptionState.Default,
+            onClick = { },
+            imageVector = ImageVector.vectorResource(VectorIcons.Bold),
+            contentDescription = "",
+        )
+        FormattingOption(
+            state = FormattingOptionState.Selected,
+            onClick = { },
+            imageVector = ImageVector.vectorResource(VectorIcons.Italic),
+            contentDescription = "",
+        )
+        FormattingOption(
+            state = FormattingOptionState.Disabled,
+            onClick = { },
+            imageVector = ImageVector.vectorResource(VectorIcons.Underline),
+            contentDescription = "",
         )
     }
 }

@@ -327,8 +327,8 @@ private fun TextFormatting(
                 .constrainAs(formatting) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    start.linkTo(close.end, margin = 7.dp)
-                    end.linkTo(send.start, margin = 8.dp)
+                    start.linkTo(close.end, margin = 1.dp)
+                    end.linkTo(send.start, margin = 14.dp)
                     width = fillToConstraints
                 }
                 .horizontalScroll(scrollState),
