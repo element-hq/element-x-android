@@ -86,7 +86,7 @@ class ActionListPresenter @Inject constructor(
             when (timelineItem.content) {
                 is TimelineItemRedactedContent -> {
                     if (buildMeta.isDebuggable) {
-                        listOf(TimelineItemAction.Developer)
+                        listOf(TimelineItemAction.ViewSource)
                     } else {
                         emptyList()
                     }
@@ -95,7 +95,7 @@ class ActionListPresenter @Inject constructor(
                     buildList {
                         add(TimelineItemAction.Copy)
                         if (buildMeta.isDebuggable) {
-                            add(TimelineItemAction.Developer)
+                            add(TimelineItemAction.ViewSource)
                         }
                     }
                 }
@@ -116,7 +116,7 @@ class ActionListPresenter @Inject constructor(
                             add(TimelineItemAction.Copy)
                         }
                         if (buildMeta.isDebuggable) {
-                            add(TimelineItemAction.Developer)
+                            add(TimelineItemAction.ViewSource)
                         }
                         if (!timelineItem.isMine) {
                             add(TimelineItemAction.ReportContent)
@@ -145,7 +145,7 @@ class ActionListPresenter @Inject constructor(
                         add(TimelineItemAction.Copy)
                     }
                     if (buildMeta.isDebuggable) {
-                        add(TimelineItemAction.Developer)
+                        add(TimelineItemAction.ViewSource)
                     }
                     if (!timelineItem.isMine) {
                         add(TimelineItemAction.ReportContent)

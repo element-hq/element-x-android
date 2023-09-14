@@ -71,7 +71,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                     )
                 )
             )
@@ -96,7 +96,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                     )
                 )
             )
@@ -127,7 +127,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
                 )
@@ -158,7 +158,7 @@ class ActionListPresenterTest {
                     persistentListOf(
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
                 )
@@ -188,7 +188,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
                     )
@@ -222,7 +222,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -253,7 +253,7 @@ class ActionListPresenterTest {
                     persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -283,7 +283,7 @@ class ActionListPresenterTest {
                     stateEvent,
                     persistentListOf(
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                     )
                 )
             )

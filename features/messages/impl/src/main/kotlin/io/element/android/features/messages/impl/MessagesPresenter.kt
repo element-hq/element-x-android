@@ -213,7 +213,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.Reply,
             TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState)
-            TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
+            TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent)
