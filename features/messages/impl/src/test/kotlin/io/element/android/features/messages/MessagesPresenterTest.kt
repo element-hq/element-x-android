@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -614,7 +615,7 @@ class MessagesPresenterTest {
             messageComposerContext = MessageComposerContextImpl(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
 
-        )
+            )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
@@ -627,7 +628,7 @@ class MessagesPresenterTest {
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
-        val featureFlagsService = FakeFeatureFlagService(mapOf(FeatureFlags.RichTextEditor.key to true))
+        val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -642,7 +643,7 @@ class MessagesPresenterTest {
             navigator = navigator,
             clipboardHelper = clipboardHelper,
             analyticsService = analyticsService,
-            featureFlagService = featureFlagsService,
+            preferencesStore = preferencesStore,
             dispatchers = coroutineDispatchers,
         )
     }

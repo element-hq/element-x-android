@@ -57,6 +57,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
@@ -66,8 +67,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -97,7 +96,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
     private val analyticsService: AnalyticsService,
-    private val featureFlagService: FeatureFlagService,
+    private val preferencesStore: PreferencesStore,
     @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
 
@@ -146,15 +145,17 @@ class MessagesPresenter @AssistedInject constructor(
             timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
         }
 
-        var enableTextFormatting by remember { mutableStateOf(true) }
-        LaunchedEffect(Unit) {
-            enableTextFormatting = featureFlagService.isFeatureEnabled(FeatureFlags.RichTextEditor)
-        }
+        val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> {
-                    localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
+                    localCoroutineScope.handleTimelineAction(
+                        action = event.action,
+                        targetEvent = event.event,
+                        composerState = composerState,
+                        enableTextFormatting = enableTextFormatting,
+                    )
                 }
                 is MessagesEvents.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventId)
@@ -204,11 +205,12 @@ class MessagesPresenter @AssistedInject constructor(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
     ) = launch {
         when (action) {
             TimelineItemAction.Copy -> handleCopyContents(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
-            TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
+            TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.Reply,
             TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState)
             TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
@@ -260,11 +262,15 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+    private suspend fun handleActionEdit(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
+        ) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.eventId,
             (targetEvent.content as? TimelineItemTextBasedContent)?.let {
-                if (featureFlagService.isFeatureEnabled(FeatureFlags.RichTextEditor)) {
+                if (enableTextFormatting) {
                     it.htmlBody ?: it.body
                 } else {
                     it.body
