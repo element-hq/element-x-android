@@ -209,7 +209,8 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Copy -> handleCopyContents(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
-            TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
+            TimelineItemAction.Reply,
+            TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState)
             TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
@@ -312,6 +313,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(
+            isThreaded = targetEvent.isThreaded,
             senderName = targetEvent.safeSenderName,
             eventId = targetEvent.eventId,
             attachmentThumbnailInfo = attachmentThumbnailInfo,

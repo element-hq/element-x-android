@@ -43,4 +43,5 @@ object VectorIcons {
     val Underline = R.drawable.ic_underline
     val Mention = R.drawable.ic_mention
     val Mute = R.drawable.ic_mute
+    val ThreadDecoration = R.drawable.ic_thread_decoration
 }

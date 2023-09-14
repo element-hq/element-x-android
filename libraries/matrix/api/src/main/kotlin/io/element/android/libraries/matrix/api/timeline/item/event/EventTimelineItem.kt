@@ -40,6 +40,11 @@ data class EventTimelineItem(
     fun inReplyTo(): InReplyTo? {
         return (content as? MessageContent)?.inReplyTo
     }
+
+    fun isThreaded(): Boolean {
+        return (content as? MessageContent)?.isThreaded ?: false
+    }
+
     fun hasNotLoadedInReplyTo(): Boolean {
         val details = inReplyTo()
         return details is InReplyTo.NotLoaded

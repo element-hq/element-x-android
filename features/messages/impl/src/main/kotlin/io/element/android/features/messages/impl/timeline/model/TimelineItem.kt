@@ -66,6 +66,7 @@ sealed interface TimelineItem {
         val reactionsState: TimelineItemReactions,
         val localSendState: LocalEventSendState?,
         val inReplyTo: InReplyTo?,
+        val isThreaded: Boolean,
         val debugInfo: TimelineItemDebugInfo,
         val origin: TimelineItemEventOrigin?,
     ) : TimelineItem {

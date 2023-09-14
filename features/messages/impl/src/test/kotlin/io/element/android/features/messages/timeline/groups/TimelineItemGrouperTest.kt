@@ -44,6 +44,7 @@ class TimelineItemGrouperTest {
         reactionsState = aTimelineItemReactions(count = 0),
         localSendState = LocalEventSendState.Sent(AN_EVENT_ID),
         inReplyTo = null,
+        isThreaded = false,
         debugInfo = aTimelineItemDebugInfo(),
         origin = null
     )

@@ -130,7 +130,11 @@ class ActionListPresenter @Inject constructor(
                     if (timelineItem.isRemote) {
                         // Can only reply or forward messages already uploaded to the server
                         if (userCanSendMessage) {
-                            add(TimelineItemAction.Reply)
+                            if (timelineItem.isThreaded) {
+                                add(TimelineItemAction.ReplyInThread)
+                            } else {
+                                add(TimelineItemAction.Reply)
+                            }
                         }
                         add(TimelineItemAction.Forward)
                     }
