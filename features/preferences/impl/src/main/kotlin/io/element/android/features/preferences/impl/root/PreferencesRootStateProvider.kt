@@ -26,6 +26,7 @@ fun aPreferencesRootState() = PreferencesRootState(
     version = "Version 1.1 (1)",
     showCompleteVerification = true,
     accountManagementUrl = "aUrl",
+    devicesManagementUrl = "anOtherUrl",
     showAnalyticsSettings = true,
     showDeveloperSettings = true,
     showNotificationSettings = true,

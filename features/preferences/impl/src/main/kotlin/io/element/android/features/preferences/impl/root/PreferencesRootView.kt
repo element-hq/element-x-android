@@ -23,8 +23,8 @@ import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.DeveloperMode
 import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
-import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -53,7 +53,7 @@ fun PreferencesRootView(
     state: PreferencesRootState,
     onBackPressed: () -> Unit,
     onVerifyClicked: () -> Unit,
-    onManageAccountClicked: () -> Unit,
+    onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
@@ -82,10 +82,11 @@ fun PreferencesRootView(
         }
         if (state.accountManagementUrl != null) {
             PreferenceText(
-                title = stringResource(id = CommonStrings.screen_settings_oidc_account),
-                icon = Icons.Outlined.ManageAccounts,
-                onClick = onManageAccountClicked,
+                title = stringResource(id = CommonStrings.action_manage_account),
+                icon = Icons.Outlined.OpenInNew,
+                onClick = { onManageAccountClicked(state.accountManagementUrl) },
             )
+            HorizontalDivider()
         }
         if (state.showAnalyticsSettings) {
             PreferenceText(
@@ -94,7 +95,7 @@ fun PreferencesRootView(
                 onClick = onOpenAnalytics,
             )
         }
-        if(state.showNotificationSettings) {
+        if (state.showNotificationSettings) {
             PreferenceText(
                 title = stringResource(id = CommonStrings.screen_notification_settings_title),
                 icon = Icons.Outlined.Notifications,
@@ -111,10 +112,19 @@ fun PreferencesRootView(
             icon = Icons.Outlined.Help,
             onClick = onOpenAbout,
         )
+        HorizontalDivider()
+        if (state.devicesManagementUrl != null) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.action_manage_devices),
+                icon = Icons.Outlined.OpenInNew,
+                onClick = { onManageAccountClicked(state.devicesManagementUrl) },
+            )
+            HorizontalDivider()
+        }
         if (state.showDeveloperSettings) {
             DeveloperPreferencesView(onOpenDeveloperSettings)
+            HorizontalDivider()
         }
-        HorizontalDivider()
         LogoutPreferenceView(
             state = state.logoutState,
             onSuccessLogout = onSuccessLogout,
