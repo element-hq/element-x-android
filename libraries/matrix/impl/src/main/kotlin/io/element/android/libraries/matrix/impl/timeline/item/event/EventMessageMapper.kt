@@ -46,22 +46,22 @@ class EventMessageMapper {
 
     fun map(message: Message): MessageContent = message.use {
         val type = it.msgtype().use(this::mapMessageType)
-        val inReplyToId = it.inReplyTo()?.eventId?.let(::EventId)
-        val inReplyToEvent: InReplyTo? = it.inReplyTo()?.event?.use { details ->
-            when (details) {
+        val inReplyToEvent: InReplyTo? = it.inReplyTo()?.use { details ->
+            val inReplyToId = EventId(details.eventId)
+            when (val event = details.event) {
                 is RepliedToEventDetails.Ready -> {
-                    val senderProfile = details.senderProfile as? ProfileDetails.Ready
+                    val senderProfile = event.senderProfile as? ProfileDetails.Ready
                     InReplyTo.Ready(
-                        eventId = inReplyToId!!,
-                        content = timelineEventContentMapper.map(details.content),
-                        senderId = UserId(details.sender),
+                        eventId = inReplyToId,
+                        content = timelineEventContentMapper.map(event.content),
+                        senderId = UserId(event.sender),
                         senderDisplayName = senderProfile?.displayName,
                         senderAvatarUrl = senderProfile?.avatarUrl,
                     )
                 }
                 is RepliedToEventDetails.Error -> InReplyTo.Error
                 is RepliedToEventDetails.Pending -> InReplyTo.Pending
-                is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(inReplyToId!!)
+                is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(inReplyToId)
             }
         }
         MessageContent(
