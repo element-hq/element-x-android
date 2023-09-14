@@ -77,7 +77,7 @@ internal fun FormattingOption(
             modifier = modifier
                 .size(36.dp.applyScaleUp())
                 .align(Alignment.Center)
-                .background(backgroundColor, shape = RoundedCornerShape(4.dp.applyScaleUp()))
+                .background(backgroundColor, shape = RoundedCornerShape(8.dp.applyScaleUp()))
         ) {
             Icon(
                 modifier = Modifier.align(Alignment.Center),
