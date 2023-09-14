@@ -89,7 +89,7 @@ fun NotificationSettingsView(
                 onGroupChatsClicked = { onOpenEditDefault(false) },
                 onDirectChatsClicked = { onOpenEditDefault(true) },
                 onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
-                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
+//                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
             )
         }
     }
@@ -103,7 +103,7 @@ private fun NotificationSettingsContentView(
     onGroupChatsClicked: () -> Unit,
     onDirectChatsClicked: () -> Unit,
     onMentionNotificationsChanged: (Boolean) -> Unit,
-    onCallsNotificationsChanged: (Boolean) -> Unit,
+//    onCallsNotificationsChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
         val context = LocalContext.current
