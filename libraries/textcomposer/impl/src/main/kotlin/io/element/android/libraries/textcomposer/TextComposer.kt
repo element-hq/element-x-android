@@ -365,6 +365,26 @@ private fun TextFormatting(
                 imageVector = ImageVector.vectorResource(VectorIcons.Strikethrough),
                 contentDescription = stringResource(R.string.rich_text_editor_format_strikethrough)
             )
+
+            var linkDialogAction by remember { mutableStateOf<LinkAction?>(null) }
+
+            linkDialogAction?.let {
+                TextComposerLinkDialog(
+                    onDismissRequest = { linkDialogAction = null },
+                    onCreateLinkRequest = state::insertLink,
+                    onSaveLinkRequest = state::setLink,
+                    onRemoveLinkRequest = state::removeLink,
+                    linkAction = it,
+                )
+            }
+
+            FormattingOption(
+                state = state.actions[ComposerAction.LINK].toButtonState(),
+                onClick = { linkDialogAction = state.linkAction },
+                imageVector = ImageVector.vectorResource(VectorIcons.Link),
+                contentDescription = stringResource(R.string.rich_text_editor_link)
+            )
+
             FormattingOption(
                 state = state.actions[ComposerAction.UNORDERED_LIST].toButtonState(),
                 onClick = { state.toggleList(ordered = false) },
@@ -401,26 +421,6 @@ private fun TextFormatting(
                 imageVector = ImageVector.vectorResource(VectorIcons.CodeBlock),
                 contentDescription = stringResource(R.string.rich_text_editor_code_block)
             )
-
-            var linkDialogAction by remember { mutableStateOf<LinkAction?>(null) }
-
-            linkDialogAction?.let {
-                TextComposerLinkDialog(
-                    onDismissRequest = { linkDialogAction = null },
-                    onCreateLinkRequest = state::insertLink,
-                    onSaveLinkRequest = state::setLink,
-                    onRemoveLinkRequest = state::removeLink,
-                    linkAction = it,
-                )
-            }
-
-            FormattingOption(
-                state = state.actions[ComposerAction.LINK].toButtonState(),
-                onClick = { linkDialogAction = state.linkAction },
-                imageVector = ImageVector.vectorResource(VectorIcons.Link),
-                contentDescription = stringResource(R.string.rich_text_editor_link)
-            )
-
             FormattingOption(
                 state = state.actions[ComposerAction.QUOTE].toButtonState(),
                 onClick = { state.toggleQuote() },
