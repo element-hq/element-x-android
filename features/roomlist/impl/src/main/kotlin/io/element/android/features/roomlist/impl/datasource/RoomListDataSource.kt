@@ -35,6 +35,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -52,17 +53,13 @@ class RoomListDataSource @Inject constructor(
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val coroutineDispatchers: CoroutineDispatchers,
-    notificationSettingsService: NotificationSettingsService,
-    appScope: CoroutineScope,
+    private val notificationSettingsService: NotificationSettingsService,
+    private val appScope: CoroutineScope,
 ) {
     init {
-        notificationSettingsService.notificationSettingsChangeFlow
-            .debounce(0.5.seconds)
-            .onEach {
-                roomListService.rebuildRoomSummaries()
-            }
-            .launchIn(appScope)
+        observerNotificationSettings()
     }
+
     private val _filter = MutableStateFlow("")
     private val _allRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
     private val _filteredRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
@@ -104,6 +101,16 @@ class RoomListDataSource @Inject constructor(
     val filter: StateFlow<String> = _filter
     val allRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
     val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
+
+    @OptIn(FlowPreview::class)
+    private fun observerNotificationSettings() {
+        notificationSettingsService.notificationSettingsChangeFlow
+            .debounce(0.5.seconds)
+            .onEach {
+                roomListService.rebuildRoomSummaries()
+            }
+            .launchIn(appScope)
+    }
 
     private suspend fun replaceWith(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
         lock.withLock {
