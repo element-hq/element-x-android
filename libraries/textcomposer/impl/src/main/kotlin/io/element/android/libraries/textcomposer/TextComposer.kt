@@ -345,61 +345,61 @@ private fun TextFormatting(
                 state = state.actions[ComposerAction.BOLD].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.Bold) },
                 imageVector = ImageVector.vectorResource(VectorIcons.Bold),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_format_bold)
+                contentDescription = stringResource(R.string.rich_text_editor_format_bold)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.ITALIC].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.Italic) },
                 imageVector = ImageVector.vectorResource(VectorIcons.Italic),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_format_italic)
+                contentDescription = stringResource(R.string.rich_text_editor_format_italic)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.UNDERLINE].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.Underline) },
                 imageVector = ImageVector.vectorResource(VectorIcons.Underline),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_format_underline)
+                contentDescription = stringResource(R.string.rich_text_editor_format_underline)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.STRIKE_THROUGH].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.StrikeThrough) },
                 imageVector = ImageVector.vectorResource(VectorIcons.Strikethrough),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_format_strikethrough)
+                contentDescription = stringResource(R.string.rich_text_editor_format_strikethrough)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.UNORDERED_LIST].toButtonState(),
                 onClick = { state.toggleList(ordered = false) },
                 imageVector = ImageVector.vectorResource(VectorIcons.BulletList),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_bullet_list)
+                contentDescription = stringResource(R.string.rich_text_editor_bullet_list)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.ORDERED_LIST].toButtonState(),
                 onClick = { state.toggleList(ordered = true) },
                 imageVector = ImageVector.vectorResource(VectorIcons.NumberedList),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_numbered_list)
+                contentDescription = stringResource(R.string.rich_text_editor_numbered_list)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.INDENT].toButtonState(),
                 onClick = { state.indent() },
                 imageVector = ImageVector.vectorResource(VectorIcons.IndentIncrease),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_indent)
+                contentDescription = stringResource(R.string.rich_text_editor_indent)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.UNINDENT].toButtonState(),
                 onClick = { state.unindent() },
                 imageVector = ImageVector.vectorResource(VectorIcons.IndentDecrease),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_unindent)
+                contentDescription = stringResource(R.string.rich_text_editor_unindent)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.INLINE_CODE].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.InlineCode) },
                 imageVector = ImageVector.vectorResource(VectorIcons.InlineCode),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_inline_code)
+                contentDescription = stringResource(R.string.rich_text_editor_inline_code)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.CODE_BLOCK].toButtonState(),
                 onClick = { state.toggleCodeBlock() },
                 imageVector = ImageVector.vectorResource(VectorIcons.CodeBlock),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_code_block)
+                contentDescription = stringResource(R.string.rich_text_editor_code_block)
             )
 
             var linkDialogAction by remember { mutableStateOf<LinkAction?>(null) }
@@ -418,14 +418,14 @@ private fun TextFormatting(
                 state = state.actions[ComposerAction.LINK].toButtonState(),
                 onClick = { linkDialogAction = state.linkAction },
                 imageVector = ImageVector.vectorResource(VectorIcons.Link),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_link)
+                contentDescription = stringResource(R.string.rich_text_editor_link)
             )
 
             FormattingOption(
                 state = state.actions[ComposerAction.QUOTE].toButtonState(),
                 onClick = { state.toggleQuote() },
                 imageVector = ImageVector.vectorResource(VectorIcons.Quote),
-                contentDescription = stringResource(CommonStrings.rich_text_editor_quote)
+                contentDescription = stringResource(R.string.rich_text_editor_quote)
             )
         }
 

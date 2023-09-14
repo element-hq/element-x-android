@@ -82,7 +82,7 @@ private fun CreateLinkWithTextDialog(
     var linkText by remember { mutableStateOf("") }
     var linkUrl by remember { mutableStateOf("") }
 
-    val titleText = stringResource(CommonStrings.rich_text_editor_create_link)
+    val titleText = stringResource(R.string.rich_text_editor_create_link)
 
     fun onSubmit() {
         onCreateLinkRequest(linkUrl, linkText)
@@ -104,7 +104,7 @@ private fun CreateLinkWithTextDialog(
         }
         item {
             TextFieldListItem(
-                placeholder = stringResource(id = CommonStrings.rich_text_editor_url_placeholder),
+                placeholder = stringResource(id = R.string.rich_text_editor_url_placeholder),
                 text = linkUrl,
                 onTextChanged = { linkUrl = it },
             )
@@ -120,7 +120,7 @@ private fun CreateLinkWithoutTextDialog(
 ) {
     var linkUrl by remember { mutableStateOf("") }
 
-    val titleText = stringResource(CommonStrings.rich_text_editor_create_link)
+    val titleText = stringResource(R.string.rich_text_editor_create_link)
 
     fun onSubmit() {
         onSaveLinkRequest(linkUrl)
@@ -135,7 +135,7 @@ private fun CreateLinkWithoutTextDialog(
     ) {
         item {
             TextFieldListItem(
-                placeholder = stringResource(id = CommonStrings.rich_text_editor_url_placeholder),
+                placeholder = stringResource(id = R.string.rich_text_editor_url_placeholder),
                 text = linkUrl,
                 onTextChanged = { linkUrl = it },
             )
@@ -155,7 +155,7 @@ private fun EditLinkDialog(
 ) {
     var linkUrl by remember { mutableStateOf(currentUrl) }
 
-    val titleText = stringResource(CommonStrings.rich_text_editor_edit_link)
+    val titleText = stringResource(R.string.rich_text_editor_edit_link)
 
     fun onSubmit() {
         onSaveLinkRequest(linkUrl)
@@ -175,7 +175,7 @@ private fun EditLinkDialog(
     ) {
         item {
             TextFieldListItem(
-                placeholder = stringResource(id = CommonStrings.rich_text_editor_url_placeholder),
+                placeholder = stringResource(id = R.string.rich_text_editor_url_placeholder),
                 text = linkUrl,
                 onTextChanged = { linkUrl = it },
             )
