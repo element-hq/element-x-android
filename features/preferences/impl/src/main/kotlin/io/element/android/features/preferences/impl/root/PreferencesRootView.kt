@@ -123,16 +123,14 @@ fun PreferencesRootView(
             )
             HorizontalDivider()
         }
-        if (state.showDeveloperSettings) {
-            DeveloperPreferencesView(onOpenDeveloperSettings)
-            HorizontalDivider()
-        }
-        HorizontalDivider()
         PreferenceText(
             title = stringResource(id = CommonStrings.common_advanced_settings),
             icon = Icons.Outlined.Settings,
             onClick = onOpenAdvancedSettings,
         )
+        if (state.showDeveloperSettings) {
+            DeveloperPreferencesView(onOpenDeveloperSettings)
+        }
         HorizontalDivider()
         LogoutPreferenceView(
             state = state.logoutState,
