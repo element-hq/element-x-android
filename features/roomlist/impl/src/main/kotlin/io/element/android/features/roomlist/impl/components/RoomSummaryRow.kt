@@ -24,12 +24,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -154,7 +152,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
     Text(
         text = room.timestamp ?: "",
         style = ElementTheme.typography.fontBodySmRegular,
-        color = if (room.hasUnread) {
+        color = if (room.shouldDisplayNotificationAlertDecoration) {
             ElementTheme.colors.unreadIndicator
         } else {
             MaterialTheme.roomListRoomMessageDate()
@@ -184,7 +182,7 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         NotificationIcon(room)
-        if (room.hasUnread) {
+        if (room.shouldDisplayNotificationAlertDecoration) {
             UnreadIndicatorAtom(
                 modifier = Modifier.padding(top = 3.dp),
             )
@@ -192,23 +190,28 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
     }
 
 }
+// We should never show a green dot/icon for mute. Also mentions is not yet supported by the mobile app.
+// In some cases a green @ was incorrectly shown when we switch from ALL_MESSAGES to MENTIONS_AND_KEYWORDS_ONLY
+// and we don't know whether the room has mentions, just that it has unread.
+private val RoomListRoomSummary.shouldDisplayNotificationAlertDecoration get() = hasUnread
+    && notificationMode != RoomNotificationMode.MUTE
+    && notificationMode != RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
 
 @Composable
 private fun NotificationIcon(room: RoomListRoomSummary) {
-    val tint = if(room.hasUnread) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
     when(room.notificationMode) {
         null, RoomNotificationMode.ALL_MESSAGES -> return
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
             Icon(
                 contentDescription = stringResource(CommonStrings.screen_notification_settings_mode_mentions),
                 imageVector = ImageVector.vectorResource(VectorIcons.Mention),
-                tint = tint,
+                tint = ElementTheme.colors.iconQuaternary,
             )
         RoomNotificationMode.MUTE ->
             Icon(
                 contentDescription = stringResource(CommonStrings.common_mute),
                 imageVector = ImageVector.vectorResource(VectorIcons.Mute),
-                tint = tint,
+                tint = ElementTheme.colors.iconQuaternary,
             )
     }
 }

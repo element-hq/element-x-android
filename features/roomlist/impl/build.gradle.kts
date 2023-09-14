@@ -49,7 +49,6 @@ dependencies {
     implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.eventformatter.api)
     implementation(projects.libraries.deeplink)
-    implementation(projects.libraries.pushstore.api)
     implementation(projects.features.invitelist.api)
     implementation(projects.features.networkmonitor.api)
     implementation(projects.features.leaveroom.api)
