@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.pushstore.api)
     implementation(projects.libraries.pushstore.test)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.rageshake.api)
@@ -55,6 +56,7 @@ dependencies {
     implementation(libs.accompanist.placeholder)
     implementation(libs.coil.compose)
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.datastore.preferences)
     api(projects.features.preferences.api)
     ksp(libs.showkase.processor)
 
