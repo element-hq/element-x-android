@@ -76,7 +76,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.libraries.designsystem.R
+import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -402,7 +402,7 @@ private fun MessageEventBubbleContent(
             horizontalArrangement = spacedBy(4.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(resourceId = R.drawable.ic_thread_decoration, contentDescription = null, tint = ElementTheme.colors.iconSecondary)
+            Icon(resourceId = VectorIcons.ThreadDecoration, contentDescription = null, tint = ElementTheme.colors.iconSecondary)
             Text(
                 text = stringResource(CommonStrings.common_thread),
                 style = ElementTheme.typography.fontBodyXsRegular,

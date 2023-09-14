@@ -41,4 +41,5 @@ object VectorIcons {
     val Quote = R.drawable.ic_quote
     val Strikethrough = R.drawable.ic_strikethrough
     val Underline = R.drawable.ic_underline
+    val ThreadDecoration = R.drawable.ic_thread_decoration
 }
