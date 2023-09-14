@@ -20,6 +20,7 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
@@ -55,6 +56,17 @@ class RoomSummaryListProcessor(
             Timber.v("Update rooms from postUpdates (with ${updates.size} items) on ${Thread.currentThread()}")
             updates.forEach { update ->
                 applyUpdate(update)
+            }
+        }
+    }
+
+    suspend fun rebuildRoomSummaries() {
+        updateRoomSummaries {
+            forEachIndexed { i, summary ->
+                this[i] = when(summary) {
+                    is RoomSummary.Empty -> summary
+                    is RoomSummary.Filled -> buildAndCacheRoomSummaryForIdentifier(summary.identifier())
+                }
             }
         }
     }

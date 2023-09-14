@@ -26,30 +26,57 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 class RoomListDataSource @Inject constructor(
     private val roomListService: RoomListService,
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val coroutineDispatchers: CoroutineDispatchers,
+    notificationSettingsService: NotificationSettingsService,
+    appScope: CoroutineScope,
+    userPushStoreFactory: UserPushStoreFactory,
+    matrixClient: MatrixClient,
 ) {
+    init {
+        notificationSettingsService.notificationSettingsChangeFlow
+            .debounce(0.5.seconds)
+            .onEach {
+                roomListService.rebuildRoomSummaries()
+            }
+            .launchIn(appScope)
 
+        val userPushStore = userPushStoreFactory.create(matrixClient.sessionId)
+        userPushStore.getNotificationEnabledForDevice().distinctUntilChanged()
+            .onEach {
+                roomListService.rebuildRoomSummaries()
+            }
+            .launchIn(appScope)
+    }
     private val _filter = MutableStateFlow("")
     private val _allRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
     private val _filteredRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
@@ -59,13 +86,15 @@ class RoomListDataSource @Inject constructor(
     private val diffCacheUpdater = DiffCacheUpdater<RoomSummary, RoomListRoomSummary>(diffCache = diffCache, detectMoves = true) { old, new ->
         old?.identifier() == new?.identifier()
     }
+    private val userPushStore = userPushStoreFactory.create(matrixClient.sessionId)
 
     fun launchIn(coroutineScope: CoroutineScope) {
+        
         roomListService
             .allRooms()
             .summaries
             .onEach { roomSummaries ->
-                replaceWith(roomSummaries)
+                replaceWith(roomSummaries, userPushStore.getNotificationEnabledForDevice().first())
             }
             .launchIn(coroutineScope)
 
@@ -92,14 +121,14 @@ class RoomListDataSource @Inject constructor(
     val allRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
     val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
 
-    private suspend fun replaceWith(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
+    private suspend fun replaceWith(roomSummaries: List<RoomSummary>, notificationsEnabled: Boolean) = withContext(coroutineDispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(roomSummaries)
-            buildAndEmitAllRooms(roomSummaries)
+            buildAndEmitAllRooms(roomSummaries, notificationsEnabled)
         }
     }
 
-    private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>) {
+    private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>, notificationsEnabled: Boolean) {
         if (diffCache.isEmpty()) {
             _allRooms.emit(
                 RoomListRoomSummaryPlaceholders.createFakeList(16).toImmutableList()
@@ -109,7 +138,7 @@ class RoomListDataSource @Inject constructor(
             for (index in diffCache.indices()) {
                 val cacheItem = diffCache.get(index)
                 if (cacheItem == null) {
-                    buildAndCacheItem(roomSummaries, index)?.also { timelineItemState ->
+                    buildAndCacheItem(roomSummaries, index, notificationsEnabled)?.also { timelineItemState ->
                         roomListRoomSummaries.add(timelineItemState)
                     }
                 } else {
@@ -122,11 +151,18 @@ class RoomListDataSource @Inject constructor(
 
     private fun buildAndCacheItem(
         roomSummaries: List<RoomSummary>,
-        index: Int
+        index: Int,
+        notificationsEnabled: Boolean,
     ): RoomListRoomSummary? {
         val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
             is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
             is RoomSummary.Filled -> {
+                // Only show a decoration if notifications are enabled and the mode is not ALL_MESSAGES
+                val notificationMode = if (roomSummary.details.notificationMode == RoomNotificationMode.ALL_MESSAGES || !notificationsEnabled) {
+                    null
+                } else {
+                    roomSummary.details.notificationMode
+                }
                 val avatarData = AvatarData(
                     id = roomSummary.identifier(),
                     name = roomSummary.details.name,
@@ -144,10 +180,12 @@ class RoomListDataSource @Inject constructor(
                         roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
                     }.orEmpty(),
                     avatarData = avatarData,
+                    notificationMode = notificationMode
                 )
             }
             null -> null
         }
+
         diffCache[index] = roomListRoomSummary
         return roomListRoomSummary
     }

@@ -19,14 +19,17 @@ package io.element.android.features.roomlist.impl.components
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -38,6 +41,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,16 +54,20 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
 import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 
 internal val minHeight = 84.dp
 
@@ -168,11 +178,39 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         maxLines = 2,
         overflow = TextOverflow.Ellipsis
     )
+
     // Unread
-    UnreadIndicatorAtom(
-        modifier = Modifier.padding(top = 3.dp),
-        isVisible = room.hasUnread,
-    )
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        NotificationIcon(room)
+        if (room.hasUnread) {
+            UnreadIndicatorAtom(
+                modifier = Modifier.padding(top = 3.dp),
+            )
+        }
+    }
+
+}
+
+@Composable
+private fun NotificationIcon(room: RoomListRoomSummary) {
+    val tint = if(room.hasUnread) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
+    when(room.notificationMode) {
+        null, RoomNotificationMode.ALL_MESSAGES -> return
+        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
+            Icon(
+                contentDescription = stringResource(CommonStrings.screen_notification_settings_mode_mentions),
+                imageVector = ImageVector.vectorResource(VectorIcons.Mention),
+                tint = tint,
+            )
+        RoomNotificationMode.MUTE ->
+            Icon(
+                contentDescription = stringResource(CommonStrings.common_mute),
+                imageVector = ImageVector.vectorResource(VectorIcons.Mute),
+                tint = tint,
+            )
+    }
 }
 
 val TextPlaceholderShape = PercentRectangleSizeShape(0.5f)
