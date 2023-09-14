@@ -2,4 +2,4 @@ appId: ${APP_ID}
 ---
 - extendedWaitUntil:
     visible: "Change account provider"
-    timeout: 10_000
+    timeout: 10000
