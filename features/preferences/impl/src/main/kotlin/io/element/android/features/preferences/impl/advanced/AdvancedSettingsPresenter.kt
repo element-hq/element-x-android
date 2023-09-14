@@ -36,7 +36,7 @@ class AdvancedSettingsPresenter @Inject constructor(
             .isRichTextEditorEnabledFlow()
             .collectAsState(initial = false)
         val isDeveloperModeEnabled by preferencesStore
-            .isDevelopModeEnabledFlow()
+            .isDeveloperModeEnabledFlow()
             .collectAsState(initial = false)
 
         fun handleEvents(event: AdvancedSettingsEvents) {
@@ -45,7 +45,7 @@ class AdvancedSettingsPresenter @Inject constructor(
                     preferencesStore.setRichTextEditorEnabled(event.enabled)
                 }
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
-                    preferencesStore.setDevelopModeEnabled(event.enabled)
+                    preferencesStore.setDeveloperModeEnabled(event.enabled)
                 }
             }
         }

@@ -35,11 +35,11 @@ class InMemoryPreferencesStore(
         return _isRichTextEditorEnabled
     }
 
-    override suspend fun setDevelopModeEnabled(enabled: Boolean) {
+    override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         _isDeveloperModeEnabled.value = enabled
     }
 
-    override fun isDevelopModeEnabledFlow(): Flow<Boolean> {
+    override fun isDeveloperModeEnabledFlow(): Flow<Boolean> {
         return _isDeveloperModeEnabled
     }
 

@@ -22,8 +22,8 @@ interface PreferencesStore {
     suspend fun setRichTextEditorEnabled(enabled: Boolean)
     fun isRichTextEditorEnabledFlow(): Flow<Boolean>
 
-    suspend fun setDevelopModeEnabled(enabled: Boolean)
-    fun isDevelopModeEnabledFlow(): Flow<Boolean>
+    suspend fun setDeveloperModeEnabled(enabled: Boolean)
+    fun isDeveloperModeEnabledFlow(): Flow<Boolean>
 
     suspend fun reset()
 }

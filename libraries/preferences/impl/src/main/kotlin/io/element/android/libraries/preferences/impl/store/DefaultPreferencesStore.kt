@@ -58,13 +58,13 @@ class DefaultPreferencesStore @Inject constructor(
         }
     }
 
-    override suspend fun setDevelopModeEnabled(enabled: Boolean) {
+    override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         store.edit { prefs ->
             prefs[developerModeKey] = enabled
         }
     }
 
-    override fun isDevelopModeEnabledFlow(): Flow<Boolean> {
+    override fun isDeveloperModeEnabledFlow(): Flow<Boolean> {
         return store.data.map { prefs ->
             // disabled by default on release and nightly, enabled by default on debug
             prefs[developerModeKey] ?: (buildMeta.buildType == BuildType.DEBUG)

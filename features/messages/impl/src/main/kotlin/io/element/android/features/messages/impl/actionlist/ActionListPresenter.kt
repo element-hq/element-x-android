@@ -50,7 +50,7 @@ class ActionListPresenter @Inject constructor(
             mutableStateOf(ActionListState.Target.None)
         }
 
-        val isDeveloperModeEnabled by preferencesStore.isDevelopModeEnabledFlow().collectAsState(initial = false)
+        val isDeveloperModeEnabled by preferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
 
         val displayEmojiReactions by remember {
             derivedStateOf {
