@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Pridať možnosť"</string>
+  <string name="screen_create_poll_anonymous_desc">"Zobraziť výsledky až po skončení ankety"</string>
+  <string name="screen_create_poll_anonymous_headline">"Anonymná anketa"</string>
+  <string name="screen_create_poll_answer_hint">"Možnosť %1$d"</string>
+  <string name="screen_create_poll_discard_confirmation">"Ste si istí, že chcete túto anketu zahodiť?"</string>
+  <string name="screen_create_poll_discard_confirmation_title">"Odstrániť anketu"</string>
+  <string name="screen_create_poll_question_desc">"Otázka alebo téma"</string>
+  <string name="screen_create_poll_question_hint">"O čom je anketa?"</string>
+  <string name="screen_create_poll_title">"Vytvoriť anketu"</string>
+</resources>

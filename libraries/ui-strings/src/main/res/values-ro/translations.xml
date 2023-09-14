@@ -98,7 +98,6 @@
   <string name="common_password">"Parola"</string>
   <string name="common_people">"Persoane"</string>
   <string name="common_permalink">"Permalink"</string>
-  <string name="common_poll_final_votes">"Voturi finale: %1$s"</string>
   <string name="common_poll_total_votes">"Total voturi: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Rezultatele vor fi afișate după încheierea sondajului"</string>
   <string name="common_privacy_policy">"Politica de confidențialitate"</string>
