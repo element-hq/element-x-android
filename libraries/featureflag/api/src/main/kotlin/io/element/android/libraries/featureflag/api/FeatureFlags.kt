@@ -43,9 +43,4 @@ enum class FeatureFlags(
         title = "Show notification settings",
         defaultValue = true,
     ),
-    RichTextEditor(
-        key = "feature.richtexteditor",
-        title = "Enable rich text editor",
-        defaultValue = true,
-    ),
 }
