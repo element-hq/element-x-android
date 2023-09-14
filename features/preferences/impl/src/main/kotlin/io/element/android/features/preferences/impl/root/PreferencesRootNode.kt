@@ -29,6 +29,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
@@ -67,9 +68,17 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenAbout() }
     }
 
-    private fun onManageAccountClicked(activity: Activity, accountManagementUrl: String?) {
-        accountManagementUrl?.let {
-            activity.openUrlInChromeCustomTab(null, false, it)
+    private fun onManageAccountClicked(
+        activity: Activity,
+        url: String?,
+        isDark: Boolean,
+    ) {
+        url?.let {
+            activity.openUrlInChromeCustomTab(
+                null,
+                darkTheme = isDark,
+                url = it
+            )
         }
     }
 
@@ -81,6 +90,7 @@ class PreferencesRootNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         val activity = LocalContext.current as Activity
+        val isDark = ElementTheme.isLightTheme.not()
         PreferencesRootView(
             state = state,
             modifier = modifier,
@@ -91,7 +101,7 @@ class PreferencesRootNode @AssistedInject constructor(
             onVerifyClicked = this::onVerifyClicked,
             onOpenDeveloperSettings = this::onOpenDeveloperSettings,
             onSuccessLogout = { onSuccessLogout(activity, it) },
-            onManageAccountClicked = { onManageAccountClicked(activity, state.accountManagementUrl) },
+            onManageAccountClicked = { onManageAccountClicked(activity, it, isDark) },
             onOpenNotificationSettings = this::onOpenNotificationSettings
         )
     }

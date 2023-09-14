@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -129,7 +130,7 @@ class FakeMatrixClient(
         return userAvatarURLString
     }
 
-    override suspend fun getAccountManagementUrl(): Result<String?> {
+    override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> {
         return accountManagementUrlString
     }
     override suspend fun uploadMedia(
