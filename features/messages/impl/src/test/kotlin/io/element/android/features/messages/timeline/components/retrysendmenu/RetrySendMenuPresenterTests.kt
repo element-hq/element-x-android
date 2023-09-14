@@ -32,8 +32,7 @@ import org.junit.Test
 
 class RetrySendMenuPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private val room = FakeMatrixRoom()

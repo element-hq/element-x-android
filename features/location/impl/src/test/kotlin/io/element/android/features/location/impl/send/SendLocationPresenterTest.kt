@@ -42,8 +42,7 @@ import org.junit.Test
 
 class SendLocationPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private val permissionsPresenterFake = PermissionsPresenterFake()

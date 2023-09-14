@@ -48,8 +48,7 @@ import java.io.File
 @ExperimentalCoroutinesApi
 class RoomDetailsEditPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private lateinit var fakePickerProvider: FakePickerProvider

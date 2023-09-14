@@ -37,8 +37,7 @@ import org.junit.Test
 
 class ReactionSummaryPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private val aggregatedReaction = anAggregatedReaction(userId = A_USER_ID, key = "👍", isHighlighted = true)

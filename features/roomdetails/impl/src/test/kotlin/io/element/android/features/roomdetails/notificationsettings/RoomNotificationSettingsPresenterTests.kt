@@ -24,7 +24,6 @@ import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsEvents
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsPresenter
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.test.A_ROOM_NOTIFICATION_MODE
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -67,9 +66,9 @@ class RoomNotificationSettingsPresenterTests {
             initialState.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
             initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(true))
             val defaultState = consumeItemsUntilPredicate {
-                it.roomNotificationSettings?.mode ==  A_ROOM_NOTIFICATION_MODE
+                it.roomNotificationSettings?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(defaultState.roomNotificationSettings?.mode).isEqualTo(A_ROOM_NOTIFICATION_MODE)
+            Truth.assertThat(defaultState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         }
     }
 

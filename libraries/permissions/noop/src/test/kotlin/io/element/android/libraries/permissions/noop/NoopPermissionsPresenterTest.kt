@@ -27,8 +27,7 @@ import org.junit.Test
 
 class NoopPermissionsPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

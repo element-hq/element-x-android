@@ -15,7 +15,7 @@ appId: ${APP_ID}
 - tapOn: "gnuradio.org"
 - extendedWaitUntil:
     visible: "This server currently doesn’t support sliding sync."
-    timeout: 10_000
+    timeout: 10000
 - tapOn: "Cancel"
 - back
 - back

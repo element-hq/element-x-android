@@ -35,8 +35,7 @@ import org.junit.Test
 
 class DeveloperSettingsPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

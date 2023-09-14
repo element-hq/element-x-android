@@ -39,8 +39,7 @@ import org.junit.Test
 
 class NotificationsOptInPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private var isFinished = false

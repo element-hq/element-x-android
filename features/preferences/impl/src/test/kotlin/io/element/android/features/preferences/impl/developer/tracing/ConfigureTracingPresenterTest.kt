@@ -30,8 +30,7 @@ import org.junit.Test
 
 class ConfigureTracingPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
     @Test
     fun `present - initial state`() = runTest {

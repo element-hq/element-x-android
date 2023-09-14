@@ -35,8 +35,7 @@ import org.junit.Test
 
 class CreatePollPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private var navUpInvocationsCount = 0
