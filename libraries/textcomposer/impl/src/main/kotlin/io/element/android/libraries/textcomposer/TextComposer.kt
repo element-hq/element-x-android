@@ -581,7 +581,7 @@ private fun SendButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .height(18.dp.applyScaleUp())
+                    .height(24.dp.applyScaleUp())
                     .align(Alignment.Center),
                 resourceId = iconId,
                 contentDescription = contentDescription,
