@@ -52,22 +52,24 @@ class CallForegroundService : Service() {
         super.onCreate()
 
         notificationManagerCompat = NotificationManagerCompat.from(this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val foregroundServiceChannel = NotificationChannelCompat.Builder(
-                "call_foreground_service_channel",
-                NotificationManagerCompat.IMPORTANCE_LOW,
-            ).setName(getString(R.string.call_foreground_service_channel_title_android)).build()
-            notificationManagerCompat.createNotificationChannel(foregroundServiceChannel)
-            val callActivityIntent = Intent(this, ElementCallActivity::class.java)
-            val pendingIntent = PendingIntentCompat.getActivity(this, 0, callActivityIntent, 0, false)
-            val notification = NotificationCompat.Builder(this, foregroundServiceChannel.id)
-                .setSmallIcon(IconCompat.createWithResource(this, CommonDrawables.ic_notification_small))
-                .setContentTitle(getString(R.string.call_foreground_service_title_android))
-                .setContentText(getString(R.string.call_foreground_service_message_android))
-                .setContentIntent(pendingIntent)
-                .build()
-            startForeground(1, notification)
-        }
+
+        val foregroundServiceChannel = NotificationChannelCompat.Builder(
+            "call_foreground_service_channel",
+            NotificationManagerCompat.IMPORTANCE_LOW,
+        ).setName(
+            getString(R.string.call_foreground_service_channel_title_android).ifEmpty { "Ongoing call" }
+        ).build()
+        notificationManagerCompat.createNotificationChannel(foregroundServiceChannel)
+
+        val callActivityIntent = Intent(this, ElementCallActivity::class.java)
+        val pendingIntent = PendingIntentCompat.getActivity(this, 0, callActivityIntent, 0, false)
+        val notification = NotificationCompat.Builder(this, foregroundServiceChannel.id)
+            .setSmallIcon(IconCompat.createWithResource(this, CommonDrawables.ic_notification_small))
+            .setContentTitle(getString(R.string.call_foreground_service_title_android))
+            .setContentText(getString(R.string.call_foreground_service_message_android))
+            .setContentIntent(pendingIntent)
+            .build()
+        startForeground(1, notification)
     }
 
     override fun onDestroy() {
@@ -75,6 +77,8 @@ class CallForegroundService : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            stopForeground(true)
         }
     }
 
