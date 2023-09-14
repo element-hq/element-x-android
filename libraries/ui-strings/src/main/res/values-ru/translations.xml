@@ -95,7 +95,6 @@
   <string name="common_password">"Пароль"</string>
   <string name="common_people">"Пользователи"</string>
   <string name="common_permalink">"Постоянная ссылка"</string>
-  <string name="common_poll_final_votes">"Итоговые голоса: %1$s"</string>
   <string name="common_poll_total_votes">"Всего голосов: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Результаты будут показаны после завершения опроса"</string>
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>

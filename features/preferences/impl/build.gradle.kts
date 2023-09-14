@@ -40,6 +40,8 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.featureflag.ui)
     implementation(projects.libraries.network)
+    implementation(projects.libraries.pushstore.api)
+    implementation(projects.libraries.pushstore.test)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.rageshake.api)

@@ -29,6 +29,8 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
@@ -46,6 +48,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val buildType: BuildType,
     private val versionFormatter: VersionFormatter,
     private val snackbarDispatcher: SnackbarDispatcher,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<PreferencesRootState> {
 
     @Composable
@@ -59,6 +62,11 @@ class PreferencesRootPresenter @Inject constructor(
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
+
+        val showNotificationSettings = remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            showNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
+        }
 
         // We should display the 'complete verification' option if the current session can be verified
         val showCompleteVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
@@ -81,6 +89,7 @@ class PreferencesRootPresenter @Inject constructor(
             accountManagementUrl = accountManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
+            showNotificationSettings = showNotificationSettings.value,
             snackbarMessage = snackbarMessage,
         )
     }

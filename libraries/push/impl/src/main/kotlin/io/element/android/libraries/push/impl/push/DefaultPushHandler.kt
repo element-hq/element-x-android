@@ -35,6 +35,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -123,7 +124,7 @@ class DefaultPushHandler @Inject constructor(
             }
 
             val userPushStore = userPushStoreFactory.create(userId)
-            if (!userPushStore.areNotificationEnabledForDevice()) {
+            if (!userPushStore.getNotificationEnabledForDevice().first()) {
                 // TODO We need to check if this is an incoming call
                 Timber.tag(loggerTag.value).i("Notification are disabled for this device, ignore push.")
                 return

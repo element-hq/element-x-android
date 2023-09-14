@@ -101,7 +101,6 @@ class RustMatrixClient constructor(
         client = client,
         dispatchers = dispatchers,
     )
-
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
     private val notificationClient = client.notificationClient(notificationProcessSetup)
         .use { builder ->
