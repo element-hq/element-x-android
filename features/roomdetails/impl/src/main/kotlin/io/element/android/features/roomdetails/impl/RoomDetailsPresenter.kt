@@ -106,7 +106,7 @@ class RoomDetailsPresenter @Inject constructor(
                 }
                 RoomDetailsEvent.UnmuteNotification -> {
                     scope.launch(dispatchers.io) {
-                        client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.activeMemberCount)
+                        client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.isOneToOne)
                     }
                 }
             }

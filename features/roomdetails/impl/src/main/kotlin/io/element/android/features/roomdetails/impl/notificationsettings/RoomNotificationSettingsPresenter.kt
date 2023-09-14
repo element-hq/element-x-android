@@ -94,7 +94,7 @@ class RoomNotificationSettingsPresenter @Inject constructor(
     private fun CoroutineScope.getDefaultRoomNotificationMode(defaultRoomNotificationMode: MutableState<RoomNotificationMode?>) = launch {
         defaultRoomNotificationMode.value = notificationSettingsService.getDefaultRoomNotificationMode(
             room.isEncrypted,
-            room.activeMemberCount
+            room.isOneToOne
         ).getOrThrow()
     }
 

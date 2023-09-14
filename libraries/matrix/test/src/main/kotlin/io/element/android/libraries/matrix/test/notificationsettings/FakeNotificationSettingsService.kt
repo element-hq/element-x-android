@@ -25,32 +25,75 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 
 class FakeNotificationSettingsService(
-    initialMode: RoomNotificationMode = A_ROOM_NOTIFICATION_MODE,
-    initialDefaultMode: RoomNotificationMode = A_ROOM_NOTIFICATION_MODE
+    initialRoomMode: RoomNotificationMode = A_ROOM_NOTIFICATION_MODE,
+    initialGroupDefaultMode: RoomNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+    initialEncryptedGroupDefaultMode: RoomNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+    initialOneToOneDefaultMode: RoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
+    initialEncryptedOneToOneDefaultMode: RoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
 ) : NotificationSettingsService {
-    private var _roomNotificationSettingsStateFlow = MutableStateFlow(Unit)
-    private var defaultRoomNotificationMode: RoomNotificationMode = initialDefaultMode
-    private var roomNotificationMode: RoomNotificationMode = initialMode
+    private var _notificationSettingsStateFlow = MutableStateFlow(Unit)
+    private var defaultGroupRoomNotificationMode: RoomNotificationMode = initialGroupDefaultMode
+    private var defaultEncryptedGroupRoomNotificationMode: RoomNotificationMode = initialEncryptedGroupDefaultMode
+    private var defaultOneToOneRoomNotificationMode: RoomNotificationMode = initialOneToOneDefaultMode
+    private var defaultEncryptedOneToOneRoomNotificationMode: RoomNotificationMode = initialEncryptedOneToOneDefaultMode
+    private var roomNotificationMode: RoomNotificationMode = initialRoomMode
+    private var callNotificationsEnabled = false
+    private var atRoomNotificationsEnabled = false
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
-        get() = _roomNotificationSettingsStateFlow
+        get() = _notificationSettingsStateFlow
 
-    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationSettings> {
-        return Result.success(RoomNotificationSettings(mode = roomNotificationMode, isDefault = roomNotificationMode == defaultRoomNotificationMode))
+    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> {
+        return Result.success(
+            RoomNotificationSettings(
+                mode = roomNotificationMode,
+                isDefault = roomNotificationMode == defaultEncryptedGroupRoomNotificationMode
+            )
+        )
     }
 
-    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationMode> {
-        return Result.success(defaultRoomNotificationMode)
+    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode> {
+        return if (isOneToOne) {
+            if (isEncrypted) {
+                Result.success(defaultEncryptedOneToOneRoomNotificationMode)
+            } else {
+                Result.success(defaultOneToOneRoomNotificationMode)
+            }
+        } else {
+            if (isEncrypted) {
+                Result.success(defaultEncryptedGroupRoomNotificationMode)
+            } else {
+                Result.success(defaultGroupRoomNotificationMode)
+            }
+        }
+    }
+
+    override suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit> {
+        if (isOneToOne) {
+            if (isEncrypted) {
+                defaultEncryptedOneToOneRoomNotificationMode = mode
+            } else {
+                defaultOneToOneRoomNotificationMode = mode
+            }
+        } else {
+            if (isEncrypted) {
+                defaultEncryptedGroupRoomNotificationMode = mode
+            } else {
+                defaultGroupRoomNotificationMode = mode
+            }
+        }
+        _notificationSettingsStateFlow.emit(Unit)
+        return Result.success(Unit)
     }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> {
         roomNotificationMode = mode
-        _roomNotificationSettingsStateFlow.emit(Unit)
+        _notificationSettingsStateFlow.emit(Unit)
         return Result.success(Unit)
     }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> {
-        roomNotificationMode = defaultRoomNotificationMode
-        _roomNotificationSettingsStateFlow.emit(Unit)
+        roomNotificationMode = defaultEncryptedGroupRoomNotificationMode
+        _notificationSettingsStateFlow.emit(Unit)
         return Result.success(Unit)
     }
 
@@ -58,7 +101,25 @@ class FakeNotificationSettingsService(
         return setRoomNotificationMode(roomId, RoomNotificationMode.MUTE)
     }
 
-    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<Unit> {
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<Unit> {
         return restoreDefaultRoomNotificationMode(roomId)
+    }
+
+    override suspend fun isRoomMentionEnabled(): Result<Boolean> {
+        return Result.success(atRoomNotificationsEnabled)
+    }
+
+    override suspend fun setRoomMentionEnabled(enabled: Boolean): Result<Unit> {
+        atRoomNotificationsEnabled = enabled
+        return Result.success(Unit)
+    }
+
+    override suspend fun isCallEnabled(): Result<Boolean> {
+        return Result.success(callNotificationsEnabled)
+    }
+
+    override suspend fun setCallEnabled(enabled: Boolean): Result<Unit> {
+        callNotificationsEnabled = enabled
+        return Result.success(Unit)
     }
 }

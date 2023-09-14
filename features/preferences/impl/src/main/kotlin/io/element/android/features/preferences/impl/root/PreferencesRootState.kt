@@ -28,5 +28,6 @@ data class PreferencesRootState(
     val accountManagementUrl: String?,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
+    val showNotificationSettings: Boolean,
     val snackbarMessage: SnackbarMessage?,
 )

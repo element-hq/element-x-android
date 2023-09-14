@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.DeveloperMode
 import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.ManageAccounts
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -58,6 +59,7 @@ fun PreferencesRootView(
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onSuccessLogout: (logoutUrlResult: String?) -> Unit,
+    onOpenNotificationSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -90,6 +92,13 @@ fun PreferencesRootView(
                 title = stringResource(id = CommonStrings.common_analytics),
                 icon = Icons.Outlined.InsertChart,
                 onClick = onOpenAnalytics,
+            )
+        }
+        if(state.showNotificationSettings) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.screen_notification_settings_title),
+                icon = Icons.Outlined.Notifications,
+                onClick = onOpenNotificationSettings,
             )
         }
         PreferenceText(
@@ -153,5 +162,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onVerifyClicked = {},
         onSuccessLogout = {},
         onManageAccountClicked = {},
+        onOpenNotificationSettings = {},
     )
 }
