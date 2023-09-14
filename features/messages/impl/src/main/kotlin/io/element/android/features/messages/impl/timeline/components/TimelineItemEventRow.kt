@@ -24,6 +24,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -396,9 +397,12 @@ private fun MessageEventBubbleContent(
     fun ThreadDecoration(
         modifier: Modifier = Modifier
     ) {
-        Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = modifier,
+            horizontalArrangement = spacedBy(4.dp, Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Icon(resourceId = R.drawable.ic_thread_decoration, contentDescription = null, tint = ElementTheme.colors.iconSecondary)
-            Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = stringResource(CommonStrings.common_thread),
                 style = ElementTheme.typography.fontBodyXsRegular,
