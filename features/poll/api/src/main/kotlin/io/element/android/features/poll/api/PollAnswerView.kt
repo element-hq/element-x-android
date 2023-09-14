@@ -21,24 +21,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconToggleButton
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
@@ -47,41 +44,33 @@ import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonPlurals
 
 @Composable
-fun PollAnswerView(
+internal fun PollAnswerView(
     answerItem: PollAnswerItem,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier
-            .fillMaxWidth()
-            .selectable(
-                selected = answerItem.isSelected,
-                enabled = answerItem.isEnabled,
-                onClick = onClick,
-                role = Role.RadioButton,
-            )
+        modifier = modifier.fillMaxWidth(),
     ) {
-        IconToggleButton(
-            modifier = Modifier.size(22.dp),
-            checked = answerItem.isSelected,
-            enabled = answerItem.isEnabled,
-            colors = IconButtonDefaults.iconToggleButtonColors(
-                contentColor = ElementTheme.colors.iconSecondary,
-                checkedContentColor = ElementTheme.colors.iconPrimary,
-                disabledContentColor = ElementTheme.colors.iconDisabled,
-            ),
-            onCheckedChange = { onClick() },
-        ) {
-            Icon(
-                imageVector = if (answerItem.isSelected) {
-                    Icons.Default.CheckCircle
+        Icon(
+            imageVector = if (answerItem.isSelected) {
+                Icons.Default.CheckCircle
+            } else {
+                Icons.Default.RadioButtonUnchecked
+            },
+            contentDescription = null,
+            modifier = Modifier
+                .padding(0.5.dp)
+                .size(22.dp),
+            tint = if (answerItem.isEnabled) {
+                if (answerItem.isSelected) {
+                    ElementTheme.colors.iconPrimary
                 } else {
-                    Icons.Default.RadioButtonUnchecked
-                },
-                contentDescription = null,
-            )
-        }
+                    ElementTheme.colors.iconSecondary
+                }
+            } else {
+                ElementTheme.colors.iconDisabled
+            },
+        )
         Spacer(modifier = Modifier.width(12.dp))
         Column {
             Row {
@@ -119,65 +108,58 @@ fun PollAnswerView(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PollAnswerDisclosedNotSelectedPreview() = ElementThemedPreview {
+internal fun PollAnswerDisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(isDisclosed = true, isSelected = false),
-        onClick = { },
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PollAnswerDisclosedSelectedPreview() = ElementThemedPreview {
+internal fun PollAnswerDisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true),
-        onClick = { }
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementThemedPreview {
+internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(isDisclosed = false, isSelected = false),
-        onClick = { },
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PollAnswerUndisclosedSelectedPreview() = ElementThemedPreview {
+internal fun PollAnswerUndisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(isDisclosed = false, isSelected = true),
-        onClick = { }
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementThemedPreview {
+internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(isDisclosed = true, isSelected = false, isEnabled = false, isWinner = true),
-        onClick = { }
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PollAnswerEndedWinnerSelectedPreview() = ElementThemedPreview {
+internal fun PollAnswerEndedWinnerSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true, isEnabled = false, isWinner = true),
-        onClick = { }
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PollAnswerEndedSelectedPreview() = ElementThemedPreview {
+internal fun PollAnswerEndedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true, isEnabled = false, isWinner = false),
-        onClick = { }
     )
 }
