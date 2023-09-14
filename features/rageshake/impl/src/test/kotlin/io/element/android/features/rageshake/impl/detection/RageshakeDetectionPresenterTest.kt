@@ -38,8 +38,7 @@ import org.junit.Test
 
 class RageshakeDetectionPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     companion object {

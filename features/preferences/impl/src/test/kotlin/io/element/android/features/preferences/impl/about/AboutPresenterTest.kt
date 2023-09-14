@@ -27,8 +27,7 @@ import org.junit.Test
 
 class AboutPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

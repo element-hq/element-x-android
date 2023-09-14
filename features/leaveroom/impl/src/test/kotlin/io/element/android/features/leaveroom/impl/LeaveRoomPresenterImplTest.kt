@@ -39,8 +39,7 @@ import org.junit.Test
 
 class LeaveRoomPresenterImplTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

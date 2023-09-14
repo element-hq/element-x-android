@@ -47,6 +47,11 @@ object TestTags {
      * Welcome screen.
      */
     val welcomeScreenTitle = TestTag("welcome_screen-title")
+
+    /**
+     * RichTextEditor.
+     */
+    val richTextEditor = TestTag("rich_text_editor")
 }
 
 

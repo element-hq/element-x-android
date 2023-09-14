@@ -30,8 +30,7 @@ import org.junit.Test
 
 class AnalyticsPreferencesPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

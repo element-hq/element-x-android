@@ -33,8 +33,7 @@ import org.junit.Test
 
 class CustomReactionPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private val presenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())

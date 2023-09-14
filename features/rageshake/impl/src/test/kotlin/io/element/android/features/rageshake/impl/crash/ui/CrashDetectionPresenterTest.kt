@@ -31,8 +31,7 @@ import org.junit.Test
 
 class CrashDetectionPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

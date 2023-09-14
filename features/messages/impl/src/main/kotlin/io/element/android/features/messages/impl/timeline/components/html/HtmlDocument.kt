@@ -126,7 +126,12 @@ private fun HtmlBody(
             when (val node = nodes.next()) {
                 is TextNode -> {
                     if (!node.isBlank) {
-                        ClickableLinkText(text = node.text(), interactionSource = interactionSource)
+                        ClickableLinkText(
+                            text = node.text(),
+                            interactionSource = interactionSource,
+                            onClick = onTextClicked,
+                            onLongClick = onTextLongClicked,
+                        )
                     }
                 }
                 is Element -> {

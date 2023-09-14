@@ -2,4 +2,4 @@ appId: ${APP_ID}
 ---
 - extendedWaitUntil:
     visible: "Help improve Element X dbg"
-    timeout: 10_000
+    timeout: 10000

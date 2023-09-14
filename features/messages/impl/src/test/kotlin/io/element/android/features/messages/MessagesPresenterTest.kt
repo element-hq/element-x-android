@@ -86,8 +86,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class MessagesPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private val mockMediaUrl: Uri = mockk("localMediaUri")
