@@ -114,7 +114,7 @@ fun TextComposer(
                 start = 3.dp,
                 end = 6.dp,
                 top = 8.dp,
-                bottom = 5.dp,
+                bottom = 4.dp,
             )
             .fillMaxWidth(),
     ) {
