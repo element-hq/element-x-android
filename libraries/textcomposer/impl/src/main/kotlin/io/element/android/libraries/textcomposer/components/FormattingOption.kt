@@ -74,7 +74,7 @@ internal fun FormattingOption(
             .size(48.dp.applyScaleUp())
     ) {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .size(36.dp.applyScaleUp())
                 .align(Alignment.Center)
                 .background(backgroundColor, shape = RoundedCornerShape(8.dp.applyScaleUp()))
