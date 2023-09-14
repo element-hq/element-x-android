@@ -182,7 +182,12 @@ private fun EditLinkDialog(
         }
         item {
             ListItem(
-                headlineContent = { Text("Remove link", color = ElementTheme.colors.textCriticalPrimary) }, // TODO localization
+                headlineContent = {
+                    Text(
+                        text = stringResource(R.string.rich_text_editor_remove_link),
+                        color = ElementTheme.colors.textCriticalPrimary
+                    )
+                },
                 onClick = ::onRemoveClicked,
             )
         }
