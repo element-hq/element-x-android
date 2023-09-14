@@ -24,8 +24,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.store.PreferencesStore
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.bool.orTrue
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -39,7 +40,8 @@ private val developerModeKey = booleanPreferencesKey("developerMode")
 
 @ContributesBinding(AppScope::class)
 class DefaultPreferencesStore @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
+    private val buildMeta: BuildMeta,
 ) : PreferencesStore {
     private val store = context.dataStore
 
@@ -64,8 +66,8 @@ class DefaultPreferencesStore @Inject constructor(
 
     override fun isDevelopModeEnabledFlow(): Flow<Boolean> {
         return store.data.map { prefs ->
-            // disabled by default
-            prefs[developerModeKey].orFalse()
+            // disabled by default on release and nightly, enabled by default on debug
+            prefs[developerModeKey] ?: (buildMeta.buildType == BuildType.DEBUG)
         }
     }
 
