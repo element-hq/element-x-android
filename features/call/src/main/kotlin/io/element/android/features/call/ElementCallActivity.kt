@@ -30,22 +30,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
-import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.theme.ElementTheme
 
 class ElementCallActivity : ComponentActivity() {
 
@@ -79,7 +64,7 @@ class ElementCallActivity : ComponentActivity() {
         requestAudioFocus()
 
         setContent {
-            CallContents(
+            CallScreenView(
                 url = urlState.value!!,
                 onBackPressed = this::onBackPressed,
                 requestPermissions = { permissions, callback ->
@@ -208,58 +193,5 @@ internal fun mapWebkitPermissions(permissions: Array<String>): List<String> {
             PermissionRequest.RESOURCE_VIDEO_CAPTURE -> Manifest.permission.CAMERA
             else -> null
         }
-    }
-}
-
-typealias RequestPermissionCallback = (Array<String>) -> Unit
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CallContents(
-    url: String,
-    requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
-    onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    ElementTheme {
-        Scaffold(
-            modifier = modifier,
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.element_call)) },
-                    navigationIcon = {
-                        BackButton(
-                            imageVector = Icons.Default.Close,
-                            onClick = { onBackPressed() }
-                        )
-                    }
-                )
-            }
-        ) { padding ->
-            CallWebView(
-                modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .fillMaxSize(),
-                url = url,
-                onPermissionsRequested = { request ->
-                    val androidPermissions = mapWebkitPermissions(request.resources)
-                    val callback: RequestPermissionCallback = { request.grant(it) }
-                    requestPermissions(androidPermissions.toTypedArray(), callback)
-                }
-            )
-        }
-    }
-}
-
-@DayNightPreviews
-@Composable
-internal fun ElementCallActivityPreview() {
-    ElementTheme {
-        CallContents(
-            url = "https://call.element.io/some-actual-call?with=parameters",
-            requestPermissions = { _, _ -> },
-            onBackPressed = { },
-        )
     }
 }
