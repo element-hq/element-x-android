@@ -41,6 +41,7 @@ sealed interface MessageComposerMode : Parcelable {
     class Reply(
         val senderName: String,
         val attachmentThumbnailInfo: AttachmentThumbnailInfo?,
+        val isThreaded: Boolean,
         override val eventId: EventId,
         override val defaultContent: String
     ) : Special(eventId, defaultContent)
@@ -60,5 +61,5 @@ sealed interface MessageComposerMode : Parcelable {
         get() = this is Reply
 
     val inThread: Boolean
-        get() = false // TODO
+        get() = this is Reply && isThreaded
 }

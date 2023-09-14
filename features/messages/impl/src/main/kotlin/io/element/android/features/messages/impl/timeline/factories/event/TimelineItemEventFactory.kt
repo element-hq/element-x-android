@@ -71,6 +71,7 @@ class TimelineItemEventFactory @Inject constructor(
             url = senderAvatarUrl,
             size = AvatarSize.TimelineSender
         )
+        currentTimelineItem.event
         return TimelineItem.Event(
             id = currentTimelineItem.uniqueId.toString(),
             eventId = currentTimelineItem.eventId,
@@ -85,6 +86,7 @@ class TimelineItemEventFactory @Inject constructor(
             reactionsState = currentTimelineItem.computeReactionsState(),
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo(),
+            isThreaded = currentTimelineItem.event.isThreaded(),
             debugInfo = currentTimelineItem.event.debugInfo,
             origin = currentTimelineItem.event.origin,
         )
