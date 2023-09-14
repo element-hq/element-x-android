@@ -16,15 +16,15 @@
 
 package io.element.android.libraries.designsystem.components.list
 
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -36,17 +36,15 @@ fun TextFieldListItem(
 ) {
     val textFieldStyle = ElementTheme.materialTypography.bodyLarge
 
-    TextField(
+    OutlinedTextField(
         value = text,
         onValueChange = onTextChanged,
         placeholder = { Text(placeholder) },
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
+        colors = OutlinedTextFieldDefaults.colors(
+            disabledBorderColor = Color.Transparent,
+            errorBorderColor = Color.Transparent,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
         ),
         textStyle = textFieldStyle,
         modifier = modifier,
