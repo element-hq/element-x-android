@@ -48,27 +48,31 @@ fun TextComposerLinkDialog(
         }
     }
 
-    urlToEdit.let {
-        if (it != null) {
-            EditLinkDialog(
-                currentUrl = it,
-                onDismissRequest = onDismissRequest,
-                onSaveLinkRequest = onSaveLinkRequest,
-                onRemoveLinkRequest = onRemoveLinkRequest,
-                modifier = modifier,
-            )
-        } else if (linkAction is LinkAction.InsertLink) {
-            CreateLinkWithTextDialog(
-                onDismissRequest = onDismissRequest,
-                onCreateLinkRequest = onCreateLinkRequest,
-                modifier = modifier,
-            )
-        } else if (linkAction is LinkAction.SetLink) {
-            CreateLinkWithoutTextDialog(
-                onDismissRequest = onDismissRequest,
-                onSaveLinkRequest = onSaveLinkRequest,
-                modifier = modifier,
-            )
+    urlToEdit.let { url ->
+        when {
+            url != null -> {
+                EditLinkDialog(
+                    currentUrl = url,
+                    onDismissRequest = onDismissRequest,
+                    onSaveLinkRequest = onSaveLinkRequest,
+                    onRemoveLinkRequest = onRemoveLinkRequest,
+                    modifier = modifier,
+                )
+            }
+            linkAction is LinkAction.InsertLink -> {
+                CreateLinkWithTextDialog(
+                    onDismissRequest = onDismissRequest,
+                    onCreateLinkRequest = onCreateLinkRequest,
+                    modifier = modifier,
+                )
+            }
+            linkAction is LinkAction.SetLink -> {
+                CreateLinkWithoutTextDialog(
+                    onDismissRequest = onDismissRequest,
+                    onSaveLinkRequest = onSaveLinkRequest,
+                    modifier = modifier,
+                )
+            }
         }
     }
 }
