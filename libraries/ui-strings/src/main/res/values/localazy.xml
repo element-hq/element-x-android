@@ -67,9 +67,6 @@
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_view_source">"View Source"</string>
   <string name="action_yes">"Yes"</string>
-  <string name="call_foreground_service_channel_title_android">"Ongoing call"</string>
-  <string name="call_foreground_service_message_android">"Tap to return to the call"</string>
-  <string name="call_foreground_service_title_android">"☎️ Call in progress"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
@@ -207,6 +204,11 @@
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
   <string name="screen_analytics_settings_share_data">"Share analytics data"</string>
+  <string name="screen_edit_profile_display_name">"Display name"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Your display name"</string>
+  <string name="screen_edit_profile_error">"An unknown error was encountered and the information couldn\'t be changed."</string>
+  <string name="screen_edit_profile_error_title">"Unable to update profile"</string>
+  <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>

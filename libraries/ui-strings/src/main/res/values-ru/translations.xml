@@ -194,9 +194,9 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Дополнительные параметры"</string>
   <string name="screen_notification_settings_calls_label">"Аудио и видео звонки"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Несоответствие конфигурации"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Мы упростили настройки уведомлений, чтобы упростить поиск опций. 
+  <string name="screen_notification_settings_configuration_mismatch_description">"Мы упростили настройки уведомлений, чтобы упростить поиск опций.
 
-Некоторые пользовательские настройки, выбранные вами ранее, не отображаются в данном меню, но они все еще активны. 
+Некоторые пользовательские настройки, выбранные вами ранее, не отображаются в данном меню, но они все еще активны.
 
 Если вы продолжите, некоторые настройки могут быть изменены."</string>
   <string name="screen_notification_settings_direct_chats">"Прямые чаты"</string>
