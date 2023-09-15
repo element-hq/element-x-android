@@ -33,6 +33,11 @@ interface RoomList {
         data class Loaded(val numberOfRooms: Int) : LoadingState()
     }
 
+    sealed interface Filter {
+        data object All : Filter
+        data class NormalizedMatchRoomName(val pattern: String) : Filter
+    }
+
     /**
      * The list of room summaries as a flow.
      */
@@ -43,6 +48,12 @@ interface RoomList {
      * This is useful to know if a specific set of rooms is loaded or not.
      */
     val loadingState: StateFlow<LoadingState>
+
+    suspend fun updateFilter(filter: Filter)
+
+    suspend fun loadMore()
+
+    suspend fun reset()
 }
 
 suspend fun RoomList.awaitLoaded(timeout: Duration = Duration.INFINITE) {

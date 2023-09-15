@@ -14,26 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.test.roomlist
+package io.element.android.libraries.matrix.impl.roomlist
 
-import io.element.android.libraries.matrix.api.roomlist.RoomList
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.flow.StateFlow
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 
-data class SimpleRoomList(
-    override val summaries: StateFlow<List<RoomSummary>>,
-    override val loadingState: StateFlow<RoomList.LoadingState>
-) : RoomList {
-
-    override suspend fun updateFilter(filter: RoomList.Filter) {
-        // No-op
-    }
-
-    override suspend  fun loadMore() {
-        //No-op
-    }
-
-    override suspend fun reset() {
-        //No-op
-    }
+internal sealed interface RoomListDynamicEvents {
+    data object Reset : RoomListDynamicEvents
+    data object LoadMore : RoomListDynamicEvents
+    data class SetFilter(val filter: RoomListEntriesDynamicFilterKind) : RoomListDynamicEvents
 }

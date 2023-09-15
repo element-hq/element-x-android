@@ -22,11 +22,11 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -50,47 +50,49 @@ class RustRoomListService(
 ) : RoomListService {
 
     private val allRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
-    private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
-
     private val allRoomsLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
     private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, roomSummaryDetailsFactory)
+    private val allRoomsDynamicEvents = MutableSharedFlow<RoomListDynamicEvents>()
+
     private val invitesLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
+    private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, roomSummaryDetailsFactory)
+    private val inviteRoomsDynamicEvents = MutableSharedFlow<RoomListDynamicEvents>()
 
     init {
         sessionCoroutineScope.launch(dispatcher) {
             val allRooms = innerRoomListService.allRooms()
             allRooms
-                .observeEntriesWithProcessor(allRoomsListProcessor)
+                .observeDynamicEntries(allRoomsDynamicEvents, allRoomsListProcessor)
                 .launchIn(this)
             allRooms
                 .observeLoadingState(allRoomsLoadingState)
                 .launchIn(this)
 
-
-            launch {
-                // Wait until running, as invites is only available after that
-                innerRoomListService.stateFlow().first {
-                    it == RoomListServiceState.RUNNING
-                }
-                val invites = innerRoomListService.invites()
-                invites
-                    .observeEntriesWithProcessor(inviteRoomsListProcessor)
-                    .launchIn(this)
-                invites
-                    .observeLoadingState(invitesLoadingState)
-                    .launchIn(this)
-
-            }
+            val invites = innerRoomListService.invites()
+            invites
+                .observeDynamicEntries(inviteRoomsDynamicEvents, inviteRoomsListProcessor)
+                .launchIn(this)
+            invites
+                .observeLoadingState(invitesLoadingState)
+                .launchIn(this)
         }
     }
 
     override fun allRooms(): RoomList {
-        return RustRoomList(allRooms, allRoomsLoadingState)
+        return RustRoomList(
+            summaries = allRooms,
+            loadingState = allRoomsLoadingState,
+            dynamicEvents = allRoomsDynamicEvents
+        )
     }
 
     override fun invites(): RoomList {
-        return RustRoomList(inviteRooms, invitesLoadingState)
+        return RustRoomList(
+            summaries = inviteRooms,
+            loadingState = invitesLoadingState,
+            dynamicEvents = inviteRoomsDynamicEvents
+        )
     }
 
     override fun updateAllRoomsVisibleRange(range: IntRange) {
@@ -151,12 +153,11 @@ private fun RoomListServiceSyncIndicator.toSyncIndicator(): RoomListService.Sync
     }
 }
 
-private fun org.matrix.rustcomponents.sdk.RoomList.observeEntriesWithProcessor(processor: RoomSummaryListProcessor): Flow<List<RoomListEntriesUpdate>> {
-    return entriesFlow { roomListEntries ->
-        processor.postEntries(roomListEntries)
-    }.onEach { update ->
-        processor.postUpdate(update)
-    }
+private fun org.matrix.rustcomponents.sdk.RoomList.observeDynamicEntries(roomListDynamicEvents: Flow<RoomListDynamicEvents>, processor: RoomSummaryListProcessor): Flow<List<RoomListEntriesUpdate>> {
+    return entriesFlow(roomListDynamicEvents)
+        .onEach { update ->
+            processor.postUpdate(update)
+        }
 }
 
 private fun org.matrix.rustcomponents.sdk.RoomList.observeLoadingState(stateFlow: MutableStateFlow<RoomList.LoadingState>): Flow<RoomList.LoadingState> {

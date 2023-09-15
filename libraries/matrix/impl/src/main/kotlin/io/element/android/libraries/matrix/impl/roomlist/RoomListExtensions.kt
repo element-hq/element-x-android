@@ -17,16 +17,21 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.rustcomponents.sdk.RoomList
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
-import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListLoadingStateListener
@@ -55,20 +60,35 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
         Timber.d(it, "loadingStateFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<List<RoomListEntriesUpdate>> =
-    mxCallbackFlow {
+internal fun RoomList.entriesFlow(roomListDynamicEvents: Flow<RoomListDynamicEvents>): Flow<List<RoomListEntriesUpdate>> =
+    callbackFlow {
         val listener = object : RoomListEntriesListener {
             override fun onUpdate(roomEntriesUpdate: List<RoomListEntriesUpdate>) {
                 trySendBlocking(roomEntriesUpdate)
             }
         }
-        val result = entries(listener)
-        try {
-            onInitialList(result.entries)
-        } catch (exception: Exception) {
-            Timber.d("entriesFlow() onInitialList failed.")
+        val result = entriesWithDynamicFilter(listener)
+
+        val dynamicFilter = result.dynamicFilter
+        dynamicFilter.set(RoomListEntriesDynamicFilterKind.All)
+        roomListDynamicEvents.onEach { controllerEvents ->
+            when (controllerEvents) {
+                is RoomListDynamicEvents.SetFilter -> {
+                    dynamicFilter.set(controllerEvents.filter)
+                }
+                is RoomListDynamicEvents.LoadMore -> {
+                    //result.loadMore()
+                }
+                is RoomListDynamicEvents.Reset -> {
+                    //result.reset()
+                }
+            }
+        }.launchIn(this)
+
+        awaitClose {
+            result.entriesStream.cancelAndDestroy()
+            result.destroy()
         }
-        result.entriesStream
     }.catch {
         Timber.d(it, "entriesFlow() failed")
     }.buffer(Channel.UNLIMITED)

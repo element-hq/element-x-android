@@ -18,12 +18,35 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 
 /**
  * Simple implementation of [RoomList] where state flows are provided through constructor.
  */
-class RustRoomList(
+internal class RustRoomList(
     override val summaries: StateFlow<List<RoomSummary>>,
-    override val loadingState: StateFlow<RoomList.LoadingState>
-) : RoomList
+    override val loadingState: StateFlow<RoomList.LoadingState>,
+    private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>,
+) : RoomList {
+
+    override suspend fun updateFilter(filter: RoomList.Filter) {
+        dynamicEvents.emit(RoomListDynamicEvents.SetFilter(filter.toRoomListEntriesDynamicFilterKind()))
+    }
+
+    override suspend fun loadMore() {
+        dynamicEvents.emit(RoomListDynamicEvents.LoadMore)
+    }
+
+    override suspend fun reset() {
+        dynamicEvents.emit(RoomListDynamicEvents.Reset)
+    }
+
+    private fun RoomList.Filter.toRoomListEntriesDynamicFilterKind(): RoomListEntriesDynamicFilterKind {
+        return when (this) {
+            RoomList.Filter.All -> RoomListEntriesDynamicFilterKind.All
+            is RoomList.Filter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(pattern)
+        }
+    }
+}
