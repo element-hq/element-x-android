@@ -224,7 +224,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
         doRender: Boolean,
         action: (NotificationEventQueue) -> Unit,
     ) {
-        notificationState.updateQueuedEvents(this) { queuedEvents, _ ->
+        notificationState.updateQueuedEvents { queuedEvents, _ ->
             action(queuedEvents)
         }
         coroutineScope.refreshNotificationDrawer(doRender)
@@ -247,7 +247,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     private suspend fun refreshNotificationDrawerBg(doRender: Boolean) {
         Timber.v("refreshNotificationDrawerBg()")
-        val eventsToRender = notificationState.updateQueuedEvents(this) { queuedEvents, renderedEvents ->
+        val eventsToRender = notificationState.updateQueuedEvents { queuedEvents, renderedEvents ->
             notifiableEventProcessor.process(queuedEvents.rawEvents(), renderedEvents).also {
                 queuedEvents.clearAndAdd(it.onlyKeptEvents())
             }
