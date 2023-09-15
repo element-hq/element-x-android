@@ -49,7 +49,7 @@ internal class RustTracingTree(private val retrieveFromStackTrace: Boolean) : Ti
             line = location.line,
             level = logLevel,
             target = Target.ELEMENT.filter,
-            message = message,
+            message = if (tag != null) "[$tag] $message" else message,
         )
     }
 

@@ -22,7 +22,6 @@ import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import timber.log.Timber
 import java.io.File
@@ -33,7 +32,7 @@ import javax.inject.Inject
 private const val ROOMS_NOTIFICATIONS_FILE_NAME_LEGACY = "im.vector.notifications.cache"
 private const val FILE_NAME = "notifications.bin"
 
-private val loggerTag = LoggerTag("NotificationEventPersistence", notificationLoggerTag)
+private val loggerTag = LoggerTag("NotificationEventPersistence", LoggerTag.NotificationLoggerTag)
 
 class NotificationEventPersistence @Inject constructor(
     @ApplicationContext private val context: Context,
