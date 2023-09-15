@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,16 +34,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
@@ -96,10 +97,11 @@ fun RoomListView(
             }
 
             LeaveRoomView(state = state.leaveRoomState)
-
+            val lazyListState = rememberLazyListState()
             RoomListContent(
                 modifier = Modifier.padding(top = topPadding),
                 state = state,
+                lazyListState = lazyListState,
                 onVerifyClicked = onVerifyClicked,
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
@@ -107,6 +109,10 @@ fun RoomListView(
                 onCreateRoomClicked = onCreateRoomClicked,
                 onInvitesClicked = onInvitesClicked,
                 onMenuActionClicked = onMenuActionClicked,
+            )
+            RoomListScrollHelper(
+                lazyListState = lazyListState,
+                eventSink = state.eventSink,
             )
             // This overlaid view will only be visible when state.displaySearchResults is true
             RoomListSearchResultView(
@@ -127,6 +133,7 @@ fun RoomListView(
 @Composable
 fun RoomListContent(
     state: RoomListState,
+    lazyListState: LazyListState,
     onVerifyClicked: () -> Unit,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
@@ -141,33 +148,13 @@ fun RoomListContent(
     }
 
     val appBarState = rememberTopAppBarState()
-    val lazyListState = rememberLazyListState()
-
-    val visibleRange by remember {
-        derivedStateOf {
-            val layoutInfo = lazyListState.layoutInfo
-            val firstItemIndex = layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
-            val size = layoutInfo.visibleItemsInfo.size
-            firstItemIndex until firstItemIndex + size
-        }
-    }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
     LogCompositions(
         tag = "RoomListScreen",
         msg = "Content"
     )
 
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-                state.eventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
-                return super.onPostFling(consumed, available)
-            }
-        }
-    }
-
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
-
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -185,8 +172,7 @@ fun RoomListContent(
             LazyColumn(
                 modifier = Modifier
                     .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .nestedScroll(nestedScrollConnection),
+                    .consumeWindowInsets(padding),
                 state = lazyListState,
             ) {
                 if (state.displayVerificationPrompt) {
@@ -239,6 +225,27 @@ fun RoomListContent(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     )
+}
+
+@Composable
+private fun RoomListScrollHelper(
+    lazyListState: LazyListState,
+    eventSink: (RoomListEvents) -> Unit,
+) {
+    val visibleRange by remember {
+        derivedStateOf {
+            val layoutInfo = lazyListState.layoutInfo
+            val firstItemIndex = layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
+            val size = layoutInfo.visibleItemsInfo.size
+            firstItemIndex until firstItemIndex + size
+        }
+    }
+    LaunchedEffect(Unit) {
+        snapshotFlow { visibleRange }
+            .collect {
+                eventSink(RoomListEvents.UpdateVisibleRange(it))
+            }
+    }
 }
 
 internal fun RoomListRoomSummary.contentType() = isPlaceholder

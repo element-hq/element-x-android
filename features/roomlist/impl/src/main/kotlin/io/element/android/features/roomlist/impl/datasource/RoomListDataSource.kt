@@ -60,10 +60,10 @@ class RoomListDataSource @Inject constructor(
         old?.identifier() == new?.identifier()
     }
 
+    private val allRoomsList = roomListService.allRooms()
+
     fun launchIn(coroutineScope: CoroutineScope) {
-        roomListService
-            .allRooms()
-            .summaries
+        allRoomsList.summaries
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
             }
@@ -86,6 +86,14 @@ class RoomListDataSource @Inject constructor(
 
     fun updateFilter(filterValue: String) {
         _filter.value = filterValue
+    }
+
+    suspend fun loadMore(){
+        allRoomsList.loadMore()
+    }
+
+    suspend fun reset(){
+        allRoomsList.reset()
     }
 
     val filter: StateFlow<String> = _filter

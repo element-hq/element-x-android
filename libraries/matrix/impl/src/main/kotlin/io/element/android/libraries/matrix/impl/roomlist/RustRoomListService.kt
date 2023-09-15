@@ -95,17 +95,15 @@ class RustRoomListService(
         )
     }
 
-    override fun updateAllRoomsVisibleRange(range: IntRange) {
+    override suspend fun updateAllRoomsVisibleRange(range: IntRange) {
         Timber.v("setVisibleRange=$range")
-        sessionCoroutineScope.launch {
-            try {
-                val ranges = listOf(RoomListRange(range.first.toUInt(), range.last.toUInt()))
-                innerRoomListService.applyInput(
-                    RoomListInput.Viewport(ranges)
-                )
-            } catch (exception: RoomListException) {
-                Timber.e(exception, "Failed updating visible range")
-            }
+        try {
+            val ranges = listOf(RoomListRange(range.first.toUInt(), range.last.toUInt()))
+            innerRoomListService.applyInput(
+                RoomListInput.Viewport(ranges)
+            )
+        } catch (exception: RoomListException) {
+            Timber.e(exception, "Failed updating visible range")
         }
     }
 
@@ -154,10 +152,13 @@ private fun RoomListServiceSyncIndicator.toSyncIndicator(): RoomListService.Sync
 }
 
 private fun org.matrix.rustcomponents.sdk.RoomList.observeDynamicEntries(roomListDynamicEvents: Flow<RoomListDynamicEvents>, processor: RoomSummaryListProcessor): Flow<List<RoomListEntriesUpdate>> {
-    return entriesFlow(roomListDynamicEvents)
-        .onEach { update ->
-            processor.postUpdate(update)
-        }
+    return entriesFlow(
+        pageSize = RoomListService.DEFAULT_PAGE_SIZE,
+        numberOfPages = RoomListService.DEFAULT_PAGES_TO_LOAD,
+        roomListDynamicEvents = roomListDynamicEvents
+    ).onEach { update ->
+        processor.postUpdate(update)
+    }
 }
 
 private fun org.matrix.rustcomponents.sdk.RoomList.observeLoadingState(stateFlow: MutableStateFlow<RoomList.LoadingState>): Flow<RoomList.LoadingState> {

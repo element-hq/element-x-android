@@ -85,6 +85,9 @@ class RoomSummaryListProcessor(
             RoomListEntriesUpdate.Clear -> {
                 clear()
             }
+            is RoomListEntriesUpdate.Truncate -> {
+                subList(update.length.toInt(), size).clear()
+            }
         }
     }
 

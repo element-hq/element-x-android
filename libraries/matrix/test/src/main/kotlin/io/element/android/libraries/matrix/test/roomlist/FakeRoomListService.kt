@@ -54,7 +54,7 @@ class FakeRoomListService : RoomListService {
     var latestSlidingSyncRange: IntRange? = null
         private set
 
-    override fun updateAllRoomsVisibleRange(range: IntRange) {
+    override suspend fun updateAllRoomsVisibleRange(range: IntRange) {
         latestSlidingSyncRange = range
     }
 

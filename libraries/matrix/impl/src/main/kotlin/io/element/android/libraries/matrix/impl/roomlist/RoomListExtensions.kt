@@ -60,27 +60,28 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
         Timber.d(it, "loadingStateFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-internal fun RoomList.entriesFlow(roomListDynamicEvents: Flow<RoomListDynamicEvents>): Flow<List<RoomListEntriesUpdate>> =
+internal fun RoomList.entriesFlow(pageSize: Int, numberOfPages: Int, roomListDynamicEvents: Flow<RoomListDynamicEvents>): Flow<List<RoomListEntriesUpdate>> =
     callbackFlow {
         val listener = object : RoomListEntriesListener {
             override fun onUpdate(roomEntriesUpdate: List<RoomListEntriesUpdate>) {
                 trySendBlocking(roomEntriesUpdate)
             }
         }
-        val result = entriesWithDynamicFilter(listener)
-
-        val dynamicFilter = result.dynamicFilter
-        dynamicFilter.set(RoomListEntriesDynamicFilterKind.All)
+        val result = entriesWithDynamicAdapters(pageSize.toUInt(), listener)
+        val controller = result.controller
+        controller.setFilter(RoomListEntriesDynamicFilterKind.All)
         roomListDynamicEvents.onEach { controllerEvents ->
             when (controllerEvents) {
                 is RoomListDynamicEvents.SetFilter -> {
-                    dynamicFilter.set(controllerEvents.filter)
+                    controller.setFilter(controllerEvents.filter)
                 }
                 is RoomListDynamicEvents.LoadMore -> {
-                    //result.loadMore()
+                    repeat(numberOfPages) {
+                        controller.addOnePage()
+                    }
                 }
                 is RoomListDynamicEvents.Reset -> {
-                    //result.reset()
+                    controller.resetToOnePage()
                 }
             }
         }.launchIn(this)

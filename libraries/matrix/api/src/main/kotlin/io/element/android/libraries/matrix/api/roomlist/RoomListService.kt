@@ -23,7 +23,13 @@ import kotlinx.coroutines.flow.StateFlow
  * This service will provide different sets of rooms (all, invites, etc.).
  * It requires the SyncService to be started to receive updates.
  */
+
 interface RoomListService {
+
+    companion object {
+        const val DEFAULT_PAGE_SIZE = 20
+        const val DEFAULT_PAGES_TO_LOAD = 10
+    }
 
     sealed class State {
         data object Idle : State()
@@ -52,7 +58,7 @@ interface RoomListService {
      * Will set the visible range of all rooms.
      * This is useful to load more data when the user scrolls down.
      */
-    fun updateAllRoomsVisibleRange(range: IntRange)
+    suspend fun updateAllRoomsVisibleRange(range: IntRange)
 
     /**
      * The sync indicator as a flow.

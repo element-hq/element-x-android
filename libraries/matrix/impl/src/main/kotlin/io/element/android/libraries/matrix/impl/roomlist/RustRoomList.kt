@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
+import timber.log.Timber
 
 /**
  * Simple implementation of [RoomList] where state flows are provided through constructor.
@@ -32,14 +33,17 @@ internal class RustRoomList(
 ) : RoomList {
 
     override suspend fun updateFilter(filter: RoomList.Filter) {
+        Timber.d("updateFilter($filter)")
         dynamicEvents.emit(RoomListDynamicEvents.SetFilter(filter.toRoomListEntriesDynamicFilterKind()))
     }
 
     override suspend fun loadMore() {
+        Timber.d("loadMore()")
         dynamicEvents.emit(RoomListDynamicEvents.LoadMore)
     }
 
     override suspend fun reset() {
+        Timber.d("reset()")
         dynamicEvents.emit(RoomListDynamicEvents.Reset)
     }
 

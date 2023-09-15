@@ -19,6 +19,7 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -26,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -36,14 +38,18 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val EXTENDED_RANGE_SIZE = 40
+private const val THRESHOLD_PAGE_MULTIPLIER = 5
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
@@ -65,12 +71,14 @@ class RoomListPresenter @Inject constructor(
         val filteredRoomList by roomListDataSource.filteredRooms.collectAsState()
         val filter by roomListDataSource.filter.collectAsState()
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
-
+        val visibleRange = remember {
+            mutableStateOf(IntRange.EMPTY)
+        }
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
             initialLoad(matrixUser)
         }
-
+        VisibleRangeHandler(visibleRange = visibleRange)
         // Session verification status (unknown, not verified, verified)
         val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
         var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
@@ -86,7 +94,7 @@ class RoomListPresenter @Inject constructor(
         fun handleEvents(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateFilter -> roomListDataSource.updateFilter(event.newFilter)
-                is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
+                is RoomListEvents.UpdateVisibleRange -> visibleRange.value = event.range
                 RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
                 RoomListEvents.ToggleSearchResults -> {
                     if (displaySearchResults) {
@@ -106,7 +114,6 @@ class RoomListPresenter @Inject constructor(
         }
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
-
         return RoomListState(
             matrixUser = matrixUser.value,
             roomList = roomList,
@@ -123,17 +130,42 @@ class RoomListPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
-        matrixUser.value = client.getCurrentUser()
+    @Composable
+    private fun VisibleRangeHandler(visibleRange: State<IntRange>) {
+        val hasReachEndThreshold = remember {
+            derivedStateOf {
+                visibleRange.value.first == 0 || visibleRange.value.last > roomListDataSource.allRooms.value.size - RoomListService.DEFAULT_PAGE_SIZE * THRESHOLD_PAGE_MULTIPLIER
+            }
+        }
+        val hasReachedStart = remember {
+            derivedStateOf {
+                visibleRange.value.first == 0
+            }
+        }
+        LaunchedEffect(Unit) {
+            snapshotFlow { visibleRange.value }
+                .debounce(300)
+                .onEach { range ->
+                    client.roomListService.updateAllRoomsVisibleRange(range)
+                }.launchIn(this)
+
+            snapshotFlow { hasReachedStart.value }
+                .onEach { shouldReset ->
+                    if (shouldReset) {
+                        roomListDataSource.reset()
+                    }
+                }.launchIn(this)
+
+            snapshotFlow { hasReachEndThreshold.value }
+                .onEach { shouldLoadMore ->
+                    if (shouldLoadMore) {
+                        roomListDataSource.loadMore()
+                    }
+                }.launchIn(this)
+        }
     }
 
-    private fun updateVisibleRange(range: IntRange) {
-        if (range.isEmpty()) return
-        val midExtendedRangeSize = EXTENDED_RANGE_SIZE / 2
-        val extendedRangeStart = (range.first - midExtendedRangeSize).coerceAtLeast(0)
-        // Safe to give bigger size than room list
-        val extendedRangeEnd = range.last + midExtendedRangeSize
-        val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
-        client.roomListService.updateAllRoomsVisibleRange(extendedRange)
+    private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
+        matrixUser.value = client.getCurrentUser()
     }
 }
