@@ -53,6 +53,9 @@ import io.element.android.libraries.matrix.test.verification.FakeSessionVerifica
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -66,7 +69,8 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
-        val presenter = createRoomListPresenter()
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -77,6 +81,7 @@ class RoomListPresenterTests {
             Truth.assertThat(withUserState.matrixUser!!.userId).isEqualTo(A_USER_ID)
             Truth.assertThat(withUserState.matrixUser!!.displayName).isEqualTo(A_USER_NAME)
             Truth.assertThat(withUserState.matrixUser!!.avatarUrl).isEqualTo(AN_AVATAR_URL)
+            scope.cancel()
         }
     }
 
@@ -86,7 +91,8 @@ class RoomListPresenterTests {
             userDisplayName = Result.failure(AN_EXCEPTION),
             userAvatarURLString = Result.failure(AN_EXCEPTION),
         )
-        val presenter = createRoomListPresenter(matrixClient)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -94,12 +100,14 @@ class RoomListPresenterTests {
             Truth.assertThat(initialState.matrixUser).isNull()
             val withUserState = awaitItem()
             Truth.assertThat(withUserState.matrixUser).isNotNull()
+            scope.cancel()
         }
     }
 
     @Test
     fun `present - should filter room with success`() = runTest {
-        val presenter = createRoomListPresenter()
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -109,8 +117,8 @@ class RoomListPresenterTests {
             withUserState.eventSink.invoke(RoomListEvents.UpdateFilter("t"))
             val withFilterState = awaitItem()
             Truth.assertThat(withFilterState.filter).isEqualTo("t")
-
             cancelAndIgnoreRemainingEvents()
+            scope.cancel()
         }
     }
 
@@ -120,7 +128,8 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService
         )
-        val presenter = createRoomListPresenter(matrixClient)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(client =  matrixClient, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -133,6 +142,7 @@ class RoomListPresenterTests {
             Truth.assertThat(withRoomState.roomList.size).isEqualTo(1)
             Truth.assertThat(withRoomState.roomList.first())
                 .isEqualTo(aRoomListRoomSummary)
+            scope.cancel()
         }
     }
 
@@ -142,7 +152,8 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService
         )
-        val presenter = createRoomListPresenter(matrixClient)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(matrixClient, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -160,6 +171,7 @@ class RoomListPresenterTests {
             val withNotFilteredRoomState = consumeItemsUntilPredicate { state -> state.filteredRoomList.size == 0 }.last()
             Truth.assertThat(withNotFilteredRoomState.filter).isEqualTo("tada")
             Truth.assertThat(withNotFilteredRoomState.filteredRoomList).isEmpty()
+            scope.cancel()
         }
     }
 
@@ -169,7 +181,8 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService
         )
-        val presenter = createRoomListPresenter(matrixClient)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -200,6 +213,7 @@ class RoomListPresenterTests {
             Truth.assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(129, 279))
             cancelAndIgnoreRemainingEvents()
+            scope.cancel()
         }
     }
 
@@ -209,12 +223,14 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
         )
+        val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
             client = matrixClient,
             sessionVerificationService = FakeSessionVerificationService().apply {
                 givenIsReady(true)
                 givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
             },
+            coroutineScope = scope,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -224,6 +240,7 @@ class RoomListPresenterTests {
 
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
             Truth.assertThat(awaitItem().displayVerificationPrompt).isFalse()
+            scope.cancel()
         }
     }
 
@@ -231,7 +248,8 @@ class RoomListPresenterTests {
     fun `present - sets invite state`() = runTest {
         val inviteStateFlow = MutableStateFlow(InvitesState.NoInvites)
         val inviteStateDataSource = FakeInviteDataSource(inviteStateFlow)
-        val presenter = createRoomListPresenter(inviteStateDataSource = inviteStateDataSource)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(inviteStateDataSource = inviteStateDataSource, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -246,12 +264,14 @@ class RoomListPresenterTests {
 
             inviteStateFlow.value = InvitesState.NoInvites
             Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
+            scope.cancel()
         }
     }
 
     @Test
     fun `present - show context menu`() = runTest {
-        val presenter = createRoomListPresenter()
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -264,12 +284,14 @@ class RoomListPresenterTests {
             val shownState = awaitItem()
             Truth.assertThat(shownState.contextMenu)
                 .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
+            scope.cancel()
         }
     }
 
     @Test
     fun `present - hide context menu`() = runTest {
-        val presenter = createRoomListPresenter()
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -286,13 +308,15 @@ class RoomListPresenterTests {
 
             val hiddenState = awaitItem()
             Truth.assertThat(hiddenState.contextMenu).isEqualTo(RoomListState.ContextMenu.Hidden)
+            scope.cancel()
         }
     }
 
     @Test
     fun `present - leave room calls into leave room presenter`() = runTest {
         val leaveRoomPresenter = LeaveRoomPresenterFake()
-        val presenter = createRoomListPresenter(leaveRoomPresenter = leaveRoomPresenter)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(leaveRoomPresenter = leaveRoomPresenter, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -300,6 +324,7 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.LeaveRoom(A_ROOM_ID))
             Truth.assertThat(leaveRoomPresenter.events).containsExactly(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
             cancelAndIgnoreRemainingEvents()
+            scope.cancel()
         }
     }
 
@@ -313,7 +338,8 @@ class RoomListPresenterTests {
         lastMessageTimestampFormatter: LastMessageTimestampFormatter = FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
         },
-        roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter()
+        roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
+        coroutineScope: CoroutineScope = this
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,
@@ -327,7 +353,7 @@ class RoomListPresenterTests {
             roomLastMessageFormatter,
             coroutineDispatchers = testCoroutineDispatchers(),
             notificationSettingsService = client.notificationSettingsService(),
-            appScope = this
+            appScope = coroutineScope
         )
     )
 }
