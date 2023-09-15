@@ -274,6 +274,8 @@ private fun TextInput(
                 style = defaultTypography.copy(
                     color = ElementTheme.colors.textDisabled,
                 ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
 
