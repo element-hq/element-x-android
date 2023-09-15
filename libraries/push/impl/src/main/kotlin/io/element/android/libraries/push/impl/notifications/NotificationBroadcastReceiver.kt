@@ -41,10 +41,11 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
-        Timber.tag(loggerTag.value).v("NotificationBroadcastReceiver received : $intent")
+        Timber.tag(loggerTag.value).d("received: ${intent.action} ${intent.data}")
         val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.let(::SessionId) ?: return
         val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
         val eventId = intent.getStringExtra(KEY_EVENT_ID)?.let(::EventId)
+        Timber.tag(loggerTag.value).d("received for: ${roomId?.value}/${eventId?.value}")
         when (intent.action) {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)

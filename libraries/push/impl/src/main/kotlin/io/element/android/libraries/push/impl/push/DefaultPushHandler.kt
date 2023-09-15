@@ -67,7 +67,7 @@ class DefaultPushHandler @Inject constructor(
      * @param pushData the data received in the push.
      */
     override suspend fun handle(pushData: PushData) {
-        Timber.tag(loggerTag.value).d("## handling pushData")
+        Timber.tag(loggerTag.value).d("## handling pushData: ${pushData.roomId}/${pushData.eventId}")
 
         if (buildMeta.lowPrivacyLoggingEnabled) {
             Timber.tag(loggerTag.value).d("## pushData: $pushData")
