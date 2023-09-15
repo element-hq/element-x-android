@@ -31,11 +31,12 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
+import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
+import io.element.android.features.preferences.impl.developer.tracing.ConfigureTracingNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
-import io.element.android.features.preferences.impl.developer.tracing.ConfigureTracingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -62,6 +63,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object DeveloperSettings : NavTarget
+
+        @Parcelize
+        data object AdvancedSettings : NavTarget
 
         @Parcelize
         data object ConfigureTracing : NavTarget
@@ -106,6 +110,10 @@ class PreferencesFlowNode @AssistedInject constructor(
                     override fun onOpenNotificationSettings() {
                         backstack.push(NavTarget.NotificationSettings)
                     }
+
+                    override fun onOpenAdvancedSettings() {
+                        backstack.push(NavTarget.AdvancedSettings)
+                    }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
             }
@@ -137,6 +145,9 @@ class PreferencesFlowNode @AssistedInject constructor(
             is NavTarget.EditDefaultNotificationSetting -> {
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
                 createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input))
+            }
+            NavTarget.AdvancedSettings -> {
+                createNode<AdvancedSettingsNode>(buildContext)
             }
         }
     }

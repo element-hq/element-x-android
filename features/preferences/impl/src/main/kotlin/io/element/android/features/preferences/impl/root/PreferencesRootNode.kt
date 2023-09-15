@@ -46,6 +46,7 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenAbout()
         fun onOpenDeveloperSettings()
         fun onOpenNotificationSettings()
+        fun onOpenAdvancedSettings()
     }
 
     private fun onOpenBugReport() {
@@ -58,6 +59,10 @@ class PreferencesRootNode @AssistedInject constructor(
 
     private fun onOpenDeveloperSettings() {
         plugins<Callback>().forEach { it.onOpenDeveloperSettings() }
+    }
+
+    private fun onOpenAdvancedSettings() {
+        plugins<Callback>().forEach { it.onOpenAdvancedSettings() }
     }
 
     private fun onOpenAnalytics() {
@@ -100,6 +105,7 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenAbout = this::onOpenAbout,
             onVerifyClicked = this::onVerifyClicked,
             onOpenDeveloperSettings = this::onOpenDeveloperSettings,
+            onOpenAdvancedSettings = this::onOpenAdvancedSettings,
             onSuccessLogout = { onSuccessLogout(activity, it) },
             onManageAccountClicked = { onManageAccountClicked(activity, it, isDark) },
             onOpenNotificationSettings = this::onOpenNotificationSettings
