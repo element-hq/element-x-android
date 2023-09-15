@@ -75,6 +75,16 @@ val SemanticColors.progressIndicatorTrackColor
         Color(0x25F4F7FA)
     }
 
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.iconSuccessPrimaryBackground
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGreen300
+        Color(0xffe3f7ed)
+    } else {
+        // We want DarkDesignTokens.colorGreen300
+        Color(0xff002513)
+    }
+
 // Temporary color, which is not in the token right now
 val SemanticColors.temporaryColorBgSpecial
     get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
@@ -100,7 +110,9 @@ private fun ContentToPreview() {
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
+            "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
+            "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
         )
     )
 }

@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsS
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -74,9 +75,12 @@ class PreferencesRootPresenter @Inject constructor(
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
         }
+        val devicesManagementUrl: MutableState<String?> = remember {
+            mutableStateOf(null)
+        }
 
         LaunchedEffect(Unit) {
-            initAccountManagementUrl(accountManagementUrl)
+            initAccountManagementUrl(accountManagementUrl, devicesManagementUrl)
         }
 
         val logoutState = logoutPresenter.present()
@@ -87,6 +91,7 @@ class PreferencesRootPresenter @Inject constructor(
             version = versionFormatter.get(),
             showCompleteVerification = showCompleteVerification,
             accountManagementUrl = accountManagementUrl.value,
+            devicesManagementUrl = devicesManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             showNotificationSettings = showNotificationSettings.value,
@@ -98,7 +103,11 @@ class PreferencesRootPresenter @Inject constructor(
         matrixUser.value = matrixClient.getCurrentUser()
     }
 
-    private fun CoroutineScope.initAccountManagementUrl(accountManagementUrl: MutableState<String?>) = launch {
-        accountManagementUrl.value = matrixClient.getAccountManagementUrl().getOrNull()
+    private fun CoroutineScope.initAccountManagementUrl(
+        accountManagementUrl: MutableState<String?>,
+        devicesManagementUrl: MutableState<String?>,
+    ) = launch {
+        accountManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.Profile).getOrNull()
+        devicesManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList).getOrNull()
     }
 }

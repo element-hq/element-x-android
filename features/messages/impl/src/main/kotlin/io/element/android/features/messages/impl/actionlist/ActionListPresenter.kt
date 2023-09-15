@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.actionlist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,15 +31,15 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.features.messages.impl.timeline.model.event.canReact
+import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ActionListPresenter @Inject constructor(
-    private val buildMeta: BuildMeta,
+    private val preferencesStore: PreferencesStore,
 ) : Presenter<ActionListState> {
 
     @Composable
@@ -48,6 +49,8 @@ class ActionListPresenter @Inject constructor(
         val target: MutableState<ActionListState.Target> = remember {
             mutableStateOf(ActionListState.Target.None)
         }
+
+        val isDeveloperModeEnabled by preferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
 
         val displayEmojiReactions by remember {
             derivedStateOf {
@@ -63,6 +66,7 @@ class ActionListPresenter @Inject constructor(
                     timelineItem = event.event,
                     userCanRedact = event.canRedact,
                     userCanSendMessage = event.canSendMessage,
+                    isDeveloperModeEnabled = isDeveloperModeEnabled,
                     target = target,
                 )
             }
@@ -79,14 +83,15 @@ class ActionListPresenter @Inject constructor(
         timelineItem: TimelineItem.Event,
         userCanRedact: Boolean,
         userCanSendMessage: Boolean,
+        isDeveloperModeEnabled: Boolean,
         target: MutableState<ActionListState.Target>
     ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
         val actions =
             when (timelineItem.content) {
                 is TimelineItemRedactedContent -> {
-                    if (buildMeta.isDebuggable) {
-                        listOf(TimelineItemAction.Developer)
+                    if (isDeveloperModeEnabled) {
+                        listOf(TimelineItemAction.ViewSource)
                     } else {
                         emptyList()
                     }
@@ -94,8 +99,8 @@ class ActionListPresenter @Inject constructor(
                 is TimelineItemStateContent -> {
                     buildList {
                         add(TimelineItemAction.Copy)
-                        if (buildMeta.isDebuggable) {
-                            add(TimelineItemAction.Developer)
+                        if (isDeveloperModeEnabled) {
+                            add(TimelineItemAction.ViewSource)
                         }
                     }
                 }
@@ -115,8 +120,8 @@ class ActionListPresenter @Inject constructor(
                         if (timelineItem.content.canBeCopied()) {
                             add(TimelineItemAction.Copy)
                         }
-                        if (buildMeta.isDebuggable) {
-                            add(TimelineItemAction.Developer)
+                        if (isDeveloperModeEnabled) {
+                            add(TimelineItemAction.ViewSource)
                         }
                         if (!timelineItem.isMine) {
                             add(TimelineItemAction.ReportContent)
@@ -130,7 +135,11 @@ class ActionListPresenter @Inject constructor(
                     if (timelineItem.isRemote) {
                         // Can only reply or forward messages already uploaded to the server
                         if (userCanSendMessage) {
-                            add(TimelineItemAction.Reply)
+                            if (timelineItem.isThreaded) {
+                                add(TimelineItemAction.ReplyInThread)
+                            } else {
+                                add(TimelineItemAction.Reply)
+                            }
                         }
                         add(TimelineItemAction.Forward)
                     }
@@ -140,8 +149,8 @@ class ActionListPresenter @Inject constructor(
                     if (timelineItem.content.canBeCopied()) {
                         add(TimelineItemAction.Copy)
                     }
-                    if (buildMeta.isDebuggable) {
-                        add(TimelineItemAction.Developer)
+                    if (isDeveloperModeEnabled) {
+                        add(TimelineItemAction.ViewSource)
                     }
                     if (!timelineItem.isMine) {
                         add(TimelineItemAction.ReportContent)

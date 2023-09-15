@@ -117,7 +117,7 @@ fun TextComposer(
                 start = 3.dp,
                 end = 6.dp,
                 top = 8.dp,
-                bottom = 5.dp,
+                bottom = 4.dp,
             )
             .fillMaxWidth(),
     ) {
@@ -140,7 +140,7 @@ fun TextComposer(
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp.applyScaleUp()),
-                    resourceId = R.drawable.ic_plus, // TODO Replace with design system icon when available
+                    resourceId = VectorIcons.Plus,
                     contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
                     tint = ElementTheme.colors.iconPrimary,
                 )
@@ -149,7 +149,7 @@ fun TextComposer(
             val roundCornerLarge = 28.dp.applyScaleUp()
 
             val roundedCornerSize = remember(state.lineCount, composerMode) {
-                if (state.lineCount > 1 || composerMode is MessageComposerMode.Special) {
+                if (composerMode is MessageComposerMode.Special) {
                     roundCornerSmall
                 } else {
                     roundCornerLarge
@@ -159,17 +159,13 @@ fun TextComposer(
                 targetValue = roundedCornerSize,
                 animationSpec = tween(
                     durationMillis = 100,
-                )
+                ),
+                label = "roundedCornerSizeAnimation"
             )
             val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
             val colors = ElementTheme.colors
             val bgColor = colors.bgSubtleSecondary
-
-            val borderColor by remember(state.hasFocus, colors) {
-                derivedStateOf {
-                    if (state.hasFocus) colors.borderDisabled else bgColor
-                }
-            }
+            val borderColor = colors.borderDisabled
 
             Column(
                 modifier = Modifier
@@ -183,14 +179,18 @@ fun TextComposer(
                     .fillMaxWidth()
                     .clip(roundedCorners)
                     .background(color = bgColor)
-                    .border(1.dp, borderColor, roundedCorners)
+                    .border(0.5.dp, borderColor, roundedCorners)
             ) {
                 if (composerMode is MessageComposerMode.Special) {
                     ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
                 }
-
                 TextInput(
                     state = state,
+                    placeholder = if (composerMode.inThread) {
+                        stringResource(id = CommonStrings.action_reply_in_thread)
+                    } else {
+                        stringResource(id = R.string.rich_text_editor_composer_placeholder)
+                    },
                     roundedCorners = roundedCorners,
                     bgColor = bgColor,
                     onError = onError,
@@ -242,6 +242,7 @@ fun TextComposer(
 @Composable
 private fun TextInput(
     state: RichTextEditorState,
+    placeholder: String,
     roundedCorners: RoundedCornerShape,
     bgColor: Color,
     modifier: Modifier = Modifier,
@@ -268,9 +269,9 @@ private fun TextInput(
         // Placeholder
         if (state.messageHtml.isEmpty()) {
             Text(
-                stringResource(CommonStrings.common_message),
+                placeholder,
                 style = defaultTypography.copy(
-                    color = ElementTheme.colors.textDisabled,
+                    color = ElementTheme.colors.textSecondary,
                 ),
             )
         }
@@ -278,6 +279,7 @@ private fun TextInput(
         RichTextEditor(
             state = state,
             modifier = Modifier
+                .padding(top = 6.dp, bottom = 6.dp)
                 .fillMaxWidth(),
             style = RichTextEditorDefaults.style(
                 text = RichTextEditorDefaults.textStyle(
@@ -321,7 +323,7 @@ private fun TextFormatting(
         ) {
             Icon(
                 modifier = Modifier.size(30.dp.applyScaleUp()),
-                resourceId = R.drawable.ic_cancel, // TODO Replace with design system icon when available
+                resourceId = VectorIcons.Cancel,
                 contentDescription = stringResource(CommonStrings.action_close),
                 tint = ElementTheme.colors.iconPrimary,
             )
@@ -333,8 +335,8 @@ private fun TextFormatting(
                 .constrainAs(formatting) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    start.linkTo(close.end, margin = 3.dp)
-                    end.linkTo(send.start, margin = 20.dp)
+                    start.linkTo(close.end, margin = 1.dp)
+                    end.linkTo(send.start, margin = 14.dp)
                     width = fillToConstraints
                 }
                 .horizontalScroll(scrollState),
@@ -607,7 +609,7 @@ private fun SendButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .height(18.dp.applyScaleUp())
+                    .height(24.dp.applyScaleUp())
                     .align(Alignment.Center),
                 resourceId = iconId,
                 contentDescription = contentDescription,
@@ -712,6 +714,23 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = false,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = false,
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = null,
+                defaultContent = "A message\n" +
+                    "With several lines\n" +
+                    "To preview larger textfields and long lines with overflow"
+            ),
+            onResetComposerMode = {},
+            enableTextFormatting = true,
+        )
+        TextComposer(
+            RichTextEditorState("", fake = true),
+            canSendMessage = false,
+            onSendMessage = {},
+            composerMode = MessageComposerMode.Reply(
+                isThreaded = true,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = null,
@@ -727,6 +746,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = true,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(
@@ -745,6 +765,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = false,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(
@@ -763,6 +784,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = false,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(
@@ -781,6 +803,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             canSendMessage = true,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
+                isThreaded = false,
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(
