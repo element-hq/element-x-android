@@ -89,7 +89,11 @@ class DefaultNotificationDrawerManager @Inject constructor(
             is NavigationState.Space -> {}
             is NavigationState.Room -> {
                 // Cleanup notification for current room
-                clearMessagesForRoom(navigationState.parentSpace.parentSession.sessionId, navigationState.roomId)
+                clearMessagesForRoom(
+                    sessionId = navigationState.parentSpace.parentSession.sessionId,
+                    roomId = navigationState.roomId,
+                    doRender = true,
+                )
             }
             is NavigationState.Thread -> {
                 onEnteringThread(
@@ -132,7 +136,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
      * Events might be grouped and there might not be one notification per event!
      */
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
-        updateEvents {
+        updateEvents(doRender = true) {
             it.onNotifiableEventReceived(notifiableEvent)
         }
     }
@@ -140,8 +144,8 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear all known events and refresh the notification drawer.
      */
-    fun clearAllMessagesEvents(sessionId: SessionId) {
-        updateEvents {
+    fun clearAllMessagesEvents(sessionId: SessionId, doRender: Boolean) {
+        updateEvents(doRender = doRender) {
             it.clearMessagesForSession(sessionId)
         }
     }
@@ -150,7 +154,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
      * Clear all notifications related to the session and refresh the notification drawer.
      */
     fun clearAllEvents(sessionId: SessionId) {
-        updateEvents {
+        updateEvents(doRender = true) {
             it.clearAllForSession(sessionId)
         }
     }
@@ -160,14 +164,14 @@ class DefaultNotificationDrawerManager @Inject constructor(
      * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
      * Can also be called when a notification for this room is dismissed by the user.
      */
-    fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId) {
-        updateEvents {
+    fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId, doRender: Boolean) {
+        updateEvents(doRender = doRender) {
             it.clearMessagesForRoom(sessionId, roomId)
         }
     }
 
     override fun clearMembershipNotificationForSession(sessionId: SessionId) {
-        updateEvents {
+        updateEvents(doRender = true) {
             it.clearMembershipNotificationForSession(sessionId)
         }
     }
@@ -175,8 +179,12 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear invitation notification for the provided room.
      */
-    override fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
-        updateEvents {
+    override fun clearMembershipNotificationForRoom(
+        sessionId: SessionId,
+        roomId: RoomId,
+        doRender: Boolean,
+    ) {
+        updateEvents(doRender = doRender) {
             it.clearMembershipNotificationForRoom(sessionId, roomId)
         }
     }
@@ -184,8 +192,8 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear the notifications for a single event.
      */
-    fun clearEvent(eventId: EventId) {
-        updateEvents {
+    fun clearEvent(eventId: EventId, doRender: Boolean) {
+        updateEvents(doRender = doRender) {
             it.clearEvent(eventId)
         }
     }
@@ -195,14 +203,14 @@ class DefaultNotificationDrawerManager @Inject constructor(
      * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
      */
     private fun onEnteringThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
-        updateEvents {
+        updateEvents(doRender = true) {
             it.clearMessagesForThread(sessionId, roomId, threadId)
         }
     }
 
     // TODO EAx Must be per account
     fun notificationStyleChanged() {
-        updateEvents {
+        updateEvents(doRender = true) {
             val newSettings = true // pushDataStore.useCompleteNotificationFormat()
             if (newSettings != useCompleteNotificationFormat) {
                 // Settings has changed, remove all current notifications
@@ -212,21 +220,24 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
     }
 
-    private fun updateEvents(action: DefaultNotificationDrawerManager.(NotificationEventQueue) -> Unit) {
+    private fun updateEvents(
+        doRender: Boolean,
+        action: DefaultNotificationDrawerManager.(NotificationEventQueue) -> Unit,
+    ) {
         notificationState.updateQueuedEvents(this) { queuedEvents, _ ->
             action(queuedEvents)
         }
-        coroutineScope.refreshNotificationDrawer()
+        coroutineScope.refreshNotificationDrawer(doRender)
     }
 
-    private fun CoroutineScope.refreshNotificationDrawer() = launch {
+    private fun CoroutineScope.refreshNotificationDrawer(doRender: Boolean) = launch {
         // Implement last throttler
         val canHandle = firstThrottler.canHandle()
         Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
         withContext(dispatchers.io) {
             delay(canHandle.waitMillis())
             try {
-                refreshNotificationDrawerBg()
+                refreshNotificationDrawerBg(doRender)
             } catch (throwable: Throwable) {
                 // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
                 Timber.w(throwable, "refreshNotificationDrawerBg failure")
@@ -234,7 +245,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
     }
 
-    private suspend fun refreshNotificationDrawerBg() {
+    private suspend fun refreshNotificationDrawerBg(doRender: Boolean) {
         Timber.v("refreshNotificationDrawerBg()")
         val eventsToRender = notificationState.updateQueuedEvents(this) { queuedEvents, renderedEvents ->
             notifiableEventProcessor.process(queuedEvents.rawEvents(), renderedEvents).also {
@@ -246,7 +257,9 @@ class DefaultNotificationDrawerManager @Inject constructor(
             Timber.d("Skipping notification update due to event list not changing")
         } else {
             notificationState.clearAndAddRenderedEvents(eventsToRender)
-            renderEvents(eventsToRender)
+            if (doRender) {
+                renderEvents(eventsToRender)
+            }
             persistEvents()
         }
     }

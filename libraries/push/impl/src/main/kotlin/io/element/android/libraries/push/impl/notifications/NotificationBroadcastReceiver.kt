@@ -50,26 +50,26 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
             actionIds.dismissRoom -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = false)
             }
             actionIds.dismissSummary ->
-                defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId)
+                defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId, doRender = false)
             actionIds.dismissInvite -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = false)
             }
             actionIds.dismissEvent -> if (eventId != null) {
-                defaultNotificationDrawerManager.clearEvent(eventId)
+                defaultNotificationDrawerManager.clearEvent(eventId, doRender = false)
             }
             actionIds.markRoomRead -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = true)
                 handleMarkAsRead(sessionId, roomId)
             }
             actionIds.join -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = true)
                 handleJoinRoom(sessionId, roomId)
             }
             actionIds.reject -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = true)
                 handleRejectRoom(sessionId, roomId)
             }
         }
