@@ -67,9 +67,6 @@
   <string name="action_take_photo">"Prendre une photo"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
-  <string name="call_foreground_service_channel_title_android">"Appel en cours"</string>
-  <string name="call_foreground_service_message_android">"Appuyez pour retourner à l\'appel."</string>
-  <string name="call_foreground_service_title_android">"☎️ Appel en cours"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d\'utilisation acceptable"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>
