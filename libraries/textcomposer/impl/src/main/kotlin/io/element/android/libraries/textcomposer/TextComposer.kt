@@ -270,6 +270,8 @@ private fun TextInput(
                 style = defaultTypography.copy(
                     color = ElementTheme.colors.textSecondary,
                 ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
 
