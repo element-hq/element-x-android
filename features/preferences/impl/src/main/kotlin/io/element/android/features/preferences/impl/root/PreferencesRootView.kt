@@ -63,7 +63,7 @@ fun PreferencesRootView(
     onOpenAdvancedSettings: () -> Unit,
     onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     onOpenNotificationSettings: () -> Unit,
-    onOpenUserProfile: () -> Unit,
+    onOpenUserProfile: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -77,7 +77,7 @@ fun PreferencesRootView(
     ) {
         UserPreferences(
             modifier = Modifier.clickable {
-               onOpenUserProfile()
+               state.myUser?.let(onOpenUserProfile)
             },
             user = state.myUser,
         )

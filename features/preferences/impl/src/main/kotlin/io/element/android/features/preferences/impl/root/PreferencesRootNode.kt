@@ -29,6 +29,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
 
@@ -47,7 +48,7 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenDeveloperSettings()
         fun onOpenNotificationSettings()
         fun onOpenAdvancedSettings()
-        fun onOpenUserProfile()
+        fun onOpenUserProfile(matrixUser: MatrixUser)
     }
 
     private fun onOpenBugReport() {
@@ -92,8 +93,8 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenNotificationSettings() }
     }
 
-    private fun onOpenUserProfile() {
-        plugins<Callback>().forEach { it.onOpenUserProfile() }
+    private fun onOpenUserProfile(matrixUser: MatrixUser) {
+        plugins<Callback>().forEach { it.onOpenUserProfile(matrixUser) }
     }
 
     @Composable

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.user.screen
+package io.element.android.features.preferences.impl.user.editprofile
 
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 
-sealed interface UserPreferencesEvents {
-    data class HandleAvatarAction(val action: AvatarAction) : UserPreferencesEvents
-    data class UpdateDisplayName(val name: String) : UserPreferencesEvents
-    data object Save : UserPreferencesEvents
-    data object CancelSaveChanges : UserPreferencesEvents
+sealed interface EditUserProfileEvents {
+    data class HandleAvatarAction(val action: AvatarAction) : EditUserProfileEvents
+    data class UpdateDisplayName(val name: String) : EditUserProfileEvents
+    data object Save : EditUserProfileEvents
+    data object CancelSaveChanges : EditUserProfileEvents
 }

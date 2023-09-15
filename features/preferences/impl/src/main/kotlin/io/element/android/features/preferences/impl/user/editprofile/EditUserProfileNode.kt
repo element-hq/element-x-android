@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.user.screen
+package io.element.android.features.preferences.impl.user.editprofile
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,22 +24,32 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 @ContributesNode(SessionScope::class)
-class UserPreferencesNode @AssistedInject constructor(
+class EditUserProfileNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: UserPreferencesPresenter,
+    presenterFactory: EditUserProfilePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
+
+    data class Inputs(
+        val matrixUser: MatrixUser
+    ) : NodeInputs
+
+    val matrixUser = inputs<Inputs>().matrixUser
+    val presenter = presenterFactory.create(matrixUser)
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        UserPreferencesView(
+        EditUserProfileView(
             state = state,
             onBackPressed = ::navigateUp,
-            onProfileEdited = ::navigateUp, // TODO: check if something else is needed
+            onProfileEdited = ::navigateUp,
             modifier = modifier
         )
     }

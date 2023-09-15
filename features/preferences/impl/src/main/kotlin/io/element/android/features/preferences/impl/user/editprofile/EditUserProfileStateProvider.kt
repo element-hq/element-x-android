@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.user.screen
+package io.element.android.features.preferences.impl.user.editprofile
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.persistentListOf
 
-open class UserPreferencesStateProvider : PreviewParameterProvider<UserPreferencesState> {
-    override val values: Sequence<UserPreferencesState>
+open class EditUserProfileStateProvider : PreviewParameterProvider<EditUserProfileState> {
+    override val values: Sequence<EditUserProfileState>
         get() = sequenceOf(
-            aUserPreferencesState(),
+            aEditUserProfileState(),
             // Add other states here
         )
 }
 
-fun aUserPreferencesState() = UserPreferencesState(
+fun aEditUserProfileState() = EditUserProfileState(
     userId = UserId("@john.doe:matrix.org"),
     displayName = "John Doe",
     userAvatarUrl = null,

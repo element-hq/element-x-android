@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.user.screen
+package io.element.android.features.preferences.impl.user.editprofile
 
 import android.net.Uri
 import io.element.android.libraries.architecture.Async
@@ -22,12 +22,12 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import kotlinx.collections.immutable.ImmutableList
 
-data class UserPreferencesState(
+data class EditUserProfileState(
     val userId: UserId?,
     val displayName: String,
     val userAvatarUrl: Uri?,
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonEnabled: Boolean,
     val saveAction: Async<Unit>,
-    val eventSink: (UserPreferencesEvents) -> Unit
+    val eventSink: (EditUserProfileEvents) -> Unit
 )

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.user.screen
+package io.element.android.features.preferences.impl.user.editprofile
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -41,29 +41,29 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-class UserPreferencesPresenter @Inject constructor(
+class EditUserProfilePresenter @AssistedInject constructor(
+    @Assisted private val matrixUser: MatrixUser,
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
-) : Presenter<UserPreferencesState> {
+) : Presenter<EditUserProfileState> {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(matrixUser: MatrixUser): EditUserProfilePresenter
+    }
 
     @Composable
-    override fun present(): UserPreferencesState {
-        var currentUser by remember { mutableStateOf<MatrixUser?>(null) }
-        var userAvatarUri by rememberSaveable(currentUser) { mutableStateOf(currentUser?.avatarUrl?.let { Uri.parse(it) }) }
-        var userDisplayName by rememberSaveable(currentUser) { mutableStateOf(currentUser?.displayName) }
+    override fun present(): EditUserProfileState {
+        var userAvatarUri = remember { matrixUser.avatarUrl?.let { Uri.parse(it) } }
+        var userDisplayName = remember { matrixUser.displayName }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri != null) userAvatarUri = uri }
         )
         val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
             onResult = { uri -> if (uri != null) userAvatarUri = uri }
         )
-
-        LaunchedEffect(Unit) {
-            currentUser = matrixClient.getCurrentUser()
-        }
 
         val avatarActions by remember(userAvatarUri) {
             derivedStateOf {
@@ -77,12 +77,10 @@ class UserPreferencesPresenter @Inject constructor(
 
         val saveAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
-        fun handleEvents(event: UserPreferencesEvents) {
+        fun handleEvents(event: EditUserProfileEvents) {
             when (event) {
-                is UserPreferencesEvents.Save -> currentUser?.let {
-                    localCoroutineScope.saveChanges(userDisplayName, userAvatarUri, it, saveAction)
-                }
-                is UserPreferencesEvents.HandleAvatarAction -> {
+                is EditUserProfileEvents.Save -> localCoroutineScope.saveChanges(userDisplayName, userAvatarUri, matrixUser, saveAction)
+                is EditUserProfileEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
@@ -90,19 +88,19 @@ class UserPreferencesPresenter @Inject constructor(
                     }
                 }
 
-                is UserPreferencesEvents.UpdateDisplayName -> userDisplayName = event.name
-                UserPreferencesEvents.CancelSaveChanges -> saveAction.value = Async.Uninitialized
+                is EditUserProfileEvents.UpdateDisplayName -> userDisplayName = event.name
+                EditUserProfileEvents.CancelSaveChanges -> saveAction.value = Async.Uninitialized
             }
         }
 
-        val canSave = remember(userDisplayName, userAvatarUri, currentUser) {
-            val hasProfileChanged = hasDisplayNameChanged(userDisplayName, currentUser)
-                    || hasAvatarUrlChanged(userAvatarUri, currentUser)
+        val canSave = remember(userDisplayName, userAvatarUri) {
+            val hasProfileChanged = hasDisplayNameChanged(userDisplayName, matrixUser)
+                    || hasAvatarUrlChanged(userAvatarUri, matrixUser)
             !userDisplayName.isNullOrBlank() && hasProfileChanged
         }
 
-        return UserPreferencesState(
-            userId = currentUser?.userId,
+        return EditUserProfileState(
+            userId = matrixUser.userId,
             displayName = userDisplayName.orEmpty(),
             userAvatarUrl = userAvatarUri,
             avatarActions = avatarActions,
@@ -116,7 +114,6 @@ class UserPreferencesPresenter @Inject constructor(
     private fun hasAvatarUrlChanged(avatarUri: Uri?, currentUser: MatrixUser?) = avatarUri?.toString()?.trim() != currentUser?.avatarUrl?.trim()
 
     private fun CoroutineScope.saveChanges(name: String?, avatarUri: Uri?, currentUser: MatrixUser, action: MutableState<Async<Unit>>) = launch {
-        matrixClient.getCurrentUser()
         val results = mutableListOf<Result<Unit>>()
         suspend {
             if (!name.isNullOrEmpty() && name.trim() != currentUser.displayName.orEmpty().trim()) {
