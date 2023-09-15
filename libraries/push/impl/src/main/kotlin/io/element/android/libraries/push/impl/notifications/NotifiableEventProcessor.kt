@@ -16,7 +16,9 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
+import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -28,6 +30,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 private typealias ProcessedEvents = List<ProcessedEvent<NotifiableEvent>>
+
+private val loggerTag = LoggerTag("NotifiableEventProcessor", notificationLoggerTag)
 
 class NotifiableEventProcessor @Inject constructor(
     private val outdatedDetector: OutdatedEventDetector,
@@ -45,10 +49,10 @@ class NotifiableEventProcessor @Inject constructor(
                 is NotifiableMessageEvent -> when {
                     it.shouldIgnoreEventInRoom(appState) -> {
                         ProcessedEvent.Type.REMOVE
-                            .also { Timber.d("notification message removed due to currently viewing the same room or thread") }
+                            .also { Timber.tag(loggerTag.value).d("notification message removed due to currently viewing the same room or thread") }
                     }
                     outdatedDetector.isMessageOutdated(it) -> ProcessedEvent.Type.REMOVE
-                        .also { Timber.d("notification message removed due to being read") }
+                        .also { Timber.tag(loggerTag.value).d("notification message removed due to being read") }
                     else -> ProcessedEvent.Type.KEEP
                 }
                 is SimpleNotifiableEvent -> when (it.type) {
@@ -58,7 +62,7 @@ class NotifiableEventProcessor @Inject constructor(
                 is FallbackNotifiableEvent -> when {
                     it.shouldIgnoreEventInRoom(appState) -> {
                         ProcessedEvent.Type.REMOVE
-                            .also { Timber.d("notification fallback removed due to currently viewing the same room or thread") }
+                            .also { Timber.tag(loggerTag.value).d("notification fallback removed due to currently viewing the same room or thread") }
                     }
                     else -> ProcessedEvent.Type.KEEP
                 }
