@@ -45,8 +45,9 @@ typealias RequestPermissionCallback = (Array<String>) -> Unit
 @Composable
 internal fun CallScreenView(
     url: String,
+    userAgent: String,
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
-    onBackPressed: () -> Unit,
+    onClose: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ElementTheme {
@@ -58,7 +59,7 @@ internal fun CallScreenView(
                     navigationIcon = {
                         BackButton(
                             imageVector = Icons.Default.Close,
-                            onClick = { onBackPressed() }
+                            onClick = onClose
                         )
                     }
                 )
@@ -70,6 +71,7 @@ internal fun CallScreenView(
                     .consumeWindowInsets(padding)
                     .fillMaxSize(),
                 url = url,
+                userAgent = userAgent,
                 onPermissionsRequested = { request ->
                     val androidPermissions = mapWebkitPermissions(request.resources)
                     val callback: RequestPermissionCallback = { request.grant(it) }
@@ -83,6 +85,7 @@ internal fun CallScreenView(
 @Composable
 private fun CallWebView(
     url: String,
+    userAgent: String,
     onPermissionsRequested: (PermissionRequest) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -92,7 +95,7 @@ private fun CallWebView(
         factory = { context ->
             WebView(context).apply {
                 if (!isInpectionMode) {
-                    setup(onPermissionsRequested)
+                    setup(userAgent, onPermissionsRequested)
                     loadUrl(url)
                 }
             }
@@ -101,12 +104,15 @@ private fun CallWebView(
             if (!isInpectionMode) {
                 webView.loadUrl(url)
             }
+        },
+        onRelease = { webView ->
+            webView.destroy()
         }
     )
 }
 
 @SuppressLint("SetJavaScriptEnabled")
-private fun WebView.setup(onPermissionsRequested: (PermissionRequest) -> Unit) {
+private fun WebView.setup(userAgent: String, onPermissionsRequested: (PermissionRequest) -> Unit) {
     layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT
@@ -120,7 +126,7 @@ private fun WebView.setup(onPermissionsRequested: (PermissionRequest) -> Unit) {
         mediaPlaybackRequiresUserGesture = false
         databaseEnabled = true
         loadsImagesAutomatically = true
-        userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
+        userAgentString = userAgent
     }
 
     webChromeClient = object : WebChromeClient() {
@@ -136,8 +142,9 @@ internal fun CallScreenViewPreview() {
     ElementTheme {
         CallScreenView(
             url = "https://call.element.io/some-actual-call?with=parameters",
+            userAgent = "",
             requestPermissions = { _, _ -> },
-            onBackPressed = { },
+            onClose = { },
         )
     }
 }

@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
-}
+package io.element.android.features.call.di
 
-android {
-    namespace = "io.element.android.features.call"
-}
+import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.features.call.ElementCallActivity
+import io.element.android.libraries.di.AppScope
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.network)
-    implementation(libs.androidx.webkit)
-    ksp(libs.showkase.processor)
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.robolectric)
+@ContributesTo(AppScope::class)
+interface CallBindings {
+    fun inject(callActivity: ElementCallActivity)
 }

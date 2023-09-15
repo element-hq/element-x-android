@@ -31,8 +31,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
+import io.element.android.features.call.di.CallBindings
+import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.network.useragent.UserAgentProvider
+import javax.inject.Inject
 
 class ElementCallActivity : ComponentActivity() {
+
+    @Inject lateinit var userAgentProvider: UserAgentProvider
 
     private lateinit var audioManager: AudioManager
 
@@ -49,6 +55,8 @@ class ElementCallActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        applicationContext.bindings<CallBindings>().inject(this)
+
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         urlState.value = intent?.dataString?.let(::parseUrl) ?: run {
@@ -63,10 +71,13 @@ class ElementCallActivity : ComponentActivity() {
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         requestAudioFocus()
 
+        val userAgent = userAgentProvider.provide()
+
         setContent {
             CallScreenView(
                 url = urlState.value!!,
-                onBackPressed = this::onBackPressed,
+                userAgent = userAgent,
+                onClose = this::finish,
                 requestPermissions = { permissions, callback ->
                     requestPermissionCallback = callback
                     requestPermissionsLauncher.launch(permissions)
