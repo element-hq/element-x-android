@@ -48,6 +48,7 @@ class ElementCallActivity : ComponentActivity() {
     private var webView: WebView? = null
     private lateinit var handler: Handler
 
+    // Example toWidget event to reply to the WebView
     private val exampleToWidgetEvent = "{\"requestId\":\"c22b40aa-6f77-4403-b2af-088cf4b77aac\",\"widgetId\":\"w_id_1234\",\"api\":\"toWidget\",\"action\":\"capabilities\",\"data\":{}}"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,12 +105,19 @@ class ElementCallActivity : ComponentActivity() {
             }
         }
 
+        // We call both the WebMessageListener and the JavascriptInterface objects in JS with this
+        // 'listenerName' so they can both receive the data from the WebView when
+        // `$listenerName.postMessage` is called
         val listenerName = "elementX"
 
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
+                // We inject this JS code when the page starts loading to attach a message listener to the window.
+                // This listener will receive both messages:
+                // - EC widget API -> Element X (message.data.api == "fromWidget")
+                // - Element X -> EC widget API (message.data.api == "toWidget"), we should ignore these
                 view?.evaluateJavascript(
                     """
                         console.log("Attaching event listener")
@@ -124,6 +132,7 @@ class ElementCallActivity : ComponentActivity() {
                             }
                         });
                         
+                        // This is where the messages from the `replyProxy.postMessage` are received
                         $listenerName.onmessage = function(event) {
                             postMessage(JSON.parse(event.data), '*');
                         }
@@ -133,6 +142,7 @@ class ElementCallActivity : ComponentActivity() {
             }
         }
 
+        // Create a WebMessageListener, which will receive messages from the WebView and reply to them
         val webMessageListener = object : WebViewCompat.WebMessageListener {
             override fun onPostMessage(
                 view: WebView,
@@ -146,18 +156,20 @@ class ElementCallActivity : ComponentActivity() {
             }
         }
 
-//        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
-//            WebViewCompat.addWebMessageListener(webView, listenerName, setOf("*"), webMessageListener)
-//            println("$listenerName listener added")
-//        } else {
+        // Use WebMessageListener if supported, otherwise use JavascriptInterface
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
+            WebViewCompat.addWebMessageListener(webView, listenerName, setOf("*"), webMessageListener)
+            println("$listenerName listener added")
+        } else {
             webView.addJavascriptInterface(this, listenerName)
-//        }
+        }
 
         val userId = "%40jorgem_test%3Amatrix.org"
         val roomId = "%21hjHgOuPWxAvPIQuAkT%3Amatrix.org"
-//        val url = "https://element-call-livekit.netlify.app/room?widgetId=w_id_1234&parentUrl=*&embed=&preload=&hideHeader=&userId=$userId&deviceId=ONLDUUSMTR&roomId=$roomId&baseUrl=https%3A%2F%2Fmatrix-client.matrix.org&lang=en-us&fontScale=1"
+        // Example of 'real' url for EC with widget API
+        val url = "https://element-call-livekit.netlify.app/room?widgetId=w_id_1234&parentUrl=*&embed=&preload=&hideHeader=&userId=$userId&deviceId=ONLDUUSMTR&roomId=$roomId&baseUrl=https%3A%2F%2Fmatrix-client.matrix.org&lang=en-us&fontScale=1"
 
-        val url = "http://192.168.1.120:8080/#/?widgetId=stefan&userId=%40stefan.ceriu%3Amatrix.org"
+//        val url = "http://192.168.1.120:8080/#/?widgetId=stefan&userId=%40stefan.ceriu%3Amatrix.org"
         webView.loadUrl(url)
     }
 
@@ -184,15 +196,20 @@ class ElementCallActivity : ComponentActivity() {
         CallForegroundService.stop(this)
     }
 
+    // This is where we receive messages from the WebView using the JavascriptInterface
     @JavascriptInterface
     fun postMessage(json: String?) {
+        // Do something with the message
         onMessageReceived(json)
         handler.post {
-            webView?.evaluateJavascript("postMessage($exampleToWidgetEvent, '*')", { println("RESULT: $it") })
+            // We receive a message from the WebView, we send a sample message back to it
+            webView?.evaluateJavascript("postMessage($exampleToWidgetEvent, '*')", null)
         }
     }
 
     private fun onMessageReceived(json: String?) {
+        // Here is where we would handle the messages from the WebView, probably passing them to
+        // the Rust SDK
         println("onPostMessage: $json")
     }
 
