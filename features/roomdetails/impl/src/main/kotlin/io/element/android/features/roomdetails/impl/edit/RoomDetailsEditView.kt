@@ -223,7 +223,7 @@ private fun LabelledReadOnlyField(
 }
 
 private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
-    this.pointerInput(Unit) {
+    pointerInput(Unit) {
         detectTapGestures(onTap = {
             focusManager.clearFocus()
         })

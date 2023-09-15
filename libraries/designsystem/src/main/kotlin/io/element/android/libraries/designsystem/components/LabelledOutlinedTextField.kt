@@ -24,10 +24,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
@@ -66,16 +65,9 @@ fun LabelledOutlinedTextField(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun LabelledOutlinedTextFieldLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun LabelledOutlinedTextFieldDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun LabelledOutlinedTextFieldPreview() = ElementPreview {
     Column {
         LabelledOutlinedTextField(
             label = "Room name",
@@ -89,3 +81,4 @@ private fun ContentToPreview() {
         )
     }
 }
+

@@ -40,7 +40,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.preferences.impl.R
@@ -50,8 +49,8 @@ import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -135,7 +134,6 @@ fun EditUserProfileView(
                 )
             }
             Spacer(modifier = Modifier.height(40.dp))
-
             LabelledOutlinedTextField(
                 label = stringResource(R.string.screen_edit_profile_display_name),
                 value = state.displayName,
@@ -155,7 +153,6 @@ fun EditUserProfileView(
             is Async.Loading -> {
                 ProgressDialog(text = stringResource(R.string.screen_edit_profile_updating_details))
             }
-
             is Async.Failure -> {
                 ErrorDialog(
                     title = stringResource(R.string.screen_edit_profile_error_title),
@@ -163,40 +160,31 @@ fun EditUserProfileView(
                     onDismiss = { state.eventSink(EditUserProfileEvents.CancelSaveChanges) },
                 )
             }
-
             is Async.Success -> {
                 LaunchedEffect(state.saveAction) {
                     onProfileEdited()
                 }
             }
-
             else -> Unit
         }
     }
 }
 
 private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
-    this.pointerInput(Unit) {
+    pointerInput(Unit) {
         detectTapGestures(onTap = {
             focusManager.clearFocus()
         })
     }
 
-@Preview
+@DayNightPreviews
 @Composable
-fun EditUserProfileViewLightPreview(@PreviewParameter(EditUserProfileStateProvider::class) state: EditUserProfileState) =
-    ElementPreviewLight { ContentToPreview(state) }
+internal fun EditUserProfileViewPreview(@PreviewParameter(EditUserProfileStateProvider::class) state: EditUserProfileState) =
+    ElementPreview {
+        EditUserProfileView(
+            onBackPressed = {},
+            onProfileEdited = {},
+            state = state,
+        )
+    }
 
-@Preview
-@Composable
-fun EditUserProfileViewDarkPreview(@PreviewParameter(EditUserProfileStateProvider::class) state: EditUserProfileState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: EditUserProfileState) {
-    EditUserProfileView(
-        onBackPressed = {},
-        onProfileEdited = {},
-        state = state,
-    )
-}

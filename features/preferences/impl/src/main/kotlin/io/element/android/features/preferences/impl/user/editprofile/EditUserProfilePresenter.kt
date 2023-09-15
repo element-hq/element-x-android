@@ -95,8 +95,8 @@ class EditUserProfilePresenter @AssistedInject constructor(
         }
 
         val canSave = remember(userDisplayName, userAvatarUri) {
-            val hasProfileChanged = hasDisplayNameChanged(userDisplayName, matrixUser)
-                    || hasAvatarUrlChanged(userAvatarUri, matrixUser)
+            val hasProfileChanged = hasDisplayNameChanged(userDisplayName, matrixUser) ||
+                hasAvatarUrlChanged(userAvatarUri, matrixUser)
             !userDisplayName.isNullOrBlank() && hasProfileChanged
         }
 
@@ -139,6 +139,6 @@ class EditUserProfilePresenter @AssistedInject constructor(
             } else {
                 matrixClient.removeAvatar().getOrThrow()
             }
-        }.onFailure { it.printStackTrace() }
+        }.onFailure { Timber.e(it, "Unable to update avatar") }
     }
 }
