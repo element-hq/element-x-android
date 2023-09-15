@@ -41,6 +41,7 @@ dependencies {
     implementation(projects.libraries.featureflag.ui)
     implementation(projects.libraries.network)
     implementation(projects.libraries.pushstore.api)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.rageshake.api)
@@ -54,6 +55,7 @@ dependencies {
     implementation(libs.accompanist.placeholder)
     implementation(libs.coil.compose)
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.datastore.preferences)
     api(projects.features.preferences.api)
     ksp(libs.showkase.processor)
 
@@ -64,6 +66,7 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)

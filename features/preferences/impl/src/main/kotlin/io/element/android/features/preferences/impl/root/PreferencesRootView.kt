@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -58,6 +59,7 @@ fun PreferencesRootView(
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    onOpenAdvancedSettings: () -> Unit,
     onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     onOpenNotificationSettings: () -> Unit,
     modifier: Modifier = Modifier,
@@ -121,10 +123,15 @@ fun PreferencesRootView(
             )
             HorizontalDivider()
         }
+        PreferenceText(
+            title = stringResource(id = CommonStrings.common_advanced_settings),
+            icon = Icons.Outlined.Settings,
+            onClick = onOpenAdvancedSettings,
+        )
         if (state.showDeveloperSettings) {
             DeveloperPreferencesView(onOpenDeveloperSettings)
-            HorizontalDivider()
         }
+        HorizontalDivider()
         LogoutPreferenceView(
             state = state.logoutState,
             onSuccessLogout = onSuccessLogout,
@@ -168,6 +175,7 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenAnalytics = {},
         onOpenRageShake = {},
         onOpenDeveloperSettings = {},
+        onOpenAdvancedSettings = {},
         onOpenAbout = {},
         onVerifyClicked = {},
         onSuccessLogout = {},
