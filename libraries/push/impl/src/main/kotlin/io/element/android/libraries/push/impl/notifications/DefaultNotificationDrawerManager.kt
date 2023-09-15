@@ -222,7 +222,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     private fun updateEvents(
         doRender: Boolean,
-        action: DefaultNotificationDrawerManager.(NotificationEventQueue) -> Unit,
+        action: (NotificationEventQueue) -> Unit,
     ) {
         notificationState.updateQueuedEvents(this) { queuedEvents, _ ->
             action(queuedEvents)
