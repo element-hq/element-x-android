@@ -44,7 +44,7 @@ typealias RequestPermissionCallback = (Array<String>) -> Unit
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CallScreenView(
-    url: String,
+    url: String?,
     userAgent: String,
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
     onClose: () -> Unit,
@@ -84,7 +84,7 @@ internal fun CallScreenView(
 
 @Composable
 private fun CallWebView(
-    url: String,
+    url: String?,
     userAgent: String,
     onPermissionsRequested: (PermissionRequest) -> Unit,
     modifier: Modifier = Modifier,
@@ -96,12 +96,14 @@ private fun CallWebView(
             WebView(context).apply {
                 if (!isInpectionMode) {
                     setup(userAgent, onPermissionsRequested)
-                    loadUrl(url)
+                    if (url != null) {
+                        loadUrl(url)
+                    }
                 }
             }
         },
         update = { webView ->
-            if (!isInpectionMode) {
+            if (!isInpectionMode && url != null) {
                 webView.loadUrl(url)
             }
         },

@@ -75,7 +75,7 @@ class ElementCallActivity : ComponentActivity() {
 
         setContent {
             CallScreenView(
-                url = urlState.value!!,
+                url = urlState.value,
                 userAgent = userAgent,
                 onClose = this::finish,
                 requestPermissions = { permissions, callback ->
