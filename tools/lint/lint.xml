@@ -48,6 +48,8 @@
         <ignore path="**/localazy.xml" />
         <!-- Ignore unused resource in debug build type -->
         <ignore path="**/src/debug/**" />
+        <!-- Ignore unused resources in designsystem since they're imported elsewhere through aliases and can't be properly detected -->
+        <ignore path="**/libraries/designsystem/src/main/res/**" />
     </issue>
 
     <!-- UX -->
