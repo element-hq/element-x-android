@@ -233,7 +233,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private fun CoroutineScope.refreshNotificationDrawer(doRender: Boolean) = launch {
         // Implement last throttler
         val canHandle = firstThrottler.canHandle()
-        Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
+        Timber.v("refreshNotificationDrawer($doRender), delay: ${canHandle.waitMillis()} ms")
         withContext(dispatchers.io) {
             delay(canHandle.waitMillis())
             try {
@@ -246,7 +246,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     }
 
     private suspend fun refreshNotificationDrawerBg(doRender: Boolean) {
-        Timber.v("refreshNotificationDrawerBg()")
+        Timber.v("refreshNotificationDrawerBg($doRender)")
         val eventsToRender = notificationState.updateQueuedEvents { queuedEvents, renderedEvents ->
             notifiableEventProcessor.process(queuedEvents.rawEvents(), renderedEvents).also {
                 queuedEvents.clearAndAdd(it.onlyKeptEvents())
