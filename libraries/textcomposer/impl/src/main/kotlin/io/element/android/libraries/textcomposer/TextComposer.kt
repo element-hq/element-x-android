@@ -114,7 +114,7 @@ fun TextComposer(
                 start = 3.dp,
                 end = 6.dp,
                 top = 8.dp,
-                bottom = 5.dp,
+                bottom = 4.dp,
             )
             .fillMaxWidth(),
     ) {
@@ -137,7 +137,7 @@ fun TextComposer(
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp.applyScaleUp()),
-                    resourceId = R.drawable.ic_plus, // TODO Replace with design system icon when available
+                    resourceId = VectorIcons.Plus,
                     contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
                     tint = ElementTheme.colors.iconPrimary,
                 )
@@ -146,7 +146,7 @@ fun TextComposer(
             val roundCornerLarge = 28.dp.applyScaleUp()
 
             val roundedCornerSize = remember(state.lineCount, composerMode) {
-                if (state.lineCount > 1 || composerMode is MessageComposerMode.Special) {
+                if (composerMode is MessageComposerMode.Special) {
                     roundCornerSmall
                 } else {
                     roundCornerLarge
@@ -156,17 +156,13 @@ fun TextComposer(
                 targetValue = roundedCornerSize,
                 animationSpec = tween(
                     durationMillis = 100,
-                )
+                ),
+                label = "roundedCornerSizeAnimation"
             )
             val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
             val colors = ElementTheme.colors
             val bgColor = colors.bgSubtleSecondary
-
-            val borderColor by remember(state.hasFocus, colors) {
-                derivedStateOf {
-                    if (state.hasFocus) colors.borderDisabled else bgColor
-                }
-            }
+            val borderColor = colors.borderDisabled
 
             Column(
                 modifier = Modifier
@@ -180,7 +176,7 @@ fun TextComposer(
                     .fillMaxWidth()
                     .clip(roundedCorners)
                     .background(color = bgColor)
-                    .border(1.dp, borderColor, roundedCorners)
+                    .border(0.5.dp, borderColor, roundedCorners)
             ) {
                 if (composerMode is MessageComposerMode.Special) {
                     ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
@@ -272,7 +268,7 @@ private fun TextInput(
             Text(
                 placeholder,
                 style = defaultTypography.copy(
-                    color = ElementTheme.colors.textDisabled,
+                    color = ElementTheme.colors.textSecondary,
                 ),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -282,6 +278,7 @@ private fun TextInput(
         RichTextEditor(
             state = state,
             modifier = Modifier
+                .padding(top = 6.dp, bottom = 6.dp)
                 .fillMaxWidth(),
             style = RichTextEditorDefaults.style(
                 text = RichTextEditorDefaults.textStyle(
@@ -325,7 +322,7 @@ private fun TextFormatting(
         ) {
             Icon(
                 modifier = Modifier.size(30.dp.applyScaleUp()),
-                resourceId = R.drawable.ic_cancel, // TODO Replace with design system icon when available
+                resourceId = VectorIcons.Cancel,
                 contentDescription = stringResource(CommonStrings.action_close),
                 tint = ElementTheme.colors.iconPrimary,
             )
@@ -337,8 +334,8 @@ private fun TextFormatting(
                 .constrainAs(formatting) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    start.linkTo(close.end, margin = 3.dp)
-                    end.linkTo(send.start, margin = 20.dp)
+                    start.linkTo(close.end, margin = 1.dp)
+                    end.linkTo(send.start, margin = 14.dp)
                     width = fillToConstraints
                 }
                 .horizontalScroll(scrollState),
@@ -591,7 +588,7 @@ private fun SendButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .height(18.dp.applyScaleUp())
+                    .height(24.dp.applyScaleUp())
                     .align(Alignment.Center),
                 resourceId = iconId,
                 contentDescription = contentDescription,
