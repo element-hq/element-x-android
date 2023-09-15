@@ -20,6 +20,7 @@ import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.core.cache.CircularCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
@@ -30,6 +31,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
@@ -40,6 +42,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
+
+private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", notificationLoggerTag)
 
 /**
  * The NotificationDrawerManager receives notification events as they arrived (from event stream or fcm) and
@@ -116,13 +120,13 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     private fun NotificationEventQueue.onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
         if (buildMeta.lowPrivacyLoggingEnabled) {
-            Timber.d("onNotifiableEventReceived(): $notifiableEvent")
+            Timber.tag(loggerTag.value).d("onNotifiableEventReceived(): $notifiableEvent")
         } else {
-            Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
+            Timber.tag(loggerTag.value).d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
         }
 
         if (filteredEventDetector.shouldBeIgnored(notifiableEvent)) {
-            Timber.d("onNotifiableEventReceived(): ignore the event")
+            Timber.tag(loggerTag.value).d("onNotifiableEventReceived(): ignore the event")
             return
         }
 
@@ -233,20 +237,20 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private fun CoroutineScope.refreshNotificationDrawer(doRender: Boolean) = launch {
         // Implement last throttler
         val canHandle = firstThrottler.canHandle()
-        Timber.v("refreshNotificationDrawer($doRender), delay: ${canHandle.waitMillis()} ms")
+        Timber.tag(loggerTag.value).v("refreshNotificationDrawer($doRender), delay: ${canHandle.waitMillis()} ms")
         withContext(dispatchers.io) {
             delay(canHandle.waitMillis())
             try {
                 refreshNotificationDrawerBg(doRender)
             } catch (throwable: Throwable) {
                 // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
-                Timber.w(throwable, "refreshNotificationDrawerBg failure")
+                Timber.tag(loggerTag.value).w(throwable, "refreshNotificationDrawerBg failure")
             }
         }
     }
 
     private suspend fun refreshNotificationDrawerBg(doRender: Boolean) {
-        Timber.v("refreshNotificationDrawerBg($doRender)")
+        Timber.tag(loggerTag.value).v("refreshNotificationDrawerBg($doRender)")
         val eventsToRender = notificationState.updateQueuedEvents { queuedEvents, renderedEvents ->
             notifiableEventProcessor.process(queuedEvents.rawEvents(), renderedEvents).also {
                 queuedEvents.clearAndAdd(it.onlyKeptEvents())
@@ -254,7 +258,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
 
         if (notificationState.hasAlreadyRendered(eventsToRender)) {
-            Timber.d("Skipping notification update due to event list not changing")
+            Timber.tag(loggerTag.value).d("Skipping notification update due to event list not changing")
         } else {
             notificationState.clearAndAddRenderedEvents(eventsToRender)
             if (doRender) {
@@ -278,7 +282,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
         eventsForSessions.forEach { (sessionId, notifiableEvents) ->
             val currentUser = tryOrNull(
-                onError = { Timber.e(it, "Unable to retrieve info for user ${sessionId.value}") },
+                onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
                 operation = {
                     val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
                     // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
