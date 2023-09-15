@@ -72,6 +72,7 @@ class CallForegroundService : Service() {
         startForeground(1, notification)
     }
 
+    @Suppress("DEPRECATION")
     override fun onDestroy() {
         super.onDestroy()
 
