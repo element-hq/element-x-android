@@ -93,7 +93,7 @@ class RoomSummaryListProcessor(
             RoomListEntry.Empty -> buildEmptyRoomSummary()
             is RoomListEntry.Filled -> buildAndCacheRoomSummaryForIdentifier(entry.roomId)
             is RoomListEntry.Invalidated -> {
-                roomSummariesByIdentifier[entry.roomId] ?: buildEmptyRoomSummary()
+                roomSummariesByIdentifier[entry.roomId] ?: buildAndCacheRoomSummaryForIdentifier(entry.roomId)
             }
         }
     }
