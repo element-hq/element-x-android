@@ -31,7 +31,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
-import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
@@ -43,7 +42,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", notificationLoggerTag)
+private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.NotificationLoggerTag)
 
 /**
  * The NotificationDrawerManager receives notification events as they arrived (from event stream or fcm) and

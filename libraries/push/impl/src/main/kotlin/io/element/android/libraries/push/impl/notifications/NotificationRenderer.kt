@@ -19,7 +19,6 @@ package io.element.android.libraries.push.impl.notifications
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -28,7 +27,7 @@ import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiab
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("NotificationRenderer", notificationLoggerTag)
+private val loggerTag = LoggerTag("NotificationRenderer", LoggerTag.NotificationLoggerTag)
 
 class NotificationRenderer @Inject constructor(
     private val notificationIdProvider: NotificationIdProvider,

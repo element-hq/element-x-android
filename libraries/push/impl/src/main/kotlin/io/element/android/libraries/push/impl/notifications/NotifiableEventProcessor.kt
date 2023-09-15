@@ -18,7 +18,6 @@ package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
-import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -31,7 +30,7 @@ import javax.inject.Inject
 
 private typealias ProcessedEvents = List<ProcessedEvent<NotifiableEvent>>
 
-private val loggerTag = LoggerTag("NotifiableEventProcessor", notificationLoggerTag)
+private val loggerTag = LoggerTag("NotifiableEventProcessor", LoggerTag.NotificationLoggerTag)
 
 class NotifiableEventProcessor @Inject constructor(
     private val outdatedDetector: OutdatedEventDetector,
