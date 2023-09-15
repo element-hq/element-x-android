@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -111,8 +112,12 @@ class EditUserProfilePresenter @AssistedInject constructor(
         )
     }
 
-    private fun hasDisplayNameChanged(name: String?, currentUser: MatrixUser?) = name?.trim() != currentUser?.displayName?.trim()
-    private fun hasAvatarUrlChanged(avatarUri: Uri?, currentUser: MatrixUser?) = avatarUri?.toString()?.trim() != currentUser?.avatarUrl?.trim()
+    private fun hasDisplayNameChanged(name: String?, currentUser: MatrixUser) =
+        name?.trim() != currentUser.displayName?.trim()
+
+    private fun hasAvatarUrlChanged(avatarUri: Uri?, currentUser: MatrixUser) =
+        // Need to call `toUri()?.toString()` to make the test pass (we mockk Uri)
+        avatarUri?.toString()?.trim() != currentUser.avatarUrl?.toUri()?.toString()?.trim()
 
     private fun CoroutineScope.saveChanges(name: String?, avatarUri: Uri?, currentUser: MatrixUser, action: MutableState<Async<Unit>>) = launch {
         val results = mutableListOf<Result<Unit>>()

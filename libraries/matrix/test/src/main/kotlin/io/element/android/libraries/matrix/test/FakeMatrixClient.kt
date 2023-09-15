@@ -143,6 +143,7 @@ class FakeMatrixClient(
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> {
         return accountManagementUrlString
     }
+
     override suspend fun uploadMedia(
         mimeType: String,
         data: ByteArray,
@@ -151,17 +152,17 @@ class FakeMatrixClient(
         return uploadMediaResult
     }
 
-    override suspend fun setDisplayName(displayName: String): Result<Unit> {
+    override suspend fun setDisplayName(displayName: String): Result<Unit> = simulateLongTask {
         setDisplayNameCalled = true
         return setDisplayNameResult
     }
 
-    override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> {
+    override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> = simulateLongTask {
         uploadAvatarCalled = true
         return uploadAvatarResult
     }
 
-    override suspend fun removeAvatar(): Result<Unit> {
+    override suspend fun removeAvatar(): Result<Unit> = simulateLongTask {
         removeAvatarCalled = true
         return removeAvatarResult
     }

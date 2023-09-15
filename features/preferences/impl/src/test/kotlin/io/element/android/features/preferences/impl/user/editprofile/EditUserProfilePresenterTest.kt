@@ -33,6 +33,7 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -87,14 +88,14 @@ class EditUserProfilePresenterTest {
     }
 
     @Test
-    fun `present - initial state is created from room info`() = runTest {
+    fun `present - initial state is created from user info`() = runTest {
         val user = aMatrixUser(avatarUrl = AN_AVATAR_URL)
         val presenter = createEditUserProfilePresenter(matrixUser = user)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.userId).isEqualTo(user.userId.value)
+            assertThat(initialState.userId).isEqualTo(user.userId)
             assertThat(initialState.displayName).isEqualTo(user.displayName)
             assertThat(initialState.userAvatarUrl).isEqualTo(userAvatarUri)
             assertThat(initialState.avatarActions).containsExactly(
@@ -102,7 +103,7 @@ class EditUserProfilePresenterTest {
                 AvatarAction.TakePhoto,
                 AvatarAction.Remove
             )
-            assertThat(initialState.saveButtonEnabled).isEqualTo(false)
+            assertThat(initialState.saveButtonEnabled).isFalse()
             assertThat(initialState.saveAction).isInstanceOf(Async.Uninitialized::class.java)
         }
     }
@@ -178,26 +179,26 @@ class EditUserProfilePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.saveButtonEnabled).isEqualTo(false)
+            assertThat(initialState.saveButtonEnabled).isFalse()
             // Once a change is made, the save button is enabled
             initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("Name II"))
             awaitItem().apply {
-                assertThat(saveButtonEnabled).isEqualTo(true)
+                assertThat(saveButtonEnabled).isTrue()
             }
             // If it's reverted then the save disables again
             initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("Name"))
             awaitItem().apply {
-                assertThat(saveButtonEnabled).isEqualTo(false)
+                assertThat(saveButtonEnabled).isFalse()
             }
             // Make a change...
             initialState.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.Remove))
             awaitItem().apply {
-                assertThat(saveButtonEnabled).isEqualTo(true)
+                assertThat(saveButtonEnabled).isTrue()
             }
             // Revert it...
             initialState.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             awaitItem().apply {
-                assertThat(saveButtonEnabled).isEqualTo(false)
+                assertThat(saveButtonEnabled).isFalse()
             }
         }
     }
@@ -211,26 +212,26 @@ class EditUserProfilePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.saveButtonEnabled).isEqualTo(false)
+            assertThat(initialState.saveButtonEnabled).isFalse()
             // Once a change is made, the save button is enabled
             initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("Name II"))
             awaitItem().apply {
-                assertThat(saveButtonEnabled).isEqualTo(true)
+                assertThat(saveButtonEnabled).isTrue()
             }
             // If it's reverted then the save disables again
-            initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("fallback"))
+            initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("Name"))
             awaitItem().apply {
-                assertThat(saveButtonEnabled).isEqualTo(false)
+                assertThat(saveButtonEnabled).isFalse()
             }
             // Make a change...
             initialState.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             awaitItem().apply {
-                assertThat(saveButtonEnabled).isEqualTo(true)
+                assertThat(saveButtonEnabled).isTrue()
             }
             // Revert it...
             initialState.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.Remove))
             awaitItem().apply {
-                assertThat(saveButtonEnabled).isEqualTo(false)
+                assertThat(saveButtonEnabled).isFalse()
             }
         }
     }
@@ -250,7 +251,7 @@ class EditUserProfilePresenterTest {
             initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("New name"))
             initialState.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.Remove))
             initialState.eventSink(EditUserProfileEvents.Save)
-            skipItems(5)
+            consumeItemsUntilPredicate { matrixClient.setDisplayNameCalled && matrixClient.removeAvatarCalled && !matrixClient.uploadAvatarCalled }
             assertThat(matrixClient.setDisplayNameCalled).isTrue()
             assertThat(matrixClient.removeAvatarCalled).isTrue()
             assertThat(matrixClient.uploadAvatarCalled).isFalse()
@@ -259,7 +260,7 @@ class EditUserProfilePresenterTest {
     }
 
     @Test
-    fun `present - save doesn't change room details if they're the same trimmed`() = runTest {
+    fun `present - save does not change room details if they're the same trimmed`() = runTest {
         val matrixClient = FakeMatrixClient()
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val presenter = createEditUserProfilePresenter(
@@ -272,7 +273,8 @@ class EditUserProfilePresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("   Name   "))
             initialState.eventSink(EditUserProfileEvents.Save)
-            assertThat(matrixClient.setDisplayNameCalled).isTrue()
+            consumeItemsUntilPredicate { matrixClient.setDisplayNameCalled && !matrixClient.removeAvatarCalled && !matrixClient.uploadAvatarCalled }
+            assertThat(matrixClient.setDisplayNameCalled).isFalse()
             assertThat(matrixClient.uploadAvatarCalled).isFalse()
             assertThat(matrixClient.removeAvatarCalled).isFalse()
             cancelAndIgnoreRemainingEvents()
@@ -280,7 +282,7 @@ class EditUserProfilePresenterTest {
     }
 
     @Test
-    fun `present - save doesn't change name if it's now empty`() = runTest {
+    fun `present - save does not change name if it's now empty`() = runTest {
         val matrixClient = FakeMatrixClient()
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val presenter = createEditUserProfilePresenter(
@@ -315,7 +317,7 @@ class EditUserProfilePresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             initialState.eventSink(EditUserProfileEvents.Save)
-            skipItems(2)
+            consumeItemsUntilPredicate { matrixClient.uploadAvatarCalled }
             assertThat(matrixClient.uploadAvatarCalled).isTrue()
         }
     }
@@ -377,7 +379,7 @@ class EditUserProfilePresenterTest {
         val matrixClient = FakeMatrixClient().apply {
             givenSetDisplayNameResult(Result.failure(Throwable("!")))
         }
-        val presenter = createEditUserProfilePresenter(matrixUser = user)
+        val presenter = createEditUserProfilePresenter(matrixUser = user, matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
