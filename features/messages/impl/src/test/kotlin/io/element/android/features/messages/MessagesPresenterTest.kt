@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -64,7 +65,6 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -364,7 +364,7 @@ class MessagesPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ViewSource, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
             assertThat(navigator.onShowEventDebugInfoClickedCount).isEqualTo(1)
         }
@@ -614,7 +614,7 @@ class MessagesPresenterTest {
             messageComposerContext = MessageComposerContextImpl(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
 
-        )
+            )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
@@ -622,12 +622,11 @@ class MessagesPresenterTest {
             appScope = this,
             analyticsService = analyticsService,
         )
-        val buildMeta = aBuildMeta()
-        val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
+        val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
+        val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
-        val featureFlagsService = FakeFeatureFlagService(mapOf(FeatureFlags.RichTextEditor.key to true))
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -642,7 +641,7 @@ class MessagesPresenterTest {
             navigator = navigator,
             clipboardHelper = clipboardHelper,
             analyticsService = analyticsService,
-            featureFlagService = featureFlagsService,
+            preferencesStore = preferencesStore,
             dispatchers = coroutineDispatchers,
         )
     }

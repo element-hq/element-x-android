@@ -31,11 +31,13 @@
   <string name="screen_room_notification_settings_default_setting_footnote">"Môžete to zmeniť vo svojich %1$s."</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"všeobecných nastaveniach"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Predvolené nastavenie"</string>
+  <string name="screen_room_notification_settings_edit_remove_setting">"Odstrániť vlastné nastavenie"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"Pri načítavaní nastavení oznámení došlo k chybe."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Nepodarilo sa obnoviť predvolený režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nepodarilo sa nastaviť režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všetky správy"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
+  <string name="screen_room_notification_settings_room_custom_settings_title">"V tejto miestnosti ma upozorniť na"</string>
   <string name="screen_dm_details_block_alert_action">"Zablokovať"</string>
   <string name="screen_dm_details_block_alert_description">"Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať."</string>
   <string name="screen_dm_details_block_user">"Zablokovať používateľa"</string>

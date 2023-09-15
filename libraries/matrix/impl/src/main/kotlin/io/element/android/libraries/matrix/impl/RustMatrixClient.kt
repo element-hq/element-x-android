@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -44,6 +45,7 @@ import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
+import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
@@ -326,9 +328,10 @@ class RustMatrixClient constructor(
         return result
     }
 
-    override suspend fun getAccountManagementUrl(): Result<String?> = withContext(sessionDispatcher) {
+    override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = withContext(sessionDispatcher) {
+        val rustAction = action?.toRustAction()
         runCatching {
-            client.accountUrl()
+            client.accountUrl(rustAction)
         }
     }
 

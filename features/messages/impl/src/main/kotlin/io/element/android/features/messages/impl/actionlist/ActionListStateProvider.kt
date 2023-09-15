@@ -111,7 +111,7 @@ fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {
         TimelineItemAction.Edit,
         TimelineItemAction.Redact,
         TimelineItemAction.ReportContent,
-        TimelineItemAction.Developer,
+        TimelineItemAction.ViewSource,
     )
 }
 fun aTimelineItemPollActionList(): ImmutableList<TimelineItemAction> {
@@ -119,7 +119,7 @@ fun aTimelineItemPollActionList(): ImmutableList<TimelineItemAction> {
         TimelineItemAction.EndPoll,
         TimelineItemAction.Reply,
         TimelineItemAction.Copy,
-        TimelineItemAction.Developer,
+        TimelineItemAction.ViewSource,
         TimelineItemAction.ReportContent,
         TimelineItemAction.Redact,
     )

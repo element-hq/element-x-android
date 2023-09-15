@@ -147,6 +147,7 @@ fun aMessageContent(
     body: String = "body",
     inReplyTo: InReplyTo? = null,
     isEdited: Boolean = false,
+    isThreaded: Boolean = false,
     messageType: MessageType = TextMessageType(
         body = body,
         formatted = null
@@ -155,6 +156,7 @@ fun aMessageContent(
     body = body,
     inReplyTo = inReplyTo,
     isEdited = isEdited,
+    isThreaded = isThreaded,
     type = messageType
 )
 

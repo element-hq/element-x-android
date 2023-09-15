@@ -153,7 +153,7 @@ class DefaultRoomLastMessageFormatterTests {
     fun `Message contents`() {
         val body = "Shared body"
         fun createMessageContent(type: MessageType): MessageContent {
-            return MessageContent(body, null, false, type)
+            return MessageContent(body, null, false, false,type)
         }
 
         val sharedContentMessagesTypes = arrayOf(

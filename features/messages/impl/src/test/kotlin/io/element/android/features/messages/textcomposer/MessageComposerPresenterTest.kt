@@ -632,7 +632,7 @@ fun anEditMode(
     transactionId: TransactionId? = null,
 ) = MessageComposerMode.Edit(eventId, message, transactionId)
 
-fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, null, AN_EVENT_ID, A_MESSAGE)
+fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, null, false, AN_EVENT_ID, A_MESSAGE)
 fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)
 
 private fun String.toMessage() = Message(

@@ -110,6 +110,7 @@ private fun ContentToPreview() {
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
+            "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
             "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
         )
