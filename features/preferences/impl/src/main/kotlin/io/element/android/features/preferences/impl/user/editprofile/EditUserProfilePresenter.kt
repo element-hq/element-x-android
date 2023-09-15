@@ -24,6 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -33,7 +35,6 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -56,8 +57,8 @@ class EditUserProfilePresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): EditUserProfileState {
-        var userAvatarUri = remember { matrixUser.avatarUrl?.let { Uri.parse(it) } }
-        var userDisplayName = remember { matrixUser.displayName }
+        var userAvatarUri by rememberSaveable { mutableStateOf(matrixUser.avatarUrl?.let { Uri.parse(it) }) }
+        var userDisplayName by rememberSaveable { mutableStateOf(matrixUser.displayName) }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri != null) userAvatarUri = uri }
         )
@@ -106,7 +107,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
             avatarActions = avatarActions,
             saveButtonEnabled = canSave && saveAction.value !is Async.Loading,
             saveAction = saveAction.value,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) },
         )
     }
 
@@ -138,6 +139,6 @@ class EditUserProfilePresenter @AssistedInject constructor(
             } else {
                 matrixClient.removeAvatar().getOrThrow()
             }
-        }
+        }.onFailure { it.printStackTrace() }
     }
 }

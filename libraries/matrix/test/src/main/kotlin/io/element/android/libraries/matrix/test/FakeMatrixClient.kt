@@ -58,6 +58,13 @@ class FakeMatrixClient(
     private val accountManagementUrlString: Result<String?> = Result.success(null),
 ) : MatrixClient {
 
+    var setDisplayNameCalled: Boolean = false
+        private set
+    var uploadAvatarCalled: Boolean = false
+        private set
+    var removeAvatarCalled: Boolean = false
+        private set
+
     private var ignoreUserResult: Result<Unit> = Result.success(Unit)
     private var unignoreUserResult: Result<Unit> = Result.success(Unit)
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
@@ -69,6 +76,9 @@ class FakeMatrixClient(
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
+    private var setDisplayNameResult: Result<Unit> = Result.success(Unit)
+    private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
+    private var removeAvatarResult: Result<Unit> = Result.success(Unit)
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -141,6 +151,21 @@ class FakeMatrixClient(
         return uploadMediaResult
     }
 
+    override suspend fun setDisplayName(displayName: String): Result<Unit> {
+        setDisplayNameCalled = true
+        return setDisplayNameResult
+    }
+
+    override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> {
+        uploadAvatarCalled = true
+        return uploadAvatarResult
+    }
+
+    override suspend fun removeAvatar(): Result<Unit> {
+        removeAvatarCalled = true
+        return removeAvatarResult
+    }
+
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
     override fun pushersService(): PushersService = pushersService
@@ -196,5 +221,17 @@ class FakeMatrixClient(
 
     fun givenUploadMediaResult(result: Result<String>) {
         uploadMediaResult = result
+    }
+
+    fun givenSetDisplayNameResult(result: Result<Unit>) {
+        setDisplayNameResult = result
+    }
+
+    fun givenUploadAvatarResult(result: Result<Unit>) {
+        uploadAvatarResult = result
+    }
+
+    fun givenRemoveAvatarResult(result: Result<Unit>) {
+        removeAvatarResult = result
     }
 }
