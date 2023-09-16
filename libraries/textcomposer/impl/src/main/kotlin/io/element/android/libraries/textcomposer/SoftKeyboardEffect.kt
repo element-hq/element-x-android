@@ -28,6 +28,7 @@ import io.element.android.libraries.androidutils.ui.showKeyboard
  *
  * Uses [showKeyboard] to show the keyboard for compatibility with [AndroidView].
  *
+ * @param T
  * @param key The key to watch for changes.
  * @param onRequestFocus A callback to request focus to the view that will receive the keyboard input.
  * @param predicate The predicate that [key] must meet before showing the keyboard.
