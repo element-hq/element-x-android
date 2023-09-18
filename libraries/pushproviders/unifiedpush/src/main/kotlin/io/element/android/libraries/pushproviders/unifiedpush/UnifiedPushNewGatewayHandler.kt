@@ -24,7 +24,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("UnifiedPushNewGatewayHandler")
+private val loggerTag = LoggerTag("UnifiedPushNewGatewayHandler", LoggerTag.PushLoggerTag)
 
 /**
  * Handle new endpoint received from UnifiedPush. Will update all the sessions which are using UnifiedPush as a push provider.

@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
@@ -25,6 +26,8 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import timber.log.Timber
 import javax.inject.Inject
+
+private val loggerTag = LoggerTag("NotificationRenderer", LoggerTag.NotificationLoggerTag)
 
 class NotificationRenderer @Inject constructor(
     private val notificationIdProvider: NotificationIdProvider,
@@ -54,7 +57,7 @@ class NotificationRenderer @Inject constructor(
 
             // Remove summary first to avoid briefly displaying it after dismissing the last notification
             if (summaryNotification == SummaryNotification.Removed) {
-                Timber.d("Removing summary notification")
+                Timber.tag(loggerTag.value).d("Removing summary notification")
                 notificationDisplayer.cancelNotificationMessage(
                     tag = null,
                     id = notificationIdProvider.getSummaryNotificationId(currentUser.userId)
@@ -64,14 +67,14 @@ class NotificationRenderer @Inject constructor(
             roomNotifications.forEach { wrapper ->
                 when (wrapper) {
                     is RoomNotification.Removed -> {
-                        Timber.d("Removing room messages notification ${wrapper.roomId}")
+                        Timber.tag(loggerTag.value).d("Removing room messages notification ${wrapper.roomId}")
                         notificationDisplayer.cancelNotificationMessage(
                             tag = wrapper.roomId.value,
                             id = notificationIdProvider.getRoomMessagesNotificationId(currentUser.userId)
                         )
                     }
                     is RoomNotification.Message -> if (useCompleteNotificationFormat) {
-                        Timber.d("Updating room messages notification ${wrapper.meta.roomId}")
+                        Timber.tag(loggerTag.value).d("Updating room messages notification ${wrapper.meta.roomId}")
                         notificationDisplayer.showNotificationMessage(
                             tag = wrapper.meta.roomId.value,
                             id = notificationIdProvider.getRoomMessagesNotificationId(currentUser.userId),
@@ -84,14 +87,14 @@ class NotificationRenderer @Inject constructor(
             invitationNotifications.forEach { wrapper ->
                 when (wrapper) {
                     is OneShotNotification.Removed -> {
-                        Timber.d("Removing invitation notification ${wrapper.key}")
+                        Timber.tag(loggerTag.value).d("Removing invitation notification ${wrapper.key}")
                         notificationDisplayer.cancelNotificationMessage(
                             tag = wrapper.key,
                             id = notificationIdProvider.getRoomInvitationNotificationId(currentUser.userId)
                         )
                     }
                     is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
-                        Timber.d("Updating invitation notification ${wrapper.meta.key}")
+                        Timber.tag(loggerTag.value).d("Updating invitation notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(
                             tag = wrapper.meta.key,
                             id = notificationIdProvider.getRoomInvitationNotificationId(currentUser.userId),
@@ -104,14 +107,14 @@ class NotificationRenderer @Inject constructor(
             simpleNotifications.forEach { wrapper ->
                 when (wrapper) {
                     is OneShotNotification.Removed -> {
-                        Timber.d("Removing simple notification ${wrapper.key}")
+                        Timber.tag(loggerTag.value).d("Removing simple notification ${wrapper.key}")
                         notificationDisplayer.cancelNotificationMessage(
                             tag = wrapper.key,
                             id = notificationIdProvider.getRoomEventNotificationId(currentUser.userId)
                         )
                     }
                     is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
-                        Timber.d("Updating simple notification ${wrapper.meta.key}")
+                        Timber.tag(loggerTag.value).d("Updating simple notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(
                             tag = wrapper.meta.key,
                             id = notificationIdProvider.getRoomEventNotificationId(currentUser.userId),
@@ -124,14 +127,14 @@ class NotificationRenderer @Inject constructor(
             fallbackNotifications.forEach { wrapper ->
                 when (wrapper) {
                     is OneShotNotification.Removed -> {
-                        Timber.d("Removing fallback notification ${wrapper.key}")
+                        Timber.tag(loggerTag.value).d("Removing fallback notification ${wrapper.key}")
                         notificationDisplayer.cancelNotificationMessage(
                             tag = wrapper.key,
                             id = notificationIdProvider.getFallbackNotificationId(currentUser.userId)
                         )
                     }
                     is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
-                        Timber.d("Updating fallback notification ${wrapper.meta.key}")
+                        Timber.tag(loggerTag.value).d("Updating fallback notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(
                             tag = wrapper.meta.key,
                             id = notificationIdProvider.getFallbackNotificationId(currentUser.userId),
@@ -143,7 +146,7 @@ class NotificationRenderer @Inject constructor(
 
             // Update summary last to avoid briefly displaying it before other notifications
             if (summaryNotification is SummaryNotification.Update) {
-                Timber.d("Updating summary notification")
+                Timber.tag(loggerTag.value).d("Updating summary notification")
                 notificationDisplayer.showNotificationMessage(
                     tag = null,
                     id = notificationIdProvider.getSummaryNotificationId(currentUser.userId),

@@ -3,6 +3,8 @@
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
+  <string name="a11y_poll">"Sondage"</string>
+  <string name="a11y_poll_end">"Sondage terminé"</string>
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
@@ -67,9 +69,6 @@
   <string name="action_take_photo">"Prendre une photo"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
-  <string name="call_foreground_service_channel_title_android">"Appel en cours"</string>
-  <string name="call_foreground_service_message_android">"Appuyez pour retourner à l\'appel."</string>
-  <string name="call_foreground_service_title_android">"☎️ Appel en cours"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d\'utilisation acceptable"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>
@@ -207,6 +206,12 @@
   <string name="room_timeline_beginning_of_room_no_name">"Ceci est le début de cette conversation."</string>
   <string name="room_timeline_read_marker_title">"Nouveau"</string>
   <string name="screen_analytics_settings_share_data">"Partagez des données de statistiques d\'utilisation"</string>
+  <string name="screen_edit_profile_display_name">"Nom d\'affichage"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Votre nom d\'affichage"</string>
+  <string name="screen_edit_profile_error">"Une erreur inconnue s\'est produite et les informations n\'ont pas pu être modifiées."</string>
+  <string name="screen_edit_profile_error_title">"Impossible de mettre à jour le profil"</string>
+  <string name="screen_edit_profile_title">"Modifier le profil"</string>
+  <string name="screen_edit_profile_updating_details">"Mise à jour du profil…"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>

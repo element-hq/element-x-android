@@ -26,7 +26,7 @@ import io.element.android.libraries.sessionstorage.api.toUserList
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("FirebaseNewTokenHandler")
+private val loggerTag = LoggerTag("FirebaseNewTokenHandler", LoggerTag.PushLoggerTag)
 
 /**
  * Handle new token receive from Firebase. Will update all the sessions which are using Firebase as a push provider.

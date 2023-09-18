@@ -3,6 +3,8 @@
   <string name="a11y_hide_password">"Skryť heslo"</string>
   <string name="a11y_notifications_mentions_only">"Iba zmienky"</string>
   <string name="a11y_notifications_muted">"Stlmené"</string>
+  <string name="a11y_poll">"Anketa"</string>
+  <string name="a11y_poll_end">"Ukončená anketa"</string>
   <string name="a11y_send_files">"Odoslať súbory"</string>
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
@@ -36,6 +38,8 @@
   <string name="action_learn_more">"Zistiť viac"</string>
   <string name="action_leave">"Opustiť"</string>
   <string name="action_leave_room">"Opustiť miestnosť"</string>
+  <string name="action_manage_account">"Spravovať účet"</string>
+  <string name="action_manage_devices">"Spravovať zariadenia"</string>
   <string name="action_next">"Ďalej"</string>
   <string name="action_no">"Nie"</string>
   <string name="action_not_now">"Teraz nie"</string>
@@ -46,6 +50,7 @@
   <string name="action_react">"Reagovať"</string>
   <string name="action_remove">"Odstrániť"</string>
   <string name="action_reply">"Odpovedať"</string>
+  <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
   <string name="action_report_bug">"Nahlásiť chybu"</string>
   <string name="action_report_content">"Nahlásiť obsah"</string>
   <string name="action_retry">"Skúsiť znova"</string>
@@ -66,6 +71,7 @@
   <string name="action_yes">"Áno"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
+  <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
   <string name="common_analytics">"Analytika"</string>
   <string name="common_audio">"Zvuk"</string>
   <string name="common_bubbles">"Bubliny"</string>
@@ -84,6 +90,7 @@
   <string name="common_forward_message">"Preposlať správu"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Obrázok"</string>
+  <string name="common_in_reply_to">"V odpovedi na %1$s"</string>
   <string name="common_invite_unknown_profile">"Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá."</string>
   <string name="common_leaving_room">"Opustenie miestnosti"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
@@ -101,11 +108,13 @@
   <string name="common_poll_total_votes">"Celkový počet hlasov: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Výsledky sa zobrazia po ukončení ankety"</string>
   <string name="common_privacy_policy">"Zásady ochrany osobných údajov"</string>
+  <string name="common_reaction">"Reakcia"</string>
   <string name="common_reactions">"Reakcie"</string>
   <string name="common_refreshing">"Obnovuje sa…"</string>
   <string name="common_replying_to">"Odpoveď na %1$s"</string>
   <string name="common_report_a_bug">"Nahlásiť chybu"</string>
   <string name="common_report_submitted">"Nahlásenie bolo odoslané"</string>
+  <string name="common_rich_text_editor">"Rozšírený textový editor"</string>
   <string name="common_room_name">"Názov miestnosti"</string>
   <string name="common_room_name_placeholder">"napr. názov vášho projektu"</string>
   <string name="common_search_for_someone">"Vyhľadať niekoho"</string>
@@ -124,6 +133,7 @@
   <string name="common_syncing">"Synchronizuje sa"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Oznámenia tretích strán"</string>
+  <string name="common_thread">"Vlákno"</string>
   <string name="common_topic">"Téma"</string>
   <string name="common_topic_placeholder">"O čom je táto miestnosť?"</string>
   <string name="common_unable_to_decrypt">"Nie je možné dešifrovať"</string>
@@ -191,12 +201,19 @@
   <string name="rich_text_editor_numbered_list">"Prepnúť číslovaný zoznam"</string>
   <string name="rich_text_editor_open_compose_options">"Otvoriť možnosti písania"</string>
   <string name="rich_text_editor_quote">"Prepnúť citáciu"</string>
+  <string name="rich_text_editor_remove_link">"Odstrániť odkaz"</string>
   <string name="rich_text_editor_unindent">"Zrušiť odsadenie"</string>
   <string name="rich_text_editor_url_placeholder">"Odkaz"</string>
   <string name="room_timeline_beginning_of_room">"Toto je začiatok %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Toto je začiatok tejto konverzácie."</string>
   <string name="room_timeline_read_marker_title">"Nové"</string>
   <string name="screen_analytics_settings_share_data">"Zdieľať analytické údaje"</string>
+  <string name="screen_edit_profile_display_name">"Zobrazované meno"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované meno"</string>
+  <string name="screen_edit_profile_error">"Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť."</string>
+  <string name="screen_edit_profile_error_title">"Nepodarilo sa aktualizovať profil"</string>
+  <string name="screen_edit_profile_title">"Upraviť profil"</string>
+  <string name="screen_edit_profile_updating_details">"Aktualizácia profilu…"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
