@@ -32,6 +32,7 @@ import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
+import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListLoadingStateListener
@@ -42,7 +43,7 @@ import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
 import timber.log.Timber
 
-fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
+internal fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
     mxCallbackFlow {
         val listener = object : RoomListLoadingStateListener {
             override fun onUpdate(state: RoomListLoadingState) {
@@ -94,7 +95,7 @@ internal fun RoomList.entriesFlow(pageSize: Int, numberOfPages: Int, roomListDyn
         Timber.d(it, "entriesFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
+internal fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
     mxCallbackFlow {
         val listener = object : RoomListServiceStateListener {
             override fun onUpdate(state: RoomListServiceState) {
@@ -106,7 +107,7 @@ fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
         }
     }.buffer(Channel.UNLIMITED)
 
-fun RoomListService.syncIndicator(): Flow<RoomListServiceSyncIndicator> =
+internal fun RoomListService.syncIndicator(): Flow<RoomListServiceSyncIndicator> =
     mxCallbackFlow {
         val listener = object : RoomListServiceSyncIndicatorListener {
             override fun onUpdate(syncIndicator: RoomListServiceSyncIndicator) {
@@ -118,7 +119,7 @@ fun RoomListService.syncIndicator(): Flow<RoomListServiceSyncIndicator> =
         }
     }.buffer(Channel.UNLIMITED)
 
-fun RoomListService.roomOrNull(roomId: String): RoomListItem? {
+internal fun RoomListService.roomOrNull(roomId: String): RoomListItem? {
     return try {
         room(roomId)
     } catch (exception: Exception) {

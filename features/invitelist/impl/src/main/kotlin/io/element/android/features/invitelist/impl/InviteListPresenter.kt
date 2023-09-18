@@ -20,11 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
@@ -36,6 +38,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.analytics.api.AnalyticsService
@@ -43,6 +46,8 @@ import io.element.android.services.analytics.api.extensions.toAnalyticsJoinedRoo
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -55,11 +60,12 @@ class InviteListPresenter @Inject constructor(
 
     @Composable
     override fun present(): InviteListState {
-        val invites by client
-            .roomListService
-            .invites()
-            .summaries
-            .collectAsState()
+        val invitesRoomList = remember {
+            client.roomListService.invites()
+        }
+        val invites by invitesRoomList.summaries.collectAsState()
+
+        var visibleRange: IntRange by remember { mutableStateOf(IntRange.EMPTY) }
 
         var seenInvites by remember { mutableStateOf<Set<RoomId>>(emptySet()) }
 
@@ -80,6 +86,20 @@ class InviteListPresenter @Inject constructor(
         val acceptedAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
         val declinedAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
         val decliningInvite: MutableState<InviteListInviteSummary?> = remember { mutableStateOf(null) }
+
+        val hasReachEndThreshold = remember {
+            derivedStateOf {
+                visibleRange.last > invites.size - RoomListService.DEFAULT_PAGE_SIZE
+            }
+        }
+        LaunchedEffect(Unit) {
+            snapshotFlow { hasReachEndThreshold.value }
+                .onEach { shouldLoadMore ->
+                    if (shouldLoadMore) {
+                        invitesRoomList.loadMore()
+                    }
+                }.launchIn(this)
+        }
 
         fun handleEvent(event: InviteListEvents) {
             when (event) {
@@ -111,6 +131,7 @@ class InviteListPresenter @Inject constructor(
                 is InviteListEvents.DismissDeclineError -> {
                     declinedAction.value = Async.Uninitialized
                 }
+                is InviteListEvents.VisibleRangeUpdated -> visibleRange = event.visibleRange
             }
         }
 

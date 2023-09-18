@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -47,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.LazyListVisibleRangeHelper
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -140,7 +142,6 @@ fun InviteListContent(
             ) {
                 if (state.inviteList.isEmpty()) {
                     Spacer(Modifier.size(80.dp))
-
                     Text(
                         text = stringResource(R.string.screen_invites_empty_list),
                         textAlign = TextAlign.Center,
@@ -148,8 +149,10 @@ fun InviteListContent(
                         modifier = Modifier.fillMaxWidth()
                     )
                 } else {
+                    val lazyListState = rememberLazyListState()
                     LazyColumn(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        state = lazyListState,
                     ) {
                         itemsIndexed(
                             items = state.inviteList,
@@ -159,12 +162,20 @@ fun InviteListContent(
                                 onAcceptClicked = { state.eventSink(InviteListEvents.AcceptInvite(invite)) },
                                 onDeclineClicked = { state.eventSink(InviteListEvents.DeclineInvite(invite)) },
                             )
-
                             if (index != state.inviteList.lastIndex) {
                                 HorizontalDivider()
                             }
                         }
                     }
+
+                    fun onVisibleRangeUpdated(visibleRange: IntRange) {
+                        state.eventSink(InviteListEvents.VisibleRangeUpdated(visibleRange))
+                    }
+
+                    LazyListVisibleRangeHelper(
+                        lazyListState = lazyListState,
+                        onVisibleRangeUpdated = ::onVisibleRangeUpdated,
+                    )
                 }
             }
         }

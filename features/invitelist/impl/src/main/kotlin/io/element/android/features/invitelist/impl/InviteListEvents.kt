@@ -21,10 +21,9 @@ import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 sealed interface InviteListEvents {
     data class AcceptInvite(val invite: InviteListInviteSummary) : InviteListEvents
     data class DeclineInvite(val invite: InviteListInviteSummary) : InviteListEvents
-
-    data object ConfirmDeclineInvite: InviteListEvents
-    data object CancelDeclineInvite: InviteListEvents
-
-    data object DismissAcceptError: InviteListEvents
-    data object DismissDeclineError: InviteListEvents
+    data object ConfirmDeclineInvite : InviteListEvents
+    data object CancelDeclineInvite : InviteListEvents
+    data object DismissAcceptError : InviteListEvents
+    data object DismissDeclineError : InviteListEvents
+    data class VisibleRangeUpdated(val visibleRange: IntRange) : InviteListEvents
 }
