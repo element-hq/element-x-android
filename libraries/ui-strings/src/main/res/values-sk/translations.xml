@@ -208,12 +208,6 @@
   <string name="room_timeline_beginning_of_room_no_name">"Toto je začiatok tejto konverzácie."</string>
   <string name="room_timeline_read_marker_title">"Nové"</string>
   <string name="screen_analytics_settings_share_data">"Zdieľať analytické údaje"</string>
-  <string name="screen_edit_profile_display_name">"Zobrazované meno"</string>
-  <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované meno"</string>
-  <string name="screen_edit_profile_error">"Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť."</string>
-  <string name="screen_edit_profile_error_title">"Nepodarilo sa aktualizovať profil"</string>
-  <string name="screen_edit_profile_title">"Upraviť profil"</string>
-  <string name="screen_edit_profile_updating_details">"Aktualizácia profilu…"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
