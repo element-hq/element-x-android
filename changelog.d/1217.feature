@@ -1,1 +1,0 @@
-Implement Bloom effect modifier.
