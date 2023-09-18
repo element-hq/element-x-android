@@ -25,6 +25,7 @@ import java.util.Locale
 import java.util.UUID
 
 fun File.safeDelete() {
+    if (exists().not()) return
     tryOrNull(
         onError = {
             Timber.e(it, "Error, unable to delete file $path")

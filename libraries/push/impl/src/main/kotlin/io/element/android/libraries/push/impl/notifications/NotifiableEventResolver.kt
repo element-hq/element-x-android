@@ -36,7 +36,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.push.impl.R
-import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -47,7 +46,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("NotifiableEventResolver", pushLoggerTag)
+private val loggerTag = LoggerTag("NotifiableEventResolver", LoggerTag.NotificationLoggerTag)
 
 /**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.

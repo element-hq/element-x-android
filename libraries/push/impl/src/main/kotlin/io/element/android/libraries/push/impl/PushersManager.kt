@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.push.impl.config.PushConfig
-import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -35,7 +34,7 @@ import javax.inject.Inject
 
 internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
-private val loggerTag = LoggerTag("PushersManager", pushLoggerTag)
+private val loggerTag = LoggerTag("PushersManager", LoggerTag.PushLoggerTag)
 
 @ContributesBinding(AppScope::class)
 class PushersManager @Inject constructor(

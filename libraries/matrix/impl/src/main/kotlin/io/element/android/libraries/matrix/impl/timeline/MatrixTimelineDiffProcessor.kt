@@ -99,7 +99,7 @@ internal class MatrixTimelineDiffProcessor(
                 clear()
             }
             TimelineChange.TRUNCATE -> {
-                //NOOP
+                // Not supported
             }
         }
     }
