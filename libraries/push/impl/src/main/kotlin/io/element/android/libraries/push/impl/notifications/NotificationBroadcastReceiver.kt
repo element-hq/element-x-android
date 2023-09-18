@@ -24,11 +24,10 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("NotificationBroadcastReceiver", notificationLoggerTag)
+private val loggerTag = LoggerTag("NotificationBroadcastReceiver", LoggerTag.NotificationLoggerTag)
 
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).
@@ -41,34 +40,34 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
-        Timber.tag(loggerTag.value).v("NotificationBroadcastReceiver received : $intent")
         val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.let(::SessionId) ?: return
         val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
         val eventId = intent.getStringExtra(KEY_EVENT_ID)?.let(::EventId)
+        Timber.tag(loggerTag.value).d("onReceive: ${intent.action} ${intent.data} for: ${roomId?.value}/${eventId?.value}")
         when (intent.action) {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
             actionIds.dismissRoom -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = false)
             }
             actionIds.dismissSummary ->
-                defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId)
+                defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId, doRender = false)
             actionIds.dismissInvite -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = false)
             }
             actionIds.dismissEvent -> if (eventId != null) {
-                defaultNotificationDrawerManager.clearEvent(eventId)
+                defaultNotificationDrawerManager.clearEvent(eventId, doRender = false)
             }
             actionIds.markRoomRead -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = true)
                 handleMarkAsRead(sessionId, roomId)
             }
             actionIds.join -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = true)
                 handleJoinRoom(sessionId, roomId)
             }
             actionIds.reject -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = true)
                 handleRejectRoom(sessionId, roomId)
             }
         }
