@@ -210,6 +210,7 @@
   <string name="screen_edit_profile_display_name_placeholder">"Your display name"</string>
   <string name="screen_edit_profile_error">"An unknown error was encountered and the information couldn\'t be changed."</string>
   <string name="screen_edit_profile_error_title">"Unable to update profile"</string>
+  <string name="screen_edit_profile_title">"Edit profile"</string>
   <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
