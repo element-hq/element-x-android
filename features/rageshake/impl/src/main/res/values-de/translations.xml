@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Bildschirmfoto anhängen"</string>
+  <string name="screen_bug_report_contact_me">"Sie können mich kontaktieren, wenn Sie weitere Fragen haben."</string>
+  <string name="screen_bug_report_contact_me_title">"Kontaktieren Sie mich"</string>
+  <string name="screen_bug_report_edit_screenshot">"Bildschirmfoto bearbeiten"</string>
+  <string name="screen_bug_report_editor_description">"Bitte beschreiben Sie den Fehler. Was haben Sie getan? Was haben Sie erwartet, was passiert? Was ist tatsächlich passiert. Bitte gehen Sie so detailliert wie möglich vor."</string>
+  <string name="screen_bug_report_editor_placeholder">"Beschreiben Sie den Fehler…"</string>
+  <string name="screen_bug_report_editor_supporting">"Wenn möglich, verfassen Sie die Beschreibung bitte auf Englisch."</string>
+  <string name="screen_bug_report_include_crash_logs">"Absturzprotokolle senden"</string>
+  <string name="screen_bug_report_include_logs">"Protokolle zulassen"</string>
+  <string name="screen_bug_report_include_screenshot">"Bildschirmfoto senden"</string>
+  <string name="screen_bug_report_logs_description">"Die Protokolle werden Ihrer Nachricht beigefügt, um sicherzustellen, dass alles ordnungsgemäß funktioniert. Um Ihre Nachricht ohne Protokolle zu senden, deaktivieren Sie diese Einstellung."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s ist bei der letzten Nutzung abgestürzt. Möchten Sie einen Absturzbericht mit uns teilen?"</string>
+</resources>
