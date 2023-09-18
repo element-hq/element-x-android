@@ -43,7 +43,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -52,7 +51,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -84,7 +82,6 @@ import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.view.models.InlineFormat
-import kotlinx.coroutines.android.awaitFrame
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
 
@@ -223,17 +220,11 @@ fun TextComposer(
         }
     }
 
-    // Request focus when changing mode, and show keyboard.
-    val keyboard = LocalSoftwareKeyboardController.current
-    LaunchedEffect(composerMode) {
-        if (composerMode is MessageComposerMode.Special) {
-            onRequestFocus()
-            keyboard?.let {
-                awaitFrame()
-                it.show()
-            }
-        }
+    SoftKeyboardEffect(composerMode, onRequestFocus) {
+        it is MessageComposerMode.Special
     }
+
+    SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
 }
 
 @Composable
@@ -270,6 +261,8 @@ private fun TextInput(
                 style = defaultTypography.copy(
                     color = ElementTheme.colors.textSecondary,
                 ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
 

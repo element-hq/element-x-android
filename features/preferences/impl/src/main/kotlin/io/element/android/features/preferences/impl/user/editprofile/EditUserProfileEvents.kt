@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.log
+package io.element.android.features.preferences.impl.user.editprofile
 
-import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 
-internal val pushLoggerTag = LoggerTag("Push")
-internal val notificationLoggerTag = LoggerTag("Notification", pushLoggerTag)
+sealed interface EditUserProfileEvents {
+    data class HandleAvatarAction(val action: AvatarAction) : EditUserProfileEvents
+    data class UpdateDisplayName(val name: String) : EditUserProfileEvents
+    data object Save : EditUserProfileEvents
+    data object CancelSaveChanges : EditUserProfileEvents
+}

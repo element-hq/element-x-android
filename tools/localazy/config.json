@@ -130,6 +130,12 @@
       ]
     },
     {
+      "name": ":features:preferences:impl",
+      "includeRegex": [
+        "screen_edit_profile_.*"
+      ]
+    },
+    {
       "name": ":features:call",
       "includeRegex": [
         "call_.*"

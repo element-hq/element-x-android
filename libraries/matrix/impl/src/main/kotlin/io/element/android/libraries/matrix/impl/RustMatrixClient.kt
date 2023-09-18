@@ -276,6 +276,23 @@ class RustMatrixClient constructor(
             }
         }
 
+    override suspend fun setDisplayName(displayName: String): Result<Unit> =
+        withContext(sessionDispatcher) {
+            runCatching { client.setDisplayName(displayName) }
+        }
+
+    @OptIn(ExperimentalUnsignedTypes::class)
+    override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> =
+        withContext(sessionDispatcher) {
+            runCatching { client.uploadAvatar(mimeType, data.toUByteArray().toList()) }
+        }
+
+    override suspend fun removeAvatar(): Result<Unit> =
+        withContext(sessionDispatcher) {
+            runCatching { client.removeAvatar() }
+        }
+
+
     override fun syncService(): SyncService = rustSyncService
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
