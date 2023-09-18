@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_profile_display_name">"Display name"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Your display name"</string>
+  <string name="screen_edit_profile_error">"An unknown error was encountered and the information couldn\'t be changed."</string>
+  <string name="screen_edit_profile_error_title">"Unable to update profile"</string>
+  <string name="screen_edit_profile_title">"Edit profile"</string>
+  <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
+</resources>

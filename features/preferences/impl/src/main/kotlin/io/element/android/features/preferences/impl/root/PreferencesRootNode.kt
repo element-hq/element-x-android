@@ -29,6 +29,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
 
@@ -47,6 +48,7 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenDeveloperSettings()
         fun onOpenNotificationSettings()
         fun onOpenAdvancedSettings()
+        fun onOpenUserProfile(matrixUser: MatrixUser)
     }
 
     private fun onOpenBugReport() {
@@ -91,6 +93,10 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenNotificationSettings() }
     }
 
+    private fun onOpenUserProfile(matrixUser: MatrixUser) {
+        plugins<Callback>().forEach { it.onOpenUserProfile(matrixUser) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -108,7 +114,8 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenAdvancedSettings = this::onOpenAdvancedSettings,
             onSuccessLogout = { onSuccessLogout(activity, it) },
             onManageAccountClicked = { onManageAccountClicked(activity, it, isDark) },
-            onOpenNotificationSettings = this::onOpenNotificationSettings
+            onOpenNotificationSettings = this::onOpenNotificationSettings,
+            onOpenUserProfile = this::onOpenUserProfile,
         )
     }
 

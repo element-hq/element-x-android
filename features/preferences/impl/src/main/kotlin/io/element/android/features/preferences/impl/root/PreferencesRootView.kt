@@ -16,6 +16,7 @@
 
 package io.element.android.features.preferences.impl.root
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -62,6 +63,7 @@ fun PreferencesRootView(
     onOpenAdvancedSettings: () -> Unit,
     onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     onOpenNotificationSettings: () -> Unit,
+    onOpenUserProfile: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -73,7 +75,12 @@ fun PreferencesRootView(
         title = stringResource(id = CommonStrings.common_settings),
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
-        UserPreferences(state.myUser)
+        UserPreferences(
+            modifier = Modifier.clickable {
+               state.myUser?.let(onOpenUserProfile)
+            },
+            user = state.myUser,
+        )
         if (state.showCompleteVerification) {
             PreferenceText(
                 title = stringResource(id = CommonStrings.action_complete_verification),
@@ -181,5 +188,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onSuccessLogout = {},
         onManageAccountClicked = {},
         onOpenNotificationSettings = {},
+        onOpenUserProfile = {},
     )
 }

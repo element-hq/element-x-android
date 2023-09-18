@@ -47,6 +47,9 @@ interface MatrixClient : Closeable {
     suspend fun createDM(userId: UserId): Result<RoomId>
     suspend fun getProfile(userId: UserId): Result<MatrixUser>
     suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
+    suspend fun setDisplayName(displayName: String): Result<Unit>
+    suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit>
+    suspend fun removeAvatar(): Result<Unit>
     fun syncService(): SyncService
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
