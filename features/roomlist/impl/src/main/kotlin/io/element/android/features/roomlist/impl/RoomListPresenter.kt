@@ -152,7 +152,7 @@ class RoomListPresenter @Inject constructor(
             snapshotFlow { hasReachedStart.value }
                 .onEach { shouldReset ->
                     if (shouldReset) {
-                        roomListDataSource.reset()
+                        //roomListDataSource.reset()
                     }
                 }.launchIn(this)
 
