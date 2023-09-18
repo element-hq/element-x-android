@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -47,6 +48,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -61,6 +63,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class RoomListPresenterTests {
 
@@ -153,7 +156,7 @@ class RoomListPresenterTests {
             roomListService = roomListService
         )
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(matrixClient, coroutineScope = scope)
+        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -328,6 +331,34 @@ class RoomListPresenterTests {
         }
     }
 
+    @Test
+    fun `present - change in notification settings updates the summary for decorations`() = runTest {
+        val userDefinedMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
+        val notificationSettingsService = FakeNotificationSettingsService()
+        val roomListService = FakeRoomListService()
+        roomListService.postAllRooms(listOf(aRoomSummaryFilled(notificationMode = userDefinedMode)))
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+            notificationSettingsService = notificationSettingsService
+        )
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(client = matrixClient , coroutineScope = scope)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, userDefinedMode)
+
+            val updatedState = consumeItemsUntilPredicate { state ->
+                state.roomList.any { it.id == A_ROOM_ID.value && it.notificationMode == userDefinedMode }
+            }.last()
+
+            val room = updatedState.roomList.find { it.id == A_ROOM_ID.value }
+            Truth.assertThat(room?.notificationMode).isEqualTo(userDefinedMode)
+            cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
@@ -339,7 +370,7 @@ class RoomListPresenterTests {
             givenFormat(A_FORMATTED_DATE)
         },
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
-        coroutineScope: CoroutineScope = this
+        coroutineScope: CoroutineScope = this,
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,
