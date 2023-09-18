@@ -20,14 +20,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>
         get() = sequenceOf(
             aRoomListRoomSummary(),
             aRoomListRoomSummary().copy(lastMessage = null),
-            aRoomListRoomSummary().copy(hasUnread = true),
-            aRoomListRoomSummary().copy(timestamp = "88:88"),
+            aRoomListRoomSummary().copy(hasUnread = true, notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
+            aRoomListRoomSummary().copy(timestamp = "88:88", notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
+            aRoomListRoomSummary().copy(timestamp = "88:88", notificationMode = RoomNotificationMode.MUTE),
             aRoomListRoomSummary().copy(timestamp = "88:88", hasUnread = true),
             aRoomListRoomSummary().copy(isPlaceholder = true, timestamp = "88:88"),
             aRoomListRoomSummary().copy(

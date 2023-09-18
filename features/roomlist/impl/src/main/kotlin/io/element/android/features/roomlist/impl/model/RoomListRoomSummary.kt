@@ -20,6 +20,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 @Immutable
 data class RoomListRoomSummary constructor(
@@ -31,4 +32,5 @@ data class RoomListRoomSummary constructor(
     val lastMessage: CharSequence? = null,
     val avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
     val isPlaceholder: Boolean = false,
+    val notificationMode: RoomNotificationMode? = null,
 )
