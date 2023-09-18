@@ -1,1 +1,0 @@
-Bump Rust SDK to `v0.1.49`
