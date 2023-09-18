@@ -39,6 +39,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(),
             aMessagesState().copy(hasNetworkConnection = false),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
+            aMessagesState().copy(composerState = aMessageComposerState().copy(showTextFormatting = true)),
             aMessagesState().copy(userHasPermissionToSendMessage = false),
             aMessagesState().copy(showReinvitePrompt = true),
             aMessagesState().copy(
@@ -55,9 +56,7 @@ fun aMessagesState() = MessagesState(
     userHasPermissionToSendMessage = true,
     userHasPermissionToRedact = false,
     composerState = aMessageComposerState().copy(
-        richTextEditorState = RichTextEditorState("Hello", fake = true).apply {
-            requestFocus()
-        },
+        richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
         isFullScreen = false,
         mode = MessageComposerMode.Normal("Hello"),
     ),
