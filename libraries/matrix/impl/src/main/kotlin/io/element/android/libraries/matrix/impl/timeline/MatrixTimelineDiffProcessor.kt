@@ -98,6 +98,9 @@ internal class MatrixTimelineDiffProcessor(
             TimelineChange.CLEAR -> {
                 clear()
             }
+            TimelineChange.TRUNCATE -> {
+                // Not supported
+            }
         }
     }
 
