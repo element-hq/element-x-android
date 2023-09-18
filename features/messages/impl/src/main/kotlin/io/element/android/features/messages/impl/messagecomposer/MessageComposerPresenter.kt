@@ -44,8 +44,10 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -67,6 +69,7 @@ class MessageComposerPresenter @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContextImpl,
+    private val richTextEditorStateFactory: RichTextEditorStateFactory,
 ) : Presenter<MessageComposerState> {
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -103,19 +106,16 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val hasFocus = remember {
-            mutableStateOf(false)
-        }
-        val text: MutableState<String> = rememberSaveable {
-            mutableStateOf("")
-        }
+        val richTextEditorState = richTextEditorStateFactory.create()
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
+        var showTextFormatting: Boolean by remember { mutableStateOf(false) }
 
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
-                is MessageComposerMode.Edit -> text.value = modeValue.defaultContent
+                is MessageComposerMode.Edit ->
+                    richTextEditorState.setHtml(modeValue.defaultContent)
                 else -> Unit
             }
         }
@@ -136,29 +136,18 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
 
-                is MessageComposerEvents.FocusChanged -> hasFocus.value = event.hasFocus
-
-                is MessageComposerEvents.UpdateText -> text.value = event.text
                 MessageComposerEvents.CloseSpecialMode -> {
-                    text.value = ""
+                    richTextEditorState.setHtml("")
                     messageComposerContext.composerMode = MessageComposerMode.Normal("")
                 }
 
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
-                    text = event.message,
+                    message = event.message,
                     updateComposerMode = { messageComposerContext.composerMode = it },
-                    textState = text
+                    richTextEditorState = richTextEditorState,
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
-                    analyticsService.capture(
-                        Composer(
-                            inThread = messageComposerContext.composerMode.inThread,
-                            isEditing = messageComposerContext.composerMode.isEditing,
-                            isReply = messageComposerContext.composerMode.isReply,
-                            isLocation = false,
-                        )
-                    )
                 }
                 MessageComposerEvents.AddAttachment -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = true
@@ -194,45 +183,61 @@ class MessageComposerPresenter @Inject constructor(
                         ongoingSendAttachmentJob.value == null
                     }
                 }
+                is MessageComposerEvents.ToggleTextFormatting -> {
+                    showAttachmentSourcePicker = false
+                    showTextFormatting = event.enabled
+                }
+                is MessageComposerEvents.Error -> {
+                    analyticsService.trackError(event.error)
+                }
             }
         }
 
         return MessageComposerState(
-            text = text.value,
+            richTextEditorState = richTextEditorState,
             isFullScreen = isFullScreen.value,
-            hasFocus = hasFocus.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
+            showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 
     private fun CoroutineScope.sendMessage(
-        text: String,
+        message: Message,
         updateComposerMode: (newComposerMode: MessageComposerMode) -> Unit,
-        textState: MutableState<String>
+        richTextEditorState: RichTextEditorState,
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
         // Reset composer right away
-        textState.value = ""
+        richTextEditorState.setHtml("")
         updateComposerMode(MessageComposerMode.Normal(""))
         when (capturedMode) {
-            is MessageComposerMode.Normal -> room.sendMessage(text)
+            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html)
             is MessageComposerMode.Edit -> {
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
-                room.editMessage(eventId, transactionId, text)
+                room.editMessage(eventId, transactionId, message.markdown, message.html)
             }
 
             is MessageComposerMode.Quote -> TODO()
             is MessageComposerMode.Reply -> room.replyMessage(
                 capturedMode.eventId,
-                text
+                message.markdown,
+                message.html,
             )
         }
+        analyticsService.capture(
+            Composer(
+                inThread = capturedMode.inThread,
+                isEditing = capturedMode.isEditing,
+                isReply = capturedMode.isReply,
+                messageType = Composer.MessageType.Text, // Set proper type when we'll be sending other types of messages.
+            )
+        )
     }
 
     private fun CoroutineScope.sendAttachment(

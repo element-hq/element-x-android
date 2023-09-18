@@ -23,21 +23,16 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.permissions.api.PermissionsView
 
 @Composable
 fun LoggedInView(
     state: LoggedInState,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -48,10 +43,6 @@ fun LoggedInView(
                 .padding(top = 8.dp)
                 .align(Alignment.TopCenter),
             isVisible = state.showSyncSpinner,
-        )
-        PermissionsView(
-            state = state.permissionsState,
-            openSystemSettings = context::openAppSettingsPage
         )
     }
 }

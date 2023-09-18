@@ -26,13 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
@@ -87,20 +87,19 @@ private fun InitialsAvatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
 ) {
-    // Use temporary color for default avatar background
-    val avatarColor = ElementTheme.colors.bgActionPrimaryDisabled
+    val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
     Box(
-        modifier.background(color = avatarColor),
+        modifier.background(color = avatarColors.background)
     ) {
         val fontSize = avatarData.size.dp.toSp() / 2
-        val originalFont = ElementTheme.typography.fontBodyMdRegular
+        val originalFont = ElementTheme.typography.fontHeadingMdBold
         val ratio = fontSize.value / originalFont.fontSize.value
         val lineHeight = originalFont.lineHeight * ratio
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = avatarData.initial,
             style = originalFont.copy(fontSize = fontSize, lineHeight = lineHeight, letterSpacing = 0.sp),
-            color = Color.White,
+            color = avatarColors.foreground,
         )
     }
 }

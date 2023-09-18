@@ -25,17 +25,30 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.test.InMemoryPermissionsStore
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 const val A_PERMISSION = "A_PERMISSION"
 
 class DefaultPermissionsPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val permissionsStore = InMemoryPermissionsStore()
-        val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Granted)
-        val permissionStateProvider = FakePermissionStateProvider(permissionState)
+        val permissionState = FakePermissionState(
+            A_PERMISSION,
+            PermissionStatus.Granted
+        )
+        val permissionStateProvider =
+            FakeComposablePermissionStateProvider(
+                permissionState
+            )
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
@@ -57,8 +70,14 @@ class DefaultPermissionsPresenterTest {
     @Test
     fun `present - user closes dialog`() = runTest {
         val permissionsStore = InMemoryPermissionsStore()
-        val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = false))
-        val permissionStateProvider = FakePermissionStateProvider(permissionState)
+        val permissionState = FakePermissionState(
+            A_PERMISSION,
+            PermissionStatus.Denied(shouldShowRationale = false)
+        )
+        val permissionStateProvider =
+            FakeComposablePermissionStateProvider(
+                permissionState
+            )
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
@@ -77,8 +96,14 @@ class DefaultPermissionsPresenterTest {
     @Test
     fun `present - user does not grant permission`() = runTest {
         val permissionsStore = InMemoryPermissionsStore()
-        val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = false))
-        val permissionStateProvider = FakePermissionStateProvider(permissionState)
+        val permissionState = FakePermissionState(
+            A_PERMISSION,
+            PermissionStatus.Denied(shouldShowRationale = false)
+        )
+        val permissionStateProvider =
+            FakeComposablePermissionStateProvider(
+                permissionState
+            )
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
@@ -106,8 +131,14 @@ class DefaultPermissionsPresenterTest {
     @Test
     fun `present - user does not grant permission second time`() = runTest {
         val permissionsStore = InMemoryPermissionsStore()
-        val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = true))
-        val permissionStateProvider = FakePermissionStateProvider(permissionState)
+        val permissionState = FakePermissionState(
+            A_PERMISSION,
+            PermissionStatus.Denied(shouldShowRationale = true)
+        )
+        val permissionStateProvider =
+            FakeComposablePermissionStateProvider(
+                permissionState
+            )
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
@@ -134,9 +165,19 @@ class DefaultPermissionsPresenterTest {
 
     @Test
     fun `present - user does not grant permission third time`() = runTest {
-        val permissionsStore = InMemoryPermissionsStore(permissionDenied = true, permissionAsked = true)
-        val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = false))
-        val permissionStateProvider = FakePermissionStateProvider(permissionState)
+        val permissionsStore =
+            InMemoryPermissionsStore(
+                permissionDenied = true,
+                permissionAsked = true
+            )
+        val permissionState = FakePermissionState(
+            A_PERMISSION,
+            PermissionStatus.Denied(shouldShowRationale = false)
+        )
+        val permissionStateProvider =
+            FakeComposablePermissionStateProvider(
+                permissionState
+            )
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
@@ -157,8 +198,14 @@ class DefaultPermissionsPresenterTest {
     @Test
     fun `present - user grants permission`() = runTest {
         val permissionsStore = InMemoryPermissionsStore()
-        val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = false))
-        val permissionStateProvider = FakePermissionStateProvider(permissionState)
+        val permissionState = FakePermissionState(
+            A_PERMISSION,
+            PermissionStatus.Denied(shouldShowRationale = false)
+        )
+        val permissionStateProvider =
+            FakeComposablePermissionStateProvider(
+                permissionState
+            )
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,

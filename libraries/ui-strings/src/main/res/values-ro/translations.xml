@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_hide_password">"Ascundeți parola"</string>
+  <string name="a11y_notifications_mentions_only">"Doar mențiuni"</string>
+  <string name="a11y_notifications_muted">"Notificări dezactivate"</string>
   <string name="a11y_send_files">"Trimiteți fișiere"</string>
   <string name="a11y_show_password">"Afișați parola"</string>
   <string name="a11y_user_menu">"Meniu utilizator"</string>
@@ -23,6 +25,7 @@
   <string name="action_done">"Efectuat"</string>
   <string name="action_edit">"Editați"</string>
   <string name="action_enable">"Activați"</string>
+  <string name="action_end_poll">"Închideți sondajul"</string>
   <string name="action_forgot_password">"Ați uitat parola?"</string>
   <string name="action_forward">"Redirecționați"</string>
   <string name="action_invite">"Invitați"</string>
@@ -40,6 +43,7 @@
   <string name="action_open_with">"Deschideți cu"</string>
   <string name="action_quick_reply">"Raspuns rapid"</string>
   <string name="action_quote">"Citat"</string>
+  <string name="action_react">"Reacționați"</string>
   <string name="action_remove">"Ștergeți"</string>
   <string name="action_reply">"Răspundeți"</string>
   <string name="action_report_bug">"Raportați o eroare"</string>
@@ -94,6 +98,8 @@
   <string name="common_password">"Parola"</string>
   <string name="common_people">"Persoane"</string>
   <string name="common_permalink">"Permalink"</string>
+  <string name="common_poll_total_votes">"Total voturi: %1$s"</string>
+  <string name="common_poll_undisclosed_text">"Rezultatele vor fi afișate după încheierea sondajului"</string>
   <string name="common_privacy_policy">"Politica de confidențialitate"</string>
   <string name="common_reactions">"Reacții"</string>
   <string name="common_refreshing">"Se actualizează"</string>
@@ -116,11 +122,12 @@
   <string name="common_success">"Succes"</string>
   <string name="common_suggestions">"Sugestii"</string>
   <string name="common_syncing">"Se sincronizează…"</string>
+  <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Notificări despre software de la terți"</string>
   <string name="common_topic">"Subiect"</string>
   <string name="common_topic_placeholder">"Despre ce este vorba în această cameră?"</string>
   <string name="common_unable_to_decrypt">"Nu s-a putut decripta"</string>
-  <string name="common_unable_to_invite_message">"Nu am putut trimite cu succes invitații unuia sau mai multor utilizatori."</string>
+  <string name="common_unable_to_invite_message">"Nu am putut trimite invitații unuia sau mai multor utilizatori."</string>
   <string name="common_unable_to_invite_title">"Nu s-a putut trimite invitația (invitațiile)"</string>
   <string name="common_unmute">"Activați sunetul"</string>
   <string name="common_unsupported_event">"Eveniment neacceptat"</string>
@@ -140,7 +147,11 @@
   <string name="emoji_picker_category_places">"Călătorii &amp; Locuri"</string>
   <string name="emoji_picker_category_symbols">"Simboluri"</string>
   <string name="error_failed_creating_the_permalink">"Crearea permalink-ului a eșuat"</string>
+  <string name="error_failed_loading_map">"%1$s nu a putut încărca harta. Vă rugăm să încercați din nou mai târziu."</string>
   <string name="error_failed_loading_messages">"Încărcarea mesajelor a eșuat"</string>
+  <string name="error_failed_locating_user">"%1$s nu a putut accesa locația dumneavoastră. Vă rugăm să încercați din nou mai târziu."</string>
+  <string name="error_missing_location_auth_android">"%1$s nu are permisiuni pentru a accesa locația dumneavoastră. Puteți permite accesul în Setări."</string>
+  <string name="error_missing_location_rationale_android">"%1$s nu are permisiuni pentru a accesa locația dumneavoastră. Permiteți accesul mai jos."</string>
   <string name="error_some_messages_have_not_been_sent">"Unele mesaje nu au fost trimise"</string>
   <string name="error_unknown">"Ne pare rău, a apărut o eroare"</string>
   <string name="invite_friends_rich_title">"🔐️ Alăturați-vă mie pe %1$s"</string>
@@ -154,10 +165,34 @@
     <item quantity="few">"%1$d membri"</item>
     <item quantity="other">"%1$d membri"</item>
   </plurals>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d vot"</item>
+    <item quantity="few">"%d voturi"</item>
+    <item quantity="other">"%d voturi"</item>
+  </plurals>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
   <string name="rageshake_dialog_content">"Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?"</string>
   <string name="report_content_explanation">"Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat."</string>
   <string name="report_content_hint">"Motivul raportării acestui conținut"</string>
+  <string name="rich_text_editor_bullet_list">"Comutați lista cu puncte"</string>
+  <string name="rich_text_editor_close_formatting_options">"Închideți opțiunile de formatare"</string>
+  <string name="rich_text_editor_code_block">"Comutați blocul de cod"</string>
+  <string name="rich_text_editor_composer_placeholder">"Mesaj…"</string>
+  <string name="rich_text_editor_create_link">"Creați un link"</string>
+  <string name="rich_text_editor_edit_link">"Editați link-ul"</string>
+  <string name="rich_text_editor_format_bold">"Aplicați formatul aldin"</string>
+  <string name="rich_text_editor_format_italic">"Aplicați formatul italic"</string>
+  <string name="rich_text_editor_format_strikethrough">"Aplicați formatul barat"</string>
+  <string name="rich_text_editor_format_underline">"Aplică formatul de subliniere"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Comutați modul ecran complet"</string>
+  <string name="rich_text_editor_indent">"Indentare"</string>
+  <string name="rich_text_editor_inline_code">"Aplicați formatul de cod inline"</string>
+  <string name="rich_text_editor_link">"Setați linkul"</string>
+  <string name="rich_text_editor_numbered_list">"Comutați lista numerotată"</string>
+  <string name="rich_text_editor_open_compose_options">"Deschideți opțiunile de compunere"</string>
+  <string name="rich_text_editor_quote">"Aplicați citatul"</string>
+  <string name="rich_text_editor_unindent">"Dez-identare"</string>
+  <string name="rich_text_editor_url_placeholder">"Link"</string>
   <string name="room_timeline_beginning_of_room">"Acesta este începutul conversației %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Acesta este începutul acestei conversații."</string>
   <string name="room_timeline_read_marker_title">"Nou"</string>
@@ -165,9 +200,40 @@
   <string name="screen_media_picker_error_failed_selection">"Selectarea fișierelor media a eșuat, încercați din nou."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Încărcarea fișierelor media a eșuat, încercați din nou."</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Setări adiționale"</string>
+  <string name="screen_notification_settings_calls_label">"Apeluri audio și video"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Nepotrivire de configurație"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Am simplificat Setările pentru notificări pentru a face opțiunile mai ușor de găsit.
+
+Unele setări personalizate pe care le-ați ales în trecut nu sunt afișate aici, dar sunt încă active.
+
+Dacă continuați, unele dintre setările dumneavoastră pot fi modificate."</string>
+  <string name="screen_notification_settings_direct_chats">"Discuții directe"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Setare personalizată per chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"A apărut o eroare în timpul actualizării setărilor pentru notificari."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Toate mesajele"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"În conversațiile directe, anunță-mă pentru"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"În conversațiile de grup, anunțați-mă pentru"</string>
+  <string name="screen_notification_settings_enable_notifications">"Activați notificările pe acest dispozitiv"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Configurația nu a fost corectată, vă rugăm să încercați din nou."</string>
+  <string name="screen_notification_settings_group_chats">"Discuții de grup"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Mențiuni"</string>
+  <string name="screen_notification_settings_mode_all">"Toate"</string>
+  <string name="screen_notification_settings_mode_mentions">"Mențiuni"</string>
+  <string name="screen_notification_settings_notification_section_title">"Anunță-mă pentru"</string>
+  <string name="screen_notification_settings_room_mention_label">"Anunțați-mă pentru @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Pentru a primi notificări, vă rugăm să vă schimbați %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"Setări de sistem"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Notificările de sistem sunt dezactivate"</string>
+  <string name="screen_notification_settings_title">"Notificări"</string>
   <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
+  <string name="screen_settings_oidc_account">"Cont și dispozitive"</string>
   <string name="screen_share_location_title">"Partajați locația"</string>
   <string name="screen_share_my_location_action">"Distribuiți locația mea"</string>
+  <string name="screen_share_open_apple_maps">"Deschideți în Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Deschideți în Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Deschideți în OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Distribuiți această locație"</string>
   <string name="screen_view_location_title">"Locație"</string>
   <string name="settings_rageshake">"Rageshake"</string>

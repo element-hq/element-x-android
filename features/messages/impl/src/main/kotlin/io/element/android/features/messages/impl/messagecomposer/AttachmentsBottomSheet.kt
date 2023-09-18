@@ -26,10 +26,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Collections
+import androidx.compose.material.icons.filled.FormatColorText
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,6 +56,7 @@ internal fun AttachmentsBottomSheet(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val localView = LocalView.current
@@ -82,10 +85,14 @@ internal fun AttachmentsBottomSheet(
     if (isVisible) {
         ModalBottomSheet(
             modifier = modifier,
+            sheetState = rememberModalBottomSheetState(
+                skipPartiallyExpanded = true
+            ),
             onDismissRequest = { isVisible = false }
         ) {
             AttachmentSourcePickerMenu(
                 state = state,
+                enableTextFormatting = enableTextFormatting,
                 onSendLocationClicked = onSendLocationClicked,
                 onCreatePollClicked = onCreatePollClicked,
             )
@@ -99,6 +106,7 @@ internal fun AttachmentSourcePickerMenu(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -145,6 +153,13 @@ internal fun AttachmentSourcePickerMenu(
                 text = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
             )
         }
+        if (enableTextFormatting) {
+            ListItem(
+                modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = true)) },
+                icon = { Icon(Icons.Default.FormatColorText, null) },
+                text = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
+            )
+        }
     }
 }
 
@@ -157,5 +172,6 @@ internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
         ),
         onSendLocationClicked = {},
         onCreatePollClicked = {},
+        enableTextFormatting = true,
     )
 }

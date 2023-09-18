@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.TextComposer
 
 @Composable
@@ -30,13 +31,14 @@ fun MessageComposerView(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
     fun onFullscreenToggle() {
         state.eventSink(MessageComposerEvents.ToggleFullScreenState)
     }
 
-    fun sendMessage(message: String) {
+    fun sendMessage(message: Message) {
         state.eventSink(MessageComposerEvents.SendMessage(message))
     }
 
@@ -48,12 +50,12 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.CloseSpecialMode)
     }
 
-    fun onComposerTextChange(text: String) {
-        state.eventSink(MessageComposerEvents.UpdateText(text))
+    fun onDismissTextFormatting() {
+        state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = false))
     }
 
-    fun onFocusChanged(hasFocus: Boolean) {
-        state.eventSink(MessageComposerEvents.FocusChanged(hasFocus))
+    fun onError(error: Throwable) {
+        state.eventSink(MessageComposerEvents.Error(error))
     }
 
     Box(modifier = modifier) {
@@ -61,17 +63,21 @@ fun MessageComposerView(
             state = state,
             onSendLocationClicked = onSendLocationClicked,
             onCreatePollClicked = onCreatePollClicked,
+            enableTextFormatting = enableTextFormatting,
         )
 
         TextComposer(
+            state = state.richTextEditorState,
+            canSendMessage = state.canSendMessage,
+            onRequestFocus = { state.richTextEditorState.requestFocus() },
             onSendMessage = ::sendMessage,
             composerMode = state.mode,
+            showTextFormatting = state.showTextFormatting,
             onResetComposerMode = ::onCloseSpecialMode,
-            onComposerTextChange = ::onComposerTextChange,
             onAddAttachment = ::onAddAttachment,
-            onFocusChanged = ::onFocusChanged,
-            composerCanSendMessage = state.isSendButtonVisible,
-            composerText = state.text
+            onDismissTextFormatting = ::onDismissTextFormatting,
+            enableTextFormatting = enableTextFormatting,
+            onError = ::onError,
         )
     }
 }
@@ -92,5 +98,6 @@ private fun ContentToPreview(state: MessageComposerState) {
         state = state,
         onSendLocationClicked = {},
         onCreatePollClicked = {},
+        enableTextFormatting = true,
     )
 }

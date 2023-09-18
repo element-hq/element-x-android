@@ -25,10 +25,16 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class MigrationScreenPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial`() = runTest {
         val presenter = createPresenter()

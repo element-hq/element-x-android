@@ -26,12 +26,17 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class VerifySelfSessionPresenterTests {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - Initial state is received`() = runTest {

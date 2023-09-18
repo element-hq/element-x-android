@@ -19,8 +19,6 @@ package io.element.android.libraries.matrix.impl
 import android.content.Context
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -41,7 +39,6 @@ class RustMatrixClientFactory @Inject constructor(
     private val sessionStore: SessionStore,
     private val userAgentProvider: UserAgentProvider,
     private val clock: SystemClock,
-    private val featureFlagsService: FeatureFlagService,
 ) {
 
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
@@ -56,11 +53,7 @@ class RustMatrixClientFactory @Inject constructor(
 
         client.restoreSession(sessionData.toSession())
 
-        val syncService = client.syncService().apply {
-                if (featureFlagsService.isFeatureEnabled(FeatureFlags.UseEncryptionSync)) {
-                    withEncryptionSync(withCrossProcessLock = false, appIdentifier = null)
-                }
-            }
+        val syncService = client.syncService()
             .finish()
 
         RustMatrixClient(

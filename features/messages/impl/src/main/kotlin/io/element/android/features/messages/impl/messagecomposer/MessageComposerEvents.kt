@@ -17,16 +17,15 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.MessageComposerMode
 
 @Immutable
 sealed interface MessageComposerEvents {
     data object ToggleFullScreenState : MessageComposerEvents
-    data class FocusChanged(val hasFocus: Boolean) : MessageComposerEvents
-    data class SendMessage(val message: String) : MessageComposerEvents
+    data class SendMessage(val message: Message) : MessageComposerEvents
     data object CloseSpecialMode : MessageComposerEvents
     data class SetMode(val composerMode: MessageComposerMode) : MessageComposerEvents
-    data class UpdateText(val text: String) : MessageComposerEvents
     data object AddAttachment : MessageComposerEvents
     data object DismissAttachmentMenu : MessageComposerEvents
     sealed interface PickAttachmentSource : MessageComposerEvents {
@@ -37,5 +36,7 @@ sealed interface MessageComposerEvents {
         data object Location : PickAttachmentSource
         data object Poll : PickAttachmentSource
     }
+    data class ToggleTextFormatting(val enabled: Boolean) : MessageComposerEvents
     data object CancelSendAttachment : MessageComposerEvents
+    data class Error(val error: Throwable) : MessageComposerEvents
 }

@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
@@ -37,15 +38,22 @@ import io.element.android.libraries.matrix.test.room.aMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitWithLatch
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 import java.util.Date
 
 class TimelinePresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createTimelinePresenter()
@@ -253,7 +261,11 @@ class TimelinePresenterTest {
     @Test
     fun `present - PollAnswerSelected event calls into rust room api and analytics`() = runTest {
         val room = FakeMatrixRoom()
-        val presenter = createTimelinePresenter(room)
+        val analyticsService = FakeAnalyticsService()
+        val presenter = createTimelinePresenter(
+            room = room,
+            analyticsService = analyticsService,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -264,7 +276,8 @@ class TimelinePresenterTest {
         assertThat(room.sendPollResponseInvocations.size).isEqualTo(1)
         assertThat(room.sendPollResponseInvocations.first().answers).isEqualTo(listOf("anAnswerId"))
         assertThat(room.sendPollResponseInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
-        // TODO Polls: Test poll vote analytic
+        assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
+        assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollVote())
     }
 
     private fun TestScope.createTimelinePresenter(
@@ -275,18 +288,21 @@ class TimelinePresenterTest {
             timelineItemsFactory = timelineItemsFactory,
             room = FakeMatrixRoom(matrixTimeline = timeline),
             dispatchers = testCoroutineDispatchers(),
-            appScope = this
+            appScope = this,
+            analyticsService = FakeAnalyticsService(),
         )
     }
 
     private fun TestScope.createTimelinePresenter(
         room: MatrixRoom,
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = room,
             dispatchers = testCoroutineDispatchers(),
-            appScope = this
+            appScope = this,
+            analyticsService = analyticsService,
         )
     }
 }

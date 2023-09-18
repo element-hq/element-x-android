@@ -30,11 +30,17 @@ import io.element.android.features.login.impl.resolver.network.WellKnownSlidingS
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class SearchAccountProviderPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val fakeWellknownRequest = FakeWellknownRequest()

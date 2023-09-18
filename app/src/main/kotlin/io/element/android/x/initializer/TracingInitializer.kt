@@ -17,6 +17,7 @@
 package io.element.android.x.initializer
 
 import android.content.Context
+import android.system.Os
 import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
 import io.element.android.features.preferences.impl.developer.tracing.SharedPrefTracingConfigurationStore
@@ -57,6 +58,8 @@ class TracingInitializer : Initializer<Unit> {
         }
         bugReporter.cleanLogDirectoryIfNeeded()
         tracingService.setupTracing(tracingConfiguration)
+        // Also set env variable for rust back trace
+        Os.setenv("RUST_BACKTRACE", "1", true)
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = mutableListOf()

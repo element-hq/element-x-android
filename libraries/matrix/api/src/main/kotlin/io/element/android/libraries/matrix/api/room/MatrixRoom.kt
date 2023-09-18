@@ -50,16 +50,26 @@ interface MatrixRoom : Closeable {
     val joinedMemberCount: Long
 
     /**
+     * A one-to-one is a room with exactly 2 members.
+     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
+     */
+    val isOneToOne: Boolean get() = activeMemberCount == 2L
+
+    /**
      * The current loaded members as a StateFlow.
      * Initial value is [MatrixRoomMembersState.Unknown].
      * To update them you should call [updateMembers].
      */
     val membersStateFlow: StateFlow<MatrixRoomMembersState>
 
+    val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState>
+
     /**
      * Try to load the room members and update the membersFlow.
      */
     suspend fun updateMembers(): Result<Unit>
+
+    suspend fun updateRoomNotificationSettings(): Result<Unit>
 
     val syncUpdateFlow: StateFlow<Long>
 
@@ -75,11 +85,11 @@ interface MatrixRoom : Closeable {
 
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
-    suspend fun sendMessage(message: String): Result<Unit>
+    suspend fun sendMessage(body: String, htmlBody: String?): Result<Unit>
 
-    suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, message: String): Result<Unit>
+    suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit>
 
-    suspend fun replyMessage(eventId: EventId, message: String): Result<Unit>
+    suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
@@ -174,6 +184,7 @@ interface MatrixRoom : Closeable {
     suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
 
     override fun close() = destroy()
+
 }
 
 

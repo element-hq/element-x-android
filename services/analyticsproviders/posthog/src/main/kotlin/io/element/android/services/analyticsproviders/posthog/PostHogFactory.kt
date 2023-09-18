@@ -25,10 +25,12 @@ import javax.inject.Inject
 class PostHogFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
+    private val posthogEndpointConfigProvider: PosthogEndpointConfigProvider,
 ) {
 
     fun createPosthog(): PostHog {
-        return PostHog.Builder(context, PosthogConfig.postHogApiKey, PosthogConfig.postHogHost)
+        val endpoint = posthogEndpointConfigProvider.provide()
+        return PostHog.Builder(context, endpoint.apiKey, endpoint.host)
                 // Record certain application events automatically! (off/false by default)
                 // .captureApplicationLifecycleEvents()
                 // Record screen views automatically! (off/false by default)

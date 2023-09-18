@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
@@ -48,6 +49,7 @@ fun aRoomSummaryFilled(
     lastMessage: RoomMessage? = aRoomMessage(),
     lastMessageTimestamp: Long? = null,
     unreadNotificationCount: Int = 2,
+    notificationMode: RoomNotificationMode? = null,
 ) = RoomSummary.Filled(
     aRoomSummaryDetail(
         roomId = roomId,
@@ -57,6 +59,7 @@ fun aRoomSummaryFilled(
         lastMessage = lastMessage,
         lastMessageTimestamp = lastMessageTimestamp,
         unreadNotificationCount = unreadNotificationCount,
+        notificationMode = notificationMode,
     )
 )
 
@@ -68,6 +71,7 @@ fun aRoomSummaryDetail(
     lastMessage: RoomMessage? = aRoomMessage(),
     lastMessageTimestamp: Long? = null,
     unreadNotificationCount: Int = 2,
+    notificationMode: RoomNotificationMode? = null,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -76,6 +80,7 @@ fun aRoomSummaryDetail(
     lastMessage = lastMessage,
     lastMessageTimestamp = lastMessageTimestamp,
     unreadNotificationCount = unreadNotificationCount,
+    notificationMode = notificationMode
 )
 
 fun aRoomMessage(
@@ -147,6 +152,7 @@ fun aMessageContent(
     body: String = "body",
     inReplyTo: InReplyTo? = null,
     isEdited: Boolean = false,
+    isThreaded: Boolean = false,
     messageType: MessageType = TextMessageType(
         body = body,
         formatted = null
@@ -155,6 +161,7 @@ fun aMessageContent(
     body = body,
     inReplyTo = inReplyTo,
     isEdited = isEdited,
+    isThreaded = isThreaded,
     type = messageType
 )
 

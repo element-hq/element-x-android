@@ -57,4 +57,5 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.rageshake.test)
+    testImplementation(projects.tests.testutils)
 }

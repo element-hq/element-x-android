@@ -45,7 +45,7 @@
       ]
     },
     {
-      "name": ":libraries:textcomposer",
+      "name": ":libraries:textcomposer:impl",
       "includeRegex": [
         "rich_text_editor_.*"
       ]
@@ -92,7 +92,8 @@
       "includeRegex": [
         "screen_room_details_.*",
         "screen_room_member_list_.*",
-        "screen_dm_details_.*"
+        "screen_dm_details_.*",
+        "screen_room_notification_settings_.*"
       ]
     },
     {
@@ -118,13 +119,26 @@
       "name": ":features:ftue:impl",
       "includeRegex": [
         "screen_welcome_.*",
-        "screen_migration_.*"
+        "screen_migration_.*",
+        "screen_notification_optin_.*"
       ]
     },
     {
       "name": ":features:poll:impl",
       "includeRegex": [
         "screen_create_poll_.*"
+      ]
+    },
+    {
+      "name": ":features:preferences:impl",
+      "includeRegex": [
+        "screen_edit_profile_.*"
+      ]
+    },
+    {
+      "name": ":features:call",
+      "includeRegex": [
+        "call_.*"
       ]
     }
   ]

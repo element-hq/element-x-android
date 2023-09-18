@@ -28,10 +28,16 @@ import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataSto
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class DeveloperSettingsPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - ensures initial state is correct`() = runTest {
         val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())

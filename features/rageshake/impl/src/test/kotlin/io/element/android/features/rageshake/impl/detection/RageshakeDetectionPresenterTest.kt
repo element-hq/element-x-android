@@ -28,13 +28,18 @@ import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.BeforeClass
+import org.junit.Rule
 import org.junit.Test
 
 class RageshakeDetectionPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
 
     companion object {
         private lateinit var aBitmap: Bitmap

@@ -25,8 +25,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -53,13 +55,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.features.messages.impl.timeline.components.event.ExtraPadding
+import io.element.android.features.messages.impl.timeline.components.event.getDpSize
+import io.element.android.features.messages.impl.timeline.components.event.noExtraPadding
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.LinkColor
 import kotlinx.collections.immutable.persistentMapOf
 import org.jsoup.nodes.Document
@@ -72,18 +79,28 @@ private const val CHIP_ID = "chip"
 @Composable
 fun HtmlDocument(
     document: Document,
+    extraPadding: ExtraPadding,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    HtmlBody(
-        body = document.body(),
-        interactionSource = interactionSource,
+    FlowRow(
         modifier = modifier,
-        onTextClicked = onTextClicked,
-        onTextLongClicked = onTextLongClicked,
-    )
+    ) {
+        HtmlBody(
+            body = document.body(),
+            interactionSource = interactionSource,
+            onTextClicked = onTextClicked,
+            onTextLongClicked = onTextLongClicked,
+        )
+        Spacer(
+            modifier = Modifier.size(
+                width = extraPadding.getDpSize(),
+                height = ElementTheme.typography.fontBodyXsRegular.fontSize.toDp() * 1.25f
+            )
+        )
+    }
 }
 
 @Composable
@@ -109,7 +126,12 @@ private fun HtmlBody(
             when (val node = nodes.next()) {
                 is TextNode -> {
                     if (!node.isBlank) {
-                        ClickableLinkText(text = node.text(), interactionSource = interactionSource)
+                        ClickableLinkText(
+                            text = node.text(),
+                            interactionSource = interactionSource,
+                            onClick = onTextClicked,
+                            onLongClick = onTextLongClicked,
+                        )
                     }
                 }
                 is Element -> {
@@ -603,5 +625,9 @@ internal fun HtmlDocumentDarkPreview(@PreviewParameter(DocumentProvider::class) 
 
 @Composable
 private fun ContentToPreview(document: Document) {
-    HtmlDocument(document, remember { MutableInteractionSource() })
+    HtmlDocument(
+        document = document,
+        extraPadding = noExtraPadding,
+        interactionSource = remember { MutableInteractionSource() }
+    )
 }

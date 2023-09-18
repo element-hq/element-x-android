@@ -33,14 +33,20 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
+import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 private val TESTED_MEDIA_INFO = aFileInfo()
 
 class MediaViewerPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
 
     private val mockMediaUri: Uri = mockk("localMediaUri")
     private val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)

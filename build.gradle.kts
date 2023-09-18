@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.cli.common.toBooleanLenient
 buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10")
-        classpath("com.google.gms:google-services:4.3.15")
+        classpath("com.google.gms:google-services:4.4.0")
     }
 }
 
@@ -62,7 +62,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.2.1")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.2.2")
     }
 
     // KtLint
@@ -140,22 +140,6 @@ sonar {
         // exclude source code from analyses separated by a colon (:)
         // Exclude Java source
         property("sonar.exclusions", "**/BugReporterMultipartBody.java")
-    }
-}
-
-allprojects {
-    val projectDir = projectDir.toString()
-    sonar {
-        properties {
-            // Note: folders `kotlin` are not supported (yet), I asked on their side: https://community.sonarsource.com/t/82824
-            // As a workaround provide the path in `sonar.sources` property.
-            if (File("$projectDir/src/main/kotlin").exists()) {
-                property("sonar.sources", "src/main/kotlin")
-            }
-            if (File("$projectDir/src/test/kotlin").exists()) {
-                property("sonar.tests", "src/test/kotlin")
-            }
-        }
     }
 }
 
@@ -261,6 +245,8 @@ koverMerged {
                 includes += "*Presenter"
                 excludes += "*Fake*Presenter"
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
+                // Some options can't be tested at the moment
+                excludes += "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*"
             }
             bound {
                 minValue = 85

@@ -31,16 +31,22 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
+import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.libraries.matrix.test.A_MESSAGE
-import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class ActionListPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -51,13 +57,13 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for message from me redacted`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(isMine = true, content = TimelineItemRedactedContent)
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -65,7 +71,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                     )
                 )
             )
@@ -76,13 +82,13 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for message from others redacted`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(isMine = false, content = TimelineItemRedactedContent)
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -90,7 +96,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                     )
                 )
             )
@@ -101,7 +107,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -110,7 +116,7 @@ class ActionListPresenterTest {
                 isMine = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -121,7 +127,38 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
+                        TimelineItemAction.ReportContent,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for others message cannot sent message`() = runTest {
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = false,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+            )
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = false))
+            // val loadingState = awaitItem()
+            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Copy,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
                 )
@@ -133,7 +170,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message and can redact`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -142,7 +179,7 @@ class ActionListPresenterTest {
                 isMine = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, true))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = true, canSendMessage = true))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -151,7 +188,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
                     )
@@ -164,7 +201,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for my message`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -173,7 +210,7 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -185,7 +222,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -197,7 +234,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a media item`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -206,7 +243,7 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemImageContent(),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -216,7 +253,7 @@ class ActionListPresenterTest {
                     persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -228,7 +265,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a state item in debug build`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -237,7 +274,7 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemStateEventContent(),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(stateEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(stateEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -246,7 +283,7 @@ class ActionListPresenterTest {
                     stateEvent,
                     persistentListOf(
                         TimelineItemAction.Copy,
-                        TimelineItemAction.Developer,
+                        TimelineItemAction.ViewSource,
                     )
                 )
             )
@@ -257,7 +294,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a state item in non-debuggable build`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -266,7 +303,7 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemStateEventContent(),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(stateEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(stateEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -285,7 +322,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute message in non-debuggable build`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -294,7 +331,7 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -317,7 +354,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute message with no actions`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -331,10 +368,10 @@ class ActionListPresenterTest {
                 content = TimelineItemRedactedContent,
             )
 
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             assertThat(awaitItem().target).isInstanceOf(ActionListState.Target.Success::class.java)
 
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(redactedEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(redactedEvent, canRedact = false, canSendMessage = true))
             awaitItem().run {
                 assertThat(target).isEqualTo(ActionListState.Target.None)
                 assertThat(displayEmojiReactions).isFalse()
@@ -344,7 +381,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute not sent message`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -355,7 +392,7 @@ class ActionListPresenterTest {
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
             )
 
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -373,7 +410,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for poll message`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -382,7 +419,7 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemPollContent(),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -399,7 +436,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for ended poll message`() = runTest {
-        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -408,7 +445,7 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemPollContent(isEnded = true),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, false))
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -423,5 +460,8 @@ class ActionListPresenterTest {
     }
 }
 
-private fun anActionListPresenter(isBuildDebuggable: Boolean) = ActionListPresenter(buildMeta = aBuildMeta(isDebuggable = isBuildDebuggable))
+private fun anActionListPresenter(isDeveloperModeEnabled: Boolean): ActionListPresenter {
+    val preferencesStore = InMemoryPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
+    return ActionListPresenter(preferencesStore = preferencesStore)
+}
 

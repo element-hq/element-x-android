@@ -29,13 +29,18 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class LeaveRoomPresenterImplTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - initial state hides all dialogs`() = runTest {

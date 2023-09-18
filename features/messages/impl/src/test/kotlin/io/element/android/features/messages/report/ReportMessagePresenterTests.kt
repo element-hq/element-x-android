@@ -28,10 +28,15 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class ReportMessagePresenterTests {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
 
     @Test
     fun `presenter - initial state`() = runTest {

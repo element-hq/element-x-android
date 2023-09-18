@@ -35,12 +35,17 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class CreateRoomRootPresenterTests {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
 
     private lateinit var userRepository: FakeUserRepository
     private lateinit var presenter: CreateRoomRootPresenter

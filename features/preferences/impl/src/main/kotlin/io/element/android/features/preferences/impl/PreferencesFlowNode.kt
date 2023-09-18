@@ -31,14 +31,19 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
+import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
 import io.element.android.features.preferences.impl.developer.tracing.ConfigureTracingNode
+import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
+import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
+import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -62,6 +67,9 @@ class PreferencesFlowNode @AssistedInject constructor(
         data object DeveloperSettings : NavTarget
 
         @Parcelize
+        data object AdvancedSettings : NavTarget
+
+        @Parcelize
         data object ConfigureTracing : NavTarget
 
         @Parcelize
@@ -69,6 +77,15 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object About : NavTarget
+
+        @Parcelize
+        data object NotificationSettings : NavTarget
+
+        @Parcelize
+        data class EditDefaultNotificationSetting(val isOneToOne: Boolean) : NavTarget
+
+        @Parcelize
+        data class UserProfile(val matrixUser: MatrixUser) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -94,6 +111,18 @@ class PreferencesFlowNode @AssistedInject constructor(
                     override fun onOpenDeveloperSettings() {
                         backstack.push(NavTarget.DeveloperSettings)
                     }
+
+                    override fun onOpenNotificationSettings() {
+                        backstack.push(NavTarget.NotificationSettings)
+                    }
+
+                    override fun onOpenAdvancedSettings() {
+                        backstack.push(NavTarget.AdvancedSettings)
+                    }
+
+                    override fun onOpenUserProfile(matrixUser: MatrixUser) {
+                        backstack.push(NavTarget.UserProfile(matrixUser))
+                    }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
             }
@@ -113,6 +142,25 @@ class PreferencesFlowNode @AssistedInject constructor(
             }
             NavTarget.AnalyticsSettings -> {
                 createNode<AnalyticsSettingsNode>(buildContext)
+            }
+            NavTarget.NotificationSettings -> {
+                val notificationSettingsCallback = object : NotificationSettingsNode.Callback {
+                    override fun editDefaultNotificationMode(isOneToOne: Boolean) {
+                        backstack.push(NavTarget.EditDefaultNotificationSetting(isOneToOne))
+                    }
+                }
+                createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
+            }
+            is NavTarget.EditDefaultNotificationSetting -> {
+                val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
+                createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input))
+            }
+            NavTarget.AdvancedSettings -> {
+                createNode<AdvancedSettingsNode>(buildContext)
+            }
+            is NavTarget.UserProfile -> {
+                val inputs = EditUserProfileNode.Inputs(navTarget.matrixUser)
+                createNode<EditUserProfileNode>(buildContext, listOf(inputs))
             }
         }
     }

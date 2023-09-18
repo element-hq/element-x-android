@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -40,11 +41,15 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
 @ExperimentalCoroutinesApi
 class RoomDetailsEditPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
 
     private lateinit var fakePickerProvider: FakePickerProvider
     private lateinit var fakeMediaPreProcessor: FakeMediaPreProcessor

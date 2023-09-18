@@ -26,7 +26,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 /**
  * Store data related to push about a user.
@@ -60,8 +62,8 @@ class UserPushStoreDataStore(
         }
     }
 
-    override suspend fun areNotificationEnabledForDevice(): Boolean {
-        return context.dataStore.data.first()[notificationEnabled].orTrue()
+    override fun getNotificationEnabledForDevice(): Flow<Boolean> {
+        return context.dataStore.data.map{ it[notificationEnabled].orTrue() }
     }
 
     override suspend fun setNotificationEnabledForDevice(enabled: Boolean) {

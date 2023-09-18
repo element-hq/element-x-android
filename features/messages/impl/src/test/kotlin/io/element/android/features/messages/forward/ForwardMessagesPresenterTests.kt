@@ -30,12 +30,18 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class ForwardMessagesPresenterTests {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
 
     @Test
     fun `present - initial state`() = runTest {

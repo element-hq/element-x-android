@@ -33,16 +33,19 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.toInner
+import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
@@ -60,9 +63,11 @@ import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
+import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
+import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
 import java.io.File
@@ -72,6 +77,7 @@ class RustMatrixRoom(
     override val sessionId: SessionId,
     private val roomListItem: RoomListItem,
     private val innerRoom: Room,
+    private val roomNotificationSettingsService: RustNotificationSettingsService,
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
@@ -90,6 +96,10 @@ class RustMatrixRoom(
     private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
     private val _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
     private val _syncUpdateFlow = MutableStateFlow(0L)
+
+    private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
+    override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
+
     private val _timeline by lazy {
         RustMatrixTimeline(
             matrixRoom = this,
@@ -197,37 +207,54 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun updateRoomNotificationSettings(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        val currentState = _roomNotificationSettingsStateFlow.value
+        val currentRoomNotificationSettings = currentState.roomNotificationSettings()
+        _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
+        runCatching {
+            roomNotificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
+        }.map {
+            _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(it)
+        }.onFailure {
+            _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Error(
+                prevRoomNotificationSettings = currentRoomNotificationSettings,
+                failure = it
+            )
+        }
+    }
+
     override suspend fun userAvatarUrl(userId: UserId): Result<String?> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.memberAvatarUrl(userId.value)
         }
     }
 
-    override suspend fun sendMessage(message: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun sendMessage(body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         val transactionId = genTransactionId()
-        messageEventContentFromMarkdown(message).use { content ->
+        messageEventContentFromParts(body, htmlBody).use { content ->
             runCatching {
                 innerRoom.send(content, transactionId)
             }
         }
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, message: String): Result<Unit> = withContext(roomDispatcher) {
-        if (originalEventId != null) {
-            runCatching {
-                innerRoom.edit(messageEventContentFromMarkdown(message), originalEventId.value, transactionId?.value)
-            }
-        } else {
-            runCatching {
-                transactionId?.let { cancelSend(it) }
-                innerRoom.send(messageEventContentFromMarkdown(message), genTransactionId())
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit> =
+        withContext(roomDispatcher) {
+            if (originalEventId != null) {
+                runCatching {
+                    innerRoom.edit(messageEventContentFromParts(body, htmlBody), originalEventId.value, transactionId?.value)
+                }
+            } else {
+                runCatching {
+                    transactionId?.let { cancelSend(it) }
+                    innerRoom.send(messageEventContentFromParts(body, htmlBody), genTransactionId())
+                }
             }
         }
-    }
 
-    override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.sendReply(messageEventContentFromMarkdown(message), eventId.value, genTransactionId())
+            innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventId.value, genTransactionId())
         }
     }
 
@@ -431,4 +458,11 @@ class RustMatrixRoom(
             MediaUploadHandlerImpl(files, handle())
         }
     }
+
+    private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
+        if(htmlBody != null) {
+            messageEventContentFromHtml(body, htmlBody)
+        } else {
+            messageEventContentFromMarkdown(body)
+        }
 }

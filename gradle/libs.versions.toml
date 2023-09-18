@@ -6,23 +6,23 @@
 android_gradle_plugin = "8.1.1"
 kotlin = "1.9.10"
 ksp = "1.9.10-1.0.13"
-molecule = "1.2.0"
+molecule = "1.2.1"
 
 # AndroidX
 material = "1.9.0"
-core = "1.10.1"
+core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
 recyclerview = "1.3.1"
-lifecycle = "2.6.1"
+lifecycle = "2.6.2"
 activity = "1.7.2"
 startup = "1.1.1"
 media3 = "1.1.1"
 browser = "1.6.0"
 
 # Compose
-compose_bom = "2023.08.00"
+compose_bom = "2023.09.00"
 composecompiler = "1.5.3"
 
 # Coroutines
@@ -42,14 +42,15 @@ showkase = "1.0.0-beta18"
 jsoup = "1.16.1"
 appyx = "1.3.0"
 dependencycheck = "8.4.0"
-dependencyanalysis = "1.21.0"
+dependencyanalysis = "1.22.0"
 stem = "2.3.0"
 sqldelight = "1.5.5"
-telephoto = "0.6.0-SNAPSHOT"
+telephoto = "0.6.0"
+wysiwyg = "2.10.0"
 
 # DI
 dagger = "2.48"
-anvil = "2.4.7-1-8"
+anvil = "2.4.8-1-8"
 
 # Auto service
 autoservice = "1.1.1"
@@ -65,7 +66,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.2.3"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.3.1"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -90,8 +91,11 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 androidx_preference = "androidx.preference:preference:1.2.1"
+androidx_webkit = "androidx.webkit:webkit:1.8.0"
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
+# Warning: issue on alpha07, make sure this is working when upgrading
+# Context in https://github.com/vector-im/element-x-android/pull/1239#issuecomment-1711500332
 androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha06"
 
 # Coroutines
@@ -146,7 +150,9 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.48"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.54"
+matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
+matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
@@ -163,8 +169,8 @@ maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.1"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
-sentry = "io.sentry:sentry-android:6.28.0"
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:42b2faa417c1e95f430bf8f6e379adba25ad5ef8"
+sentry = "io.sentry:sentry-android:6.29.0"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:e9cd9adaf18cec52ed851395eb84358b4f9b8d7f"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"
@@ -203,6 +209,9 @@ dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyanalysis" }
 paparazzi = "app.cash.paparazzi:1.3.1"
-sonarqube = "org.sonarqube:4.3.1.3277"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
+
+# Version '4.3.1.3277' introduced some regressions in CI time (more than 2x slower), so make sure
+# this is no longer the case before upgrading.
+sonarqube = "org.sonarqube:4.2.1.3168"

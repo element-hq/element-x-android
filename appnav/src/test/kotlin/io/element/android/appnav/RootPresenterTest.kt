@@ -31,10 +31,15 @@ import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolde
 import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
 import io.element.android.services.apperror.impl.DefaultAppErrorStateService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class RootPresenterTest {
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createPresenter()

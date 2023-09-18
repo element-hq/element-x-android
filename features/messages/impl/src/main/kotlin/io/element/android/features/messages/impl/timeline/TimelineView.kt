@@ -63,6 +63,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
@@ -119,7 +120,7 @@ fun TimelineView(
                 TimelineItemRow(
                     timelineItem = timelineItem,
                     highlightedItem = state.highlightedEventId?.value,
-                    canReply = state.canReply,
+                    userHasPermissionToSendMessage = state.userHasPermissionToSendMessage,
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked,
                     onUserDataClick = onUserDataClicked,
@@ -156,7 +157,7 @@ fun TimelineView(
 fun TimelineItemRow(
     timelineItem: TimelineItem,
     highlightedItem: String?,
-    canReply: Boolean,
+    userHasPermissionToSendMessage: Boolean,
     onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
@@ -189,7 +190,7 @@ fun TimelineItemRow(
                 TimelineItemEventRow(
                     event = timelineItem,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
-                    canReply = canReply,
+                    canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
                     onClick = { onClick(timelineItem) },
                     onLongClick = { onLongClick(timelineItem) },
                     onUserDataClick = onUserDataClick,
@@ -228,7 +229,7 @@ fun TimelineItemRow(
                             TimelineItemRow(
                                 timelineItem = subGroupEvent,
                                 highlightedItem = highlightedItem,
-                                canReply = false,
+                                userHasPermissionToSendMessage = false,
                                 onClick = onClick,
                                 onLongClick = onLongClick,
                                 inReplyToClick = inReplyToClick,

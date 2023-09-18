@@ -20,13 +20,13 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
-import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.util.UUID
 
@@ -34,7 +34,6 @@ class RoomSummaryListProcessor(
     private val roomSummaries: MutableStateFlow<List<RoomSummary>>,
     private val roomListService: RoomListService,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
-    private val shouldFetchFullRoom: Boolean = false,
 ) {
 
     private val roomSummariesByIdentifier = HashMap<String, RoomSummary>()
@@ -61,7 +60,18 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private suspend fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
+    suspend fun rebuildRoomSummaries() {
+        updateRoomSummaries {
+            forEachIndexed { i, summary ->
+                this[i] = when(summary) {
+                    is RoomSummary.Empty -> summary
+                    is RoomSummary.Filled -> buildAndCacheRoomSummaryForIdentifier(summary.identifier())
+                }
+            }
+        }
+    }
+
+    private fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
         when (update) {
             is RoomListEntriesUpdate.Append -> {
                 val roomSummaries = update.values.map {
@@ -101,15 +111,18 @@ class RoomSummaryListProcessor(
             RoomListEntriesUpdate.Clear -> {
                 clear()
             }
+            is RoomListEntriesUpdate.Truncate -> {
+                subList(update.length.toInt(), size).clear()
+            }
         }
     }
 
-    private suspend fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
+    private fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
         return when (entry) {
             RoomListEntry.Empty -> buildEmptyRoomSummary()
             is RoomListEntry.Filled -> buildAndCacheRoomSummaryForIdentifier(entry.roomId)
             is RoomListEntry.Invalidated -> {
-                roomSummariesByIdentifier[entry.roomId] ?: buildEmptyRoomSummary()
+                roomSummariesByIdentifier[entry.roomId] ?: buildAndCacheRoomSummaryForIdentifier(entry.roomId)
             }
         }
     }
@@ -118,24 +131,16 @@ class RoomSummaryListProcessor(
         return RoomSummary.Empty(UUID.randomUUID().toString())
     }
 
-    private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
+    private fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
-            roomListItem.fullRoomOrNull().use { fullRoom ->
+            roomListItem.roomInfoBlocking().use { roomInfo ->
                 RoomSummary.Filled(
-                    details = roomSummaryDetailsFactory.create(roomListItem, fullRoom)
+                    details = roomSummaryDetailsFactory.create(roomInfo)
                 )
             }
         } ?: buildEmptyRoomSummary()
         roomSummariesByIdentifier[builtRoomSummary.identifier()] = builtRoomSummary
         return builtRoomSummary
-    }
-
-    private fun RoomListItem.fullRoomOrNull(): Room? {
-        return if (shouldFetchFullRoom) {
-            fullRoom()
-        } else {
-            null
-        }
     }
 
     private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) =

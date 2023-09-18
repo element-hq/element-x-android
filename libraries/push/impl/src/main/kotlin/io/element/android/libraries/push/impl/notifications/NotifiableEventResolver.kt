@@ -26,7 +26,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import io.element.android.libraries.matrix.api.sync.StartSyncReason
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -37,7 +36,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.push.impl.R
-import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -45,11 +43,10 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.delay
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("NotifiableEventResolver", pushLoggerTag)
+private val loggerTag = LoggerTag("NotifiableEventResolver", LoggerTag.NotificationLoggerTag)
 
 /**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
@@ -67,14 +64,6 @@ class NotifiableEventResolver @Inject constructor(
         // Restore session
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val notificationService = client.notificationService()
-
-        // Restart the sync service to ensure that the crypto sync handle the toDevice Events.
-        client.syncService().startSync(StartSyncReason.Notification(roomId, eventId))
-        // Wait for toDevice Event to be processed
-        // FIXME This delay can be removed when the Rust SDK will handle internal retry to get
-        //  clear notification content.
-        delay(300)
-
         val notificationData = notificationService.getNotification(
             userId = sessionId,
             roomId = roomId,
@@ -82,8 +71,6 @@ class NotifiableEventResolver @Inject constructor(
         ).onFailure {
             Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
         }.getOrNull()
-
-        client.syncService().stopSync(StartSyncReason.Notification(roomId, eventId))
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
         return notificationData?.asNotifiableEvent(sessionId)

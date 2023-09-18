@@ -124,15 +124,11 @@ class DeveloperSettingsPresenter @Inject constructor(
         enabledFeatures: SnapshotStateMap<String, Boolean>,
         featureUiModel: FeatureUiModel,
         enabled: Boolean,
-        triggerClearCache: () -> Unit,
+        @Suppress("UNUSED_PARAMETER") triggerClearCache: () -> Unit,
     ) = launch {
         val feature = features[featureUiModel.key] ?: return@launch
         if (featureFlagService.setFeatureEnabled(feature, enabled)) {
             enabledFeatures[featureUiModel.key] = enabled
-        }
-
-        if (featureUiModel.key == FeatureFlags.UseEncryptionSync.key) {
-            triggerClearCache()
         }
     }
 

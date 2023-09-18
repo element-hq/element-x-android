@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.PollEnd
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -56,10 +57,10 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -75,6 +76,7 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -93,6 +95,8 @@ class MessagesPresenter @AssistedInject constructor(
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
+    private val analyticsService: AnalyticsService,
+    private val preferencesStore: PreferencesStore,
     @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
 
@@ -141,10 +145,17 @@ class MessagesPresenter @AssistedInject constructor(
             timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
         }
 
+        val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
+
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> {
-                    localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
+                    localCoroutineScope.handleTimelineAction(
+                        action = event.action,
+                        targetEvent = event.event,
+                        composerState = composerState,
+                        enableTextFormatting = enableTextFormatting,
+                    )
                 }
                 is MessagesEvents.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventId)
@@ -176,7 +187,8 @@ class MessagesPresenter @AssistedInject constructor(
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
-            eventSink = ::handleEvents
+            enableTextFormatting = enableTextFormatting,
+            eventSink = { handleEvents(it) }
         )
     }
 
@@ -193,13 +205,15 @@ class MessagesPresenter @AssistedInject constructor(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
     ) = launch {
         when (action) {
             TimelineItemAction.Copy -> handleCopyContents(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
-            TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
-            TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
-            TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
+            TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
+            TimelineItemAction.Reply,
+            TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState)
+            TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent)
@@ -215,7 +229,8 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.reinviteOtherUser(inviteProgress: MutableState<Async<Unit>>) = launch(dispatchers.io) {
-        suspend {
+        inviteProgress.value = Async.Loading()
+        runCatching {
             room.updateMembers()
 
             val memberList = when (val memberState = room.membersStateFlow.value) {
@@ -228,7 +243,14 @@ class MessagesPresenter @AssistedInject constructor(
             room.inviteUserById(member.userId).onFailure { t ->
                 Timber.e(t, "Failed to reinvite DM partner")
             }.getOrThrow()
-        }.runCatchingUpdatingState(inviteProgress)
+        }.fold(
+            onSuccess = {
+                inviteProgress.value = Async.Success(Unit)
+            },
+            onFailure = {
+                inviteProgress.value = Async.Failure(it)
+            }
+        )
     }
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {
@@ -240,10 +262,20 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+    private suspend fun handleActionEdit(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
+        ) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.eventId,
-            (targetEvent.content as? TimelineItemTextBasedContent)?.body.orEmpty(),
+            (targetEvent.content as? TimelineItemTextBasedContent)?.let {
+                if (enableTextFormatting) {
+                    it.htmlBody ?: it.body
+                } else {
+                    it.body
+                }
+            }.orEmpty(),
             targetEvent.transactionId,
         )
         composerState.eventSink(
@@ -287,6 +319,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(
+            isThreaded = targetEvent.isThreaded,
             senderName = targetEvent.safeSenderName,
             eventId = targetEvent.eventId,
             attachmentThumbnailInfo = attachmentThumbnailInfo,
@@ -312,8 +345,10 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private suspend fun handleEndPollAction(event: TimelineItem.Event) {
-        event.eventId?.let { room.endPoll(it, "The poll with event id: $it has ended.") }
-        // TODO Polls: Send poll end analytic
+        event.eventId?.let {
+            room.endPoll(it, "The poll with event id: $it has ended.")
+            analyticsService.capture(PollEnd())
+        }
     }
 
     private suspend fun handleCopyContents(event: TimelineItem.Event) {

@@ -24,11 +24,16 @@ import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.createroom.impl.userlist.FakeUserListPresenterFactory
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.libraries.usersearch.test.FakeUserRepository
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class AddPeoplePresenterTests {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
 
     private lateinit var presenter: AddPeoplePresenter
 

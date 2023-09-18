@@ -44,7 +44,7 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     timelineItems = timelineItems,
     paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, hasMoreToLoadBackwards = true),
     highlightedEventId = null,
-    canReply = true,
+    userHasPermissionToSendMessage = true,
     hasNewItems = false,
     eventSink = {},
 )
@@ -111,6 +111,7 @@ internal fun aTimelineItemEvent(
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: LocalEventSendState = LocalEventSendState.Sent(eventId),
     inReplyTo: InReplyTo? = null,
+    isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
 ): TimelineItem.Event {
@@ -129,6 +130,7 @@ internal fun aTimelineItemEvent(
         localSendState = sendState,
         inReplyTo = inReplyTo,
         debugInfo = debugInfo,
+        isThreaded = isThreaded,
         origin = null
     )
 }

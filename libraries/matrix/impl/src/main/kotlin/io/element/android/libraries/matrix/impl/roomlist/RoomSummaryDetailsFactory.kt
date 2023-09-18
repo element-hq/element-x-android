@@ -18,27 +18,30 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
 import io.element.android.libraries.matrix.impl.room.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
-import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.RoomInfo
+import org.matrix.rustcomponents.sdk.use
 
 class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
 
-    suspend fun create(roomListItem: RoomListItem, room: Room?): RoomSummaryDetails {
-        val latestRoomMessage = roomListItem.latestEvent()?.use {
+    fun create(roomInfo: RoomInfo): RoomSummaryDetails {
+        val latestRoomMessage = roomInfo.latestEvent?.use {
             roomMessageFactory.create(it)
         }
         return RoomSummaryDetails(
-            roomId = RoomId(roomListItem.id()),
-            name = roomListItem.name() ?: roomListItem.id(),
-            canonicalAlias = roomListItem.canonicalAlias(),
-            isDirect = roomListItem.isDirect(),
-            avatarURLString = roomListItem.avatarUrl(),
-            unreadNotificationCount = roomListItem.unreadNotifications().use { it.notificationCount().toInt() },
+            roomId = RoomId(roomInfo.id),
+            name = roomInfo.name ?: roomInfo.id,
+            canonicalAlias = roomInfo.canonicalAlias,
+            isDirect = roomInfo.isDirect,
+            avatarURLString = roomInfo.avatarUrl,
+            unreadNotificationCount = roomInfo.notificationCount.toInt(),
             lastMessage = latestRoomMessage,
             lastMessageTimestamp = latestRoomMessage?.originServerTs,
-            inviter = room?.inviter()?.let(RoomMemberMapper::map),
+            inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
+            notificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
         )
     }
 }
+

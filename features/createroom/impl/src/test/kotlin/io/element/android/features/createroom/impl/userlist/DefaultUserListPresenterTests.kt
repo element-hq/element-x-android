@@ -25,11 +25,16 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.test.FakeUserRepository
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class DefaultUserListPresenterTests {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
 
     private val userRepository = FakeUserRepository()
 

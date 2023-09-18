@@ -32,6 +32,11 @@ interface RoomListService {
         data object Terminated : State()
     }
 
+    sealed class SyncIndicator {
+        data object Show : SyncIndicator()
+        data object Hide : SyncIndicator()
+    }
+
     /**
      * returns a [RoomList] object of all rooms we want to display.
      * This will exclude some rooms like the invites, or spaces.
@@ -48,6 +53,16 @@ interface RoomListService {
      * This is useful to load more data when the user scrolls down.
      */
     fun updateAllRoomsVisibleRange(range: IntRange)
+
+    /**
+     * Rebuild the room summaries, required when we know some data may have changed. (E.g. room notification settings)
+     */
+    fun rebuildRoomSummaries()
+
+    /**
+     * The sync indicator as a flow.
+     */
+    val syncIndicator: StateFlow<SyncIndicator>
 
     /**
      * The state of the service as a flow.

@@ -37,6 +37,7 @@ internal fun aMessageEvent(
     isMine: Boolean = true,
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
     inReplyTo: InReplyTo? = null,
+    isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
 ) = TimelineItem.Event(
@@ -52,5 +53,6 @@ internal fun aMessageEvent(
     localSendState = sendState,
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,
+    isThreaded = isThreaded,
     origin = null
 )

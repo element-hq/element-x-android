@@ -38,6 +38,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
+import io.element.android.libraries.permissions.api.PermissionsStore
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -46,7 +47,7 @@ private val loggerTag = LoggerTag("DefaultPermissionsPresenter")
 class DefaultPermissionsPresenter @AssistedInject constructor(
     @Assisted val permission: String,
     private val permissionsStore: PermissionsStore,
-    private val permissionStateProvider: PermissionStateProvider,
+    private val composablePermissionStateProvider: ComposablePermissionStateProvider,
 ) : PermissionsPresenter {
 
     @AssistedFactory
@@ -90,7 +91,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
             }
         }
 
-        permissionState = permissionStateProvider.provide(
+        permissionState = composablePermissionStateProvider.provide(
             permission = permission,
             onPermissionResult = ::onPermissionResult
         )
@@ -123,7 +124,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
             showDialog = showDialog.value,
             permissionAlreadyAsked = isAlreadyAsked,
             permissionAlreadyDenied = isAlreadyDenied,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 

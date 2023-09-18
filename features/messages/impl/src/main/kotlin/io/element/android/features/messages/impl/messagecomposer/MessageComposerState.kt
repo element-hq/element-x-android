@@ -19,21 +19,23 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class MessageComposerState(
-    val text: String?,
+    val richTextEditorState: RichTextEditorState,
     val isFullScreen: Boolean,
-    val hasFocus: Boolean,
     val mode: MessageComposerMode,
     val showAttachmentSourcePicker: Boolean,
+    val showTextFormatting: Boolean,
     val canShareLocation: Boolean,
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
-    val eventSink: (MessageComposerEvents) -> Unit
+    val eventSink: (MessageComposerEvents) -> Unit,
 ) {
-    val isSendButtonVisible: Boolean = text.isNullOrEmpty().not()
+    val canSendMessage: Boolean = richTextEditorState.messageHtml.isNotEmpty()
+    val hasFocus: Boolean = richTextEditorState.hasFocus
 }
 
 @Immutable

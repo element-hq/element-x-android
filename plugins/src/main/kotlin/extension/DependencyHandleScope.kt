@@ -92,6 +92,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:pushproviders:unifiedpush"))
     implementation(project(":libraries:featureflag:impl"))
     implementation(project(":libraries:pushstore:impl"))
+    implementation(project(":libraries:preferences:impl"))
     implementation(project(":libraries:architecture"))
     implementation(project(":libraries:dateformatter:impl"))
     implementation(project(":libraries:di"))
@@ -99,7 +100,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:mediapickers:impl"))
     implementation(project(":libraries:mediaupload:impl"))
     implementation(project(":libraries:usersearch:impl"))
-    implementation(project(":libraries:textcomposer"))
+    implementation(project(":libraries:textcomposer:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {

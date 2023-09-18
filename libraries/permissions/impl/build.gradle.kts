@@ -56,6 +56,8 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.permissions.test)
+    testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)
 }

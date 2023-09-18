@@ -24,10 +24,8 @@ package io.element.android.libraries.core.log.logger
  */
 open class LoggerTag(name: String, parentTag: LoggerTag? = null) {
 
-    object SYNC : LoggerTag("SYNC")
-    object VOIP : LoggerTag("VOIP")
-    object CRYPTO : LoggerTag("CRYPTO")
-    object RENDEZVOUS : LoggerTag("RZ")
+    object PushLoggerTag : LoggerTag("Push")
+    object NotificationLoggerTag : LoggerTag("Notification", PushLoggerTag)
 
     val value: String = if (parentTag == null) {
         name

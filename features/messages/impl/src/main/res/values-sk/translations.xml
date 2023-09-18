@@ -5,11 +5,6 @@
     <item quantity="few">"%1$d zmeny miestnosti"</item>
     <item quantity="other">"%1$d zmien miestnosti"</item>
   </plurals>
-  <plurals name="screen_room_timeline_more_reactions">
-    <item quantity="one">"%1$d ďalší"</item>
-    <item quantity="few">"%1$d ďalšie"</item>
-    <item quantity="other">"%1$d ďalších"</item>
-  </plurals>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Odfotiť"</string>
   <string name="screen_room_attachment_source_camera_video">"Nahrať video"</string>
@@ -17,6 +12,7 @@
   <string name="screen_room_attachment_source_gallery">"Knižnica fotografií a videí"</string>
   <string name="screen_room_attachment_source_location">"Poloha"</string>
   <string name="screen_room_attachment_source_poll">"Anketa"</string>
+  <string name="screen_room_attachment_text_formatting">"Formátovanie textu"</string>
   <string name="screen_room_encrypted_history_banner">"História správ v tejto miestnosti nie je momentálne k dispozícii"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
   <string name="screen_room_invite_again_alert_message">"Chceli by ste ich pozvať späť?"</string>

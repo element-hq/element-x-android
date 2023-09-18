@@ -35,6 +35,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.impl.migration.MigrationScreenNode
+import io.element.android.features.ftue.impl.notifications.NotificationsOptInNode
 import io.element.android.features.ftue.impl.state.DefaultFtueState
 import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.welcome.WelcomeNode
@@ -78,6 +79,9 @@ class FtueFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object WelcomeScreen : NavTarget
+
+        @Parcelize
+        data object NotificationsOptIn : NavTarget
 
         @Parcelize
         data object AnalyticsOptIn : NavTarget
@@ -124,6 +128,14 @@ class FtueFlowNode @AssistedInject constructor(
                 }
                 createNode<WelcomeNode>(buildContext, listOf(callback))
             }
+            NavTarget.NotificationsOptIn -> {
+                val callback = object : NotificationsOptInNode.Callback {
+                    override fun onNotificationsOptInFinished() {
+                        lifecycleScope.launch { moveToNextStep() }
+                    }
+                }
+                createNode<NotificationsOptInNode>(buildContext, listOf(callback))
+            }
             NavTarget.AnalyticsOptIn -> {
                 analyticsEntryPoint.createNode(this, buildContext)
             }
@@ -137,6 +149,9 @@ class FtueFlowNode @AssistedInject constructor(
             }
             FtueStep.WelcomeScreen -> {
                 backstack.newRoot(NavTarget.WelcomeScreen)
+            }
+            FtueStep.NotificationsOptIn -> {
+                backstack.newRoot(NavTarget.NotificationsOptIn)
             }
             FtueStep.AnalyticsOptIn -> {
                 backstack.replace(NavTarget.AnalyticsOptIn)

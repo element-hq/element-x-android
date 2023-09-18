@@ -22,11 +22,16 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.waitForPredicate
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class ConfigureTracingPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
     @Test
     fun `present - initial state`() = runTest {
         val store = InMemoryTracingConfigurationStore()

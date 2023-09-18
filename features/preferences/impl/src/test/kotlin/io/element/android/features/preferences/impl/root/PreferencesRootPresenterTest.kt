@@ -24,16 +24,23 @@ import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class PreferencesRootPresenterTest {
+
+    @get:Rule
+    val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val matrixClient = FakeMatrixClient()
@@ -46,6 +53,7 @@ class PreferencesRootPresenterTest {
             BuildType.DEBUG,
             FakeVersionFormatter(),
             SnackbarDispatcher(),
+            FakeFeatureFlagService()
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -65,6 +73,7 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.showDeveloperSettings).isEqualTo(true)
             assertThat(loadedState.showAnalyticsSettings).isEqualTo(false)
             assertThat(loadedState.accountManagementUrl).isNull()
+            assertThat(loadedState.devicesManagementUrl).isNull()
         }
     }
 }

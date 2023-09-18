@@ -38,6 +38,7 @@ import org.matrix.rustcomponents.sdk.RoomListInput
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListServiceState
+import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 
@@ -52,9 +53,9 @@ class RustRoomListService(
     private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
 
     private val allRoomsLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, roomSummaryDetailsFactory, shouldFetchFullRoom = false)
+    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, roomSummaryDetailsFactory)
     private val invitesLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, roomSummaryDetailsFactory, shouldFetchFullRoom = true)
+    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, roomSummaryDetailsFactory)
 
     init {
         sessionCoroutineScope.launch(dispatcher) {
@@ -106,6 +107,21 @@ class RustRoomListService(
         }
     }
 
+    override fun rebuildRoomSummaries() {
+        sessionCoroutineScope.launch {
+            allRoomsListProcessor.rebuildRoomSummaries()
+        }
+    }
+
+    override val syncIndicator: StateFlow<RoomListService.SyncIndicator> =
+        innerRoomListService.syncIndicator()
+            .map { it.toSyncIndicator() }
+            .onEach { syncIndicator ->
+                Timber.d("SyncIndicator = $syncIndicator")
+            }
+            .distinctUntilChanged()
+            .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RoomListService.SyncIndicator.Hide)
+
     override val state: StateFlow<RoomListService.State> =
         innerRoomListService.stateFlow()
             .map { it.toRoomListState() }
@@ -126,10 +142,18 @@ private fun RoomListLoadingState.toLoadingState(): RoomList.LoadingState {
 private fun RoomListServiceState.toRoomListState(): RoomListService.State {
     return when (this) {
         RoomListServiceState.INITIAL,
+        RoomListServiceState.RECOVERING,
         RoomListServiceState.SETTING_UP -> RoomListService.State.Idle
         RoomListServiceState.RUNNING -> RoomListService.State.Running
         RoomListServiceState.ERROR -> RoomListService.State.Error
         RoomListServiceState.TERMINATED -> RoomListService.State.Terminated
+    }
+}
+
+private fun RoomListServiceSyncIndicator.toSyncIndicator(): RoomListService.SyncIndicator {
+    return when (this) {
+        RoomListServiceSyncIndicator.SHOW -> RoomListService.SyncIndicator.Show
+        RoomListServiceSyncIndicator.HIDE -> RoomListService.SyncIndicator.Hide
     }
 }
 
