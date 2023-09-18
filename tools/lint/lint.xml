@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
   ~ Copyright (c) 2022 New Vector Ltd
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +31,9 @@
     <issue id="IconDipSize" severity="error" />
     <issue id="IconDuplicatesConfig" severity="error" />
     <issue id="IconDuplicates" severity="error" />
-    <issue id="IconExpectedSize" severity="error" />
+    <issue id="IconExpectedSize" severity="error">
+        <ignore path="**/ic_launcher_monochrome.webp" />
+    </issue>
     <issue id="LocaleFolder" severity="error" />
 
     <!-- AlwaysShowAction is considered as an error to force ignoring the issue when detected -->
