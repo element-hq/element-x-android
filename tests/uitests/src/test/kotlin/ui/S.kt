@@ -96,6 +96,7 @@ class S {
         paparazzi.unsafeUpdateConfig(
             deviceConfig = baseDeviceConfig.deviceConfig.copy(
                 softButtons = false,
+                locale = localeStr,
                 nightMode = componentTestPreview.isNightMode().let {
                     when (it) {
                         true -> NightMode.NIGHT
