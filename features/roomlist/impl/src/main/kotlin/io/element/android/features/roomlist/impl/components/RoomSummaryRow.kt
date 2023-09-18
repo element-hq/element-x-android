@@ -33,17 +33,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
@@ -173,29 +166,6 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         modifier = Modifier.padding(top = 3.dp),
         isVisible = room.hasUnread,
     )
-}
-
-val TextPlaceholderShape = PercentRectangleSizeShape(0.5f)
-
-class PercentRectangleSizeShape(private val percent: Float) : Shape {
-    override fun createOutline(
-        size: Size,
-        layoutDirection: LayoutDirection,
-        density: Density
-    ): Outline {
-        val halfPercent = percent / 2f
-        val path = Path().apply {
-            val rect = Rect(
-                left = 0f,
-                top = size.height * halfPercent,
-                right = size.width,
-                bottom = size.height * (1 - halfPercent)
-            )
-            addRect(rect)
-            close()
-        }
-        return Outline.Generic(path)
-    }
 }
 
 @Preview
