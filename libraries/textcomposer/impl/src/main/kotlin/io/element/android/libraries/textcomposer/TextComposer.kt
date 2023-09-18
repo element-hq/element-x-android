@@ -81,7 +81,6 @@ import io.element.android.libraries.textcomposer.components.FormattingOptionStat
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
-import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.view.models.InlineFormat
 import io.element.android.wysiwyg.view.models.LinkAction
@@ -274,17 +273,8 @@ private fun TextInput(
             modifier = Modifier
                 .padding(top = 6.dp, bottom = 6.dp)
                 .fillMaxWidth(),
-            style = RichTextEditorDefaults.style(
-                text = RichTextEditorDefaults.textStyle(
-                    color = if (state.hasFocus) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.secondary
-                    }
-                ),
-                cursor = RichTextEditorDefaults.cursorStyle(
-                    color = ElementTheme.colors.iconAccentTertiary,
-                )
+            style = ElementRichTextEditorStyle.create(
+                hasFocus = state.hasFocus
             ),
             onError = onError
         )
