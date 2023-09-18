@@ -134,7 +134,7 @@ class RoomListPresenter @Inject constructor(
     private fun VisibleRangeHandler(visibleRange: State<IntRange>) {
         val hasReachEndThreshold = remember {
             derivedStateOf {
-                visibleRange.value.first == 0 || visibleRange.value.last > roomListDataSource.allRooms.value.size - RoomListService.DEFAULT_PAGE_SIZE * THRESHOLD_PAGE_MULTIPLIER
+                visibleRange.value.last > roomListDataSource.allRooms.value.size - RoomListService.DEFAULT_PAGE_SIZE * THRESHOLD_PAGE_MULTIPLIER
             }
         }
         val hasReachedStart = remember {
@@ -143,6 +143,9 @@ class RoomListPresenter @Inject constructor(
             }
         }
         LaunchedEffect(Unit) {
+            launch {
+                roomListDataSource.loadMore()
+            }
             snapshotFlow { visibleRange.value }
                 .debounce(300)
                 .onEach { range ->
