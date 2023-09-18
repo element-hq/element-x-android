@@ -28,7 +28,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
@@ -57,7 +56,7 @@ class RoomListDataSource @Inject constructor(
     private val appScope: CoroutineScope,
 ) {
     init {
-        observerNotificationSettings()
+        observeNotificationSettings()
     }
 
     private val _filter = MutableStateFlow("")
@@ -103,7 +102,7 @@ class RoomListDataSource @Inject constructor(
     val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
 
     @OptIn(FlowPreview::class)
-    private fun observerNotificationSettings() {
+    private fun observeNotificationSettings() {
         notificationSettingsService.notificationSettingsChangeFlow
             .debounce(0.5.seconds)
             .onEach {
@@ -140,16 +139,10 @@ class RoomListDataSource @Inject constructor(
         }
     }
 
-    private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int, ): RoomListRoomSummary? {
+    private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
         val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
             is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
             is RoomSummary.Filled -> {
-                // Only show a decoration if the mode is not ALL_MESSAGES
-                val notificationMode = if (roomSummary.details.notificationMode == RoomNotificationMode.ALL_MESSAGES) {
-                    null
-                } else {
-                    roomSummary.details.notificationMode
-                }
                 val avatarData = AvatarData(
                     id = roomSummary.identifier(),
                     name = roomSummary.details.name,
@@ -167,7 +160,7 @@ class RoomListDataSource @Inject constructor(
                         roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
                     }.orEmpty(),
                     avatarData = avatarData,
-                    notificationMode = notificationMode
+                    notificationMode = roomSummary.details.notificationMode,
                 )
             }
             null -> null
