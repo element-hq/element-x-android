@@ -59,6 +59,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -192,6 +193,7 @@ class RustMatrixRoom(
                     while (true) {
                         // Loading the whole membersIterator as a stop-gap measure.
                         // We should probably implement some sort of paging in the future.
+                        yield()
                         addAll(membersIterator.nextChunk(1000u) ?: break)
                     }
                 }
@@ -199,13 +201,12 @@ class RustMatrixRoom(
             val mappedMembers = rustMembers.parallelMap(RoomMemberMapper::map)
             _membersStateFlow.value = MatrixRoomMembersState.Ready(mappedMembers)
             Result.success(Unit)
+        } catch (exception: CancellationException) {
+            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
+            throw exception
         } catch (exception: Exception) {
             _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
-            if (exception is CancellationException) {
-                throw exception
-            } else {
-                Result.failure(exception)
-            }
+            Result.failure(exception)
         } finally {
             rustMembers?.destroyAll()
         }
