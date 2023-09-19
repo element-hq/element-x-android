@@ -35,11 +35,9 @@ import io.element.android.features.login.impl.oidc.customtab.DefaultOidcActionFl
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.net.URL
 
 class ConfirmAccountProviderPresenter @AssistedInject constructor(
     @Assisted private val params: Params,
@@ -97,8 +95,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
         loginFlowAction: MutableState<Async<LoginFlow>>,
     ) = launch {
         suspend {
-            val domain = tryOrNull { URL(homeserverUrl) }?.host ?: homeserverUrl
-            authenticationService.setHomeserver(domain).map {
+            authenticationService.setHomeserver(homeserverUrl).map {
                 val matrixHomeServerDetails = authenticationService.getHomeserverDetails().value!!
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
