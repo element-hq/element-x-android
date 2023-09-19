@@ -16,10 +16,12 @@
 
 package io.element.android.x.di
 
+import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.anvil.annotations.MergeSubcomponent
 import dagger.BindsInstance
 import dagger.Subcomponent
 import io.element.android.libraries.architecture.NodeFactoriesBindings
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -33,5 +35,10 @@ interface SessionComponent : NodeFactoriesBindings {
         @BindsInstance
         fun client(matrixClient: MatrixClient): Builder
         fun build(): SessionComponent
+    }
+
+    @ContributesTo(AppScope::class)
+    interface ParentBindings {
+        fun sessionComponentBuilder(): Builder
     }
 }
