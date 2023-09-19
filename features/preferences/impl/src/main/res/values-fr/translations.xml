@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_edit_profile_display_name">"Nom d\'affichage"</string>
-  <string name="screen_edit_profile_display_name_placeholder">"Votre nom d\'affichage"</string>
-  <string name="screen_edit_profile_error">"Une erreur inconnue s\'est produite et les informations n\'ont pas pu être modifiées."</string>
+  <string name="screen_edit_profile_display_name">"Pseudonyme"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Votre pseudonyme"</string>
+  <string name="screen_edit_profile_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>
   <string name="screen_edit_profile_error_title">"Impossible de mettre à jour le profil"</string>
   <string name="screen_edit_profile_title">"Modifier le profil"</string>
   <string name="screen_edit_profile_updating_details">"Mise à jour du profil…"</string>

@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Ergebnisse erst nach Ende der Umfrage anzeigen"</string>
   <string name="screen_create_poll_anonymous_headline">"Anonyme Umfrage"</string>
   <string name="screen_create_poll_answer_hint">"Option %1$d"</string>
-  <string name="screen_create_poll_discard_confirmation">"Sind Sie sicher, dass Sie diese Umfrage verwerfen wollen?"</string>
+  <string name="screen_create_poll_discard_confirmation">"Bist du sicher, dass du diese Umfrage verwerfen willst?"</string>
   <string name="screen_create_poll_discard_confirmation_title">"Umfrage verwerfen"</string>
   <string name="screen_create_poll_question_desc">"Frage oder Thema"</string>
   <string name="screen_create_poll_question_hint">"Worum geht es bei der Umfrage?"</string>
