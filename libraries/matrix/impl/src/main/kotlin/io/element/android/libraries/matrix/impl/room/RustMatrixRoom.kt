@@ -44,8 +44,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
-import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
+import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
@@ -187,21 +187,25 @@ class RustMatrixRoom(
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         var rustMembers: List<RoomMember>? = null
         try {
-            rustMembers = buildList {
-                while (true) {
-                    // Loading the whole iterator as a stop-gap measure.
-                    // We should probably implement some sort of paging in the future.
-                    addAll(innerRoom.members().nextChunk(1000u) ?: break)
+            rustMembers = innerRoom.members().use { membersIterator ->
+                buildList {
+                    while (true) {
+                        // Loading the whole membersIterator as a stop-gap measure.
+                        // We should probably implement some sort of paging in the future.
+                        addAll(membersIterator.nextChunk(1000u) ?: break)
+                    }
                 }
             }
             val mappedMembers = rustMembers.parallelMap(RoomMemberMapper::map)
             _membersStateFlow.value = MatrixRoomMembersState.Ready(mappedMembers)
             Result.success(Unit)
-        } catch (cancellationException: CancellationException) {
-            throw cancellationException
         } catch (exception: Exception) {
             _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
-            Result.failure(exception)
+            if (exception is CancellationException) {
+                throw exception
+            } else {
+                Result.failure(exception)
+            }
         } finally {
             rustMembers?.destroyAll()
         }
@@ -466,7 +470,7 @@ class RustMatrixRoom(
     }
 
     private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
-        if(htmlBody != null) {
+        if (htmlBody != null) {
             messageEventContentFromHtml(body, htmlBody)
         } else {
             messageEventContentFromMarkdown(body)
