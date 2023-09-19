@@ -187,7 +187,13 @@ class RustMatrixRoom(
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         var rustMembers: List<RoomMember>? = null
         try {
-            rustMembers = innerRoom.members()
+            rustMembers = buildList {
+                while (true) {
+                    // Loading the whole iterator as a stop-gap measure.
+                    // We should probably implement some sort of paging in the future.
+                    addAll(innerRoom.members().nextChunk(1000u) ?: break)
+                }
+            }
             val mappedMembers = rustMembers.parallelMap(RoomMemberMapper::map)
             _membersStateFlow.value = MatrixRoomMembersState.Ready(mappedMembers)
             Result.success(Unit)

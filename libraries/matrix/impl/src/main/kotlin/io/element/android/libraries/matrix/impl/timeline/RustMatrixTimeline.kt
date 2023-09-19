@@ -27,7 +27,6 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelin
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
-import io.element.android.libraries.matrix.impl.util.TaskHandleBag
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -103,7 +102,6 @@ class RustMatrixTimeline(
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
 
-        val taskHandleBag = TaskHandleBag()
         roomCoroutineScope.launch(dispatcher) {
             innerRoom.timelineDiffFlow { initialList ->
                 postItems(initialList)
@@ -120,17 +118,13 @@ class RustMatrixTimeline(
                 }
                 .launchIn(this)
 
-            taskHandleBag += fetchMembers().getOrNull()
-        }.invokeOnCompletion {
-            taskHandleBag.dispose()
+            fetchMembers()
         }
     }
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
         initLatch.await()
-        runCatching {
-            innerRoom.fetchMembers()
-        }
+        innerRoom.fetchMembers()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
