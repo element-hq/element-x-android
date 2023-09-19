@@ -95,7 +95,9 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is StateContent -> {
                 stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
             }
-            is PollContent, // TODO Polls: handle last message
+            is PollContent -> {
+                prefixIfNeeded(content.question, senderDisplayName, isDmRoom)
+            }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
                 prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
             }
