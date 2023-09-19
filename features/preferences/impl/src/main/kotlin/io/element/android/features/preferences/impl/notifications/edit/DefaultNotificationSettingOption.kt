@@ -78,12 +78,10 @@ fun DefaultNotificationSettingOption(
         )
     }
 }
+
 @DayNightPreviews
 @Composable
-internal fun DefaultNotificationSettingOptionPreview() = ElementPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun DefaultNotificationSettingOptionPreview() = ElementPreview {
     Column {
         DefaultNotificationSettingOption(
             mode = RoomNotificationMode.ALL_MESSAGES,
@@ -95,4 +93,3 @@ private fun ContentToPreview() {
         )
     }
 }
-

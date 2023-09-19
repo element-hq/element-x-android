@@ -49,12 +49,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -173,24 +172,9 @@ private fun CopyableText(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun EventDebugInfoViewPreviewLight() {
-    ElementPreviewLight {
-        ContentToPreview()
-    }
-}
-
-@Preview
-@Composable
-internal fun EventDebugInfoViewPreviewDark() {
-    ElementPreviewDark {
-        ContentToPreview()
-    }
-}
-
-@Composable
-private fun ContentToPreview() {
+internal fun EventDebugInfoViewPreview() = ElementPreview {
     EventDebugInfoView(
         eventId = EventId("\$some-event-id"),
         model = "Rust(\n\tModel()\n)",

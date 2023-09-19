@@ -49,7 +49,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
@@ -62,8 +61,8 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -209,18 +208,9 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun SearchAccountProviderViewLightPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun SearchAccountProviderViewDarkPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: SearchAccountProviderState) {
+internal fun SearchAccountProviderViewPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) = ElementPreview {
     SearchAccountProviderView(
         state = state,
         onBackPressed = {},

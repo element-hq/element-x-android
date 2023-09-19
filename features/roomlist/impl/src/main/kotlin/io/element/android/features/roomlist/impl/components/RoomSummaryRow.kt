@@ -39,7 +39,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -48,8 +47,8 @@ import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
@@ -181,13 +180,12 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
             )
         }
     }
-
 }
 
 @Composable
 private fun NotificationIcon(room: RoomListRoomSummary) {
-    val tint = if(room.hasUnread) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
-    when(room.notificationMode) {
+    val tint = if (room.hasUnread) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
+    when (room.notificationMode) {
         null, RoomNotificationMode.ALL_MESSAGES -> return
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
             Icon(
@@ -204,18 +202,9 @@ private fun NotificationIcon(room: RoomListRoomSummary) {
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun RoomSummaryRowLightPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) =
-    ElementPreviewLight { ContentToPreview(data) }
-
-@Preview
-@Composable
-internal fun RoomSummaryRowDarkPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) =
-    ElementPreviewDark { ContentToPreview(data) }
-
-@Composable
-private fun ContentToPreview(data: RoomListRoomSummary) {
+internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) = ElementPreview {
     RoomSummaryRow(
         room = data,
         onClick = {},

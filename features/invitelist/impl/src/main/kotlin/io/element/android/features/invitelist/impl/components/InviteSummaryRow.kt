@@ -37,7 +37,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.invitelist.impl.R
@@ -46,8 +45,8 @@ import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
@@ -185,17 +184,8 @@ private fun SenderRow(sender: InviteSender) {
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun InviteSummaryRowLightPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) =
-    ElementPreviewLight { ContentToPreview(data) }
-
-@Preview
-@Composable
-internal fun InviteSummaryRowDarkPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) =
-    ElementPreviewDark { ContentToPreview(data) }
-
-@Composable
-private fun ContentToPreview(data: InviteListInviteSummary) {
+internal fun InviteSummaryRowPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) = ElementPreview {
     InviteSummaryRow(data)
 }

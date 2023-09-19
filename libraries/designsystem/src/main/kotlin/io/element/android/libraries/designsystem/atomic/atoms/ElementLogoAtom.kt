@@ -150,38 +150,36 @@ sealed class ElementLogoAtomSize(
 
 @Composable
 @DayNightPreviews
-internal fun ElementLogoAtomMediumPreview() {
+internal fun ElementLogoAtomMediumPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Medium)
 }
 
 @Composable
 @DayNightPreviews
-internal fun ElementLogoAtomLargePreview() {
+internal fun ElementLogoAtomLargePreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Large)
 }
 
 @Composable
 @DayNightPreviews
-internal fun ElementLogoAtomMediumNoBlurShadowPreview() {
+internal fun ElementLogoAtomMediumNoBlurShadowPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Medium, useBlurredShadow = false)
 }
 
 @Composable
 @DayNightPreviews
-internal fun ElementLogoAtomLargeNoBlurShadowPreview() {
+internal fun ElementLogoAtomLargeNoBlurShadowPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Large, useBlurredShadow = false)
 }
 
 @Composable
 private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize, useBlurredShadow: Boolean = true) {
-    ElementPreview {
-        Box(
-            Modifier
-                .size(elementLogoAtomSize.outerSize + elementLogoAtomSize.shadowRadius * 2)
-                .background(ElementTheme.colors.bgSubtlePrimary),
-            contentAlignment = Alignment.Center
-        ) {
-            ElementLogoAtom(elementLogoAtomSize, useBlurredShadow = useBlurredShadow)
-        }
+    Box(
+        Modifier
+            .size(elementLogoAtomSize.outerSize + elementLogoAtomSize.shadowRadius * 2)
+            .background(ElementTheme.colors.bgSubtlePrimary),
+        contentAlignment = Alignment.Center
+    ) {
+        ElementLogoAtom(elementLogoAtomSize, useBlurredShadow = useBlurredShadow)
     }
 }

@@ -24,11 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.VectorIcons
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 
 /**
@@ -54,18 +53,9 @@ fun RowScope.ReplySwipeIndicator(
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun ReplySwipeIndicatorLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun ReplySwipeIndicatorDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun ReplySwipeIndicatorPreview() = ElementPreview {
     Column(modifier = Modifier.fillMaxWidth()) {
         for (i in 0..8) {
             Row { ReplySwipeIndicator(swipeProgress = { i / 8f }) }

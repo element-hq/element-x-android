@@ -31,13 +31,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -92,18 +91,8 @@ internal fun RequestVerificationHeader(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PreviewRequestVerificationHeaderLight() {
-    ElementPreviewLight {
-        RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
-    }
-}
-
-@Preview
-@Composable
-internal fun PreviewRequestVerificationHeaderDark() {
-    ElementPreviewDark {
-        RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
-    }
+internal fun RequestVerificationHeaderPreview() = ElementPreview {
+    RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
 }
