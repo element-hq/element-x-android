@@ -18,11 +18,10 @@ package io.element.android.libraries.permissions.api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 
 @Composable
 fun PermissionsView(
@@ -81,18 +80,9 @@ fun PermissionsView(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PermissionsViewLightPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun PermissionsViewDarkPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: PermissionsState) {
+internal fun PermissionsViewPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) = ElementPreview {
     PermissionsView(
         state = state,
     )

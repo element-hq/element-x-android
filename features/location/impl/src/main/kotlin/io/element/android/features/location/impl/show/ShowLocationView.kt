@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -43,8 +42,8 @@ import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -184,18 +183,9 @@ fun ShowLocationView(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun ShowLocationViewLightPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun ShowLocationViewDarkPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: ShowLocationState) {
+internal fun ShowLocationViewPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) = ElementPreview {
     ShowLocationView(
         state = state,
         onBackPressed = {},
@@ -203,4 +193,3 @@ private fun ContentToPreview(state: ShowLocationState) {
 }
 
 private const val PIN_ID = "pin"
-

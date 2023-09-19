@@ -27,7 +27,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
@@ -36,8 +35,8 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -68,7 +67,7 @@ fun RoomNotificationSettingsView(
                 .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            val subtitle = when(state.defaultRoomNotificationMode) {
+            val subtitle = when (state.defaultRoomNotificationMode) {
                 RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_room_notification_settings_mode_all_messages)
                 RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = R.string.screen_room_notification_settings_mode_mentions_and_keywords)
                 RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
@@ -145,17 +144,10 @@ fun RoomNotificationSettingsOptions(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun RoomNotificationSettingsLightPreview(@PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun RoomNotificationSettingsDarkPreview(@PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: RoomNotificationSettingsState) {
+internal fun RoomNotificationSettingsPreview(
+    @PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState
+) = ElementPreview {
     RoomNotificationSettingsView(state)
 }

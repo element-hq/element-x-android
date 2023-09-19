@@ -243,13 +243,10 @@ private fun ErrorView(
     )
 }
 
+// Only preview in dark, dark theme is forced on the Node.
 @Preview
 @Composable
-internal fun MediaViewerViewDarkPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: MediaViewerState) {
+internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
         onBackPressed = {}

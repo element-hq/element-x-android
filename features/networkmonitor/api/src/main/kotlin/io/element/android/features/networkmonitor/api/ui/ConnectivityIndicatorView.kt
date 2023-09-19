@@ -49,12 +49,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
@@ -165,18 +164,10 @@ private fun StatusBarPaddingSpacer(modifier: Modifier = Modifier) {
     Spacer(modifier = modifier.statusBarsPadding())
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun PreviewLightConnectivityIndicatorView() {
-    ElementPreviewLight {
-        ConnectivityIndicatorView(isOnline = false)
-    }
-}
-
-@Preview
-@Composable
-internal fun PreviewDarkConnectivityIndicatorView() {
-    ElementPreviewDark {
+internal fun ConnectivityIndicatorViewPreview() {
+    ElementPreview {
         ConnectivityIndicatorView(isOnline = false)
     }
 }

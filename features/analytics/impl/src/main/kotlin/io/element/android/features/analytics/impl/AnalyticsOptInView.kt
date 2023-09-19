@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
@@ -49,8 +48,8 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
@@ -210,20 +209,9 @@ private fun AnalyticsOptInFooter(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun AnalyticsOptInViewLightPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewLight {
-    ContentToPreview(state)
-}
-
-@Preview
-@Composable
-internal fun AnalyticsOptInViewDarkPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewDark {
-    ContentToPreview(state)
-}
-
-@Composable
-private fun ContentToPreview(state: AnalyticsOptInState) {
+internal fun AnalyticsOptInViewPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreview {
     AnalyticsOptInView(
         state = state,
         onClickTerms = {},

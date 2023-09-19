@@ -21,10 +21,9 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -42,18 +41,9 @@ fun TimelineItemRedactedView(
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun TimelineItemRedactedViewLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemRedactedViewDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun TimelineItemRedactedViewPreview() = ElementPreview {
     TimelineItemRedactedView(
         TimelineItemRedactedContent,
         extraPadding = noExtraPadding
