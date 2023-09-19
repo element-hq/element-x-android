@@ -171,12 +171,13 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
 
     // Unread
     Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         NotificationIcon(room)
         if (room.hasUnread) {
             UnreadIndicatorAtom(
-                modifier = Modifier.padding(top = 3.dp),
+                modifier = Modifier.padding(vertical = 3.dp),
             )
         }
     }
