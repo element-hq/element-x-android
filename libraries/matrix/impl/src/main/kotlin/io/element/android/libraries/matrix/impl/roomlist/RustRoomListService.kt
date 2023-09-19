@@ -107,6 +107,12 @@ class RustRoomListService(
         }
     }
 
+    override fun rebuildRoomSummaries() {
+        sessionCoroutineScope.launch {
+            allRoomsListProcessor.rebuildRoomSummaries()
+        }
+    }
+
     override val syncIndicator: StateFlow<RoomListService.SyncIndicator> =
         innerRoomListService.syncIndicator()
             .map { it.toSyncIndicator() }
