@@ -45,7 +45,7 @@ import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    dispatcher: CoroutineDispatcher,
+    private val dispatcher: CoroutineDispatcher,
     roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) : RoomListService {
 
@@ -53,9 +53,9 @@ class RustRoomListService(
     private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
 
     private val allRoomsLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, roomSummaryDetailsFactory)
+    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
     private val invitesLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, roomSummaryDetailsFactory)
+    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
 
     init {
         sessionCoroutineScope.launch(dispatcher) {
