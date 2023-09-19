@@ -46,7 +46,7 @@ dependencyanalysis = "1.22.0"
 stem = "2.3.0"
 sqldelight = "1.5.5"
 telephoto = "0.6.0"
-wysiwyg = "2.10.0"
+wysiwyg = "2.10.2"
 
 # DI
 dagger = "2.48"
