@@ -84,6 +84,16 @@ val SemanticColors.iconSuccessPrimaryBackground
         Color(0xff002513)
     }
 
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.bgSubtleTertiary
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray100
+        Color(0xfffbfcfd)
+    } else {
+        // We want DarkDesignTokens.colorGray100
+        Color(0xff14171b)
+    }
+
 // Temporary color, which is not in the token right now
 val SemanticColors.temporaryColorBgSpecial
     get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
