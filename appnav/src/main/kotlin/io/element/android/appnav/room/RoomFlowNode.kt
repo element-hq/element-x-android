@@ -36,7 +36,6 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.appnav.NodeLifecycleCallback
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.BackstackNode
@@ -103,12 +102,11 @@ class RoomFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Loaded -> {
-                val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
                 val roomFlowNodeCallback = plugins<RoomLoadedFlowNode.Callback>()
                 val awaitRoomState = loadingRoomStateStateFlow.value
                 if (awaitRoomState is LoadingRoomState.Loaded) {
                     val inputs = RoomLoadedFlowNode.Inputs(awaitRoomState.room, initialElement = inputs.initialElement)
-                    createNode<RoomLoadedFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback + nodeLifecycleCallbacks)
+                    createNode<RoomLoadedFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
                 } else {
                     loadingNode(buildContext, this::navigateUp)
                 }

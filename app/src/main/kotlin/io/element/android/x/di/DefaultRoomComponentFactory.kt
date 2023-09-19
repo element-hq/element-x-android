@@ -14,8 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav
+package io.element.android.x.di
 
-import com.bumble.appyx.core.plugin.Plugin
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appnav.di.RoomComponentFactory
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import javax.inject.Inject
 
-interface NodeLifecycleCallback : Plugin
+@ContributesBinding(SessionScope::class)
+class DefaultRoomComponentFactory @Inject constructor(
+    private val roomComponentBuilder: RoomComponent.Builder
+) : RoomComponentFactory {
+
+    override fun create(room: MatrixRoom): Any {
+        return roomComponentBuilder.room(room).build()
+    }
+}
