@@ -28,9 +28,6 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Announcement
-import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -42,6 +39,7 @@ import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -115,18 +113,18 @@ internal fun PreferenceViewPreview() = ElementPreview {
             PreferenceText(
                 title = "Title",
                 subtitle = "Some other text",
-                icon = Icons.Default.BugReport,
+                iconResourceId = CommonDrawables.ic_compound_chat_problem,
             )
             PreferenceDivider()
             PreferenceSwitch(
                 title = "Switch",
-                icon = Icons.Default.Announcement,
+                iconResourceId = CommonDrawables.ic_compound_threads,
                 isChecked = true,
             )
             PreferenceDivider()
             PreferenceCheckbox(
                 title = "Checkbox",
-                icon = Icons.Default.Announcement,
+                iconResourceId = CommonDrawables.ic_compound_notifications,
                 isChecked = true,
             )
             PreferenceDivider()

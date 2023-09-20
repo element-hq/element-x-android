@@ -24,8 +24,6 @@ import android.webkit.WebView
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -37,6 +35,7 @@ import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 typealias RequestPermissionCallback = (Array<String>) -> Unit
@@ -58,7 +57,7 @@ internal fun CallScreenView(
                     title = { Text(stringResource(R.string.element_call)) },
                     navigationIcon = {
                         BackButton(
-                            imageVector = Icons.Default.Close,
+                            resourceId = CommonDrawables.ic_compound_close,
                             onClick = onClose
                         )
                     }

@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.MyLocation
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,6 +50,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.maplibre.compose.CameraMode
 import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason
 import io.element.android.libraries.maplibre.compose.IconAnchor
@@ -125,7 +125,10 @@ fun ShowLocationView(
                 },
                 actions = {
                     IconButton(onClick = { state.eventSink(ShowLocationEvents.Share) }) {
-                        Icon(imageVector = Icons.Outlined.Share, contentDescription = stringResource(CommonStrings.action_share))
+                        Icon(
+                            resourceId = CommonDrawables.ic_compound_share_android,
+                            contentDescription = stringResource(CommonStrings.action_share),
+                        )
                     }
                 }
             )

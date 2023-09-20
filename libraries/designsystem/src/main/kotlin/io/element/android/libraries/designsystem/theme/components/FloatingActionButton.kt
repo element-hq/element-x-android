@@ -20,8 +20,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.contentColorFor
@@ -34,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun FloatingActionButton(
@@ -67,7 +66,7 @@ internal fun FloatingActionButtonPreview() =
 private fun ContentToPreview() {
     Box(modifier = Modifier.padding(8.dp)) {
         FloatingActionButton(onClick = {}) {
-            Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+            Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
         }
     }
 }

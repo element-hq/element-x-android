@@ -18,8 +18,6 @@ package io.element.android.libraries.designsystem.utils
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -88,7 +86,10 @@ fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
             message = data.visuals.message,
             action = data.visuals.actionLabel?.let { ButtonVisuals.Text(it, data::performAction) },
             dismissAction = if (data.visuals.withDismissAction) {
-                ButtonVisuals.Icon(IconSource.Vector(Icons.Default.Close), data::dismiss)
+                ButtonVisuals.Icon(
+                    IconSource.Resource(CommonDrawables.ic_compound_close),
+                    data::dismiss
+                )
             } else null,
         )
     }

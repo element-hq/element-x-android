@@ -17,8 +17,6 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.annotation.DrawableRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
  * Icon is a wrapper around [androidx.compose.material3.Icon] which allows to use
@@ -146,5 +145,5 @@ internal fun IconImageVectorPreview() =
 
 @Composable
 private fun ContentToPreview() {
-    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
 }

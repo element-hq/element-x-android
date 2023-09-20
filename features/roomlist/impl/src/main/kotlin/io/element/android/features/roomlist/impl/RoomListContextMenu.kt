@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -92,7 +90,7 @@ private fun RoomListModalBottomSheetContent(
             modifier = Modifier.clickable { onRoomSettingsClicked(contextMenu.roomId) },
             leadingContent = {
                 Icon(
-                    imageVector = Icons.Outlined.Settings,
+                    resourceId = CommonDrawables.ic_compound_settings,
                     contentDescription = stringResource(id = CommonStrings.common_settings),
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onSurface,
@@ -110,7 +108,7 @@ private fun RoomListModalBottomSheetContent(
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
             leadingContent = {
                 Icon(
-                    resourceId = CommonDrawables.ic_door_open_24,
+                    resourceId = CommonDrawables.ic_compound_leave,
                     contentDescription = stringResource(id = CommonStrings.action_leave_room),
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.error,

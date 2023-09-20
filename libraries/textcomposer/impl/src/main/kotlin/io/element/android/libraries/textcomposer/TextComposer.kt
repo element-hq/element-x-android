@@ -38,8 +38,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -494,7 +492,7 @@ private fun EditingModeView(
                 .weight(1f)
         )
         Icon(
-            imageVector = Icons.Default.Close,
+            resourceId = CommonDrawables.ic_compound_close,
             contentDescription = stringResource(CommonStrings.action_close),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -557,7 +555,7 @@ private fun ReplyToModeView(
             )
         }
         Icon(
-            imageVector = Icons.Default.Close,
+            resourceId = CommonDrawables.ic_compound_close,
             contentDescription = stringResource(CommonStrings.action_close),
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
