@@ -32,9 +32,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -69,6 +66,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -105,7 +103,7 @@ fun SearchAccountProviderView(
                 item {
                     IconTitleSubtitleMolecule(
                         modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
-                        iconImageVector = Icons.Filled.Search,
+                        iconResourceId = CommonDrawables.ic_compound_search,
                         title = stringResource(id = R.string.screen_account_provider_form_title),
                         subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
                     )
@@ -141,7 +139,7 @@ fun SearchAccountProviderView(
                                     eventSink(SearchAccountProviderEvents.UserInput(""))
                                 }) {
                                     Icon(
-                                        imageVector = Icons.Filled.Close,
+                                        resourceId = CommonDrawables.ic_compound_close,
                                         contentDescription = stringResource(CommonStrings.action_clear)
                                     )
                                 }

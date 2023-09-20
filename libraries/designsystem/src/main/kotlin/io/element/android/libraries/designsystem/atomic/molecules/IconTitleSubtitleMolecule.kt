@@ -88,7 +88,7 @@ fun IconTitleSubtitleMolecule(
 @Composable
 internal fun IconTitleSubtitleMoleculePreview() = ElementPreview {
     IconTitleSubtitleMolecule(
-        iconResourceId = R.drawable.ic_edit,
+        iconResourceId = R.drawable.ic_compound_chat,
         title = "Title",
         subTitle = "Sub iitle",
     )

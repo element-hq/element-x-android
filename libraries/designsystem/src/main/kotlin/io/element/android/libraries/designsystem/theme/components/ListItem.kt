@@ -17,8 +17,6 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ListItemColors
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalContentColor
@@ -37,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=425%3A24208&mode=design&t=G5hCfkLB6GgXDuWe-1
@@ -119,7 +118,9 @@ fun ListItem(
 
     androidx.compose.material3.ListItem(
         headlineContent = decoratedHeadlineContent,
-        modifier = if (onClick != null) Modifier.clickable(enabled = enabled, onClick = onClick).then(modifier) else modifier,
+        modifier = if (onClick != null) Modifier
+            .clickable(enabled = enabled, onClick = onClick)
+            .then(modifier) else modifier,
         overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,
@@ -135,27 +136,31 @@ fun ListItem(
  */
 sealed interface ListItemStyle {
     data object Default : ListItemStyle
-    data object Primary: ListItemStyle
+    data object Primary : ListItemStyle
     data object Destructive : ListItemStyle
 
-    @Composable fun headlineColor() = when (this) {
+    @Composable
+    fun headlineColor() = when (this) {
         Default, Primary -> ListItemDefaultColors.headline
         Destructive -> ElementTheme.colors.textCriticalPrimary
     }
 
-    @Composable fun supportingTextColor() = when (this) {
+    @Composable
+    fun supportingTextColor() = when (this) {
         Default, Primary -> ListItemDefaultColors.supportingText
         // FIXME once we have a defined color for this value
         Destructive -> ElementTheme.colors.textCriticalPrimary.copy(alpha = 0.8f)
     }
 
-    @Composable fun leadingIconColor() = when (this) {
+    @Composable
+    fun leadingIconColor() = when (this) {
         Default -> ListItemDefaultColors.icon
         Primary -> ElementTheme.colors.iconPrimary
         Destructive -> ElementTheme.colors.iconCriticalPrimary
     }
 
-    @Composable fun trailingIconColor() = when (this) {
+    @Composable
+    fun trailingIconColor() = when (this) {
         Default -> ListItemDefaultColors.icon
         Primary -> ElementTheme.colors.iconPrimary
         Destructive -> ElementTheme.colors.iconCriticalPrimary
@@ -169,15 +174,16 @@ object ListItemDefaultColors {
     val icon: Color @Composable get() = ElementTheme.colors.iconTertiary
     val iconDisabled: Color @Composable get() = ElementTheme.colors.iconDisabled
 
-    val colors: ListItemColors @Composable get() = ListItemDefaults.colors(
-        headlineColor = headline,
-        supportingColor = supportingText,
-        leadingIconColor = icon,
-        trailingIconColor = icon,
-        disabledHeadlineColor = headlineDisabled,
-        disabledLeadingIconColor = iconDisabled,
-        disabledTrailingIconColor = iconDisabled,
-    )
+    val colors: ListItemColors
+        @Composable get() = ListItemDefaults.colors(
+            headlineColor = headline,
+            supportingColor = supportingText,
+            leadingIconColor = icon,
+            trailingIconColor = icon,
+            disabledHeadlineColor = headlineDisabled,
+            disabledLeadingIconColor = iconDisabled,
+            disabledTrailingIconColor = iconDisabled,
+        )
 }
 
 // region: Simple list item
@@ -191,7 +197,7 @@ internal fun ListItemTwoLinesSimplePreview() = PreviewItems.TwoLinesListItemPrev
 
 @Preview(name = "List item (1 line) - Simple", group = PreviewGroup.ListItems)
 @Composable
-internal fun ListItemSingleLineSimplePreview()  = PreviewItems.OneLineListItemPreview()
+internal fun ListItemSingleLineSimplePreview() = PreviewItems.OneLineListItemPreview()
 // endregion
 
 // region: Trailing Checkbox
@@ -453,10 +459,12 @@ private object PreviewItems {
     }
 
     @Composable
-    fun switch() : ListItemContent {
+    fun switch(): ListItemContent {
         var checked by remember { mutableStateOf(false) }
         return ListItemContent.Switch(checked = checked, onChange = { checked = !checked })
     }
 
-    fun icon() = ListItemContent.Icon(iconSource = IconSource.Vector(Icons.Outlined.Share))
+    fun icon() = ListItemContent.Icon(
+        iconSource = IconSource.Resource(CommonDrawables.ic_compound_share_android)
+    )
 }

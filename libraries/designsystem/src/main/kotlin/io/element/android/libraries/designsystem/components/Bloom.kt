@@ -33,8 +33,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -114,6 +112,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -375,7 +374,7 @@ fun Modifier.avatarBloom(
             width = avatarData.size.dp,
             height = avatarData.size.dp,
             text = avatarData.initial,
-            textColor =  avatarColors.foreground,
+            textColor = avatarColors.foreground,
             backgroundColor = avatarColors.background,
         )
         val hash = remember(avatarData, avatarColors) {
@@ -430,7 +429,7 @@ private fun initialsBitmap(
         val bitmap = Bitmap.createBitmap(width.roundToPx(), height.roundToPx(), Bitmap.Config.ARGB_8888).asImageBitmap()
         androidx.compose.ui.graphics.Canvas(bitmap).also { canvas ->
             canvas.drawCircle(centerPx.toOffset(), width.toPx() / 2, backgroundPaint)
-            canvas.nativeCanvas.drawText(text, centerPx.x.toFloat() - result.size.width/2, centerPx.y * 2f - result.size.height/2 - 4, textPaint)
+            canvas.nativeCanvas.drawText(text, centerPx.x.toFloat() - result.size.width / 2, centerPx.y * 2f - result.size.height / 2 - 4, textPaint)
         }
         bitmap
     }
@@ -467,7 +466,9 @@ internal fun BloomPreview() {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
     ElementPreview {
         Scaffold(
-            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 Box {
                     MediumTopAppBar(
@@ -499,7 +500,10 @@ internal fun BloomPreview() {
                         },
                         actions = {
                             IconButton(onClick = {}) {
-                                Icon(imageVector = Icons.Default.Share, contentDescription = null)
+                                Icon(
+                                    resourceId = CommonDrawables.ic_compound_share_android,
+                                    contentDescription = null,
+                                )
                             }
                         },
                         title = {
@@ -539,7 +543,8 @@ internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::
         val bitmap = initialsBitmap(text = "F", backgroundColor = avatarColors.background, textColor = avatarColors.foreground)
         val hash = BlurHash.encode(bitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
         Box(
-            modifier = Modifier.size(256.dp)
+            modifier = Modifier
+                .size(256.dp)
                 .bloom(
                     hash = hash,
                     background = if (ElementTheme.isLightTheme) {

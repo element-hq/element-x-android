@@ -76,7 +76,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -89,6 +88,7 @@ import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsS
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
@@ -403,7 +403,11 @@ private fun MessageEventBubbleContent(
             horizontalArrangement = spacedBy(4.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(resourceId = VectorIcons.ThreadDecoration, contentDescription = null, tint = ElementTheme.colors.iconSecondary)
+            Icon(
+                resourceId = CommonDrawables.ic_thread_decoration,
+                contentDescription = null,
+                tint = ElementTheme.colors.iconSecondary,
+            )
             Text(
                 text = stringResource(CommonStrings.common_thread),
                 style = ElementTheme.typography.fontBodyXsRegular,

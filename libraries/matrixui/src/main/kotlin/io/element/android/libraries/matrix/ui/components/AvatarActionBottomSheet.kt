@@ -100,7 +100,7 @@ private fun AvatarActionBottomSheetContent(
                 },
                 leadingContent = {
                     Icon(
-                        imageVector = action.icon,
+                        resourceId = action.iconResourceId,
                         contentDescription = stringResource(action.titleResId),
                         tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
                     )

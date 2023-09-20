@@ -32,7 +32,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -57,6 +56,7 @@ import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -126,7 +126,9 @@ internal fun RoomMemberHeaderSection(
             text = userId,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(40.dp))
@@ -136,7 +138,11 @@ internal fun RoomMemberHeaderSection(
 @Composable
 internal fun RoomMemberMainActionsSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        MainActionButton(title = stringResource(CommonStrings.action_share), icon = Icons.Outlined.Share, onClick = onShareUser)
+        MainActionButton(
+            title = stringResource(CommonStrings.action_share),
+            iconResourceId = CommonDrawables.ic_compound_share_android,
+            onClick = onShareUser
+        )
     }
 }
 

@@ -33,12 +33,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.PersonAddAlt
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -48,9 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -77,6 +70,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
@@ -153,7 +147,8 @@ fun RoomDetailsView(
             if (state.canShowNotificationSettings && state.roomNotificationSettings != null) {
                 NotificationSection(
                     isDefaultMode = state.roomNotificationSettings.isDefault,
-                    openRoomNotificationSettings = openRoomNotificationSettings)
+                    openRoomNotificationSettings = openRoomNotificationSettings
+                )
             }
 
             if (state.roomType is RoomDetailsType.Room) {
@@ -230,17 +225,29 @@ internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit
         val roomNotificationSettings = state.roomNotificationSettings
         if (state.canShowNotificationSettings && roomNotificationSettings != null) {
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
-                MainActionButton(title = stringResource(CommonStrings.common_unmute), icon = Icons.Outlined.NotificationsOff, onClick = {
-                    state.eventSink(RoomDetailsEvent.UnmuteNotification)
-                })
+                MainActionButton(
+                    title = stringResource(CommonStrings.common_unmute),
+                    iconResourceId = CommonDrawables.ic_compound_notifications_off,
+                    onClick = {
+                        state.eventSink(RoomDetailsEvent.UnmuteNotification)
+                    },
+                )
             } else {
-                MainActionButton(title = stringResource(CommonStrings.common_mute), icon = Icons.Outlined.Notifications, onClick = {
-                    state.eventSink(RoomDetailsEvent.MuteNotification)
-                })
+                MainActionButton(
+                    title = stringResource(CommonStrings.common_mute),
+                    iconResourceId = CommonDrawables.ic_compound_notifications,
+                    onClick = {
+                        state.eventSink(RoomDetailsEvent.MuteNotification)
+                    },
+                )
             }
         }
         Spacer(modifier = Modifier.width(20.dp))
-        MainActionButton(title = stringResource(R.string.screen_room_details_share_room_title), icon = Icons.Outlined.Share, onClick = onShareRoom)
+        MainActionButton(
+            title = stringResource(R.string.screen_room_details_share_room_title),
+            iconResourceId = CommonDrawables.ic_compound_share_android,
+            onClick = onShareRoom
+        )
     }
 }
 
@@ -322,7 +329,7 @@ internal fun NotificationSection(
         PreferenceText(
             title = stringResource(R.string.screen_room_details_notification_title),
             subtitle = subtitle,
-            icon = Icons.Outlined.Notifications,
+            iconResourceId = CommonDrawables.ic_compound_notifications,
             onClick = openRoomNotificationSettings,
         )
     }
@@ -352,7 +359,7 @@ internal fun InviteSection(
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_invite_people_title),
-            icon = Icons.Outlined.PersonAddAlt,
+            iconResourceId = CommonDrawables.ic_compound_user_add,
             onClick = invitePeople,
         )
     }
@@ -364,7 +371,7 @@ internal fun SecuritySection(modifier: Modifier = Modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_encryption_enabled_title),
             subtitle = stringResource(R.string.screen_room_details_encryption_enabled_subtitle),
-            icon = Icons.Outlined.Lock,
+            iconResourceId = CommonDrawables.ic_compound_lock,
         )
     }
 }
@@ -374,7 +381,7 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
     PreferenceCategory(showDivider = false, modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_leave_room_title),
-            icon = ImageVector.vectorResource(R.drawable.ic_door_open),
+            iconResourceId = CommonDrawables.ic_compound_leave,
             tintColor = MaterialTheme.colorScheme.error,
             onClick = onLeaveRoom,
         )

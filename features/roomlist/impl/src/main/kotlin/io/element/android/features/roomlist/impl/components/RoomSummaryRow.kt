@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -44,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
 import io.element.android.libraries.core.extensions.orEmpty
-import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
@@ -55,6 +55,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -171,12 +172,13 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
 
     // Unread
     Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         NotificationIcon(room)
         if (room.hasUnread) {
             UnreadIndicatorAtom(
-                modifier = Modifier.padding(top = 3.dp),
+                modifier = Modifier.padding(vertical = 3.dp),
             )
         }
     }
@@ -189,14 +191,16 @@ private fun NotificationIcon(room: RoomListRoomSummary) {
         null, RoomNotificationMode.ALL_MESSAGES -> return
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
             Icon(
+                modifier = Modifier.size(16.dp),
                 contentDescription = stringResource(CommonStrings.screen_notification_settings_mode_mentions),
-                imageVector = ImageVector.vectorResource(VectorIcons.Mention),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_mention),
                 tint = tint,
             )
         RoomNotificationMode.MUTE ->
             Icon(
+                modifier = Modifier.size(16.dp),
                 contentDescription = stringResource(CommonStrings.common_mute),
-                imageVector = ImageVector.vectorResource(VectorIcons.Mute),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_notifications_solid_off),
                 tint = tint,
             )
     }

@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -29,15 +30,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -52,6 +50,7 @@ import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -96,7 +95,7 @@ fun MessagesReactionButton(
         color = buttonColor
     ) {
         when (content) {
-            is MessagesReactionsButtonContent.Icon -> IconContent(imageVector = content.imageVector)
+            is MessagesReactionsButtonContent.Icon -> IconContent(resourceId = content.resourceId)
             is MessagesReactionsButtonContent.Text -> TextContent(text = content.text)
             is MessagesReactionsButtonContent.Reaction -> ReactionContent(reaction = content.reaction)
         }
@@ -105,7 +104,7 @@ fun MessagesReactionButton(
 
 sealed class MessagesReactionsButtonContent {
     data class Text(val text: String) : MessagesReactionsButtonContent()
-    data class Icon(val imageVector: ImageVector) : MessagesReactionsButtonContent()
+    data class Icon(@DrawableRes val resourceId: Int) : MessagesReactionsButtonContent()
 
     data class Reaction(val reaction: AggregatedReaction) : MessagesReactionsButtonContent()
 
@@ -129,10 +128,10 @@ private fun TextContent(
 
 @Composable
 private fun IconContent(
-    imageVector: ImageVector,
+    @DrawableRes resourceId: Int,
     modifier: Modifier = Modifier
 ) = Icon(
-    imageVector = imageVector,
+    resourceId = resourceId,
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
     tint = ElementTheme.materialColors.secondary,
     modifier = modifier
@@ -179,7 +178,7 @@ internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionP
 @Composable
 internal fun MessagesAddReactionButtonPreview() = ElementPreview {
     MessagesReactionButton(
-        content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+        content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_september_add_reaction),
         onClick = {},
         onLongClick = {}
     )

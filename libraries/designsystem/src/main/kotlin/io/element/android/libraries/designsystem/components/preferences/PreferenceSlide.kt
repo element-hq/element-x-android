@@ -16,14 +16,13 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -35,6 +34,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -44,6 +44,7 @@ fun PreferenceSlide(
     value: Float,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
+    @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
     enabled: Boolean = true,
     summary: String? = null,
@@ -56,7 +57,11 @@ fun PreferenceSlide(
             .defaultMinSize(minHeight = preferenceMinHeight)
             .padding(vertical = 4.dp, horizontal = preferencePaddingHorizontal),
     ) {
-        PreferenceIcon(icon = icon, isVisible = showIconAreaIfNoIcon)
+        PreferenceIcon(
+            icon = icon,
+            iconResourceId = iconResourceId,
+            isVisible = showIconAreaIfNoIcon,
+        )
         Column(
             modifier = Modifier
                 .weight(1f),
@@ -90,7 +95,7 @@ internal fun PreferenceSlidePreview() = ElementThemedPreview { ContentToPreview(
 @Composable
 private fun ContentToPreview() {
     PreferenceSlide(
-        icon = Icons.Default.Person,
+        iconResourceId = CommonDrawables.ic_compound_user_profile,
         title = "Slide",
         summary = "Summary",
         value = 0.75F
