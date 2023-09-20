@@ -72,7 +72,6 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.designsystem.R as CommonR
 
 private val avatarBloomSize = 430.dp
 
@@ -207,7 +206,7 @@ private fun DefaultRoomListTopBar(
                     onClick = onSearchClicked,
                 ) {
                     Icon(
-                        resourceId = CommonR.drawable.ic_compound_search,
+                        resourceId = CommonDrawables.ic_compound_search,
                         contentDescription = stringResource(CommonStrings.action_search),
                     )
                 }
@@ -215,7 +214,7 @@ private fun DefaultRoomListTopBar(
                     onClick = { showMenu = !showMenu }
                 ) {
                     Icon(
-                        resourceId = CommonR.drawable.ic_compound_overflow_vertical,
+                        resourceId = CommonDrawables.ic_compound_overflow_vertical,
                         contentDescription = null,
                     )
                 }

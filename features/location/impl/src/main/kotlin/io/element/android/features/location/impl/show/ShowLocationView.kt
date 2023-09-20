@@ -62,7 +62,6 @@ import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.TypographyTokens
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableMap
-import io.element.android.libraries.designsystem.R as DesignSystemR
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -166,7 +165,7 @@ fun ShowLocationView(
             MapboxMap(
                 styleUri = rememberTileStyleUrl(),
                 modifier = Modifier.fillMaxSize(),
-                images = mapOf(PIN_ID to DesignSystemR.drawable.pin).toImmutableMap(),
+                images = mapOf(PIN_ID to CommonDrawables.pin).toImmutableMap(),
                 cameraPositionState = cameraPositionState,
                 uiSettings = MapDefaults.uiSettings,
                 symbolManagerSettings = MapDefaults.symbolManagerSettings,
