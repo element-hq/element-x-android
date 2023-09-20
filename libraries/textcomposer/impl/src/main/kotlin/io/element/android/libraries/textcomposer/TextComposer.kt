@@ -593,6 +593,10 @@ private fun SendButton(
             // CommonDrawables.ic_september_send is too big... reduce its size.
             else -> 18.dp
         }
+        val iconStartPadding = when (composerMode) {
+            is MessageComposerMode.Edit -> 0.dp
+            else -> 2.dp
+        }
         val contentDescription = when (composerMode) {
             is MessageComposerMode.Edit -> stringResource(CommonStrings.action_edit)
             else -> stringResource(CommonStrings.action_send)
@@ -606,6 +610,7 @@ private fun SendButton(
             Icon(
                 modifier = Modifier
                     .height(iconSize.applyScaleUp())
+                    .padding(start = iconStartPadding)
                     .align(Alignment.Center),
                 resourceId = iconId,
                 contentDescription = contentDescription,
