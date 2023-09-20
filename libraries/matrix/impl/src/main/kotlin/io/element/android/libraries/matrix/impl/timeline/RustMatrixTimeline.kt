@@ -124,7 +124,7 @@ class RustMatrixTimeline(
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
         initLatch.await()
-        innerRoom.fetchMembers()
+        innerRoom.fetchMembersBlocking()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
