@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -98,11 +99,18 @@ class TimelinePresenter @Inject constructor(
                     )
                     analyticsService.capture(PollVote())
                 }
+                is TimelineEvents.PollEndClicked -> appScope.launch {
+                    room.endPoll(
+                        pollStartId = event.pollStartId,
+                        text = "The poll with event id: ${event.pollStartId} has ended."
+                    )
+                    analyticsService.capture(PollEnd())
+                }
             }
         }
 
         LaunchedEffect(timelineItems.size) {
-             computeHasNewItems(timelineItems, prevMostRecentItemId, hasNewItems)
+            computeHasNewItems(timelineItems, prevMostRecentItemId, hasNewItems)
         }
 
         LaunchedEffect(Unit) {

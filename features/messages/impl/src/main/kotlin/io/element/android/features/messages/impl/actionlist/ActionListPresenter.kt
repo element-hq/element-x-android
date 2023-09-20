@@ -108,7 +108,7 @@ class ActionListPresenter @Inject constructor(
                     buildList {
                         val isMineOrCanRedact = timelineItem.isMine || userCanRedact
 
-                        // TODO Poll: Reply to poll. Ensure to update `fun TimelineItemEventContent.canBeReplied()`
+                        // TODO Polls: Reply to poll. Ensure to update `fun TimelineItemEventContent.canBeReplied()`
                         //  when touching this
                         // if (timelineItem.isRemote) {
                         //     // Can only reply or forward messages already uploaded to the server

@@ -644,7 +644,6 @@ class MessagesPresenterTest {
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            analyticsService = analyticsService,
             preferencesStore = preferencesStore,
             dispatchers = coroutineDispatchers,
         )

@@ -36,6 +36,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 @Composable
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
+    isMine: Boolean,
     interactionSource: MutableInteractionSource,
     extraPadding: ExtraPadding,
     onClick: () -> Unit,
@@ -95,6 +96,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemPollContent -> TimelineItemPollView(
             content = content,
+            isMine = isMine,
             eventSink = eventSink,
             modifier = modifier,
         )
