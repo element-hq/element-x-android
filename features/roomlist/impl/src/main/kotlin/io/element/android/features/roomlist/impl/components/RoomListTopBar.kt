@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -210,7 +209,7 @@ private fun DefaultRoomListTopBar(
                     onClick = onSearchClicked,
                 ) {
                     Icon(
-                        resourceId = CommonR.drawable.ic_search,
+                        resourceId = CommonR.drawable.ic_compound_search,
                         contentDescription = stringResource(CommonStrings.action_search),
                     )
                 }
@@ -218,7 +217,7 @@ private fun DefaultRoomListTopBar(
                     onClick = { showMenu = !showMenu }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.MoreVert,
+                        resourceId = CommonR.drawable.ic_compound_overflow_vertical,
                         contentDescription = null,
                     )
                 }

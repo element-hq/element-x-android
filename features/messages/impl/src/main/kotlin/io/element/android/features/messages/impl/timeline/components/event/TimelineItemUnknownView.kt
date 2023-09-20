@@ -16,14 +16,13 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -35,7 +34,7 @@ fun TimelineItemUnknownView(
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_unsupported_event),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
-        icon = Icons.Default.Info,
+        iconResourceId = CommonDrawables.ic_compound_info,
         extraPadding = extraPadding,
         modifier = modifier
     )

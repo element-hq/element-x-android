@@ -470,14 +470,14 @@ private fun EditingModeView(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 12.dp)
     ) {
         Icon(
-            resourceId = CommonDrawables.ic_edit,
+            resourceId = CommonDrawables.ic_september_edit_solid_16,
             contentDescription = stringResource(CommonStrings.common_editing),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -587,8 +587,13 @@ private fun SendButton(
         enabled = canSendMessage,
     ) {
         val iconId = when (composerMode) {
-            is MessageComposerMode.Edit -> R.drawable.ic_tick
-            else -> R.drawable.ic_send
+            is MessageComposerMode.Edit -> CommonDrawables.ic_compound_check
+            else -> CommonDrawables.ic_september_send
+        }
+        val iconSize = when (composerMode) {
+            is MessageComposerMode.Edit -> 24.dp
+            // CommonDrawables.ic_september_send is too big... reduce its size.
+            else -> 18.dp
         }
         val contentDescription = when (composerMode) {
             is MessageComposerMode.Edit -> stringResource(CommonStrings.action_edit)
@@ -602,7 +607,7 @@ private fun SendButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .height(24.dp.applyScaleUp())
+                    .height(iconSize.applyScaleUp())
                     .align(Alignment.Center),
                 resourceId = iconId,
                 contentDescription = contentDescription,

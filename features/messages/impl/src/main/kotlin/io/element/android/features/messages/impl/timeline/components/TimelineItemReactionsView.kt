@@ -16,8 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -35,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.model.AggregatedReacti
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -96,7 +95,7 @@ private fun TimelineItemReactionsView(
             },
             addMoreButton = {
                 MessagesReactionButton(
-                    content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+                    content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_september_add_reaction),
                     onClick = onMoreReactionsClick,
                     onLongClick = {}
                 )
