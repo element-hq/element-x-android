@@ -1,3 +1,23 @@
+Changes in Element X v0.2.1 (2023-09-20)
+========================================
+
+Features ✨
+----------
+ - Bump Rust SDK to `v0.1.56`
+ - [Rich text editor] Add link support to rich text editor ([#1309](https://github.com/vector-im/element-x-android/issues/1309))
+ - Let the SDK figure the best scheme given an homeserver URL (thus allowing HTTP homeservers) ([#1382](https://github.com/vector-im/element-x-android/issues/1382))
+
+Bugfixes 🐛
+----------
+ - Fix ANR on RoomList when notification settings change. ([#1370](https://github.com/vector-im/element-x-android/issues/1370))
+
+Other changes
+-------------
+ - Element Call: support scheme `io.element.call` ([#1377](https://github.com/vector-im/element-x-android/issues/1377))
+ - [DI] Rework how dagger components are created and provided. ([#1378](https://github.com/vector-im/element-x-android/issues/1378))
+ - Remove usage of async-uniffi as it leads to a deadlocks and memory leaks. ([#1381](https://github.com/vector-im/element-x-android/issues/1381))
+
+
 Changes in Element X v0.2.0 (2023-09-18)
 ========================================
 
