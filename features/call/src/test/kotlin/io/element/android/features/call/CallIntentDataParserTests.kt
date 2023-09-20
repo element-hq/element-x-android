@@ -84,10 +84,26 @@ class CallIntentDataParserTests {
     }
 
     @Test
+    fun `element scheme 2 with url param gets url extracted`() {
+        val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isEqualTo(embeddedUrl)
+    }
+
+    @Test
     fun `element scheme with call host and no url param returns null`() {
         val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "element://call?no-url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isNull()
+    }
+
+    @Test
+    fun `element scheme 2 with no url returns null`() {
+        val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?no_url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isNull()
     }
 
@@ -102,6 +118,12 @@ class CallIntentDataParserTests {
     @Test
     fun `element scheme with no data returns null`() {
         val url = "element://call?url="
+        assertThat(callIntentDataParser.parse(url)).isNull()
+    }
+
+    @Test
+    fun `element scheme 2 with no data returns null`() {
+        val url = "io.element.call:/?url="
         assertThat(callIntentDataParser.parse(url)).isNull()
     }
 }
