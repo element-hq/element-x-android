@@ -1,0 +1,1 @@
+Remove usage of async-uniffi as it leads to a deadlocks and memory leaks.
