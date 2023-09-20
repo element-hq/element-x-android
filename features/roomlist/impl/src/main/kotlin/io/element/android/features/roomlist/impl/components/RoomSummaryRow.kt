@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -190,14 +191,16 @@ private fun NotificationIcon(room: RoomListRoomSummary) {
         null, RoomNotificationMode.ALL_MESSAGES -> return
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
             Icon(
+                modifier = Modifier.size(16.dp),
                 contentDescription = stringResource(CommonStrings.screen_notification_settings_mode_mentions),
-                imageVector = ImageVector.vectorResource(CommonDrawables.ic_mention),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_mention),
                 tint = tint,
             )
         RoomNotificationMode.MUTE ->
             Icon(
+                modifier = Modifier.size(16.dp),
                 contentDescription = stringResource(CommonStrings.common_mute),
-                imageVector = ImageVector.vectorResource(CommonDrawables.ic_mute),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_notifications_solid_off),
                 tint = tint,
             )
     }

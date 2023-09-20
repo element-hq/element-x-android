@@ -161,7 +161,7 @@ fun CreateRoomActionButtonsList(
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
-            iconRes = CommonDrawables.ic_share,
+            iconRes = CommonDrawables.ic_compound_share_android,
             text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
             onClick = onInvitePeopleClicked,
         )

@@ -113,31 +113,20 @@ internal val iconsSeptember = listOf(
     R.drawable.ic_september_view_source,
 )
 
+// This list and all the drawable it contains should be removed at some point.
+// All the icons should be defined in Compound.
 internal val iconsOther = listOf(
-    R.drawable.ic_content_copy,
-    R.drawable.ic_delete,
     R.drawable.ic_developer_mode,
-    R.drawable.ic_door_open_24,
-    R.drawable.ic_edit,
-    R.drawable.ic_edit_square,
-    R.drawable.ic_forward,
     R.drawable.ic_groups,
     R.drawable.ic_indent_decrease,
     R.drawable.ic_indent_increase,
     R.drawable.ic_inline_code,
     R.drawable.ic_italic,
     R.drawable.ic_link,
-    R.drawable.ic_mention,
-    R.drawable.ic_mute,
     R.drawable.ic_numbered_list,
     R.drawable.ic_plus,
-    R.drawable.ic_poll,
     R.drawable.ic_poll_end,
     R.drawable.ic_quote,
-    R.drawable.ic_reply,
-    R.drawable.ic_report_content,
-    R.drawable.ic_search,
-    R.drawable.ic_share,
     R.drawable.ic_strikethrough,
     R.drawable.ic_thread_decoration,
     R.drawable.ic_underline,

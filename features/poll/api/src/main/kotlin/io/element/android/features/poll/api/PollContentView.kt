@@ -93,7 +93,7 @@ private fun PollTitle(
             )
         } else {
             Icon(
-                resourceId = CommonDrawables.ic_poll,
+                resourceId = CommonDrawables.ic_compound_polls,
                 contentDescription = stringResource(id = CommonStrings.a11y_poll),
                 modifier = Modifier.size(22.dp)
             )
