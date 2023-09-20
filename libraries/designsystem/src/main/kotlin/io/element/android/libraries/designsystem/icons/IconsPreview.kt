@@ -38,10 +38,22 @@ import kotlinx.collections.immutable.toPersistentList
 
 @DayNightPreviews
 @Composable
-internal fun IconsCompoundPreview() = ElementPreview {
+internal fun IconsCompoundPart1Preview() = ElementPreview {
     IconsPreview(
-        title = "R.drawable.ic_compound_*",
-        iconsList = iconsCompound.toPersistentList(),
+        title = "R.drawable.ic_compound_* 1 / 2",
+        iconsList = iconsCompound.take(36).toPersistentList(),
+        iconNameTransform = { name ->
+            name.removePrefix("ic_compound_")
+                .replace("_", " ")
+        })
+}
+
+@DayNightPreviews
+@Composable
+internal fun IconsCompoundPart2Preview() = ElementPreview {
+    IconsPreview(
+        title = "R.drawable.ic_compound_* 2 / 2",
+        iconsList = iconsCompound.drop(36).toPersistentList(),
         iconNameTransform = { name ->
             name.removePrefix("ic_compound_")
                 .replace("_", " ")
@@ -90,7 +102,7 @@ private fun IconsPreview(
             text = title,
             textAlign = TextAlign.Center,
         )
-        iconsList.chunked(8).forEach { iconsRow ->
+        iconsList.chunked(6).forEach { iconsRow ->
             Row(horizontalArrangement = Arrangement.spacedBy(1.dp)) {
                 iconsRow.forEach { icon ->
                     Column(
