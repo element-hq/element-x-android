@@ -1,0 +1,2 @@
+Main changes in this version: Element Call, design update, bugfixes
+Full changelog: https://github.com/vector-im/element-x-android/releases
