@@ -17,7 +17,6 @@
 package io.element.android.features.call
 
 import android.net.Uri
-import java.net.URLDecoder
 import javax.inject.Inject
 
 class CallIntentDataParser @Inject constructor() {
@@ -46,7 +45,6 @@ class CallIntentDataParser @Inject constructor() {
 
     private fun Uri.getUrlParameter(): String? {
         return getQueryParameter("url")
-            ?.let { URLDecoder.decode(it, "utf-8") }
             ?.takeIf {
                 val internalUri = Uri.parse(it)
                 internalUri.scheme in validHttpSchemes && !internalUri.host.isNullOrBlank()
