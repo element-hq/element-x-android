@@ -57,11 +57,11 @@ import io.element.android.libraries.designsystem.theme.components.FloatingAction
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.designsystem.R as DrawableR
 
 @Composable
 fun RoomListView(
@@ -231,7 +231,7 @@ fun RoomListContent(
             ) {
                 Icon(
                     // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
-                    resourceId = DrawableR.drawable.ic_september_compose_button,
+                    resourceId = CommonDrawables.ic_september_compose_button,
                     contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
                 )
             }
