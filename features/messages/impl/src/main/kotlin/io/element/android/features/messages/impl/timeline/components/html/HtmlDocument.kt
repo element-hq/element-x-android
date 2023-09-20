@@ -51,7 +51,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,8 +58,8 @@ import io.element.android.features.messages.impl.timeline.components.event.Extra
 import io.element.android.features.messages.impl.timeline.components.event.getDpSize
 import io.element.android.features.messages.impl.timeline.components.event.noExtraPadding
 import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -613,18 +612,9 @@ private fun HtmlText(
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
-    ElementPreviewLight { ContentToPreview(document) }
-
-@Preview
-@Composable
-internal fun HtmlDocumentDarkPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
-    ElementPreviewDark { ContentToPreview(document) }
-
-@Composable
-private fun ContentToPreview(document: Document) {
+internal fun HtmlDocumentPreview(@PreviewParameter(DocumentProvider::class) document: Document) = ElementPreview {
     HtmlDocument(
         document = document,
         extraPadding = noExtraPadding,

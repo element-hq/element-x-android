@@ -19,12 +19,11 @@ package io.element.android.features.preferences.impl.about
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -48,18 +47,9 @@ fun AboutView(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun AboutViewLightPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun AboutViewDarkPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: AboutState) {
+internal fun AboutViewPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) = ElementPreview {
     AboutView(
         state = state,
         onElementLegalClicked = {},

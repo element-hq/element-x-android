@@ -44,8 +44,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
-import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
+import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
@@ -55,6 +55,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -187,12 +188,22 @@ class RustMatrixRoom(
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         var rustMembers: List<RoomMember>? = null
         try {
-            rustMembers = innerRoom.members()
+            rustMembers = innerRoom.membersBlocking().use { membersIterator ->
+                buildList {
+                    while (true) {
+                        // Loading the whole membersIterator as a stop-gap measure.
+                        // We should probably implement some sort of paging in the future.
+                        ensureActive()
+                        addAll(membersIterator.nextChunk(1000u) ?: break)
+                    }
+                }
+            }
             val mappedMembers = rustMembers.parallelMap(RoomMemberMapper::map)
             _membersStateFlow.value = MatrixRoomMembersState.Ready(mappedMembers)
             Result.success(Unit)
-        } catch (cancellationException: CancellationException) {
-            throw cancellationException
+        } catch (exception: CancellationException) {
+            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
+            throw exception
         } catch (exception: Exception) {
             _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
             Result.failure(exception)
@@ -283,27 +294,27 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
-        return runCatching {
-            innerRoom.canUserInvite(userId.value)
+    override suspend fun canUserInvite(userId: UserId): Result<Boolean> = withContext(roomMembersDispatcher) {
+        runCatching {
+            innerRoom.canUserInviteBlocking(userId.value)
         }
     }
 
-    override suspend fun canUserRedact(userId: UserId): Result<Boolean> {
-        return runCatching {
-            innerRoom.canUserRedact(userId.value)
+    override suspend fun canUserRedact(userId: UserId): Result<Boolean> = withContext(roomMembersDispatcher) {
+        runCatching {
+            innerRoom.canUserRedactBlocking(userId.value)
         }
     }
 
-    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
-        return runCatching {
-            innerRoom.canUserSendState(userId.value, type.map())
+    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
+        runCatching {
+            innerRoom.canUserSendStateBlocking(userId.value, type.map())
         }
     }
 
-    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
-        return runCatching {
-            innerRoom.canUserSendMessage(userId.value, type.map())
+    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
+        runCatching {
+            innerRoom.canUserSendMessageBlocking(userId.value, type.map())
         }
     }
 
@@ -460,7 +471,7 @@ class RustMatrixRoom(
     }
 
     private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
-        if(htmlBody != null) {
+        if (htmlBody != null) {
             messageEventContentFromHtml(body, htmlBody)
         } else {
             messageEventContentFromMarkdown(body)

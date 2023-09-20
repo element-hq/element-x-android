@@ -30,12 +30,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.theme.ElementTheme
 
@@ -88,17 +87,8 @@ internal fun RoomSummaryPlaceholderRow(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun RoomSummaryPlaceholderRowLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun RoomSummaryPlaceholderRowDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun RoomSummaryPlaceholderRowPreview() = ElementPreview {
     RoomSummaryPlaceholderRow()
 }

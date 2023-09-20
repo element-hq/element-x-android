@@ -31,12 +31,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
@@ -148,26 +147,11 @@ private fun ColumnScope.RetrySendMenuContents(
     )
 }
 
-@Preview
-@Composable
-internal fun RetrySendMessageMenuPreviewLight(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) {
-    ElementPreviewLight {
-        ContentToPreview(state)
-    }
-}
-
-@Preview
-@Composable
-internal fun RetrySendMessageMenuPreviewDark(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) {
-    ElementPreviewDark {
-        ContentToPreview(state)
-    }
-}
-
 @Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterial3Api::class)
+@DayNightPreviews
 @Composable
-private fun ContentToPreview(state: RetrySendMenuState) {
+internal fun RetrySendMessageMenuPreview(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) = ElementPreview {
     // TODO restore RetrySendMessageMenuBottomSheet once the issue with bottom sheet not being previewable is fixed
     Column {
         RetrySendMenuContents(

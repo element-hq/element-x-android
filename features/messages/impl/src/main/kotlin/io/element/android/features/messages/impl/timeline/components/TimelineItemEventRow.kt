@@ -81,7 +81,8 @@ import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
@@ -622,18 +623,9 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun TimelineItemEventRowLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun TimelineItemEventRowPreview() = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
             TimelineItemEventRow(
@@ -683,18 +675,9 @@ private fun ContentToPreview() {
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun TimelineItemEventRowWithReplyLightPreview() =
-    ElementPreviewLight { ContentToPreviewWithReply() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowWithReplyDarkPreview() =
-    ElementPreviewDark { ContentToPreviewWithReply() }
-
-@Composable
-private fun ContentToPreviewWithReply() {
+internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
             val replyContent = if (it) {
@@ -766,18 +749,11 @@ private fun aInReplyToReady(
     )
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewLight { ContentTimestampToPreview(event) }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowTimestampDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewDark { ContentTimestampToPreview(event) }
-
-@Composable
-private fun ContentTimestampToPreview(event: TimelineItem.Event) {
+internal fun TimelineItemEventRowTimestampPreview(
+    @PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event
+) = ElementPreview {
     Column {
         val oldContent = event.content as TimelineItemTextContent
         listOf(
@@ -813,18 +789,9 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun TimelineItemEventRowWithManyReactionsLightPreview() =
-    ElementPreviewLight { ContentWithManyReactionsToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowWithManyReactionsDarkPreview() =
-    ElementPreviewDark { ContentWithManyReactionsToPreview() }
-
-@Composable
-private fun ContentWithManyReactionsToPreview() {
+internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
     Column {
         listOf(false, true).forEach { isMine ->
             TimelineItemEventRow(

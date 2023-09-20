@@ -77,7 +77,7 @@ fun PreferencesRootView(
     ) {
         UserPreferences(
             modifier = Modifier.clickable {
-               state.myUser?.let(onOpenUserProfile)
+                state.myUser?.let(onOpenUserProfile)
             },
             user = state.myUser,
         )

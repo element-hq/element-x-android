@@ -46,7 +46,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -54,8 +53,8 @@ import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatarBloom
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.applyScaleDown
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.text.toDp
@@ -147,7 +146,7 @@ private fun DefaultRoomListTopBar(
         }
     }
 
-    val statusBarPadding = with (LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
+    val statusBarPadding = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
 
     Box(modifier = modifier) {
         MediumTopAppBar(
@@ -261,8 +260,10 @@ private fun DefaultRoomListTopBar(
             windowInsets = WindowInsets(0.dp),
         )
 
-        HorizontalDivider(modifier =
-            Modifier.fillMaxWidth()
+        HorizontalDivider(
+            modifier =
+            Modifier
+                .fillMaxWidth()
                 .alpha(collapsedFraction)
                 .align(Alignment.BottomCenter),
             color = ElementTheme.materialColors.outlineVariant,
@@ -270,17 +271,10 @@ private fun DefaultRoomListTopBar(
     }
 }
 
-@Preview
-@Composable
-internal fun DefaultRoomListTopBarLightPreview() = ElementPreviewLight { DefaultRoomListTopBarPreview() }
-
-@Preview
-@Composable
-internal fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRoomListTopBarPreview() }
-
 @OptIn(ExperimentalMaterial3Api::class)
+@DayNightPreviews
 @Composable
-private fun DefaultRoomListTopBarPreview() {
+internal fun DefaultRoomListTopBarPreview() = ElementPreview {
     DefaultRoomListTopBar(
         matrixUser = MatrixUser(UserId("@id:domain"), "Alice"),
         areSearchResultsDisplayed = false,

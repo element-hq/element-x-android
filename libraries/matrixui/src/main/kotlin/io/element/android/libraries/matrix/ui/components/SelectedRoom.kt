@@ -35,13 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -92,16 +91,9 @@ fun SelectedRoom(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun SelectedRoomLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun SelectedRoomDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun SelectedRoomPreview() = ElementPreview {
     SelectedRoom(
         roomSummary = RoomSummaryDetails(
             roomId = RoomId("!room:domain"),

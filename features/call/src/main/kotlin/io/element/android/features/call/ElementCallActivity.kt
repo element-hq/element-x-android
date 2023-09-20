@@ -39,6 +39,7 @@ import javax.inject.Inject
 class ElementCallActivity : ComponentActivity() {
 
     @Inject lateinit var userAgentProvider: UserAgentProvider
+    @Inject lateinit var callIntentDataParser: CallIntentDataParser
 
     private lateinit var audioManager: AudioManager
 
@@ -129,7 +130,7 @@ class ElementCallActivity : ComponentActivity() {
         finishAndRemoveTask()
     }
 
-    private fun parseUrl(url: String?): String? = CallIntentDataParser.parse(url)
+    private fun parseUrl(url: String?): String? = callIntentDataParser.parse(url)
 
     private fun registerPermissionResultLauncher(): ActivityResultLauncher<Array<String>> {
         return registerForActivityResult(

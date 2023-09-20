@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -37,8 +36,8 @@ import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.pages.SunsetPage
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
@@ -145,18 +144,9 @@ private fun OverallContent(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun WaitListViewLightPreview(@PreviewParameter(WaitListStateProvider::class) state: WaitListState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun WaitListViewDarkPreview(@PreviewParameter(WaitListStateProvider::class) state: WaitListState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: WaitListState) {
+internal fun WaitListViewPreview(@PreviewParameter(WaitListStateProvider::class) state: WaitListState) = ElementPreview {
     WaitListView(
         state = state,
         onCancelClicked = {},

@@ -79,10 +79,7 @@ fun RoomNotificationSettingsOption(
 
 @DayNightPreviews
 @Composable
-internal fun RoomPrivacyOptionLightPreview() = ElementPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun RoomPrivacyOptionPreview() = ElementPreview {
     Column {
         RoomNotificationSettingsOption(
             roomNotificationSettingsItem = roomNotificationSettingsItems().first(),

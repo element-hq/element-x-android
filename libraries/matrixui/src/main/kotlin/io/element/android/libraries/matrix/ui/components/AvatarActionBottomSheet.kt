@@ -35,9 +35,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -111,18 +110,9 @@ private fun AvatarActionBottomSheetContent(
     }
 }
 
-@Preview
+@DayNightPreviews
 @Composable
-internal fun AvatarActionBottomSheetLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun AvatarActionBottomSheetDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun AvatarActionBottomSheetPreview() = ElementPreview {
     AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
         modalBottomSheetState = ModalBottomSheetState(

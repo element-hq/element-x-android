@@ -4,6 +4,6 @@
   <string name="screen_roomlist_empty_message">"Beginne, indem du jemandem eine Nachricht sendest."</string>
   <string name="screen_roomlist_empty_title">"Noch keine Chats."</string>
   <string name="screen_roomlist_main_space_title">"Alle Chats"</string>
-  <string name="session_verification_banner_message">"Es sieht aus, als würden Sie ein neues Gerät verwenden. Verifizieren Sie es mit einem anderen Gerät, damit Sie auf Ihre verschlüsselten Nachrichten zugreifen können."</string>
-  <string name="session_verification_banner_title">"Bestätigen Sie Ihre Identität"</string>
+  <string name="session_verification_banner_message">"Es sieht aus, als würdest du ein neues Gerät verwenden. Verifiziere es mit einem anderen Gerät, damit du auf deine verschlüsselten Nachrichten zugreifen kannst."</string>
+  <string name="session_verification_banner_title">"Bestätige deine Identität"</string>
 </resources>
