@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
 import io.element.android.libraries.core.extensions.orEmpty
-import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.DayNightPreviews
@@ -55,6 +54,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -191,13 +191,13 @@ private fun NotificationIcon(room: RoomListRoomSummary) {
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
             Icon(
                 contentDescription = stringResource(CommonStrings.screen_notification_settings_mode_mentions),
-                imageVector = ImageVector.vectorResource(VectorIcons.Mention),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_mention),
                 tint = tint,
             )
         RoomNotificationMode.MUTE ->
             Icon(
                 contentDescription = stringResource(CommonStrings.common_mute),
-                imageVector = ImageVector.vectorResource(VectorIcons.Mute),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_mute),
                 tint = tint,
             )
     }

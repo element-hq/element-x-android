@@ -19,7 +19,7 @@ package io.element.android.features.messages.impl.actionlist.model
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.designsystem.VectorIcons
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
@@ -28,13 +28,13 @@ sealed class TimelineItemAction(
     @DrawableRes val icon: Int,
     val destructive: Boolean = false
 ) {
-    data object Forward : TimelineItemAction(CommonStrings.action_forward, VectorIcons.Forward)
-    data object Copy : TimelineItemAction(CommonStrings.action_copy, VectorIcons.Copy)
-    data object Redact : TimelineItemAction(CommonStrings.action_remove, VectorIcons.Delete, destructive = true)
-    data object Reply : TimelineItemAction(CommonStrings.action_reply, VectorIcons.Reply)
-    data object ReplyInThread : TimelineItemAction(CommonStrings.action_reply_in_thread, VectorIcons.Reply)
-    data object Edit : TimelineItemAction(CommonStrings.action_edit, VectorIcons.Edit)
-    data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, VectorIcons.DeveloperMode)
-    data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, VectorIcons.ReportContent, destructive = true)
-    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, VectorIcons.PollEnd)
+    data object Forward : TimelineItemAction(CommonStrings.action_forward, CommonDrawables.ic_forward)
+    data object Copy : TimelineItemAction(CommonStrings.action_copy, CommonDrawables.ic_content_copy)
+    data object Redact : TimelineItemAction(CommonStrings.action_remove, CommonDrawables.ic_delete, destructive = true)
+    data object Reply : TimelineItemAction(CommonStrings.action_reply, CommonDrawables.ic_reply)
+    data object ReplyInThread : TimelineItemAction(CommonStrings.action_reply_in_thread, CommonDrawables.ic_reply)
+    data object Edit : TimelineItemAction(CommonStrings.action_edit, CommonDrawables.ic_edit)
+    data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, CommonDrawables.ic_developer_mode)
+    data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, CommonDrawables.ic_report_content, destructive = true)
+    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CommonDrawables.ic_poll_end)
 }
