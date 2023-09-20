@@ -18,8 +18,9 @@ package io.element.android.features.call
 
 import android.net.Uri
 import java.net.URLDecoder
+import javax.inject.Inject
 
-object CallIntentDataParser {
+class CallIntentDataParser @Inject constructor() {
 
     private val validHttpSchemes = sequenceOf("http", "https")
 
