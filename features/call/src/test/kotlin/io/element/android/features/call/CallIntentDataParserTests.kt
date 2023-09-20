@@ -126,4 +126,12 @@ class CallIntentDataParserTests {
         val url = "io.element.call:/?url="
         assertThat(callIntentDataParser.parse(url)).isNull()
     }
+
+    @Test
+    fun `element invalid scheme returns null`() {
+        val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "bad.scheme:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isNull()
+    }
 }
