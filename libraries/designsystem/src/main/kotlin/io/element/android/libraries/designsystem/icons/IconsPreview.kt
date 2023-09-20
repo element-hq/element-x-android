@@ -33,13 +33,15 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @DayNightPreviews
 @Composable
 internal fun IconsCompoundPreview() = ElementPreview {
     IconsPreview(
         title = "R.drawable.ic_compound_*",
-        iconsList = iconsCompound,
+        iconsList = iconsCompound.toPersistentList(),
         iconNameTransform = { name ->
             name.removePrefix("ic_compound_")
                 .replace("_", " ")
@@ -51,7 +53,7 @@ internal fun IconsCompoundPreview() = ElementPreview {
 internal fun IconsSeptemberPreview() = ElementPreview {
     IconsPreview(
         title = "R.drawable.ic_september_*",
-        iconsList = iconsSeptember,
+        iconsList = iconsSeptember.toPersistentList(),
         iconNameTransform = { name ->
             name.removePrefix("ic_september_")
                 .replace("_", " ")
@@ -63,7 +65,7 @@ internal fun IconsSeptemberPreview() = ElementPreview {
 internal fun IconsOtherPreview() = ElementPreview {
     IconsPreview(
         title = "R.drawable.ic_*",
-        iconsList = iconsOther,
+        iconsList = iconsOther.toPersistentList(),
         iconNameTransform = { name ->
             name.removePrefix("ic_")
                 .replace("_", " ")
@@ -73,7 +75,7 @@ internal fun IconsOtherPreview() = ElementPreview {
 @Composable
 private fun IconsPreview(
     title: String,
-    iconsList: List<Int>,
+    iconsList: ImmutableList<Int>,
     iconNameTransform: (String) -> String,
     modifier: Modifier = Modifier,
 ) = ElementPreview {
