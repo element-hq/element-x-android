@@ -53,6 +53,14 @@
                 <data android:scheme="element" />
                 <data android:host="call" />
             </intent-filter>
+            <!-- Custom scheme to handle urls from other domains in the format: io.element.call:/?url=https%3A%2F%2Felement.io -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="io.element.call" />
+            </intent-filter>
 
         </activity>
         <service android:name=".CallForegroundService" android:enabled="true" android:foregroundServiceType="mediaPlayback" />

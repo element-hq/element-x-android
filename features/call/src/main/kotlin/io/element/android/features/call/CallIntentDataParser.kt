@@ -38,6 +38,16 @@ object CallIntentDataParser {
                         internalUri.scheme in validHttpSchemes && !internalUri.host.isNullOrBlank()
                     }
             }
+            scheme == "io.element.call" && parsedUrl.host == null -> {
+                // We use this custom scheme to load arbitrary URLs for other instances of Element Call,
+                // so we can only verify it's an HTTP/HTTPs URL with a non-empty host
+                parsedUrl.getQueryParameter("url")
+                    ?.let { URLDecoder.decode(it, "utf-8") }
+                    ?.takeIf {
+                        val internalUri = Uri.parse(it)
+                        internalUri.scheme in validHttpSchemes && !internalUri.host.isNullOrBlank()
+                    }
+            }
             // This should never be possible, but we still need to take into account the possibility
             else -> null
         }
