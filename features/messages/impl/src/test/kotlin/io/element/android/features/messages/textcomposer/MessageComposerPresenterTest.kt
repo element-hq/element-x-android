@@ -54,6 +54,7 @@ import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.textcomposer.Message
@@ -527,16 +528,46 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Take photo`() = runTest {
         val room = FakeMatrixRoom()
-        val presenter = createPresenter(this, room = room)
+        val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
+        val presenter = createPresenter(
+            this,
+            room = room,
+            permissionPresenter = permissionPresenter,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera)
-            val previewingState = awaitItem()
-            assertThat(previewingState.showAttachmentSourcePicker).isFalse()
-            assertThat(previewingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            val finalState = awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - Take photo with permission request`() = runTest {
+        val room = FakeMatrixRoom()
+        val permissionPresenter = FakePermissionsPresenter()
+        val presenter = createPresenter(
+            this,
+            room = room,
+            permissionPresenter = permissionPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera)
+            val permissionState = awaitItem()
+            assertThat(permissionState.showAttachmentSourcePicker).isFalse()
+            assertThat(permissionState.attachmentsState).isInstanceOf(AttachmentsState.None::class.java)
+            permissionPresenter.setPermissionGranted()
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -544,16 +575,47 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Record video`() = runTest {
         val room = FakeMatrixRoom()
-        val presenter = createPresenter(this, room = room)
+        val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
+        val presenter = createPresenter(
+            this,
+            room = room,
+            permissionPresenter = permissionPresenter,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera)
-            val previewingState = awaitItem()
-            assertThat(previewingState.showAttachmentSourcePicker).isFalse()
-            assertThat(previewingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            val finalState = awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - Record video with permission request`() = runTest {
+        val room = FakeMatrixRoom()
+        val permissionPresenter = FakePermissionsPresenter()
+        val presenter = createPresenter(
+            this,
+            room = room,
+            permissionPresenter = permissionPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera)
+            val permissionState = awaitItem()
+            assertThat(permissionState.showAttachmentSourcePicker).isFalse()
+            assertThat(permissionState.attachmentsState).isInstanceOf(AttachmentsState.None::class.java)
+            permissionPresenter.setPermissionGranted()
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -650,6 +712,7 @@ class MessageComposerPresenterTest {
         featureFlagService: FeatureFlagService = this.featureFlagService,
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
+        permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
     ) = MessageComposerPresenter(
         coroutineScope,
         room,
@@ -661,7 +724,7 @@ class MessageComposerPresenterTest {
         analyticsService,
         MessageComposerContextImpl(),
         TestRichTextEditorStateFactory(),
-        permissionsPresenterFactory = FakePermissionsPresenterFactory(FakePermissionsPresenter().apply { setPermissionGranted() }),
+        permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
     )
 }
 
