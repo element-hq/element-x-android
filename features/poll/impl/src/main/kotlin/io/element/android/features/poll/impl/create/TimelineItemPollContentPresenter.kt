@@ -22,10 +22,11 @@ import io.element.android.features.messages.api.TimelineItemPresenter
 import io.element.android.features.messages.api.TimelineItemPresenterKey
 import io.element.android.features.poll.api.TimelineItemPollContentState
 import io.element.android.libraries.di.RoomScope
+import javax.inject.Inject
 
 @ContributesMultibinding(RoomScope::class)
 @TimelineItemPresenterKey("TimelineItemPollContent")
-class TimelineItemPollContentPresenter : TimelineItemPresenter {
+class TimelineItemPollContentPresenter @Inject constructor() : TimelineItemPresenter {
     @Composable
     override fun present(): TimelineItemPollContentState {
         TODO("Not yet implemented")

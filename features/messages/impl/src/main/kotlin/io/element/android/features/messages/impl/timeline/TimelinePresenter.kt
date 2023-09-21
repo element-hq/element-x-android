@@ -56,7 +56,7 @@ class TimelinePresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
-    private val contentPresenterFactories: Map<String, Provider<TimelineItemPresenter>>,
+    private val contentPresenterFactories: Map<String, @JvmSuppressWildcards Provider<TimelineItemPresenter>>,
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline
