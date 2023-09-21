@@ -65,6 +65,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
+import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -172,6 +173,8 @@ fun ConfigureRoomView(
 
         else -> Unit
     }
+    
+    PermissionsView(state = state.cameraPermissionState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

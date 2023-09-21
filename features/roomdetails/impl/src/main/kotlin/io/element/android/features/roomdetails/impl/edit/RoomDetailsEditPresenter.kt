@@ -39,6 +39,8 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsPresenter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -49,10 +51,14 @@ class RoomDetailsEditPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
+    permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<RoomDetailsEditState> {
+
+    private val cameraPermissionPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
 
     @Composable
     override fun present(): RoomDetailsEditState {
+        val cameraPermissionState = cameraPermissionPresenter.present()
         val roomSyncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
         // Since there is no way to obtain the new avatar uri after uploading a new avatar,
@@ -110,7 +116,11 @@ class RoomDetailsEditPresenter @Inject constructor(
                 is RoomDetailsEditEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
-                        AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
+                        AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
+                            cameraPhotoPicker.launch()
+                        } else {
+                            cameraPermissionState.eventSink(PermissionsEvents.OpenSystemDialog)
+                        }
                         AvatarAction.Remove -> roomAvatarUri = null
                     }
                 }
@@ -132,6 +142,7 @@ class RoomDetailsEditPresenter @Inject constructor(
             avatarActions = avatarActions,
             saveButtonEnabled = saveButtonEnabled,
             saveAction = saveAction.value,
+            cameraPermissionState = cameraPermissionState,
             eventSink = ::handleEvents,
         )
     }

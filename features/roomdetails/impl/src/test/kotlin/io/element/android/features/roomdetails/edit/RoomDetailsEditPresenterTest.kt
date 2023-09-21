@@ -32,6 +32,8 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.every
 import io.mockk.mockk
@@ -74,11 +76,19 @@ class RoomDetailsEditPresenterTest {
         unmockkAll()
     }
 
-    private fun aRoomDetailsEditPresenter(room: MatrixRoom): RoomDetailsEditPresenter {
+    private fun aRoomDetailsEditPresenter(
+        room: MatrixRoom,
+        permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
+    ): RoomDetailsEditPresenter {
         return RoomDetailsEditPresenter(
             room = room,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
+            permissionsPresenterFactory = object : PermissionsPresenter.Factory {
+                override fun create(permission: String): PermissionsPresenter {
+                    return permissionsPresenter
+                }
+            },
         )
     }
 
@@ -252,16 +262,22 @@ class RoomDetailsEditPresenterTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
         fakePickerProvider.givenResult(anotherAvatarUri)
-
-        val presenter = aRoomDetailsEditPresenter(room)
+        val fakePermissionsPresenter = FakePermissionsPresenter()
+        val presenter = aRoomDetailsEditPresenter(
+            room = room,
+            permissionsPresenter = fakePermissionsPresenter,
+        )
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
-
-            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            assertThat(initialState.cameraPermissionState.permissionGranted).isFalse()
+            fakePermissionsPresenter.setPermissionGranted()
+            val stateWithPermission = awaitItem()
+            assertThat(stateWithPermission.cameraPermissionState.permissionGranted).isTrue()
+            stateWithPermission.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             awaitItem().apply {
                 assertThat(roomAvatarUrl).isEqualTo(anotherAvatarUri)
             }

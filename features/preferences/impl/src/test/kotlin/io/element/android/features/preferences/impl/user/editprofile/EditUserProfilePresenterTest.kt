@@ -32,6 +32,8 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.mockk.every
@@ -78,12 +80,18 @@ class EditUserProfilePresenterTest {
     private fun createEditUserProfilePresenter(
         matrixClient: MatrixClient = FakeMatrixClient(),
         matrixUser: MatrixUser = aMatrixUser(),
+        permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
     ): EditUserProfilePresenter {
         return EditUserProfilePresenter(
             matrixClient = matrixClient,
             matrixUser = matrixUser,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
+            permissionsPresenterFactory = object : PermissionsPresenter.Factory {
+                override fun create(permission: String): PermissionsPresenter {
+                    return permissionsPresenter
+                }
+            },
         )
     }
 
@@ -157,13 +165,21 @@ class EditUserProfilePresenterTest {
     fun `present - obtains avatar uris from camera`() = runTest {
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         fakePickerProvider.givenResult(anotherAvatarUri)
-        val presenter = createEditUserProfilePresenter(matrixUser = user)
+        val fakePermissionsPresenter = FakePermissionsPresenter()
+        val presenter = createEditUserProfilePresenter(
+            matrixUser = user,
+            permissionsPresenter = fakePermissionsPresenter,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.userAvatarUrl).isEqualTo(userAvatarUri)
-            initialState.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            assertThat(initialState.cameraPermissionState.permissionGranted).isFalse()
+            fakePermissionsPresenter.setPermissionGranted()
+            val stateWithPermission = awaitItem()
+            assertThat(stateWithPermission.cameraPermissionState.permissionGranted).isTrue()
+            stateWithPermission.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             awaitItem().apply {
                 assertThat(userAvatarUrl).isEqualTo(anotherAvatarUri)
             }

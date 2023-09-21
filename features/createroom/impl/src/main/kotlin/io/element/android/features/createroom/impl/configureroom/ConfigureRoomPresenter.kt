@@ -40,6 +40,8 @@ import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -52,10 +54,14 @@ class ConfigureRoomPresenter @Inject constructor(
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
     private val analyticsService: AnalyticsService,
+    permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<ConfigureRoomState> {
+
+    private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
 
     @Composable
     override fun present(): ConfigureRoomState {
+        val cameraPermissionState = cameraPermissionPresenter.present()
         val createRoomConfig = dataStore.getCreateRoomConfig().collectAsState(CreateRoomConfig())
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
@@ -93,7 +99,11 @@ class ConfigureRoomPresenter @Inject constructor(
                 is ConfigureRoomEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
-                        AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
+                        AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
+                            cameraPhotoPicker.launch()
+                        } else {
+                            cameraPermissionState.eventSink(PermissionsEvents.OpenSystemDialog)
+                        }
                         AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
                     }
                 }
@@ -106,6 +116,7 @@ class ConfigureRoomPresenter @Inject constructor(
             config = createRoomConfig.value,
             avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
+            cameraPermissionState = cameraPermissionState,
             eventSink = ::handleEvents,
         )
     }

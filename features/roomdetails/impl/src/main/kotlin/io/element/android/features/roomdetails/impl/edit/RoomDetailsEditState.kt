@@ -17,8 +17,9 @@
 package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
-import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.ui.media.AvatarAction
+import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomDetailsEditState(
@@ -32,5 +33,6 @@ data class RoomDetailsEditState(
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonEnabled: Boolean,
     val saveAction: Async<Unit>,
+    val cameraPermissionState: PermissionsState,
     val eventSink: (RoomDetailsEditEvents) -> Unit
 )

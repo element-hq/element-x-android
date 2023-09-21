@@ -39,6 +39,8 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsPresenter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -49,7 +51,10 @@ class EditUserProfilePresenter @AssistedInject constructor(
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
+    permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<EditUserProfileState> {
+
+    private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
 
     @AssistedFactory
     interface Factory {
@@ -58,6 +63,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): EditUserProfileState {
+        val cameraPermissionState = cameraPermissionPresenter.present()
         var userAvatarUri by rememberSaveable { mutableStateOf(matrixUser.avatarUrl?.let { Uri.parse(it) }) }
         var userDisplayName by rememberSaveable { mutableStateOf(matrixUser.displayName) }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
@@ -85,7 +91,11 @@ class EditUserProfilePresenter @AssistedInject constructor(
                 is EditUserProfileEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
-                        AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
+                        AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
+                            cameraPhotoPicker.launch()
+                        } else {
+                            cameraPermissionState.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
+                        }
                         AvatarAction.Remove -> userAvatarUri = null
                     }
                 }
@@ -108,6 +118,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
             avatarActions = avatarActions,
             saveButtonEnabled = canSave && saveAction.value !is Async.Loading,
             saveAction = saveAction.value,
+            cameraPermissionState = cameraPermissionState,
             eventSink = { handleEvents(it) },
         )
     }

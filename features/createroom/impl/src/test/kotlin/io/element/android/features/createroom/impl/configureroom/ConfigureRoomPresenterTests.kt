@@ -37,6 +37,8 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.every
@@ -70,6 +72,7 @@ class ConfigureRoomPresenterTests {
     private lateinit var fakePickerProvider: FakePickerProvider
     private lateinit var fakeMediaPreProcessor: FakeMediaPreProcessor
     private lateinit var fakeAnalyticsService: FakeAnalyticsService
+    private lateinit var fakePermissionsPresenter: FakePermissionsPresenter
 
     @Before
     fun setup() {
@@ -79,12 +82,18 @@ class ConfigureRoomPresenterTests {
         fakePickerProvider = FakePickerProvider()
         fakeMediaPreProcessor = FakeMediaPreProcessor()
         fakeAnalyticsService = FakeAnalyticsService()
+        fakePermissionsPresenter = FakePermissionsPresenter()
         presenter = ConfigureRoomPresenter(
             dataStore = createRoomDataStore,
             matrixClient = fakeMatrixClient,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
             analyticsService = fakeAnalyticsService,
+            permissionsPresenterFactory = object : PermissionsPresenter.Factory {
+                override fun create(permission: String): PermissionsPresenter {
+                    return fakePermissionsPresenter
+                }
+            },
         )
 
         mockkStatic(File::readBytes)
@@ -170,8 +179,6 @@ class ConfigureRoomPresenterTests {
             // Room avatar
             // Pick avatar
             fakePickerProvider.givenResult(null)
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             // From gallery
             val uriFromGallery = Uri.parse(AN_URI_FROM_GALLERY)
             fakePickerProvider.givenResult(uriFromGallery)
@@ -182,6 +189,10 @@ class ConfigureRoomPresenterTests {
             // From camera
             val uriFromCamera = Uri.parse(AN_URI_FROM_CAMERA)
             fakePickerProvider.givenResult(uriFromCamera)
+            assertThat(newState.cameraPermissionState.permissionGranted).isFalse()
+            fakePermissionsPresenter.setPermissionGranted()
+            newState = awaitItem()
+            assertThat(newState.cameraPermissionState.permissionGranted).isTrue()
             newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(avatarUri = uriFromCamera)
