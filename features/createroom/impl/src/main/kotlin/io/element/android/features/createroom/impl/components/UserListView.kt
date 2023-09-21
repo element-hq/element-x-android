@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.userlist.UserListEvents
 import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.features.createroom.impl.userlist.UserListStateProvider
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
@@ -76,7 +76,7 @@ fun UserListView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun UserListViewPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) = ElementPreview {
     UserListView(state = state)

@@ -16,14 +16,13 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -35,13 +34,13 @@ fun TimelineItemRedactedView(
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_message_removed),
         iconDescription = stringResource(id = CommonStrings.common_message_removed),
-        icon = Icons.Default.Delete,
+        iconResourceId = CommonDrawables.ic_compound_delete,
         extraPadding = extraPadding,
         modifier = modifier
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemRedactedViewPreview() = ElementPreview {
     TimelineItemRedactedView(

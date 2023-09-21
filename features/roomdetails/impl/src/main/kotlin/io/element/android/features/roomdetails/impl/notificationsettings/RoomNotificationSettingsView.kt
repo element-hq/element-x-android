@@ -35,7 +35,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -144,7 +144,7 @@ fun RoomNotificationSettingsOptions(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun RoomNotificationSettingsPreview(
     @PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState

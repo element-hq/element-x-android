@@ -38,8 +38,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -61,13 +59,13 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension.Companion.fillToConstraints
 import androidx.constraintlayout.compose.Visibility
-import io.element.android.libraries.designsystem.VectorIcons
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -136,7 +134,7 @@ fun TextComposer(
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp.applyScaleUp()),
-                    resourceId = VectorIcons.Plus,
+                    resourceId = CommonDrawables.ic_plus,
                     contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
                     tint = ElementTheme.colors.iconPrimary,
                 )
@@ -306,7 +304,7 @@ private fun TextFormatting(
         ) {
             Icon(
                 modifier = Modifier.size(30.dp.applyScaleUp()),
-                resourceId = VectorIcons.Cancel,
+                resourceId = CommonDrawables.ic_cancel,
                 contentDescription = stringResource(CommonStrings.action_close),
                 tint = ElementTheme.colors.iconPrimary,
             )
@@ -329,25 +327,25 @@ private fun TextFormatting(
             FormattingOption(
                 state = state.actions[ComposerAction.BOLD].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.Bold) },
-                imageVector = ImageVector.vectorResource(VectorIcons.Bold),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_bold),
                 contentDescription = stringResource(R.string.rich_text_editor_format_bold)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.ITALIC].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.Italic) },
-                imageVector = ImageVector.vectorResource(VectorIcons.Italic),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_italic),
                 contentDescription = stringResource(R.string.rich_text_editor_format_italic)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.UNDERLINE].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.Underline) },
-                imageVector = ImageVector.vectorResource(VectorIcons.Underline),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_underline),
                 contentDescription = stringResource(R.string.rich_text_editor_format_underline)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.STRIKE_THROUGH].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.StrikeThrough) },
-                imageVector = ImageVector.vectorResource(VectorIcons.Strikethrough),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_strikethrough),
                 contentDescription = stringResource(R.string.rich_text_editor_format_strikethrough)
             )
 
@@ -366,50 +364,50 @@ private fun TextFormatting(
             FormattingOption(
                 state = state.actions[ComposerAction.LINK].toButtonState(),
                 onClick = { linkDialogAction = state.linkAction },
-                imageVector = ImageVector.vectorResource(VectorIcons.Link),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_link),
                 contentDescription = stringResource(R.string.rich_text_editor_link)
             )
 
             FormattingOption(
                 state = state.actions[ComposerAction.UNORDERED_LIST].toButtonState(),
                 onClick = { state.toggleList(ordered = false) },
-                imageVector = ImageVector.vectorResource(VectorIcons.BulletList),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_bullet_list),
                 contentDescription = stringResource(R.string.rich_text_editor_bullet_list)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.ORDERED_LIST].toButtonState(),
                 onClick = { state.toggleList(ordered = true) },
-                imageVector = ImageVector.vectorResource(VectorIcons.NumberedList),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_numbered_list),
                 contentDescription = stringResource(R.string.rich_text_editor_numbered_list)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.INDENT].toButtonState(),
                 onClick = { state.indent() },
-                imageVector = ImageVector.vectorResource(VectorIcons.IndentIncrease),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_indent_increase),
                 contentDescription = stringResource(R.string.rich_text_editor_indent)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.UNINDENT].toButtonState(),
                 onClick = { state.unindent() },
-                imageVector = ImageVector.vectorResource(VectorIcons.IndentDecrease),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_indent_decrease),
                 contentDescription = stringResource(R.string.rich_text_editor_unindent)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.INLINE_CODE].toButtonState(),
                 onClick = { state.toggleInlineFormat(InlineFormat.InlineCode) },
-                imageVector = ImageVector.vectorResource(VectorIcons.InlineCode),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_inline_code),
                 contentDescription = stringResource(R.string.rich_text_editor_inline_code)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.CODE_BLOCK].toButtonState(),
                 onClick = { state.toggleCodeBlock() },
-                imageVector = ImageVector.vectorResource(VectorIcons.CodeBlock),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_code_block),
                 contentDescription = stringResource(R.string.rich_text_editor_code_block)
             )
             FormattingOption(
                 state = state.actions[ComposerAction.QUOTE].toButtonState(),
                 onClick = { state.toggleQuote() },
-                imageVector = ImageVector.vectorResource(VectorIcons.Quote),
+                imageVector = ImageVector.vectorResource(CommonDrawables.ic_quote),
                 contentDescription = stringResource(R.string.rich_text_editor_quote)
             )
         }
@@ -460,14 +458,14 @@ private fun EditingModeView(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 12.dp)
     ) {
         Icon(
-            resourceId = VectorIcons.Edit,
+            resourceId = CommonDrawables.ic_september_edit_solid_16,
             contentDescription = stringResource(CommonStrings.common_editing),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -484,7 +482,7 @@ private fun EditingModeView(
                 .weight(1f)
         )
         Icon(
-            imageVector = Icons.Default.Close,
+            resourceId = CommonDrawables.ic_compound_close,
             contentDescription = stringResource(CommonStrings.action_close),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -547,7 +545,7 @@ private fun ReplyToModeView(
             )
         }
         Icon(
-            imageVector = Icons.Default.Close,
+            resourceId = CommonDrawables.ic_compound_close,
             contentDescription = stringResource(CommonStrings.action_close),
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
@@ -577,8 +575,17 @@ private fun SendButton(
         enabled = canSendMessage,
     ) {
         val iconId = when (composerMode) {
-            is MessageComposerMode.Edit -> R.drawable.ic_tick
-            else -> R.drawable.ic_send
+            is MessageComposerMode.Edit -> CommonDrawables.ic_compound_check
+            else -> CommonDrawables.ic_september_send
+        }
+        val iconSize = when (composerMode) {
+            is MessageComposerMode.Edit -> 24.dp
+            // CommonDrawables.ic_september_send is too big... reduce its size.
+            else -> 18.dp
+        }
+        val iconStartPadding = when (composerMode) {
+            is MessageComposerMode.Edit -> 0.dp
+            else -> 2.dp
         }
         val contentDescription = when (composerMode) {
             is MessageComposerMode.Edit -> stringResource(CommonStrings.action_edit)
@@ -592,7 +599,8 @@ private fun SendButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .height(24.dp.applyScaleUp())
+                    .height(iconSize.applyScaleUp())
+                    .padding(start = iconStartPadding)
                     .align(Alignment.Center),
                 resourceId = iconId,
                 contentDescription = contentDescription,
@@ -603,7 +611,7 @@ private fun SendButton(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerSimplePreview() = ElementPreview {
     Column {
@@ -647,7 +655,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerFormattingPreview() = ElementPreview {
     Column {
@@ -675,7 +683,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
@@ -688,7 +696,7 @@ internal fun TextComposerEditPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerReplyPreview() = ElementPreview {
     Column {

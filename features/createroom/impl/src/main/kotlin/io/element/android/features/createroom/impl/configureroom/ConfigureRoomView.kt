@@ -54,7 +54,7 @@ import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -65,6 +65,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
+import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -73,9 +74,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun ConfigureRoomView(
     state: ConfigureRoomState,
+    onBackPressed: () -> Unit,
+    onRoomCreated: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onRoomCreated: (RoomId) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
@@ -172,6 +173,10 @@ fun ConfigureRoomView(
 
         else -> Unit
     }
+
+    PermissionsView(
+        state = state.cameraPermissionState,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -273,10 +278,12 @@ private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
         })
     }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
     ConfigureRoomView(
         state = state,
+        onBackPressed = {},
+        onRoomCreated = {},
     )
 }

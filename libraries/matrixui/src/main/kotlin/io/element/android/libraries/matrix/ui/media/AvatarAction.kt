@@ -16,22 +16,31 @@
 
 package io.element.android.libraries.matrix.ui.media
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.PhotoCamera
-import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.vector.ImageVector
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
 sealed class AvatarAction(
     @StringRes val titleResId: Int,
-    val icon: ImageVector,
+    @DrawableRes val iconResourceId: Int,
     val destructive: Boolean = false,
 ) {
-    data object TakePhoto : AvatarAction(titleResId = CommonStrings.action_take_photo, icon = Icons.Outlined.PhotoCamera)
-    data object ChoosePhoto : AvatarAction(titleResId = CommonStrings.action_choose_photo, icon = Icons.Outlined.PhotoLibrary)
-    data object Remove : AvatarAction(titleResId = CommonStrings.action_remove, icon = Icons.Outlined.Delete, destructive = true)
+    data object TakePhoto : AvatarAction(
+        titleResId = CommonStrings.action_take_photo,
+        iconResourceId = CommonDrawables.ic_september_take_photo_camera,
+    )
+
+    data object ChoosePhoto : AvatarAction(
+        titleResId = CommonStrings.action_choose_photo,
+        iconResourceId = CommonDrawables.ic_september_photo_video_library,
+    )
+
+    data object Remove : AvatarAction(
+        titleResId = CommonStrings.action_remove,
+        iconResourceId = CommonDrawables.ic_compound_delete,
+        destructive = true
+    )
 }

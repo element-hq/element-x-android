@@ -37,7 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -128,7 +128,7 @@ fun SelectedUsersList(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun SelectedUsersListPreview() = ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

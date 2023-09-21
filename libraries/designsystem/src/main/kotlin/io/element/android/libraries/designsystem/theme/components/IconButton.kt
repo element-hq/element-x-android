@@ -19,8 +19,6 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
@@ -30,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 // Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=1182%3A48861&mode=design&t=Shlcvznm1oUyqGC2-1
@@ -67,20 +66,20 @@ private fun ContentToPreview() {
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconPrimary) {
             Row {
                 IconButton(onClick = {}) {
-                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
                 }
                 IconButton(enabled = false, onClick = {}) {
-                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
                 }
             }
         }
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconSecondary) {
             Row {
                 IconButton(onClick = {}) {
-                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
                 }
                 IconButton(enabled = false, onClick = {}) {
-                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
                 }
             }
         }

@@ -65,7 +65,7 @@ class NotificationsOptInPresenter @AssistedInject constructor(
                     if (notificationsPermissionsState.permissionGranted) {
                         callback.onNotificationsOptInFinished()
                     } else {
-                        notificationsPermissionsState.eventSink(PermissionsEvents.OpenSystemDialog)
+                        notificationsPermissionsState.eventSink(PermissionsEvents.RequestPermissions)
                     }
                 }
                 NotificationsOptInEvents.NotNowClicked -> {

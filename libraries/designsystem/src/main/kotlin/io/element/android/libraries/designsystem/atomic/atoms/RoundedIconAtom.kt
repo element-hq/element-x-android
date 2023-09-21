@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
@@ -96,7 +96,7 @@ private fun RoundedIconAtomSize.toIconSize(): Dp {
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun RoundedIconAtomPreview() = ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

@@ -9,6 +9,7 @@
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_user_menu">"Benutzermenü"</string>
   <string name="action_accept">"Akzeptieren"</string>
+  <string name="action_add_to_timeline">"Zur Zeitleiste hinzufügen"</string>
   <string name="action_back">"Zurück"</string>
   <string name="action_cancel">"Abbrechen"</string>
   <string name="action_choose_photo">"Foto auswählen"</string>

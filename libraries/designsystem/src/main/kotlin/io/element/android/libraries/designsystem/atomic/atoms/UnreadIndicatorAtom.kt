@@ -26,7 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.theme.ElementTheme
@@ -46,7 +46,7 @@ fun UnreadIndicatorAtom(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun UnreadIndicatorAtomPreview() = ElementPreview {
     UnreadIndicatorAtom()

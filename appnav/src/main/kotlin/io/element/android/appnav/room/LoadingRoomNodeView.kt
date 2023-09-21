@@ -34,7 +34,7 @@ import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorVi
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -100,7 +100,7 @@ private fun LoadingRoomTopBar(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun LoadingRoomNodeViewPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) = ElementPreview {
     LoadingRoomNodeView(

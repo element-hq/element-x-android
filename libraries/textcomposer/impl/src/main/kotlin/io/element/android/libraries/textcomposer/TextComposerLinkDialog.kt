@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.TextFieldListItem
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
@@ -198,7 +198,7 @@ private fun EditLinkDialog(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerLinkDialogCreateLinkPreview() {
     TextComposerLinkDialog(
@@ -210,7 +210,7 @@ internal fun TextComposerLinkDialogCreateLinkPreview() {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerLinkDialogCreateLinkWithoutTextPreview() {
     TextComposerLinkDialog(
@@ -222,7 +222,7 @@ internal fun TextComposerLinkDialogCreateLinkWithoutTextPreview() {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerLinkDialogEditLinkPreview() {
     TextComposerLinkDialog(

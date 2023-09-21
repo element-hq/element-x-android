@@ -9,6 +9,7 @@
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_user_menu">"User menu"</string>
   <string name="action_accept">"Accept"</string>
+  <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
   <string name="action_cancel">"Cancel"</string>
   <string name="action_choose_photo">"Choose photo"</string>
@@ -44,6 +45,7 @@
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_settings">"Open settings"</string>
   <string name="action_open_with">"Open with"</string>
   <string name="action_quick_reply">"Quick reply"</string>
   <string name="action_quote">"Quote"</string>
@@ -105,6 +107,7 @@
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>
+  <string name="common_permission">"Permission"</string>
   <string name="common_poll_total_votes">"Total votes: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Results will show after the poll has ended"</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
@@ -146,6 +149,7 @@
   <string name="common_verification_complete">"Verification complete"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Waiting…"</string>
+  <string name="common_poll_summary">"Poll: %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Warning"</string>
   <string name="emoji_picker_category_activity">"Activities"</string>

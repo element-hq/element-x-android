@@ -16,14 +16,13 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -36,13 +35,13 @@ fun TimelineItemEncryptedView(
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_decryption_error),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
-        icon = Icons.Default.Warning,
+        iconResourceId = CommonDrawables.ic_september_decryption_error,
         extraPadding = extraPadding,
         modifier = modifier
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemEncryptedViewPreview() = ElementPreview {
     TimelineItemEncryptedView(
