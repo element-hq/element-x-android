@@ -53,8 +53,7 @@ class RustMatrixClientFactory @Inject constructor(
 
         client.restoreSession(sessionData.toSession())
 
-        val syncService = client.syncService()
-            .finish()
+        val syncService = client.syncService().finishBlocking()
 
         RustMatrixClient(
             client = client,

@@ -43,7 +43,10 @@ import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
 import timber.log.Timber
 
-internal fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
+private const val SYNC_INDICATOR_DELAY_BEFORE_SHOWING = 1000u
+private const val SYNC_INDICATOR_DELAY_BEFORE_HIDING = 0u
+
+fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
     mxCallbackFlow {
         val listener = object : RoomListLoadingStateListener {
             override fun onUpdate(state: RoomListLoadingState) {
@@ -115,7 +118,11 @@ internal fun RoomListService.syncIndicator(): Flow<RoomListServiceSyncIndicator>
             }
         }
         tryOrNull {
-            syncIndicator(listener)
+            syncIndicator(
+                SYNC_INDICATOR_DELAY_BEFORE_SHOWING,
+                SYNC_INDICATOR_DELAY_BEFORE_HIDING,
+                listener,
+            )
         }
     }.buffer(Channel.UNLIMITED)
 

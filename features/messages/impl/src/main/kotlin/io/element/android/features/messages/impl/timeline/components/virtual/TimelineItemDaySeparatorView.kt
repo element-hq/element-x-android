@@ -24,13 +24,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModelProvider
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
@@ -54,22 +53,11 @@ internal fun TimelineItemDaySeparatorView(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemDaySeparatorViewLightPreview(
+internal fun TimelineItemDaySeparatorViewPreview(
     @PreviewParameter(TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel
-) =
-    ElementPreviewLight { ContentToPreview(model) }
-
-@Preview
-@Composable
-internal fun TimelineItemDaySeparatorViewDarkPreview(
-    @PreviewParameter(TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel
-) =
-    ElementPreviewDark { ContentToPreview(model) }
-
-@Composable
-private fun ContentToPreview(model: TimelineItemDaySeparatorModel) {
+) = ElementPreview {
     TimelineItemDaySeparatorView(
         model = model,
     )

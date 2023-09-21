@@ -47,7 +47,13 @@
     {
       "name": ":libraries:textcomposer:impl",
       "includeRegex": [
-        "rich_text_editor_.*"
+        "rich_text_editor.*"
+      ]
+    },
+    {
+      "name": ":libraries:permissions:api",
+      "includeRegex": [
+        "dialog\\.permission_.*"
       ]
     },
     {

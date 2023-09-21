@@ -27,11 +27,9 @@ import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.net.URL
 import javax.inject.Inject
 
 class ChangeServerPresenter @Inject constructor(
@@ -65,8 +63,7 @@ class ChangeServerPresenter @Inject constructor(
         changeServerAction: MutableState<Async<Unit>>,
     ) = launch {
         suspend {
-            val domain = tryOrNull { URL(data.title) }?.host ?: data.title
-            authenticationService.setHomeserver(domain).map {
+            authenticationService.setHomeserver(data.title).map {
                 authenticationService.getHomeserverDetails().value!!
                 // Valid, remember user choice
                 accountProviderDataSource.userSelection(data)

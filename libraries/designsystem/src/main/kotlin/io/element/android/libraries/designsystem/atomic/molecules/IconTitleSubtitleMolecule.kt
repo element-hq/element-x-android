@@ -27,13 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
@@ -85,20 +84,11 @@ fun IconTitleSubtitleMolecule(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun IconTitleSubtitleMoleculeLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun IconTitleSubtitleMoleculeDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun IconTitleSubtitleMoleculePreview() = ElementPreview {
     IconTitleSubtitleMolecule(
-        iconResourceId = R.drawable.ic_edit,
+        iconResourceId = R.drawable.ic_compound_chat,
         title = "Title",
         subTitle = "Sub iitle",
     )

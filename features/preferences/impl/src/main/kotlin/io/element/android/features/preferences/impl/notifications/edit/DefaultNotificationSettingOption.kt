@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -78,12 +78,10 @@ fun DefaultNotificationSettingOption(
         )
     }
 }
-@DayNightPreviews
-@Composable
-internal fun DefaultNotificationSettingOptionPreview() = ElementPreview { ContentToPreview() }
 
+@PreviewsDayNight
 @Composable
-private fun ContentToPreview() {
+internal fun DefaultNotificationSettingOptionPreview() = ElementPreview {
     Column {
         DefaultNotificationSettingOption(
             mode = RoomNotificationMode.ALL_MESSAGES,
@@ -95,4 +93,3 @@ private fun ContentToPreview() {
         )
     }
 }
-

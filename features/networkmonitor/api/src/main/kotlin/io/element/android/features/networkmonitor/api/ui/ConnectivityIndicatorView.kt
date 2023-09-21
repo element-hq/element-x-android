@@ -25,7 +25,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -38,25 +37,23 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toDp
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -145,10 +142,10 @@ private fun Indicator(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val tint = MaterialTheme.colorScheme.primary
-        Image(
-            imageVector = Icons.Outlined.WifiOff,
+        Icon(
+            resourceId = CommonDrawables.ic_compound_offline,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(tint),
+            tint = tint,
             modifier = Modifier.size(16.sp.toDp()),
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -165,18 +162,10 @@ private fun StatusBarPaddingSpacer(modifier: Modifier = Modifier) {
     Spacer(modifier = modifier.statusBarsPadding())
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun PreviewLightConnectivityIndicatorView() {
-    ElementPreviewLight {
-        ConnectivityIndicatorView(isOnline = false)
-    }
-}
-
-@Preview
-@Composable
-internal fun PreviewDarkConnectivityIndicatorView() {
-    ElementPreviewDark {
+internal fun ConnectivityIndicatorViewPreview() {
+    ElementPreview {
         ConnectivityIndicatorView(isOnline = false)
     }
 }

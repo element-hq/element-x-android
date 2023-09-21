@@ -28,12 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.configureroom.RoomPrivacyItem
 import io.element.android.features.createroom.impl.configureroom.roomPrivacyItems
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -58,7 +57,7 @@ fun RoomPrivacyOption(
     ) {
         Icon(
             modifier = Modifier.padding(horizontal = 8.dp),
-            imageVector = roomPrivacyItem.icon,
+            resourceId = roomPrivacyItem.icon,
             contentDescription = "",
             tint = MaterialTheme.colorScheme.secondary,
         )
@@ -91,16 +90,9 @@ fun RoomPrivacyOption(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun RoomPrivacyOptionLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun RoomPrivacyOptionDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun RoomPrivacyOptionPreview() = ElementPreview {
     val aRoomPrivacyItem = roomPrivacyItems().first()
     Column {
         RoomPrivacyOption(

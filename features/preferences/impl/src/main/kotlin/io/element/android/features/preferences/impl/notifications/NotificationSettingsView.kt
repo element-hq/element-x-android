@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NotificationsOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -42,12 +39,13 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
@@ -85,7 +83,7 @@ fun NotificationSettingsView(
             is NotificationSettingsState.MatrixSettings.Valid -> NotificationSettingsContentView(
                 matrixSettings = state.matrixSettings,
                 systemSettings = state.appSettings,
-                onNotificationsEnabledChanged = { state.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(it))},
+                onNotificationsEnabledChanged = { state.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(it)) },
                 onGroupChatsClicked = { onOpenEditDefault(false) },
                 onDirectChatsClicked = { onOpenEditDefault(true) },
                 onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
@@ -106,51 +104,53 @@ private fun NotificationSettingsContentView(
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-        val context = LocalContext.current
-        if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
+    val context = LocalContext.current
+    if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
+        PreferenceText(
+            iconResourceId = CommonDrawables.ic_compound_notifications_solid_off,
+            title = stringResource(id = CommonStrings.screen_notification_settings_system_notifications_turned_off),
+            subtitle = stringResource(
+                id = CommonStrings.screen_notification_settings_system_notifications_action_required,
+                stringResource(id = CommonStrings.screen_notification_settings_system_notifications_action_required_content_link)
+            ),
+            onClick = {
+                context.startNotificationSettingsIntent()
+            }
+        )
+    }
+
+    PreferenceSwitch(
+        modifier = modifier,
+        title = stringResource(id = CommonStrings.screen_notification_settings_enable_notifications),
+        isChecked = systemSettings.appNotificationsEnabled,
+        switchAlignment = Alignment.Top,
+        onCheckedChange = onNotificationsEnabledChanged
+    )
+
+    if (systemSettings.appNotificationsEnabled) {
+        PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_notification_section_title)) {
             PreferenceText(
-                icon = Icons.Filled.NotificationsOff,
-                title = stringResource(id = CommonStrings.screen_notification_settings_system_notifications_turned_off),
-                subtitle = stringResource(id = CommonStrings.screen_notification_settings_system_notifications_action_required,
-                    stringResource(id = CommonStrings.screen_notification_settings_system_notifications_action_required_content_link)),
-                onClick = {
-                    context.startNotificationSettingsIntent()
-                }
+                title = stringResource(id = CommonStrings.screen_notification_settings_group_chats),
+                subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode),
+                onClick = onGroupChatsClicked
+            )
+
+            PreferenceText(
+                title = stringResource(id = CommonStrings.screen_notification_settings_direct_chats),
+                subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode),
+                onClick = onDirectChatsClicked
             )
         }
 
-        PreferenceSwitch(
-            modifier = modifier,
-            title = stringResource(id = CommonStrings.screen_notification_settings_enable_notifications),
-            isChecked = systemSettings.appNotificationsEnabled,
-            switchAlignment = Alignment.Top,
-            onCheckedChange = onNotificationsEnabledChanged
-        )
-
-        if (systemSettings.appNotificationsEnabled) {
-            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_notification_section_title)) {
-                PreferenceText(
-                    title = stringResource(id = CommonStrings.screen_notification_settings_group_chats),
-                    subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode),
-                    onClick = onGroupChatsClicked
-                )
-
-                PreferenceText(
-                    title = stringResource(id = CommonStrings.screen_notification_settings_direct_chats),
-                    subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode),
-                    onClick = onDirectChatsClicked
-                )
-            }
-
-            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_mode_mentions)) {
-                PreferenceSwitch(
-                    modifier = Modifier,
-                    title = stringResource(id = CommonStrings.screen_notification_settings_room_mention_label),
-                    isChecked = matrixSettings.atRoomNotificationsEnabled,
-                    switchAlignment = Alignment.Top,
-                    onCheckedChange = onMentionNotificationsChanged
-                )
-            }
+        PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_mode_mentions)) {
+            PreferenceSwitch(
+                modifier = Modifier,
+                title = stringResource(id = CommonStrings.screen_notification_settings_room_mention_label),
+                isChecked = matrixSettings.atRoomNotificationsEnabled,
+                switchAlignment = Alignment.Top,
+                onCheckedChange = onMentionNotificationsChanged
+            )
+        }
         // We are removing the call notification toggle until call support has been added
 //            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_additional_settings_section_title)) {
 //                PreferenceSwitch(
@@ -161,17 +161,17 @@ private fun NotificationSettingsContentView(
 //                    onCheckedChange = onCallsNotificationsChanged
 //                )
 //            }
-        }
+    }
 }
 
 @Composable
 private fun getTitleForRoomNotificationMode(mode: RoomNotificationMode?) =
-when(mode) {
-    RoomNotificationMode.ALL_MESSAGES -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_all_messages)
-    RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_mentions_and_keywords)
-    RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
-    null -> ""
-}
+    when (mode) {
+        RoomNotificationMode.ALL_MESSAGES -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_all_messages)
+        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_mentions_and_keywords)
+        RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
+        null -> ""
+    }
 
 @Composable
 private fun InvalidNotificationSettingsView(
@@ -215,7 +215,7 @@ private fun InvalidNotificationSettingsView(
             }
         }
     }
-    if(showError) {
+    if (showError) {
         ErrorDialog(
             title = stringResource(id = CommonStrings.dialog_title_error),
             content = stringResource(id = CommonStrings.screen_notification_settings_failed_fixing_configuration),
@@ -224,18 +224,9 @@ private fun InvalidNotificationSettingsView(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun NotificationSettingsViewLightPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun NotificationSettingsViewDarkPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: NotificationSettingsState) {
+internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) = ElementPreview {
     NotificationSettingsView(
         state = state,
         onBackPressed = {},
@@ -243,18 +234,9 @@ private fun ContentToPreview(state: NotificationSettingsState) {
     )
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun InvalidNotificationSettingsViewightPreview() =
-    ElementPreviewLight { InvalidNotificationSettingsContentToPreview() }
-
-@Preview
-@Composable
-internal fun InvalidNotificationSettingsViewDarkPreview() =
-    ElementPreviewDark { InvalidNotificationSettingsContentToPreview() }
-
-@Composable
-private fun InvalidNotificationSettingsContentToPreview() {
+internal fun InvalidNotificationSettingsViewPreview() = ElementPreview {
     InvalidNotificationSettingsView(
         showError = false,
         onContinueClicked = {},

@@ -143,22 +143,6 @@
     <item quantity="other">"%d 票"</item>
   </plurals>
   <string name="report_content_hint">"檢舉這個內容的原因"</string>
-  <string name="rich_text_editor_bullet_list">"切換項目編號"</string>
-  <string name="rich_text_editor_code_block">"切換程式碼區塊"</string>
-  <string name="rich_text_editor_composer_placeholder">"訊息"</string>
-  <string name="rich_text_editor_create_link">"建立連結"</string>
-  <string name="rich_text_editor_edit_link">"編輯連結"</string>
-  <string name="rich_text_editor_format_bold">"套用粗體"</string>
-  <string name="rich_text_editor_format_italic">"套用斜體"</string>
-  <string name="rich_text_editor_format_strikethrough">"套用刪除線"</string>
-  <string name="rich_text_editor_format_underline">"套用底線"</string>
-  <string name="rich_text_editor_full_screen_toggle">"切換全螢幕模式"</string>
-  <string name="rich_text_editor_indent">"增加縮排"</string>
-  <string name="rich_text_editor_link">"設定連結"</string>
-  <string name="rich_text_editor_numbered_list">"切換數字編號"</string>
-  <string name="rich_text_editor_quote">"切換引用"</string>
-  <string name="rich_text_editor_unindent">"減少縮排"</string>
-  <string name="rich_text_editor_url_placeholder">"連結"</string>
   <string name="room_timeline_read_marker_title">"新訊息"</string>
   <string name="screen_analytics_settings_share_data">"分享分析數據"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>

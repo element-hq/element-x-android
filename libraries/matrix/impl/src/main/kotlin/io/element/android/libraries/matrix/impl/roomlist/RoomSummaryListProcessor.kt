@@ -17,9 +17,11 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.RoomListService
@@ -30,6 +32,7 @@ import java.util.UUID
 class RoomSummaryListProcessor(
     private val roomSummaries: MutableStateFlow<List<RoomSummary>>,
     private val roomListService: RoomListService,
+    private val dispatcher: CoroutineDispatcher,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
 
@@ -41,6 +44,17 @@ class RoomSummaryListProcessor(
             Timber.v("Update rooms from postUpdates (with ${updates.size} items) on ${Thread.currentThread()}")
             updates.forEach { update ->
                 applyUpdate(update)
+            }
+        }
+    }
+
+    suspend fun rebuildRoomSummaries() {
+        updateRoomSummaries {
+            forEachIndexed { i, summary ->
+                this[i] = when (summary) {
+                    is RoomSummary.Empty -> summary
+                    is RoomSummary.Filled -> buildAndCacheRoomSummaryForIdentifier(summary.identifier())
+                }
             }
         }
     }
@@ -117,10 +131,11 @@ class RoomSummaryListProcessor(
         return builtRoomSummary
     }
 
-    private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) =
+    private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(dispatcher) {
         mutex.withLock {
             val mutableRoomSummaries = roomSummaries.value.toMutableList()
             block(mutableRoomSummaries)
             roomSummaries.value = mutableRoomSummaries
         }
+    }
 }

@@ -27,19 +27,19 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.appnav.NodeLifecycleCallback
+import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -60,6 +60,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     private val messagesEntryPoint: MessagesEntryPoint,
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
+    roomComponentFactory: RoomComponentFactory,
     roomMembershipObserver: RoomMembershipObserver,
 ) : BackstackNode<RoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
@@ -68,15 +69,10 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     ),
     buildContext = buildContext,
     plugins = plugins,
-) {
+), DaggerComponentOwner {
 
     interface Callback : Plugin {
         fun onForwardedToSingleRoom(roomId: RoomId)
-    }
-
-    interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(identifier: String, room: MatrixRoom)
-        fun onFlowReleased(identifier: String, room: MatrixRoom)
     }
 
     data class Inputs(
@@ -86,18 +82,17 @@ class RoomLoadedFlowNode @AssistedInject constructor(
 
     private val inputs: Inputs = inputs()
     private val callbacks = plugins.filterIsInstance<Callback>()
+    override val daggerComponent = roomComponentFactory.create(inputs.room)
 
     init {
         lifecycle.subscribe(
             onCreate = {
-                Timber.v("OnCreate")
-                plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.room) }
+                Timber.v("OnCreate => ${inputs.room.roomId}")
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()
             },
             onDestroy = {
                 Timber.v("OnDestroy")
-                plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.room) }
                 appNavigationStateService.onLeavingRoom(id)
             }
         )

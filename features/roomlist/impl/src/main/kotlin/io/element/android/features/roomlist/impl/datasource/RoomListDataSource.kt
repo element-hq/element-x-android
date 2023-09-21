@@ -27,28 +27,37 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 class RoomListDataSource @Inject constructor(
     private val roomListService: RoomListService,
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val notificationSettingsService: NotificationSettingsService,
+    private val appScope: CoroutineScope,
 ) {
+    init {
+        observeNotificationSettings()
+    }
 
     private val _filter = MutableStateFlow("")
     private val _allRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
@@ -100,6 +109,16 @@ class RoomListDataSource @Inject constructor(
     val allRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
     val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
 
+    @OptIn(FlowPreview::class)
+    private fun observeNotificationSettings() {
+        notificationSettingsService.notificationSettingsChangeFlow
+            .debounce(0.5.seconds)
+            .onEach {
+                roomListService.rebuildRoomSummaries()
+            }
+            .launchIn(appScope)
+    }
+
     private suspend fun replaceWith(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(roomSummaries)
@@ -128,10 +147,7 @@ class RoomListDataSource @Inject constructor(
         }
     }
 
-    private fun buildAndCacheItem(
-        roomSummaries: List<RoomSummary>,
-        index: Int
-    ): RoomListRoomSummary? {
+    private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
         val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
             is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
             is RoomSummary.Filled -> {
@@ -152,10 +168,12 @@ class RoomListDataSource @Inject constructor(
                         roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
                     }.orEmpty(),
                     avatarData = avatarData,
+                    notificationMode = roomSummary.details.notificationMode,
                 )
             }
             null -> null
         }
+
         diffCache[index] = roomListRoomSummary
         return roomListRoomSummary
     }

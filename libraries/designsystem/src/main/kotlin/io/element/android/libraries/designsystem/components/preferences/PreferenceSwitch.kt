@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,8 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +39,7 @@ import io.element.android.libraries.designsystem.theme.components.Switch
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
 import io.element.android.libraries.designsystem.toSecondaryEnabledColor
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -50,6 +50,7 @@ fun PreferenceSwitch(
     subtitle: String? = null,
     enabled: Boolean = true,
     icon: ImageVector? = null,
+    @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
     switchAlignment: Alignment.Vertical = Alignment.CenterVertically
@@ -64,6 +65,7 @@ fun PreferenceSwitch(
     ) {
         PreferenceIcon(
             icon = icon,
+            iconResourceId = iconResourceId,
             enabled = enabled,
             isVisible = showIconAreaIfNoIcon
         )
@@ -107,7 +109,7 @@ private fun ContentToPreview() {
     PreferenceSwitch(
         title = "Switch",
         subtitle = "Subtitle Switch",
-        icon = Icons.Default.Announcement,
+        iconResourceId = CommonDrawables.ic_compound_threads,
         enabled = true,
         isChecked = true
     )

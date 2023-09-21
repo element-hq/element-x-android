@@ -45,18 +45,18 @@ import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    dispatcher: CoroutineDispatcher,
+    private val dispatcher: CoroutineDispatcher,
     roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) : RoomListService {
 
     private val allRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val allRoomsLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, roomSummaryDetailsFactory)
+    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
     private val allRoomsDynamicEvents = MutableSharedFlow<RoomListDynamicEvents>()
 
     private val invitesLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
     private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
-    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, roomSummaryDetailsFactory)
+    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
     private val inviteRoomsDynamicEvents = MutableSharedFlow<RoomListDynamicEvents>()
 
     init {
@@ -104,6 +104,12 @@ class RustRoomListService(
             )
         } catch (exception: RoomListException) {
             Timber.e(exception, "Failed updating visible range")
+        }
+    }
+
+    override fun rebuildRoomSummaries() {
+        sessionCoroutineScope.launch {
+            allRoomsListProcessor.rebuildRoomSummaries()
         }
     }
 

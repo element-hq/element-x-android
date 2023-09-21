@@ -37,12 +37,12 @@ import coil.request.ImageRequest
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.StaticMapUrlBuilder
 import io.element.android.features.location.api.internal.centerBottomEdge
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
-import io.element.android.libraries.designsystem.R as DesignSystemR
 
 /**
  * Shows a static map image downloaded via a third party service's static maps API.
@@ -102,7 +102,7 @@ fun StaticMapView(
                 contentScale = ContentScale.Fit,
             )
             Icon(
-                resourceId = DesignSystemR.drawable.pin,
+                resourceId = CommonDrawables.pin,
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.centerBottomEdge(this),
@@ -119,7 +119,7 @@ fun StaticMapView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun StaticMapViewPreview() = ElementPreview {
     StaticMapView(

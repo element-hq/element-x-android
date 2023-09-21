@@ -58,6 +58,10 @@ class FakeRoomListService : RoomListService {
         latestSlidingSyncRange = range
     }
 
+    override fun rebuildRoomSummaries() {
+
+    }
+
     override fun allRooms(): RoomList {
         return SimpleRoomList(
             summaries = allRoomSummariesFlow,

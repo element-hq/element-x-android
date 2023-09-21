@@ -28,11 +28,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,12 +35,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
@@ -56,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
 import io.element.android.libraries.theme.ElementTheme
@@ -93,7 +90,7 @@ fun ConfigureTracingView(
                         onClick = { showMenu = !showMenu }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.MoreVert,
+                            resourceId = CommonDrawables.ic_compound_overflow_vertical,
                             tint = ElementTheme.materialColors.secondary,
                             contentDescription = null,
                         )
@@ -110,7 +107,7 @@ fun ConfigureTracingView(
                             text = { Text("Reset to default") },
                             leadingIcon = {
                                 Icon(
-                                    Icons.Outlined.Delete,
+                                    resourceId = CommonDrawables.ic_compound_delete,
                                     tint = ElementTheme.materialColors.secondary,
                                     contentDescription = null,
                                 )
@@ -212,11 +209,11 @@ fun LogLevelDropdownMenu(
             text = { Text(text = logLevel.filter) },
             onClick = { expanded = !expanded },
             trailingIcon = {
-                if (expanded) {
-                    Icon(Icons.Default.ArrowDropUp, contentDescription = null)
-                } else {
-                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                }
+                Icon(
+                    modifier = Modifier.rotate(if (expanded) 180f else 0f),
+                    resourceId = CommonDrawables.ic_compound_chevron_down,
+                    contentDescription = null,
+                )
             },
         )
         DropdownMenu(
@@ -238,7 +235,7 @@ fun LogLevelDropdownMenu(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ConfigureTracingViewPreview(
     @PreviewParameter(ConfigureTracingStateProvider::class) state: ConfigureTracingState

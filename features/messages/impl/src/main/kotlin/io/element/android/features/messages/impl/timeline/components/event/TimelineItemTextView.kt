@@ -23,15 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.components.html.HtmlDocument
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
 import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.theme.ElementTheme
 
@@ -71,22 +70,14 @@ fun TimelineItemTextView(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemTextViewLightPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) =
-    ElementPreviewLight { ContentToPreview(content) }
-
-@Preview
-@Composable
-internal fun TimelineItemTextViewDarkPreview(@PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent) =
-    ElementPreviewDark { ContentToPreview(content) }
-
-@Composable
-fun ContentToPreview(content: TimelineItemTextBasedContent) {
+internal fun TimelineItemTextViewPreview(
+    @PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent
+) = ElementPreview {
     TimelineItemTextView(
         content = content,
         interactionSource = remember { MutableInteractionSource() },
         extraPadding = ExtraPadding(nbChars = 8),
     )
 }
-

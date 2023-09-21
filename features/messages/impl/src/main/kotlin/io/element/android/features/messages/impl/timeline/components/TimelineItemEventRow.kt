@@ -76,18 +76,19 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
@@ -402,7 +403,11 @@ private fun MessageEventBubbleContent(
             horizontalArrangement = spacedBy(4.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(resourceId = VectorIcons.ThreadDecoration, contentDescription = null, tint = ElementTheme.colors.iconSecondary)
+            Icon(
+                resourceId = CommonDrawables.ic_thread_decoration,
+                contentDescription = null,
+                tint = ElementTheme.colors.iconSecondary,
+            )
             Text(
                 text = stringResource(CommonStrings.common_thread),
                 style = ElementTheme.typography.fontBodyXsRegular,
@@ -622,18 +627,9 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun TimelineItemEventRowPreview() = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
             TimelineItemEventRow(
@@ -683,18 +679,9 @@ private fun ContentToPreview() {
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowWithReplyLightPreview() =
-    ElementPreviewLight { ContentToPreviewWithReply() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowWithReplyDarkPreview() =
-    ElementPreviewDark { ContentToPreviewWithReply() }
-
-@Composable
-private fun ContentToPreviewWithReply() {
+internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
             val replyContent = if (it) {
@@ -766,18 +753,11 @@ private fun aInReplyToReady(
     )
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewLight { ContentTimestampToPreview(event) }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowTimestampDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewDark { ContentTimestampToPreview(event) }
-
-@Composable
-private fun ContentTimestampToPreview(event: TimelineItem.Event) {
+internal fun TimelineItemEventRowTimestampPreview(
+    @PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event
+) = ElementPreview {
     Column {
         val oldContent = event.content as TimelineItemTextContent
         listOf(
@@ -813,18 +793,9 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowWithManyReactionsLightPreview() =
-    ElementPreviewLight { ContentWithManyReactionsToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowWithManyReactionsDarkPreview() =
-    ElementPreviewDark { ContentWithManyReactionsToPreview() }
-
-@Composable
-private fun ContentWithManyReactionsToPreview() {
+internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
     Column {
         listOf(false, true).forEach { isMine ->
             TimelineItemEventRow(

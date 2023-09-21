@@ -26,14 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
 import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 @Composable
@@ -64,17 +63,8 @@ fun TimelineItemVideoView(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemVideoViewLightPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) =
-    ElementPreviewLight { ContentToPreview(content) }
-
-@Preview
-@Composable
-internal fun TimelineItemVideoViewDarkPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) =
-    ElementPreviewDark { ContentToPreview(content) }
-
-@Composable
-private fun ContentToPreview(content: TimelineItemVideoContent) {
+internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) = ElementPreview {
     TimelineItemVideoView(content)
 }

@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessag
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.aPollContent
 import io.element.android.libraries.matrix.test.room.aProfileChangeMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
@@ -58,6 +59,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
+@Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
 class DefaultRoomLastMessageFormatterTests {
 
@@ -153,7 +155,7 @@ class DefaultRoomLastMessageFormatterTests {
     fun `Message contents`() {
         val body = "Shared body"
         fun createMessageContent(type: MessageType): MessageContent {
-            return MessageContent(body, null, false, false,type)
+            return MessageContent(body, null, false, false, type)
         }
 
         val sharedContentMessagesTypes = arrayOf(
@@ -760,6 +762,34 @@ class DefaultRoomLastMessageFormatterTests {
         val sameContentEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = sameContent)
         val sameMessage = formatter.format(sameContentEvent, false)
         Truth.assertThat(sameMessage).isNull()
+    }
+
+    // endregion
+
+    // region Polls
+
+    @Test
+    @Config(qualifiers = "en")
+    fun `Computes last message for poll in DM`() {
+        val pollContent = aPollContent()
+
+        val mineContentEvent = createRoomEvent(sentByYou = true, senderDisplayName = "Alice", content = pollContent)
+        Truth.assertThat(formatter.format(mineContentEvent, true)).isEqualTo("Poll: Do you like polls?")
+
+        val contentEvent = createRoomEvent(sentByYou = false, senderDisplayName = "Bob", content = pollContent)
+        Truth.assertThat(formatter.format(contentEvent, true)).isEqualTo("Poll: Do you like polls?")
+    }
+
+    @Test
+    @Config(qualifiers = "en")
+    fun `Computes last message for poll in room`() {
+        val pollContent = aPollContent()
+
+        val mineContentEvent = createRoomEvent(sentByYou = true, senderDisplayName = "Alice", content = pollContent)
+        Truth.assertThat(formatter.format(mineContentEvent, false).toString()).isEqualTo("Alice: Poll: Do you like polls?")
+
+        val contentEvent = createRoomEvent(sentByYou = false, senderDisplayName = "Bob", content = pollContent)
+        Truth.assertThat(formatter.format(contentEvent, false).toString()).isEqualTo("Bob: Poll: Do you like polls?")
     }
 
     // endregion

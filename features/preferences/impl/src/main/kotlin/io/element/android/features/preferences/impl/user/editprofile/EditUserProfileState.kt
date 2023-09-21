@@ -20,6 +20,7 @@ import android.net.Uri
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.media.AvatarAction
+import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
 
 data class EditUserProfileState(
@@ -29,5 +30,6 @@ data class EditUserProfileState(
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonEnabled: Boolean,
     val saveAction: Async<Unit>,
+    val cameraPermissionState: PermissionsState,
     val eventSink: (EditUserProfileEvents) -> Unit
 )
