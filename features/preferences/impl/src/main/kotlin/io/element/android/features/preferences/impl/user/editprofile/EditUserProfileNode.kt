@@ -18,14 +18,12 @@ package io.element.android.features.preferences.impl.user.editprofile
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
@@ -48,12 +46,10 @@ class EditUserProfileNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val context = LocalContext.current
         EditUserProfileView(
             state = state,
             onBackPressed = ::navigateUp,
             onProfileEdited = ::navigateUp,
-            onOpenSystemSettings = { context.openAppSettingsPage() },
             modifier = modifier
         )
     }

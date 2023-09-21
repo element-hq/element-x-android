@@ -29,7 +29,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun PermissionsView(
     state: PermissionsState,
-    onOpenSystemSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.showDialog.not()) return
@@ -40,8 +39,7 @@ fun PermissionsView(
         content = state.permission.toDialogContent(),
         submitText = stringResource(id = CommonStrings.action_open_settings),
         onSubmitClicked = {
-            state.eventSink.invoke(PermissionsEvents.CloseDialog)
-            onOpenSystemSettings()
+            state.eventSink.invoke(PermissionsEvents.OpenSystemSettingAndCloseDialog)
         },
         onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
     )
@@ -62,6 +60,5 @@ private fun String.toDialogContent(): String {
 internal fun PermissionsViewPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) = ElementPreview {
     PermissionsView(
         state = state,
-        onOpenSystemSettings = {},
     )
 }

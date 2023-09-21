@@ -76,7 +76,6 @@ fun ConfigureRoomView(
     state: ConfigureRoomState,
     onBackPressed: () -> Unit,
     onRoomCreated: (RoomId) -> Unit,
-    onOpenSystemSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -177,7 +176,6 @@ fun ConfigureRoomView(
 
     PermissionsView(
         state = state.cameraPermissionState,
-        onOpenSystemSettings = onOpenSystemSettings,
     )
 }
 
@@ -287,6 +285,5 @@ internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvid
         state = state,
         onBackPressed = {},
         onRoomCreated = {},
-        onOpenSystemSettings = {},
     )
 }

@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.permissions.api
+package io.element.android.libraries.permissions.impl.action
 
-sealed interface PermissionsEvents {
-    data object AskPermissionToUser : PermissionsEvents
-    data object CloseDialog : PermissionsEvents
-    data object OpenSystemSettingAndCloseDialog : PermissionsEvents
+class FakePermissionActions : PermissionActions {
+    var openSettingsCalled = false
+        private set
+
+    override fun openSettings() {
+        openSettingsCalled = true
+    }
 }

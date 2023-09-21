@@ -69,7 +69,6 @@ fun EditUserProfileView(
     state: EditUserProfileState,
     onBackPressed: () -> Unit,
     onProfileEdited: () -> Unit,
-    onOpenSystemSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -172,7 +171,6 @@ fun EditUserProfileView(
     }
     PermissionsView(
         state = state.cameraPermissionState,
-        onOpenSystemSettings = onOpenSystemSettings,
     )
 }
 
@@ -190,7 +188,6 @@ internal fun EditUserProfileViewPreview(@PreviewParameter(EditUserProfileStatePr
         EditUserProfileView(
             onBackPressed = {},
             onProfileEdited = {},
-            onOpenSystemSettings = {},
             state = state,
         )
     }

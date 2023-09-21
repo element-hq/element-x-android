@@ -18,7 +18,6 @@ package io.element.android.features.roomdetails.impl.edit
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -27,7 +26,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
 
@@ -50,12 +48,10 @@ class RoomDetailsEditNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val context = LocalContext.current
         RoomDetailsEditView(
             state = state,
             onBackPressed = ::navigateUp,
             onRoomEdited = ::navigateUp,
-            onOpenSystemSettings = { context.openAppSettingsPage() },
             modifier = modifier,
         )
     }

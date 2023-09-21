@@ -39,6 +39,7 @@ import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.PermissionsStore
+import io.element.android.libraries.permissions.impl.action.PermissionActions
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -48,6 +49,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
     @Assisted val permission: String,
     private val permissionsStore: PermissionsStore,
     private val composablePermissionStateProvider: ComposablePermissionStateProvider,
+    private val permissionActions: PermissionActions,
 ) : PermissionsPresenter {
 
     @AssistedFactory
@@ -116,6 +118,10 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
                     } else {
                         permissionState.launchPermissionRequest()
                     }
+                }
+                PermissionsEvents.OpenSystemSettingAndCloseDialog -> {
+                    permissionActions.openSettings()
+                    showDialog.value = false
                 }
             }
         }

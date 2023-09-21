@@ -25,6 +25,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.impl.action.FakePermissionActions
 import io.element.android.libraries.permissions.test.InMemoryPermissionsStore
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -52,7 +53,8 @@ class DefaultPermissionsPresenterTest {
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
-            permissionStateProvider
+            permissionStateProvider,
+            FakePermissionActions(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -84,7 +86,8 @@ class DefaultPermissionsPresenterTest {
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
-            permissionStateProvider
+            permissionStateProvider,
+            FakePermissionActions(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -96,6 +99,42 @@ class DefaultPermissionsPresenterTest {
             assertThat(withDialogState.showDialog).isTrue()
             withDialogState.eventSink.invoke(PermissionsEvents.CloseDialog)
             assertThat(awaitItem().showDialog).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - user open settings`() = runTest {
+        val permissionsStore = InMemoryPermissionsStore(
+            permissionDenied = true,
+            permissionAsked = true
+        )
+        val permissionState = FakePermissionState(
+            A_PERMISSION,
+            PermissionStatus.Denied(shouldShowRationale = false)
+        )
+        val permissionStateProvider =
+            FakeComposablePermissionStateProvider(
+                permissionState
+            )
+        val permissionActions = FakePermissionActions()
+        val presenter = DefaultPermissionsPresenter(
+            A_PERMISSION,
+            permissionsStore,
+            permissionStateProvider,
+            permissionActions,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
+            val withDialogState = awaitItem()
+            assertThat(withDialogState.showDialog).isTrue()
+            assertThat(permissionActions.openSettingsCalled).isFalse()
+            withDialogState.eventSink.invoke(PermissionsEvents.OpenSystemSettingAndCloseDialog)
+            assertThat(awaitItem().showDialog).isFalse()
+            assertThat(permissionActions.openSettingsCalled).isTrue()
         }
     }
 
@@ -113,7 +152,8 @@ class DefaultPermissionsPresenterTest {
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
-            permissionStateProvider
+            permissionStateProvider,
+            FakePermissionActions(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -147,7 +187,8 @@ class DefaultPermissionsPresenterTest {
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
-            permissionStateProvider
+            permissionStateProvider,
+            FakePermissionActions(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -185,7 +226,8 @@ class DefaultPermissionsPresenterTest {
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
-            permissionStateProvider
+            permissionStateProvider,
+            FakePermissionActions(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -215,7 +257,8 @@ class DefaultPermissionsPresenterTest {
         val presenter = DefaultPermissionsPresenter(
             A_PERMISSION,
             permissionsStore,
-            permissionStateProvider
+            permissionStateProvider,
+            FakePermissionActions(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
