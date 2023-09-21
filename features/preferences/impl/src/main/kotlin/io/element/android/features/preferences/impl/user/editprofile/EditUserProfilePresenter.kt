@@ -104,7 +104,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
                             cameraPhotoPicker.launch()
                         } else {
                             pendingPermissionRequest = true
-                            cameraPermissionState.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
+                            cameraPermissionState.eventSink(PermissionsEvents.AskPermissionToUser)
                         }
                         AvatarAction.Remove -> userAvatarUri = null
                     }
