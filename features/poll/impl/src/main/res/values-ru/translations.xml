@@ -4,6 +4,8 @@
   <string name="screen_create_poll_anonymous_desc">"Показывать результаты только после окончания опроса"</string>
   <string name="screen_create_poll_anonymous_headline">"Анонимный опрос"</string>
   <string name="screen_create_poll_answer_hint">"Настройка %1$d"</string>
+  <string name="screen_create_poll_discard_confirmation">"Вы действительно хотите отменить этот опрос?"</string>
+  <string name="screen_create_poll_discard_confirmation_title">"Отменить опрос"</string>
   <string name="screen_create_poll_question_desc">"Вопрос или тема"</string>
   <string name="screen_create_poll_question_hint">"Тема опроса?"</string>
   <string name="screen_create_poll_title">"Создать опрос"</string>

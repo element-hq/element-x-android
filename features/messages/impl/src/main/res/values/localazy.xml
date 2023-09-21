@@ -6,7 +6,7 @@
   </plurals>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>
-  <string name="screen_room_attachment_source_camera_video">"Record a video"</string>
+  <string name="screen_room_attachment_source_camera_video">"Record video"</string>
   <string name="screen_room_attachment_source_files">"Attachment"</string>
   <string name="screen_room_attachment_source_gallery">"Photo &amp; Video Library"</string>
   <string name="screen_room_attachment_source_location">"Location"</string>
