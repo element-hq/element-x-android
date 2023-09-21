@@ -173,13 +173,19 @@ class EditUserProfilePresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.userAvatarUrl).isEqualTo(userAvatarUri)
             assertThat(initialState.cameraPermissionState.permissionGranted).isFalse()
+            initialState.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            val stateWithAskingPermission = awaitItem()
+            assertThat(stateWithAskingPermission.cameraPermissionState.showDialog).isTrue()
             fakePermissionsPresenter.setPermissionGranted()
             val stateWithPermission = awaitItem()
             assertThat(stateWithPermission.cameraPermissionState.permissionGranted).isTrue()
-            stateWithPermission.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.TakePhoto))
-            awaitItem().apply {
-                assertThat(userAvatarUrl).isEqualTo(anotherAvatarUri)
-            }
+            val stateWithNewAvatar = awaitItem()
+            assertThat(stateWithNewAvatar.userAvatarUrl).isEqualTo(anotherAvatarUri)
+            // Do it again, no permission is requested
+            fakePickerProvider.givenResult(userAvatarUri)
+            stateWithNewAvatar.eventSink(EditUserProfileEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            val stateWithNewAvatar2 = awaitItem()
+            assertThat(stateWithNewAvatar2.userAvatarUrl).isEqualTo(userAvatarUri)
         }
     }
 

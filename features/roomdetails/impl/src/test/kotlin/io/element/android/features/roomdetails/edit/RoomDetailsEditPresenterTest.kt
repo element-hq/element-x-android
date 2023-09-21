@@ -271,13 +271,19 @@ class RoomDetailsEditPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
             assertThat(initialState.cameraPermissionState.permissionGranted).isFalse()
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            val stateWithAskingPermission = awaitItem()
+            assertThat(stateWithAskingPermission.cameraPermissionState.showDialog).isTrue()
             fakePermissionsPresenter.setPermissionGranted()
             val stateWithPermission = awaitItem()
             assertThat(stateWithPermission.cameraPermissionState.permissionGranted).isTrue()
-            stateWithPermission.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
-            awaitItem().apply {
-                assertThat(roomAvatarUrl).isEqualTo(anotherAvatarUri)
-            }
+            val stateWithNewAvatar = awaitItem()
+            assertThat(stateWithNewAvatar.roomAvatarUrl).isEqualTo(anotherAvatarUri)
+            // Do it again, no permission is requested
+            fakePickerProvider.givenResult(roomAvatarUri)
+            stateWithNewAvatar.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            val stateWithNewAvatar2 = awaitItem()
+            assertThat(stateWithNewAvatar2.roomAvatarUrl).isEqualTo(roomAvatarUri)
         }
     }
 

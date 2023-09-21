@@ -57,6 +57,7 @@ import org.robolectric.RobolectricTestRunner
 import java.io.File
 
 private const val AN_URI_FROM_CAMERA = "content://uri_from_camera"
+private const val AN_URI_FROM_CAMERA_2 = "content://uri_from_camera_2"
 private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 
 @RunWith(RobolectricTestRunner::class)
@@ -186,12 +187,21 @@ class ConfigureRoomPresenterTests {
             val uriFromCamera = Uri.parse(AN_URI_FROM_CAMERA)
             fakePickerProvider.givenResult(uriFromCamera)
             assertThat(newState.cameraPermissionState.permissionGranted).isFalse()
+            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            newState = awaitItem()
+            assertThat(newState.cameraPermissionState.showDialog).isTrue()
             fakePermissionsPresenter.setPermissionGranted()
             newState = awaitItem()
             assertThat(newState.cameraPermissionState.permissionGranted).isTrue()
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(avatarUri = uriFromCamera)
+            assertThat(newState.config).isEqualTo(expectedConfig)
+            // Do it again, no permission is requested
+            val uriFromCamera2 = Uri.parse(AN_URI_FROM_CAMERA_2)
+            fakePickerProvider.givenResult(uriFromCamera2)
+            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            newState = awaitItem()
+            expectedConfig = expectedConfig.copy(avatarUri = uriFromCamera2)
             assertThat(newState.config).isEqualTo(expectedConfig)
             // Remove
             newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.Remove))
