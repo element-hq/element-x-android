@@ -47,7 +47,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -209,7 +209,7 @@ private fun AnalyticsOptInFooter(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun AnalyticsOptInViewPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreview {
     AnalyticsOptInView(

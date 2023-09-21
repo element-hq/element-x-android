@@ -52,7 +52,7 @@ import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
@@ -223,7 +223,7 @@ fun SendLocationView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun SendLocationViewPreview(
     @PreviewParameter(SendLocationStateProvider::class) state: SendLocationState

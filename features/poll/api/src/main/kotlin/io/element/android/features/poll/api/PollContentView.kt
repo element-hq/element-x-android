@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -157,7 +157,7 @@ private fun ColumnScope.UndisclosedPollBottomNotice(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollContentUndisclosedPreview() = ElementPreview {
     PollContentView(
@@ -170,7 +170,7 @@ internal fun PollContentUndisclosedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollContentDisclosedPreview() = ElementPreview {
     PollContentView(
@@ -183,7 +183,7 @@ internal fun PollContentDisclosedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollContentEndedPreview() = ElementPreview {
     PollContentView(

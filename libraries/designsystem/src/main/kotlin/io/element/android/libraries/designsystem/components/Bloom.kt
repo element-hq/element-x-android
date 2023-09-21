@@ -104,7 +104,7 @@ import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.text.toDp
@@ -456,7 +456,7 @@ fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@DayNightPreviews
+@PreviewsDayNight
 @ShowkaseComposable(group = PreviewGroup.Bloom)
 @Composable
 internal fun BloomPreview() {
@@ -534,7 +534,7 @@ class InitialsColorStateProvider : PreviewParameterProvider<Int> {
         get() = sequenceOf(0, 1, 2, 3, 4, 5, 6, 7)
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 @ShowkaseComposable(group = PreviewGroup.Bloom)
 internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::class) color: Int) {

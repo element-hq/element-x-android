@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.TextComposer
@@ -81,7 +81,7 @@ fun MessageComposerView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun MessageComposerViewPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) = ElementPreview {
     MessageComposerView(

@@ -37,7 +37,7 @@ import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.modifiers.blurCompat
 import io.element.android.libraries.designsystem.modifiers.blurredShapeShadow
 import io.element.android.libraries.designsystem.modifiers.canUseBlurMaskFilter
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.theme.ElementTheme
 
@@ -149,25 +149,25 @@ sealed class ElementLogoAtomSize(
 }
 
 @Composable
-@DayNightPreviews
+@PreviewsDayNight
 internal fun ElementLogoAtomMediumPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Medium)
 }
 
 @Composable
-@DayNightPreviews
+@PreviewsDayNight
 internal fun ElementLogoAtomLargePreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Large)
 }
 
 @Composable
-@DayNightPreviews
+@PreviewsDayNight
 internal fun ElementLogoAtomMediumNoBlurShadowPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Medium, useBlurredShadow = false)
 }
 
 @Composable
-@DayNightPreviews
+@PreviewsDayNight
 internal fun ElementLogoAtomLargeNoBlurShadowPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Large, useBlurredShadow = false)
 }

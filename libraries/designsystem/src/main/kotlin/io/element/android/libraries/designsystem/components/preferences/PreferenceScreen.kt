@@ -33,7 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -101,7 +101,7 @@ fun PreferenceTopAppBar(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PreferenceViewPreview() = ElementPreview {
     PreferenceView(

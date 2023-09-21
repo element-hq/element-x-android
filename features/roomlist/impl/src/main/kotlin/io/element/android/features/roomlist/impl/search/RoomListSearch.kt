@@ -56,7 +56,7 @@ import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.applyIf
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -217,7 +217,7 @@ internal fun RoomListSearchResultContent(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun RoomListSearchResultContentPreview() = ElementPreview {
     RoomListSearchResultContent(

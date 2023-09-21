@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
@@ -180,7 +180,7 @@ fun TimelineItemReactionsLayout(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsLayoutPreview() = ElementPreview {
     TimelineItemReactionsLayout(

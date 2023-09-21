@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -182,7 +182,7 @@ private fun NotificationRow(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun NotificationsOptInViewPreview(
     @PreviewParameter(NotificationsOptInStateProvider::class) state: NotificationsOptInState

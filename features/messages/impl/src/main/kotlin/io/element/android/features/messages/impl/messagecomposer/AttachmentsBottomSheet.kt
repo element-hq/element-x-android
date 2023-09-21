@@ -36,7 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.androidutils.ui.hideKeyboard
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
@@ -156,7 +156,7 @@ internal fun AttachmentSourcePickerMenu(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
     AttachmentSourcePickerMenu(

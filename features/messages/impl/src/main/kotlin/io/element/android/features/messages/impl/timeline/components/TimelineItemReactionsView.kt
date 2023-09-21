@@ -31,7 +31,7 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
@@ -115,7 +115,7 @@ private fun TimelineItemReactionsView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsViewPreview() = ElementPreview {
     ContentToPreview(
@@ -123,7 +123,7 @@ internal fun TimelineItemReactionsViewPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsViewFewPreview() = ElementPreview {
     ContentToPreview(
@@ -131,7 +131,7 @@ internal fun TimelineItemReactionsViewFewPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
     ContentToPreview(
@@ -139,7 +139,7 @@ internal fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsViewOutgoingPreview() = ElementPreview {
     ContentToPreview(

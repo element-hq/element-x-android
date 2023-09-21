@@ -39,7 +39,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
@@ -224,7 +224,7 @@ private fun InvalidNotificationSettingsView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) = ElementPreview {
     NotificationSettingsView(
@@ -234,7 +234,7 @@ internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSetti
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun InvalidNotificationSettingsViewPreview() = ElementPreview {
     InvalidNotificationSettingsView(

@@ -31,7 +31,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -137,7 +137,7 @@ private fun WebView.setup(userAgent: String, onPermissionsRequested: (Permission
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun CallScreenViewPreview() {
     ElementTheme {

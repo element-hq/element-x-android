@@ -50,7 +50,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -172,7 +172,7 @@ private fun CopyableText(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun EventDebugInfoViewPreview() = ElementPreview {
     EventDebugInfoView(

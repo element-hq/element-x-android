@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 
 @Composable
@@ -80,7 +80,7 @@ fun PermissionsView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PermissionsViewPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) = ElementPreview {
     PermissionsView(

@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -36,7 +36,7 @@ import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun IconsCompoundPart1Preview() = ElementPreview {
     IconsPreview(
@@ -48,7 +48,7 @@ internal fun IconsCompoundPart1Preview() = ElementPreview {
         })
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun IconsCompoundPart2Preview() = ElementPreview {
     IconsPreview(
@@ -60,7 +60,7 @@ internal fun IconsCompoundPart2Preview() = ElementPreview {
         })
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun IconsSeptemberPreview() = ElementPreview {
     IconsPreview(
@@ -72,7 +72,7 @@ internal fun IconsSeptemberPreview() = ElementPreview {
         })
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun IconsOtherPreview() = ElementPreview {
     IconsPreview(

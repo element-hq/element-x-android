@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -53,7 +53,7 @@ fun RowScope.ReplySwipeIndicator(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ReplySwipeIndicatorPreview() = ElementPreview {
     Column(modifier = Modifier.fillMaxWidth()) {

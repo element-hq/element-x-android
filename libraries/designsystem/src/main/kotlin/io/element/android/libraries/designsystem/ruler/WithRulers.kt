@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
@@ -62,7 +62,7 @@ fun WithRulers(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun WithRulerPreview() = ElementPreview {
     WithRulers(xRulersOffset = 20.dp, yRulersOffset = 15.dp) {

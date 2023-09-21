@@ -49,7 +49,7 @@ import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatarBloom
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.applyScaleDown
 import io.element.android.libraries.designsystem.text.roundToPx
@@ -268,7 +268,7 @@ private fun DefaultRoomListTopBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun DefaultRoomListTopBarPreview() = ElementPreview {
     DefaultRoomListTopBar(
