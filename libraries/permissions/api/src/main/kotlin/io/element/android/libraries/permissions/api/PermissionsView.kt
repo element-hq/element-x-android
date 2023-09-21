@@ -69,7 +69,7 @@ fun PermissionsView(
                 content = textToShow,
                 submitText = "Request permission",
                 onSubmitClicked = {
-                    state.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
+                    state.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
                 },
                 onCancelClicked = {
                     state.eventSink.invoke(PermissionsEvents.CloseDialog)

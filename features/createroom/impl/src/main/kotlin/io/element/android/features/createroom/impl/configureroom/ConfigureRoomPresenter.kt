@@ -102,7 +102,7 @@ class ConfigureRoomPresenter @Inject constructor(
                         AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
                             cameraPhotoPicker.launch()
                         } else {
-                            cameraPermissionState.eventSink(PermissionsEvents.OpenSystemDialog)
+                            cameraPermissionState.eventSink(PermissionsEvents.AskPermissionToUser)
                         }
                         AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
                     }

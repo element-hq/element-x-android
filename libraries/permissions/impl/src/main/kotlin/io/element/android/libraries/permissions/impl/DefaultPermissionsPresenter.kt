@@ -110,7 +110,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
                 PermissionsEvents.CloseDialog -> {
                     showDialog.value = false
                 }
-                PermissionsEvents.OpenSystemDialog -> {
+                PermissionsEvents.AskPermissionToUser -> {
                     if (permissionState.status !is PermissionStatus.Granted && isAlreadyDenied) {
                         showDialog.value = true
                     } else {

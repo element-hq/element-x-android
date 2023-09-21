@@ -91,7 +91,7 @@ class DefaultPermissionsPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
+            initialState.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
             val withDialogState = awaitItem()
             assertThat(withDialogState.showDialog).isTrue()
             withDialogState.eventSink.invoke(PermissionsEvents.CloseDialog)
@@ -120,7 +120,7 @@ class DefaultPermissionsPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.showDialog).isFalse()
-            initialState.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
+            initialState.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
             assertThat(permissionState.launchPermissionRequestCalled).isTrue()
             // User does not grant permission
             permissionStateProvider.userGiveAnswer(answer = false, firstTime = true)
@@ -154,7 +154,7 @@ class DefaultPermissionsPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.showDialog).isFalse()
-            initialState.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
+            initialState.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
             assertThat(permissionState.launchPermissionRequestCalled).isTrue()
             // User does not grant permission
             permissionStateProvider.userGiveAnswer(answer = false, firstTime = false)
@@ -192,7 +192,7 @@ class DefaultPermissionsPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
+            initialState.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
             val withDialogState = awaitItem()
             assertThat(withDialogState.showDialog).isTrue()
             assertThat(withDialogState.permissionGranted).isFalse()
@@ -222,7 +222,7 @@ class DefaultPermissionsPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.showDialog).isFalse()
-            initialState.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
+            initialState.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
             assertThat(permissionState.launchPermissionRequestCalled).isTrue()
             // User grants permission
             permissionStateProvider.userGiveAnswer(answer = true, firstTime = true)

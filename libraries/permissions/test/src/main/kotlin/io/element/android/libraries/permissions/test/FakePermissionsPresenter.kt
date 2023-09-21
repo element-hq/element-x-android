@@ -29,7 +29,7 @@ class FakePermissionsPresenter(
 
     private fun eventSink(events: PermissionsEvents) {
         when (events) {
-            PermissionsEvents.OpenSystemDialog -> state.value = state.value.copy(showDialog = true, permissionAlreadyAsked = true)
+            PermissionsEvents.AskPermissionToUser -> state.value = state.value.copy(showDialog = true, permissionAlreadyAsked = true)
             PermissionsEvents.CloseDialog -> state.value = state.value.copy(showDialog = false)
         }
     }
