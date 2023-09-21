@@ -47,6 +47,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
@@ -63,8 +64,9 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.animation.alphaAnimation
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -105,7 +107,10 @@ fun TimelineView(
         state.eventSink(TimelineEvents.PollAnswerSelected(pollStartId, answerId))
     }
 
-    Box(modifier = modifier) {
+    // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
+    val alpha by alphaAnimation(label = "alpha for timeline")
+
+    Box(modifier = modifier.alpha(alpha)) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
@@ -315,7 +320,9 @@ private fun JumpToBottomButton(
             contentColor = ElementTheme.colors.iconSecondary
         ) {
             Icon(
-                modifier = Modifier.size(24.dp).rotate(90f),
+                modifier = Modifier
+                    .size(24.dp)
+                    .rotate(90f),
                 resourceId = CommonDrawables.ic_compound_arrow_right,
                 contentDescription = "",
             )
