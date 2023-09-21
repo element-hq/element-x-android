@@ -22,9 +22,8 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.TextButton
 
 @Composable
@@ -40,18 +39,9 @@ fun ButtonRowMolecule(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun ButtonRowMoleculeLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun ButtonRowMoleculeDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun ButtonRowMoleculePreview() = ElementPreview {
     ButtonRowMolecule {
         TextButton(text = "Button 1", onClick = {})
         TextButton(text = "Button 2", onClick = {})

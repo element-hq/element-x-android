@@ -34,7 +34,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
             when(feature) {
                 FeatureFlags.LocationSharing -> true
                 FeatureFlags.Polls -> true
-                FeatureFlags.NotificationSettings -> false
+                FeatureFlags.NotificationSettings -> true
             }
         } else {
             false

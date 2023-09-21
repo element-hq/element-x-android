@@ -29,7 +29,6 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
@@ -196,8 +195,7 @@ class RootFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.BugReport)
                     }
                 }
-                val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
-                createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
+                createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
             NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
             NavTarget.SplashScreen -> splashNode(buildContext)

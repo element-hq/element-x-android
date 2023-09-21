@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -44,6 +45,7 @@ import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
+import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
@@ -95,13 +97,12 @@ class RustMatrixClient constructor(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
-    private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
-    private val verificationService = RustSessionVerificationService(rustSyncService)
+    private val rustSyncService = RustSyncService(syncService, dispatchers, sessionCoroutineScope)
+    private val verificationService = RustSessionVerificationService(rustSyncService, dispatchers)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
     )
-
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
     private val notificationClient = client.notificationClient(notificationProcessSetup)
         .use { builder ->
@@ -275,6 +276,23 @@ class RustMatrixClient constructor(
             }
         }
 
+    override suspend fun setDisplayName(displayName: String): Result<Unit> =
+        withContext(sessionDispatcher) {
+            runCatching { client.setDisplayName(displayName) }
+        }
+
+    @OptIn(ExperimentalUnsignedTypes::class)
+    override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> =
+        withContext(sessionDispatcher) {
+            runCatching { client.uploadAvatar(mimeType, data.toUByteArray().toList()) }
+        }
+
+    override suspend fun removeAvatar(): Result<Unit> =
+        withContext(sessionDispatcher) {
+            runCatching { client.removeAvatar() }
+        }
+
+
     override fun syncService(): SyncService = rustSyncService
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
@@ -327,9 +345,10 @@ class RustMatrixClient constructor(
         return result
     }
 
-    override suspend fun getAccountManagementUrl(): Result<String?> = withContext(sessionDispatcher) {
+    override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = withContext(sessionDispatcher) {
+        val rustAction = action?.toRustAction()
         runCatching {
-            client.accountUrl()
+            client.accountUrl(rustAction)
         }
     }
 

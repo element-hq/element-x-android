@@ -35,8 +35,7 @@ import org.junit.Test
 
 class OidcPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

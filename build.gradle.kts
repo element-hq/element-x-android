@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.cli.common.toBooleanLenient
 buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10")
-        classpath("com.google.gms:google-services:4.3.15")
+        classpath("com.google.gms:google-services:4.4.0")
     }
 }
 
@@ -62,7 +62,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.2.2")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.3.0")
     }
 
     // KtLint

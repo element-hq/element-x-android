@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,8 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
 import io.element.android.libraries.designsystem.toSecondaryEnabledColor
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 /**
@@ -55,6 +55,7 @@ fun PreferenceText(
     currentValue: String? = null,
     loadingCurrentValue: Boolean = false,
     icon: ImageVector? = null,
+    @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
     tintColor: Color? = null,
     onClick: () -> Unit = {},
@@ -71,6 +72,7 @@ fun PreferenceText(
     ) {
         PreferenceIcon(
             icon = icon,
+            iconResourceId = iconResourceId,
             enabled = enabled,
             isVisible = showIconAreaIfNoIcon,
             tintColor = tintColor ?: enabled.toSecondaryEnabledColor(),
@@ -126,40 +128,40 @@ private fun ContentToPreview() {
     ) {
         PreferenceText(
             title = "Title",
-            icon = Icons.Default.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            icon = Icons.Default.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            icon = Icons.Default.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
             currentValue = "123",
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            icon = Icons.Default.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
             currentValue = "123",
             enabled = false,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            icon = Icons.Default.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
             loadingCurrentValue = true,
         )
         PreferenceText(
             title = "Title",
-            icon = Icons.Default.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
             currentValue = "123",
         )
         PreferenceText(
             title = "Title",
-            icon = Icons.Default.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
             loadingCurrentValue = true,
         )
         PreferenceText(

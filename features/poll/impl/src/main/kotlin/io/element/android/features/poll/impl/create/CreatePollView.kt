@@ -18,6 +18,7 @@ package io.element.android.features.poll.impl.create
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -32,6 +34,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -41,11 +44,10 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.poll.impl.R
-import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
@@ -58,9 +60,12 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,6 +73,8 @@ fun CreatePollView(
     state: CreatePollState,
     modifier: Modifier = Modifier,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
     BackHandler(onBack = navBack)
     if (state.showConfirmation) ConfirmationDialog(
@@ -76,6 +83,7 @@ fun CreatePollView(
         onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
     )
     val questionFocusRequester = remember { FocusRequester() }
+    val answerFocusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         questionFocusRequester.requestFocus()
     }
@@ -102,40 +110,43 @@ fun CreatePollView(
             )
         },
     ) { paddingValues ->
+        val lazyListState = rememberLazyListState()
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
                 .imePadding()
                 .fillMaxSize(),
+            state = lazyListState,
         ) {
             item {
-                Text(
-                    text = stringResource(id = R.string.screen_create_poll_question_desc),
-                    modifier = Modifier.padding(start = 32.dp),
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = {
-                        OutlinedTextField(
-                            value = state.question,
-                            onValueChange = {
-                                state.eventSink(CreatePollEvents.SetQuestion(it))
-                            },
-                            modifier = Modifier
-                                .focusRequester(questionFocusRequester)
-                                .fillMaxWidth(),
-                            placeholder = {
-                                Text(text = stringResource(id = R.string.screen_create_poll_question_hint))
-                            },
-                            keyboardOptions = keyboardOptions,
-                        )
-                    }
-                )
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.screen_create_poll_question_desc),
+                        modifier = Modifier.padding(start = 32.dp),
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                    )
+                    ListItem(
+                        headlineContent = {
+                            OutlinedTextField(
+                                value = state.question,
+                                onValueChange = {
+                                    state.eventSink(CreatePollEvents.SetQuestion(it))
+                                },
+                                modifier = Modifier
+                                    .focusRequester(questionFocusRequester)
+                                    .fillMaxWidth(),
+                                placeholder = {
+                                    Text(text = stringResource(id = R.string.screen_create_poll_question_hint))
+                                },
+                                keyboardOptions = keyboardOptions,
+                            )
+                        }
+                    )
+                }
             }
             itemsIndexed(state.answers) { index, answer ->
+                val isLastItem = index == state.answers.size - 1
                 ListItem(
                     headlineContent = {
                         OutlinedTextField(
@@ -143,7 +154,9 @@ fun CreatePollView(
                             onValueChange = {
                                 state.eventSink(CreatePollEvents.SetAnswer(index, it))
                             },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .then(if (isLastItem) Modifier.focusRequester(answerFocusRequester) else Modifier)
+                                .fillMaxWidth(),
                             placeholder = {
                                 Text(text = stringResource(id = R.string.screen_create_poll_answer_hint, index + 1))
                             },
@@ -152,7 +165,7 @@ fun CreatePollView(
                     },
                     trailingContent = ListItemContent.Custom {
                         Icon(
-                            resourceId = VectorIcons.Delete,
+                            resourceId = CommonDrawables.ic_compound_delete,
                             contentDescription = null,
                             modifier = Modifier.clickable(answer.canDelete) {
                                 state.eventSink(CreatePollEvents.RemoveAnswer(index))
@@ -170,28 +183,34 @@ fun CreatePollView(
                             iconSource = IconSource.Vector(Icons.Default.Add),
                         ),
                         style = ListItemStyle.Primary,
-                        onClick = { state.eventSink(CreatePollEvents.AddAnswer) },
+                        onClick = {
+                            state.eventSink(CreatePollEvents.AddAnswer)
+                            coroutineScope.launch(Dispatchers.Main) {
+                                lazyListState.animateScrollToItem(state.answers.size + 1)
+                                answerFocusRequester.requestFocus()
+                            }
+                        },
                     )
                 }
             }
             item {
-                HorizontalDivider()
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
-                    supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
-                    trailingContent = ListItemContent.Switch(
-                        checked = state.pollKind == PollKind.Undisclosed,
-                        onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
-                    ),
-                )
+                Column {
+                    HorizontalDivider()
+                    ListItem(
+                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
+                        supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
+                        trailingContent = ListItemContent.Switch(
+                            checked = state.pollKind == PollKind.Undisclosed,
+                            onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
+                        ),
+                    )
+                }
             }
         }
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun CreatePollViewPreview(
     @PreviewParameter(CreatePollStateProvider::class) state: CreatePollState

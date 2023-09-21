@@ -19,9 +19,8 @@ package io.element.android.libraries.designsystem.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.SemanticColors
 import io.element.android.libraries.theme.previews.ColorListPreview
@@ -45,20 +44,63 @@ val SemanticColors.unreadIndicator
 val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.messageFromMeBackground
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray400
+        Color(0xFFE1E6EC)
+    } else {
+        // We want DarkDesignTokens.colorGray500
+        Color(0xFF323539)
+    }
+
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.messageFromOtherBackground
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray300
+        Color(0xFFF0F2F5)
+    } else {
+        // We want DarkDesignTokens.colorGray400
+        Color(0xFF26282D)
+    }
+
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.progressIndicatorTrackColor
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorAlphaGray500
+        Color(0x33052448)
+    } else {
+        // We want DarkDesignTokens.colorAlphaGray500
+        Color(0x25F4F7FA)
+    }
+
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.iconSuccessPrimaryBackground
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGreen300
+        Color(0xffe3f7ed)
+    } else {
+        // We want DarkDesignTokens.colorGreen300
+        Color(0xff002513)
+    }
+
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.bgSubtleTertiary
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray100
+        Color(0xfffbfcfd)
+    } else {
+        // We want DarkDesignTokens.colorGray100
+        Color(0xff14171b)
+    }
+
 // Temporary color, which is not in the token right now
 val SemanticColors.temporaryColorBgSpecial
     get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun ColorAliasesLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun ColorAliasesDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun ColorAliasesPreview() = ElementPreview {
     ColorListPreview(
         backgroundColor = Color.Black,
         foregroundColor = Color.White,
@@ -70,7 +112,9 @@ private fun ContentToPreview() {
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
+            "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
+            "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
         )
     )
 }

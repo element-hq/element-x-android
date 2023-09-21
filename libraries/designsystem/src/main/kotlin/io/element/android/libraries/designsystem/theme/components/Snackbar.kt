@@ -17,8 +17,6 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.SnackbarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.ButtonVisuals
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.SnackBarLabelColorDark
 import io.element.android.libraries.theme.SnackBarLabelColorLight
@@ -119,8 +118,10 @@ internal fun SnackbarWithActionAndCloseButtonPreview() {
     ElementThemedPreview {
         Snackbar(
             message = "Snackbar supporting text",
-            action = ButtonVisuals.Text("Action", {}),
-            dismissAction = ButtonVisuals.Icon(IconSource.Vector(Icons.Default.Close), {})
+            action = ButtonVisuals.Text("Action") {},
+            dismissAction = ButtonVisuals.Icon(
+                IconSource.Resource(CommonDrawables.ic_compound_close)
+            ) {}
         )
     }
 }
@@ -140,7 +141,9 @@ internal fun SnackbarWithActionOnNewLineAndCloseButtonPreview() {
         Snackbar(
             message = "Snackbar supporting text",
             action = ButtonVisuals.Text("Action", {}),
-            dismissAction = ButtonVisuals.Icon(IconSource.Vector(Icons.Default.Close), {}),
+            dismissAction = ButtonVisuals.Icon(
+                IconSource.Resource(CommonDrawables.ic_compound_close)
+            ) {},
             actionOnNewLine = true
         )
     }

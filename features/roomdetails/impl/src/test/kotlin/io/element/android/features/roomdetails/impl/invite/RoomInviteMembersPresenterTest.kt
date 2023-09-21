@@ -46,8 +46,7 @@ import org.junit.Test
 
 internal class RoomInviteMembersPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

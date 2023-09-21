@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.features.location.api.R
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -78,7 +78,7 @@ internal fun StaticMapPlaceholder(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun StaticMapPlaceholderPreview(
     @PreviewParameter(BooleanParameterProvider::class) values: Boolean

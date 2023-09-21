@@ -28,7 +28,7 @@ import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("VectorUnifiedPushMessagingReceiver")
+private val loggerTag = LoggerTag("VectorUnifiedPushMessagingReceiver", LoggerTag.PushLoggerTag)
 
 class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var pushParser: UnifiedPushParser

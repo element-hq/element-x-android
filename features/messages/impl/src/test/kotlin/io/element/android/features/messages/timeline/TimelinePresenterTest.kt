@@ -51,8 +51,7 @@ import java.util.Date
 
 class TimelinePresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

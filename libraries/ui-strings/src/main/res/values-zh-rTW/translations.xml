@@ -31,6 +31,8 @@
   <string name="action_learn_more">"了解更多"</string>
   <string name="action_leave">"離開"</string>
   <string name="action_leave_room">"離開聊天室"</string>
+  <string name="action_manage_account">"管理帳號"</string>
+  <string name="action_manage_devices">"管理裝置"</string>
   <string name="action_next">"下一個"</string>
   <string name="action_no">"否"</string>
   <string name="action_not_now">"以後再說"</string>
@@ -141,19 +143,6 @@
     <item quantity="other">"%d 票"</item>
   </plurals>
   <string name="report_content_hint">"檢舉這個內容的原因"</string>
-  <string name="rich_text_editor_bullet_list">"切換項目編號"</string>
-  <string name="rich_text_editor_code_block">"切換程式碼區塊"</string>
-  <string name="rich_text_editor_composer_placeholder">"訊息"</string>
-  <string name="rich_text_editor_format_bold">"套用粗體"</string>
-  <string name="rich_text_editor_format_italic">"套用斜體"</string>
-  <string name="rich_text_editor_format_strikethrough">"套用刪除線"</string>
-  <string name="rich_text_editor_format_underline">"套用底線"</string>
-  <string name="rich_text_editor_full_screen_toggle">"切換全螢幕模式"</string>
-  <string name="rich_text_editor_indent">"增加縮排"</string>
-  <string name="rich_text_editor_link">"設定連結"</string>
-  <string name="rich_text_editor_numbered_list">"切換數字編號"</string>
-  <string name="rich_text_editor_quote">"切換引用"</string>
-  <string name="rich_text_editor_unindent">"減少縮排"</string>
   <string name="room_timeline_read_marker_title">"新訊息"</string>
   <string name="screen_analytics_settings_share_data">"分享分析數據"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
@@ -168,8 +157,8 @@
   <string name="screen_notification_settings_title">"通知"</string>
   <string name="screen_share_location_title">"分享位置"</string>
   <string name="screen_share_my_location_action">"分享我的位置"</string>
-  <string name="screen_share_open_apple_maps">"在 Apple 地圖中開啟"</string>
-  <string name="screen_share_open_google_maps">"在 Google 地圖中開啟"</string>
+  <string name="screen_share_open_apple_maps">"在 Apple Maps 中開啟"</string>
+  <string name="screen_share_open_google_maps">"在 Google Maps 中開啟"</string>
   <string name="screen_share_open_osm_maps">"在開放街圖（OpenStreetMap） 中開啟"</string>
   <string name="screen_share_this_location_action">"分享這個位置"</string>
   <string name="screen_view_location_title">"位置"</string>
@@ -178,5 +167,8 @@
   <string name="test_language_identifier">"zh-tw"</string>
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
+  <string name="screen_analytics_settings_help_us_improve">"分享匿名的使用數據以協助我們釐清問題"</string>
+  <string name="screen_analytics_settings_read_terms">"您可以到 %1$s 閱讀我們的條款。"</string>
+  <string name="screen_analytics_settings_read_terms_content_link">"這裡"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
 </resources>

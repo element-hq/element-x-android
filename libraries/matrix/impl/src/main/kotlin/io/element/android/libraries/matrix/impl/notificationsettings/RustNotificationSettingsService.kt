@@ -47,40 +47,71 @@ class RustNotificationSettingsService(
         notificationSettings.setDelegate(notificationSettingsDelegate)
     }
 
-    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationSettings> =
+    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> = withContext(
+        dispatchers.io
+    ) {
         runCatching {
-            notificationSettings.getRoomNotificationSettings(roomId.value, isEncrypted, isOneToOne(membersCount)).let(RoomNotificationSettingsMapper::map)
+            notificationSettings.getRoomNotificationSettingsBlocking(roomId.value, isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::map)
         }
+    }
 
-    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, membersCount: Long): Result<RoomNotificationMode> =
+    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.getDefaultRoomNotificationMode(isEncrypted, isOneToOne(membersCount)).let(RoomNotificationSettingsMapper::mapMode)
+            notificationSettings.getDefaultRoomNotificationModeBlocking(isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::mapMode)
         }
+    }
+
+    override suspend fun setDefaultRoomNotificationMode(
+        isEncrypted: Boolean,
+        mode: RoomNotificationMode,
+        isOneToOne: Boolean
+    ): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.setDefaultRoomNotificationModeBlocking(isEncrypted, isOneToOne, mode.let(RoomNotificationSettingsMapper::mapMode))
+        }
+    }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.setRoomNotificationMode(roomId.value, mode.let(RoomNotificationSettingsMapper::mapMode))
+            notificationSettings.setRoomNotificationModeBlocking(roomId.value, mode.let(RoomNotificationSettingsMapper::mapMode))
         }
     }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.restoreDefaultRoomNotificationMode(roomId.value)
+            notificationSettings.restoreDefaultRoomNotificationModeBlocking(roomId.value)
         }
     }
 
     override suspend fun muteRoom(roomId: RoomId): Result<Unit> = setRoomNotificationMode(roomId, RoomNotificationMode.MUTE)
 
-    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, membersCount: Long) = withContext(dispatchers.io) {
+    override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean) = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.unmuteRoom(roomId.value, isEncrypted, isOneToOne(membersCount))
+            notificationSettings.unmuteRoomBlocking(roomId.value, isEncrypted, isOneToOne)
         }
     }
 
-    /**
-     * A one-to-one is a room with exactly 2 members.
-     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
-     * @param membersCount The active members count in a room
-     */
-    private fun isOneToOne(membersCount: Long) = membersCount == 2L
+    override suspend fun isRoomMentionEnabled(): Result<Boolean> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.isRoomMentionEnabledBlocking()
+        }
+    }
+
+    override suspend fun setRoomMentionEnabled(enabled: Boolean): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.setRoomMentionEnabledBlocking(enabled)
+        }
+    }
+
+    override suspend fun isCallEnabled(): Result<Boolean> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.isCallEnabledBlocking()
+        }
+    }
+
+    override suspend fun setCallEnabled(enabled: Boolean): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.setCallEnabledBlocking(enabled)
+        }
+    }
 }

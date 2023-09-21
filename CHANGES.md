@@ -1,3 +1,62 @@
+Changes in Element X v0.2.1 (2023-09-20)
+========================================
+
+Features ✨
+----------
+ - Bump Rust SDK to `v0.1.56`
+ - [Rich text editor] Add link support to rich text editor ([#1309](https://github.com/vector-im/element-x-android/issues/1309))
+ - Let the SDK figure the best scheme given an homeserver URL (thus allowing HTTP homeservers) ([#1382](https://github.com/vector-im/element-x-android/issues/1382))
+
+Bugfixes 🐛
+----------
+ - Fix ANR on RoomList when notification settings change. ([#1370](https://github.com/vector-im/element-x-android/issues/1370))
+
+Other changes
+-------------
+ - Element Call: support scheme `io.element.call` ([#1377](https://github.com/vector-im/element-x-android/issues/1377))
+ - [DI] Rework how dagger components are created and provided. ([#1378](https://github.com/vector-im/element-x-android/issues/1378))
+ - Remove usage of async-uniffi as it leads to a deadlocks and memory leaks. ([#1381](https://github.com/vector-im/element-x-android/issues/1381))
+
+
+Changes in Element X v0.2.0 (2023-09-18)
+========================================
+
+Features ✨
+----------
+ - Bump Rust SDK to `v0.1.54`
+ - Add a "Mute" shortcut icon and a "Notifications" section in the room details screen ([#506](https://github.com/vector-im/element-x-android/issues/506))
+ - Add a notification permission screen to the initial flow. ([#897](https://github.com/vector-im/element-x-android/issues/897))
+ - Integrate Element Call into EX by embedding a call in a WebView. ([#1300](https://github.com/vector-im/element-x-android/issues/1300))
+ - Implement Bloom effect modifier. ([#1217](https://github.com/vector-im/element-x-android/issues/1217))
+ - Set color on display name and default avatar in the timeline. ([#1224](https://github.com/vector-im/element-x-android/issues/1224))
+ - Display a thread decorator in timeline so we know when a message is coming from a thread. ([#1236](https://github.com/vector-im/element-x-android/issues/1236))
+ - [Rich text editor] Integrate rich text editor library. Note that markdown is now not supported and further formatting support will be introduced through the rich text editor. ([#1172](https://github.com/vector-im/element-x-android/issues/1172))
+ - [Rich text editor] Add formatting menu (accessible via the '+' button) ([#1261](https://github.com/vector-im/element-x-android/issues/1261))
+ - [Rich text editor] Add feature flag for rich text editor. Markdown support can now be enabled by disabling the rich text editor. ([#1289](https://github.com/vector-im/element-x-android/issues/1289))
+ - [Rich text editor] Update design ([#1332](https://github.com/vector-im/element-x-android/issues/1332))
+
+Bugfixes 🐛
+----------
+ - Make links in room topic clickable ([#612](https://github.com/vector-im/element-x-android/issues/612))
+ - Reply action: harmonize conditions in bottom sheet and swipe to reply. ([#1173](https://github.com/vector-im/element-x-android/issues/1173))
+ - Fix system bar color after login on light theme. ([#1222](https://github.com/vector-im/element-x-android/issues/1222))
+ - Fix long click on simple formatted messages ([#1232](https://github.com/vector-im/element-x-android/issues/1232))
+ - Enable polls in release build. ([#1241](https://github.com/vector-im/element-x-android/issues/1241))
+ - Fix top padding in room list when app is opened in offline mode. ([#1297](https://github.com/vector-im/element-x-android/issues/1297))
+ - [Rich text editor] Fix 'text formatting' option only partially visible ([#1335](https://github.com/vector-im/element-x-android/issues/1335))
+ - [Rich text editor] Ensure keyboard opens for reply and text formatting modes ([#1337](https://github.com/vector-im/element-x-android/issues/1337))
+ - [Rich text editor] Fix placeholder spilling onto multiple lines ([#1347](https://github.com/vector-im/element-x-android/issues/1347))
+
+Other changes
+-------------
+ - Add a sub-screen "Notifications" in the existing application Settings ([#510](https://github.com/vector-im/element-x-android/issues/510))
+ - Exclude some groups related to analytics to be included. ([#1191](https://github.com/vector-im/element-x-android/issues/1191))
+ - Use the new SyncIndicator API. ([#1244](https://github.com/vector-im/element-x-android/issues/1244))
+ - Improve RoomSummary mapping by using RoomInfo. ([#1251](https://github.com/vector-im/element-x-android/issues/1251))
+ - Ensure Posthog data are sent to "https://posthog.element.io" ([#1269](https://github.com/vector-im/element-x-android/issues/1269))
+ - New app icon, with monochrome support. ([#1363](https://github.com/vector-im/element-x-android/issues/1363))
+
+
 Changes in Element X v0.1.6 (2023-09-04)
 ========================================
 

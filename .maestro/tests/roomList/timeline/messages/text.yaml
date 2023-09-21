@@ -1,7 +1,8 @@
 appId: ${APP_ID}
 ---
 - takeScreenshot: build/maestro/510-Timeline
-- tapOn: "Message"
+- tapOn:
+    id: "rich_text_editor"
 - inputText: "Hello world!"
 - tapOn: "Send"
 - hideKeyboard

@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_bullet_list">"Prepnúť zoznam odrážok"</string>
+  <string name="rich_text_editor_close_formatting_options">"Zatvoriť možnosti formátovania"</string>
+  <string name="rich_text_editor_code_block">"Prepnúť blok kódu"</string>
+  <string name="rich_text_editor_composer_placeholder">"Správa…"</string>
+  <string name="rich_text_editor_create_link">"Vytvoriť odkaz"</string>
+  <string name="rich_text_editor_edit_link">"Upraviť odkaz"</string>
+  <string name="rich_text_editor_format_bold">"Použiť tučný formát"</string>
+  <string name="rich_text_editor_format_italic">"Použiť formát kurzívy"</string>
+  <string name="rich_text_editor_format_strikethrough">"Použiť formát prečiarknutia"</string>
+  <string name="rich_text_editor_format_underline">"Použiť formát podčiarknutia"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Prepnúť režim celej obrazovky"</string>
+  <string name="rich_text_editor_indent">"Odsadenie"</string>
+  <string name="rich_text_editor_inline_code">"Použiť formát riadkového kódu"</string>
+  <string name="rich_text_editor_link">"Nastaviť odkaz"</string>
+  <string name="rich_text_editor_numbered_list">"Prepnúť číslovaný zoznam"</string>
+  <string name="rich_text_editor_open_compose_options">"Otvoriť možnosti písania"</string>
+  <string name="rich_text_editor_quote">"Prepnúť citáciu"</string>
+  <string name="rich_text_editor_remove_link">"Odstrániť odkaz"</string>
+  <string name="rich_text_editor_unindent">"Zrušiť odsadenie"</string>
+  <string name="rich_text_editor_url_placeholder">"Odkaz"</string>
   <string name="rich_text_editor_a11y_add_attachment">"Pridať prílohu"</string>
 </resources>

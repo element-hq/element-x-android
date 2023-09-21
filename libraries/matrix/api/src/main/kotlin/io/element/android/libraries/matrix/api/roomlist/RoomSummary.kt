@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.api.roomlist
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 
 sealed interface RoomSummary {
@@ -42,4 +43,5 @@ data class RoomSummaryDetails(
     val lastMessageTimestamp: Long?,
     val unreadNotificationCount: Int,
     val inviter: RoomMember? = null,
+    val notificationMode: RoomNotificationMode? = null,
 )

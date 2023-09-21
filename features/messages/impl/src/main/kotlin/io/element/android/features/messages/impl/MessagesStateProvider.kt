@@ -82,5 +82,6 @@ fun aMessagesState() = MessagesState(
     snackbarMessage = null,
     inviteProgress = Async.Uninitialized,
     showReinvitePrompt = false,
+    enableTextFormatting = true,
     eventSink = {}
 )

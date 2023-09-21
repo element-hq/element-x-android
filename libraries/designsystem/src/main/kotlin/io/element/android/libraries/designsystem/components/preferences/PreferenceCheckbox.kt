@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,8 +24,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +37,7 @@ import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
 import io.element.android.libraries.designsystem.toSecondaryEnabledColor
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -48,6 +48,7 @@ fun PreferenceCheckbox(
     supportingText: String? = null,
     enabled: Boolean = true,
     icon: ImageVector? = null,
+    @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
 ) {
@@ -61,6 +62,7 @@ fun PreferenceCheckbox(
     ) {
         PreferenceIcon(
             icon = icon,
+            iconResourceId = iconResourceId,
             enabled = enabled,
             isVisible = showIconAreaIfNoIcon
         )
@@ -100,14 +102,14 @@ private fun ContentToPreview() {
     Column {
         PreferenceCheckbox(
             title = "Checkbox",
-            icon = Icons.Default.Announcement,
+            iconResourceId = CommonDrawables.ic_compound_threads,
             enabled = true,
             isChecked = true
         )
         PreferenceCheckbox(
             title = "Checkbox with supporting text",
             supportingText = "Supporting text",
-            icon = Icons.Default.Announcement,
+            iconResourceId = CommonDrawables.ic_compound_threads,
             enabled = true,
             isChecked = true
         )

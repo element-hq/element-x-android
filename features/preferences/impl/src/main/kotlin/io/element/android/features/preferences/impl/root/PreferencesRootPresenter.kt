@@ -29,7 +29,10 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -46,6 +49,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val buildType: BuildType,
     private val versionFormatter: VersionFormatter,
     private val snackbarDispatcher: SnackbarDispatcher,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<PreferencesRootState> {
 
     @Composable
@@ -60,15 +64,23 @@ class PreferencesRootPresenter @Inject constructor(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
 
+        val showNotificationSettings = remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            showNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
+        }
+
         // We should display the 'complete verification' option if the current session can be verified
         val showCompleteVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
 
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
         }
+        val devicesManagementUrl: MutableState<String?> = remember {
+            mutableStateOf(null)
+        }
 
         LaunchedEffect(Unit) {
-            initAccountManagementUrl(accountManagementUrl)
+            initAccountManagementUrl(accountManagementUrl, devicesManagementUrl)
         }
 
         val logoutState = logoutPresenter.present()
@@ -79,8 +91,10 @@ class PreferencesRootPresenter @Inject constructor(
             version = versionFormatter.get(),
             showCompleteVerification = showCompleteVerification,
             accountManagementUrl = accountManagementUrl.value,
+            devicesManagementUrl = devicesManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
+            showNotificationSettings = showNotificationSettings.value,
             snackbarMessage = snackbarMessage,
         )
     }
@@ -89,7 +103,11 @@ class PreferencesRootPresenter @Inject constructor(
         matrixUser.value = matrixClient.getCurrentUser()
     }
 
-    private fun CoroutineScope.initAccountManagementUrl(accountManagementUrl: MutableState<String?>) = launch {
-        accountManagementUrl.value = matrixClient.getAccountManagementUrl().getOrNull()
+    private fun CoroutineScope.initAccountManagementUrl(
+        accountManagementUrl: MutableState<String?>,
+        devicesManagementUrl: MutableState<String?>,
+    ) = launch {
+        accountManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.Profile).getOrNull()
+        devicesManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList).getOrNull()
     }
 }

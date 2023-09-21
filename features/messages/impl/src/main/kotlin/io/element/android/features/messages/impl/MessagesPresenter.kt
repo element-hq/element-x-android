@@ -58,6 +58,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
@@ -96,6 +97,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
     private val analyticsService: AnalyticsService,
+    private val preferencesStore: PreferencesStore,
     @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
 
@@ -144,10 +146,17 @@ class MessagesPresenter @AssistedInject constructor(
             timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
         }
 
+        val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
+
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> {
-                    localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
+                    localCoroutineScope.handleTimelineAction(
+                        action = event.action,
+                        targetEvent = event.event,
+                        composerState = composerState,
+                        enableTextFormatting = enableTextFormatting,
+                    )
                 }
                 is MessagesEvents.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventId)
@@ -179,6 +188,7 @@ class MessagesPresenter @AssistedInject constructor(
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
+            enableTextFormatting = enableTextFormatting,
             eventSink = { handleEvents(it) }
         )
     }
@@ -196,13 +206,15 @@ class MessagesPresenter @AssistedInject constructor(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
     ) = launch {
         when (action) {
             TimelineItemAction.Copy -> handleCopyContents(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
-            TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
-            TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
-            TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
+            TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
+            TimelineItemAction.Reply,
+            TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState)
+            TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent)
@@ -251,11 +263,19 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+    private suspend fun handleActionEdit(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
+        ) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.eventId,
             (targetEvent.content as? TimelineItemTextBasedContent)?.let {
-                it.htmlBody ?: it.body
+                if (enableTextFormatting) {
+                    it.htmlBody ?: it.body
+                } else {
+                    it.body
+                }
             }.orEmpty(),
             targetEvent.transactionId,
         )
@@ -306,6 +326,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(
+            isThreaded = targetEvent.isThreaded,
             senderName = targetEvent.safeSenderName,
             eventId = targetEvent.eventId,
             attachmentThumbnailInfo = attachmentThumbnailInfo,

@@ -52,7 +52,7 @@ import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
@@ -60,13 +60,13 @@ import io.element.android.libraries.designsystem.theme.components.FloatingAction
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.maplibre.compose.CameraMode
 import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason
 import io.element.android.libraries.maplibre.compose.MapboxMap
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.designsystem.R as DesignSystemR
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -203,7 +203,7 @@ fun SendLocationView(
                 ),
             )
             Icon(
-                resourceId = DesignSystemR.drawable.pin,
+                resourceId = CommonDrawables.pin,
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.centerBottomEdge(this),
@@ -223,7 +223,7 @@ fun SendLocationView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun SendLocationViewPreview(
     @PreviewParameter(SendLocationStateProvider::class) state: SendLocationState

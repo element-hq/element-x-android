@@ -41,7 +41,6 @@ enum class FeatureFlags(
     NotificationSettings(
         key = "feature.notificationsettings",
         title = "Show notification settings",
-        // Do not forget to edit StaticFeatureFlagProvider when enabling the feature.
-        defaultValue = false,
+        defaultValue = true,
     ),
 }

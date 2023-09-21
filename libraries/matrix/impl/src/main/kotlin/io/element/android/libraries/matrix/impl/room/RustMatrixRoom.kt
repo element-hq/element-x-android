@@ -44,8 +44,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
-import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
+import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
@@ -55,6 +55,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -63,10 +64,12 @@ import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
+import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
+import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
 import java.io.File
 
@@ -185,12 +188,22 @@ class RustMatrixRoom(
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         var rustMembers: List<RoomMember>? = null
         try {
-            rustMembers = innerRoom.members()
+            rustMembers = innerRoom.membersBlocking().use { membersIterator ->
+                buildList {
+                    while (true) {
+                        // Loading the whole membersIterator as a stop-gap measure.
+                        // We should probably implement some sort of paging in the future.
+                        ensureActive()
+                        addAll(membersIterator.nextChunk(1000u) ?: break)
+                    }
+                }
+            }
             val mappedMembers = rustMembers.parallelMap(RoomMemberMapper::map)
             _membersStateFlow.value = MatrixRoomMembersState.Ready(mappedMembers)
             Result.success(Unit)
-        } catch (cancellationException: CancellationException) {
-            throw cancellationException
+        } catch (exception: CancellationException) {
+            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
+            throw exception
         } catch (exception: Exception) {
             _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
             Result.failure(exception)
@@ -210,7 +223,7 @@ class RustMatrixRoom(
         val currentRoomNotificationSettings = currentState.roomNotificationSettings()
         _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
         runCatching {
-            roomNotificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, activeMemberCount).getOrThrow()
+            roomNotificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
         }.map {
             _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(it)
         }.onFailure {
@@ -227,32 +240,32 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun sendMessage(body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         val transactionId = genTransactionId()
-        messageEventContentFromHtml(body, htmlBody).use { content ->
+        messageEventContentFromParts(body, htmlBody).use { content ->
             runCatching {
                 innerRoom.send(content, transactionId)
             }
         }
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String): Result<Unit> =
+    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit> =
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
-                    innerRoom.edit(messageEventContentFromHtml(body, htmlBody), originalEventId.value, transactionId?.value)
+                    innerRoom.edit(messageEventContentFromParts(body, htmlBody), originalEventId.value, transactionId?.value)
                 }
             } else {
                 runCatching {
                     transactionId?.let { cancelSend(it) }
-                    innerRoom.send(messageEventContentFromHtml(body, htmlBody), genTransactionId())
+                    innerRoom.send(messageEventContentFromParts(body, htmlBody), genTransactionId())
                 }
             }
         }
 
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.sendReply(messageEventContentFromHtml(body, htmlBody), eventId.value, genTransactionId())
+            innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventId.value, genTransactionId())
         }
     }
 
@@ -281,27 +294,27 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
-        return runCatching {
-            innerRoom.canUserInvite(userId.value)
+    override suspend fun canUserInvite(userId: UserId): Result<Boolean> = withContext(roomMembersDispatcher) {
+        runCatching {
+            innerRoom.canUserInviteBlocking(userId.value)
         }
     }
 
-    override suspend fun canUserRedact(userId: UserId): Result<Boolean> {
-        return runCatching {
-            innerRoom.canUserRedact(userId.value)
+    override suspend fun canUserRedact(userId: UserId): Result<Boolean> = withContext(roomMembersDispatcher) {
+        runCatching {
+            innerRoom.canUserRedactBlocking(userId.value)
         }
     }
 
-    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
-        return runCatching {
-            innerRoom.canUserSendState(userId.value, type.map())
+    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
+        runCatching {
+            innerRoom.canUserSendStateBlocking(userId.value, type.map())
         }
     }
 
-    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
-        return runCatching {
-            innerRoom.canUserSendMessage(userId.value, type.map())
+    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
+        runCatching {
+            innerRoom.canUserSendMessageBlocking(userId.value, type.map())
         }
     }
 
@@ -456,4 +469,11 @@ class RustMatrixRoom(
             MediaUploadHandlerImpl(files, handle())
         }
     }
+
+    private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
+        if (htmlBody != null) {
+            messageEventContentFromHtml(body, htmlBody)
+        } else {
+            messageEventContentFromMarkdown(body)
+        }
 }

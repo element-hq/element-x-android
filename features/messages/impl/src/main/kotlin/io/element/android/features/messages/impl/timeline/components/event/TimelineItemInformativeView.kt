@@ -16,32 +16,30 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TimelineItemInformativeView(
     text: String,
     iconDescription: String,
-    icon: ImageVector,
+    @DrawableRes iconResourceId: Int,
     extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {
@@ -50,7 +48,7 @@ fun TimelineItemInformativeView(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = icon,
+            resourceId = iconResourceId,
             tint = MaterialTheme.colorScheme.secondary,
             contentDescription = iconDescription,
             modifier = Modifier.size(16.dp)
@@ -65,20 +63,13 @@ fun TimelineItemInformativeView(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemInformativeViewLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemInformativeViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun TimelineItemInformativeViewPreview() = ElementPreview {
     TimelineItemInformativeView(
         text = "Info",
         iconDescription = "",
-        icon = Icons.Default.Delete,
+        iconResourceId = CommonDrawables.ic_compound_delete,
         extraPadding = noExtraPadding,
     )
 }

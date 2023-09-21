@@ -29,9 +29,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.OpenInNew
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
@@ -61,6 +59,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -176,7 +175,10 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.OpenWith)
                 },
             ) {
-                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = stringResource(id = CommonStrings.action_open_with))
+                Icon(
+                    imageVector = Icons.Default.OpenInNew,
+                    contentDescription = stringResource(id = CommonStrings.action_open_with)
+                )
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -184,7 +186,10 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.SaveOnDisk)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Download, contentDescription = stringResource(id = CommonStrings.action_save))
+                Icon(
+                    resourceId = CommonDrawables.ic_compound_download,
+                    contentDescription = stringResource(id = CommonStrings.action_save),
+                )
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -192,7 +197,10 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.Share)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = CommonStrings.action_share))
+                Icon(
+                    resourceId = CommonDrawables.ic_compound_share_android,
+                    contentDescription = stringResource(id = CommonStrings.action_share)
+                )
             }
         }
     )
@@ -243,13 +251,10 @@ private fun ErrorView(
     )
 }
 
+// Only preview in dark, dark theme is forced on the Node.
 @Preview
 @Composable
-internal fun MediaViewerViewDarkPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: MediaViewerState) {
+internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
         onBackPressed = {}

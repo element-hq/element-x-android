@@ -16,20 +16,18 @@
 
 package io.element.android.features.logout.api
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun LogoutPreferenceView(
@@ -81,21 +79,14 @@ fun LogoutPreferenceContent(
 ) {
     PreferenceText(
         title = stringResource(id = R.string.screen_signout_preference_item),
-        icon = Icons.Filled.Logout,
+        iconResourceId = CommonDrawables.ic_compound_leave,
         onClick = onClick
     )
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun LogoutPreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun LogoutPreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun LogoutPreferenceViewPreview() = ElementPreview {
     LogoutPreferenceView(
         aLogoutPreferenceState(),
         onSuccessLogout = {}

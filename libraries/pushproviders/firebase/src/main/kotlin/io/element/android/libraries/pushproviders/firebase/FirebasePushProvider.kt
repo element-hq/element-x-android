@@ -26,7 +26,7 @@ import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("FirebasePushProvider")
+private val loggerTag = LoggerTag("FirebasePushProvider", LoggerTag.PushLoggerTag)
 
 @ContributesMultibinding(AppScope::class)
 class FirebasePushProvider @Inject constructor(

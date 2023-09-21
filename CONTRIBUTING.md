@@ -171,11 +171,11 @@ For instance, when updating the image `src` of an ImageView, please also conside
 
 ### Jetpack Compose
 
-When adding or editing `@Composable`, make sure that you create an internal function annotated with `@DayNightPreviews`, with a name suffixed by `Preview`, and having `ElementPreview` as the root composable.
+When adding or editing `@Composable`, make sure that you create an internal function annotated with `@PreviewsDayNight`, with a name suffixed by `Preview`, and having `ElementPreview` as the root composable.
 
 Example:
 ```kotlin
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PinIconPreview() = ElementPreview {
     PinIcon()

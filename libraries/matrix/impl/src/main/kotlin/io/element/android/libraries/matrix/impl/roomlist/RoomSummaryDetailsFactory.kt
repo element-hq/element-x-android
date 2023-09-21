@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
 import io.element.android.libraries.matrix.impl.room.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
 import org.matrix.rustcomponents.sdk.RoomInfo
@@ -39,6 +40,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             lastMessage = latestRoomMessage,
             lastMessageTimestamp = latestRoomMessage?.originServerTs,
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
+            notificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
         )
     }
 }

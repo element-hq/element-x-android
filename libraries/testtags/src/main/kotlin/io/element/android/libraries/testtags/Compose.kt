@@ -26,9 +26,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
  * Add a testTag to a Modifier, to be used by external tool, like TrafficLight for instance.
  */
 @OptIn(ExperimentalComposeUiApi::class)
-fun Modifier.testTag(id: TestTag) = this.then(
-    semantics {
-        testTag = id.value
-        testTagsAsResourceId = true
-    }
-)
+fun Modifier.testTag(id: TestTag) = semantics {
+    testTag = id.value
+    testTagsAsResourceId = true
+}

@@ -42,7 +42,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSiz
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -124,7 +124,7 @@ private fun listItems() = persistentListOf(
     ),
 )
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun WelcomeViewPreview() {
     ElementPreview {

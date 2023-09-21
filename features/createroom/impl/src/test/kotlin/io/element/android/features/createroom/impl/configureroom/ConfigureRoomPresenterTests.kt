@@ -37,6 +37,8 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.permissions.test.FakePermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.every
@@ -55,13 +57,13 @@ import org.robolectric.RobolectricTestRunner
 import java.io.File
 
 private const val AN_URI_FROM_CAMERA = "content://uri_from_camera"
+private const val AN_URI_FROM_CAMERA_2 = "content://uri_from_camera_2"
 private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 
 @RunWith(RobolectricTestRunner::class)
 class ConfigureRoomPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private lateinit var presenter: ConfigureRoomPresenter
@@ -71,6 +73,7 @@ class ConfigureRoomPresenterTests {
     private lateinit var fakePickerProvider: FakePickerProvider
     private lateinit var fakeMediaPreProcessor: FakeMediaPreProcessor
     private lateinit var fakeAnalyticsService: FakeAnalyticsService
+    private lateinit var fakePermissionsPresenter: FakePermissionsPresenter
 
     @Before
     fun setup() {
@@ -80,12 +83,14 @@ class ConfigureRoomPresenterTests {
         fakePickerProvider = FakePickerProvider()
         fakeMediaPreProcessor = FakeMediaPreProcessor()
         fakeAnalyticsService = FakeAnalyticsService()
+        fakePermissionsPresenter = FakePermissionsPresenter()
         presenter = ConfigureRoomPresenter(
             dataStore = createRoomDataStore,
             matrixClient = fakeMatrixClient,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
             analyticsService = fakeAnalyticsService,
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(fakePermissionsPresenter),
         )
 
         mockkStatic(File::readBytes)
@@ -171,8 +176,6 @@ class ConfigureRoomPresenterTests {
             // Room avatar
             // Pick avatar
             fakePickerProvider.givenResult(null)
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             // From gallery
             val uriFromGallery = Uri.parse(AN_URI_FROM_GALLERY)
             fakePickerProvider.givenResult(uriFromGallery)
@@ -183,9 +186,22 @@ class ConfigureRoomPresenterTests {
             // From camera
             val uriFromCamera = Uri.parse(AN_URI_FROM_CAMERA)
             fakePickerProvider.givenResult(uriFromCamera)
+            assertThat(newState.cameraPermissionState.permissionGranted).isFalse()
             newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             newState = awaitItem()
+            assertThat(newState.cameraPermissionState.showDialog).isTrue()
+            fakePermissionsPresenter.setPermissionGranted()
+            newState = awaitItem()
+            assertThat(newState.cameraPermissionState.permissionGranted).isTrue()
+            newState = awaitItem()
             expectedConfig = expectedConfig.copy(avatarUri = uriFromCamera)
+            assertThat(newState.config).isEqualTo(expectedConfig)
+            // Do it again, no permission is requested
+            val uriFromCamera2 = Uri.parse(AN_URI_FROM_CAMERA_2)
+            fakePickerProvider.givenResult(uriFromCamera2)
+            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            newState = awaitItem()
+            expectedConfig = expectedConfig.copy(avatarUri = uriFromCamera2)
             assertThat(newState.config).isEqualTo(expectedConfig)
             // Remove
             newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.Remove))

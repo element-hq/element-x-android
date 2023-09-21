@@ -22,15 +22,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachFile
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Collections
-import androidx.compose.material.icons.filled.FormatColorText
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,11 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.androidutils.ui.hideKeyboard
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +49,7 @@ internal fun AttachmentsBottomSheet(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val localView = LocalView.current
@@ -83,10 +78,14 @@ internal fun AttachmentsBottomSheet(
     if (isVisible) {
         ModalBottomSheet(
             modifier = modifier,
+            sheetState = rememberModalBottomSheetState(
+                skipPartiallyExpanded = true
+            ),
             onDismissRequest = { isVisible = false }
         ) {
             AttachmentSourcePickerMenu(
                 state = state,
+                enableTextFormatting = enableTextFormatting,
                 onSendLocationClicked = onSendLocationClicked,
                 onCreatePollClicked = onCreatePollClicked,
             )
@@ -100,6 +99,7 @@ internal fun AttachmentSourcePickerMenu(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -108,22 +108,22 @@ internal fun AttachmentSourcePickerMenu(
     ) {
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
-            icon = { Icon(Icons.Default.Collections, null) },
+            icon = { Icon(CommonDrawables.ic_september_photo_video_library, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
-            icon = { Icon(Icons.Default.AttachFile, null) },
+            icon = { Icon(CommonDrawables.ic_september_attachment, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
-            icon = { Icon(Icons.Default.PhotoCamera, null) },
+            icon = { Icon(CommonDrawables.ic_september_take_photo_camera, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
-            icon = { Icon(Icons.Default.Videocam, null) },
+            icon = { Icon(CommonDrawables.ic_september_video_call, null) },
             text = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
         )
         if (state.canShareLocation) {
@@ -132,7 +132,7 @@ internal fun AttachmentSourcePickerMenu(
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
                     onSendLocationClicked()
                 },
-                icon = { Icon(Icons.Default.LocationOn, null) },
+                icon = { Icon(CommonDrawables.ic_september_location, null) },
                 text = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
             )
         }
@@ -142,19 +142,21 @@ internal fun AttachmentSourcePickerMenu(
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
                     onCreatePollClicked()
                 },
-                icon = { Icon(Icons.Default.BarChart, null) },
+                icon = { Icon(CommonDrawables.ic_compound_polls, null) },
                 text = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
             )
         }
-        ListItem(
-            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = true)) },
-            icon = { Icon(Icons.Default.FormatColorText, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
-        )
+        if (enableTextFormatting) {
+            ListItem(
+                modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = true)) },
+                icon = { Icon(CommonDrawables.ic_september_text_formatting, null) },
+                text = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
+            )
+        }
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
     AttachmentSourcePickerMenu(
@@ -163,5 +165,6 @@ internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
         ),
         onSendLocationClicked = {},
         onCreatePollClicked = {},
+        enableTextFormatting = true,
     )
 }

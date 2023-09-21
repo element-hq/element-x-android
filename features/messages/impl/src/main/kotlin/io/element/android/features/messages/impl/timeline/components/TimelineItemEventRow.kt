@@ -24,6 +24,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -70,7 +71,6 @@ import io.element.android.features.messages.impl.timeline.model.bubble.BubbleSta
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -80,12 +80,15 @@ import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
@@ -94,7 +97,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
@@ -372,15 +374,6 @@ private fun MessageEventBubbleContent(
     onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
     @SuppressLint("ModifierParameter") bubbleModifier: Modifier = Modifier, // need to rename this modifier to distinguish it from the following ones
 ) {
-    val timestampPosition = when (event.content) {
-        is TimelineItemImageContent,
-        is TimelineItemStickerContent,
-        is TimelineItemVideoContent,
-        is TimelineItemLocationContent -> TimestampPosition.Overlay
-        is TimelineItemPollContent -> TimestampPosition.Below
-        else -> TimestampPosition.Default
-    }
-    val replyToDetails = event.inReplyTo as? InReplyTo.Ready
 
     // Long clicks are not not automatically propagated from a `clickable`
     // to its `combinedClickable` parent so we do it manually
@@ -399,6 +392,28 @@ private fun MessageEventBubbleContent(
             onPollAnswerSelected = onPollAnswerSelected,
             modifier = modifier,
         )
+    }
+
+    @Composable
+    fun ThreadDecoration(
+        modifier: Modifier = Modifier
+    ) {
+        Row(
+            modifier = modifier,
+            horizontalArrangement = spacedBy(4.dp, Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                resourceId = CommonDrawables.ic_thread_decoration,
+                contentDescription = null,
+                tint = ElementTheme.colors.iconSecondary,
+            )
+            Text(
+                text = stringResource(CommonStrings.common_thread),
+                style = ElementTheme.typography.fontBodyXsRegular,
+                color = ElementTheme.colors.textPrimary,
+            )
+        }
     }
 
     @Composable
@@ -453,47 +468,74 @@ private fun MessageEventBubbleContent(
     /** Groups the different components in a Column with some space between them. */
     @Composable
     fun CommonLayout(
+        timestampPosition: TimestampPosition,
+        showThreadDecoration: Boolean,
         inReplyToDetails: InReplyTo.Ready?,
         modifier: Modifier = Modifier
     ) {
-        var modifierWithPadding: Modifier = Modifier
-        var contentModifier: Modifier = Modifier
-        EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
-            when {
-                inReplyToDetails != null -> {
-                    val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
-                    val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
-                    val text = textForInReplyTo(inReplyToDetails)
-                    ReplyToContent(
-                        senderName = senderName,
-                        text = text,
-                        attachmentThumbnailInfo = attachmentThumbnailInfo,
-                        modifier = Modifier
-                            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .clickable(enabled = true, onClick = inReplyToClick),
-                    )
-                    if (timestampPosition == TimestampPosition.Overlay) {
-                        modifierWithPadding = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-                        contentModifier = Modifier.clip(RoundedCornerShape(12.dp))
-                    } else {
-                        contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
-                    }
-                }
-                timestampPosition != TimestampPosition.Overlay -> {
-                    contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
+        val modifierWithPadding: Modifier
+        val contentModifier: Modifier
+        when {
+            inReplyToDetails != null -> {
+                if (timestampPosition == TimestampPosition.Overlay) {
+                    modifierWithPadding = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                    contentModifier = Modifier.clip(RoundedCornerShape(12.dp))
+                } else {
+                    contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
+                    modifierWithPadding = Modifier
                 }
             }
+            timestampPosition != TimestampPosition.Overlay -> {
+                modifierWithPadding = Modifier
+                contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
+            }
+            else -> {
+                modifierWithPadding = Modifier
+                contentModifier = Modifier
+            }
+        }
 
+        EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
+            if (showThreadDecoration) {
+                ThreadDecoration(modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp))
+            }
+            if (inReplyToDetails != null) {
+                val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
+                val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
+                val text = textForInReplyTo(inReplyToDetails)
+                val topPadding = if (showThreadDecoration) 0.dp else 8.dp
+                ReplyToContent(
+                    senderName = senderName,
+                    text = text,
+                    attachmentThumbnailInfo = attachmentThumbnailInfo,
+                    modifier = Modifier
+                        .padding(top = topPadding, start = 8.dp, end = 8.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .clickable(enabled = true, onClick = inReplyToClick),
+                )
+            }
             ContentAndTimestampView(
                 timestampPosition = timestampPosition,
-                contentModifier = contentModifier,
                 modifier = modifierWithPadding,
+                contentModifier = contentModifier,
             )
         }
     }
 
-    CommonLayout(inReplyToDetails = replyToDetails, modifier = bubbleModifier)
+    val timestampPosition = when (event.content) {
+        is TimelineItemImageContent,
+        is TimelineItemVideoContent,
+        is TimelineItemLocationContent -> TimestampPosition.Overlay
+        is TimelineItemPollContent -> TimestampPosition.Below
+        else -> TimestampPosition.Default
+    }
+    val replyToDetails = event.inReplyTo as? InReplyTo.Ready
+    CommonLayout(
+        showThreadDecoration = event.isThreaded,
+        timestampPosition = timestampPosition,
+        inReplyToDetails = replyToDetails,
+        modifier = bubbleModifier
+    )
 }
 
 @Composable
@@ -547,12 +589,6 @@ private fun ReplyToContent(
 private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): AttachmentThumbnailInfo? {
     val messageContent = inReplyTo.content as? MessageContent ?: return null
     return when (val type = messageContent.type) {
-        is StickerMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource,
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Image,
-            blurHash = type.info?.blurhash,
-        )
         is ImageMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource,
             textContent = messageContent.body,
@@ -591,18 +627,9 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun TimelineItemEventRowPreview() = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
             TimelineItemEventRow(
@@ -652,18 +679,9 @@ private fun ContentToPreview() {
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowWithReplyLightPreview() =
-    ElementPreviewLight { ContentToPreviewWithReply() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowWithReplyDarkPreview() =
-    ElementPreviewDark { ContentToPreviewWithReply() }
-
-@Composable
-private fun ContentToPreviewWithReply() {
+internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
             val replyContent = if (it) {
@@ -703,6 +721,7 @@ private fun ContentToPreviewWithReply() {
                         aspectRatio = 5f
                     ),
                     inReplyTo = aInReplyToReady(replyContent),
+                    isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
                 isHighlighted = false,
@@ -723,29 +742,22 @@ private fun ContentToPreviewWithReply() {
 }
 
 private fun aInReplyToReady(
-    replyContent: String
+    replyContent: String,
 ): InReplyTo.Ready {
     return InReplyTo.Ready(
         eventId = EventId("\$event"),
-        content = MessageContent(replyContent, null, false, TextMessageType(replyContent, null)),
+        content = MessageContent(replyContent, null, false, false, TextMessageType(replyContent, null)),
         senderId = UserId("@Sender:domain"),
         senderDisplayName = "Sender",
         senderAvatarUrl = null,
     )
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewLight { ContentTimestampToPreview(event) }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowTimestampDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
-    ElementPreviewDark { ContentTimestampToPreview(event) }
-
-@Composable
-private fun ContentTimestampToPreview(event: TimelineItem.Event) {
+internal fun TimelineItemEventRowTimestampPreview(
+    @PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event
+) = ElementPreview {
     Column {
         val oldContent = event.content as TimelineItemTextContent
         listOf(
@@ -781,18 +793,9 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowWithManyReactionsLightPreview() =
-    ElementPreviewLight { ContentWithManyReactionsToPreview() }
-
-@Preview
-@Composable
-internal fun TimelineItemEventRowWithManyReactionsDarkPreview() =
-    ElementPreviewDark { ContentWithManyReactionsToPreview() }
-
-@Composable
-private fun ContentWithManyReactionsToPreview() {
+internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
     Column {
         listOf(false, true).forEach { isMine ->
             TimelineItemEventRow(

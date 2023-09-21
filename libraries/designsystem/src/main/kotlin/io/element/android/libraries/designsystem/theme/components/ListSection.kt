@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +36,7 @@ import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=425%3A24208&mode=design&t=G5hCfkLB6GgXDuWe-1
@@ -129,12 +128,16 @@ object ListSupportingTextDefaults {
     sealed interface Padding {
         /** No padding. */
         data object None : Padding
+
         /** Default padding, it will align fine with a [ListItem] with no leading content. */
         data object Default : Padding
+
         /** It will align to a [ListItem] with an [Icon] or [Checkbox] as leading content. */
         data object SmallLeadingContent : Padding
+
         /** It will align to with a [ListItem] with a [Switch] as leading content. */
         data object LargeLeadingContent : Padding
+
         /** It will align to with a [ListItem] with a custom start [padding]. */
         data class Custom(val padding: Dp) : Padding
 
@@ -257,7 +260,10 @@ internal fun ListSupportingTextDefaultPaddingPreview() {
 internal fun ListSupportingTextSmallPaddingPreview() {
     ElementThemedPreview {
         Column {
-            ListItem(headlineContent = { Text("A title") }, leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Outlined.Share)))
+            ListItem(
+                headlineContent = { Text("A title") },
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_share_android))
+            )
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
                 contentPadding = ListSupportingTextDefaults.Padding.SmallLeadingContent,

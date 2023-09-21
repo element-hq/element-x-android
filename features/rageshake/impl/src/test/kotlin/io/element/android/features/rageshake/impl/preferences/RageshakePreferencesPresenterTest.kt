@@ -31,8 +31,7 @@ import org.junit.Test
 
 class RageshakePreferencesPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

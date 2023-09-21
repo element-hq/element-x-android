@@ -44,8 +44,7 @@ private val TESTED_MEDIA_INFO = aFileInfo()
 
 class MediaViewerPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
 

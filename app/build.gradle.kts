@@ -198,6 +198,7 @@ dependencies {
     allLibrariesImpl()
     allServicesImpl()
     allFeaturesImpl(rootDir, logger)
+    implementation(projects.features.call)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
     anvil(projects.anvilcodegen)

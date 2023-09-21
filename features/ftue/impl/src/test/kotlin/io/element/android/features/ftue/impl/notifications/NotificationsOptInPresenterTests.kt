@@ -25,6 +25,7 @@ import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -39,8 +40,7 @@ import org.junit.Test
 
 class NotificationsOptInPresenterTests {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private var isFinished = false
@@ -131,11 +131,7 @@ class NotificationsOptInPresenterTests {
         permissionStateProvider: PermissionStateProvider = FakePermissionStateProvider(),
         sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU,
     ) = NotificationsOptInPresenter(
-        permissionsPresenterFactory = object : PermissionsPresenter.Factory {
-            override fun create(permission: String): PermissionsPresenter {
-                return permissionsPresenter
-            }
-        },
+        permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
         callback = object : NotificationsOptInNode.Callback {
             override fun onNotificationsOptInFinished() {
                 isFinished = true

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_profile_display_name">"Zobrazované meno"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované meno"</string>
+  <string name="screen_edit_profile_error">"Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť."</string>
+  <string name="screen_edit_profile_error_title">"Nepodarilo sa aktualizovať profil"</string>
+  <string name="screen_edit_profile_title">"Upraviť profil"</string>
+  <string name="screen_edit_profile_updating_details">"Aktualizácia profilu…"</string>
+</resources>

@@ -78,6 +78,8 @@ class RoomListScreen(
                 stateContentFormatter = StateContentFormatter(stringProvider),
             ),
             coroutineDispatchers = coroutineDispatchers,
+            notificationSettingsService = matrixClient.notificationSettingsService(),
+            appScope = Singleton.appScope
         )
     )
 

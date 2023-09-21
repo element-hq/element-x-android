@@ -47,7 +47,13 @@
     {
       "name": ":libraries:textcomposer:impl",
       "includeRegex": [
-        "rich_text_editor_.*"
+        "rich_text_editor.*"
+      ]
+    },
+    {
+      "name": ":libraries:permissions:api",
+      "includeRegex": [
+        "dialog\\.permission_.*"
       ]
     },
     {
@@ -127,6 +133,18 @@
       "name": ":features:poll:impl",
       "includeRegex": [
         "screen_create_poll_.*"
+      ]
+    },
+    {
+      "name": ":features:preferences:impl",
+      "includeRegex": [
+        "screen_edit_profile_.*"
+      ]
+    },
+    {
+      "name": ":features:call",
+      "includeRegex": [
+        "call_.*"
       ]
     }
   ]

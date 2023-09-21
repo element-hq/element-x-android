@@ -23,17 +23,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.VectorIcons
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
@@ -56,24 +59,24 @@ fun PollContentView(
     }
 
     Column(
-        modifier = modifier
-            .selectableGroup()
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         PollTitle(title = question, isPollEnded = isPollEnded)
 
         PollAnswers(answerItems = answerItems, onAnswerSelected = ::onAnswerSelected)
 
-        when {
-            isPollEnded || pollKind == PollKind.Disclosed -> DisclosedPollBottomNotice(answerItems)
-            pollKind == PollKind.Undisclosed -> UndisclosedPollBottomNotice()
+        if (isPollEnded || pollKind == PollKind.Disclosed) {
+            val votesCount = remember(answerItems) { answerItems.sumOf { it.votesCount } }
+            DisclosedPollBottomNotice(votesCount = votesCount)
+        } else {
+            UndisclosedPollBottomNotice()
         }
     }
 }
 
 @Composable
-internal fun PollTitle(
+private fun PollTitle(
     title: String,
     isPollEnded: Boolean,
     modifier: Modifier = Modifier
@@ -84,14 +87,14 @@ internal fun PollTitle(
     ) {
         if (isPollEnded) {
             Icon(
-                resourceId = VectorIcons.PollEnd,
-                contentDescription = null,
+                resourceId = CommonDrawables.ic_poll_end,
+                contentDescription = stringResource(id = CommonStrings.a11y_poll_end),
                 modifier = Modifier.size(22.dp)
             )
         } else {
             Icon(
-                resourceId = VectorIcons.Poll,
-                contentDescription = null,
+                resourceId = CommonDrawables.ic_compound_polls,
+                contentDescription = stringResource(id = CommonStrings.a11y_poll),
                 modifier = Modifier.size(22.dp)
             )
         }
@@ -103,27 +106,35 @@ internal fun PollTitle(
 }
 
 @Composable
-internal fun PollAnswers(
+private fun PollAnswers(
     answerItems: ImmutableList<PollAnswerItem>,
     onAnswerSelected: (PollAnswer) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    answerItems.forEach { answerItem ->
-        PollAnswerView(
-            modifier = modifier,
-            answerItem = answerItem,
-            onClick = { onAnswerSelected(answerItem.answer) }
-        )
+    Column(
+        modifier = modifier.selectableGroup(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        answerItems.forEach {
+            PollAnswerView(
+                answerItem = it,
+                modifier = Modifier
+                    .selectable(
+                        selected = it.isSelected,
+                        enabled = it.isEnabled,
+                        onClick = { onAnswerSelected(it.answer) },
+                        role = Role.RadioButton,
+                    ),
+            )
+        }
     }
 }
 
 @Composable
-internal fun ColumnScope.DisclosedPollBottomNotice(
-    answerItems: ImmutableList<PollAnswerItem>,
+private fun ColumnScope.DisclosedPollBottomNotice(
+    votesCount: Int,
     modifier: Modifier = Modifier
 ) {
-    val votesCount = answerItems.sumOf { it.votesCount }
     Text(
         modifier = modifier.align(Alignment.End),
         style = ElementTheme.typography.fontBodyXsRegular,
@@ -133,7 +144,9 @@ internal fun ColumnScope.DisclosedPollBottomNotice(
 }
 
 @Composable
-fun ColumnScope.UndisclosedPollBottomNotice(modifier: Modifier = Modifier) {
+private fun ColumnScope.UndisclosedPollBottomNotice(
+    modifier: Modifier = Modifier
+) {
     Text(
         modifier = modifier
             .align(Alignment.Start)
@@ -144,7 +157,7 @@ fun ColumnScope.UndisclosedPollBottomNotice(modifier: Modifier = Modifier) {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollContentUndisclosedPreview() = ElementPreview {
     PollContentView(
@@ -157,7 +170,7 @@ internal fun PollContentUndisclosedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollContentDisclosedPreview() = ElementPreview {
     PollContentView(
@@ -170,7 +183,7 @@ internal fun PollContentDisclosedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollContentEndedPreview() = ElementPreview {
     PollContentView(

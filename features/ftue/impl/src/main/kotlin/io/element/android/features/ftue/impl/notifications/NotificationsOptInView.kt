@@ -29,8 +29,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,11 +43,12 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -80,7 +79,7 @@ private fun NotificationsOptInHeader(
         modifier = modifier,
         title = stringResource(R.string.screen_notification_optin_title),
         subTitle = stringResource(R.string.screen_notification_optin_subtitle),
-        iconImageVector = Icons.Default.Notifications,
+        iconResourceId = CommonDrawables.ic_compound_notifications_solid,
     )
 }
 
@@ -183,7 +182,7 @@ private fun NotificationRow(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun NotificationsOptInViewPreview(
     @PreviewParameter(NotificationsOptInStateProvider::class) state: NotificationsOptInState

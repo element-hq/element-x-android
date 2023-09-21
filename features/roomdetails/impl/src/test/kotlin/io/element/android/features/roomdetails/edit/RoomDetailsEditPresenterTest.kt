@@ -32,6 +32,9 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.every
 import io.mockk.mockk
@@ -48,8 +51,7 @@ import java.io.File
 @ExperimentalCoroutinesApi
 class RoomDetailsEditPresenterTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     private lateinit var fakePickerProvider: FakePickerProvider
@@ -75,11 +77,15 @@ class RoomDetailsEditPresenterTest {
         unmockkAll()
     }
 
-    private fun aRoomDetailsEditPresenter(room: MatrixRoom): RoomDetailsEditPresenter {
+    private fun aRoomDetailsEditPresenter(
+        room: MatrixRoom,
+        permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
+    ): RoomDetailsEditPresenter {
         return RoomDetailsEditPresenter(
             room = room,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
         )
     }
 
@@ -253,19 +259,31 @@ class RoomDetailsEditPresenterTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
         fakePickerProvider.givenResult(anotherAvatarUri)
-
-        val presenter = aRoomDetailsEditPresenter(room)
+        val fakePermissionsPresenter = FakePermissionsPresenter()
+        val presenter = aRoomDetailsEditPresenter(
+            room = room,
+            permissionsPresenter = fakePermissionsPresenter,
+        )
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
-
+            assertThat(initialState.cameraPermissionState.permissionGranted).isFalse()
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
-            awaitItem().apply {
-                assertThat(roomAvatarUrl).isEqualTo(anotherAvatarUri)
-            }
+            val stateWithAskingPermission = awaitItem()
+            assertThat(stateWithAskingPermission.cameraPermissionState.showDialog).isTrue()
+            fakePermissionsPresenter.setPermissionGranted()
+            val stateWithPermission = awaitItem()
+            assertThat(stateWithPermission.cameraPermissionState.permissionGranted).isTrue()
+            val stateWithNewAvatar = awaitItem()
+            assertThat(stateWithNewAvatar.roomAvatarUrl).isEqualTo(anotherAvatarUri)
+            // Do it again, no permission is requested
+            fakePickerProvider.givenResult(roomAvatarUri)
+            stateWithNewAvatar.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            val stateWithNewAvatar2 = awaitItem()
+            assertThat(stateWithNewAvatar2.roomAvatarUrl).isEqualTo(roomAvatarUri)
         }
     }
 

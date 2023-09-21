@@ -22,10 +22,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -46,7 +42,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -54,8 +49,8 @@ import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatarBloom
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.applyScaleDown
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.text.toDp
@@ -68,6 +63,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -76,7 +72,6 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.designsystem.R as CommonR
 
 private val avatarBloomSize = 430.dp
 
@@ -147,7 +142,7 @@ private fun DefaultRoomListTopBar(
         }
     }
 
-    val statusBarPadding = with (LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
+    val statusBarPadding = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
 
     Box(modifier = modifier) {
         MediumTopAppBar(
@@ -211,7 +206,7 @@ private fun DefaultRoomListTopBar(
                     onClick = onSearchClicked,
                 ) {
                     Icon(
-                        resourceId = CommonR.drawable.ic_search,
+                        resourceId = CommonDrawables.ic_compound_search,
                         contentDescription = stringResource(CommonStrings.action_search),
                     )
                 }
@@ -219,7 +214,7 @@ private fun DefaultRoomListTopBar(
                     onClick = { showMenu = !showMenu }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.MoreVert,
+                        resourceId = CommonDrawables.ic_compound_overflow_vertical,
                         contentDescription = null,
                     )
                 }
@@ -235,7 +230,7 @@ private fun DefaultRoomListTopBar(
                         text = { Text(stringResource(id = CommonStrings.action_invite)) },
                         leadingIcon = {
                             Icon(
-                                Icons.Outlined.Share,
+                                resourceId = CommonDrawables.ic_compound_share_android,
                                 tint = ElementTheme.materialColors.secondary,
                                 contentDescription = null,
                             )
@@ -249,7 +244,7 @@ private fun DefaultRoomListTopBar(
                         text = { Text(stringResource(id = CommonStrings.common_report_a_bug)) },
                         leadingIcon = {
                             Icon(
-                                Icons.Outlined.BugReport,
+                                resourceId = CommonDrawables.ic_compound_chat_problem,
                                 tint = ElementTheme.materialColors.secondary,
                                 contentDescription = null,
                             )
@@ -261,8 +256,10 @@ private fun DefaultRoomListTopBar(
             windowInsets = WindowInsets(0.dp),
         )
 
-        HorizontalDivider(modifier =
-            Modifier.fillMaxWidth()
+        HorizontalDivider(
+            modifier =
+            Modifier
+                .fillMaxWidth()
                 .alpha(collapsedFraction)
                 .align(Alignment.BottomCenter),
             color = ElementTheme.materialColors.outlineVariant,
@@ -270,17 +267,10 @@ private fun DefaultRoomListTopBar(
     }
 }
 
-@Preview
-@Composable
-internal fun DefaultRoomListTopBarLightPreview() = ElementPreviewLight { DefaultRoomListTopBarPreview() }
-
-@Preview
-@Composable
-internal fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRoomListTopBarPreview() }
-
 @OptIn(ExperimentalMaterial3Api::class)
+@PreviewsDayNight
 @Composable
-private fun DefaultRoomListTopBarPreview() {
+internal fun DefaultRoomListTopBarPreview() = ElementPreview {
     DefaultRoomListTopBar(
         matrixUser = MatrixUser(UserId("@id:domain"), "Alice"),
         areSearchResultsDisplayed = false,

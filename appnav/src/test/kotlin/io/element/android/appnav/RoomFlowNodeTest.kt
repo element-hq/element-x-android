@@ -26,10 +26,12 @@ import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.google.common.truth.Truth
+import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.childNode
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
@@ -54,6 +56,12 @@ class RoomFlowNodeTest {
                 nodeId = it.id
                 this.callback = callback
             }
+        }
+    }
+
+    private class FakeRoomComponentFactory : RoomComponentFactory {
+        override fun create(room: MatrixRoom): Any {
+            return Unit
         }
     }
 
@@ -83,7 +91,8 @@ class RoomFlowNodeTest {
         messagesEntryPoint = messagesEntryPoint,
         roomDetailsEntryPoint = roomDetailsEntryPoint,
         appNavigationStateService = FakeAppNavigationStateService(),
-        roomMembershipObserver = RoomMembershipObserver()
+        roomMembershipObserver = RoomMembershipObserver(),
+        roomComponentFactory = FakeRoomComponentFactory(),
     )
 
     @Test

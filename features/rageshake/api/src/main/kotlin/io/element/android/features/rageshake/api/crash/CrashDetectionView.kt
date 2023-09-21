@@ -18,11 +18,10 @@ package io.element.android.features.rageshake.api.crash
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.features.rageshake.api.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -66,18 +65,10 @@ fun CrashDetectionContent(
     )
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun CrashDetectionViewLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun CrashDetectionViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun CrashDetectionViewPreview() = ElementPreview {
     CrashDetectionView(
         state = aCrashDetectionState().copy(crashDetected = true)
     )
 }
-

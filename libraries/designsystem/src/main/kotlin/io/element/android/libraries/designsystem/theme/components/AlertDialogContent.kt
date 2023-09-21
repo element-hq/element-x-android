@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
@@ -44,6 +42,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import kotlin.math.max
 
@@ -417,7 +416,10 @@ internal fun DialogWithTitleIconAndOkButtonPreview() {
         DialogPreview {
             SimpleAlertDialogContent(
                 icon = {
-                    Icon(imageVector = Icons.Default.Notifications, contentDescription = null)
+                    Icon(
+                        resourceId = CommonDrawables.ic_compound_notifications_solid,
+                        contentDescription = null
+                    )
                 },
                 title = "Dialog Title",
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",

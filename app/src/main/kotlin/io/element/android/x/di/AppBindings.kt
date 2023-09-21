@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.tracing.TracingService
 
 @ContributesTo(AppScope::class)
 interface AppBindings {
-    fun mainDaggerComponentOwner(): MainDaggerComponentsOwner
     fun snackbarDispatcher(): SnackbarDispatcher
     fun tracingService(): TracingService
     fun bugReporter(): BugReporter

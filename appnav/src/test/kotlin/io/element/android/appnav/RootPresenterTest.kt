@@ -37,8 +37,7 @@ import org.junit.Rule
 import org.junit.Test
 
 class RootPresenterTest {
-    @Rule
-    @JvmField
+    @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test

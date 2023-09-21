@@ -22,14 +22,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionView
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionView
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.services.apperror.impl.AppErrorView
 
@@ -67,16 +66,9 @@ fun RootView(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun RootLightPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
-
-@Preview
-@Composable
-internal fun RootDarkPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
-
-@Composable
-private fun ContentToPreview(rootState: RootState) {
+internal fun RootPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreview {
     RootView(rootState) {
         Text("Children")
     }

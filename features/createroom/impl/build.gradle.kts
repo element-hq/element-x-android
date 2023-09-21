@@ -48,6 +48,7 @@ dependencies {
     implementation(projects.libraries.deeplink)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaupload.api)
+    implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.usersearch.impl)
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
@@ -64,6 +65,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.mediaupload.test)
+    testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.tests.testutils)
 

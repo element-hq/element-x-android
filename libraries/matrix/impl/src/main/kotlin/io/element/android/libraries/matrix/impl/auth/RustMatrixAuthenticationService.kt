@@ -57,6 +57,8 @@ class RustMatrixAuthenticationService @Inject constructor(
         userAgent = userAgentProvider.provide(),
         oidcConfiguration = oidcConfiguration,
         customSlidingSyncProxy = null,
+        sessionDelegate = null,
+        crossProcessRefreshLockId = null,
     )
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 

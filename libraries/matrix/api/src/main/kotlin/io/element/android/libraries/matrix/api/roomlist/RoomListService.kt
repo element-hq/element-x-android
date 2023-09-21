@@ -55,6 +55,11 @@ interface RoomListService {
     fun updateAllRoomsVisibleRange(range: IntRange)
 
     /**
+     * Rebuild the room summaries, required when we know some data may have changed. (E.g. room notification settings)
+     */
+    fun rebuildRoomSummaries()
+
+    /**
      * The sync indicator as a flow.
      */
     val syncIndicator: StateFlow<SyncIndicator>

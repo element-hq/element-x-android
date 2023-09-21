@@ -16,14 +16,11 @@
 
 package io.element.android.features.preferences.impl.root
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.DeveloperMode
-import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
-import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -38,9 +35,10 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.preview.LargeHeightPreview
+import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.SnackbarHost
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -53,12 +51,15 @@ fun PreferencesRootView(
     state: PreferencesRootState,
     onBackPressed: () -> Unit,
     onVerifyClicked: () -> Unit,
-    onManageAccountClicked: () -> Unit,
+    onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    onOpenAdvancedSettings: () -> Unit,
     onSuccessLogout: (logoutUrlResult: String?) -> Unit,
+    onOpenNotificationSettings: () -> Unit,
+    onOpenUserProfile: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -70,7 +71,12 @@ fun PreferencesRootView(
         title = stringResource(id = CommonStrings.common_settings),
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
-        UserPreferences(state.myUser)
+        UserPreferences(
+            modifier = Modifier.clickable {
+                state.myUser?.let(onOpenUserProfile)
+            },
+            user = state.myUser,
+        )
         if (state.showCompleteVerification) {
             PreferenceText(
                 title = stringResource(id = CommonStrings.action_complete_verification),
@@ -81,10 +87,11 @@ fun PreferencesRootView(
         }
         if (state.accountManagementUrl != null) {
             PreferenceText(
-                title = stringResource(id = CommonStrings.screen_settings_oidc_account),
-                icon = Icons.Outlined.ManageAccounts,
-                onClick = onManageAccountClicked,
+                title = stringResource(id = CommonStrings.action_manage_account),
+                iconResourceId = CommonDrawables.ic_compound_pop_out,
+                onClick = { onManageAccountClicked(state.accountManagementUrl) },
             )
+            HorizontalDivider()
         }
         if (state.showAnalyticsSettings) {
             PreferenceText(
@@ -93,15 +100,36 @@ fun PreferencesRootView(
                 onClick = onOpenAnalytics,
             )
         }
+        if (state.showNotificationSettings) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.screen_notification_settings_title),
+                iconResourceId = CommonDrawables.ic_compound_notifications,
+                onClick = onOpenNotificationSettings,
+            )
+        }
         PreferenceText(
             title = stringResource(id = CommonStrings.action_report_bug),
-            icon = Icons.Outlined.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
             onClick = onOpenRageShake
         )
         PreferenceText(
             title = stringResource(id = CommonStrings.common_about),
-            icon = Icons.Outlined.Help,
+            iconResourceId = CommonDrawables.ic_compound_info,
             onClick = onOpenAbout,
+        )
+        HorizontalDivider()
+        if (state.devicesManagementUrl != null) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.action_manage_devices),
+                iconResourceId = CommonDrawables.ic_compound_pop_out,
+                onClick = { onManageAccountClicked(state.devicesManagementUrl) },
+            )
+            HorizontalDivider()
+        }
+        PreferenceText(
+            title = stringResource(id = CommonStrings.common_advanced_settings),
+            iconResourceId = CommonDrawables.ic_compound_settings,
+            onClick = onOpenAdvancedSettings,
         )
         if (state.showDeveloperSettings) {
             DeveloperPreferencesView(onOpenDeveloperSettings)
@@ -127,17 +155,17 @@ fun PreferencesRootView(
 fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
     PreferenceText(
         title = stringResource(id = CommonStrings.common_developer_options),
-        icon = Icons.Outlined.DeveloperMode,
+        iconResourceId = CommonDrawables.ic_developer_mode,
         onClick = onOpenDeveloperSettings
     )
 }
 
-@LargeHeightPreview
+@PreviewWithLargeHeight
 @Composable
 internal fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewLight { ContentToPreview(matrixUser) }
 
-@LargeHeightPreview
+@PreviewWithLargeHeight
 @Composable
 internal fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }
@@ -150,9 +178,12 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenAnalytics = {},
         onOpenRageShake = {},
         onOpenDeveloperSettings = {},
+        onOpenAdvancedSettings = {},
         onOpenAbout = {},
         onVerifyClicked = {},
         onSuccessLogout = {},
         onManageAccountClicked = {},
+        onOpenNotificationSettings = {},
+        onOpenUserProfile = {},
     )
 }

@@ -22,8 +22,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +37,7 @@ import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.modifiers.blurCompat
 import io.element.android.libraries.designsystem.modifiers.blurredShapeShadow
 import io.element.android.libraries.designsystem.modifiers.canUseBlurMaskFilter
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.theme.ElementTheme
 
@@ -51,8 +51,9 @@ fun ElementLogoAtom(
     val blur = if (darkTheme) 160.dp else 24.dp
     //box-shadow: 0px 6.075949668884277px 24.30379867553711px 0px #1B1D2280;
     val shadowColor = if (darkTheme) size.shadowColorDark else size.shadowColorLight
+    val logoShadowColor = if (darkTheme) size.logoShadowColorDark else size.logoShadowColorLight
     val backgroundColor = if (darkTheme) Color.White.copy(alpha = 0.2f) else Color.White.copy(alpha = 0.4f)
-    val borderColor = if (darkTheme) Color.White.copy(alpha = 0.8f) else Color.White.copy(alpha = 0.4f)
+    val borderColor = if (darkTheme) Color.White.copy(alpha = 0.89f) else Color.White
     Box(
         modifier = modifier
             .size(size.outerSize)
@@ -90,7 +91,21 @@ fun ElementLogoAtom(
                 .blurCompat(blur)
         )
         Image(
-            modifier = Modifier.size(size.logoSize),
+            modifier = Modifier
+                .size(size.logoSize)
+                // Do the same double shadow than on Figma...
+                .shadow(
+                    elevation = 25.dp,
+                    clip = false,
+                    shape = CircleShape,
+                    ambientColor = logoShadowColor,
+                )
+                .shadow(
+                    elevation = 25.dp,
+                    clip = false,
+                    shape = CircleShape,
+                    ambientColor = Color(0x80000000),
+                ),
             painter = painterResource(id = R.drawable.element_logo),
             contentDescription = null
         )
@@ -102,6 +117,8 @@ sealed class ElementLogoAtomSize(
     val logoSize: Dp,
     val cornerRadius: Dp,
     val borderWidth: Dp,
+    val logoShadowColorDark: Color,
+    val logoShadowColorLight: Color,
     val shadowColorDark: Color,
     val shadowColorLight: Color,
     val shadowRadius: Dp,
@@ -111,6 +128,8 @@ sealed class ElementLogoAtomSize(
         logoSize = 83.5.dp,
         cornerRadius = 33.dp,
         borderWidth = 0.38.dp,
+        logoShadowColorDark = Color(0x4D000000),
+        logoShadowColorLight = Color(0x66000000),
         shadowColorDark = Color.Black.copy(alpha = 0.4f),
         shadowColorLight = Color(0x401B1D22),
         shadowRadius = 32.dp,
@@ -121,6 +140,8 @@ sealed class ElementLogoAtomSize(
         logoSize = 110.dp,
         cornerRadius = 44.dp,
         borderWidth = 0.5.dp,
+        logoShadowColorDark = Color(0x4D000000),
+        logoShadowColorLight = Color(0x66000000),
         shadowColorDark = Color.Black,
         shadowColorLight = Color(0x801B1D22),
         shadowRadius = 60.dp,
@@ -128,39 +149,37 @@ sealed class ElementLogoAtomSize(
 }
 
 @Composable
-@DayNightPreviews
-internal fun ElementLogoAtomMediumPreview() {
+@PreviewsDayNight
+internal fun ElementLogoAtomMediumPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Medium)
 }
 
 @Composable
-@DayNightPreviews
-internal fun ElementLogoAtomLargePreview() {
+@PreviewsDayNight
+internal fun ElementLogoAtomLargePreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Large)
 }
 
 @Composable
-@DayNightPreviews
-internal fun ElementLogoAtomMediumNoBlurShadowPreview() {
+@PreviewsDayNight
+internal fun ElementLogoAtomMediumNoBlurShadowPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Medium, useBlurredShadow = false)
 }
 
 @Composable
-@DayNightPreviews
-internal fun ElementLogoAtomLargeNoBlurShadowPreview() {
+@PreviewsDayNight
+internal fun ElementLogoAtomLargeNoBlurShadowPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Large, useBlurredShadow = false)
 }
 
 @Composable
 private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize, useBlurredShadow: Boolean = true) {
-    ElementPreview {
-        Box(
-            Modifier
-                .size(elementLogoAtomSize.outerSize + elementLogoAtomSize.shadowRadius * 2)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center
-        ) {
-            ElementLogoAtom(elementLogoAtomSize, useBlurredShadow = useBlurredShadow)
-        }
+    Box(
+        Modifier
+            .size(elementLogoAtomSize.outerSize + elementLogoAtomSize.shadowRadius * 2)
+            .background(ElementTheme.colors.bgSubtlePrimary),
+        contentAlignment = Alignment.Center
+    ) {
+        ElementLogoAtom(elementLogoAtomSize, useBlurredShadow = useBlurredShadow)
     }
 }

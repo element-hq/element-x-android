@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="Use_an_identity_server_to_invite_by_email.__default_Use_the_default____defaultIdentityServerName_s___default__or_manage_in__settings_Settings__settings_._web">"Use an identity server to invite by email. "<default>"Use the default (%(defaultIdentityServerName)s)"</default>" or manage in "<settings>"Settings"</settings>"."</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
+  <string name="a11y_poll">"Poll"</string>
+  <string name="a11y_poll_end">"Ended poll"</string>
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_user_menu">"User menu"</string>
   <string name="action_accept">"Accept"</string>
+  <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
   <string name="action_cancel">"Cancel"</string>
   <string name="action_choose_photo">"Choose photo"</string>
@@ -37,16 +39,20 @@
   <string name="action_learn_more">"Learn more"</string>
   <string name="action_leave">"Leave"</string>
   <string name="action_leave_room">"Leave room"</string>
+  <string name="action_manage_account">"Manage account"</string>
+  <string name="action_manage_devices">"Manage devices"</string>
   <string name="action_next">"Next"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_settings">"Open settings"</string>
   <string name="action_open_with">"Open with"</string>
   <string name="action_quick_reply">"Quick reply"</string>
   <string name="action_quote">"Quote"</string>
   <string name="action_react">"React"</string>
   <string name="action_remove">"Remove"</string>
   <string name="action_reply">"Reply"</string>
+  <string name="action_reply_in_thread">"Reply in thread"</string>
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report Content"</string>
   <string name="action_retry">"Retry"</string>
@@ -67,6 +73,7 @@
   <string name="action_yes">"Yes"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
+  <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_analytics">"Analytics"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Bubbles"</string>
@@ -85,6 +92,7 @@
   <string name="common_forward_message">"Forward message"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
+  <string name="common_in_reply_to">"In reply to %1$s"</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
@@ -99,15 +107,17 @@
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>
-  <string name="common_poll_final_votes">"Final votes: %1$s"</string>
+  <string name="common_permission">"Permission"</string>
   <string name="common_poll_total_votes">"Total votes: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Results will show after the poll has ended"</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
+  <string name="common_reaction">"Reaction"</string>
   <string name="common_reactions">"Reactions"</string>
   <string name="common_refreshing">"Refreshing…"</string>
   <string name="common_replying_to">"Replying to %1$s"</string>
   <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_submitted">"Report submitted"</string>
+  <string name="common_rich_text_editor">"Rich text editor"</string>
   <string name="common_room_name">"Room name"</string>
   <string name="common_room_name_placeholder">"e.g. your project name"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
@@ -126,6 +136,7 @@
   <string name="common_syncing">"Syncing"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
+  <string name="common_thread">"Thread"</string>
   <string name="common_topic">"Topic"</string>
   <string name="common_topic_placeholder">"What is this room about?"</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
@@ -138,6 +149,7 @@
   <string name="common_verification_complete">"Verification complete"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Waiting…"</string>
+  <string name="common_poll_summary">"Poll: %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Warning"</string>
   <string name="emoji_picker_category_activity">"Activities"</string>
@@ -162,10 +174,6 @@
   <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you won\'t be able to rejoin without an invite."</string>
   <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="__count_s_rooms_web">
-    <item quantity="one">"%(count)s room"</item>
-    <item quantity="other">"%(count)s rooms"</item>
-  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
     <item quantity="other">"%1$d members"</item>
@@ -178,25 +186,6 @@
   <string name="rageshake_dialog_content">"You seem to be shaking the phone in frustration. Would you like to open the bug report screen?"</string>
   <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
   <string name="report_content_hint">"Reason for reporting this content"</string>
-  <string name="rich_text_editor_bullet_list">"Toggle bullet list"</string>
-  <string name="rich_text_editor_close_formatting_options">"Close formatting options"</string>
-  <string name="rich_text_editor_code_block">"Toggle code block"</string>
-  <string name="rich_text_editor_composer_placeholder">"Message…"</string>
-  <string name="rich_text_editor_create_link">"Create a link"</string>
-  <string name="rich_text_editor_edit_link">"Edit link"</string>
-  <string name="rich_text_editor_format_bold">"Apply bold format"</string>
-  <string name="rich_text_editor_format_italic">"Apply italic format"</string>
-  <string name="rich_text_editor_format_strikethrough">"Apply strikethrough format"</string>
-  <string name="rich_text_editor_format_underline">"Apply underline format"</string>
-  <string name="rich_text_editor_full_screen_toggle">"Toggle full screen mode"</string>
-  <string name="rich_text_editor_indent">"Indent"</string>
-  <string name="rich_text_editor_inline_code">"Apply inline code format"</string>
-  <string name="rich_text_editor_link">"Set link"</string>
-  <string name="rich_text_editor_numbered_list">"Toggle numbered list"</string>
-  <string name="rich_text_editor_open_compose_options">"Open compose options"</string>
-  <string name="rich_text_editor_quote">"Toggle quote"</string>
-  <string name="rich_text_editor_unindent">"Unindent"</string>
-  <string name="rich_text_editor_url_placeholder">"Link"</string>
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
@@ -207,9 +196,7 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
   <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Configuration mismatch"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"We’ve simplified Notifications Settings to make options easier to find.
-
-Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
+  <string name="screen_notification_settings_configuration_mismatch_description">"We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
 
 If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_direct_chats">"Direct chats"</string>

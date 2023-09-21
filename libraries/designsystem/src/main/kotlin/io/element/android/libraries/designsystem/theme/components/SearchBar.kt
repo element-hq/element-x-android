@@ -24,9 +24,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarColors
@@ -46,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -99,7 +97,7 @@ fun <T> SearchBar(
                 {
                     IconButton(onClick = { onQueryChange("") }) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            resourceId = CommonDrawables.ic_compound_close,
                             contentDescription = stringResource(CommonStrings.action_clear),
                         )
                     }
@@ -109,7 +107,7 @@ fun <T> SearchBar(
             !active -> {
                 {
                     Icon(
-                        imageVector = Icons.Default.Search,
+                        resourceId = CommonDrawables.ic_compound_search,
                         contentDescription = stringResource(CommonStrings.action_search),
                         tint = MaterialTheme.colorScheme.tertiary,
                     )

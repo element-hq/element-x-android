@@ -39,6 +39,7 @@ import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.PermissionsStore
+import io.element.android.libraries.permissions.impl.action.PermissionActions
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -48,6 +49,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
     @Assisted val permission: String,
     private val permissionsStore: PermissionsStore,
     private val composablePermissionStateProvider: ComposablePermissionStateProvider,
+    private val permissionActions: PermissionActions,
 ) : PermissionsPresenter {
 
     @AssistedFactory
@@ -98,20 +100,27 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
 
         LaunchedEffect(this) {
             if (permissionState.status.isGranted) {
-                // User may have granted permission from the settings, to reset the store regarding this permission
+                // User may have granted permission from the settings, so reset the store regarding this permission
                 permissionsStore.resetPermission(permission)
             }
         }
 
-        val showDialog = rememberSaveable { mutableStateOf(permissionState.status !is PermissionStatus.Granted) }
+        val showDialog = rememberSaveable { mutableStateOf(false) }
 
         fun handleEvents(event: PermissionsEvents) {
             when (event) {
                 PermissionsEvents.CloseDialog -> {
                     showDialog.value = false
                 }
-                PermissionsEvents.OpenSystemDialog -> {
-                    permissionState.launchPermissionRequest()
+                PermissionsEvents.RequestPermissions -> {
+                    if (permissionState.status !is PermissionStatus.Granted && isAlreadyDenied) {
+                        showDialog.value = true
+                    } else {
+                        permissionState.launchPermissionRequest()
+                    }
+                }
+                PermissionsEvents.OpenSystemSettingAndCloseDialog -> {
+                    permissionActions.openSettings()
                     showDialog.value = false
                 }
             }

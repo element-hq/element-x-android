@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.MyLocation
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -43,8 +41,8 @@ import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -52,6 +50,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.maplibre.compose.CameraMode
 import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason
 import io.element.android.libraries.maplibre.compose.IconAnchor
@@ -63,7 +62,6 @@ import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.TypographyTokens
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableMap
-import io.element.android.libraries.designsystem.R as DesignSystemR
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -126,7 +124,10 @@ fun ShowLocationView(
                 },
                 actions = {
                     IconButton(onClick = { state.eventSink(ShowLocationEvents.Share) }) {
-                        Icon(imageVector = Icons.Outlined.Share, contentDescription = stringResource(CommonStrings.action_share))
+                        Icon(
+                            resourceId = CommonDrawables.ic_compound_share_android,
+                            contentDescription = stringResource(CommonStrings.action_share),
+                        )
                     }
                 }
             )
@@ -164,7 +165,7 @@ fun ShowLocationView(
             MapboxMap(
                 styleUri = rememberTileStyleUrl(),
                 modifier = Modifier.fillMaxSize(),
-                images = mapOf(PIN_ID to DesignSystemR.drawable.pin).toImmutableMap(),
+                images = mapOf(PIN_ID to CommonDrawables.pin).toImmutableMap(),
                 cameraPositionState = cameraPositionState,
                 uiSettings = MapDefaults.uiSettings,
                 symbolManagerSettings = MapDefaults.symbolManagerSettings,
@@ -184,18 +185,9 @@ fun ShowLocationView(
     }
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun ShowLocationViewLightPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
-    ElementPreviewLight { ContentToPreview(state) }
-
-@Preview
-@Composable
-internal fun ShowLocationViewDarkPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) =
-    ElementPreviewDark { ContentToPreview(state) }
-
-@Composable
-private fun ContentToPreview(state: ShowLocationState) {
+internal fun ShowLocationViewPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) = ElementPreview {
     ShowLocationView(
         state = state,
         onBackPressed = {},
@@ -203,4 +195,3 @@ private fun ContentToPreview(state: ShowLocationState) {
 }
 
 private const val PIN_ID = "pin"
-

@@ -19,11 +19,10 @@ package io.element.android.libraries.designsystem.ruler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 
@@ -63,18 +62,9 @@ fun WithRulers(
     )
 }
 
-@Preview
+@PreviewsDayNight
 @Composable
-internal fun WithRulerLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun WithRulerDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun WithRulerPreview() = ElementPreview {
     WithRulers(xRulersOffset = 20.dp, yRulersOffset = 15.dp) {
         OutlinedButton(
             text = "A Button with rulers on it!",
