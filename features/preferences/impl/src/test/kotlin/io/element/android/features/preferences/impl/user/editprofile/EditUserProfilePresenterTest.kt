@@ -34,6 +34,7 @@ import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.mockk.every
@@ -87,11 +88,7 @@ class EditUserProfilePresenterTest {
             matrixUser = matrixUser,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
-            permissionsPresenterFactory = object : PermissionsPresenter.Factory {
-                override fun create(permission: String): PermissionsPresenter {
-                    return permissionsPresenter
-                }
-            },
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
         )
     }
 

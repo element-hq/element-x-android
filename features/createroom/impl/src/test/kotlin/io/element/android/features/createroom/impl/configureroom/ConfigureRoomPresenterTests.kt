@@ -37,8 +37,8 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
-import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.every
@@ -89,11 +89,7 @@ class ConfigureRoomPresenterTests {
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
             analyticsService = fakeAnalyticsService,
-            permissionsPresenterFactory = object : PermissionsPresenter.Factory {
-                override fun create(permission: String): PermissionsPresenter {
-                    return fakePermissionsPresenter
-                }
-            },
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(fakePermissionsPresenter),
         )
 
         mockkStatic(File::readBytes)
