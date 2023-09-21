@@ -18,6 +18,7 @@ package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -28,6 +29,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.impl.di.CreateRoomScope
+import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
 
@@ -58,11 +60,13 @@ class ConfigureRoomNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        val context = LocalContext.current
         ConfigureRoomView(
             state = state,
             modifier = modifier,
             onBackPressed = this::navigateUp,
             onRoomCreated = this::onRoomCreated,
+            onOpenSystemSettings = { context.openAppSettingsPage() }
         )
     }
 }

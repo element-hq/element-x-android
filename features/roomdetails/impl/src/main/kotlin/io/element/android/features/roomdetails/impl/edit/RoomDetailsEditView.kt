@@ -73,6 +73,7 @@ fun RoomDetailsEditView(
     state: RoomDetailsEditState,
     onBackPressed: () -> Unit,
     onRoomEdited: () -> Unit,
+    onOpenSystemSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -195,7 +196,10 @@ fun RoomDetailsEditView(
         else -> Unit
     }
 
-    PermissionsView(state = state.cameraPermissionState)
+    PermissionsView(
+        state = state.cameraPermissionState,
+        onOpenSystemSettings = onOpenSystemSettings,
+    )
 }
 
 @Composable
@@ -238,5 +242,6 @@ internal fun RoomDetailsEditViewPreview(@PreviewParameter(RoomDetailsEditStatePr
         state = state,
         onBackPressed = {},
         onRoomEdited = {},
+        onOpenSystemSettings = {},
     )
 }

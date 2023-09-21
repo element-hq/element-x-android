@@ -74,9 +74,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun ConfigureRoomView(
     state: ConfigureRoomState,
+    onBackPressed: () -> Unit,
+    onRoomCreated: (RoomId) -> Unit,
+    onOpenSystemSettings: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onRoomCreated: (RoomId) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
@@ -173,8 +174,11 @@ fun ConfigureRoomView(
 
         else -> Unit
     }
-    
-    PermissionsView(state = state.cameraPermissionState)
+
+    PermissionsView(
+        state = state.cameraPermissionState,
+        onOpenSystemSettings = onOpenSystemSettings,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -281,5 +285,8 @@ private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
 internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
     ConfigureRoomView(
         state = state,
+        onBackPressed = {},
+        onRoomCreated = {},
+        onOpenSystemSettings = {},
     )
 }

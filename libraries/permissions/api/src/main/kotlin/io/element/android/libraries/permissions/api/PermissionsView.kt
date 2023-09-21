@@ -26,8 +26,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 @Composable
 fun PermissionsView(
     state: PermissionsState,
+    onOpenSystemSettings: () -> Unit,
     modifier: Modifier = Modifier,
-    openSystemSettings: () -> Unit = {},
 ) {
     if (state.showDialog.not()) return
 
@@ -44,7 +44,7 @@ fun PermissionsView(
                 submitText = "Open settings",
                 onSubmitClicked = {
                     state.eventSink.invoke(PermissionsEvents.CloseDialog)
-                    openSystemSettings()
+                    onOpenSystemSettings()
                 },
                 onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
             )
@@ -85,5 +85,6 @@ fun PermissionsView(
 internal fun PermissionsViewPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) = ElementPreview {
     PermissionsView(
         state = state,
+        onOpenSystemSettings = {},
     )
 }
