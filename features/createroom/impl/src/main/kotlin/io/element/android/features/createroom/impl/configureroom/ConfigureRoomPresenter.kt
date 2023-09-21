@@ -18,6 +18,7 @@ package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -40,6 +41,8 @@ import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -52,10 +55,15 @@ class ConfigureRoomPresenter @Inject constructor(
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
     private val analyticsService: AnalyticsService,
+    permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<ConfigureRoomState> {
+
+    private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
+    private var pendingPermissionRequest = false
 
     @Composable
     override fun present(): ConfigureRoomState {
+        val cameraPermissionState = cameraPermissionPresenter.present()
         val createRoomConfig = dataStore.getCreateRoomConfig().collectAsState(CreateRoomConfig())
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
@@ -72,6 +80,13 @@ class ConfigureRoomPresenter @Inject constructor(
                     AvatarAction.ChoosePhoto,
                     AvatarAction.Remove.takeIf { createRoomConfig.value.avatarUri != null },
                 ).toImmutableList()
+            }
+        }
+
+        LaunchedEffect(cameraPermissionState.permissionGranted) {
+            if (cameraPermissionState.permissionGranted && pendingPermissionRequest) {
+                pendingPermissionRequest = false
+                cameraPhotoPicker.launch()
             }
         }
 
@@ -93,7 +108,12 @@ class ConfigureRoomPresenter @Inject constructor(
                 is ConfigureRoomEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
-                        AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
+                        AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
+                            cameraPhotoPicker.launch()
+                        } else {
+                            pendingPermissionRequest = true
+                            cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
+                        }
                         AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
                     }
                 }
@@ -106,6 +126,7 @@ class ConfigureRoomPresenter @Inject constructor(
             config = createRoomConfig.value,
             avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
+            cameraPermissionState = cameraPermissionState,
             eventSink = ::handleEvents,
         )
     }

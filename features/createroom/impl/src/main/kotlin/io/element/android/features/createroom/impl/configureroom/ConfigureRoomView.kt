@@ -65,6 +65,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
+import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -73,9 +74,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun ConfigureRoomView(
     state: ConfigureRoomState,
+    onBackPressed: () -> Unit,
+    onRoomCreated: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onRoomCreated: (RoomId) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
@@ -172,6 +173,10 @@ fun ConfigureRoomView(
 
         else -> Unit
     }
+
+    PermissionsView(
+        state = state.cameraPermissionState,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -278,5 +283,7 @@ private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
 internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
     ConfigureRoomView(
         state = state,
+        onBackPressed = {},
+        onRoomCreated = {},
     )
 }

@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.permissions.api
+package io.element.android.libraries.permissions.test
 
-sealed interface PermissionsEvents {
-    data object RequestPermissions : PermissionsEvents
-    data object CloseDialog : PermissionsEvents
-    data object OpenSystemSettingAndCloseDialog : PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsPresenter
+
+class FakePermissionsPresenterFactory(
+    private val permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
+) : PermissionsPresenter.Factory {
+    override fun create(permission: String): PermissionsPresenter {
+        return permissionPresenter
+    }
 }

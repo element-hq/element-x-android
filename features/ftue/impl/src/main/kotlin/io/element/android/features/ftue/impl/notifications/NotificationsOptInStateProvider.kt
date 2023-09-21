@@ -28,6 +28,6 @@ open class NotificationsOptInStateProvider : PreviewParameterProvider<Notificati
 }
 
 fun aNotificationsOptInState() = NotificationsOptInState(
-    notificationsPermissionState = aPermissionsState(),
+    notificationsPermissionState = aPermissionsState(showDialog = false),
     eventSink = {}
 )

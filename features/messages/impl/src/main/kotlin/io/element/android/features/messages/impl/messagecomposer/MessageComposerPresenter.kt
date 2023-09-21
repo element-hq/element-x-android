@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.runtime.Composable
@@ -44,6 +45,8 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
@@ -70,13 +73,18 @@ class MessageComposerPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContextImpl,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
+    permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<MessageComposerState> {
+
+    private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
+    private var pendingEvent: MessageComposerEvents? = null
 
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
+        val cameraPermissionState = cameraPermissionPresenter.present()
         val attachmentsState = remember {
             mutableStateOf<AttachmentsState>(AttachmentsState.None)
         }
@@ -132,6 +140,17 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+        LaunchedEffect(cameraPermissionState.permissionGranted) {
+            if (cameraPermissionState.permissionGranted) {
+                when (pendingEvent) {
+                    is MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> cameraPhotoPicker.launch()
+                    is MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> cameraVideoPicker.launch()
+                    else -> Unit
+                }
+                pendingEvent = null
+            }
+        }
+
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
@@ -163,11 +182,21 @@ class MessageComposerPresenter @Inject constructor(
                 }
                 MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
-                    cameraPhotoPicker.launch()
+                    if (cameraPermissionState.permissionGranted) {
+                        cameraPhotoPicker.launch()
+                    } else {
+                        pendingEvent = event
+                        cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
+                    }
                 }
                 MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
-                    cameraVideoPicker.launch()
+                    if (cameraPermissionState.permissionGranted) {
+                        cameraVideoPicker.launch()
+                    } else {
+                        pendingEvent = event
+                        cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
+                    }
                 }
                 MessageComposerEvents.PickAttachmentSource.Location -> {
                     showAttachmentSourcePicker = false
@@ -301,16 +330,16 @@ class MessageComposerPresenter @Inject constructor(
         }
         mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback).getOrThrow()
     }
-    .onSuccess {
-        attachmentState.value = AttachmentsState.None
-    }
-    .onFailure { cause ->
-        attachmentState.value = AttachmentsState.None
-        if (cause is CancellationException) {
-            throw cause
-        } else {
-            val snackbarMessage = SnackbarMessage(sendAttachmentError(cause))
-            snackbarDispatcher.post(snackbarMessage)
+        .onSuccess {
+            attachmentState.value = AttachmentsState.None
         }
-    }
+        .onFailure { cause ->
+            attachmentState.value = AttachmentsState.None
+            if (cause is CancellationException) {
+                throw cause
+            } else {
+                val snackbarMessage = SnackbarMessage(sendAttachmentError(cause))
+                snackbarDispatcher.post(snackbarMessage)
+            }
+        }
 }

@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.permissions.api
+package io.element.android.libraries.permissions.impl.action
 
-sealed interface PermissionsEvents {
-    data object RequestPermissions : PermissionsEvents
-    data object CloseDialog : PermissionsEvents
-    data object OpenSystemSettingAndCloseDialog : PermissionsEvents
+import android.content.Context
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidutils.system.openAppSettingsPage
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
+import javax.inject.Inject
+
+@ContributesBinding(AppScope::class)
+class AndroidPermissionActions @Inject constructor(
+    @ApplicationContext private val context: Context
+) : PermissionActions {
+
+    override fun openSettings() {
+        context.openAppSettingsPage()
+    }
 }

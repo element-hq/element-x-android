@@ -19,6 +19,7 @@ package io.element.android.features.preferences.impl.user.editprofile
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.permissions.api.aPermissionsState
 import kotlinx.collections.immutable.persistentListOf
 
 open class EditUserProfileStateProvider : PreviewParameterProvider<EditUserProfileState> {
@@ -36,5 +37,6 @@ fun aEditUserProfileState() = EditUserProfileState(
     avatarActions = persistentListOf(),
     saveAction = Async.Uninitialized,
     saveButtonEnabled = true,
+    cameraPermissionState = aPermissionsState(showDialog = false),
     eventSink = {}
 )

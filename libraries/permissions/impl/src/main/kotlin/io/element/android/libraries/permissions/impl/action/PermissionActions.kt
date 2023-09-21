@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.permissions.api
+package io.element.android.libraries.permissions.impl.action
 
-sealed interface PermissionsEvents {
-    data object RequestPermissions : PermissionsEvents
-    data object CloseDialog : PermissionsEvents
-    data object OpenSystemSettingAndCloseDialog : PermissionsEvents
+interface PermissionActions {
+    fun openSettings()
 }
