@@ -146,6 +146,7 @@
   <string name="common_verification_complete">"Verification complete"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Waiting…"</string>
+  <string name="common_poll_summary">"Poll: %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Warning"</string>
   <string name="emoji_picker_category_activity">"Activities"</string>

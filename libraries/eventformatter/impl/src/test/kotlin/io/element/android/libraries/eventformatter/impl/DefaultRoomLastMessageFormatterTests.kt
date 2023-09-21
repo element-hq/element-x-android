@@ -773,10 +773,10 @@ class DefaultRoomLastMessageFormatterTests {
         val pollContent = aPollContent()
 
         val mineContentEvent = createRoomEvent(sentByYou = true, senderDisplayName = "Alice", content = pollContent)
-        Truth.assertThat(formatter.format(mineContentEvent, true)).isEqualTo("Do you like polls?")
+        Truth.assertThat(formatter.format(mineContentEvent, true)).isEqualTo("Poll: Do you like polls?")
 
         val contentEvent = createRoomEvent(sentByYou = false, senderDisplayName = "Bob", content = pollContent)
-        Truth.assertThat(formatter.format(contentEvent, true)).isEqualTo("Do you like polls?")
+        Truth.assertThat(formatter.format(contentEvent, true)).isEqualTo("Poll: Do you like polls?")
     }
 
     @Test
@@ -785,10 +785,10 @@ class DefaultRoomLastMessageFormatterTests {
         val pollContent = aPollContent()
 
         val mineContentEvent = createRoomEvent(sentByYou = true, senderDisplayName = "Alice", content = pollContent)
-        Truth.assertThat(formatter.format(mineContentEvent, false).toString()).isEqualTo("Alice: Do you like polls?")
+        Truth.assertThat(formatter.format(mineContentEvent, false).toString()).isEqualTo("Alice: Poll: Do you like polls?")
 
         val contentEvent = createRoomEvent(sentByYou = false, senderDisplayName = "Bob", content = pollContent)
-        Truth.assertThat(formatter.format(contentEvent, false).toString()).isEqualTo("Bob: Do you like polls?")
+        Truth.assertThat(formatter.format(contentEvent, false).toString()).isEqualTo("Bob: Poll: Do you like polls?")
     }
 
     // endregion

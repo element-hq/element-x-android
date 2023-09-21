@@ -96,7 +96,8 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
             }
             is PollContent -> {
-                prefixIfNeeded(content.question, senderDisplayName, isDmRoom)
+                val message = sp.getString(CommonStrings.common_poll_summary, content.question)
+                prefixIfNeeded(message, senderDisplayName, isDmRoom)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
                 prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
