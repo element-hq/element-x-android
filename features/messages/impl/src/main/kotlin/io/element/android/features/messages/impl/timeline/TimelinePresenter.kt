@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import im.vector.app.features.analytics.plan.PollVote
+import io.element.android.features.messages.api.TimelineItemPresenter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
@@ -44,6 +45,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Provider
 
 private const val BACK_PAGINATION_EVENT_LIMIT = 20
 private const val BACK_PAGINATION_PAGE_SIZE = 50
@@ -54,6 +56,7 @@ class TimelinePresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
+    private val contentPresenterFactories: Map<String, Provider<TimelineItemPresenter>>,
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline
