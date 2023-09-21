@@ -3,6 +3,8 @@
 style:
   AlsoCouldBeApply:
     active: true
+  OptionalWhenBraces:
+    active: false
   CascadingCallWrapping:
     active: true
     includeElvis: true
@@ -124,7 +126,7 @@ potential-bugs:
     allowExplicitReturnType: false
   MissingPackageDeclaration:
     active: true
-    excludes: ['**/*.kts']
+    excludes: [ '**/*.kts' ]
   NullCheckOnMutableProperty:
     active: true
   NullableToStringCall:
@@ -173,7 +175,7 @@ naming:
     active: true
   FunctionNaming:
     active: true
-    ignoreAnnotated: ['Composable']
+    ignoreAnnotated: [ 'Composable' ]
   LambdaParameterNaming:
     active: true
   NonBooleanPropertyPrefixedWithIs:
@@ -234,7 +236,7 @@ Compose:
     active: true
   MultipleEmitters:
     active: true
-      # You can optionally add your own composables here
+    # You can optionally add your own composables here
     # contentEmitters: MyComposable,MyOtherComposable
   MutableParams:
     active: true
