@@ -22,16 +22,18 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 open class PermissionsViewStateProvider : PreviewParameterProvider<PermissionsState> {
     override val values: Sequence<PermissionsState>
         get() = sequenceOf(
-            aPermissionsState(showDialog = true),
-            aPermissionsState(showDialog = true).copy(shouldShowRationale = true),
-            aPermissionsState(showDialog = true).copy(permissionAlreadyDenied = true),
+            aPermissionsState(showDialog = true, permission = Manifest.permission.POST_NOTIFICATIONS),
+            aPermissionsState(showDialog = true, permission = Manifest.permission.CAMERA),
+            aPermissionsState(showDialog = true, permission = Manifest.permission.RECORD_AUDIO),
+            aPermissionsState(showDialog = true, permission = Manifest.permission.INTERNET),
         )
 }
 
 fun aPermissionsState(
     showDialog: Boolean,
+    permission: String = Manifest.permission.POST_NOTIFICATIONS
 ) = PermissionsState(
-    permission = Manifest.permission.INTERNET,
+    permission = permission,
     permissionGranted = false,
     shouldShowRationale = false,
     showDialog = showDialog,

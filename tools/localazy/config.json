@@ -51,6 +51,12 @@
       ]
     },
     {
+      "name": ":libraries:permissions:api",
+      "includeRegex": [
+        "dialog\\.permission_.*"
+      ]
+    },
+    {
       "name": ":libraries:androidutils",
       "includeRegex": [
         "error_no_compatible_app_found"
