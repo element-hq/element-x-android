@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_hide_password">"Скрыть пароль"</string>
+  <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
+  <string name="a11y_notifications_muted">"Звук отключен"</string>
+  <string name="a11y_poll">"Опрос"</string>
+  <string name="a11y_poll_end">"Опрос завершен"</string>
   <string name="a11y_send_files">"Отправить файлы"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
@@ -23,6 +27,7 @@
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редактировать"</string>
   <string name="action_enable">"Включить"</string>
+  <string name="action_end_poll">"Завершить опрос"</string>
   <string name="action_forgot_password">"Забыли пароль?"</string>
   <string name="action_forward">"Переслать"</string>
   <string name="action_invite">"Пригласить"</string>
@@ -33,6 +38,8 @@
   <string name="action_learn_more">"Подробнее"</string>
   <string name="action_leave">"Выйти"</string>
   <string name="action_leave_room">"Покинуть комнату"</string>
+  <string name="action_manage_account">"Настройки аккаунта"</string>
+  <string name="action_manage_devices">"Управление устройствами"</string>
   <string name="action_next">"Далее"</string>
   <string name="action_no">"Нет"</string>
   <string name="action_not_now">"Не сейчас"</string>
@@ -43,6 +50,7 @@
   <string name="action_react">"Реакция"</string>
   <string name="action_remove">"Удалить"</string>
   <string name="action_reply">"Ответить"</string>
+  <string name="action_reply_in_thread">"Ответить в теме"</string>
   <string name="action_report_bug">"Сообщить об ошибке"</string>
   <string name="action_report_content">"Пожаловаться на содержание"</string>
   <string name="action_retry">"Повторить"</string>
@@ -63,6 +71,7 @@
   <string name="action_yes">"Да"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
+  <string name="common_advanced_settings">"Дополнительные параметры"</string>
   <string name="common_analytics">"Аналитика"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_bubbles">"Пузыри"</string>
@@ -81,6 +90,7 @@
   <string name="common_forward_message">"Переслать сообщение"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Изображения"</string>
+  <string name="common_in_reply_to">"В ответ на %1$s"</string>
   <string name="common_invite_unknown_profile">"Идентификатор Matrix ID не найден, приглашение может быть не получено."</string>
   <string name="common_leaving_room">"Покинуть комнату"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
@@ -98,11 +108,13 @@
   <string name="common_poll_total_votes">"Всего голосов: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Результаты будут показаны после завершения опроса"</string>
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
+  <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
   <string name="common_refreshing">"Обновление…"</string>
   <string name="common_replying_to">"Отвечает на %1$s"</string>
   <string name="common_report_a_bug">"Сообщить об ошибке"</string>
   <string name="common_report_submitted">"Отчет отправлен"</string>
+  <string name="common_rich_text_editor">"Редактор форматированного текста"</string>
   <string name="common_room_name">"Название комнаты"</string>
   <string name="common_room_name_placeholder">"например, название вашего проекта"</string>
   <string name="common_search_for_someone">"Поиск человека"</string>
@@ -119,7 +131,9 @@
   <string name="common_success">"Успешно"</string>
   <string name="common_suggestions">"Рекомендации"</string>
   <string name="common_syncing">"Синхронизация"</string>
+  <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Уведомление о третьей стороне"</string>
+  <string name="common_thread">"Обсуждение"</string>
   <string name="common_topic">"Тема"</string>
   <string name="common_topic_placeholder">"О чем эта комната?"</string>
   <string name="common_unable_to_decrypt">"Невозможно расшифровать"</string>

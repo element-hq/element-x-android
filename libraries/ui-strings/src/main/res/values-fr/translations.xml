@@ -9,6 +9,7 @@
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
   <string name="action_accept">"Accepter"</string>
+  <string name="action_add_to_timeline">"Ajouter à la chronologie"</string>
   <string name="action_back">"Retour"</string>
   <string name="action_cancel">"Annuler"</string>
   <string name="action_choose_photo">"Choisissez une photo"</string>
@@ -44,6 +45,7 @@
   <string name="action_no">"Non"</string>
   <string name="action_not_now">"Pas maintenant"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_settings">"Ouvrir les paramètres"</string>
   <string name="action_open_with">"Ouvrir avec"</string>
   <string name="action_quick_reply">"Réponse rapide"</string>
   <string name="action_quote">"Citer"</string>
@@ -105,6 +107,7 @@
   <string name="common_password">"Mot de passe"</string>
   <string name="common_people">"Personnes"</string>
   <string name="common_permalink">"Permalien"</string>
+  <string name="common_permission">"Autorisation"</string>
   <string name="common_poll_total_votes">"Nombre total de votes : %1$s"</string>
   <string name="common_poll_undisclosed_text">"Les résultats s’afficheront une fois le sondage terminé"</string>
   <string name="common_privacy_policy">"Politique de confidentialité"</string>
@@ -146,6 +149,7 @@
   <string name="common_verification_complete">"Vérification terminée"</string>
   <string name="common_video">"Vidéo"</string>
   <string name="common_waiting">"En attente…"</string>
+  <string name="common_poll_summary">"Sondage : %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Attention"</string>
   <string name="emoji_picker_category_activity">"Activités"</string>

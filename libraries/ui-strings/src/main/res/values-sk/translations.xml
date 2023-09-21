@@ -9,6 +9,7 @@
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
   <string name="action_accept">"Prijať"</string>
+  <string name="action_add_to_timeline">"Pridať na časovú os"</string>
   <string name="action_back">"Späť"</string>
   <string name="action_cancel">"Zrušiť"</string>
   <string name="action_choose_photo">"Vybrať fotku"</string>
