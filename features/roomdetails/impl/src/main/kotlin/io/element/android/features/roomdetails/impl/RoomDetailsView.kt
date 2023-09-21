@@ -62,7 +62,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.preview.LargeHeightPreview
+import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -388,12 +388,12 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
     }
 }
 
-@LargeHeightPreview
+@PreviewWithLargeHeight
 @Composable
 internal fun RoomDetailsPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
-@LargeHeightPreview
+@PreviewWithLargeHeight
 @Composable
 internal fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }
