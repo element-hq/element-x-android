@@ -59,6 +59,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
+@Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
 class DefaultRoomLastMessageFormatterTests {
 
