@@ -98,12 +98,12 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
 
         LaunchedEffect(this) {
             if (permissionState.status.isGranted) {
-                // User may have granted permission from the settings, to reset the store regarding this permission
+                // User may have granted permission from the settings, so reset the store regarding this permission
                 permissionsStore.resetPermission(permission)
             }
         }
 
-        val showDialog = rememberSaveable { mutableStateOf(permissionState.status !is PermissionStatus.Granted) }
+        val showDialog = rememberSaveable { mutableStateOf(false) }
 
         fun handleEvents(event: PermissionsEvents) {
             when (event) {
@@ -111,8 +111,11 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
                     showDialog.value = false
                 }
                 PermissionsEvents.OpenSystemDialog -> {
-                    permissionState.launchPermissionRequest()
-                    showDialog.value = false
+                    if (permissionState.status !is PermissionStatus.Granted && isAlreadyDenied) {
+                        showDialog.value = true
+                    } else {
+                        permissionState.launchPermissionRequest()
+                    }
                 }
             }
         }
