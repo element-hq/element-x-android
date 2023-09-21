@@ -70,6 +70,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
+@Suppress("LargeClass")
 class MessageComposerPresenterTest {
 
     @get:Rule
