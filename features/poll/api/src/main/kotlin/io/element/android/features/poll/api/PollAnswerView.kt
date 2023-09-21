@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
@@ -108,7 +108,7 @@ internal fun PollAnswerView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollAnswerDisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
@@ -116,7 +116,7 @@ internal fun PollAnswerDisclosedNotSelectedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollAnswerDisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
@@ -124,7 +124,7 @@ internal fun PollAnswerDisclosedSelectedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
@@ -132,7 +132,7 @@ internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollAnswerUndisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
@@ -140,7 +140,7 @@ internal fun PollAnswerUndisclosedSelectedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementPreview {
     PollAnswerView(
@@ -148,7 +148,7 @@ internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollAnswerEndedWinnerSelectedPreview() = ElementPreview {
     PollAnswerView(
@@ -156,7 +156,7 @@ internal fun PollAnswerEndedWinnerSelectedPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PollAnswerEndedSelectedPreview() = ElementPreview {
     PollAnswerView(

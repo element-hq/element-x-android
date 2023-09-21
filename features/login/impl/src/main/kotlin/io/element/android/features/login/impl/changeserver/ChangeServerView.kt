@@ -25,7 +25,7 @@ import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 
 @Composable
@@ -68,7 +68,7 @@ fun ChangeServerView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ChangeServerViewPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) = ElementPreview {
     ChangeServerView(

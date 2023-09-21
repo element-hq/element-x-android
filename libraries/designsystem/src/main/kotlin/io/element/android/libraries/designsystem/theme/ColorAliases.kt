@@ -19,7 +19,7 @@ package io.element.android.libraries.designsystem.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.theme.compound.generated.SemanticColors
@@ -98,7 +98,7 @@ val SemanticColors.bgSubtleTertiary
 val SemanticColors.temporaryColorBgSpecial
     get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {
     ColorListPreview(

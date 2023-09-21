@@ -80,7 +80,7 @@ import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
@@ -627,7 +627,7 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowPreview() = ElementPreview {
     Column {
@@ -679,7 +679,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
     Column {
@@ -753,7 +753,7 @@ private fun aInReplyToReady(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowTimestampPreview(
     @PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event
@@ -793,7 +793,7 @@ internal fun TimelineItemEventRowTimestampPreview(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
     Column {

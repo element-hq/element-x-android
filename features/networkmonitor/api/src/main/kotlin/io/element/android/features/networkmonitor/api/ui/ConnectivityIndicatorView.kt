@@ -48,7 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -162,7 +162,7 @@ private fun StatusBarPaddingSpacer(modifier: Modifier = Modifier) {
     Spacer(modifier = modifier.statusBarsPadding())
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ConnectivityIndicatorViewPreview() {
     ElementPreview {

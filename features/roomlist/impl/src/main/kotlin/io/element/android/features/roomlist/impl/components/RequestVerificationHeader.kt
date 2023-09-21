@@ -31,7 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
@@ -90,7 +90,7 @@ internal fun RequestVerificationHeader(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun RequestVerificationHeaderPreview() = ElementPreview {
     RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})

@@ -49,7 +49,7 @@ import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
 import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.emojibasebindings.EmojibaseStore
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -132,7 +132,7 @@ fun EmojiPicker(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun EmojiPickerPreview() = ElementPreview {
     EmojiPicker(

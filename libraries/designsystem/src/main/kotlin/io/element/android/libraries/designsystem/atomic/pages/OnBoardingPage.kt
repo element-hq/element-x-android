@@ -30,7 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
@@ -87,7 +87,7 @@ fun OnBoardingPage(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun OnBoardingPagePreview() = ElementPreview {
     OnBoardingPage(

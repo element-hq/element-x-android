@@ -51,4 +51,4 @@ const val DAY_MODE_NAME = "D"
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1f,
 )
-annotation class DayNightPreviews
+annotation class PreviewsDayNight

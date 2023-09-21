@@ -69,7 +69,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
@@ -410,7 +410,7 @@ private fun EmojiButton(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun SheetContentPreview(
     @PreviewParameter(ActionListStateProvider::class) state: ActionListState

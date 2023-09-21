@@ -59,7 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension.Companion.fillToConstraints
 import androidx.constraintlayout.compose.Visibility
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -611,7 +611,7 @@ private fun SendButton(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerSimplePreview() = ElementPreview {
     Column {
@@ -655,7 +655,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerFormattingPreview() = ElementPreview {
     Column {
@@ -683,7 +683,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
     TextComposer(
@@ -696,7 +696,7 @@ internal fun TextComposerEditPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TextComposerReplyPreview() = ElementPreview {
     Column {

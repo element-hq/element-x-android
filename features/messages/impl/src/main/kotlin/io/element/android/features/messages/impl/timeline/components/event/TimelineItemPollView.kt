@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
 import io.element.android.features.poll.api.PollContentView
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.collections.immutable.toImmutableList
@@ -44,7 +44,7 @@ fun TimelineItemPollView(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollContentProvider::class) content: TimelineItemPollContent) =
     ElementPreview {
