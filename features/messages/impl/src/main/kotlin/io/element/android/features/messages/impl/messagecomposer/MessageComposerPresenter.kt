@@ -186,7 +186,7 @@ class MessageComposerPresenter @Inject constructor(
                         cameraPhotoPicker.launch()
                     } else {
                         pendingEvent = event
-                        cameraPermissionState.eventSink(PermissionsEvents.AskPermissionToUser)
+                        cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
                     }
                 }
                 MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.launch {
@@ -195,7 +195,7 @@ class MessageComposerPresenter @Inject constructor(
                         cameraVideoPicker.launch()
                     } else {
                         pendingEvent = event
-                        cameraPermissionState.eventSink(PermissionsEvents.AskPermissionToUser)
+                        cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
                     }
                 }
                 MessageComposerEvents.PickAttachmentSource.Location -> {

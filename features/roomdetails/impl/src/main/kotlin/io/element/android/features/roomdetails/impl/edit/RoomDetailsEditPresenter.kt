@@ -128,7 +128,7 @@ class RoomDetailsEditPresenter @Inject constructor(
                             cameraPhotoPicker.launch()
                         } else {
                             pendingPermissionRequest = true
-                            cameraPermissionState.eventSink(PermissionsEvents.AskPermissionToUser)
+                            cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
                         }
                         AvatarAction.Remove -> roomAvatarUri = null
                     }
