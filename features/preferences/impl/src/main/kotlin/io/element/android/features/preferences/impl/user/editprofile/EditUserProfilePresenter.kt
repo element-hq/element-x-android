@@ -18,6 +18,7 @@ package io.element.android.features.preferences.impl.user.editprofile
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -55,6 +56,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
 ) : Presenter<EditUserProfileState> {
 
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
+    private var pendingPermissionRequest = false
 
     @AssistedFactory
     interface Factory {
@@ -83,6 +85,13 @@ class EditUserProfilePresenter @AssistedInject constructor(
             }
         }
 
+        LaunchedEffect(cameraPermissionState.permissionGranted) {
+            if (cameraPermissionState.permissionGranted && pendingPermissionRequest) {
+                pendingPermissionRequest = false
+                cameraPhotoPicker.launch()
+            }
+        }
+
         val saveAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: EditUserProfileEvents) {
@@ -94,6 +103,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
                         AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
                             cameraPhotoPicker.launch()
                         } else {
+                            pendingPermissionRequest = true
                             cameraPermissionState.eventSink.invoke(PermissionsEvents.AskPermissionToUser)
                         }
                         AvatarAction.Remove -> userAvatarUri = null

@@ -55,6 +55,7 @@ class RoomDetailsEditPresenter @Inject constructor(
 ) : Presenter<RoomDetailsEditState> {
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
+    private var pendingPermissionRequest = false
 
     @Composable
     override fun present(): RoomDetailsEditState {
@@ -98,6 +99,13 @@ class RoomDetailsEditPresenter @Inject constructor(
             onResult = { uri -> if (uri != null) roomAvatarUri = uri }
         )
 
+        LaunchedEffect(cameraPermissionState.permissionGranted) {
+            if (cameraPermissionState.permissionGranted && pendingPermissionRequest) {
+                pendingPermissionRequest = false
+                cameraPhotoPicker.launch()
+            }
+        }
+
         val avatarActions by remember(roomAvatarUri) {
             derivedStateOf {
                 listOfNotNull(
@@ -119,6 +127,7 @@ class RoomDetailsEditPresenter @Inject constructor(
                         AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
                             cameraPhotoPicker.launch()
                         } else {
+                            pendingPermissionRequest = true
                             cameraPermissionState.eventSink(PermissionsEvents.AskPermissionToUser)
                         }
                         AvatarAction.Remove -> roomAvatarUri = null

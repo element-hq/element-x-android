@@ -18,6 +18,7 @@ package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -58,6 +59,7 @@ class ConfigureRoomPresenter @Inject constructor(
 ) : Presenter<ConfigureRoomState> {
 
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
+    private var pendingPermissionRequest = false
 
     @Composable
     override fun present(): ConfigureRoomState {
@@ -78,6 +80,13 @@ class ConfigureRoomPresenter @Inject constructor(
                     AvatarAction.ChoosePhoto,
                     AvatarAction.Remove.takeIf { createRoomConfig.value.avatarUri != null },
                 ).toImmutableList()
+            }
+        }
+
+        LaunchedEffect(cameraPermissionState.permissionGranted) {
+            if (cameraPermissionState.permissionGranted && pendingPermissionRequest) {
+                pendingPermissionRequest = false
+                cameraPhotoPicker.launch()
             }
         }
 
@@ -102,6 +111,7 @@ class ConfigureRoomPresenter @Inject constructor(
                         AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
                             cameraPhotoPicker.launch()
                         } else {
+                            pendingPermissionRequest = true
                             cameraPermissionState.eventSink(PermissionsEvents.AskPermissionToUser)
                         }
                         AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
