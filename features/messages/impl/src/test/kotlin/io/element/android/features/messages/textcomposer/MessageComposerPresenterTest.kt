@@ -489,6 +489,42 @@ class MessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - create poll`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createPresenter(this, room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.AddAttachment)
+            val attachmentOpenState = awaitItem()
+            assertThat(attachmentOpenState.showAttachmentSourcePicker).isTrue()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
+            val finalState = awaitItem()
+            assertThat(finalState.showAttachmentSourcePicker).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - share location`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createPresenter(this, room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.AddAttachment)
+            val attachmentOpenState = awaitItem()
+            assertThat(attachmentOpenState.showAttachmentSourcePicker).isTrue()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
+            val finalState = awaitItem()
+            assertThat(finalState.showAttachmentSourcePicker).isFalse()
+        }
+    }
+
+    @Test
     fun `present - Take photo`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(this, room = room)
