@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_bullet_list">"Переключить список маркеров"</string>
+  <string name="rich_text_editor_close_formatting_options">"Закрыть параметры форматирования"</string>
   <string name="rich_text_editor_code_block">"Переключить блок кода"</string>
   <string name="rich_text_editor_composer_placeholder">"Сообщение"</string>
+  <string name="rich_text_editor_create_link">"Создать ссылку"</string>
+  <string name="rich_text_editor_edit_link">"Редактировать ссылку"</string>
   <string name="rich_text_editor_format_bold">"Применить жирный шрифт"</string>
   <string name="rich_text_editor_format_italic">"Применить курсивный формат"</string>
   <string name="rich_text_editor_format_strikethrough">"Применить формат зачеркивания"</string>
@@ -12,7 +15,10 @@
   <string name="rich_text_editor_inline_code">"Применить встроенный формат кода"</string>
   <string name="rich_text_editor_link">"Установить ссылку"</string>
   <string name="rich_text_editor_numbered_list">"Переключить нумерованный список"</string>
+  <string name="rich_text_editor_open_compose_options">"Открыть параметры компоновки"</string>
   <string name="rich_text_editor_quote">"Переключить цитату"</string>
+  <string name="rich_text_editor_remove_link">"Удалить ссылку"</string>
   <string name="rich_text_editor_unindent">"Без отступа"</string>
+  <string name="rich_text_editor_url_placeholder">"Ссылка"</string>
   <string name="rich_text_editor_a11y_add_attachment">"Прикрепить файл"</string>
 </resources>
