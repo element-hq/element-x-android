@@ -110,4 +110,9 @@ class RustNotificationSettingsService(
             notificationSettings.setCallEnabled(enabled)
         }
     }
+
+    override suspend fun getRoomsWithUserDefinedRules(): Result<List<String>> =
+        runCatching {
+            notificationSettings.getRoomsWithUserDefinedRules(enabled = true)
+        }
 }

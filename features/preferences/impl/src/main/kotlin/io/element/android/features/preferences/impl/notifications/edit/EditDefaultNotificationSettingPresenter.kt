@@ -26,19 +26,25 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.text.Collator
 import kotlin.time.Duration.Companion.seconds
 
 class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     private val notificationSettingsService: NotificationSettingsService,
     @Assisted private val isOneToOne: Boolean,
+    private val roomListService: RoomListService,
+    private val matrixClient: MatrixClient,
 ) : Presenter<EditDefaultNotificationSettingState> {
     @AssistedFactory
     interface Factory {
@@ -50,10 +56,16 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
         val mode: MutableState<RoomNotificationMode?> = remember {
             mutableStateOf(null)
         }
+
+        val roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>> = remember {
+            mutableStateOf(listOf())
+        }
+
         val localCoroutineScope = rememberCoroutineScope()
         LaunchedEffect(Unit) {
             fetchSettings(mode)
             observeNotificationSettings(mode)
+            observeRoomSummaries(roomsWithUserDefinedMode)
         }
 
         fun handleEvents(event: EditDefaultNotificationSettingStateEvents) {
@@ -65,6 +77,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
         return EditDefaultNotificationSettingState(
             isOneToOne = isOneToOne,
             mode = mode.value,
+            roomsWithUserDefinedMode = roomsWithUserDefinedMode.value,
             eventSink = ::handleEvents
         )
     }
@@ -81,6 +94,27 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
                 fetchSettings(mode)
             }
             .launchIn(this)
+    }
+
+    private fun CoroutineScope.observeRoomSummaries(roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>) {
+        roomListService.allRooms()
+            .summaries
+            .onEach {
+                updateRoomsWithUserDefinedMode(it, roomsWithUserDefinedMode)
+            }
+            .launchIn(this)
+    }
+
+    private fun CoroutineScope.updateRoomsWithUserDefinedMode(summaries: List<RoomSummary>, roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>) = launch {
+        val roomWithUserDefinedRules = notificationSettingsService.getRoomsWithUserDefinedRules().getOrThrow().toSet()
+        roomsWithUserDefinedMode.value = summaries
+            .filterIsInstance<RoomSummary.Filled>()
+            .filter {
+                val room = matrixClient.getRoom(it.details.roomId) ?: return@filter false
+                roomWithUserDefinedRules.contains(it.identifier()) && isOneToOne == room.isOneToOne
+            }
+            // locale sensitive sorting
+            .sortedWith(compareBy(Collator.getInstance()){ it.details.name })
     }
 
     private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode) = launch {
