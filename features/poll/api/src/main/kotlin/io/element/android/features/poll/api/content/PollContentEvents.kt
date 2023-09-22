@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model.event
+package io.element.android.features.poll.api.content
 
-import io.element.android.features.poll.api.PollAnswerItem
-import io.element.android.features.poll.api.content.PollContentPresenter
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.poll.PollKind
 
-data class TimelineItemPollContent(
-    val eventId: EventId?,
-    val question: String,
-    val answerItems: List<PollAnswerItem>,
-    val pollKind: PollKind,
-    val isEnded: Boolean,
-    val presenter: PollContentPresenter,
-) : TimelineItemEventContent {
-    override val type: String = "TimelineItemPollContent"
+sealed interface PollContentEvents {
+    data class OnPollAnswerSelected(
+        val pollStartId: EventId,
+        val answerId: String
+    ) : PollContentEvents
+
+    data object OnPollEndClicked : PollContentEvents
 }

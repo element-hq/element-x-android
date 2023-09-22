@@ -95,6 +95,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemPollContent -> TimelineItemPollView(
             content = content,
+            state = content.presenter.present(),
             onAnswerSelected = onPollAnswerSelected,
             modifier = modifier,
         )

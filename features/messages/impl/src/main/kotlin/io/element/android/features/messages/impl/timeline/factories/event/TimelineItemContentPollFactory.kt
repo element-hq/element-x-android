@@ -20,6 +20,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.poll.api.PollAnswerItem
+import io.element.android.features.poll.api.content.PollContentPresenter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -31,6 +32,7 @@ import javax.inject.Inject
 class TimelineItemContentPollFactory @Inject constructor(
     private val matrixClient: MatrixClient,
     private val featureFlagService: FeatureFlagService,
+    private val pollContentPresenterFactory: PollContentPresenter.Factory,
 ) {
 
     suspend fun create(
@@ -76,6 +78,7 @@ class TimelineItemContentPollFactory @Inject constructor(
             answerItems = answerItems,
             pollKind = content.kind,
             isEnded = isEndedPoll,
+            presenter = pollContentPresenterFactory.create(content)
         )
     }
 }

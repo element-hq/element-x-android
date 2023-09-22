@@ -16,12 +16,16 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.poll.api.PollAnswerItem
+import io.element.android.features.poll.api.content.PollContentPresenter
+import io.element.android.features.poll.api.content.PollContentState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 
 open class TimelineItemLocationContentProvider : PreviewParameterProvider<TimelineItemLocationContent> {
     override val values: Sequence<TimelineItemLocationContent>
@@ -68,4 +72,24 @@ fun aTimelineItemPollContent(
     ),
     pollKind = PollKind.Disclosed,
     isEnded = isEnded,
+    presenter = aPollContentPresenter(),
 )
+
+fun aPollContentPresenter() = object: PollContentPresenter {
+    @Composable
+    override fun present(): PollContentState {
+        return PollContentState(
+            content = PollContent(
+                question = "ea",
+                kind = PollKind.Disclosed,
+                maxSelections = 1u,
+                answers = listOf(),
+                votes = mapOf(),
+                endTime = null
+            ),
+            someRandomString = "saperet",
+            someState = false,
+            eventSink = {}
+        )
+    }
+}
