@@ -1,3 +1,12 @@
+Changes in Element X v0.2.2 (2023-09-21)
+========================================
+
+Bugfixes 🐛
+----------
+ - Add animation when rendering the timeline to avoid glitches. ([#1323](https://github.com/vector-im/element-x-android/issues/1323))
+ - Fix crash when trying to take a photo or record a video. ([#1395](https://github.com/vector-im/element-x-android/issues/1395))
+
+
 Changes in Element X v0.2.1 (2023-09-20)
 ========================================
 
