@@ -136,7 +136,7 @@ fun TextComposer(
                     modifier = Modifier.size(30.dp.applyScaleUp()),
                     resourceId = CommonDrawables.ic_plus,
                     contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
-                    tint = ElementTheme.colors.iconPrimary,
+                    tint = ElementTheme.materialColors.primary,
                 )
             }
             val roundCornerSmall = 20.dp.applyScaleUp()
@@ -157,9 +157,9 @@ fun TextComposer(
                 label = "roundedCornerSizeAnimation"
             )
             val roundedCorners = RoundedCornerShape(roundedCornerSizeState.value)
-            val colors = ElementTheme.colors
-            val bgColor = colors.bgSubtleSecondary
-            val borderColor = colors.borderDisabled
+            val colors = ElementTheme.materialColors
+            val bgColor = colors.secondaryContainer
+            val borderColor = colors.outlineVariant
 
             Column(
                 modifier = Modifier
@@ -259,7 +259,7 @@ private fun TextInput(
             Text(
                 placeholder,
                 style = defaultTypography.copy(
-                    color = ElementTheme.colors.textSecondary,
+                    color = ElementTheme.materialColors.secondary,
                 ),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -306,7 +306,7 @@ private fun TextFormatting(
                 modifier = Modifier.size(30.dp.applyScaleUp()),
                 resourceId = CommonDrawables.ic_cancel,
                 contentDescription = stringResource(CommonStrings.action_close),
-                tint = ElementTheme.colors.iconPrimary,
+                tint = ElementTheme.materialColors.primary,
             )
         }
 
@@ -595,7 +595,7 @@ private fun SendButton(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(36.dp.applyScaleUp())
-                .background(if (canSendMessage) ElementTheme.colors.iconAccentTertiary else Color.Transparent)
+                .background(if (canSendMessage) ElementTheme.materialColors.tertiary else Color.Transparent)
         ) {
             Icon(
                 modifier = Modifier
@@ -605,7 +605,7 @@ private fun SendButton(
                 resourceId = iconId,
                 contentDescription = contentDescription,
                 // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
-                tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled
+                tint = if (canSendMessage) ElementTheme.materialColors.onTertiary else ElementTheme.materialColors.surfaceVariant
             )
         }
     }
