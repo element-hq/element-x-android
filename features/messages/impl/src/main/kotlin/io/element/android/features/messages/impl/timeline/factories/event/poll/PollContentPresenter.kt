@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.api.content
+package io.element.android.features.messages.impl.timeline.factories.event.poll
 
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent

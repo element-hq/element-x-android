@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl.content
+package io.element.android.features.messages.impl.timeline.factories.event.poll
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,9 +25,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.poll.api.content.PollContentEvents
-import io.element.android.features.poll.api.content.PollContentPresenter
-import io.element.android.features.poll.api.content.PollContentState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent

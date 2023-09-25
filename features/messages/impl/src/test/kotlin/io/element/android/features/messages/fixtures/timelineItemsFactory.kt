@@ -21,7 +21,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentMessageFactory
-import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollFactory
+import io.element.android.features.messages.impl.timeline.factories.event.poll.TimelineItemContentPollFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentProfileChangeFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRedactedFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRoomMembershipFactory

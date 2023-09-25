@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.factories.event
+package io.element.android.features.messages.impl.timeline.factories.event.poll
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.poll.api.PollAnswerItem
-import io.element.android.features.poll.api.content.PollContentPresenter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient

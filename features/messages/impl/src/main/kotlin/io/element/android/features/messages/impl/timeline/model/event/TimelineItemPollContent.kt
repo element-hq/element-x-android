@@ -17,7 +17,7 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.features.poll.api.PollAnswerItem
-import io.element.android.features.poll.api.content.PollContentPresenter
+import io.element.android.features.messages.impl.timeline.factories.event.poll.PollContentPresenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
 

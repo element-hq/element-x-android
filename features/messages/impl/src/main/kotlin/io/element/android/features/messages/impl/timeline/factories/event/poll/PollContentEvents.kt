@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.api.content
+package io.element.android.features.messages.impl.timeline.factories.event.poll
 
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.core.EventId
 
-data class PollContentState(
-    val content: PollContent,
-    val someRandomString: String,
-    val someState: Boolean,
-    val eventSink: (event: PollContentEvents) -> Unit = {},
-)
+sealed interface PollContentEvents {
+    data class OnPollAnswerSelected(
+        val pollStartId: EventId,
+        val answerId: String
+    ) : PollContentEvents
+
+    data object OnPollEndClicked : PollContentEvents
+}

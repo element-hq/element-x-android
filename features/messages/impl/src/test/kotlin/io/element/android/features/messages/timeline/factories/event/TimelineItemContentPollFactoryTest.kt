@@ -17,7 +17,7 @@
 package io.element.android.features.messages.timeline.factories.event
 
 import com.google.common.truth.Truth
-import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollFactory
+import io.element.android.features.messages.impl.timeline.factories.event.poll.TimelineItemContentPollFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.poll.api.PollAnswerItem
 import io.element.android.libraries.featureflag.api.FeatureFlags

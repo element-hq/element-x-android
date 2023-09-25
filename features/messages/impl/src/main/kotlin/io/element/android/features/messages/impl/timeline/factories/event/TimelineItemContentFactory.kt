@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import io.element.android.features.messages.impl.timeline.factories.event.poll.TimelineItemContentPollFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem

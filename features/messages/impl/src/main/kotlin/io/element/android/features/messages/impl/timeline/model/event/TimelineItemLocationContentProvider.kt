@@ -20,8 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.poll.api.PollAnswerItem
-import io.element.android.features.poll.api.content.PollContentPresenter
-import io.element.android.features.poll.api.content.PollContentState
+import io.element.android.features.messages.impl.timeline.factories.event.poll.PollContentPresenter
+import io.element.android.features.messages.impl.timeline.factories.event.poll.PollContentState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
