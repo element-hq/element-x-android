@@ -123,7 +123,7 @@ class TimelinePresenter @Inject constructor(
             paginationState = paginationState,
             timelineItems = timelineItems,
             hasNewItems = hasNewItems.value,
-            eventSink = { handleEvents(it) }
+            eventSink = ::handleEvents
         )
     }
 
