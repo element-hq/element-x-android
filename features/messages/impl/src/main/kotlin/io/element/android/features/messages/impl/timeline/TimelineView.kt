@@ -103,10 +103,6 @@ fun TimelineView(
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
-    fun onPollAnswerSelected(pollStartId: EventId, answerId: String) {
-        state.eventSink(TimelineEvents.PollAnswerSelected(pollStartId, answerId))
-    }
-
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     val alpha by alphaAnimation(label = "alpha for timeline")
 
@@ -134,7 +130,7 @@ fun TimelineView(
                     onReactionLongClick = onReactionLongClicked,
                     onMoreReactionsClick = onMoreReactionsClicked,
                     onTimestampClicked = onTimestampClicked,
-                    onPollAnswerSelected = ::onPollAnswerSelected,
+                    eventSink = state.eventSink,
                     onSwipeToReply = onSwipeToReply,
                 )
             }
@@ -172,7 +168,7 @@ fun TimelineItemRow(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
-    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
+    eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
@@ -189,6 +185,7 @@ fun TimelineItemRow(
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = { onClick(timelineItem) },
                     onLongClick = { onLongClick(timelineItem) },
+                    eventSink = eventSink,
                     modifier = modifier,
                 )
             } else {
@@ -205,7 +202,7 @@ fun TimelineItemRow(
                     onMoreReactionsClick = onMoreReactionsClick,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = { onSwipeToReply(timelineItem) },
-                    onPollAnswerSelected = onPollAnswerSelected,
+                    eventSink = eventSink,
                     modifier = modifier,
                 )
             }
@@ -243,7 +240,7 @@ fun TimelineItemRow(
                                 onReactionClick = onReactionClick,
                                 onReactionLongClick = onReactionLongClick,
                                 onMoreReactionsClick = onMoreReactionsClick,
-                                onPollAnswerSelected = onPollAnswerSelected,
+                                eventSink = eventSink,
                                 onSwipeToReply = {},
                             )
                         }

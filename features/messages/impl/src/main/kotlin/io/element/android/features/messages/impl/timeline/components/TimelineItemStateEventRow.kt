@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.event.noExtraPadding
@@ -35,8 +36,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.util.defaultTimelineContentPadding
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 @Composable
 fun TimelineItemStateEventRow(
@@ -44,6 +45,7 @@ fun TimelineItemStateEventRow(
     isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -69,7 +71,7 @@ fun TimelineItemStateEventRow(
                 onClick = onClick,
                 onLongClick = onLongClick,
                 extraPadding = noExtraPadding,
-                onPollAnswerSelected = { _, _ -> error("Polls are not supported in state events") },
+                eventSink = eventSink,
                 modifier = Modifier.defaultTimelineContentPadding()
             )
         }
@@ -88,5 +90,6 @@ internal fun TimelineItemStateEventRowPreview() = ElementPreview {
         isHighlighted = false,
         onClick = {},
         onLongClick = {},
+        eventSink = {}
     )
 }
