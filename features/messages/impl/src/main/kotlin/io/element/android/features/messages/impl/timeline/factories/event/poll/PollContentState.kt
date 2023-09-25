@@ -16,10 +16,10 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event.poll
 
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 
 data class PollContentState(
-    val content: PollContent,
+    val content: TimelineItemPollContent,
     val someRandomString: String,
     val someState: Boolean,
     val eventSink: (event: PollContentEvents) -> Unit = {},

@@ -22,26 +22,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesBinding
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import javax.inject.Inject
 
-class PollContentPresenterImpl @AssistedInject constructor(
+@ContributesBinding(RoomScope::class)
+class PollContentPresenterImpl @Inject constructor(
     private val room: MatrixRoom,
-    @Assisted private val content: PollContent,
 ) : PollContentPresenter {
 
-    @ContributesBinding(RoomScope::class)
-    @AssistedFactory
-    interface Factory: PollContentPresenter.Factory {
-        override fun create(content: PollContent): PollContentPresenterImpl
-    }
-
     @Composable
-    override fun present(): PollContentState {
+    override fun present(content: TimelineItemPollContent): PollContentState {
 
         var someRandomString: String by rememberSaveable { mutableStateOf("someRandomString") }
         var someState: Boolean by rememberSaveable { mutableStateOf(false) }

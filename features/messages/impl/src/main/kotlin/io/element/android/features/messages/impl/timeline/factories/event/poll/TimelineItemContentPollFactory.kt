@@ -31,7 +31,7 @@ import javax.inject.Inject
 class TimelineItemContentPollFactory @Inject constructor(
     private val matrixClient: MatrixClient,
     private val featureFlagService: FeatureFlagService,
-    private val pollContentPresenterFactory: PollContentPresenter.Factory,
+    private val pollContentPresenter: PollContentPresenter,
 ) {
 
     suspend fun create(
@@ -77,7 +77,7 @@ class TimelineItemContentPollFactory @Inject constructor(
             answerItems = answerItems,
             pollKind = content.kind,
             isEnded = isEndedPoll,
-            presenter = pollContentPresenterFactory.create(content)
+            presenter = pollContentPresenter
         )
     }
 }

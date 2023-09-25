@@ -19,16 +19,15 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
-import io.element.android.features.poll.api.PollContentView
 import io.element.android.features.messages.impl.timeline.factories.event.poll.PollContentEvents
 import io.element.android.features.messages.impl.timeline.factories.event.poll.PollContentState
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
+import io.element.android.features.poll.api.PollContentView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
@@ -58,15 +57,8 @@ internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollConte
         TimelineItemPollView(
             content = content,
             state = PollContentState(
-                content = PollContent(
-                    question = "fabellas",
-                    kind = PollKind.Disclosed,
-                    maxSelections = 1u,
-                    answers = listOf(),
-                    votes = mapOf(),
-                    endTime = null
-                ),
-                someRandomString = "odio",
+                content = aTimelineItemPollContent(),
+                someRandomString = "grage",
                 someState = false,
                 eventSink = {}
             ),

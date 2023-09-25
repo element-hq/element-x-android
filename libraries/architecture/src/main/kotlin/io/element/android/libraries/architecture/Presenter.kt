@@ -22,3 +22,8 @@ interface Presenter<State> {
     @Composable
     fun present(): State
 }
+
+interface ContentPresenter<Content, State> {
+    @Composable
+    fun present(content: Content): State
+}

@@ -16,11 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event.poll
 
-import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.libraries.architecture.ContentPresenter
 
-interface PollContentPresenter : Presenter<PollContentState> {
-    interface Factory {
-        fun create(content: PollContent): PollContentPresenter
-    }
-}
+interface PollContentPresenter : ContentPresenter<TimelineItemPollContent, PollContentState>
