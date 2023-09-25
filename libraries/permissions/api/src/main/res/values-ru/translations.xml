@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Чтобы приложение могло использовать камеру, предоставьте разрешение в системных настройках."</string>
+  <string name="dialog_permission_generic">"Пожалуйста, предоставьте разрешение в системных настройках."</string>
+  <string name="dialog_permission_microphone">"Чтобы приложение могло использовать микрофон, предоставьте разрешение в системных настройках."</string>
+  <string name="dialog_permission_notification">"Чтобы приложение отображало уведомления, предоставьте разрешение в системных настройках."</string>
+</resources>
