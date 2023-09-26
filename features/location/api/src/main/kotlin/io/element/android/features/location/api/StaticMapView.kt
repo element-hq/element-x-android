@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -64,7 +64,7 @@ fun StaticMapView(
         contentAlignment = Alignment.Center
     ) {
         val context = LocalContext.current
-        var retryHash by remember { mutableStateOf(0) }
+        var retryHash by remember { mutableIntStateOf(0) }
         val builder = remember { StaticMapUrlBuilder(context) }
         val painter = rememberAsyncImagePainter(
             model = if (constraints.isZero) {
