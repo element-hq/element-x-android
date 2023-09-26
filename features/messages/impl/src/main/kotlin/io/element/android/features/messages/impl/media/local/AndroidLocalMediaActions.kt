@@ -130,8 +130,7 @@ class AndroidLocalMediaActions @Inject constructor(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         if (activityContext?.packageManager?.canRequestPackageInstalls() == false) {
                             pendingMedia = localMedia
-                            activityContext?.startInstallFromSourceIntent(apkInstallLauncher!!)
-                            Unit
+                            activityContext?.startInstallFromSourceIntent(apkInstallLauncher!!).let { }
                         } else {
                             openFile(localMedia)
                         }
