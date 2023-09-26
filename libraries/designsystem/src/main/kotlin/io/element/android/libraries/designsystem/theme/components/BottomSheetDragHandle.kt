@@ -33,13 +33,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun BottomSheetDragHandle() {
+fun BottomSheetDragHandle(
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .height(36.dp)
             .background(Color.Transparent)
             .fillMaxWidth()
@@ -68,6 +71,6 @@ fun BottomSheetDragHandle() {
 
 @PreviewsDayNight
 @Composable
-fun BottomSheetDragHandlePreview() {
+internal fun BottomSheetDragHandlePreview() = ElementPreview {
     BottomSheetDragHandle()
 }

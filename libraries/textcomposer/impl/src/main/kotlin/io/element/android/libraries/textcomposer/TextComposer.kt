@@ -79,6 +79,8 @@ import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.view.models.InlineFormat
 import io.element.android.wysiwyg.view.models.LinkAction
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
@@ -272,7 +274,7 @@ private fun TextInput(
         }
         val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .padding(
                     top = 4.dp.applyScaleUp(),
                     bottom = 4.dp.applyScaleUp(),
@@ -697,7 +699,7 @@ private fun SendButton(
 @PreviewsDayNight
 @Composable
 internal fun TextComposerSimplePreview() = ElementPreview {
-    PreviewColumn(items = listOf(
+    PreviewColumn(items = persistentListOf(
         {
             TextComposer(
                 RichTextEditorState("", initialFocus = true),
@@ -740,7 +742,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
 @PreviewsDayNight
 @Composable
 internal fun TextComposerFormattingPreview() = ElementPreview {
-    PreviewColumn(items = listOf({
+    PreviewColumn(items = persistentListOf({
         TextComposer(
             RichTextEditorState("", initialFocus = false),
             showTextFormatting = true,
@@ -767,7 +769,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
 @PreviewsDayNight
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
-    PreviewColumn(items = listOf {
+    PreviewColumn(items = persistentListOf({
         TextComposer(
             RichTextEditorState("A message", initialFocus = true),
             onSendMessage = {},
@@ -775,13 +777,13 @@ internal fun TextComposerEditPreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
         )
-    })
+    }))
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TextComposerReplyPreview() = ElementPreview {
-    PreviewColumn(items = listOf({
+    PreviewColumn(items = persistentListOf({
         TextComposer(
             RichTextEditorState(""),
             onSendMessage = {},
@@ -896,8 +898,8 @@ internal fun TextComposerReplyPreview() = ElementPreview {
 
 @Composable
 private fun PreviewColumn(
+    items: ImmutableList<@Composable () -> Unit>,
     modifier: Modifier = Modifier,
-    items: List<@Composable () -> Unit>,
 ) {
     Column(
         modifier = modifier

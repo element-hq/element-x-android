@@ -71,8 +71,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -284,9 +284,13 @@ private fun MessagesViewContent(
             .imePadding(),
     ) {
         ExpandableBottomSheetScaffold(
-            sheetDragHandle = if (state.composerState.showTextFormatting) ({ BottomSheetDragHandle() }) else ({}),
+            sheetDragHandle = if (state.composerState.showTextFormatting) {
+                @Composable { BottomSheetDragHandle() }
+            } else {
+                @Composable {}
+            },
             sheetSwipeEnabled = state.composerState.showTextFormatting,
-            sheetShape = if(state.composerState.showTextFormatting) MaterialTheme.shapes.large else RectangleShape,
+            sheetShape = if (state.composerState.showTextFormatting) MaterialTheme.shapes.large else RectangleShape,
             content = { paddingValues ->
                 TimelineView(
                     modifier = Modifier.padding(paddingValues),

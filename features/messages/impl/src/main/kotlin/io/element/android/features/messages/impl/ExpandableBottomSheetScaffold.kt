@@ -91,25 +91,31 @@ internal fun ExpandableBottomSheetScaffold(
             scaffoldState.bottomSheetState.partialExpand()
         }
     }
-    val scaffold: @Composable (sheetContent: @Composable () -> Unit, dragHandle: @Composable () -> Unit, peekHeight: Dp) -> Unit =
-        { sheetContent, dragHandle, peekHeight ->
-            BottomSheetScaffold(
-                modifier = Modifier,
-                scaffoldState = scaffoldState,
-                sheetPeekHeight = peekHeight,
-                sheetSwipeEnabled = sheetSwipeEnabledIfPossible,
-                sheetDragHandle = dragHandle,
-                sheetShape = sheetShape,
-                content = content,
-                sheetContent = { sheetContent() },
-                sheetTonalElevation = sheetTonalElevation,
-                sheetShadowElevation = sheetShadowElevation,
-            )
-        }
+
+    @Composable
+    fun Scaffold(
+        sheetContent: @Composable () -> Unit,
+        dragHandle: @Composable () -> Unit,
+        peekHeight: Dp,
+    ) {
+        BottomSheetScaffold(
+            modifier = Modifier,
+            scaffoldState = scaffoldState,
+            sheetPeekHeight = peekHeight,
+            sheetSwipeEnabled = sheetSwipeEnabledIfPossible,
+            sheetDragHandle = dragHandle,
+            sheetShape = sheetShape,
+            content = content,
+            sheetContent = { sheetContent() },
+            sheetTonalElevation = sheetTonalElevation,
+            sheetShadowElevation = sheetShadowElevation,
+        )
+    }
+
     SubcomposeLayout(
         modifier = modifier,
         measurePolicy = { constraints: Constraints ->
-            val sheetContentSub = subcompose(Slot.SheetContent(sheetContentKey)) { sheetContent(subcomposing = true) }.map {
+            val sheetContentSub = subcompose(Slot.SheetContent(sheetContentKey)) { sheetContent(true) }.map {
                 it.measure(Constraints(maxWidth = constraints.maxWidth))
             }.first()
             val dragHandleSub = subcompose(Slot.DragHandle) { sheetDragHandle() }.map {
@@ -128,13 +134,13 @@ internal fun ExpandableBottomSheetScaffold(
             )
 
             val scaffoldPlaceables = subcompose(Slot.Scaffold) {
-                scaffold({
+                Scaffold({
                     Layout(
                         modifier = Modifier.fillMaxHeight(),
                         measurePolicy = { measurables, constraints ->
-                            val maxHeight = constraints.maxHeight
+                            val constraintHeight = constraints.maxHeight
                             val offset = scaffoldState.bottomSheetState.getOffset() ?: 0
-                            val height = Integer.max(0, maxHeight - offset)
+                            val height = Integer.max(0, constraintHeight - offset)
                             val top = measurables[0].measure(
                                 constraints.copy(
                                     minHeight = height,
@@ -145,7 +151,7 @@ internal fun ExpandableBottomSheetScaffold(
                                 top.place(x = 0, y = 0)
                             }
                         },
-                        content = { sheetContent(subcomposing = false) })
+                        content = { sheetContent(false) })
                 }, sheetDragHandle, peekHeight)
             }.map { measurable: Measurable ->
                 measurable.measure(constraints)
@@ -164,8 +170,8 @@ private fun SheetState.getOffset(): Int? = try {
 }
 
 private sealed class Slot {
-    data class SheetContent(val key: Int?): Slot()
-    data object DragHandle: Slot()
-    data object Scaffold: Slot()
+    data class SheetContent(val key: Int?) : Slot()
+    data object DragHandle : Slot()
+    data object Scaffold : Slot()
 }
 
