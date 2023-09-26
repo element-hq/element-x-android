@@ -28,8 +28,12 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
@@ -47,7 +51,7 @@ import kotlin.math.roundToInt
  * @param content The main content.
  * @param sheetContent The sheet content.
  * @param sheetDragHandle The drag handle for the sheet.
- * @param sheetSwipeEnabled Whether the sheet can be swiped.
+ * @param sheetSwipeEnabled Whether the sheet can be swiped. This value is ignored and swipe is disabled if the sheet content overflows.
  * @param sheetShape The shape of the sheet.
  * @param sheetTonalElevation The tonal elevation of the sheet.
  * @param sheetShadowElevation The shadow elevation of the sheet.
@@ -72,8 +76,18 @@ internal fun ExpandableBottomSheetScaffold(
             skipHiddenState = true,
         )
     )
-    LaunchedEffect(sheetSwipeEnabled) {
-        if (!sheetSwipeEnabled) {
+
+    // If the content overflows, we disable swipe to prevent the sheet from intercepting
+    // scroll events of the sheet content.
+    var contentOverflows by remember { mutableStateOf(false) }
+    val sheetSwipeEnabledIfPossible by remember(contentOverflows, sheetSwipeEnabled) {
+        derivedStateOf {
+            sheetSwipeEnabled && !contentOverflows
+        }
+    }
+
+    LaunchedEffect(sheetSwipeEnabledIfPossible) {
+        if (!sheetSwipeEnabledIfPossible) {
             scaffoldState.bottomSheetState.partialExpand()
         }
     }
@@ -83,7 +97,7 @@ internal fun ExpandableBottomSheetScaffold(
                 modifier = Modifier,
                 scaffoldState = scaffoldState,
                 sheetPeekHeight = peekHeight,
-                sheetSwipeEnabled = sheetSwipeEnabled,
+                sheetSwipeEnabled = sheetSwipeEnabledIfPossible,
                 sheetDragHandle = dragHandle,
                 sheetShape = sheetShape,
                 content = content,
@@ -103,9 +117,14 @@ internal fun ExpandableBottomSheetScaffold(
             }.firstOrNull()
             val dragHandleHeight = dragHandleSub?.height?.toDp() ?: 0.dp
 
+            val maxHeight = constraints.maxHeight.toDp()
+            val contentHeight = sheetContentSub.height.toDp() + dragHandleHeight
+
+            contentOverflows = contentHeight > maxHeight
+
             val peekHeight = min(
-                constraints.maxHeight.toDp(), // prevent the sheet from expanding beyond the screen
-                sheetContentSub.height.toDp() + dragHandleHeight
+                maxHeight, // prevent the sheet from expanding beyond the screen
+                contentHeight
             )
 
             val scaffoldPlaceables = subcompose(Slot.Scaffold) {
