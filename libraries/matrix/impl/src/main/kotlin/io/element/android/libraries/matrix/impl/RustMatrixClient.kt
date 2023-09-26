@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
+import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
@@ -143,7 +144,11 @@ class RustMatrixClient constructor(
         RustRoomListService(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
-            dispatcher = sessionDispatcher,
+            roomListFactory = RoomListFactory(
+                innerRoomListService = innerRoomListService,
+                sessionCoroutineScope = sessionCoroutineScope,
+                dispatcher = sessionDispatcher,
+            ),
         )
 
     override val roomListService: RoomListService
@@ -291,7 +296,6 @@ class RustMatrixClient constructor(
         withContext(sessionDispatcher) {
             runCatching { client.removeAvatar() }
         }
-
 
     override fun syncService(): SyncService = rustSyncService
 
