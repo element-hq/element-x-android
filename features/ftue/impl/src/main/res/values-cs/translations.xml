@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_migration_message">"Jedná se o jednorázový proces, prosíme o strpení."</string>
   <string name="screen_migration_title">"Nastavení vašeho účtu"</string>
+  <string name="screen_notification_optin_subtitle">"Nastavení můžete později změnit."</string>
+  <string name="screen_notification_optin_title">"Povolte oznámení a nezmeškejte žádnou zprávu"</string>
   <string name="screen_welcome_bullet_1">"Hovory, hlasování, vyhledávání a další budou přidány koncem tohoto roku."</string>
   <string name="screen_welcome_bullet_2">"Historie zpráv šifrovaných místností nebude v této aktualizaci k dispozici."</string>
   <string name="screen_welcome_bullet_3">"Rádi bychom se od vás dozvěděli, co si o tom myslíte, dejte nám vědět prostřednictvím stránky s nastavením."</string>

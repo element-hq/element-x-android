@@ -19,13 +19,17 @@ package io.element.android.features.poll.api
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import kotlinx.collections.immutable.persistentListOf
 
-fun aPollAnswerItemList(isEnded: Boolean = false, isDisclosed: Boolean = true) = persistentListOf(
+fun aPollAnswerItemList(
+    hasVotes: Boolean = true,
+    isEnded: Boolean = false,
+    isDisclosed: Boolean = true,
+) = persistentListOf(
     aPollAnswerItem(
         answer = PollAnswer("option_1", "Italian \uD83C\uDDEE\uD83C\uDDF9"),
         isDisclosed = isDisclosed,
         isEnabled = !isEnded,
         isWinner = isEnded,
-        votesCount = 5,
+        votesCount = if (hasVotes) 5 else 0,
         percentage = 0.5f
     ),
     aPollAnswerItem(
@@ -42,7 +46,7 @@ fun aPollAnswerItemList(isEnded: Boolean = false, isDisclosed: Boolean = true) =
         isEnabled = !isEnded,
         isWinner = false,
         isSelected = true,
-        votesCount = 1,
+        votesCount = if (hasVotes) 1 else 0,
         percentage = 0.1f
     ),
     aPollAnswerItem(isDisclosed = isDisclosed, isEnabled = !isEnded),
