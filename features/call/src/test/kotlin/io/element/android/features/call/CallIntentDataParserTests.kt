@@ -62,9 +62,9 @@ class CallIntentDataParserTests {
     @Test
     fun `Element Call urls will be returned as is`() {
         val httpsBaseUrl = "https://call.element.io"
-        val httpsCallUrl = "https://call.element.io/some-actual-call?with=parameters"
-        assertThat(callIntentDataParser.parse(httpsBaseUrl)).isEqualTo(httpsBaseUrl)
-        assertThat(callIntentDataParser.parse(httpsCallUrl)).isEqualTo(httpsCallUrl)
+        val httpsCallUrl = VALID_CALL_URL_WITH_PARAM
+        assertThat(callIntentDataParser.parse(httpsBaseUrl)).isEqualTo("$httpsBaseUrl?$EXTRA_PARAMS")
+        assertThat(callIntentDataParser.parse(httpsCallUrl)).isEqualTo("$httpsCallUrl&$EXTRA_PARAMS")
     }
 
     @Test
@@ -89,10 +89,10 @@ class CallIntentDataParserTests {
 
     @Test
     fun `element scheme with call host and url param gets url extracted`() {
-        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
+        val embeddedUrl = VALID_CALL_URL_WITH_PARAM
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "element://call?url=$encodedUrl"
-        assertThat(callIntentDataParser.parse(url)).isEqualTo(embeddedUrl)
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM&$EXTRA_PARAMS")
     }
 
     @Test
@@ -105,10 +105,10 @@ class CallIntentDataParserTests {
 
     @Test
     fun `element scheme 2 with url param gets url extracted`() {
-        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
+        val embeddedUrl = VALID_CALL_URL_WITH_PARAM
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "io.element.call:/?url=$encodedUrl"
-        assertThat(callIntentDataParser.parse(url)).isEqualTo(embeddedUrl)
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM&$EXTRA_PARAMS")
     }
 
     @Test
@@ -121,7 +121,7 @@ class CallIntentDataParserTests {
 
     @Test
     fun `element scheme 2 with no url returns null`() {
-        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
+        val embeddedUrl = VALID_CALL_URL_WITH_PARAM
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "io.element.call:/?no_url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isNull()
@@ -129,7 +129,7 @@ class CallIntentDataParserTests {
 
     @Test
     fun `element scheme with no call host returns null`() {
-        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
+        val embeddedUrl = VALID_CALL_URL_WITH_PARAM
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "element://no-call?url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isNull()
@@ -149,9 +149,39 @@ class CallIntentDataParserTests {
 
     @Test
     fun `element invalid scheme returns null`() {
-        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
+        val embeddedUrl = VALID_CALL_URL_WITH_PARAM
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "bad.scheme:/?url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isNull()
+    }
+
+    @Test
+    fun `element scheme 2 with url extra param appPrompt gets url extracted`() {
+        val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}&appPrompt=true"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM&$EXTRA_PARAMS")
+    }
+
+    @Test
+    fun `element scheme 2 with url extra param confineToRoom gets url extracted`() {
+        val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}&confineToRoom=false"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM&$EXTRA_PARAMS")
+    }
+
+    @Test
+    fun `element scheme 2 with url fragment gets url extracted`() {
+        val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}#fragment"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM&$EXTRA_PARAMS#fragment")
+    }
+
+
+    companion object {
+        const val VALID_CALL_URL_WITH_PARAM = "https://call.element.io/some-actual-call?with=parameters"
+        const val EXTRA_PARAMS = "appPrompt=false&confineToRoom=true"
     }
 }
