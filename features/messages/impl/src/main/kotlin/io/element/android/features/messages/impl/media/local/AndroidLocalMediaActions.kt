@@ -72,7 +72,7 @@ class AndroidLocalMediaActions @Inject constructor(
             if (activityResult.resultCode == Activity.RESULT_OK) {
                 pendingMedia?.let {
                     coroutineScope.launch {
-                        open(it)
+                        openFile(it)
                     }
                 }
             } else {
@@ -152,7 +152,7 @@ class AndroidLocalMediaActions @Inject constructor(
             .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             .setDataAndType(localMedia.toShareableUri(), localMedia.info.mimeType)
         withContext(coroutineDispatchers.main) {
-            activityContext!!.startActivity(openMediaIntent)
+            activityContext?.startActivity(openMediaIntent)
         }
     }
 
