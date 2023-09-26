@@ -57,6 +57,7 @@ class CallIntentDataParser @Inject constructor() {
  * Ensure the uri has the following parameters and value:
  * - appPrompt=false
  * - confineToRoom=true
+ * to ensure that the rendering will bo correct on the embedded Webview.
  */
 private fun Uri.withCustomParameters(): String {
     val builder = buildUpon()
