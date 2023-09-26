@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 class CallIntentDataParser @Inject constructor() {
 
-    private val validHttpSchemes = sequenceOf("http", "https")
+    private val validHttpSchemes = sequenceOf("https")
 
     fun parse(data: String?): String? {
         val parsedUrl = data?.let { Uri.parse(data) } ?: return null

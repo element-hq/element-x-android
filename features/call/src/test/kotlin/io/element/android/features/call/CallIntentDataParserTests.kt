@@ -52,13 +52,17 @@ class CallIntentDataParserTests {
     }
 
     @Test
-    fun `Element Call urls will be returned as is`() {
+    fun `Element Call http urls returns null`() {
         val httpBaseUrl = "http://call.element.io"
         val httpCallUrl = "http://call.element.io/some-actual-call?with=parameters"
+        assertThat(callIntentDataParser.parse(httpBaseUrl)).isNull()
+        assertThat(callIntentDataParser.parse(httpCallUrl)).isNull()
+    }
+
+    @Test
+    fun `Element Call urls will be returned as is`() {
         val httpsBaseUrl = "https://call.element.io"
         val httpsCallUrl = "https://call.element.io/some-actual-call?with=parameters"
-        assertThat(callIntentDataParser.parse(httpBaseUrl)).isEqualTo(httpBaseUrl)
-        assertThat(callIntentDataParser.parse(httpCallUrl)).isEqualTo(httpCallUrl)
         assertThat(callIntentDataParser.parse(httpsBaseUrl)).isEqualTo(httpsBaseUrl)
         assertThat(callIntentDataParser.parse(httpsCallUrl)).isEqualTo(httpsCallUrl)
     }
@@ -76,16 +80,32 @@ class CallIntentDataParserTests {
     }
 
     @Test
-    fun `element scheme with call host and url param gets url extracted`() {
+    fun `element scheme with call host and url with http will returns null`() {
         val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "element://call?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isNull()
+    }
+
+    @Test
+    fun `element scheme with call host and url param gets url extracted`() {
+        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "element://call?url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isEqualTo(embeddedUrl)
     }
 
     @Test
-    fun `element scheme 2 with url param gets url extracted`() {
+    fun `element scheme 2 with url param with http returns null`() {
         val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isNull()
+    }
+
+    @Test
+    fun `element scheme 2 with url param gets url extracted`() {
+        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "io.element.call:/?url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isEqualTo(embeddedUrl)
@@ -101,7 +121,7 @@ class CallIntentDataParserTests {
 
     @Test
     fun `element scheme 2 with no url returns null`() {
-        val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
+        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "io.element.call:/?no_url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isNull()
@@ -109,7 +129,7 @@ class CallIntentDataParserTests {
 
     @Test
     fun `element scheme with no call host returns null`() {
-        val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
+        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "element://no-call?url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isNull()
@@ -129,7 +149,7 @@ class CallIntentDataParserTests {
 
     @Test
     fun `element invalid scheme returns null`() {
-        val embeddedUrl = "http://call.element.io/some-actual-call?with=parameters"
+        val embeddedUrl = "https://call.element.io/some-actual-call?with=parameters"
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "bad.scheme:/?url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isNull()
