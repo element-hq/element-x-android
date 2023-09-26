@@ -167,7 +167,7 @@ class DefaultAppNavigationStateService @Inject constructor(
     }
 
     private fun logError(logPrefix: String) {
-        Timber.tag(loggerTag.value).w("$logPrefix must be call first, can't leave.")
+        Timber.tag(loggerTag.value).w("$logPrefix must be call first.")
     }
 
     private fun NavigationState.assertOwner(owner: String): Boolean {
