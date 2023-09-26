@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.test.roomlist
+package io.element.android.libraries.matrix.api.roomlist
 
-import io.element.android.libraries.matrix.api.roomlist.RoomList
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.flow.StateFlow
+/**
+ * Specific interface for a room list that can be filtered.
+ */
+interface FilterableRoomList : RoomList {
 
-data class SimpleRoomList(
-    override val summaries: StateFlow<List<RoomSummary>>,
-    override val loadingState: StateFlow<RoomList.LoadingState>
-) : RoomList {
+    sealed interface Filter {
+        data object None : Filter
+        data class NormalizedMatchRoomName(val pattern: String) : Filter
 
-    override suspend fun updateFilter(filter: RoomList.Filter) {
-        // No-op
+        fun value(): String? {
+            return when (this) {
+                is None -> ""
+                is NormalizedMatchRoomName -> pattern
+            }
+        }
     }
 
-    override suspend  fun loadMore() {
-        //No-op
-    }
-
-    override suspend fun reset() {
-        //No-op
-    }
+    suspend fun updateFilter(filter: Filter)
 }

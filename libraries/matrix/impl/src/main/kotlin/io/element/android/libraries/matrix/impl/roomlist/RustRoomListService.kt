@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -50,8 +51,10 @@ class RustRoomListService(
 ) : RoomListService {
 
     private val allRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
+    private val filteredAllRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val allRoomsLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
     private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
+    private val filteredAllRoomsListProcessor = RoomSummaryListProcessor(filteredAllRooms, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
     private val allRoomsDynamicEvents = MutableSharedFlow<RoomListDynamicEvents>()
 
     private val invitesLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
@@ -65,6 +68,11 @@ class RustRoomListService(
             allRooms
                 .observeDynamicEntries(allRoomsDynamicEvents, allRoomsListProcessor)
                 .launchIn(this)
+
+            allRooms
+                .observeDynamicEntries(allRoomsDynamicEvents, filteredAllRoomsListProcessor)
+                .launchIn(this)
+
             allRooms
                 .observeLoadingState(allRoomsLoadingState)
                 .launchIn(this)
@@ -79,16 +87,16 @@ class RustRoomListService(
         }
     }
 
-    override fun allRooms(): RoomList {
-        return RustRoomList(
+    override fun allRooms(): PagedRoomList {
+        return RustPagedRoomList(
             summaries = allRooms,
             loadingState = allRoomsLoadingState,
             dynamicEvents = allRoomsDynamicEvents
         )
     }
 
-    override fun invites(): RoomList {
-        return RustRoomList(
+    override fun invites(): PagedRoomList {
+        return RustPagedRoomList(
             summaries = inviteRooms,
             loadingState = invitesLoadingState,
             dynamicEvents = inviteRoomsDynamicEvents

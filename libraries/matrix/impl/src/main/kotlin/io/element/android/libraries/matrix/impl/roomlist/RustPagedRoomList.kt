@@ -16,26 +16,21 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import timber.log.Timber
 
 /**
- * Simple implementation of [RoomList] where state flows are provided through constructor.
+ * Simple implementation of [PagedRoomList] where state flows are provided through constructor.
  */
-internal class RustRoomList(
+internal open class RustPagedRoomList(
     override val summaries: StateFlow<List<RoomSummary>>,
     override val loadingState: StateFlow<RoomList.LoadingState>,
     private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>,
-) : RoomList {
-
-    override suspend fun updateFilter(filter: RoomList.Filter) {
-        Timber.d("updateFilter($filter)")
-        dynamicEvents.emit(RoomListDynamicEvents.SetFilter(filter.toRoomListEntriesDynamicFilterKind()))
-    }
+) : PagedRoomList {
 
     override suspend fun loadMore() {
         Timber.d("loadMore()")
@@ -46,11 +41,6 @@ internal class RustRoomList(
         Timber.d("reset()")
         dynamicEvents.emit(RoomListDynamicEvents.Reset)
     }
-
-    private fun RoomList.Filter.toRoomListEntriesDynamicFilterKind(): RoomListEntriesDynamicFilterKind {
-        return when (this) {
-            RoomList.Filter.All -> RoomListEntriesDynamicFilterKind.All
-            is RoomList.Filter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(pattern)
-        }
-    }
 }
+
+

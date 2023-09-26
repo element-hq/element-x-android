@@ -44,15 +44,15 @@ interface RoomListService {
     }
 
     /**
-     * returns a [RoomList] object of all rooms we want to display.
+     * returns a [PagedRoomList] object of all rooms we want to display.
      * This will exclude some rooms like the invites, or spaces.
      */
-    fun allRooms(): RoomList
+    fun allRooms(): PagedRoomList
 
     /**
-     * returns a [RoomList] object of all invites.
+     * returns a [PagedRoomList] object of all invites.
      */
-    fun invites(): RoomList
+    fun invites(): PagedRoomList
 
     /**
      * Will set the visible range of all rooms.

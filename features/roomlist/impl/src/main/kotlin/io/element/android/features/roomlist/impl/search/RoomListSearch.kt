@@ -33,20 +33,14 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.RoomListState
@@ -56,14 +50,15 @@ import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.applyIf
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.designsystem.utils.LazyListVisibleRangeHelper
 import io.element.android.libraries.designsystem.utils.copy
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -98,7 +93,7 @@ internal fun RoomListSearchResultView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun RoomListSearchResultContent(
     state: RoomListState,
@@ -108,6 +103,7 @@ internal fun RoomListSearchResultContent(
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
     val strokeWidth = 1.dp
+
     fun onBackButtonPressed() {
         state.eventSink(RoomListEvents.ToggleSearchResults)
     }
@@ -115,6 +111,11 @@ internal fun RoomListSearchResultContent(
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
     }
+
+    fun onVisibleRangeUpdated(intRange: IntRange) {
+        state.eventSink(RoomListEvents.UpdateVisibleRange(intRange))
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -172,34 +173,13 @@ internal fun RoomListSearchResultContent(
         }
     ) { padding ->
         val lazyListState = rememberLazyListState()
-        val visibleRange by remember {
-            derivedStateOf {
-                val layoutInfo = lazyListState.layoutInfo
-                val firstItemIndex = layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
-                val size = layoutInfo.visibleItemsInfo.size
-                firstItemIndex until firstItemIndex + size
-            }
-        }
-        val nestedScrollConnection = remember {
-            object : NestedScrollConnection {
-                override suspend fun onPostFling(
-                    consumed: Velocity,
-                    available: Velocity
-                ): Velocity {
-                    state.eventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
-                    return super.onPostFling(consumed, available)
-                }
-            }
-        }
         Column(
             modifier = Modifier
                 .padding(padding)
                 .consumeWindowInsets(padding)
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .nestedScroll(nestedScrollConnection),
+                modifier = Modifier.weight(1f),
                 state = lazyListState,
             ) {
                 items(
@@ -213,6 +193,10 @@ internal fun RoomListSearchResultContent(
                     )
                 }
             }
+            LazyListVisibleRangeHelper(
+                lazyListState = lazyListState,
+                onVisibleRangeUpdated = ::onVisibleRangeUpdated,
+            )
         }
     }
 }
