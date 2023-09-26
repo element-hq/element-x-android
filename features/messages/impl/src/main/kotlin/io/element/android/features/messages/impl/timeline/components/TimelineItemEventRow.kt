@@ -386,6 +386,7 @@ private fun MessageEventBubbleContent(
     ) {
         TimelineItemEventContentView(
             content = event.content,
+            isMine = event.isMine,
             interactionSource = interactionSource,
             onClick = onMessageClick,
             onLongClick = onMessageLongClick,
