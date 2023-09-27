@@ -120,18 +120,9 @@ You can also have access to the aars through the [release](https://github.com/ma
 If you need to locally build the sdk-android you can use
 the [build](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/main/scripts/build.sh) script.
 
-For this, you first need to ensure to setup :
+For this please check the [prerequisites](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/main/README.md#prerequisites) from the repo.
 
-- rust environment (check https://rust-lang.github.io/rustup/ if needed)
-- cargo-ndk
-```shell
-cargo install cargo-ndk
-```
-- android targets
-```shell
-rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
-```
-- checkout both [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk) and [matrix-rust-components-kotlin](https://github.com/matrix-org/matrix-rust-components-kotlin) repositories
+Checkout both [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk) and [matrix-rust-components-kotlin](https://github.com/matrix-org/matrix-rust-components-kotlin) repositories
 ```shell
 git clone git@github.com:matrix-org/matrix-rust-sdk.git
 git clone git@github.com:matrix-org/matrix-rust-components-kotlin.git
