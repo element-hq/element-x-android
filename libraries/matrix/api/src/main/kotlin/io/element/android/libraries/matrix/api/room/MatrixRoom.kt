@@ -89,6 +89,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit>
 
+    suspend fun enterReplyMode(eventId: EventId): Result<Unit>
+
     suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
@@ -184,7 +186,4 @@ interface MatrixRoom : Closeable {
     suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
 
     override fun close() = destroy()
-
 }
-
-
