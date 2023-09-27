@@ -154,12 +154,10 @@ class MessageComposerPresenter @Inject constructor(
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
-
                 MessageComposerEvents.CloseSpecialMode -> {
                     richTextEditorState.setHtml("")
                     messageComposerContext.composerMode = MessageComposerMode.Normal("")
                 }
-
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
                     message = event.message,
                     updateComposerMode = { messageComposerContext.composerMode = it },
@@ -167,6 +165,11 @@ class MessageComposerPresenter @Inject constructor(
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
+                    if (event.composerMode is MessageComposerMode.Reply) {
+                        appCoroutineScope.launch {
+                            room.enterReplyMode(event.composerMode.eventId)
+                        }
+                    }
                 }
                 MessageComposerEvents.AddAttachment -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = true

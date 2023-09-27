@@ -1,3 +1,16 @@
+Changes in Element X v0.2.3 (2023-09-27)
+========================================
+
+Features ✨
+----------
+ - Handle installation of Apks from the media viewer. ([#1432](https://github.com/vector-im/element-x-android/pull/1432))
+ - Integrate SDK 0.1.58 ([#1437](https://github.com/vector-im/element-x-android/pull/1437))
+
+Other changes
+-------------
+ - Element call: add custom parameters to Element Call urls. ([#1434](https://github.com/vector-im/element-x-android/issues/1434))
+
+
 Changes in Element X v0.2.2 (2023-09-21)
 ========================================
 

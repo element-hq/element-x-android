@@ -147,7 +147,7 @@ fun TimelineItemEventRow(
         }
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
-            val offset = state.offset.value
+            val offset = state.offset.floatValue
             val swipeThresholdPx = 40.dp.toPx()
             val thresholdCrossed = abs(offset) > swipeThresholdPx
             SwipeSensitivity(3f) {

@@ -51,4 +51,12 @@ object MimeTypes {
     fun String?.isMimeTypeFile() = this?.startsWith("file/").orFalse()
     fun String?.isMimeTypeText() = this?.startsWith("text/").orFalse()
     fun String?.isMimeTypeAny() = this?.startsWith("*/").orFalse()
+
+    fun fromFileExtension(fileExtension: String): String {
+        return when (fileExtension.lowercase()) {
+            "apk" -> Apk
+            "pdf" -> Pdf
+            else -> OctetStream
+        }
+    }
 }

@@ -109,14 +109,17 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
                 fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
             )
-            is FileMessageType -> TimelineItemFileContent(
-                body = messageType.body,
-                thumbnailSource = messageType.info?.thumbnailSource,
-                fileSource = messageType.source,
-                mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
-                formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
-                fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
-            )
+            is FileMessageType -> {
+                val fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+                TimelineItemFileContent(
+                    body = messageType.body,
+                    thumbnailSource = messageType.info?.thumbnailSource,
+                    fileSource = messageType.source,
+                    mimeType = messageType.info?.mimetype ?: MimeTypes.fromFileExtension(fileExtension),
+                    formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
+                    fileExtension = fileExtension
+                )
+            }
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
                 htmlDocument = messageType.formatted?.toHtmlDocument(),

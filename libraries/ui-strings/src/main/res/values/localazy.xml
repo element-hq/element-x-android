@@ -94,6 +94,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"In reply to %1$s"</string>
+  <string name="common_install_apk_android">"Install APK"</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>

@@ -18,6 +18,7 @@ package io.element.android.features.login.impl.screens.waitlistscreen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,14 +59,14 @@ class WaitListPresenter @AssistedInject constructor(
             mutableStateOf(Async.Uninitialized)
         }
 
-        val attemptNumber: MutableState<Int> = remember { mutableStateOf(0) }
+        val attemptNumber = remember { mutableIntStateOf(0) }
 
         fun handleEvents(event: WaitListEvents) {
             when (event) {
                 WaitListEvents.AttemptLogin -> {
                     // Do not attempt to login on first resume of the View.
-                    attemptNumber.value++
-                    if (attemptNumber.value > 1) {
+                    attemptNumber.intValue++
+                    if (attemptNumber.intValue > 1) {
                         coroutineScope.loginAttempt(formState, loginAction)
                     }
                 }

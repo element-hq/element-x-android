@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -77,7 +78,7 @@ class RustMediaLoader(
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
                         body = body,
-                        mimeType = mimeType ?: "application/octet-stream",
+                        mimeType = mimeType ?: MimeTypes.OctetStream,
                         tempDir = cacheDirectory.path,
                     )
                     RustMediaFile(mediaFile)
