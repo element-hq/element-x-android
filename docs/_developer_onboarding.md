@@ -123,9 +123,9 @@ the [build](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/mai
 For this, you first need to ensure to setup :
 
 - rust environment (check https://rust-lang.github.io/rustup/ if needed)
-- cargo-ndk < 2.12.0
+- cargo-ndk
 ```shell
-cargo install cargo-ndk --version 2.11.0
+cargo install cargo-ndk
 ```
 - android targets
 ```shell
@@ -151,7 +151,10 @@ So for example to build the sdk against aarch64-linux-android target and copy th
 ./scripts/build.sh -p [YOUR MATRIX RUST SDK PATH] -t aarch64-linux-android -o [YOUR element-x-android PATH]/libraries/rustsdk/matrix-rust-sdk.aar
 ```
 
-Note: You may need to set `ANDROID_NDK_HOME` e.g `export ANDROID_NDK_HOME=~/Library/Android/sdk/ndk`.
+Troubleshooting:
+ - You may need to set `ANDROID_NDK_HOME` e.g `export ANDROID_NDK_HOME=~/Library/Android/sdk/ndk`.
+ - If you get the error `thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', .cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-ndk-2.11.0/src/cli.rs:345:18` try updating your Cargo NDK version. In this case, 2.11.0 is too old so `cargo install cargo-ndk` to install a newer version.
+ - If you get the error `Unsupported class file major version 64` try changing your JVM version. In this case, Java 20 is not supported in Gradle yet, so downgrade to an earlier version (Java 17 worked in this case).
 
 Finally let the `matrix/impl` module use this aar by changing the dependencies from `libs.matrix.sdk` to `projects.libraries.rustsdk`:
 
