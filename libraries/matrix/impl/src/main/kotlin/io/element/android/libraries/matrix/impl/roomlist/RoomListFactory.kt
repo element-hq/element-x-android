@@ -97,7 +97,7 @@ internal class RoomListFactory(
                     .launchIn(this)
             }
         }.invokeOnCompletion {
-            innerRoomList?.destroy()
+            //innerRoomList?.destroy()
         }
         return RustRoomList(summariesFlow, loadingStateFlow, dynamicEvents)
     }

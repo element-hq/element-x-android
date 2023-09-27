@@ -61,9 +61,7 @@ class InviteListPresenter @Inject constructor(
 
     @Composable
     override fun present(): InviteListState {
-        val invitesRoomList = remember {
-            client.roomListService.invites()
-        }
+        val invitesRoomList = client.roomListService.invites
         val invites by invitesRoomList.summaries.collectAsState()
 
         var visibleRange: IntRange by remember { mutableStateOf(IntRange.EMPTY) }

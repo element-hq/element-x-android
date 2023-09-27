@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
-import io.element.android.libraries.matrix.api.roomlist.FilterableRoomList
-import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,25 +36,17 @@ import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    private val roomListFactory: RoomListFactory,
+    roomListFactory: RoomListFactory,
 ) : RoomListService {
 
-    override fun allRooms(): PagedRoomList {
-        return roomListFactory.createPaged {
-            innerRoomListService.allRooms()
-        }
+    override val allRooms = roomListFactory.createPaged {
+        innerRoomListService.allRooms()
     }
-
-    override fun allRoomsFilterable(): FilterableRoomList {
-        return roomListFactory.createFilterable {
-            innerRoomListService.allRooms()
-        }
+    override val allRoomsFilterable = roomListFactory.createFilterable {
+        innerRoomListService.allRooms()
     }
-
-    override fun invites(): PagedRoomList {
-        return roomListFactory.createPaged {
-            innerRoomListService.invites()
-        }
+    override val invites = roomListFactory.createPaged {
+        innerRoomListService.invites()
     }
 
     override suspend fun updateAllRoomsVisibleRange(range: IntRange) {

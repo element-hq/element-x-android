@@ -42,18 +42,18 @@ interface RoomListService {
      * returns a [PagedRoomList] object of all rooms we want to display.
      * This will exclude some rooms like the invites, or spaces.
      */
-    fun allRooms(): PagedRoomList
+    val allRooms: PagedRoomList
 
     /**
      * returns a [FilterableRoomList] object of all rooms we want to display.
      * This will exclude some rooms like the invites, or spaces.
      */
-    fun allRoomsFilterable(): FilterableRoomList
+    val allRoomsFilterable: FilterableRoomList
 
     /**
      * returns a [PagedRoomList] object of all invites.
      */
-    fun invites(): PagedRoomList
+    val invites: PagedRoomList
 
     /**
      * Will set the visible range of all rooms.

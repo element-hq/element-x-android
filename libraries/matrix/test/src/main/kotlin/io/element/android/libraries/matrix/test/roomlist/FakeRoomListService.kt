@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.matrix.test.roomlist
 
+import io.element.android.libraries.matrix.api.roomlist.FilterableRoomList
+import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -54,26 +56,19 @@ class FakeRoomListService : RoomListService {
     var latestSlidingSyncRange: IntRange? = null
         private set
 
+    override val allRooms: PagedRoomList
+        get() = TODO("Not yet implemented")
+    override val allRoomsFilterable: FilterableRoomList
+        get() = TODO("Not yet implemented")
+    override val invites: PagedRoomList
+        get() = TODO("Not yet implemented")
+
     override suspend fun updateAllRoomsVisibleRange(range: IntRange) {
         latestSlidingSyncRange = range
     }
 
     override fun rebuildRoomSummaries() {
 
-    }
-
-    override fun allRooms(): RoomList {
-        return SimpleRoomList(
-            summaries = allRoomSummariesFlow,
-            loadingState = allRoomsLoadingStateFlow
-        )
-    }
-
-    override fun invites(): RoomList {
-        return SimpleRoomList(
-            summaries = inviteRoomSummariesFlow,
-            loadingState = inviteRoomsLoadingStateFlow
-        )
     }
 
     override val state: StateFlow<RoomListService.State> = roomListStateFlow

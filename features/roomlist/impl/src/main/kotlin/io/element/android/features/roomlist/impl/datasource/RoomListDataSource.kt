@@ -70,8 +70,8 @@ class RoomListDataSource @Inject constructor(
         old?.identifier() == new?.identifier()
     }
 
-    private val allRoomsList = roomListService.allRooms()
-    private val allRoomsFilterableList = roomListService.allRoomsFilterable()
+    private val allRoomsList = roomListService.allRooms
+    private val allRoomsFilterableList = roomListService.allRoomsFilterable
 
     fun launchIn(coroutineScope: CoroutineScope) {
         allRoomsList.summaries
