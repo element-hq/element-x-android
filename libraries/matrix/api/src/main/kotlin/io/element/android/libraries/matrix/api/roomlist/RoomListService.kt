@@ -50,6 +50,12 @@ interface RoomListService {
     fun allRooms(): PagedRoomList
 
     /**
+     * returns a [FilterableRoomList] object of all rooms we want to display.
+     * This will exclude some rooms like the invites, or spaces.
+     */
+    fun allRoomsFilterable(): FilterableRoomList
+
+    /**
      * returns a [PagedRoomList] object of all invites.
      */
     fun invites(): PagedRoomList

@@ -63,7 +63,11 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
         Timber.d(it, "loadingStateFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-internal fun RoomList.entriesFlow(pageSize: Int, numberOfPages: Int, roomListDynamicEvents: Flow<RoomListDynamicEvents>): Flow<List<RoomListEntriesUpdate>> =
+internal fun RoomList.entriesFlow(
+    pageSize: Int,
+    numberOfPages: Int,
+    roomListDynamicEvents: Flow<RoomListDynamicEvents>
+): Flow<List<RoomListEntriesUpdate>> =
     callbackFlow {
         val listener = object : RoomListEntriesListener {
             override fun onUpdate(roomEntriesUpdate: List<RoomListEntriesUpdate>) {

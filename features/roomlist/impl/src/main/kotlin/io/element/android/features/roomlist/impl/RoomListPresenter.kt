@@ -25,6 +25,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -76,7 +77,7 @@ class RoomListPresenter @Inject constructor(
         }
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
-            initialLoad(matrixUser)
+            loadCurrentUser(matrixUser)
         }
         VisibleRangeHandler(visibleRange = visibleRange)
         // Session verification status (unknown, not verified, verified)
@@ -90,16 +91,14 @@ class RoomListPresenter @Inject constructor(
         var displaySearchResults by rememberSaveable { mutableStateOf(false) }
 
         var contextMenu by remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
-
+        val coroutineScope = rememberCoroutineScope()
         fun handleEvents(event: RoomListEvents) {
             when (event) {
-                is RoomListEvents.UpdateFilter -> roomListDataSource.updateFilter(event.newFilter)
+                is RoomListEvents.UpdateFilter -> coroutineScope.updateFilter(event.newFilter)
                 is RoomListEvents.UpdateVisibleRange -> visibleRange.value = event.range
                 RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
                 RoomListEvents.ToggleSearchResults -> {
-                    if (displaySearchResults) {
-                        roomListDataSource.updateFilter("")
-                    }
+                    coroutineScope.updateFilter("")
                     displaySearchResults = !displaySearchResults
                 }
                 is RoomListEvents.ShowContextMenu -> {
@@ -168,7 +167,11 @@ class RoomListPresenter @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
+    private fun CoroutineScope.updateFilter(filter: String) = launch {
+        roomListDataSource.updateFilter(filter)
+    }
+
+    private fun CoroutineScope.loadCurrentUser(matrixUser: MutableState<MatrixUser?>) = launch {
         matrixUser.value = client.getCurrentUser()
     }
 }

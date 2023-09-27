@@ -44,61 +44,57 @@ internal class RoomListFactory(
 ) {
 
     fun createPaged(innerProvider: suspend () -> InnerRoomList): PagedRoomList {
-        val roomListFlows = createAndObserveRoomListFlows(innerProvider)
-        return object : PagedRoomList {
-
-            override suspend fun loadMore() {
-                roomListFlows.dynamicEvents.emit(RoomListDynamicEvents.LoadMore)
-            }
-
-            override suspend fun reset() {
-                roomListFlows.dynamicEvents.emit(RoomListDynamicEvents.Reset)
-            }
-
-            override val summaries = roomListFlows.summariesFlow
-            override val loadingState = roomListFlows.loadingStateFlow
-        }
+        return createRoomList(innerProvider)
     }
 
     fun createFilterable(innerProvider: suspend () -> InnerRoomList): FilterableRoomList {
-        val roomListFlows = createAndObserveRoomListFlows(innerProvider)
-        return object : FilterableRoomList {
-            override suspend fun updateFilter(filter: FilterableRoomList.Filter) {
-                val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
-                roomListFlows.dynamicEvents.emit(filterEvent)
-            }
-
-            override val summaries = roomListFlows.summariesFlow
-            override val loadingState = roomListFlows.loadingStateFlow
-        }
+        return createRoomList(innerProvider)
     }
 
-    private fun createAndObserveRoomListFlows(innerProvider: suspend () -> InnerRoomList): RoomListFlows {
+    private fun createRoomList(innerRoomListProvider: suspend () -> InnerRoomList): RustRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
         val summariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
         val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
         val dynamicEvents = MutableSharedFlow<RoomListDynamicEvents>()
 
+        var innerRoomList: InnerRoomList? = null
         sessionCoroutineScope.launch(dispatcher) {
-            val innerRoomList = innerProvider()
-            innerRoomList
-                .observeDynamicEntries(dynamicEvents, processor)
-                .launchIn(this)
+            innerRoomList = innerRoomListProvider()
+            innerRoomList?.let { innerRoomList ->
+                innerRoomList
+                    .observeDynamicEntries(dynamicEvents, processor)
+                    .launchIn(this)
 
-            innerRoomList
-                .observeLoadingState(loadingStateFlow)
-                .launchIn(this)
+                innerRoomList
+                    .observeLoadingState(loadingStateFlow)
+                    .launchIn(this)
+            }
+        }.invokeOnCompletion {
+            innerRoomList?.destroy()
         }
-
-        return RoomListFlows(summariesFlow, loadingStateFlow, dynamicEvents)
+        return RustRoomList(summariesFlow, loadingStateFlow, dynamicEvents)
     }
 }
 
-private class RoomListFlows(
-    val summariesFlow: MutableStateFlow<List<RoomSummary>>,
-    val loadingStateFlow: MutableStateFlow<RoomList.LoadingState>,
-    val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>
-)
+private class RustRoomList(
+    override val summaries: MutableStateFlow<List<RoomSummary>>,
+    override val loadingState: MutableStateFlow<RoomList.LoadingState>,
+    private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>
+) : PagedRoomList, FilterableRoomList {
+
+    override suspend fun updateFilter(filter: FilterableRoomList.Filter) {
+        val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
+        dynamicEvents.emit(filterEvent)
+    }
+
+    override suspend fun loadMore() {
+        dynamicEvents.emit(RoomListDynamicEvents.LoadMore)
+    }
+
+    override suspend fun reset() {
+        dynamicEvents.emit(RoomListDynamicEvents.Reset)
+    }
+}
 
 private fun InnerRoomList.observeDynamicEntries(roomListDynamicEvents: Flow<RoomListDynamicEvents>, processor: RoomSummaryListProcessor): Flow<List<RoomListEntriesUpdate>> {
     return entriesFlow(

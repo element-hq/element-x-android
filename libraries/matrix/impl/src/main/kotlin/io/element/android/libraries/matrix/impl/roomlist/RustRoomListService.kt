@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.roomlist.FilterableRoomList
 import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +43,12 @@ internal class RustRoomListService(
 
     override fun allRooms(): PagedRoomList {
         return roomListFactory.createPaged {
+            innerRoomListService.allRooms()
+        }
+    }
+
+    override fun allRoomsFilterable(): FilterableRoomList {
+        return roomListFactory.createFilterable {
             innerRoomListService.allRooms()
         }
     }

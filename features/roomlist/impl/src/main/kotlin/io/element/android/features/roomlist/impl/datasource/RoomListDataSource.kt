@@ -28,6 +28,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.matrix.api.roomlist.FilterableRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
@@ -37,9 +38,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -70,38 +71,39 @@ class RoomListDataSource @Inject constructor(
     }
 
     private val allRoomsList = roomListService.allRooms()
+    private val allRoomsFilterableList = roomListService.allRoomsFilterable()
 
     fun launchIn(coroutineScope: CoroutineScope) {
         allRoomsList.summaries
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
-            }
-            .launchIn(coroutineScope)
+            }.launchIn(coroutineScope)
 
-        combine(
-            _filter,
-            _allRooms
-        ) { filterValue, allRoomsValue ->
-            when {
-                filterValue.isEmpty() -> emptyList()
-                else -> allRoomsValue.filter { it.name.contains(filterValue, ignoreCase = true) }
-            }.toImmutableList()
-        }
-            .onEach {
-                _filteredRooms.value = it
-            }
-            .launchIn(coroutineScope)
+        allRoomsFilterableList.summaries
+            .map { roomSummaries ->
+                roomSummaries.map { roomSummary ->
+                    roomSummary.toRoomListModel()
+                }.toImmutableList()
+            }.onEach { filteredRooms ->
+                _filteredRooms.emit(filteredRooms)
+            }.launchIn(coroutineScope)
     }
 
-    fun updateFilter(filterValue: String) {
+    suspend fun updateFilter(filterValue: String) {
         _filter.value = filterValue
+        val filter = if (filterValue.isBlank()) {
+            FilterableRoomList.Filter.None
+        } else {
+            FilterableRoomList.Filter.NormalizedMatchRoomName(filterValue)
+        }
+        allRoomsFilterableList.updateFilter(filter)
     }
 
-    suspend fun loadMore(){
+    suspend fun loadMore() {
         allRoomsList.loadMore()
     }
 
-    suspend fun reset(){
+    suspend fun reset() {
         allRoomsList.reset()
     }
 
@@ -136,8 +138,9 @@ class RoomListDataSource @Inject constructor(
             for (index in diffCache.indices()) {
                 val cacheItem = diffCache.get(index)
                 if (cacheItem == null) {
-                    buildAndCacheItem(roomSummaries, index)?.also { timelineItemState ->
-                        roomListRoomSummaries.add(timelineItemState)
+                    buildRoomSummary(roomSummaries, index)?.also { roomListRoomSummary ->
+                        diffCache[index] = roomListRoomSummary
+                        roomListRoomSummaries.add(roomListRoomSummary)
                     }
                 } else {
                     roomListRoomSummaries.add(cacheItem)
@@ -147,8 +150,13 @@ class RoomListDataSource @Inject constructor(
         }
     }
 
-    private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
-        val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
+    private fun buildRoomSummary(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
+        val roomSummary = roomSummaries.getOrNull(index)
+        return roomSummary?.toRoomListModel()
+    }
+
+    private fun RoomSummary.toRoomListModel(): RoomListRoomSummary {
+        return when (val roomSummary = this) {
             is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
             is RoomSummary.Filled -> {
                 val avatarData = AvatarData(
@@ -171,10 +179,6 @@ class RoomListDataSource @Inject constructor(
                     notificationMode = roomSummary.details.notificationMode,
                 )
             }
-            null -> null
         }
-
-        diffCache[index] = roomListRoomSummary
-        return roomListRoomSummary
     }
 }
