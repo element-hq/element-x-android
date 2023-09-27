@@ -151,6 +151,8 @@ So for example to build the sdk against aarch64-linux-android target and copy th
 ./scripts/build.sh -p [YOUR MATRIX RUST SDK PATH] -t aarch64-linux-android -o [YOUR element-x-android PATH]/libraries/rustsdk/matrix-rust-sdk.aar
 ```
 
+Note: You may need to set `ANDROID_NDK_HOME` e.g `export ANDROID_NDK_HOME=~/Library/Android/sdk/ndk`.
+
 Finally let the `matrix/impl` module use this aar by changing the dependencies from `libs.matrix.sdk` to `projects.libraries.rustsdk`:
 
 ```groovy
