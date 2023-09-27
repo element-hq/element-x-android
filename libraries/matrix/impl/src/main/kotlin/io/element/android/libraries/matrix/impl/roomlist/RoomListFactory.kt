@@ -57,7 +57,7 @@ internal class RoomListFactory(
         innerProvider: suspend () -> InnerRoomList
     ): FilterableRoomList {
         return createRoomList(
-            pageSize = 50,
+            pageSize = 200,
             numberOfPages = 1,
             initialFilterKind = RoomListEntriesDynamicFilterKind.None,
             innerRoomListProvider = innerProvider
@@ -97,21 +97,26 @@ internal class RoomListFactory(
                     .launchIn(this)
             }
         }.invokeOnCompletion {
-            //innerRoomList?.destroy()
+            innerRoomList?.destroy()
         }
-        return RustRoomList(summariesFlow, loadingStateFlow, dynamicEvents)
+        return RustRoomList(summariesFlow, loadingStateFlow, dynamicEvents, processor)
     }
 }
 
 private class RustRoomList(
     override val summaries: MutableStateFlow<List<RoomSummary>>,
     override val loadingState: MutableStateFlow<RoomList.LoadingState>,
-    private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>
+    private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>,
+    private val processor: RoomSummaryListProcessor,
 ) : PagedRoomList, FilterableRoomList {
 
     override suspend fun updateFilter(filter: FilterableRoomList.Filter) {
         val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
         dynamicEvents.emit(filterEvent)
+    }
+
+    override suspend fun rebuildSummaries() {
+        processor.rebuildRoomSummaries()
     }
 
     override suspend fun loadMore() {

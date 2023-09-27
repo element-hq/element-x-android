@@ -43,7 +43,13 @@ interface RoomList {
      * The loading state of the room list as a flow.
      * This is useful to know if a specific set of rooms is loaded or not.
      */
-    val loadingState: StateFlow<RoomList.LoadingState>
+    val loadingState: StateFlow<LoadingState>
+
+    /**
+     * Force a refresh of the room summaries.
+     * Might be useful for some situations where we are not notified of changes.
+     */
+    suspend fun rebuildSummaries()
 }
 
 suspend fun RoomList.awaitLoaded(timeout: Duration = Duration.INFINITE) {

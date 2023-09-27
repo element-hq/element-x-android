@@ -116,7 +116,7 @@ class RoomListDataSource @Inject constructor(
         notificationSettingsService.notificationSettingsChangeFlow
             .debounce(0.5.seconds)
             .onEach {
-                roomListService.rebuildRoomSummaries()
+                allRoomsList.rebuildSummaries()
             }
             .launchIn(appScope)
     }
