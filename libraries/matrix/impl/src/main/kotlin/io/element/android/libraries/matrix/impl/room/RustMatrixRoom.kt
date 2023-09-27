@@ -60,6 +60,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -261,11 +262,30 @@ class RustMatrixRoom(
             }
         }
 
+    private var inReplyToEventTimelineItem: EventTimelineItem? = null
+
+    override suspend fun enterReplyMode(eventId: EventId): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            inReplyToEventTimelineItem?.destroy()
+            inReplyToEventTimelineItem = null
+            inReplyToEventTimelineItem = innerRoom.getEventTimelineItemByEventId(eventId.value)
+        }
+    }
+
+    override suspend fun exitReplyMode(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            inReplyToEventTimelineItem?.destroy()
+            inReplyToEventTimelineItem = null
+        }
+    }
+
     override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.getEventTimelineItemByEventId(eventId.value).use { eventTimelineItem ->
+            val inReplyTo = inReplyToEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
+            inReplyTo.use { eventTimelineItem ->
                 innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventTimelineItem)
             }
+            inReplyToEventTimelineItem = null
         }
     }
 

@@ -31,8 +31,8 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -207,6 +207,14 @@ class FakeMatrixRoom(
 
     var replyMessageParameter: Pair<String, String?>? = null
         private set
+
+    override suspend fun enterReplyMode(eventId: EventId): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun exitReplyMode(): Result<Unit> {
+        return Result.success(Unit)
+    }
 
     override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> {
         replyMessageParameter = body to htmlBody
