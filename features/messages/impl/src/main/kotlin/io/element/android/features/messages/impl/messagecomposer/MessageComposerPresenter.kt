@@ -20,7 +20,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -152,23 +151,12 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        DisposableEffect(Unit) {
-            onDispose {
-                appCoroutineScope.launch {
-                    room.exitReplyMode()
-                }
-            }
-        }
-
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
                     richTextEditorState.setHtml("")
                     messageComposerContext.composerMode = MessageComposerMode.Normal("")
-                    appCoroutineScope.launch {
-                        room.exitReplyMode()
-                    }
                 }
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
                     message = event.message,
@@ -177,11 +165,9 @@ class MessageComposerPresenter @Inject constructor(
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
-                    appCoroutineScope.launch {
-                        if (event.composerMode is MessageComposerMode.Reply) {
+                    if (event.composerMode is MessageComposerMode.Reply) {
+                        appCoroutineScope.launch {
                             room.enterReplyMode(event.composerMode.eventId)
-                        } else {
-                            room.exitReplyMode()
                         }
                     }
                 }

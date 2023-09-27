@@ -91,8 +91,6 @@ interface MatrixRoom : Closeable {
 
     suspend fun enterReplyMode(eventId: EventId): Result<Unit>
 
-    suspend fun exitReplyMode(): Result<Unit>
-
     suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>

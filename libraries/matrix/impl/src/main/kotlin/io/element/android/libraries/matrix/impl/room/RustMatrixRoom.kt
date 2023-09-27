@@ -139,6 +139,7 @@ class RustMatrixRoom(
         roomCoroutineScope.cancel()
         innerRoom.destroy()
         roomListItem.destroy()
+        inReplyToEventTimelineItem?.destroy()
     }
 
     override val name: String?
@@ -269,13 +270,6 @@ class RustMatrixRoom(
             inReplyToEventTimelineItem?.destroy()
             inReplyToEventTimelineItem = null
             inReplyToEventTimelineItem = innerRoom.getEventTimelineItemByEventId(eventId.value)
-        }
-    }
-
-    override suspend fun exitReplyMode(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
-            inReplyToEventTimelineItem?.destroy()
-            inReplyToEventTimelineItem = null
         }
     }
 

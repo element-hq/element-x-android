@@ -212,10 +212,6 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun exitReplyMode(): Result<Unit> {
-        return Result.success(Unit)
-    }
-
     override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> {
         replyMessageParameter = body to htmlBody
         return Result.success(Unit)
