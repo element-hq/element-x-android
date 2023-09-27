@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
@@ -89,7 +90,7 @@ class InviteListPresenter @Inject constructor(
 
         val hasReachEndThreshold = remember {
             derivedStateOf {
-                visibleRange.last > invites.size - RoomListService.DEFAULT_PAGE_SIZE
+                visibleRange.last > invites.size - PagedRoomList.DEFAULT_PAGE_SIZE
             }
         }
         LaunchedEffect(Unit) {

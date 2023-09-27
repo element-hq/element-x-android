@@ -146,7 +146,7 @@ class RustMatrixClient constructor(
             sessionCoroutineScope = sessionCoroutineScope,
             roomListFactory = RoomListFactory(
                 innerRoomListService = innerRoomListService,
-                sessionCoroutineScope = sessionCoroutineScope,
+                coroutineScope = sessionCoroutineScope,
                 dispatcher = sessionDispatcher,
             ),
         )

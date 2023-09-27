@@ -19,11 +19,9 @@ package io.element.android.libraries.matrix.impl.roomlist
 import io.element.android.libraries.matrix.api.roomlist.FilterableRoomList
 import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -31,42 +29,71 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
-import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomList as InnerRoomList
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 
 internal class RoomListFactory(
     private val innerRoomListService: InnerRoomListService,
-    private val sessionCoroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
 
-    fun createPaged(innerProvider: suspend () -> InnerRoomList): PagedRoomList {
-        return createRoomList(innerProvider)
+    fun createPaged(
+        pageSize: Int = PagedRoomList.DEFAULT_PAGE_SIZE,
+        pagesToLoad: Int = PagedRoomList.DEFAULT_PAGES_TO_LOAD,
+        innerProvider: suspend () -> InnerRoomList
+    ): PagedRoomList {
+        return createRoomList(
+            pageSize = pageSize,
+            numberOfPages = pagesToLoad,
+            initialFilterKind = RoomListEntriesDynamicFilterKind.All,
+            innerRoomListProvider = innerProvider
+        )
     }
 
-    fun createFilterable(innerProvider: suspend () -> InnerRoomList): FilterableRoomList {
-        return createRoomList(innerProvider)
+    fun createFilterable(
+        innerProvider: suspend () -> InnerRoomList
+    ): FilterableRoomList {
+        return createRoomList(
+            pageSize = 50,
+            numberOfPages = 1,
+            initialFilterKind = RoomListEntriesDynamicFilterKind.None,
+            innerRoomListProvider = innerProvider
+        )
     }
 
-    private fun createRoomList(innerRoomListProvider: suspend () -> InnerRoomList): RustRoomList {
+    private fun createRoomList(
+        pageSize: Int,
+        numberOfPages: Int,
+        initialFilterKind: RoomListEntriesDynamicFilterKind,
+        innerRoomListProvider: suspend () -> InnerRoomList
+    ): RustRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
         val summariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
         val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
         val dynamicEvents = MutableSharedFlow<RoomListDynamicEvents>()
 
         var innerRoomList: InnerRoomList? = null
-        sessionCoroutineScope.launch(dispatcher) {
+        coroutineScope.launch(dispatcher) {
             innerRoomList = innerRoomListProvider()
             innerRoomList?.let { innerRoomList ->
-                innerRoomList
-                    .observeDynamicEntries(dynamicEvents, processor)
-                    .launchIn(this)
 
-                innerRoomList
-                    .observeLoadingState(loadingStateFlow)
+                innerRoomList.entriesFlow(
+                    pageSize = pageSize,
+                    numberOfPages = numberOfPages,
+                    initialFilterKind = initialFilterKind,
+                    roomListDynamicEvents = dynamicEvents
+                ).onEach { update ->
+                    processor.postUpdate(update)
+                }.launchIn(this)
+
+                innerRoomList.loadingStateFlow()
+                    .map { it.toLoadingState() }
+                    .onEach {
+                        loadingStateFlow.value = it
+                    }
                     .launchIn(this)
             }
         }.invokeOnCompletion {
@@ -94,24 +121,6 @@ private class RustRoomList(
     override suspend fun reset() {
         dynamicEvents.emit(RoomListDynamicEvents.Reset)
     }
-}
-
-private fun InnerRoomList.observeDynamicEntries(roomListDynamicEvents: Flow<RoomListDynamicEvents>, processor: RoomSummaryListProcessor): Flow<List<RoomListEntriesUpdate>> {
-    return entriesFlow(
-        pageSize = RoomListService.DEFAULT_PAGE_SIZE,
-        numberOfPages = RoomListService.DEFAULT_PAGES_TO_LOAD,
-        roomListDynamicEvents = roomListDynamicEvents
-    ).onEach { update ->
-        processor.postUpdate(update)
-    }
-}
-
-private fun InnerRoomList.observeLoadingState(stateFlow: MutableStateFlow<RoomList.LoadingState>): Flow<RoomList.LoadingState> {
-    return loadingStateFlow()
-        .map { it.toLoadingState() }
-        .onEach {
-            stateFlow.value = it
-        }
 }
 
 private fun RoomListLoadingState.toLoadingState(): RoomList.LoadingState {

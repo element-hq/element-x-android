@@ -21,6 +21,11 @@ package io.element.android.libraries.matrix.api.roomlist
  */
 interface PagedRoomList : RoomList {
 
+    companion object {
+        const val DEFAULT_PAGE_SIZE = 20
+        const val DEFAULT_PAGES_TO_LOAD = 10
+    }
+
     /**
      * Load more rooms into the list if possible.
      */
@@ -30,4 +35,5 @@ interface PagedRoomList : RoomList {
      * Reset the list to its initial size.
      */
     suspend fun reset()
+
 }

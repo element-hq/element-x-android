@@ -39,6 +39,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
@@ -133,7 +134,7 @@ class RoomListPresenter @Inject constructor(
     private fun VisibleRangeHandler(visibleRange: State<IntRange>) {
         val hasReachEndThreshold = remember {
             derivedStateOf {
-                visibleRange.value.last > roomListDataSource.allRooms.value.size - RoomListService.DEFAULT_PAGE_SIZE * THRESHOLD_PAGE_MULTIPLIER
+                visibleRange.value.last > roomListDataSource.allRooms.value.size - PagedRoomList.DEFAULT_PAGE_SIZE * THRESHOLD_PAGE_MULTIPLIER
             }
         }
         val hasReachedStart = remember {

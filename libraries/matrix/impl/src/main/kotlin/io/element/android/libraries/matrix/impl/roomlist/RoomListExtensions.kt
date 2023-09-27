@@ -66,7 +66,8 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
 internal fun RoomList.entriesFlow(
     pageSize: Int,
     numberOfPages: Int,
-    roomListDynamicEvents: Flow<RoomListDynamicEvents>
+    roomListDynamicEvents: Flow<RoomListDynamicEvents>,
+    initialFilterKind: RoomListEntriesDynamicFilterKind
 ): Flow<List<RoomListEntriesUpdate>> =
     callbackFlow {
         val listener = object : RoomListEntriesListener {
@@ -75,8 +76,8 @@ internal fun RoomList.entriesFlow(
             }
         }
         val result = entriesWithDynamicAdapters(pageSize.toUInt(), listener)
-        val controller = result.controller
-        controller.setFilter(RoomListEntriesDynamicFilterKind.All)
+            val controller = result.controller
+        controller.setFilter(initialFilterKind)
         roomListDynamicEvents.onEach { controllerEvents ->
             when (controllerEvents) {
                 is RoomListDynamicEvents.SetFilter -> {

@@ -26,11 +26,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface RoomListService {
 
-    companion object {
-        const val DEFAULT_PAGE_SIZE = 20
-        const val DEFAULT_PAGES_TO_LOAD = 10
-    }
-
     sealed class State {
         data object Idle : State()
         data object Running : State()
