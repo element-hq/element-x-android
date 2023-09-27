@@ -27,7 +27,6 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
-import org.matrix.rustcomponents.sdk.genTransactionId
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -61,7 +60,7 @@ class RoomContentForwarder(
                     // Sending a message requires a registered timeline listener
                     targetRoom.addTimelineListener(NoOpTimelineListener)
                     withTimeout(timeoutMs.milliseconds) {
-                        targetRoom.send(content, genTransactionId())
+                        targetRoom.send(content)
                     }
                 }
                 // After sending, we remove the timeline
