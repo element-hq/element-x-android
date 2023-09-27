@@ -12,6 +12,7 @@
   <string name="screen_room_attachment_source_gallery">"Knihovna fotografií a videí"</string>
   <string name="screen_room_attachment_source_location">"Poloha"</string>
   <string name="screen_room_attachment_source_poll">"Hlasování"</string>
+  <string name="screen_room_attachment_text_formatting">"Formátování textu"</string>
   <string name="screen_room_encrypted_history_banner">"Historie zpráv je momentálně v této místnosti nedostupná"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
   <string name="screen_room_invite_again_alert_message">"Chtěli byste je pozvat zpět?"</string>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="call_foreground_service_message_android">"點擊以返回到通話頁面"</string>
+  <string name="call_foreground_service_title_android">"☎️ 通話中"</string>
+</resources>

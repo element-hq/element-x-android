@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_hide_password">"隱藏密碼"</string>
+  <string name="a11y_notifications_mentions_only">"僅限提及"</string>
+  <string name="a11y_notifications_muted">"已關閉通知"</string>
+  <string name="a11y_poll">"投票"</string>
+  <string name="a11y_poll_end">"投票已結束"</string>
   <string name="a11y_send_files">"傳送檔案"</string>
   <string name="a11y_show_password">"顯示密碼"</string>
   <string name="a11y_user_menu">"使用者選單"</string>
@@ -21,6 +25,7 @@
   <string name="action_done">"完成"</string>
   <string name="action_edit">"編輯"</string>
   <string name="action_enable">"啟用"</string>
+  <string name="action_end_poll">"結束投票"</string>
   <string name="action_forgot_password">"忘記密碼？"</string>
   <string name="action_forward">"轉寄"</string>
   <string name="action_invite">"邀請"</string>
@@ -33,16 +38,19 @@
   <string name="action_leave_room">"離開聊天室"</string>
   <string name="action_manage_account">"管理帳號"</string>
   <string name="action_manage_devices">"管理裝置"</string>
-  <string name="action_next">"下一個"</string>
+  <string name="action_next">"下一步"</string>
   <string name="action_no">"否"</string>
   <string name="action_not_now">"以後再說"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_settings">"開啟設定"</string>
   <string name="action_open_with">"用其他方式開啟"</string>
   <string name="action_quick_reply">"快速回覆"</string>
   <string name="action_quote">"引用"</string>
   <string name="action_react">"回應"</string>
   <string name="action_remove">"移除"</string>
   <string name="action_reply">"回覆"</string>
+  <string name="action_reply_in_thread">"在討論串中回覆"</string>
+  <string name="action_report_bug">"回報程式錯誤"</string>
   <string name="action_report_content">"檢舉內容"</string>
   <string name="action_retry">"再試一次"</string>
   <string name="action_retry_decryption">"再次嘗試解密"</string>
@@ -52,7 +60,7 @@
   <string name="action_send_message">"傳送訊息"</string>
   <string name="action_share">"分享"</string>
   <string name="action_share_link">"分享連結"</string>
-  <string name="action_skip">"跳過"</string>
+  <string name="action_skip">"略過"</string>
   <string name="action_start">"開始"</string>
   <string name="action_start_chat">"開始聊天"</string>
   <string name="action_start_verification">"開始驗證"</string>
@@ -61,6 +69,8 @@
   <string name="action_view_source">"檢視原始碼"</string>
   <string name="action_yes">"是"</string>
   <string name="common_about">"關於"</string>
+  <string name="common_acceptable_use_policy">"可接受使用政策"</string>
+  <string name="common_advanced_settings">"進階設定"</string>
   <string name="common_analytics">"分析"</string>
   <string name="common_audio">"音訊"</string>
   <string name="common_copyright">"著作權"</string>
@@ -70,6 +80,7 @@
   <string name="common_developer_options">"開發者選項"</string>
   <string name="common_edited_suffix">"（已編輯）"</string>
   <string name="common_editing">"編輯中"</string>
+  <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"已啟用加密"</string>
   <string name="common_error">"錯誤"</string>
   <string name="common_file">"檔案"</string>
@@ -77,6 +88,7 @@
   <string name="common_forward_message">"訊息轉寄"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"圖片"</string>
+  <string name="common_in_reply_to">"回覆 %1$s"</string>
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能沒有人會收到邀請。"</string>
   <string name="common_leaving_room">"正在離開聊天室"</string>
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
@@ -91,14 +103,20 @@
   <string name="common_password">"密碼"</string>
   <string name="common_people">"夥伴"</string>
   <string name="common_permalink">"永久連結"</string>
+  <string name="common_permission">"權限"</string>
+  <string name="common_poll_total_votes">"總票數：%1$s"</string>
   <string name="common_poll_undisclosed_text">"結果將在投票結束後公佈"</string>
   <string name="common_privacy_policy">"隱私權政策"</string>
+  <string name="common_reaction">"回應"</string>
   <string name="common_reactions">"回應"</string>
-  <string name="common_refreshing">"重新整理…"</string>
+  <string name="common_refreshing">"重新整理中…"</string>
   <string name="common_replying_to">"正在回覆%1$s"</string>
+  <string name="common_report_a_bug">"回報程式錯誤"</string>
+  <string name="common_rich_text_editor">"格式化文字編輯器"</string>
   <string name="common_room_name">"聊天室名稱"</string>
   <string name="common_room_name_placeholder">"範例：您的計畫名稱"</string>
   <string name="common_search_results">"搜尋結果"</string>
+  <string name="common_security">"安全性"</string>
   <string name="common_select_your_server">"選擇您的伺服器"</string>
   <string name="common_sending">"傳送中…"</string>
   <string name="common_server_url">"伺服器 URL"</string>
@@ -107,6 +125,8 @@
   <string name="common_success">"成功"</string>
   <string name="common_suggestions">"建議"</string>
   <string name="common_syncing">"同步中"</string>
+  <string name="common_text">"文字"</string>
+  <string name="common_thread">"討論串"</string>
   <string name="common_topic">"主題"</string>
   <string name="common_unable_to_decrypt">"無法解密"</string>
   <string name="common_unable_to_invite_message">"無法發送邀請給一或多個使用者。"</string>
@@ -117,6 +137,7 @@
   <string name="common_verification_complete">"驗證完成"</string>
   <string name="common_video">"影片"</string>
   <string name="common_waiting">"等待中…"</string>
+  <string name="common_poll_summary">"投票：%1$s"</string>
   <string name="dialog_title_confirmation">"確認"</string>
   <string name="dialog_title_warning">"警告"</string>
   <string name="emoji_picker_category_activity">"活動"</string>
@@ -148,6 +169,7 @@
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
   <string name="screen_notification_settings_direct_chats">"私訊"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
   <string name="screen_notification_settings_enable_notifications">"在這個裝置上開啟通知"</string>
   <string name="screen_notification_settings_group_chats">"群組聊天"</string>
   <string name="screen_notification_settings_mentions_section_title">"提及"</string>
@@ -155,6 +177,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系統設定"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"已關閉系統通知"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="screen_settings_oidc_account">"帳號與裝置"</string>
   <string name="screen_share_location_title">"分享位置"</string>
   <string name="screen_share_my_location_action">"分享我的位置"</string>
   <string name="screen_share_open_apple_maps">"在 Apple Maps 中開啟"</string>
@@ -168,7 +191,7 @@
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
   <string name="screen_analytics_settings_help_us_improve">"分享匿名的使用數據以協助我們釐清問題"</string>
-  <string name="screen_analytics_settings_read_terms">"您可以到 %1$s 閱讀我們的條款。"</string>
+  <string name="screen_analytics_settings_read_terms">"您可以到%1$s閱讀我們的條款。"</string>
   <string name="screen_analytics_settings_read_terms_content_link">"這裡"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
 </resources>

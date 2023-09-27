@@ -61,6 +61,7 @@ sealed interface NotificationContent {
         ) : MessageLike
         data object RoomRedaction : MessageLike
         data object Sticker : MessageLike
+        data class Poll(val question: String) : MessageLike
     }
 
     sealed interface StateEvent : NotificationContent {

@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,7 +60,7 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        var loadMediaTrigger by remember { mutableStateOf(0) }
+        var loadMediaTrigger by remember { mutableIntStateOf(0) }
         val mediaFile: MutableState<MediaFile?> = remember {
             mutableStateOf(null)
         }

@@ -71,6 +71,7 @@
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_view_source">"View Source"</string>
   <string name="action_yes">"Yes"</string>
+  <string name="action_edit_poll">"Edit poll"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
@@ -93,6 +94,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"In reply to %1$s"</string>
+  <string name="common_install_apk_android">"Install APK"</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
@@ -149,6 +151,7 @@
   <string name="common_verification_complete">"Verification complete"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Waiting…"</string>
+  <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Warning"</string>

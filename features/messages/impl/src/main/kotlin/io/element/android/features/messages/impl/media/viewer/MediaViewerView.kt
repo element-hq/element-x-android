@@ -47,11 +47,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.local.rememberLocalMediaViewState
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -92,6 +94,7 @@ fun MediaViewerView(
         topBar = {
             MediaViewerTopBar(
                 actionsEnabled = state.downloadedMedia is Async.Success,
+                mimeType = state.mediaInfo.mimeType,
                 onBackPressed = onBackPressed,
                 eventSink = state.eventSink
             )
@@ -162,6 +165,7 @@ private fun rememberShowProgress(downloadedMedia: Async<LocalMedia>): Boolean {
 @Composable
 private fun MediaViewerTopBar(
     actionsEnabled: Boolean,
+    mimeType: String,
     onBackPressed: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
@@ -175,10 +179,16 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.OpenWith)
                 },
             ) {
-                Icon(
-                    imageVector = Icons.Default.OpenInNew,
-                    contentDescription = stringResource(id = CommonStrings.action_open_with)
-                )
+                when (mimeType) {
+                    MimeTypes.Apk -> Icon(
+                        resourceId = R.drawable.ic_apk_install,
+                        contentDescription = stringResource(id = CommonStrings.common_install_apk_android)
+                    )
+                    else -> Icon(
+                        imageVector = Icons.Default.OpenInNew,
+                        contentDescription = stringResource(id = CommonStrings.action_open_with)
+                    )
+                }
             }
             IconButton(
                 enabled = actionsEnabled,

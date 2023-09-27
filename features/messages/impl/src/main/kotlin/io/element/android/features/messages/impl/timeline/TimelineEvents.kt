@@ -26,4 +26,8 @@ sealed interface TimelineEvents {
         val pollStartId: EventId,
         val answerId: String
     ) : TimelineEvents
+
+    data class PollEndClicked(
+        val pollStartId: EventId,
+    ) : TimelineEvents
 }

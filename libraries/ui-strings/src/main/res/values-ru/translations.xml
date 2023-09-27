@@ -9,6 +9,7 @@
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
   <string name="action_accept">"Разрешить"</string>
+  <string name="action_add_to_timeline">"Добавить в хронологию"</string>
   <string name="action_back">"Назад"</string>
   <string name="action_cancel">"Отмена"</string>
   <string name="action_choose_photo">"Выбрать фото"</string>
@@ -44,6 +45,7 @@
   <string name="action_no">"Нет"</string>
   <string name="action_not_now">"Не сейчас"</string>
   <string name="action_ok">"Ок"</string>
+  <string name="action_open_settings">"Открыть настройки"</string>
   <string name="action_open_with">"Открыть с помощью"</string>
   <string name="action_quick_reply">"Быстрый ответ"</string>
   <string name="action_quote">"Цитата"</string>
@@ -105,6 +107,7 @@
   <string name="common_password">"Пароль"</string>
   <string name="common_people">"Пользователи"</string>
   <string name="common_permalink">"Постоянная ссылка"</string>
+  <string name="common_permission">"Разрешение"</string>
   <string name="common_poll_total_votes">"Всего голосов: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Результаты будут показаны после завершения опроса"</string>
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
@@ -146,6 +149,7 @@
   <string name="common_verification_complete">"Проверка завершена"</string>
   <string name="common_video">"Видео"</string>
   <string name="common_waiting">"Ожидание…"</string>
+  <string name="common_poll_summary">"Опрос: %1$s"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
   <string name="emoji_picker_category_activity">"Деятельность"</string>
@@ -223,7 +227,7 @@
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>
-  <string name="screen_share_open_google_maps">"Открыть в Google Картах"</string>
+  <string name="screen_share_open_google_maps">"Открыть в Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Открыть в OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Поделиться этим местоположением"</string>
   <string name="screen_view_location_title">"Местоположение"</string>
