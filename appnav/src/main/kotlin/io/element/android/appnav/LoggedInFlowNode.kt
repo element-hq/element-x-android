@@ -54,6 +54,7 @@ import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.SessionScope
@@ -68,6 +69,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -304,6 +306,15 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
+    internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
+        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
+        backstack.singleTop(NavTarget.RoomList)
+        backstack.push(NavTarget.InviteList)
+        waitForChildAttached<Node, NavTarget> { navTarget ->
+            navTarget is NavTarget.InviteList
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
@@ -320,14 +331,5 @@ class LoggedInFlowNode @AssistedInject constructor(
                 PermanentChild(navTarget = NavTarget.Permanent)
             }
         }
-    }
-
-    internal suspend fun attachRoom(deeplinkData: DeeplinkData.Room) {
-        backstack.push(NavTarget.Room(deeplinkData.roomId))
-    }
-
-    internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) {
-        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
-        backstack.push(NavTarget.InviteList)
     }
 }

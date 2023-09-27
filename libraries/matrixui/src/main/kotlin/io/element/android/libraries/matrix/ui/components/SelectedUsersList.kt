@@ -29,7 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -55,7 +55,7 @@ fun SelectedUsersList(
 ) {
     val lazyListState = rememberLazyListState()
     if (autoScroll) {
-        var currentSize by rememberSaveable { mutableStateOf(selectedUsers.size) }
+        var currentSize by rememberSaveable { mutableIntStateOf(selectedUsers.size) }
         LaunchedEffect(selectedUsers.size) {
             val isItemAdded = selectedUsers.size > currentSize
             if (isItemAdded) {

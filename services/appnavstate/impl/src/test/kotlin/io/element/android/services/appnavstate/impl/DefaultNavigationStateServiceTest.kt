@@ -29,7 +29,6 @@ import io.element.android.services.appnavstate.test.A_THREAD_OWNER
 import io.element.android.tests.testutils.runCancellableScopeTest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class DefaultNavigationStateServiceTest {
@@ -63,8 +62,8 @@ class DefaultNavigationStateServiceTest {
     @Test
     fun testFailure() = runCancellableScopeTest { scope ->
         val service = createStateService(scope)
-
-        assertThrows(IllegalStateException::class.java) { service.onNavigateToSpace(A_SPACE_OWNER, A_SPACE_ID) }
+        service.onNavigateToSpace(A_SPACE_OWNER, A_SPACE_ID)
+        assertThat(service.appNavigationState.value.navigationState).isEqualTo(NavigationState.Root)
     }
 
     private fun createStateService(

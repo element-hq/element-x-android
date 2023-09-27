@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.features.analytics.plan.PollEnd
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -39,6 +38,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
@@ -77,7 +77,6 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
-import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -96,7 +95,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
-    private val analyticsService: AnalyticsService,
     private val preferencesStore: PreferencesStore,
     @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
@@ -156,6 +154,7 @@ class MessagesPresenter @AssistedInject constructor(
                         targetEvent = event.event,
                         composerState = composerState,
                         enableTextFormatting = enableTextFormatting,
+                        timelineState = timelineState,
                     )
                 }
                 is MessagesEvents.ToggleReaction -> {
@@ -207,6 +206,7 @@ class MessagesPresenter @AssistedInject constructor(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
         enableTextFormatting: Boolean,
+        timelineState: TimelineState,
     ) = launch {
         when (action) {
             TimelineItemAction.Copy -> handleCopyContents(targetEvent)
@@ -217,7 +217,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
-            TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent)
+            TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
         }
     }
 
@@ -267,7 +267,7 @@ class MessagesPresenter @AssistedInject constructor(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
         enableTextFormatting: Boolean,
-        ) {
+    ) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.eventId,
             (targetEvent.content as? TimelineItemTextBasedContent)?.let {
@@ -351,11 +351,11 @@ class MessagesPresenter @AssistedInject constructor(
         navigator.onReportContentClicked(event.eventId, event.senderId)
     }
 
-    private suspend fun handleEndPollAction(event: TimelineItem.Event) {
-        event.eventId?.let {
-            room.endPoll(it, "The poll with event id: $it has ended.")
-            analyticsService.capture(PollEnd())
-        }
+    private fun handleEndPollAction(
+        event: TimelineItem.Event,
+        timelineState: TimelineState,
+    ) {
+        event.eventId?.let { timelineState.eventSink(TimelineEvents.PollEndClicked(it)) }
     }
 
     private suspend fun handleCopyContents(event: TimelineItem.Event) {

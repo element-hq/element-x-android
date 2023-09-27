@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -32,16 +33,16 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
-import io.element.android.libraries.matrix.api.core.EventId
 
 @Composable
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
+    isMine: Boolean,
     interactionSource: MutableInteractionSource,
     extraPadding: ExtraPadding,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
+    eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (content) {
@@ -100,7 +101,8 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemPollContent -> TimelineItemPollView(
             content = content,
-            onAnswerSelected = onPollAnswerSelected,
+            isMine = isMine,
+            eventSink = eventSink,
             modifier = modifier,
         )
     }

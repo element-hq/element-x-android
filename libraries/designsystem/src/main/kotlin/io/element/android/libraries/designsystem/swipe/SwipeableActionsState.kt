@@ -21,9 +21,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.FloatState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,8 +42,8 @@ class SwipeableActionsState {
     /**
      * The current position (in pixels) of the content.
      */
-    val offset: State<Float> get() = offsetState
-    private var offsetState = mutableStateOf(0f)
+    val offset: FloatState get() = offsetState
+    private var offsetState = mutableFloatStateOf(0f)
 
     /**
      * Whether the content is currently animating to reset its offset after it was swiped.
@@ -51,21 +52,21 @@ class SwipeableActionsState {
         private set
 
     val draggableState = DraggableState { delta ->
-        val targetOffset = offsetState.value + delta
+        val targetOffset = offsetState.floatValue + delta
         val isAllowed = isResettingOnRelease || targetOffset > 0f
 
-        offsetState.value += if (isAllowed) delta else 0f
+        offsetState.floatValue += if (isAllowed) delta else 0f
     }
 
     suspend fun resetOffset() {
         draggableState.drag(MutatePriority.PreventUserInput) {
             isResettingOnRelease = true
             try {
-                Animatable(offsetState.value).animateTo(
+                Animatable(offsetState.floatValue).animateTo(
                     targetValue = 0f,
                     animationSpec = tween(durationMillis = 300),
                 ) {
-                    dragBy(value - offsetState.value)
+                    dragBy(value - offsetState.floatValue)
                 }
             } finally {
                 isResettingOnRelease = false

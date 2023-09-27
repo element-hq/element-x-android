@@ -20,7 +20,9 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.PollVote
+import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
@@ -42,6 +44,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitWithLatch
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.waitForPredicate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -278,6 +281,29 @@ class TimelinePresenterTest {
         assertThat(room.sendPollResponseInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
         assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
         assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollVote())
+    }
+
+    @Test
+    fun `present - PollEndClicked event calls into rust room api and analytics`() = runTest {
+        val room = FakeMatrixRoom()
+        val analyticsService = FakeAnalyticsService()
+        val presenter = createTimelinePresenter(
+            room = room,
+            analyticsService = analyticsService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(TimelineEvents.PollEndClicked(aMessageEvent().eventId!!))
+            waitForPredicate { room.endPollInvocations.size == 1 }
+            cancelAndIgnoreRemainingEvents()
+            assertThat(room.endPollInvocations.size).isEqualTo(1)
+            assertThat(room.endPollInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
+            assertThat(room.endPollInvocations.first().text).isEqualTo("The poll with event id: \$anEventId has ended.")
+            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollEnd())
+        }
     }
 
     private fun TestScope.createTimelinePresenter(

@@ -45,6 +45,7 @@
   <string name="action_no">"Nein"</string>
   <string name="action_not_now">"Nicht jetzt"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_settings">"Einstellungen öffnen"</string>
   <string name="action_open_with">"Öffnen mit"</string>
   <string name="action_quick_reply">"Schnelle Antwort"</string>
   <string name="action_quote">"Zitat"</string>
@@ -106,6 +107,7 @@
   <string name="common_password">"Passwort"</string>
   <string name="common_people">"Personen"</string>
   <string name="common_permalink">"Permalink"</string>
+  <string name="common_permission">"Erlaubnis"</string>
   <string name="common_poll_total_votes">"Stimmen insgesamt: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Die Ergebnisse werden nach Ende der Umfrage angezeigt"</string>
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
@@ -147,6 +149,7 @@
   <string name="common_verification_complete">"Verifizierung abgeschlossen"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Warten…"</string>
+  <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_warning">"Warnung"</string>
   <string name="emoji_picker_category_activity">"Aktivitäten"</string>
