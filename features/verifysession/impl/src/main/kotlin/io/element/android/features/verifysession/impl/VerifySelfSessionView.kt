@@ -190,7 +190,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 R.string.screen_session_verification_they_match
             }
         }
-        FlowStep.Ready -> R.string.screen_session_verification_positive_button_ready
+        FlowStep.Ready -> CommonStrings.action_start
         else -> null
     }
     val negativeButtonTitle = when (verificationViewState) {
