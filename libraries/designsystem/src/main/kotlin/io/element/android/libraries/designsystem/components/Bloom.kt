@@ -39,11 +39,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,9 +103,9 @@ import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
@@ -118,6 +117,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -168,7 +168,7 @@ data class BloomLayer(
  * @param bottomSoftEdgeAlpha The alpha value to apply to the bottom soft edge.
  * @param alpha The alpha value to apply to the bloom effect.
  */
-fun Modifier.bloom(
+private fun Modifier.bloom(
     hash: String?,
     background: Color,
     blurSize: DpSize = DpSize.Unspecified,
@@ -328,6 +328,8 @@ fun Modifier.avatarBloom(
     // Request the avatar contents to use as the bloom source
     val context = LocalContext.current
     val density = LocalDensity.current
+    val bloomBlurHashStore = remember { BloomBlurHashStore(context) }
+    val blurHash by bloomBlurHashStore.get(avatarData.id).collectAsState(initial = null)
     if (avatarData.url != null) {
         val painterRequest = remember(avatarData) {
             ImageRequest.Builder(context)
@@ -340,33 +342,18 @@ fun Modifier.avatarBloom(
                 .size(with(density) { Size(64.dp.roundToPx(), 64.dp.roundToPx()) })
                 .build()
         }
-
-        // By making it saveable, we'll 'cache' the previous bloom effect until a new one is loaded
-        var blurHash by rememberSaveable(avatarData) { mutableStateOf<String?>(null) }
         LaunchedEffect(avatarData) {
             withContext(Dispatchers.IO) {
-                val drawable =
-                    context.imageLoader.execute(painterRequest).drawable ?: return@withContext
+                val drawable = context.imageLoader.execute(painterRequest).drawable ?: return@withContext
                 val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@withContext
-                blurHash = BlurHash.encode(
+                val hash = BlurHash.encode(
                     bitmap,
                     BloomDefaults.HASH_COMPONENTS,
                     BloomDefaults.HASH_COMPONENTS
                 )
+                bloomBlurHashStore.put(id = avatarData.id, blurHash = hash)
             }
         }
-
-        bloom(
-            hash = blurHash,
-            background = background,
-            blurSize = blurSize,
-            offset = offset,
-            clipToSize = clipToSize,
-            bottomSoftEdgeColor = bottomSoftEdgeColor,
-            bottomSoftEdgeHeight = bottomSoftEdgeHeight,
-            bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
-            alpha = alpha,
-        )
     } else {
         // There is no URL so we'll generate an avatar with the initials and use that as the bloom source
         val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
@@ -377,21 +364,25 @@ fun Modifier.avatarBloom(
             textColor = avatarColors.foreground,
             backgroundColor = avatarColors.background,
         )
-        val hash = remember(avatarData, avatarColors) {
-            BlurHash.encode(initialsBitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+        LaunchedEffect(avatarData, avatarColors) {
+            withContext(Dispatchers.IO) {
+                val hash = BlurHash.encode(initialsBitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+                bloomBlurHashStore.put(id = avatarData.id, blurHash = hash)
+            }
         }
-        bloom(
-            hash = hash,
-            background = background,
-            blurSize = blurSize,
-            offset = offset,
-            clipToSize = clipToSize,
-            bottomSoftEdgeColor = bottomSoftEdgeColor,
-            bottomSoftEdgeHeight = bottomSoftEdgeHeight,
-            bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
-            alpha = alpha,
-        )
     }
+    Timber.d("Bloom render $blurHash")
+    bloom(
+        hash = blurHash,
+        background = background,
+        blurSize = blurSize,
+        offset = offset,
+        clipToSize = clipToSize,
+        bottomSoftEdgeColor = bottomSoftEdgeColor,
+        bottomSoftEdgeHeight = bottomSoftEdgeHeight,
+        bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
+        alpha = alpha,
+    )
 }
 
 // Used to create a Bitmap version of the initials avatar

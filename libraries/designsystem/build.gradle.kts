@@ -40,6 +40,7 @@ android {
         implementation(libs.coil.compose)
         implementation(libs.vanniktech.blurhash)
         implementation(projects.libraries.uiStrings)
+        implementation(libs.androidx.datastore.preferences)
 
         ksp(libs.showkase.processor)
         kspTest(libs.showkase.processor)
