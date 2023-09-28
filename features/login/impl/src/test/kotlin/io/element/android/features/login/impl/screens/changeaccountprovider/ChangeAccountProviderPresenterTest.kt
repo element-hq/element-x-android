@@ -50,6 +50,7 @@ class ChangeAccountProviderPresenterTest {
             assertThat(initialState.accountProviders).isEqualTo(
                 listOf(
                     AccountProvider(
+                        url = "https://matrix.org",
                         title = "matrix.org",
                         subtitle = null,
                         isPublic = true,
