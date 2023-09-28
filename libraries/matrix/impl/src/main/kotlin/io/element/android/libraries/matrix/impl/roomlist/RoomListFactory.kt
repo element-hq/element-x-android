@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.FilterableRoomList
+import io.element.android.libraries.matrix.api.roomlist.PagedFilterableRoomList
 import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -53,12 +54,14 @@ internal class RoomListFactory(
         )
     }
 
-    fun createFilterable(
+    fun createPagedFilterable(
+        pageSize: Int = PagedRoomList.DEFAULT_PAGE_SIZE,
+        pagesToLoad: Int = PagedRoomList.DEFAULT_PAGES_TO_LOAD,
         innerProvider: suspend () -> InnerRoomList
-    ): FilterableRoomList {
+    ): PagedFilterableRoomList {
         return createRoomList(
-            pageSize = 200,
-            numberOfPages = 1,
+            pageSize = pageSize,
+            numberOfPages = pagesToLoad,
             initialFilterKind = RoomListEntriesDynamicFilterKind.None,
             innerRoomListProvider = innerProvider
         )
@@ -108,15 +111,15 @@ private class RustRoomList(
     override val loadingState: MutableStateFlow<RoomList.LoadingState>,
     private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>,
     private val processor: RoomSummaryListProcessor,
-) : PagedRoomList, FilterableRoomList {
+) : PagedFilterableRoomList {
+
+    override suspend fun rebuildSummaries() {
+        processor.rebuildRoomSummaries()
+    }
 
     override suspend fun updateFilter(filter: FilterableRoomList.Filter) {
         val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
         dynamicEvents.emit(filterEvent)
-    }
-
-    override suspend fun rebuildSummaries() {
-        processor.rebuildRoomSummaries()
     }
 
     override suspend fun loadMore() {

@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListInput
 import org.matrix.rustcomponents.sdk.RoomListRange
@@ -42,7 +41,7 @@ internal class RustRoomListService(
     override val allRooms = roomListFactory.createPaged {
         innerRoomListService.allRooms()
     }
-    override val allRoomsFilterable = roomListFactory.createFilterable {
+    override val allRoomsFilterable = roomListFactory.createPagedFilterable(pageSize = 50, pagesToLoad = 1) {
         innerRoomListService.allRooms()
     }
     override val invites = roomListFactory.createPaged {

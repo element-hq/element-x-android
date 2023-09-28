@@ -20,7 +20,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -58,7 +57,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.designsystem.utils.LazyListVisibleRangeHelper
 import io.element.android.libraries.designsystem.utils.copy
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -110,10 +108,6 @@ internal fun RoomListSearchResultContent(
 
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
-    }
-
-    fun onVisibleRangeUpdated(intRange: IntRange) {
-        state.eventSink(RoomListEvents.UpdateVisibleRange(intRange))
     }
 
     Scaffold(
@@ -192,11 +186,12 @@ internal fun RoomListSearchResultContent(
                         onLongClick = onRoomLongClicked,
                     )
                 }
+                item {
+                    LaunchedEffect(Unit) {
+                        state.eventSink(RoomListEvents.LoadMoreSearchResults)
+                    }
+                }
             }
-            LazyListVisibleRangeHelper(
-                lazyListState = lazyListState,
-                onVisibleRangeUpdated = ::onVisibleRangeUpdated,
-            )
         }
     }
 }

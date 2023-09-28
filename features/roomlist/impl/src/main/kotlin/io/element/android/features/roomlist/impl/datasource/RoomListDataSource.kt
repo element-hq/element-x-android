@@ -21,6 +21,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceh
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -38,9 +39,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -76,35 +77,52 @@ class RoomListDataSource @Inject constructor(
     fun launchIn(coroutineScope: CoroutineScope) {
         allRoomsList.summaries
             .onEach { roomSummaries ->
-                replaceWith(roomSummaries)
+                replaceCacheWith(roomSummaries)
             }.launchIn(coroutineScope)
 
-        allRoomsFilterableList.summaries
-            .map { roomSummaries ->
-                roomSummaries.map { roomSummary ->
-                    roomSummary.toRoomListModel()
-                }.toImmutableList()
-            }.onEach { filteredRooms ->
-                _filteredRooms.emit(filteredRooms)
+        combine(
+            _filter,
+            allRoomsFilterableList.summaries
+        ) { filter, roomSummaries ->
+            if (filter.isBlank()) {
+                persistentListOf()
+            } else {
+                mapRoomSummaries(roomSummaries)
+            }
+        }.onEach { filteredRooms ->
+            _filteredRooms.emit(filteredRooms)
+        }.launchIn(coroutineScope)
+
+        _filter
+            .debounce(100)
+            .onEach { filter ->
+                val filter = if (filter.isBlank()) {
+                    FilterableRoomList.Filter.None
+                } else {
+                    FilterableRoomList.Filter.NormalizedMatchRoomName(filter)
+                }
+                allRoomsFilterableList.updateFilter(filter)
             }.launchIn(coroutineScope)
     }
 
-    suspend fun updateFilter(filterValue: String) {
+    fun updateFilter(filterValue: String) {
         _filter.value = filterValue
-        val filter = if (filterValue.isBlank()) {
-            FilterableRoomList.Filter.None
+    }
+
+    suspend fun loadMore(filteredList: Boolean) {
+        if (filteredList) {
+            allRoomsFilterableList.loadMore()
         } else {
-            FilterableRoomList.Filter.NormalizedMatchRoomName(filterValue)
+            allRoomsList.loadMore()
         }
-        allRoomsFilterableList.updateFilter(filter)
     }
 
-    suspend fun loadMore() {
-        allRoomsList.loadMore()
-    }
-
-    suspend fun reset() {
-        allRoomsList.reset()
+    suspend fun reset(filteredList: Boolean) {
+        if (filteredList) {
+            allRoomsFilterableList.reset()
+        } else {
+            allRoomsList.reset()
+        }
     }
 
     val filter: StateFlow<String> = _filter
@@ -121,7 +139,13 @@ class RoomListDataSource @Inject constructor(
             .launchIn(appScope)
     }
 
-    private suspend fun replaceWith(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
+    private suspend fun mapRoomSummaries(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
+        roomSummaries.parallelMap { roomSummary ->
+            roomSummary.toRoomListModel()
+        }.toImmutableList()
+    }
+
+    private suspend fun replaceCacheWith(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(roomSummaries)
             buildAndEmitAllRooms(roomSummaries)

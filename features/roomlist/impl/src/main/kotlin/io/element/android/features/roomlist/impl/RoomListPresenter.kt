@@ -40,7 +40,6 @@ import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -50,8 +49,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private const val THRESHOLD_PAGE_MULTIPLIER = 5
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
@@ -73,6 +70,7 @@ class RoomListPresenter @Inject constructor(
         val filteredRoomList by roomListDataSource.filteredRooms.collectAsState()
         val filter by roomListDataSource.filter.collectAsState()
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
+        var displaySearchResults by rememberSaveable { mutableStateOf(false) }
         val visibleRange = remember {
             mutableStateOf(IntRange.EMPTY)
         }
@@ -88,8 +86,6 @@ class RoomListPresenter @Inject constructor(
         val displayVerificationPrompt by remember {
             derivedStateOf { canVerifySession && !verificationPromptDismissed }
         }
-
-        var displaySearchResults by rememberSaveable { mutableStateOf(false) }
 
         var contextMenu by remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
         val coroutineScope = rememberCoroutineScope()
@@ -110,6 +106,7 @@ class RoomListPresenter @Inject constructor(
                 }
                 is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
+                RoomListEvents.LoadMoreSearchResults -> coroutineScope.loadMoreSearchResults()
             }
         }
 
@@ -134,7 +131,7 @@ class RoomListPresenter @Inject constructor(
     private fun VisibleRangeHandler(visibleRange: State<IntRange>) {
         val hasReachEndThreshold = remember {
             derivedStateOf {
-                visibleRange.value.last > roomListDataSource.allRooms.value.size - PagedRoomList.DEFAULT_PAGE_SIZE * THRESHOLD_PAGE_MULTIPLIER
+                visibleRange.value.last > roomListDataSource.allRooms.value.size - PagedRoomList.DEFAULT_PAGE_SIZE
             }
         }
         val hasReachedStart = remember {
@@ -144,7 +141,7 @@ class RoomListPresenter @Inject constructor(
         }
         LaunchedEffect(Unit) {
             launch {
-                roomListDataSource.loadMore()
+                roomListDataSource.loadMore(filteredList = false)
             }
             snapshotFlow { visibleRange.value }
                 .debounce(300)
@@ -162,7 +159,7 @@ class RoomListPresenter @Inject constructor(
             snapshotFlow { hasReachEndThreshold.value }
                 .onEach { shouldLoadMore ->
                     if (shouldLoadMore) {
-                        roomListDataSource.loadMore()
+                        roomListDataSource.loadMore(filteredList = false)
                     }
                 }.launchIn(this)
         }
@@ -175,4 +172,10 @@ class RoomListPresenter @Inject constructor(
     private fun CoroutineScope.loadCurrentUser(matrixUser: MutableState<MatrixUser?>) = launch {
         matrixUser.value = client.getCurrentUser()
     }
+
+    private fun CoroutineScope.loadMoreSearchResults() = launch {
+        roomListDataSource.loadMore(filteredList = true)
+    }
 }
+
+
