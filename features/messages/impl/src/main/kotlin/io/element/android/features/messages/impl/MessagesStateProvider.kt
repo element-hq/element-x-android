@@ -39,13 +39,13 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(),
             aMessagesState().copy(hasNetworkConnection = false),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
-            aMessagesState().copy(composerState = aMessageComposerState().copy(showTextFormatting = true)),
             aMessagesState().copy(userHasPermissionToSendMessage = false),
             aMessagesState().copy(showReinvitePrompt = true),
             aMessagesState().copy(
                 roomName = Async.Uninitialized,
                 roomAvatar = Async.Uninitialized,
             ),
+            aMessagesState().copy(composerState = aMessageComposerState().copy(showTextFormatting = true)),
         )
 }
 

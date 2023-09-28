@@ -17,6 +17,8 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -92,8 +94,17 @@ fun MessageComposerView(
 @PreviewsDayNight
 @Composable
 internal fun MessageComposerViewPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) = ElementPreview {
-    Box(modifier = Modifier.height(200.dp)) {
+    Column {
         MessageComposerView(
+            modifier = Modifier.height(IntrinsicSize.Min),
+            state = state,
+            onSendLocationClicked = {},
+            onCreatePollClicked = {},
+            enableTextFormatting = true,
+            subcomposing = false,
+        )
+        MessageComposerView(
+            modifier = Modifier.height(200.dp),
             state = state,
             onSendLocationClicked = {},
             onCreatePollClicked = {},
