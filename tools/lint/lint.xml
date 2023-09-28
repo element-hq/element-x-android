@@ -124,4 +124,7 @@
 
     <!-- DI -->
     <!-- issue id="JvmStaticProvidesInObjectDetector" severity="error" /-->
+
+    <!-- Compose -->
+    <issue id="UnnecessaryComposedModifier" severity="error" />
 </lint>
