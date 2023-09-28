@@ -343,7 +343,7 @@ internal fun MembersSection(
 ) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
-            title = stringResource(R.string.screen_room_details_people_title),
+            title = stringResource(CommonStrings.common_people),
             icon = Icons.Outlined.Person,
             currentValue = memberCount.toString(),
             onClick = openRoomMemberList,
