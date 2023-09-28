@@ -27,7 +27,7 @@ data class ConfirmAccountProviderState(
     val loginFlow: Async<LoginFlow>,
     val eventSink: (ConfirmAccountProviderEvents) -> Unit
 ) {
-    val submitEnabled: Boolean get() = accountProvider.title.isNotEmpty() && (loginFlow is Async.Uninitialized || loginFlow is Async.Loading)
+    val submitEnabled: Boolean get() = accountProvider.url.isNotEmpty() && (loginFlow is Async.Uninitialized || loginFlow is Async.Loading)
 }
 
 sealed interface LoginFlow {

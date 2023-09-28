@@ -109,6 +109,7 @@ fun ChangeAccountProviderView(
                 // Other
                 AccountProviderView(
                     item = AccountProvider(
+                        url = "",
                         title = stringResource(id = R.string.screen_change_account_provider_other),
                     ),
                     onClick = onOtherProviderClicked

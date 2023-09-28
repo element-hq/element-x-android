@@ -40,7 +40,7 @@ class LoginScreen(private val authenticationService: MatrixAuthenticationService
         }
 
         LaunchedEffect(Unit) {
-            authenticationService.setHomeserver(defaultAccountProvider.title)
+            authenticationService.setHomeserver(defaultAccountProvider.url)
         }
 
         val state = presenter.present()
