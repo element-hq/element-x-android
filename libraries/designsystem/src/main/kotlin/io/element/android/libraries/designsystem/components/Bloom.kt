@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
@@ -74,6 +75,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -327,10 +329,37 @@ fun Modifier.avatarBloom(
 
     // Request the avatar contents to use as the bloom source
     val context = LocalContext.current
-    val density = LocalDensity.current
-    val bloomBlurHashStore = remember { BloomBlurHashStore(context) }
-    val blurHash by bloomBlurHashStore.get(avatarData.id).collectAsState(initial = null)
+    val blurHash = if (LocalInspectionMode.current) {
+        // Use default hash for preview
+        HASH_FOR_PREVIEW
+    } else {
+        val bloomBlurHashStore = remember { BloomBlurHashStore(context) }
+        val blurHashFromStore by bloomBlurHashStore.get(avatarData.id).collectAsState(initial = null)
+        ComputeAndStoreBlurHash(context, avatarData, bloomBlurHashStore)
+        blurHashFromStore
+    }
+    Timber.d("Bloom render $blurHash")
+    bloom(
+        hash = blurHash,
+        background = background,
+        blurSize = blurSize,
+        offset = offset,
+        clipToSize = clipToSize,
+        bottomSoftEdgeColor = bottomSoftEdgeColor,
+        bottomSoftEdgeHeight = bottomSoftEdgeHeight,
+        bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
+        alpha = alpha,
+    )
+}
+
+@Composable
+fun ComputeAndStoreBlurHash(
+    context: Context,
+    avatarData: AvatarData,
+    bloomBlurHashStore: BloomBlurHashStore,
+) {
     if (avatarData.url != null) {
+        val density = LocalDensity.current
         val painterRequest = remember(avatarData) {
             ImageRequest.Builder(context)
                 .data(avatarData)
@@ -371,18 +400,6 @@ fun Modifier.avatarBloom(
             }
         }
     }
-    Timber.d("Bloom render $blurHash")
-    bloom(
-        hash = blurHash,
-        background = background,
-        blurSize = blurSize,
-        offset = offset,
-        clipToSize = clipToSize,
-        bottomSoftEdgeColor = bottomSoftEdgeColor,
-        bottomSoftEdgeHeight = bottomSoftEdgeHeight,
-        bottomSoftEdgeAlpha = bottomSoftEdgeAlpha,
-        alpha = alpha,
-    )
 }
 
 // Used to create a Bitmap version of the initials avatar
@@ -446,12 +463,13 @@ fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
     }
 }
 
+private const val HASH_FOR_PREVIEW = "eePn{tI?xExEja}ooKWWodjtNJoKR,j@a|sBWpS3WDbGazoKWWWWj@"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @ShowkaseComposable(group = PreviewGroup.Bloom)
 @Composable
 internal fun BloomPreview() {
-    val blurhash = "eePn{tI?xExEja}ooKWWodjtNJoKR,j@a|sBWpS3WDbGazoKWWWWj@"
     var topAppBarHeight by remember { mutableIntStateOf(-1) }
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
@@ -468,7 +486,7 @@ internal fun BloomPreview() {
                                 topAppBarHeight = size.height
                             }
                             .bloom(
-                                hash = blurhash,
+                                hash = HASH_FOR_PREVIEW,
                                 background = ElementTheme.materialColors.background,
                                 blurSize = DpSize(430.dp, 430.dp),
                                 offset = DpOffset(24.dp, 24.dp),
