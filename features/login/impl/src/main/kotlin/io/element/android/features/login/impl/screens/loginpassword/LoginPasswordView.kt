@@ -199,7 +199,7 @@ internal fun LoginForm(
                     eventSink(LoginPasswordEvents.SetLogin(it))
                 }),
             placeholder = {
-                Text(text = stringResource(R.string.screen_login_username_hint))
+                Text(text = stringResource(CommonStrings.common_username))
             },
             onValueChange = {
                 loginFieldState = it
@@ -246,7 +246,7 @@ internal fun LoginForm(
                 eventSink(LoginPasswordEvents.SetPassword(it))
             },
             placeholder = {
-                Text(text = stringResource(R.string.screen_login_password_hint))
+                Text(text = stringResource(CommonStrings.common_password))
             },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
