@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
+import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
@@ -114,6 +115,7 @@ class RustMatrixClient constructor(
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
+    private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -185,6 +187,7 @@ class RustMatrixClient constructor(
                 systemClock = clock,
                 roomContentForwarder = roomContentForwarder,
                 sessionData = sessionStore.getSession(sessionId.value)!!,
+                roomSyncSubscriber = roomSyncSubscriber
             )
         }
     }
@@ -291,7 +294,6 @@ class RustMatrixClient constructor(
         withContext(sessionDispatcher) {
             runCatching { client.removeAvatar() }
         }
-
 
     override fun syncService(): SyncService = rustSyncService
 

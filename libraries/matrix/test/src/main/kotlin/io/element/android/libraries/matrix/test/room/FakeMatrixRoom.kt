@@ -157,9 +157,9 @@ class FakeMatrixRoom(
 
     override val timeline: MatrixTimeline = matrixTimeline
 
-    override fun subscribeToSync() = Unit
+    override suspend fun subscribeToSync() = Unit
 
-    override fun unsubscribeFromSync() = Unit
+    override suspend fun unsubscribeFromSync() = Unit
 
     override fun destroy() = Unit
 
