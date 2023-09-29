@@ -143,7 +143,7 @@ class NotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     senderName = senderDisplayName,
                     body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
-                    imageUriString = this.contentUrl,
+                    imageUriString = null,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
                     roomAvatarPath = roomAvatarUrl,
