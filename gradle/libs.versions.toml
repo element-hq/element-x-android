@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.1.1"
+android_gradle_plugin = "8.1.2"
 kotlin = "1.9.10"
 ksp = "1.9.10-1.0.13"
 molecule = "1.2.1"
