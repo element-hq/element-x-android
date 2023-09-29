@@ -45,7 +45,7 @@ plugins {
 }
 
 tasks.register<Delete>("clean").configure {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 allprojects {
@@ -86,7 +86,7 @@ allprojects {
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
         }
         filter {
-            exclude { element -> element.file.path.contains("$buildDir/generated/") }
+            exclude { element -> element.file.path.contains("${layout.buildDirectory.asFile.get()}/generated/") }
         }
     }
     // Dependency check
@@ -354,7 +354,7 @@ subprojects {
 subprojects {
     tasks.withType<KspTask>() {
         doLast {
-            fileTree(buildDir).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
+            fileTree(layout.buildDirectory).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
                 ReplaceRegExp().apply {
                     setMatch("^public fun Showkase.getMetadata")
                     setReplace("@Suppress(\"DEPRECATION\") public fun Showkase.getMetadata")
