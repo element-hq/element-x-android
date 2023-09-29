@@ -138,6 +138,7 @@
     {
       "name": ":features:preferences:impl",
       "includeRegex": [
+        "screen_advanced_settings_.*",
         "screen_edit_profile_.*"
       ]
     },
