@@ -36,6 +36,7 @@ class FakeAuthenticationService : MatrixAuthenticationService {
     private var oidcCancelError: Throwable? = null
     private var loginError: Throwable? = null
     private var changeServerError: Throwable? = null
+    private var matrixClient: MatrixClient? = null
 
     override fun isLoggedIn(): Flow<Boolean> {
         return flowOf(false)
@@ -46,7 +47,11 @@ class FakeAuthenticationService : MatrixAuthenticationService {
     }
 
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> {
-        return Result.failure(IllegalStateException())
+        return if (matrixClient != null) {
+            Result.success(matrixClient!!)
+        } else {
+            Result.failure(IllegalStateException())
+        }
     }
 
     override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> {
@@ -91,5 +96,9 @@ class FakeAuthenticationService : MatrixAuthenticationService {
 
     fun givenChangeServerError(throwable: Throwable?) {
         changeServerError = throwable
+    }
+
+    fun givenMatrixClient(matrixClient: MatrixClient) {
+        this.matrixClient = matrixClient
     }
 }
