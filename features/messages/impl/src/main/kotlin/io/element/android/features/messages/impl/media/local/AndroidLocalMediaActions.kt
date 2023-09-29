@@ -37,10 +37,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.androidutils.system.startInstallFromSourceIntent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.launch
@@ -125,21 +123,7 @@ class AndroidLocalMediaActions @Inject constructor(
     override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatching {
-            when (localMedia.info.mimeType) {
-                MimeTypes.Apk -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (activityContext?.packageManager?.canRequestPackageInstalls() == false) {
-                            pendingMedia = localMedia
-                            activityContext?.startInstallFromSourceIntent(apkInstallLauncher!!).let { }
-                        } else {
-                            openFile(localMedia)
-                        }
-                    } else {
-                        openFile(localMedia)
-                    }
-                }
-                else -> openFile(localMedia)
-            }
+            openFile(localMedia)
         }.onSuccess {
             Timber.v("Open media succeed")
         }.onFailure {

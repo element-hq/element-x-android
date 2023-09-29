@@ -47,7 +47,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.features.messages.impl.media.local.MediaInfo
@@ -173,18 +172,15 @@ private fun MediaViewerTopBar(
         title = {},
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
-            IconButton(
-                enabled = actionsEnabled,
-                onClick = {
-                    eventSink(MediaViewerEvents.OpenWith)
-                },
-            ) {
-                when (mimeType) {
-                    MimeTypes.Apk -> Icon(
-                        resourceId = R.drawable.ic_apk_install,
-                        contentDescription = stringResource(id = CommonStrings.common_install_apk_android)
-                    )
-                    else -> Icon(
+            when (mimeType) {
+                MimeTypes.Apk -> Unit /* No open with action for APKs */
+                else -> IconButton(
+                    enabled = actionsEnabled,
+                    onClick = {
+                        eventSink(MediaViewerEvents.OpenWith)
+                    },
+                ) {
+                    Icon(
                         imageVector = Icons.AutoMirrored.Filled.OpenInNew,
                         contentDescription = stringResource(id = CommonStrings.action_open_with)
                     )
