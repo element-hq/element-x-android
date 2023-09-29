@@ -135,7 +135,7 @@ fun ForwardMessagesView(
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
         ) {
-            SearchBar<ImmutableList<RoomSummaryDetails>>(
+            SearchBar(
                 placeHolderTitle = stringResource(CommonStrings.action_search),
                 query = state.query,
                 onQueryChange = { state.eventSink(ForwardMessagesEvents.UpdateQuery(it)) },
