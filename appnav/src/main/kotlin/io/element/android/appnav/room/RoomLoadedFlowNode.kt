@@ -46,6 +46,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.appnavstate.api.AppNavigationStateService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -60,6 +61,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     private val messagesEntryPoint: MessagesEntryPoint,
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
+    private val appCoroutineScope: CoroutineScope,
     roomComponentFactory: RoomComponentFactory,
     roomMembershipObserver: RoomMembershipObserver,
 ) : BackstackNode<RoomLoadedFlowNode.NavTarget>(
@@ -90,6 +92,16 @@ class RoomLoadedFlowNode @AssistedInject constructor(
                 Timber.v("OnCreate => ${inputs.room.roomId}")
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()
+            },
+            onResume = {
+                appCoroutineScope.launch {
+                    inputs.room.subscribeToSync()
+                }
+            },
+            onPause = {
+                appCoroutineScope.launch {
+                    inputs.room.unsubscribeFromSync()
+                }
             },
             onDestroy = {
                 Timber.v("OnDestroy")
@@ -162,9 +174,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
         // because this node enters 'onDestroy' before his children, so it can leads to
         // using the room in a child node where it's already closed.
         DisposableEffect(Unit) {
-            inputs.room.subscribeToSync()
             onDispose {
-                inputs.room.unsubscribeFromSync()
                 if (lifecycle.currentState == Lifecycle.State.DESTROYED) {
                     inputs.room.destroy()
                 }

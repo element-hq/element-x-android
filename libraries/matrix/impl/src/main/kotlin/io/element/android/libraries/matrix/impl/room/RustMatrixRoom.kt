@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
-import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
@@ -61,12 +60,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
-import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
-import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
@@ -84,6 +81,7 @@ class RustMatrixRoom(
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
     private val sessionData: SessionData,
+    private val roomSyncSubscriber: RoomSyncSubscriber,
 ) : MatrixRoom {
 
     override val roomId = RoomId(innerRoom.id())
@@ -118,22 +116,9 @@ class RustMatrixRoom(
 
     override val timeline: MatrixTimeline = _timeline
 
-    override fun subscribeToSync() {
-        val settings = RoomSubscription(
-            requiredState = listOf(
-                RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_TOPIC, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
-            ),
-            timelineLimit = null
-        )
-        roomListItem.subscribe(settings)
-    }
+    override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
-    override fun unsubscribeFromSync() {
-        roomListItem.unsubscribe()
-    }
+    override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
 
     override fun destroy() {
         roomCoroutineScope.cancel()

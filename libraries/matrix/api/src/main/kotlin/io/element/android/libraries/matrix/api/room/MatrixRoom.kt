@@ -77,9 +77,9 @@ interface MatrixRoom : Closeable {
 
     fun destroy()
 
-    fun subscribeToSync()
+    suspend fun subscribeToSync()
 
-    fun unsubscribeFromSync()
+    suspend fun unsubscribeFromSync()
 
     suspend fun userDisplayName(userId: UserId): Result<String?>
 
