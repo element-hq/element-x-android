@@ -50,6 +50,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
@@ -283,6 +284,13 @@ private fun MessagesViewContent(
             .navigationBarsPadding()
             .imePadding(),
     ) {
+        AttachmentsBottomSheet(
+            state = state.composerState,
+            onSendLocationClicked = onSendLocationClicked,
+            onCreatePollClicked = onCreatePollClicked,
+            enableTextFormatting = state.enableTextFormatting,
+        )
+
         ExpandableBottomSheetScaffold(
             sheetDragHandle = if (state.composerState.showTextFormatting) {
                 @Composable { BottomSheetDragHandle() }
@@ -310,8 +318,6 @@ private fun MessagesViewContent(
                     MessageComposerView(
                         state = state.composerState,
                         subcomposing = subcomposing,
-                        onSendLocationClicked = onSendLocationClicked,
-                        onCreatePollClicked = onCreatePollClicked,
                         enableTextFormatting = state.enableTextFormatting,
                         modifier = Modifier
                             .fillMaxWidth(),
