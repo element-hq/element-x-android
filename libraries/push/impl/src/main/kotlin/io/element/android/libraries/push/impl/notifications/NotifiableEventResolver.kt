@@ -133,9 +133,22 @@ class NotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.KeyVerificationStart -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for verification ${content.javaClass.simpleName}")
             }
-            is NotificationContent.MessageLike.Poll -> null.also {
-                // TODO Polls: handle notification rendering
-                Timber.tag(loggerTag.value).d("Ignoring notification for poll")
+            is NotificationContent.MessageLike.Poll ->  {
+                buildNotifiableMessageEvent(
+                    sessionId = userId,
+                    senderId = content.senderId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    senderName = senderDisplayName,
+                    body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
+                    imageUriString = null,
+                    roomName = roomDisplayName,
+                    roomIsDirect = isDirect,
+                    roomAvatarPath = roomAvatarUrl,
+                    senderAvatarPath = senderAvatarUrl,
+                )
             }
             is NotificationContent.MessageLike.ReactionContent -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for reaction")
