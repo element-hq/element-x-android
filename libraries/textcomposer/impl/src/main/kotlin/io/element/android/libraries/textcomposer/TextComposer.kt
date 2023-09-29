@@ -298,6 +298,8 @@ private fun TextInput(
 
             RichTextEditor(
                 state = state,
+                // Disable most of the editor functionality if it's just being measured for a subcomposition.
+                // This prevents it gaining focus and mutating the state.
                 registerStateUpdates = !subcomposing,
                 modifier = Modifier
                     .padding(top = 6.dp, bottom = 6.dp)
