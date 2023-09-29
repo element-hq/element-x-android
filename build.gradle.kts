@@ -182,6 +182,7 @@ koverMerged {
                     "io.element.android.libraries.designsystem.showkase.*",
                     "io.element.android.x.di.DaggerAppComponent*",
                     "*_Factory",
+                    "*_Factory_Impl",
                     "*_Factory$*",
                     "*_Module",
                     "*_Module$*",
