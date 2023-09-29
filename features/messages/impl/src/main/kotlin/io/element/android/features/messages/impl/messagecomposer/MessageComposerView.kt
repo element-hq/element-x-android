@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.height
@@ -35,8 +34,6 @@ import kotlinx.coroutines.launch
 fun MessageComposerView(
     state: MessageComposerState,
     subcomposing: Boolean,
-    onSendLocationClicked: () -> Unit,
-    onCreatePollClicked: () -> Unit,
     enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -67,28 +64,20 @@ fun MessageComposerView(
         }
     }
 
-    Box(modifier = modifier) {
-        AttachmentsBottomSheet(
-            state = state,
-            onSendLocationClicked = onSendLocationClicked,
-            onCreatePollClicked = onCreatePollClicked,
-            enableTextFormatting = enableTextFormatting,
-        )
-
-        TextComposer(
-            state = state.richTextEditorState,
-            subcomposing = subcomposing,
-            onRequestFocus = ::onRequestFocus,
-            onSendMessage = ::sendMessage,
-            composerMode = state.mode,
-            showTextFormatting = state.showTextFormatting,
-            onResetComposerMode = ::onCloseSpecialMode,
-            onAddAttachment = ::onAddAttachment,
-            onDismissTextFormatting = ::onDismissTextFormatting,
-            enableTextFormatting = enableTextFormatting,
-            onError = ::onError,
-        )
-    }
+    TextComposer(
+        modifier = modifier,
+        state = state.richTextEditorState,
+        subcomposing = subcomposing,
+        onRequestFocus = ::onRequestFocus,
+        onSendMessage = ::sendMessage,
+        composerMode = state.mode,
+        showTextFormatting = state.showTextFormatting,
+        onResetComposerMode = ::onCloseSpecialMode,
+        onAddAttachment = ::onAddAttachment,
+        onDismissTextFormatting = ::onDismissTextFormatting,
+        enableTextFormatting = enableTextFormatting,
+        onError = ::onError,
+    )
 }
 
 @PreviewsDayNight
@@ -98,16 +87,12 @@ internal fun MessageComposerViewPreview(@PreviewParameter(MessageComposerStatePr
         MessageComposerView(
             modifier = Modifier.height(IntrinsicSize.Min),
             state = state,
-            onSendLocationClicked = {},
-            onCreatePollClicked = {},
             enableTextFormatting = true,
             subcomposing = false,
         )
         MessageComposerView(
             modifier = Modifier.height(200.dp),
             state = state,
-            onSendLocationClicked = {},
-            onCreatePollClicked = {},
             enableTextFormatting = true,
             subcomposing = false,
         )
