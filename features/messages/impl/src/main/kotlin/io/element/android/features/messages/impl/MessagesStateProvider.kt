@@ -45,6 +45,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 roomName = Async.Uninitialized,
                 roomAvatar = Async.Uninitialized,
             ),
+            aMessagesState().copy(composerState = aMessageComposerState().copy(showTextFormatting = true)),
         )
 }
 
@@ -55,9 +56,7 @@ fun aMessagesState() = MessagesState(
     userHasPermissionToSendMessage = true,
     userHasPermissionToRedact = false,
     composerState = aMessageComposerState().copy(
-        richTextEditorState = RichTextEditorState("Hello", fake = true).apply {
-            requestFocus()
-        },
+        richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
         isFullScreen = false,
         mode = MessageComposerMode.Normal("Hello"),
     ),

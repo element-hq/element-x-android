@@ -22,7 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
-import io.element.android.features.leaveroom.fake.LeaveRoomPresenterFake
+import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsType
@@ -61,7 +61,7 @@ class RoomDetailsPresenterTests {
     val warmUpRule = WarmUpRule()
     private fun aRoomDetailsPresenter(
         room: MatrixRoom,
-        leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake(),
+        leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
         dispatchers: CoroutineDispatchers,
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
     ): RoomDetailsPresenter {
@@ -348,7 +348,7 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - leave room event is passed on to leave room presenter`() = runTest {
-        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val room = aMatrixRoom()
         val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
@@ -364,7 +364,7 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - notification mode changes`() = runTest {
-        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val notificationSettingsService = FakeNotificationSettingsService()
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
@@ -383,7 +383,7 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - mute room notifications`() = runTest {
-        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val notificationSettingsService = FakeNotificationSettingsService(initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = aRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
@@ -401,7 +401,7 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - unmute room notifications`() = runTest {
-        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val notificationSettingsService = FakeNotificationSettingsService(
             initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
             initialEncryptedGroupDefaultMode = RoomNotificationMode.ALL_MESSAGES

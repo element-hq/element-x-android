@@ -45,7 +45,7 @@ plugins {
 }
 
 tasks.register<Delete>("clean").configure {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 allprojects {
@@ -86,7 +86,7 @@ allprojects {
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
         }
         filter {
-            exclude { element -> element.file.path.contains("$buildDir/generated/") }
+            exclude { element -> element.file.path.contains("${layout.buildDirectory.asFile.get()}/generated/") }
         }
     }
     // Dependency check
@@ -176,10 +176,13 @@ koverMerged {
                     "*_ModuleKt",
                     "anvil.hint.binding.io.element.*",
                     "anvil.hint.merge.*",
+                    "anvil.hint.multibinding.io.element.*",
                     "anvil.module.*",
                     "com.airbnb.android.showkase*",
                     "io.element.android.libraries.designsystem.showkase.*",
+                    "io.element.android.x.di.DaggerAppComponent*",
                     "*_Factory",
+                    "*_Factory_Impl",
                     "*_Factory$*",
                     "*_Module",
                     "*_Module$*",
@@ -228,11 +231,11 @@ koverMerged {
             name = "Global minimum code coverage."
             target = kotlinx.kover.api.VerificationTarget.ALL
             bound {
-                minValue = 55
+                minValue = 60
                 // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
                 // For instance if we have minValue = 20 and maxValue = 30, and current code coverage is now 31.32%, update
                 // minValue to 25 and maxValue to 35.
-                maxValue = 65
+                maxValue = 70
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
@@ -354,7 +357,7 @@ subprojects {
 subprojects {
     tasks.withType<KspTask>() {
         doLast {
-            fileTree(buildDir).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
+            fileTree(layout.buildDirectory).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
                 ReplaceRegExp().apply {
                     setMatch("^public fun Showkase.getMetadata")
                     setReplace("@Suppress(\"DEPRECATION\") public fun Showkase.getMetadata")

@@ -20,9 +20,8 @@ import androidx.compose.runtime.Composable
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import javax.inject.Inject
 
-class LeaveRoomPresenterFake @Inject constructor() : LeaveRoomPresenter {
+class FakeLeaveRoomPresenter: LeaveRoomPresenter {
 
     val events = mutableListOf<LeaveRoomEvent>()
 

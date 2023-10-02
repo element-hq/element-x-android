@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun ConfirmAccountProviderView(
@@ -86,7 +87,7 @@ fun ConfirmAccountProviderView(
         footer = {
             ButtonColumnMolecule {
                 Button(
-                    text = stringResource(id = R.string.screen_account_provider_continue),
+                    text = stringResource(id = CommonStrings.action_continue),
                     showProgress = isLoading,
                     onClick = { eventSink.invoke(ConfirmAccountProviderEvents.Continue) },
                     enabled = state.submitEnabled || isLoading,

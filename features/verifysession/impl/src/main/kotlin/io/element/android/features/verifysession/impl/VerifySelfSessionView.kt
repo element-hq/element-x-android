@@ -100,7 +100,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
     }
     val titleTextId = when (verificationFlowStep) {
         FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_title
-        FlowStep.Canceled -> R.string.screen_session_verification_cancelled_title
+        FlowStep.Canceled -> CommonStrings.common_verification_cancelled
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_title
         FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_title
     }
@@ -190,7 +190,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 R.string.screen_session_verification_they_match
             }
         }
-        FlowStep.Ready -> R.string.screen_session_verification_positive_button_ready
+        FlowStep.Ready -> CommonStrings.action_start
         else -> null
     }
     val negativeButtonTitle = when (verificationViewState) {

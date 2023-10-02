@@ -203,7 +203,7 @@ private fun RoomMemberListTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(R.string.screen_room_details_people_title),
+                text = stringResource(CommonStrings.common_people),
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         },

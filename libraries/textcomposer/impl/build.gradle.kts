@@ -32,8 +32,6 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.constraintlayout.compose)
 
     implementation(libs.matrix.richtexteditor)
     api(libs.matrix.richtexteditor.compose)

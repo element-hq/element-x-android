@@ -139,7 +139,7 @@ fun LoginPasswordView(
             Spacer(modifier = Modifier.weight(1f))
             // Submit
             Button(
-                text = stringResource(R.string.screen_login_submit),
+                text = stringResource(CommonStrings.action_continue),
                 showProgress = isLoading,
                 onClick = ::submit,
                 enabled = state.submitEnabled || isLoading,
@@ -199,7 +199,7 @@ internal fun LoginForm(
                     eventSink(LoginPasswordEvents.SetLogin(it))
                 }),
             placeholder = {
-                Text(text = stringResource(R.string.screen_login_username_hint))
+                Text(text = stringResource(CommonStrings.common_username))
             },
             onValueChange = {
                 loginFieldState = it
@@ -246,7 +246,7 @@ internal fun LoginForm(
                 eventSink(LoginPasswordEvents.SetPassword(it))
             },
             placeholder = {
-                Text(text = stringResource(R.string.screen_login_password_hint))
+                Text(text = stringResource(CommonStrings.common_password))
             },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
