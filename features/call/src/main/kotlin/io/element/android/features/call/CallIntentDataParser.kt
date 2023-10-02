@@ -54,21 +54,50 @@ class CallIntentDataParser @Inject constructor() {
 }
 
 /**
- * Ensure the uri has the following parameters and value:
+ * Ensure the uri has the following parameters and value in the fragment:
  * - appPrompt=false
  * - confineToRoom=true
  * to ensure that the rendering will bo correct on the embedded Webview.
  */
 private fun Uri.withCustomParameters(): String {
     val builder = buildUpon()
+    // Remove the existing query parameters
     builder.clearQuery()
     queryParameterNames.forEach {
         if (it == APP_PROMPT_PARAMETER || it == CONFINE_TO_ROOM_PARAMETER) return@forEach
         builder.appendQueryParameter(it, getQueryParameter(it))
     }
-    builder.appendQueryParameter(APP_PROMPT_PARAMETER, "false")
-    builder.appendQueryParameter(CONFINE_TO_ROOM_PARAMETER, "true")
-    return builder.build().toString()
+    // Remove the existing fragment parameters, and build the new fragment
+    val currentFragment = fragment ?: ""
+    // Reset the current fragment
+    builder.fragment("")
+    val queryFragmentPosition = currentFragment.lastIndexOf("?")
+    val newFragment = if (queryFragmentPosition == -1) {
+        // No existing query, build it.
+        "$currentFragment?$APP_PROMPT_PARAMETER=false&$CONFINE_TO_ROOM_PARAMETER=true"
+    } else {
+        buildString {
+            append(currentFragment.substring(0, queryFragmentPosition + 1))
+            val queryFragment = currentFragment.substring(queryFragmentPosition + 1)
+            // Replace the existing parameters
+            val newQueryFragment = queryFragment
+                .replace("$APP_PROMPT_PARAMETER=true", "$APP_PROMPT_PARAMETER=false")
+                .replace("$CONFINE_TO_ROOM_PARAMETER=false", "$CONFINE_TO_ROOM_PARAMETER=true")
+            append(newQueryFragment)
+            // Ensure the parameters are there
+            if (!newQueryFragment.contains("$APP_PROMPT_PARAMETER=false")) {
+                if (newQueryFragment.isNotEmpty()) {
+                    append("&")
+                }
+                append("$APP_PROMPT_PARAMETER=false")
+            }
+            if (!newQueryFragment.contains("$CONFINE_TO_ROOM_PARAMETER=true")) {
+                append("&$CONFINE_TO_ROOM_PARAMETER=true")
+            }
+        }
+    }
+    // We do not want to encode the Fragment part, so append it manually
+    return builder.build().toString() + "#" + newFragment
 }
 
 private const val APP_PROMPT_PARAMETER = "appPrompt"
