@@ -9,6 +9,9 @@
   <string name="screen_room_details_edit_room_title">"編輯聊天室"</string>
   <string name="screen_room_details_edition_error_title">"無法更新聊天室"</string>
   <string name="screen_room_details_encryption_enabled_title">"訊息已加密"</string>
+  <string name="screen_room_details_error_loading_notification_settings">"載入通知設定時發生錯誤。"</string>
+  <string name="screen_room_details_error_muting">"無法關閉聊天室通知，請再試一次。"</string>
+  <string name="screen_room_details_error_unmuting">"無法開啟聊天室通知，請再試一次。"</string>
   <string name="screen_room_details_invite_people_title">"邀請夥伴"</string>
   <string name="screen_room_details_notification_mode_custom">"自訂"</string>
   <string name="screen_room_details_notification_mode_default">"預設"</string>
