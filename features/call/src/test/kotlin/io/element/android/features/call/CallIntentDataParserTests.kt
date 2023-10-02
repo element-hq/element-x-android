@@ -172,6 +172,14 @@ class CallIntentDataParserTests {
     }
 
     @Test
+    fun `element scheme 2 with url extra param in fragment appPrompt and other gets url extracted`() {
+        val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}#?appPrompt=true&otherParam=maybe"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM#?appPrompt=false&otherParam=maybe&confineToRoom=true")
+    }
+
+    @Test
     fun `element scheme 2 with url extra param confineToRoom gets url extracted`() {
         val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}&confineToRoom=false"
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
@@ -188,11 +196,35 @@ class CallIntentDataParserTests {
     }
 
     @Test
+    fun `element scheme 2 with url extra param in fragment confineToRoom and more gets url extracted`() {
+        val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}#?confineToRoom=false&otherParam=maybe"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM#?confineToRoom=true&otherParam=maybe&appPrompt=false")
+    }
+
+    @Test
     fun `element scheme 2 with url fragment gets url extracted`() {
         val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}#fragment"
         val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
         val url = "io.element.call:/?url=$encodedUrl"
         assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM#fragment?$EXTRA_PARAMS")
+    }
+
+    @Test
+    fun `element scheme 2 with url fragment with params gets url extracted`() {
+        val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}#fragment?otherParam=maybe"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM#fragment?otherParam=maybe&$EXTRA_PARAMS")
+    }
+
+    @Test
+    fun `element scheme 2 with url fragment with other params gets url extracted`() {
+        val embeddedUrl = "${VALID_CALL_URL_WITH_PARAM}#?otherParam=maybe"
+        val encodedUrl = URLEncoder.encode(embeddedUrl, "utf-8")
+        val url = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(url)).isEqualTo("$VALID_CALL_URL_WITH_PARAM#?otherParam=maybe&$EXTRA_PARAMS")
     }
 
     @Test
