@@ -276,11 +276,12 @@ Follow these steps to install and configure the plugin and templates:
 
 1. Install the AS plugin for generating modules :
    [Generate Module from Template](https://plugins.jetbrains.com/plugin/13586-generate-module-from-template)
-2. Import file templates in AS :
+2. Run the script `tools/templates/generate_templates.sh` to generate the template zip file
+3. Import file templates in AS :
    - Navigate to File/Manage IDE Settings/Import Settings
-   - Pick the `tools/templates/file_templates.zip` files
+   - Pick the `tmp/file_templates.zip` files
    - Click on OK
-3. Configure generate-module-from-template plugin : 
+4. Configure generate-module-from-template plugin : 
    - Navigate to AS/Settings/Tools/Module Template Settings
    - Click on + / Import From File
    - Pick the `tools/templates/FeatureModule.json`
