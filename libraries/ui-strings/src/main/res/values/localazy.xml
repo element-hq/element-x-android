@@ -36,6 +36,7 @@
   <string name="action_invite_friends_to_app">"Invite friends to %1$s"</string>
   <string name="action_invite_people_to_app">"Invite people to %1$s"</string>
   <string name="action_invites_list">"Invites"</string>
+  <string name="action_join">"Join"</string>
   <string name="action_learn_more">"Learn more"</string>
   <string name="action_leave">"Leave"</string>
   <string name="action_leave_room">"Leave room"</string>

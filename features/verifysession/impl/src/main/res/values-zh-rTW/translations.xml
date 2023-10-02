@@ -4,7 +4,7 @@
   <string name="screen_session_verification_compare_emojis_subtitle">"確認顯示在其他工作階段上的表情符號是否和下方的相同。"</string>
   <string name="screen_session_verification_compare_emojis_title">"比對表情符號"</string>
   <string name="screen_session_verification_complete_subtitle">"新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。"</string>
-  <string name="screen_session_verification_open_existing_session_subtitle">"為了存取被加密的歷史訊息，請證明這是您本人。"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"為了存取被加密的歷史訊息，您需要證明這是您本人。"</string>
   <string name="screen_session_verification_open_existing_session_title">"開啟一個現存的工作階段"</string>
   <string name="screen_session_verification_positive_button_canceled">"重新嘗試驗證"</string>
   <string name="screen_session_verification_positive_button_initial">"我準備好了"</string>

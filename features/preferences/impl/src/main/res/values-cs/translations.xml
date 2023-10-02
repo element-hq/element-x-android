@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Vývojářský režim"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Povolením získáte přístup k funkcím a funkcím pro vývojáře."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Vypněte editor formátovaného textu pro ruční zadání Markdown."</string>
   <string name="screen_edit_profile_display_name">"Zobrazované jméno"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované jméno"</string>
   <string name="screen_edit_profile_error">"Došlo k neznámé chybě a informace nelze změnit."</string>

@@ -10,6 +10,8 @@
   <string name="notification_room_invite_body">"邀請您加入聊天室"</string>
   <string name="notification_sender_me">"我"</string>
   <string name="notification_test_push_notification_content">"您正在查看通知！點我！"</string>
+  <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s：%2$s %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="other">"%1$s：%2$d 則訊息"</item>
   </plurals>
