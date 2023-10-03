@@ -21,6 +21,7 @@ import android.content.ContextWrapper
 import com.bumble.appyx.core.node.Node
 import io.element.android.libraries.di.DaggerComponentOwner
 
+inline fun <reified T : Any> Node.optionalBindings() = optionalBindings(T::class.java)
 inline fun <reified T : Any> Node.bindings() = bindings(T::class.java)
 inline fun <reified T : Any> Context.bindings() = bindings(T::class.java)
 
@@ -36,7 +37,7 @@ fun <T : Any> Context.bindings(klass: Class<T>): T {
         ?: error("Unable to find bindings for ${klass.name}")
 }
 
-fun <T : Any> Node.bindings(klass: Class<T>): T {
+fun <T : Any> Node.optionalBindings(klass: Class<T>): T? {
     // search dagger components in node hierarchy
     return generateSequence(this, Node::parent)
         .filterIsInstance<DaggerComponentOwner>()
@@ -44,5 +45,8 @@ fun <T : Any> Node.bindings(klass: Class<T>): T {
         .flatMap { if (it is Collection<*>) it else listOf(it) }
         .filterIsInstance(klass)
         .firstOrNull()
-        ?: error("Unable to find bindings for ${klass.name}")
+}
+
+fun <T : Any> Node.bindings(klass: Class<T>): T {
+    return optionalBindings(klass) ?: error("Unable to find bindings for ${klass.name}")
 }

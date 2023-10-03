@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -34,7 +36,8 @@ class AdvancedSettingsPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val store = InMemoryPreferencesStore()
-        val presenter = AdvancedSettingsPresenter(store)
+        val featureFlagService = FakeFeatureFlagService()
+        val presenter = AdvancedSettingsPresenter(store, featureFlagService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -47,7 +50,8 @@ class AdvancedSettingsPresenterTest {
     @Test
     fun `present - developer mode on off`() = runTest {
         val store = InMemoryPreferencesStore()
-        val presenter = AdvancedSettingsPresenter(store)
+        val featureFlagService = FakeFeatureFlagService()
+        val presenter = AdvancedSettingsPresenter(store, featureFlagService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -63,7 +67,8 @@ class AdvancedSettingsPresenterTest {
     @Test
     fun `present - rich text editor on off`() = runTest {
         val store = InMemoryPreferencesStore()
-        val presenter = AdvancedSettingsPresenter(store)
+        val featureFlagService = FakeFeatureFlagService()
+        val presenter = AdvancedSettingsPresenter(store, featureFlagService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -73,6 +78,66 @@ class AdvancedSettingsPresenterTest {
             assertThat(awaitItem().isRichTextEditorEnabled).isTrue()
             initialState.eventSink.invoke(AdvancedSettingsEvents.SetRichTextEditorEnabled(false))
             assertThat(awaitItem().isRichTextEditorEnabled).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - custom element call url state is null if the feature flag is disabled`() = runTest {
+        val store = InMemoryPreferencesStore()
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.InRoomCalls, false)
+        }
+        val presenter = AdvancedSettingsPresenter(store, featureFlagService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.customElementCallBaseUrlState).isNull()
+        }
+    }
+
+    @Test
+    fun `present - custom element call base url`() = runTest {
+        val store = InMemoryPreferencesStore()
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.InRoomCalls, true)
+        }
+        val presenter = AdvancedSettingsPresenter(store, featureFlagService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Initial state has a default `false` feature flag value, so the state will still be null
+            skipItems(1)
+
+            val initialState = awaitItem()
+            assertThat(initialState.customElementCallBaseUrlState).isNotNull()
+            assertThat(initialState.customElementCallBaseUrlState?.baseUrl).isNull()
+
+            initialState.eventSink(AdvancedSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.dev"))
+            val updatedItem = awaitItem()
+            assertThat(updatedItem.customElementCallBaseUrlState?.baseUrl).isEqualTo("https://call.element.dev")
+        }
+    }
+
+    @Test
+    fun `present - custom element call base url validator needs at least an HTTP scheme and host`() = runTest {
+        val store = InMemoryPreferencesStore()
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.InRoomCalls, true)
+        }
+        val presenter = AdvancedSettingsPresenter(store, featureFlagService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Initial state has a default `false` feature flag value, so the state will still be null
+            skipItems(1)
+
+            val urlValidator = awaitItem().customElementCallBaseUrlState!!.validator
+            assertThat(urlValidator("")).isTrue() // We allow empty string to clear the value and use the default one
+            assertThat(urlValidator("test")).isFalse()
+            assertThat(urlValidator("http://")).isFalse()
+            assertThat(urlValidator("geo://test")).isFalse()
+            assertThat(urlValidator("https://call.element.io")).isTrue()
         }
     }
 }

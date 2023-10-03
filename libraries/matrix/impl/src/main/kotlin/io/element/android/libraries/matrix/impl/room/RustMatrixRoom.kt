@@ -40,6 +40,8 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
@@ -48,6 +50,8 @@ import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
+import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
+import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CancellationException
@@ -65,6 +69,8 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
+import org.matrix.rustcomponents.sdk.WidgetPermissions
+import org.matrix.rustcomponents.sdk.WidgetPermissionsProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
@@ -475,6 +481,27 @@ class RustMatrixRoom(
             audioInfo = audioInfo.map(),
             waveform = waveform.map { it.toUShort() },
             progressWatcher = progressCallback?.toProgressWatcher(),
+        )
+    }
+
+    override suspend fun generateWidgetWebViewUrl(
+        widgetSettings: MatrixWidgetSettings,
+        clientId: String,
+        languageTag: String?,
+        theme: String?,
+    ) = runCatching {
+        widgetSettings.generateWidgetWebViewUrl(innerRoom, clientId, languageTag, theme)
+    }
+
+    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = runCatching {
+        RustWidgetDriver(
+            widgetSettings = widgetSettings,
+            room = innerRoom,
+            widgetPermissionsProvider = object : WidgetPermissionsProvider {
+                override fun acquirePermissions(permissions: WidgetPermissions): WidgetPermissions {
+                    return permissions
+                }
+           },
         )
     }
 
