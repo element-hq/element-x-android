@@ -18,4 +18,3 @@ interface ${FEATURE_NAME}EntryPoint : FeatureEntryPoint {
         // Add your callbacks
     }
 }
-
