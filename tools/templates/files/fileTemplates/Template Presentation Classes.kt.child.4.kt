@@ -2,5 +2,5 @@
 
 // TODO Add your events or remove the file completely if no events
 sealed interface ${NAME}Events {
-    object MyEvent: ${NAME}Events
+    data object MyEvent: ${NAME}Events
 }
