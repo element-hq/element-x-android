@@ -1,0 +1,18 @@
+<application>
+  <component name="ExportableFileTemplateSettings">
+    <default_templates>
+      <template name="Template Presentation Classes.kt" file-name="${NAME}Presenter" reformat="true" live-template-enabled="false">
+        <template name="Template Presentation Classes.kt.child.0.kt" file-name="${NAME}StateProvider" reformat="true" live-template-enabled="false" />
+        <template name="Template Presentation Classes.kt.child.1.kt" file-name="${NAME}Node" reformat="true" live-template-enabled="false" />
+        <template name="Template Presentation Classes.kt.child.2.kt" file-name="${NAME}View" reformat="true" live-template-enabled="false" />
+        <template name="Template Presentation Classes.kt.child.3.kt" file-name="${NAME}State" reformat="true" live-template-enabled="false" />
+        <template name="Template Presentation Classes.kt.child.4.kt" file-name="${NAME}Events" reformat="true" live-template-enabled="false" />
+      </template>
+      <template name="Template Presentation Classes.kt.child.0.kt" file-name="${NAME}StateProvider" reformat="true" live-template-enabled="false" />
+      <template name="Template Presentation Classes.kt.child.1.kt" file-name="${NAME}Node" reformat="true" live-template-enabled="false" />
+      <template name="Template Presentation Classes.kt.child.2.kt" file-name="${NAME}View" reformat="true" live-template-enabled="false" />
+      <template name="Template Presentation Classes.kt.child.3.kt" file-name="${NAME}State" reformat="true" live-template-enabled="false" />
+      <template name="Template Presentation Classes.kt.child.4.kt" file-name="${NAME}Events" reformat="true" live-template-enabled="false" />
+    </default_templates>
+  </component>
+</application>
