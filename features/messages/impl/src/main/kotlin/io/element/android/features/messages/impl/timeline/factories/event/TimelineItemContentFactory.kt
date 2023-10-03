@@ -52,7 +52,7 @@ class TimelineItemContentFactory @Inject constructor(
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
             is MessageContent -> {
                 val senderDisplayName = (eventTimelineItem.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: eventTimelineItem.sender.value
-                messageFactory.create(itemContent, senderDisplayName)
+                messageFactory.create(itemContent, senderDisplayName, eventTimelineItem.eventId)
             }
             is ProfileChangeContent -> profileChangeFactory.create(eventTimelineItem)
             is RedactedContent -> redactedMessageFactory.create(itemContent)

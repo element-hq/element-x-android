@@ -28,9 +28,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.mediaplayer.MediaPlayer
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -49,6 +50,7 @@ class MessagesNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val presenterFactory: MessagesPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
+    private val mediaPlayer: MediaPlayer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
 
     private val presenter = presenterFactory.create(this)
@@ -71,6 +73,9 @@ class MessagesNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 analyticsService.capture(room.toAnalyticsViewRoom())
+            },
+            onDestroy = {
+                mediaPlayer.close()
             }
         )
     }

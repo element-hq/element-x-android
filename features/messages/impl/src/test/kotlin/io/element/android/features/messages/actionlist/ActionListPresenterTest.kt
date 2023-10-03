@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.tests.testutils.WarmUpRule
@@ -451,6 +452,33 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            assertThat(successState.displayEmojiReactions).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - compute for voice message`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = aTimelineItemVoiceContent(),
+            )
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
                         TimelineItemAction.Redact,
                     )
                 )

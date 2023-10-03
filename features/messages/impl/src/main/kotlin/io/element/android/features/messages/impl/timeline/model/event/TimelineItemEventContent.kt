@@ -40,6 +40,7 @@ fun TimelineItemEventContent.canBeCopied(): Boolean =
  */
 fun TimelineItemEventContent.canBeRepliedTo(): Boolean =
     when (this) {
+        is TimelineItemVoiceContent, // TODO Voice messages: swipe to reply disabled for now to avoid conflict with audio scrubbing.
         is TimelineItemRedactedContent,
         is TimelineItemStateContent,
         is TimelineItemPollContent -> false
@@ -58,6 +59,7 @@ fun TimelineItemEventContent.canReact(): Boolean =
         is TimelineItemImageContent,
         is TimelineItemLocationContent,
         is TimelineItemPollContent,
+        is TimelineItemVoiceContent,
         is TimelineItemVideoContent -> true
         is TimelineItemStateContent,
         is TimelineItemRedactedContent,
