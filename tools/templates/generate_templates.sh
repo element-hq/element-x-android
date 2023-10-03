@@ -18,8 +18,10 @@
 
 echo "Zipping the contents of the 'files' directory..."
 
+# Ensure tmp folder exists
+mkdir -p tmp
+
 rm -f ./tmp/file_templates.zip
 pushd ./tools/templates/files
 zip -r ../../../tmp/file_templates.zip .
 popd
-
