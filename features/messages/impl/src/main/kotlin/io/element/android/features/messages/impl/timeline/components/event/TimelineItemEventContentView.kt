@@ -32,6 +32,11 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.timeline.LocalTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.voice.VoiceMessageState
+import io.element.android.features.messages.impl.timeline.rememberPresenter
+import io.element.android.libraries.architecture.Presenter
 
 @Composable
 fun TimelineItemEventContentView(
@@ -44,6 +49,7 @@ fun TimelineItemEventContentView(
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val presenterFactories = LocalTimelineItemPresenterFactories.current
     when (content) {
         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
             content = content,
@@ -100,5 +106,14 @@ fun TimelineItemEventContentView(
             eventSink = eventSink,
             modifier = modifier,
         )
+        is TimelineItemVoiceContent -> {
+            val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(content)
+            TimelineItemVoiceView(
+                state = presenter.present(),
+                content = content,
+                extraPadding = extraPadding,
+                modifier = modifier
+            )
+        }
     }
 }

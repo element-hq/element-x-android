@@ -54,6 +54,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -325,6 +326,7 @@ class MessagesPresenter @AssistedInject constructor(
                 type = AttachmentThumbnailType.Location,
             )
             is TimelineItemPollContent, // TODO Polls: handle reply to
+            is TimelineItemVoiceContent, // TODO Voice messages: handle reply to
             is TimelineItemTextBasedContent,
             is TimelineItemRedactedContent,
             is TimelineItemStateContent,

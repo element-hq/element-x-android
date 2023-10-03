@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -28,6 +29,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.LocalTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.TimelineItemPresenterFactories
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -44,6 +47,7 @@ class MessagesNode @AssistedInject constructor(
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
     private val presenterFactory: MessagesPresenter.Factory,
+    private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
 
     private val presenter = presenterFactory.create(this)
@@ -84,6 +88,7 @@ class MessagesNode @AssistedInject constructor(
     private fun onUserDataClicked(userId: UserId) {
         callback?.onUserDataClicked(userId)
     }
+
     override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         callback?.onShowEventDebugInfoClicked(eventId, debugInfo)
     }
@@ -106,17 +111,21 @@ class MessagesNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        MessagesView(
-            state = state,
-            onBackPressed = this::navigateUp,
-            onRoomDetailsClicked = this::onRoomDetailsClicked,
-            onEventClicked = this::onEventClicked,
-            onPreviewAttachments = this::onPreviewAttachments,
-            onUserDataClicked = this::onUserDataClicked,
-            onSendLocationClicked = this::onSendLocationClicked,
-            onCreatePollClicked = this::onCreatePollClicked,
-            modifier = modifier,
-        )
+        CompositionLocalProvider(
+            LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
+        ) {
+            val state = presenter.present()
+            MessagesView(
+                state = state,
+                onBackPressed = this::navigateUp,
+                onRoomDetailsClicked = this::onRoomDetailsClicked,
+                onEventClicked = this::onEventClicked,
+                onPreviewAttachments = this::onPreviewAttachments,
+                onUserDataClicked = this::onUserDataClicked,
+                onSendLocationClicked = this::onSendLocationClicked,
+                onCreatePollClicked = this::onCreatePollClicked,
+                modifier = modifier,
+            )
+        }
     }
 }
