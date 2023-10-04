@@ -96,7 +96,7 @@ androidx_webkit = "androidx.webkit:webkit:1.8.0"
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
 # Warning: issue on alpha07, make sure this is working when upgrading
 # Context in https://github.com/vector-im/element-x-android/pull/1239#issuecomment-1711500332
-androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha08"
+androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha09"
 
 # Coroutines
 coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
