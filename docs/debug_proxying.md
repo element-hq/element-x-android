@@ -6,7 +6,7 @@
     1) Launch your android emulator.
     1) Open its settings page and go to Settings -> Proxy (nb this tab isn't visible when running the emu inside the Android Studio window, you need to set it so it runs in its own window).
     1) Disable "Use Android Studio HTTP proxy settings" and pick "Manual proxy configuration".
-    1) Set `127.0.0.` as "Host name" and `8080` as "Port number".
+    1) Set `127.0.0.1` as "Host name" and `8080` as "Port number".
     1) Click "Apply" and verify that "Proxy status" is "Success" and close the settings window.
        <img width="932" alt="Screenshot 2023-10-04 at 14 48 47" src="https://github.com/vector-im/element-x-android/assets/1273124/bf99a053-20b0-42a4-91d3-9602f709f684">
 1) Install the mitmproxy CA cert (this is needed to see traffic from java/kotlin code, it's not needed for traffic coming from native code e.g. the matrix-rust-sdk).
