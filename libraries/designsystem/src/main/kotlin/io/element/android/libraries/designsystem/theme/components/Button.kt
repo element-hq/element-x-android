@@ -64,6 +64,7 @@ fun Button(
     enabled: Boolean = true,
     size: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
+    destructive: Boolean = false,
     leadingIcon: IconSource? = null,
 ) = ButtonInternal(
     text = text,
@@ -73,6 +74,7 @@ fun Button(
     enabled = enabled,
     size = size,
     showProgress = showProgress,
+    destructive = destructive,
     leadingIcon = leadingIcon
 )
 
@@ -84,6 +86,7 @@ fun OutlinedButton(
     enabled: Boolean = true,
     size: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
+    destructive: Boolean = false,
     leadingIcon: IconSource? = null,
 ) = ButtonInternal(
     text = text,
@@ -93,6 +96,7 @@ fun OutlinedButton(
     enabled = enabled,
     size = size,
     showProgress = showProgress,
+    destructive = destructive,
     leadingIcon = leadingIcon
 )
 
@@ -104,6 +108,7 @@ fun TextButton(
     enabled: Boolean = true,
     size: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
+    destructive: Boolean = false,
     leadingIcon: IconSource? = null,
 ) = ButtonInternal(
     text = text,
@@ -113,6 +118,7 @@ fun TextButton(
     enabled = enabled,
     size = size,
     showProgress = showProgress,
+    destructive = destructive,
     leadingIcon = leadingIcon
 )
 
@@ -122,7 +128,8 @@ private fun ButtonInternal(
     onClick: () -> Unit,
     style: ButtonStyle,
     modifier: Modifier = Modifier,
-    colors: ButtonColors = style.getColors(),
+    destructive: Boolean = false,
+    colors: ButtonColors = style.getColors(destructive),
     enabled: Boolean = true,
     size: ButtonSize = ButtonSize.Large,
     showProgress: Boolean = false,
@@ -170,7 +177,12 @@ private fun ButtonInternal(
         ButtonStyle.Filled -> null
         ButtonStyle.Outlined -> BorderStroke(
             width = 1.dp,
-            color = ElementTheme.colors.borderInteractiveSecondary
+            color = if (destructive)
+                ElementTheme.colors.borderCriticalPrimary.copy(
+                    alpha = if (enabled) 1f else 0.5f
+                )
+            else
+                ElementTheme.colors.borderInteractiveSecondary
         )
         ButtonStyle.Text -> null
     }
@@ -246,25 +258,51 @@ internal enum class ButtonStyle {
     Filled, Outlined, Text;
 
     @Composable
-    fun getColors(): ButtonColors = when (this) {
+    fun getColors(destructive: Boolean): ButtonColors = when (this) {
         Filled -> ButtonDefaults.buttonColors(
-            containerColor = ElementTheme.materialColors.primary,
+            containerColor = getPrimaryColor(destructive),
             contentColor = ElementTheme.materialColors.onPrimary,
-            disabledContainerColor = ElementTheme.colors.bgActionPrimaryDisabled,
+            disabledContainerColor = if (destructive) {
+                ElementTheme.colors.bgCriticalPrimary.copy(alpha = 0.5f)
+            } else {
+                ElementTheme.colors.bgActionPrimaryDisabled
+            },
             disabledContentColor = ElementTheme.colors.textOnSolidPrimary
         )
         Outlined -> ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
-            contentColor = ElementTheme.materialColors.primary,
+            contentColor = getPrimaryColor(destructive),
             disabledContainerColor = Color.Transparent,
-            disabledContentColor = ElementTheme.colors.textDisabled,
+            disabledContentColor = getDisabledContentColor(destructive),
         )
         Text -> ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
-            contentColor = if (LocalContentColor.current.isSpecified) LocalContentColor.current else ElementTheme.materialColors.primary,
+            contentColor = if (destructive) {
+                ElementTheme.colors.textCriticalPrimary
+            } else {
+                if (LocalContentColor.current.isSpecified) LocalContentColor.current else ElementTheme.materialColors.primary
+            },
             disabledContainerColor = Color.Transparent,
-            disabledContentColor = ElementTheme.colors.textDisabled,
+            disabledContentColor = getDisabledContentColor(destructive),
         )
+    }
+
+    @Composable
+    private fun getPrimaryColor(destructive: Boolean): Color {
+        return if (destructive) {
+            ElementTheme.colors.bgCriticalPrimary
+        } else {
+            ElementTheme.materialColors.primary
+        }
+    }
+
+    @Composable
+    private fun getDisabledContentColor(destructive: Boolean): Color {
+        return if (destructive) {
+            ElementTheme.colors.textCriticalPrimary.copy(alpha = 0.5f)
+        } else {
+            ElementTheme.colors.textDisabled
+        }
     }
 }
 
@@ -326,7 +364,6 @@ internal fun TextButtonLargePreview() {
 private fun ButtonCombinationPreview(
     style: ButtonStyle,
     size: ButtonSize,
-    modifier: Modifier = Modifier,
 ) {
     ElementThemedPreview {
         Column(
@@ -335,59 +372,70 @@ private fun ButtonCombinationPreview(
                 .padding(16.dp)
                 .width(IntrinsicSize.Max),
         ) {
-            // Normal
-            ButtonRowPreview(
-                modifier = Modifier.then(modifier),
-                style = style,
-                size = size,
-            )
-
-            // With icon
-            ButtonRowPreview(
-                modifier = Modifier.then(modifier),
-                leadingIcon = IconSource.Resource(CommonDrawables.ic_compound_share_android),
-                style = style,
-                size = size,
-            )
-
-            // With progress
-            ButtonRowPreview(
-                modifier = Modifier.then(modifier),
-                showProgress = true,
-                style = style,
-                size = size,
-            )
+            ButtonMatrixPreview(style = style, size = size, destructive = false)
+            ButtonMatrixPreview(style = style, size = size, destructive = true)
         }
     }
+}
+
+@Composable
+private fun ButtonMatrixPreview(
+    style: ButtonStyle,
+    size: ButtonSize,
+    destructive: Boolean,
+) {
+    // Normal
+    ButtonRowPreview(
+        style = style,
+        size = size,
+        destructive = destructive,
+    )
+    // With icon
+    ButtonRowPreview(
+        leadingIcon = IconSource.Resource(CommonDrawables.ic_compound_share_android),
+        style = style,
+        size = size,
+        destructive = destructive,
+    )
+    // With progress
+    ButtonRowPreview(
+        showProgress = true,
+        style = style,
+        size = size,
+        destructive = destructive,
+    )
 }
 
 @Composable
 private fun ButtonRowPreview(
     style: ButtonStyle,
     size: ButtonSize,
-    modifier: Modifier = Modifier,
     leadingIcon: IconSource? = null,
     showProgress: Boolean = false,
+    destructive: Boolean = false,
 ) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+    ) {
         ButtonInternal(
             text = "A button",
             showProgress = showProgress,
+            destructive = destructive,
             onClick = {},
             style = style,
             size = size,
             leadingIcon = leadingIcon,
-            modifier = Modifier.then(modifier),
         )
         ButtonInternal(
             text = "A button",
             showProgress = showProgress,
+            destructive = destructive,
             enabled = false,
             onClick = {},
             style = style,
             size = size,
             leadingIcon = leadingIcon,
-            modifier = Modifier.then(modifier),
         )
     }
 }
