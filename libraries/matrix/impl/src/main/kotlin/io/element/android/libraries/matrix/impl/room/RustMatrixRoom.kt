@@ -238,7 +238,10 @@ class RustMatrixRoom(
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
-                    innerRoom.edit(messageEventContentFromParts(body, htmlBody), originalEventId.value)
+                    innerRoom.edit(
+                        newContent = messageEventContentFromParts(body, htmlBody),
+                        editItem = innerRoom.getEventTimelineItemByEventId(originalEventId.value),
+                    )
                 }
             } else {
                 runCatching {
