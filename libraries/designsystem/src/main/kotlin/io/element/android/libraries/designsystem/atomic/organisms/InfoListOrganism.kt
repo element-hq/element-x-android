@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.atomic.atoms.InfoListItemMolecule
-import io.element.android.libraries.designsystem.atomic.atoms.InfoListItemPosition
+import io.element.android.libraries.designsystem.atomic.molecules.InfoListItemMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.InfoListItemPosition
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
