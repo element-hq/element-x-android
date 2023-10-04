@@ -42,8 +42,8 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -51,7 +51,6 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.sync.Mutex
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
 @Composable
@@ -74,7 +73,6 @@ fun VerifySelfSessionView(
     val buttonsVisible by remember(verificationFlowStep) {
         derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
-    Mutex()
     HeaderFooterPage(
         modifier = modifier,
         header = {
