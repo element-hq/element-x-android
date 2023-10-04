@@ -54,6 +54,7 @@ sealed interface TimelineItem {
     @Immutable
     data class Event(
         val id: String,
+        // Note: eventId can be null when the event is a local echo
         val eventId: EventId? = null,
         val transactionId: TransactionId? = null,
         val senderId: UserId,
