@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.atomic.molecules
+package io.element.android.libraries.designsystem.atomic.organisms
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement

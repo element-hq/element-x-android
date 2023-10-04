@@ -44,8 +44,8 @@ import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.features.analytics.api.Config
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.InfoListItem
-import io.element.android.libraries.designsystem.atomic.molecules.InfoListOrganism
+import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
+import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
