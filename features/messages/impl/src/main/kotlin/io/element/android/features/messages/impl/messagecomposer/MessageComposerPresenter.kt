@@ -167,9 +167,14 @@ class MessageComposerPresenter @Inject constructor(
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
-                    if (event.composerMode is MessageComposerMode.Reply) {
+                    when (event.composerMode) {
+                        is MessageComposerMode.Reply -> event.composerMode.eventId
+                        is MessageComposerMode.Edit -> event.composerMode.eventId
+                        is MessageComposerMode.Normal -> null
+                        is MessageComposerMode.Quote -> null
+                    }.let { relatedEventId ->
                         appCoroutineScope.launch {
-                            room.enterReplyMode(event.composerMode.eventId)
+                            room.enterSpecialMode(relatedEventId)
                         }
                     }
                 }

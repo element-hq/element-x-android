@@ -124,7 +124,7 @@ class RustMatrixRoom(
         roomCoroutineScope.cancel()
         innerRoom.destroy()
         roomListItem.destroy()
-        inReplyToEventTimelineItem?.destroy()
+        specialModeEventTimelineItem?.destroy()
     }
 
     override val name: String?
@@ -238,12 +238,14 @@ class RustMatrixRoom(
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
-                    innerRoom.getEventTimelineItemByEventId(originalEventId.value).use {
+                    val editedEvent = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(originalEventId.value)
+                    editedEvent.use {
                         innerRoom.edit(
                             newContent = messageEventContentFromParts(body, htmlBody),
                             editItem = it,
                         )
                     }
+                    specialModeEventTimelineItem = null
                 }
             } else {
                 runCatching {
@@ -253,23 +255,23 @@ class RustMatrixRoom(
             }
         }
 
-    private var inReplyToEventTimelineItem: EventTimelineItem? = null
+    private var specialModeEventTimelineItem: EventTimelineItem? = null
 
-    override suspend fun enterReplyMode(eventId: EventId): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            inReplyToEventTimelineItem?.destroy()
-            inReplyToEventTimelineItem = null
-            inReplyToEventTimelineItem = innerRoom.getEventTimelineItemByEventId(eventId.value)
+            specialModeEventTimelineItem?.destroy()
+            specialModeEventTimelineItem = null
+            specialModeEventTimelineItem = eventId?.let { innerRoom.getEventTimelineItemByEventId(it.value) }
         }
     }
 
     override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            val inReplyTo = inReplyToEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
+            val inReplyTo = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
             inReplyTo.use { eventTimelineItem ->
                 innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventTimelineItem)
             }
-            inReplyToEventTimelineItem = null
+            specialModeEventTimelineItem = null
         }
     }
 

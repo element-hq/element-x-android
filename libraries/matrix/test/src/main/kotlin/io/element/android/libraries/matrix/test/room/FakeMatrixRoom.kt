@@ -208,7 +208,7 @@ class FakeMatrixRoom(
     var replyMessageParameter: Pair<String, String?>? = null
         private set
 
-    override suspend fun enterReplyMode(eventId: EventId): Result<Unit> {
+    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> {
         return Result.success(Unit)
     }
 
