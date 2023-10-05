@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import javax.inject.Inject
 
@@ -47,11 +48,11 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private val fileExtensionExtractor: FileExtensionExtractor,
 ) {
 
-    fun create(content: MessageContent): TimelineItemEventContent {
-        return when (val messageType = content.type) {
+    fun create(content: MessageContent, senderDisplayName: String): TimelineItemEventContent {
+        return when (val messageType = content.type ?: UnknownMessageType) {
             is EmoteMessageType -> TimelineItemEmoteContent(
-                body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                body = "* $senderDisplayName ${messageType.body}",
+                htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* senderDisplayName"),
                 isEdited = content.isEdited,
             )
             is ImageMessageType -> {
@@ -130,7 +131,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
                 isEdited = content.isEdited,
             )
-            else -> TimelineItemUnknownContent
+            UnknownMessageType -> TimelineItemUnknownContent
         }
     }
 

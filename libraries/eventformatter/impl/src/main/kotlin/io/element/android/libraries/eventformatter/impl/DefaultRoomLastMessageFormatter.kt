@@ -111,7 +111,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
         val internalMessage = when (messageType) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
-                return "- $senderDisplayName ${messageType.body}"
+                return "* $senderDisplayName ${messageType.body}"
             }
             is TextMessageType -> {
                 messageType.body

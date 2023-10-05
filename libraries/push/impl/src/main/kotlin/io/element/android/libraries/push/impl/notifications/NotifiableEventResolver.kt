@@ -87,7 +87,7 @@ class NotifiableEventResolver @Inject constructor(
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderName = senderDisplayName,
-                    body = descriptionFromMessageContent(content),
+                    body = descriptionFromMessageContent(content, senderDisplayName ?: content.senderId.value),
                     imageUriString = this.contentUrl,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
@@ -133,7 +133,7 @@ class NotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.KeyVerificationStart -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for verification ${content.javaClass.simpleName}")
             }
-            is NotificationContent.MessageLike.Poll ->  {
+            is NotificationContent.MessageLike.Poll -> {
                 buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
@@ -205,10 +205,11 @@ class NotifiableEventResolver @Inject constructor(
 
     private fun descriptionFromMessageContent(
         content: NotificationContent.MessageLike.RoomMessage,
+        senderDisplayName: String,
     ): String {
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.body
-            is EmoteMessageType -> messageType.body
+            is EmoteMessageType -> "* $senderDisplayName ${messageType.body}"
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
             is NoticeMessageType -> messageType.body
