@@ -21,8 +21,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-fun FormattedBody.toHtmlDocument(): Document? {
+fun FormattedBody.toHtmlDocument(senderDisplayNamePrefix: String? = null): Document? {
     return takeIf { it.format == MessageFormat.HTML }?.body?.let { formattedBody ->
-        Jsoup.parse(formattedBody)
+        if (senderDisplayNamePrefix != null) {
+            Jsoup.parse("* $senderDisplayNamePrefix $formattedBody")
+        } else {
+            Jsoup.parse(formattedBody)
+        }
     }
 }

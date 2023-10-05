@@ -48,11 +48,11 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private val fileExtensionExtractor: FileExtensionExtractor,
 ) {
 
-    fun create(content: MessageContent): TimelineItemEventContent {
+    fun create(content: MessageContent, senderDisplayName: String): TimelineItemEventContent {
         return when (val messageType = content.type ?: UnknownMessageType) {
             is EmoteMessageType -> TimelineItemEmoteContent(
-                body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                body = "* $senderDisplayName ${messageType.body}",
+                htmlDocument = messageType.formatted?.toHtmlDocument(senderDisplayName),
                 isEdited = content.isEdited,
             )
             is ImageMessageType -> {
