@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.atomic.atoms
+package io.element.android.libraries.designsystem.atomic.molecules
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
