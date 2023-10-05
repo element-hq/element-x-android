@@ -63,7 +63,7 @@ sealed interface InReplyTo {
     data object Error : InReplyTo
 }
 
-object RedactedContent : EventContent
+data object RedactedContent : EventContent
 
 data class StickerContent(
     val body: String,
@@ -124,11 +124,11 @@ data class FailedToParseStateContent(
     val error: String
 ) : EventContent
 
-object UnknownContent : EventContent
+data object UnknownContent : EventContent
 
 sealed interface MessageType
 
-object UnknownMessageType : MessageType
+data object UnknownMessageType : MessageType
 
 enum class MessageFormat {
     HTML, UNKNOWN
