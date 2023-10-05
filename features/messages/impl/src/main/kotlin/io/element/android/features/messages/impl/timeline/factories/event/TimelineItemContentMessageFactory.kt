@@ -52,7 +52,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
         return when (val messageType = content.type ?: UnknownMessageType) {
             is EmoteMessageType -> TimelineItemEmoteContent(
                 body = "* $senderDisplayName ${messageType.body}",
-                htmlDocument = messageType.formatted?.toHtmlDocument(senderDisplayName),
+                htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* senderDisplayName"),
                 isEdited = content.isEdited,
             )
             is ImageMessageType -> {
