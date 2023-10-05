@@ -201,7 +201,7 @@ class DefaultRoomLastMessageFormatterTests {
                 is ImageMessageType -> "Image"
                 is FileMessageType -> "File"
                 is LocationMessageType -> "Shared location"
-                is EmoteMessageType -> "- $senderName ${type.body}"
+                is EmoteMessageType -> "* $senderName ${type.body}"
                 is TextMessageType, is NoticeMessageType -> body
                 UnknownMessageType -> "Unsupported event"
             }
@@ -217,7 +217,7 @@ class DefaultRoomLastMessageFormatterTests {
                 is ImageMessageType -> "$senderName: Image"
                 is FileMessageType -> "$senderName: File"
                 is LocationMessageType -> "$senderName: Shared location"
-                is EmoteMessageType -> "- $senderName ${type.body}"
+                is EmoteMessageType -> "* $senderName ${type.body}"
                 is TextMessageType, is NoticeMessageType -> "$senderName: $body"
                 UnknownMessageType -> "$senderName: Unsupported event"
             }
