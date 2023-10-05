@@ -34,8 +34,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,8 +49,8 @@ import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
 import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.emojibasebindings.EmojibaseStore
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
@@ -68,12 +68,12 @@ fun EmojiPicker(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val categories = remember { emojibaseStore.categories }
-    val pagerState = rememberPagerState(pageCount = { EmojibaseCategory.values().size })
+    val pagerState = rememberPagerState(pageCount = { EmojibaseCategory.entries.size })
     Column(modifier) {
-        TabRow(
+        SecondaryTabRow(
             selectedTabIndex = pagerState.currentPage,
         ) {
-            EmojibaseCategory.values().forEachIndexed { index, category ->
+            EmojibaseCategory.entries.forEachIndexed { index, category ->
                 Tab(
                     text = {
                         Icon(
@@ -93,7 +93,7 @@ fun EmojiPicker(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
         ) { index ->
-            val category = EmojibaseCategory.values()[index]
+            val category = EmojibaseCategory.entries[index]
             val emojis = categories[category] ?: listOf()
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
