@@ -9,7 +9,7 @@ ksp = "1.9.10-1.0.13"
 molecule = "1.2.1"
 
 # AndroidX
-material = "1.9.0"
+material = "1.10.0"
 core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
