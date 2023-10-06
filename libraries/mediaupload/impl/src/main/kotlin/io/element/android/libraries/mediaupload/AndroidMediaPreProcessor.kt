@@ -66,6 +66,8 @@ class AndroidMediaPreProcessor @Inject constructor(
          * values may surpass this limit. (i.e.: an image of `480x3000px` would have `inSampleSize=1` and be sent as is).
          */
         private const val IMAGE_SCALE_REF_SIZE = 640
+
+        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
     }
 
     private val contentResolver = context.contentResolver
@@ -78,7 +80,10 @@ class AndroidMediaPreProcessor @Inject constructor(
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatching {
             val result = when {
-                mimeType.isMimeTypeImage() -> processImage(uri, mimeType, compressIfPossible && mimeType != MimeTypes.Gif)
+                mimeType.isMimeTypeImage() -> {
+                    val shouldBeCompressed = compressIfPossible && mimeType !in notCompressibleImageTypes
+                    processImage(uri, mimeType, shouldBeCompressed)
+                }
                 mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, compressIfPossible)
                 mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
                 else -> processFile(uri, mimeType)
@@ -125,13 +130,11 @@ class AndroidMediaPreProcessor @Inject constructor(
                 exifInterface?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
             } ?: ExifInterface.ORIENTATION_UNDEFINED
 
-            val compressionResult = contentResolver.openInputStream(uri).use { input ->
-                imageCompressor.compressToTmpFile(
-                    inputStream = requireNotNull(input),
-                    resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
-                    orientation = orientation,
-                ).getOrThrow()
-            }
+            val compressionResult = imageCompressor.compressToTmpFile(
+                inputStreamProvider = { contentResolver.openInputStream(uri)!! },
+                resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
+                orientation = orientation,
+            ).getOrThrow()
             val thumbnailResult: ThumbnailResult = thumbnailFactory.createImageThumbnail(compressionResult.file)
             val imageInfo = compressionResult.toImageInfo(
                 mimeType = mimeType,
