@@ -80,6 +80,8 @@ class ImageCompressor @Inject constructor(
         }
         // Decode the actual bitmap
         inputStreamProvider().use { input ->
+            // Now read the actual image and rotate it to match its metadata
+            options.inJustDecodeBounds = false
             val decodedBitmap = BitmapFactory.decodeStream(input, null, options)
                 ?: error("Decoding Bitmap from InputStream failed")
             val rotatedBitmap = decodedBitmap.rotateToMetadataOrientation(orientation)
@@ -106,8 +108,6 @@ class ImageCompressor @Inject constructor(
         BitmapFactory.decodeStream(inputStream, null, options)
         // Set sample size based on the outWidth and outHeight
         options.inSampleSize = options.calculateInSampleSize(width, height)
-        // Now read the actual image and rotate it to match its metadata
-        options.inJustDecodeBounds = false
     }
 }
 
