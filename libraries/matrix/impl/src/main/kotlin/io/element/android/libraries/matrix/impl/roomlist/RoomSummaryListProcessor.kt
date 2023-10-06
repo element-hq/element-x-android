@@ -26,14 +26,14 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
-import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.util.UUID
 
 class RoomSummaryListProcessor(
     private val roomSummaries: MutableStateFlow<List<RoomSummary>>,
-    private val roomListService: RoomListService,
+    private val roomListService: RoomListServiceInterface,
     private val dispatcher: CoroutineDispatcher,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
