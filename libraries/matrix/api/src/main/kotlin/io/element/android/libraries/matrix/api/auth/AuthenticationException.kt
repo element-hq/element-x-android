@@ -23,12 +23,4 @@ sealed class AuthenticationException(message: String) : Exception(message) {
     class SessionMissing(message: String) : AuthenticationException(message)
     class Generic(message: String) : AuthenticationException(message)
     data class OidcError(val type: String, override val message: String) : AuthenticationException(message)
-
-    override fun equals(other: Any?): Boolean {
-        return when {
-            this === other -> true
-            other !is AuthenticationException -> false
-            else -> this::class.java == other::class.java && message == other.message
-        }
-    }
 }

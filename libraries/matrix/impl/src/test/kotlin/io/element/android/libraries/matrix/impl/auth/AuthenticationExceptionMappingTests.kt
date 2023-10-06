@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
+import com.google.common.truth.ThrowableSubject
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.junit.Test
@@ -34,45 +35,70 @@ class AuthenticationExceptionMappingTests {
     fun `mapping a generic exception returns a Generic AuthenticationException`() {
         val exception = Exception("Generic exception")
         val mappedException = exception.mapAuthenticationException()
-        assertThat(mappedException).isEqualTo(AuthenticationException.Generic("Generic exception"))
+        assertThat(mappedException).isException<AuthenticationException.Generic>("Generic exception")
     }
 
     @Test
     fun `mapping specific exceptions map to their kotlin counterparts`() {
         assertThat(RustAuthenticationException.ClientMissing("Client missing").mapAuthenticationException())
-                .isEqualTo(AuthenticationException.ClientMissing("Client missing"))
+                .isException<AuthenticationException.ClientMissing>("Client missing")
 
-        assertThat(RustAuthenticationException.Generic("Generic").mapAuthenticationException()).isEqualTo(AuthenticationException.Generic("Generic"))
+        assertThat(RustAuthenticationException.Generic("Generic").mapAuthenticationException()).isException<AuthenticationException.Generic>("Generic")
 
         assertThat(RustAuthenticationException.InvalidServerName("Invalid server name").mapAuthenticationException())
-                .isEqualTo(AuthenticationException.InvalidServerName("Invalid server name"))
+                .isException<AuthenticationException.InvalidServerName>("Invalid server name")
 
         assertThat(RustAuthenticationException.SessionMissing("Session missing").mapAuthenticationException())
-            .isEqualTo(AuthenticationException.SessionMissing("Session missing"))
+            .isException<AuthenticationException.SessionMissing>("Session missing")
 
         assertThat(RustAuthenticationException.SlidingSyncNotAvailable("Sliding sync not available").mapAuthenticationException())
-            .isEqualTo(AuthenticationException.SlidingSyncNotAvailable("Sliding sync not available"))
+            .isException<AuthenticationException.SlidingSyncNotAvailable>("Sliding sync not available")
     }
 
     @Test
     fun `mapping Oidc related exceptions creates an 'OidcError' with different types`() {
-        assertThat(RustAuthenticationException.OidcException("Oidc exception").mapAuthenticationException())
-            .isEqualTo(AuthenticationException.OidcError("OidcException", "Oidc exception"))
+        assertIsOidcError(
+            throwable = RustAuthenticationException.OidcException("Oidc exception"),
+            type = "OidcException",
+            message = "Oidc exception"
+        )
+        assertIsOidcError(
+            throwable = RustAuthenticationException.OidcMetadataInvalid("Oidc metadata invalid"),
+            type = "OidcMetadataInvalid",
+            message = "Oidc metadata invalid"
+        )
+        assertIsOidcError(
+            throwable = RustAuthenticationException.OidcMetadataMissing("Oidc metadata missing"),
+            type = "OidcMetadataMissing",
+            message = "Oidc metadata missing"
+        )
+        assertIsOidcError(
+            throwable = RustAuthenticationException.OidcNotSupported("Oidc not supported"),
+            type = "OidcNotSupported",
+            message = "Oidc not supported"
+        )
+        assertIsOidcError(
+            throwable = RustAuthenticationException.OidcCancelled("Oidc cancelled"),
+            type = "OidcCancelled",
+            message = "Oidc cancelled"
+        )
+        assertIsOidcError(
+            throwable = RustAuthenticationException.OidcCallbackUrlInvalid("Oidc callback url invalid"),
+            type = "OidcCallbackUrlInvalid",
+            message = "Oidc callback url invalid"
+        )
+    }
 
-        assertThat(RustAuthenticationException.OidcMetadataInvalid("Oidc metadata invalid").mapAuthenticationException())
-            .isEqualTo(AuthenticationException.OidcError("OidcMetadataInvalid", "Oidc metadata invalid"))
+    private inline fun <reified T> ThrowableSubject.isException(message: String) {
+        isInstanceOf(T::class.java)
+        hasMessageThat().isEqualTo(message)
+    }
 
-        assertThat(RustAuthenticationException.OidcMetadataMissing("Oidc metadata missing").mapAuthenticationException())
-            .isEqualTo(AuthenticationException.OidcError("OidcMetadataMissing", "Oidc metadata missing"))
-
-        assertThat(RustAuthenticationException.OidcNotSupported("Oidc not supported").mapAuthenticationException())
-            .isEqualTo(AuthenticationException.OidcError("OidcNotSupported", "Oidc not supported"))
-
-        assertThat(RustAuthenticationException.OidcCancelled("Oidc cancelled").mapAuthenticationException())
-            .isEqualTo(AuthenticationException.OidcError("OidcCancelled", "Oidc cancelled"))
-
-        assertThat(RustAuthenticationException.OidcCallbackUrlInvalid("Oidc callback url invalid").mapAuthenticationException())
-            .isEqualTo(AuthenticationException.OidcError("OidcCallbackUrlInvalid", "Oidc callback url invalid"))
+    private inline fun assertIsOidcError(throwable: Throwable, type: String, message: String) {
+        val authenticationException = throwable.mapAuthenticationException()
+        assertThat(authenticationException).isInstanceOf(AuthenticationException.OidcError::class.java)
+        assertThat((authenticationException as? AuthenticationException.OidcError)?.type).isEqualTo(type)
+        assertThat(authenticationException.message).isEqualTo(message)
     }
 
 }
