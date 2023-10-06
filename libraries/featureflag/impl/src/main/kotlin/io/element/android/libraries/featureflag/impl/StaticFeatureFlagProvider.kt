@@ -35,6 +35,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.LocationSharing -> true
                 FeatureFlags.Polls -> true
                 FeatureFlags.NotificationSettings -> true
+                FeatureFlags.VoiceMessages -> false
             }
         } else {
             false
