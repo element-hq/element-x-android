@@ -126,24 +126,40 @@ class PermalinkParserTests {
     @Test
     fun `parsing a url with an invalid signurl returns a fallback link`() {
         // This url has no private key
-        val url = "https://app.element.io/#/room/%21cCpRBTFuXwPmOCUFRL%3Amatrix.org?email=michaelt%40element.io&signurl=https%3A%2F%2Fvector.im%2F_matrix%2Fidentity%2Fapi%2Fv1%2Fsign-ed25519%3Ftoken%3DcBeQOefWJXQrcgHavWuqjMtiazBrYMCvLbpGvOSWFLkitbMbuFGyEmgBbcPtfHhHxiKKsdEbEXSJezCbTXowCuFaQIKV&room_name=TestRoom&room_avatar_url=&inviter_name=Michael%20Telatynski&guest_access_token=&guest_user_id=&room_type="
+        val url = "https://app.element.io/#/room/%21aBCDEF12345%3Amatrix.org" +
+            "?email=testuser%40element.io" +
+            "&signurl=https%3A%2F%2Fvector.im%2F_matrix%2Fidentity%2Fapi%2Fv1%2Fsign-ed25519%3Ftoken%3Da_token" +
+            "&room_name=TestRoom" +
+            "&room_avatar_url=" +
+            "&inviter_name=User" +
+            "&guest_access_token=" +
+            "&guest_user_id=" +
+            "&room_type="
         assertThat(PermalinkParser.parse(url)).isInstanceOf(PermalinkData.FallbackLink::class.java)
     }
 
     @Test
     fun `parsing a url with signurl returns a room email invite link`() {
-        val url = "https://app.element.io/#/room/%21cCpRBTFuXwPmOCUFRL%3Amatrix.org?email=michaelt%40element.io&signurl=https%3A%2F%2Fvector.im%2F_matrix%2Fidentity%2Fapi%2Fv1%2Fsign-ed25519%3Ftoken%3DcBeQOefWJXQrcgHavWuqjMtiazBrYMCvLbpGvOSWFLkitbMbuFGyEmgBbcPtfHhHxiKKsdEbEXSJezCbTXowCuFaQIKV%26private_key%3DRkzs-2BDCjkOOnS74LwLRO_Uw&room_name=TestRoom&room_avatar_url=&inviter_name=Michael%20Telatynski&guest_access_token=&guest_user_id=&room_type="
+        val url = "https://app.element.io/#/room/%21aBCDEF12345%3Amatrix.org" +
+            "?email=testuser%40element.io" +
+            "&signurl=https%3A%2F%2Fvector.im%2F_matrix%2Fidentity%2Fapi%2Fv1%2Fsign-ed25519%3Ftoken%3Da_token%26private_key%3Da_private_key" +
+            "&room_name=TestRoom" +
+            "&room_avatar_url=" +
+            "&inviter_name=User" +
+            "&guest_access_token=" +
+            "&guest_user_id=" +
+            "&room_type="
         assertThat(PermalinkParser.parse(url)).isEqualTo(
             PermalinkData.RoomEmailInviteLink(
-                roomId = "!cCpRBTFuXwPmOCUFRL:matrix.org",
-                email = "michaelt@element.io",
-                signUrl = "https://vector.im/_matrix/identity/api/v1/sign-ed25519?token=cBeQOefWJXQrcgHavWuqjMtiazBrYMCvLbpGvOSWFLkitbMbuFGyEmgBbcPtfHhHxiKKsdEbEXSJezCbTXowCuFaQIKV&private_key=Rkzs-2BDCjkOOnS74LwLRO_Uw",
+                roomId = "!aBCDEF12345:matrix.org",
+                email = "testuser@element.io",
+                signUrl = "https://vector.im/_matrix/identity/api/v1/sign-ed25519?token=a_token&private_key=a_private_key",
                 roomName = "TestRoom",
                 roomAvatarUrl = "",
-                inviterName = "Michael Telatynski",
+                inviterName = "User",
                 identityServer = "vector.im",
-                token = "cBeQOefWJXQrcgHavWuqjMtiazBrYMCvLbpGvOSWFLkitbMbuFGyEmgBbcPtfHhHxiKKsdEbEXSJezCbTXowCuFaQIKV",
-                privateKey = "Rkzs-2BDCjkOOnS74LwLRO_Uw",
+                token = "a_token",
+                privateKey = "a_private_key",
                 roomType = "",
             )
         )
