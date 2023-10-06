@@ -26,8 +26,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumble.appyx.core.composable.Children
+import com.bumble.appyx.core.composable.PermanentChild
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
@@ -93,6 +95,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
+        savedStateMap = buildContext.savedStateMap,
+    ),
+    permanentNavModel = PermanentNavModel(
+        NavTarget.Permanent,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -328,7 +334,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
 
             if (!isFtueDisplayed) {
-                PermanentChild(navTarget = NavTarget.Permanent)
+                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.Permanent)
             }
         }
     }
