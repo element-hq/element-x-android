@@ -65,8 +65,8 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ElementTheme {
-                val isLoggedIn by matrixAuthenticationService.isLoggedIn().collectAsState(initial = LoggedInState.NotLoggedIn)
-                Content(isLoggedIn = isLoggedIn is LoggedInState.LoggedIn, modifier = Modifier.fillMaxSize())
+                val loggedInState by matrixAuthenticationService.loggedInStateFlow().collectAsState(initial = LoggedInState.NotLoggedIn)
+                Content(isLoggedIn = loggedInState is LoggedInState.LoggedIn, modifier = Modifier.fillMaxSize())
             }
 
         }
