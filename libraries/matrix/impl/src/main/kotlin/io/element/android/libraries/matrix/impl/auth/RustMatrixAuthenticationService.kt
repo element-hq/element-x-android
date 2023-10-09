@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -102,7 +103,12 @@ class RustMatrixAuthenticationService @Inject constructor(
         withContext(coroutineDispatchers.io) {
             runCatching {
                 val client = authService.login(username, password, "Element X Android", null)
-                val sessionData = client.use { it.session().toSessionData() }
+                val sessionData = client.use {
+                    it.session().toSessionData(
+                        isTokenValid = true,
+                        loginType = LoginType.PASSWORD,
+                    )
+                }
                 sessionStore.storeData(sessionData)
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
@@ -144,7 +150,12 @@ class RustMatrixAuthenticationService @Inject constructor(
             runCatching {
                 val urlForOidcLogin = pendingOidcAuthenticationData ?: error("You need to call `getOidcUrl()` first")
                 val client = authService.loginWithOidcCallback(urlForOidcLogin, callbackUrl)
-                val sessionData = client.use { it.session().toSessionData() }
+                val sessionData = client.use {
+                    it.session().toSessionData(
+                        isTokenValid = true,
+                        loginType = LoginType.OIDC,
+                    )
+                }
                 pendingOidcAuthenticationData?.close()
                 pendingOidcAuthenticationData = null
                 sessionStore.storeData(sessionData)

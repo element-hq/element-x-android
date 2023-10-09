@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,28 @@
 
 package io.element.android.libraries.sessionstorage.api
 
-import java.util.Date
+// Imported from Element Android, to be able to migrate from EA to EXA.
+enum class LoginType {
+    PASSWORD,
+    OIDC,
+    SSO,
+    UNSUPPORTED,
+    CUSTOM,
+    DIRECT,
+    UNKNOWN,
+    QR;
 
-data class SessionData(
-    val userId: String,
-    val deviceId: String,
-    val accessToken: String,
-    val refreshToken: String?,
-    val homeserverUrl: String,
-    val oidcData: String?,
-    val slidingSyncProxy: String?,
-    val loginTimestamp: Date?,
-    val isTokenValid: Boolean,
-    val loginType: LoginType,
-)
+    companion object {
+
+        fun fromName(name: String) = when (name) {
+            PASSWORD.name -> PASSWORD
+            OIDC.name -> OIDC
+            SSO.name -> SSO
+            UNSUPPORTED.name -> UNSUPPORTED
+            CUSTOM.name -> CUSTOM
+            DIRECT.name -> DIRECT
+            QR.name -> QR
+            else -> UNKNOWN
+        }
+    }
+}

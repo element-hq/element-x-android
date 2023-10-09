@@ -136,7 +136,12 @@ class RustMatrixClient constructor(
         override fun didRefreshTokens() {
             Timber.w("didRefreshTokens()")
             appCoroutineScope.launch {
-                sessionStore.updateData(client.session().toSessionData())
+                val existingData = sessionStore.getSession(client.userId()) ?: return@launch
+                val newData = client.session().toSessionData(
+                    isTokenValid = existingData.isTokenValid,
+                    loginType = existingData.loginType,
+                )
+                sessionStore.updateData(newData)
             }
         }
     }
