@@ -68,7 +68,7 @@ class DatabaseSessionStoreTests {
         databaseSessionStore.isLoggedIn().test {
             assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
             database.sessionDataQueries.insertSessionData(aSessionData)
-            assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(true))
+            assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(sessionId = aSessionData.userId, isTokenValid = true))
             database.sessionDataQueries.removeSession(aSessionData.userId)
             assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
         }
