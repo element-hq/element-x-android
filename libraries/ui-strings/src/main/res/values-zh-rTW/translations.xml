@@ -142,6 +142,7 @@
   <string name="common_verification_cancelled">"驗證已取消"</string>
   <string name="common_verification_complete">"驗證完成"</string>
   <string name="common_video">"影片"</string>
+  <string name="common_voice_message">"語音訊息"</string>
   <string name="common_waiting">"等待中…"</string>
   <string name="common_poll_end_confirmation">"您確定要結束這項投票嗎？"</string>
   <string name="common_poll_summary">"投票：%1$s"</string>
@@ -159,6 +160,8 @@
   <string name="error_failed_loading_map">"%1$s無法載入地圖。請稍後再試。"</string>
   <string name="error_failed_loading_messages">"無法載入訊息"</string>
   <string name="error_failed_locating_user">"%1$s無法取得您的位置。請稍後再試。"</string>
+  <string name="error_missing_location_auth_android">"%1$s 沒有權限存取您的位置。您可以到設定中開啟權限。"</string>
+  <string name="error_missing_location_rationale_android">"%1$s 沒有權限存取您的位置。請在下方開啟權限。"</string>
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="leave_room_alert_empty_subtitle">"您確定要離開聊天室嗎？這裡只有您一個人。如果您離開了，包含您在內的所有人都無法再進入此聊天室。"</string>
@@ -177,6 +180,7 @@
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
   <string name="screen_notification_settings_direct_chats">"私訊"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知設定時發生錯誤。"</string>
   <string name="screen_notification_settings_edit_mode_all_messages">"所有訊息"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
   <string name="screen_notification_settings_enable_notifications">"在這個裝置上開啟通知"</string>
