@@ -76,7 +76,11 @@ class RustMatrixAuthenticationService @Inject constructor(
         runCatching {
             val sessionData = sessionStore.getSession(sessionId.value)
             if (sessionData != null) {
-                rustMatrixClientFactory.create(sessionData)
+                if (sessionData.isTokenValid) {
+                    rustMatrixClientFactory.create(sessionData)
+                } else {
+                    error("Token is not valid")
+                }
             } else {
                 error("No session to restore with id $sessionId")
             }

@@ -25,6 +25,11 @@ import kotlinx.coroutines.flow.StateFlow
 interface MatrixAuthenticationService {
     fun loggedInStateFlow(): Flow<LoggedInState>
     suspend fun getLatestSessionId(): SessionId?
+
+    /**
+     * Restore a session from a [sessionId].
+     * Do not restore anything it the access token is not valid anymore.
+     */
     suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient>
     fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?>
     suspend fun setHomeserver(homeserver: String): Result<Unit>
