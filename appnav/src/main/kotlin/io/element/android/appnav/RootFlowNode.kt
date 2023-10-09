@@ -107,7 +107,7 @@ class RootFlowNode @AssistedInject constructor(
                                 onFailure = { switchToNotLoggedInFlow() }
                             )
                         } else {
-                            switchToSignedOutFlow(SessionId((navState.loggedInState.sessionId)))
+                            switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
                         }
                     }
                     LoggedInState.NotLoggedIn -> {

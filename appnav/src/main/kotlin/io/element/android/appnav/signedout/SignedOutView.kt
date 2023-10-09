@@ -71,7 +71,7 @@ fun SignedOutView(
 }
 
 @Composable
-fun SignedOutHeader() {
+private fun SignedOutHeader() {
     IconTitleSubtitleMolecule(
         modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
         title = "You’re signed out",
@@ -144,7 +144,7 @@ private fun SignedOutFooter(
 
 @PreviewsDayNight
 @Composable
-fun SignedOutViewPreview(
+internal fun SignedOutViewPreview(
     @PreviewParameter(SignedOutStateProvider::class) state: SignedOutState,
 ) = ElementPreview {
     SignedOutView(
