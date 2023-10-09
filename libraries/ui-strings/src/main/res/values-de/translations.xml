@@ -152,7 +152,7 @@
   <string name="common_verification_complete">"Verifizierung abgeschlossen"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Warten…"</string>
-  <string name="common_poll_end_confirmation">"Sind Sie sicher, dass Sie diese Umfrage beenden möchten?"</string>
+  <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
   <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_warning">"Warnung"</string>

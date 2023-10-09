@@ -125,6 +125,7 @@
   <string name="common_room_name_placeholder">"např. název vašeho projektu"</string>
   <string name="common_search_for_someone">"Hledat někoho"</string>
   <string name="common_search_results">"Výsledky hledání"</string>
+  <string name="common_secure_backup">"Zabezpečená záloha"</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_select_your_server">"Vyberte svůj server"</string>
   <string name="common_sending">"Odesílání…"</string>
@@ -151,6 +152,7 @@
   <string name="common_verification_cancelled">"Ověření zrušeno"</string>
   <string name="common_verification_complete">"Ověření dokončeno"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
   <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
   <string name="common_poll_summary">"Hlasování: %1$s"</string>

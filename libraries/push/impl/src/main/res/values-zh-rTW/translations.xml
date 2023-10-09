@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_call">"通話"</string>
   <string name="notification_channel_silent">"無聲通知"</string>
+  <string name="notification_inline_reply_failed">"** 無法傳送，請開啟聊天室"</string>
   <string name="notification_invitation_action_join">"加入"</string>
   <string name="notification_invitation_action_reject">"拒絕"</string>
   <string name="notification_invite_body">"邀請您聊天"</string>
