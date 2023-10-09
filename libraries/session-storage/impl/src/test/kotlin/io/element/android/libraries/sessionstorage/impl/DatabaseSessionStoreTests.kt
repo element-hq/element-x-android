@@ -20,6 +20,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import io.element.android.libraries.matrix.session.SessionData
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -65,11 +66,11 @@ class DatabaseSessionStoreTests {
     @Test
     fun `isLoggedIn emits true while there are sessions in the DB`() = runTest {
         databaseSessionStore.isLoggedIn().test {
-            assertThat(awaitItem()).isFalse()
+            assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
             database.sessionDataQueries.insertSessionData(aSessionData)
-            assertThat(awaitItem()).isTrue()
+            assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(true))
             database.sessionDataQueries.removeSession(aSessionData.userId)
-            assertThat(awaitItem()).isFalse()
+            assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
         }
     }
 

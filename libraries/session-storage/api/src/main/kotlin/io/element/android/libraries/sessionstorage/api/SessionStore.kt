@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface SessionStore {
-    fun isLoggedIn(): Flow<Boolean>
+    fun isLoggedIn(): Flow<LoggedInState>
     fun sessionsFlow(): Flow<List<SessionData>>
     suspend fun storeData(sessionData: SessionData)
 

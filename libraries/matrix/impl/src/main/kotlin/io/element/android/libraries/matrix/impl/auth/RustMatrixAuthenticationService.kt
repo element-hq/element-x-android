@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
@@ -63,7 +64,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     )
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
-    override fun isLoggedIn(): Flow<Boolean> {
+    override fun loggedInStateFlow(): Flow<LoggedInState> {
         return sessionStore.isLoggedIn()
     }
 

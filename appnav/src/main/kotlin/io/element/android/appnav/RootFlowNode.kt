@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -97,15 +98,21 @@ class RootFlowNode @AssistedInject constructor(
             .distinctUntilChanged()
             .onEach { navState ->
                 Timber.v("navState=$navState")
-                if (navState.isLoggedIn) {
-                    tryToRestoreLatestSession(
-                        onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
-                        onFailure = { switchToNotLoggedInFlow() }
-                    )
-                } else {
+                when(navState.loggedInState) {
+                    is LoggedInState.LoggedIn -> {
+                        if(navState.loggedInState.isTokenValid) {
+                            tryToRestoreLatestSession(
+                                onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
+                                onFailure = { switchToNotLoggedInFlow() }
+                            )
+                        } else {
+                            switchToSignedOutFlow()
+                        }
+                    }
+                    LoggedInState.NotLoggedIn ->   {
                     switchToNotLoggedInFlow()
+                    }
                 }
-            }
             .launchIn(lifecycleScope)
     }
 
@@ -116,6 +123,10 @@ class RootFlowNode @AssistedInject constructor(
     private fun switchToNotLoggedInFlow() {
         matrixClientsHolder.removeAll()
         backstack.safeRoot(NavTarget.NotLoggedInFlow)
+    }
+
+    private fun switchToSignedOutFlow() {
+        backstack.safeRoot(NavTarget.SignedOutFlow)
     }
 
     private suspend fun restoreSessionIfNeeded(
@@ -180,6 +191,9 @@ class RootFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
+        data object SignedOutFlow : NavTarget
+
+        @Parcelize
         data object BugReport : NavTarget
     }
 
@@ -198,6 +212,7 @@ class RootFlowNode @AssistedInject constructor(
                 createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
             NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
+            NavTarget.SignedOutFlow -> createNode<SignedOutFlowNode>(buildContext)
             NavTarget.SplashScreen -> splashNode(buildContext)
             NavTarget.BugReport -> {
                 val callback = object : BugReportEntryPoint.Callback {

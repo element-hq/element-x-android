@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.root
+package io.element.android.libraries.sessionstorage.api
 
-import io.element.android.libraries.sessionstorage.api.LoggedInState
-
-/**
- * [RootNavState] produced by [RootNavStateFlowFactory].
- */
-data class RootNavState(
-    /**
-     * This value is incremented when a clear cache is done.
-     * Can be useful to track to force ui state to re-render
-     */
-    val cacheIndex: Int,
-    /**
-     * LoggedInState.
-     */
-    val loggedInState: LoggedInState,
-)
+sealed interface LoggedInState {
+    data object NotLoggedIn : LoggedInState
+    data class LoggedIn(val isTokenValid: Boolean) : LoggedInState
+}
