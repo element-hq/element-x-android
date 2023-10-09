@@ -64,6 +64,7 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.networkmonitor.test)
+    testImplementation(projects.libraries.sessionStorage.implMemory)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)

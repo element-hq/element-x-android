@@ -32,7 +32,10 @@ class InMemorySessionStore : SessionStore {
             if (it == null) {
                 LoggedInState.NotLoggedIn
             } else {
-                LoggedInState.LoggedIn(it.isTokenValid)
+                LoggedInState.LoggedIn(
+                    sessionId = it.userId,
+                    isTokenValid = it.isTokenValid,
+                )
             }
         }
     }

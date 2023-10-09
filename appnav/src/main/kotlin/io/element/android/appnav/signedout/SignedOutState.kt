@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage.api
+package io.element.android.appnav.signedout
 
-sealed interface LoggedInState {
-    data object NotLoggedIn : LoggedInState
-    data class LoggedIn(
-        val sessionId: String,
-        val isTokenValid: Boolean,
-    ) : LoggedInState
-}
+import io.element.android.libraries.sessionstorage.api.SessionData
+
+// Do not use default value, so no member get forgotten in the presenters.
+data class SignedOutState(
+    val signedOutSession: SessionData?,
+    val eventSink: (SignedOutEvents) -> Unit,
+)

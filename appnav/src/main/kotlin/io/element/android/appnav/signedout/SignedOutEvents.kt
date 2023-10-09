@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage.api
+package io.element.android.appnav.signedout
 
-sealed interface LoggedInState {
-    data object NotLoggedIn : LoggedInState
-    data class LoggedIn(
-        val sessionId: String,
-        val isTokenValid: Boolean,
-    ) : LoggedInState
+sealed interface SignedOutEvents {
+    data object SignInAgain : SignedOutEvents
 }
