@@ -98,15 +98,14 @@ import androidx.compose.ui.unit.toSize
 import coil.imageLoader
 import coil.request.DefaultRequestOptions
 import coil.request.ImageRequest
-import coil.size.Size
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
@@ -129,7 +128,9 @@ object BloomDefaults {
      * Number of components to use with BlurHash to generate the blur effect.
      * Larger values mean more detailed blurs.
      */
-    const val HASH_COMPONENTS = 5
+    const val HASH_COMPONENTS = 4
+    const val ENCODE_SIZE_PX = 20
+    const val DECODE_SIZE_PX = 5
 
     /** Default bloom layers. */
     @Composable
@@ -189,7 +190,11 @@ fun Modifier.bloom(
     if (hash == null) return@composed this
 
     val hashedBitmap = remember(hash) {
-        BlurHash.decode(hash, BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)?.asImageBitmap()
+        BlurHash.decode(
+            blurHash = hash,
+            width = BloomDefaults.DECODE_SIZE_PX,
+            height = BloomDefaults.DECODE_SIZE_PX,
+        )?.asImageBitmap()
     } ?: return@composed this
     val density = LocalDensity.current
     val pixelSize = remember(blurSize, density) { blurSize.toIntSize(density) }
@@ -327,7 +332,6 @@ fun Modifier.avatarBloom(
 
     // Request the avatar contents to use as the bloom source
     val context = LocalContext.current
-    val density = LocalDensity.current
     if (avatarData.url != null) {
         val painterRequest = remember(avatarData) {
             ImageRequest.Builder(context)
@@ -337,7 +341,7 @@ fun Modifier.avatarBloom(
                 // Needed to be able to read pixels from the Bitmap for the hash
                 .allowHardware(false)
                 // Reduce size so it loads faster for large avatars
-                .size(with(density) { Size(64.dp.roundToPx(), 64.dp.roundToPx()) })
+                .size(BloomDefaults.ENCODE_SIZE_PX, BloomDefaults.ENCODE_SIZE_PX)
                 .build()
         }
 
@@ -349,9 +353,9 @@ fun Modifier.avatarBloom(
                     context.imageLoader.execute(painterRequest).drawable ?: return@withContext
                 val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@withContext
                 blurHash = BlurHash.encode(
-                    bitmap,
-                    BloomDefaults.HASH_COMPONENTS,
-                    BloomDefaults.HASH_COMPONENTS
+                    bitmap = bitmap,
+                    componentX = BloomDefaults.HASH_COMPONENTS,
+                    componentY = BloomDefaults.HASH_COMPONENTS,
                 )
             }
         }
@@ -371,14 +375,18 @@ fun Modifier.avatarBloom(
         // There is no URL so we'll generate an avatar with the initials and use that as the bloom source
         val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
         val initialsBitmap = initialsBitmap(
-            width = avatarData.size.dp,
-            height = avatarData.size.dp,
+            width = BloomDefaults.ENCODE_SIZE_PX.toDp(),
+            height = BloomDefaults.ENCODE_SIZE_PX.toDp(),
             text = avatarData.initial,
             textColor = avatarColors.foreground,
             backgroundColor = avatarColors.background,
         )
         val hash = remember(avatarData, avatarColors) {
-            BlurHash.encode(initialsBitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+            BlurHash.encode(
+                bitmap = initialsBitmap.asAndroidBitmap(),
+                componentX = BloomDefaults.HASH_COMPONENTS,
+                componentY = BloomDefaults.HASH_COMPONENTS,
+            )
         }
         bloom(
             hash = hash,
@@ -541,7 +549,11 @@ internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::
     ElementPreview {
         val avatarColors = AvatarColorsProvider.provide("$color", ElementTheme.isLightTheme)
         val bitmap = initialsBitmap(text = "F", backgroundColor = avatarColors.background, textColor = avatarColors.foreground)
-        val hash = BlurHash.encode(bitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+        val hash = BlurHash.encode(
+            bitmap = bitmap.asAndroidBitmap(),
+            componentX = BloomDefaults.HASH_COMPONENTS,
+            componentY = BloomDefaults.HASH_COMPONENTS,
+        )
         Box(
             modifier = Modifier
                 .size(256.dp)
