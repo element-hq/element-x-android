@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.signedout
+package io.element.android.features.signedout.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

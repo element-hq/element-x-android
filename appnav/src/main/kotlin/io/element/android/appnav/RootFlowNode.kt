@@ -42,10 +42,10 @@ import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
-import io.element.android.appnav.signedout.SignedOutNode
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
+import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -71,6 +71,7 @@ class RootFlowNode @AssistedInject constructor(
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
+    private val signedOutEntryPoint: SignedOutEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
 ) : BackstackNode<RootFlowNode.NavTarget>(
@@ -217,8 +218,13 @@ class RootFlowNode @AssistedInject constructor(
             }
             NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
             is NavTarget.SignedOutFlow -> {
-                val inputs = SignedOutNode.Inputs(navTarget.sessionId)
-                createNode<SignedOutNode>(buildContext, listOf(inputs))
+                signedOutEntryPoint.nodeBuilder(this, buildContext)
+                    .params(
+                        SignedOutEntryPoint.Params(
+                            sessionId = navTarget.sessionId
+                        )
+                    )
+                    .build()
             }
             NavTarget.SplashScreen -> splashNode(buildContext)
             NavTarget.BugReport -> {

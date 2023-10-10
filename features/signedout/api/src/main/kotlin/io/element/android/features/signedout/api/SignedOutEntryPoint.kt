@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.signedout
+package io.element.android.features.signedout.api
 
-import io.element.android.libraries.sessionstorage.api.SessionData
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.core.SessionId
 
-// Do not use default value, so no member get forgotten in the presenters.
-data class SignedOutState(
-    val signedOutSession: SessionData?,
-    val eventSink: (SignedOutEvents) -> Unit,
-)
+interface SignedOutEntryPoint : FeatureEntryPoint {
+
+    data class Params(
+        val sessionId: SessionId,
+    )
+
+    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+
+    interface NodeBuilder {
+        fun params(params: Params): NodeBuilder
+        fun build(): Node
+    }
+}
+

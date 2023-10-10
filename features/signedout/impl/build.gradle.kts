@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,48 +14,30 @@
  * limitations under the License.
  */
 
-@file:Suppress("UnstableApiUsage")
-
-import extension.allFeaturesApi
-
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.kapt)
     id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.appnav"
+    namespace = "io.element.android.features.signedout.impl"
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
-
-    allFeaturesApi(rootDir, logger)
-
+    api(projects.features.signedout.api)
     implementation(projects.libraries.core)
-    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.deeplink)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.push.api)
-    implementation(projects.libraries.pushproviders.api)
-    implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
-    implementation(projects.libraries.uiStrings)
-
-    implementation(libs.coil)
-
-    implementation(projects.features.ftue.api)
-
-    implementation(projects.services.apperror.impl)
-    implementation(projects.services.appnavstate.api)
-    implementation(projects.services.analytics.api)
+    implementation(projects.libraries.designsystem)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -63,13 +45,8 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.networkmonitor.test)
+    testImplementation(projects.libraries.sessionStorage.implMemory)
     testImplementation(projects.tests.testutils)
-    testImplementation(projects.features.rageshake.test)
-    testImplementation(projects.features.rageshake.impl)
-    testImplementation(projects.services.appnavstate.test)
-    testImplementation(libs.test.appyx.junit)
-    testImplementation(libs.test.arch.core)
 
     ksp(libs.showkase.processor)
 }

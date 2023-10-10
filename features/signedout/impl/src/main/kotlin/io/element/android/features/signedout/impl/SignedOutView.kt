@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.signedout
+package io.element.android.features.signedout.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -48,7 +48,6 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.persistentListOf
 
-// TODO i18n, when wording has been approved.
 @Composable
 fun SignedOutView(
     state: SignedOutState,

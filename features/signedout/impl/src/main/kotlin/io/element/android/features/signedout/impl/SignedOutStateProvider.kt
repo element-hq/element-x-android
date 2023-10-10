@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.signedout
+package io.element.android.features.signedout.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.SessionId

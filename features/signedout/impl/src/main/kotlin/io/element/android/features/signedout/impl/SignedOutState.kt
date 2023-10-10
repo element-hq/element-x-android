@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.signedout
+package io.element.android.features.signedout.impl
 
-sealed interface SignedOutEvents {
-    data object SignInAgain : SignedOutEvents
-}
+import io.element.android.libraries.sessionstorage.api.SessionData
+
+// Do not use default value, so no member get forgotten in the presenters.
+data class SignedOutState(
+    val signedOutSession: SessionData?,
+    val eventSink: (SignedOutEvents) -> Unit,
+)
