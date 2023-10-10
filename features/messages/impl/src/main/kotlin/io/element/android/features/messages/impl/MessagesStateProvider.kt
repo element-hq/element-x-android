@@ -82,5 +82,6 @@ fun aMessagesState() = MessagesState(
     inviteProgress = Async.Uninitialized,
     showReinvitePrompt = false,
     enableTextFormatting = true,
+    enableVoiceMessages = true,
     eventSink = {}
 )

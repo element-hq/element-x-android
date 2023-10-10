@@ -37,6 +37,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,8 +47,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -61,6 +63,8 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
 import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
+import io.element.android.libraries.textcomposer.components.RecordButton
+import io.element.android.libraries.textcomposer.components.RecordingProgress
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
@@ -74,8 +78,10 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun TextComposer(
     state: RichTextEditorState,
+    voiceMessageState: VoiceMessageState,
     composerMode: MessageComposerMode,
     enableTextFormatting: Boolean,
+    enableVoiceMessages: Boolean,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -84,6 +90,8 @@ fun TextComposer(
     onResetComposerMode: () -> Unit = {},
     onAddAttachment: () -> Unit = {},
     onDismissTextFormatting: () -> Unit = {},
+    onRecordClicked: () -> Unit = {},
+    onRecordReleased: () -> Unit = {},
     onError: (Throwable) -> Unit = {},
 ) {
     val onSendClicked = {
@@ -118,15 +126,35 @@ fun TextComposer(
         )
     }
 
+    val canSendMessage by remember { derivedStateOf { state.messageHtml.isNotEmpty() } }
     val sendButton = @Composable {
         SendButton(
-            canSendMessage = state.messageHtml.isNotEmpty(),
+            canSendMessage = canSendMessage,
             onClick = onSendClicked,
             composerMode = composerMode,
         )
     }
+    val recordButton = @Composable {
+        RecordButton(
+            onLongPressStart = onRecordClicked,
+            onLongPressEnd = onRecordReleased,
+            onTap = {
+                // TODO: show 'hold to record' tooltip
+            }
+        )
+    }
 
     val textFormattingOptions = @Composable { TextFormatting(state = state) }
+
+    val sendOrRecordButton = if (canSendMessage || !enableVoiceMessages) {
+        sendButton
+    } else {
+        recordButton
+    }
+
+    val recordingProgress = @Composable {
+        RecordingProgress()
+    }
 
     if (showTextFormatting) {
         TextFormattingLayout(
@@ -136,14 +164,16 @@ fun TextComposer(
                 DismissTextFormattingButton(onClick = onDismissTextFormatting)
             },
             textFormatting = textFormattingOptions,
-            sendButton = sendButton
+            sendButton = sendButton,
         )
     } else {
         StandardLayout(
+            voiceMessageState = voiceMessageState,
             modifier = layoutModifier,
             composerOptionsButton = composerOptionsButton,
             textInput = textInput,
-            sendButton = sendButton
+            endButton = sendOrRecordButton,
+            recordingProgress = recordingProgress,
         )
     }
 
@@ -158,33 +188,45 @@ fun TextComposer(
 
 @Composable
 private fun StandardLayout(
+    voiceMessageState: VoiceMessageState,
     textInput: @Composable () -> Unit,
     composerOptionsButton: @Composable () -> Unit,
-    sendButton: @Composable () -> Unit,
+    recordingProgress: @Composable () -> Unit,
+    endButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom,
     ) {
-        Box(
-            Modifier
-                .padding(bottom = 5.dp, top = 5.dp, start = 3.dp)
-        ) {
-            composerOptionsButton()
-        }
-        Box(
-            modifier = Modifier
-                .padding(bottom = 8.dp, top = 8.dp)
-                .weight(1f)
-        ) {
-            textInput()
+        if (voiceMessageState is VoiceMessageState.Recording) {
+            Box(
+                modifier = Modifier
+                    .padding(start = 16.dp, bottom = 8.dp, top = 8.dp)
+                    .weight(1f)
+            ) {
+                recordingProgress()
+            }
+        } else {
+            Box(
+                Modifier
+                    .padding(bottom = 5.dp, top = 5.dp, start = 3.dp)
+            ) {
+                composerOptionsButton()
+            }
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 8.dp, top = 8.dp)
+                    .weight(1f)
+            ) {
+                textInput()
+            }
         }
         Box(
             Modifier
                 .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
         ) {
-            sendButton()
+            endButton()
         }
     }
 }
@@ -438,18 +480,22 @@ internal fun TextComposerSimplePreview() = ElementPreview {
         {
             TextComposer(
                 RichTextEditorState("", initialFocus = true),
+                voiceMessageState = VoiceMessageState.Idle,
                 onSendMessage = {},
                 composerMode = MessageComposerMode.Normal(""),
                 onResetComposerMode = {},
                 enableTextFormatting = true,
+                enableVoiceMessages = true,
             )
         }, {
         TextComposer(
             RichTextEditorState("A message", initialFocus = true),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
@@ -457,18 +503,22 @@ internal fun TextComposerSimplePreview() = ElementPreview {
                 "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
                 initialFocus = true
             ),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
             RichTextEditorState("A message without focus", initialFocus = false),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Normal(""),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     })
     )
@@ -480,23 +530,29 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
     PreviewColumn(items = persistentListOf({
         TextComposer(
             RichTextEditorState("", initialFocus = false),
+            voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal(""),
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
             RichTextEditorState("A message", initialFocus = false),
+            voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal(""),
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
             RichTextEditorState("A message\nWith several lines\nTo preview larger textfields and long lines with overflow", initialFocus = false),
+            voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal(""),
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }))
 }
@@ -507,10 +563,12 @@ internal fun TextComposerEditPreview() = ElementPreview {
     PreviewColumn(items = persistentListOf({
         TextComposer(
             RichTextEditorState("A message", initialFocus = true),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }))
 }
@@ -521,6 +579,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
     PreviewColumn(items = persistentListOf({
         TextComposer(
             RichTextEditorState(""),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 isThreaded = false,
@@ -533,11 +592,13 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     },
         {
             TextComposer(
                 RichTextEditorState(""),
+                voiceMessageState = VoiceMessageState.Idle,
                 onSendMessage = {},
                 composerMode = MessageComposerMode.Reply(
                     isThreaded = true,
@@ -550,10 +611,12 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 ),
                 onResetComposerMode = {},
                 enableTextFormatting = true,
+                enableVoiceMessages = true,
             )
         }, {
         TextComposer(
             RichTextEditorState("A message"),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 isThreaded = true,
@@ -569,10 +632,12 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
             RichTextEditorState("A message"),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 isThreaded = false,
@@ -588,10 +653,12 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
             RichTextEditorState("A message"),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 isThreaded = false,
@@ -607,10 +674,12 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
             RichTextEditorState("A message", initialFocus = true),
+            voiceMessageState = VoiceMessageState.Idle,
             onSendMessage = {},
             composerMode = MessageComposerMode.Reply(
                 isThreaded = false,
@@ -626,6 +695,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
+            enableVoiceMessages = true,
         )
     })
     )

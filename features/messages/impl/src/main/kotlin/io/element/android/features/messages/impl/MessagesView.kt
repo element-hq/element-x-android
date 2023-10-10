@@ -319,6 +319,7 @@ private fun MessagesViewContent(
                         state = state.composerState,
                         subcomposing = subcomposing,
                         enableTextFormatting = state.enableTextFormatting,
+                        enableVoiceMessages = state.enableVoiceMessages,
                         modifier = Modifier
                             .fillMaxWidth(),
                     )

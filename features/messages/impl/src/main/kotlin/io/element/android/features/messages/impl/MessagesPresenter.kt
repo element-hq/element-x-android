@@ -67,6 +67,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -95,6 +97,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
     private val preferencesStore: PreferencesStore,
+    private val featureFlagsService: FeatureFlagService,
     @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
 
@@ -145,6 +148,11 @@ class MessagesPresenter @AssistedInject constructor(
 
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
+        var enableVoiceMessages by remember { mutableStateOf(false) }
+        LaunchedEffect(featureFlagsService) {
+            enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
+        }
+
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> {
@@ -187,6 +195,7 @@ class MessagesPresenter @AssistedInject constructor(
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
             enableTextFormatting = enableTextFormatting,
+            enableVoiceMessages = enableVoiceMessages,
             eventSink = { handleEvents(it) }
         )
     }

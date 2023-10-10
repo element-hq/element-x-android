@@ -37,4 +37,8 @@ dependencies {
     api(libs.matrix.richtexteditor.compose)
 
     ksp(libs.showkase.processor)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.coroutines.test)
 }

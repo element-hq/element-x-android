@@ -20,7 +20,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -28,6 +32,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.TextComposer
+import io.element.android.libraries.textcomposer.VoiceMessageState
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,6 +40,7 @@ fun MessageComposerView(
     state: MessageComposerState,
     subcomposing: Boolean,
     enableTextFormatting: Boolean,
+    enableVoiceMessages: Boolean,
     modifier: Modifier = Modifier,
 ) {
     fun sendMessage(message: Message) {
@@ -64,9 +70,13 @@ fun MessageComposerView(
         }
     }
 
+    // TODO: Replace with real voice recorder implementation through presenter
+    var fakeVoiceMessageState by remember { mutableStateOf<VoiceMessageState>(VoiceMessageState.Idle) }
+
     TextComposer(
         modifier = modifier,
         state = state.richTextEditorState,
+        voiceMessageState = fakeVoiceMessageState,
         subcomposing = subcomposing,
         onRequestFocus = ::onRequestFocus,
         onSendMessage = ::sendMessage,
@@ -76,6 +86,9 @@ fun MessageComposerView(
         onAddAttachment = ::onAddAttachment,
         onDismissTextFormatting = ::onDismissTextFormatting,
         enableTextFormatting = enableTextFormatting,
+        enableVoiceMessages = enableVoiceMessages,
+        onRecordClicked = { fakeVoiceMessageState = VoiceMessageState.Recording },
+        onRecordReleased = { fakeVoiceMessageState = VoiceMessageState.Idle },
         onError = ::onError,
     )
 }
@@ -88,12 +101,14 @@ internal fun MessageComposerViewPreview(@PreviewParameter(MessageComposerStatePr
             modifier = Modifier.height(IntrinsicSize.Min),
             state = state,
             enableTextFormatting = true,
+            enableVoiceMessages = true,
             subcomposing = false,
         )
         MessageComposerView(
             modifier = Modifier.height(200.dp),
             state = state,
             enableTextFormatting = true,
+            enableVoiceMessages = true,
             subcomposing = false,
         )
     }
