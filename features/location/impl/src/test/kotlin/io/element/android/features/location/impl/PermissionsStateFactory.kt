@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl.common.permissions
+package io.element.android.features.location.impl
 
-data class PermissionsState(
-    val permissions: Permissions,
-    val shouldShowRationale: Boolean,
-    val eventSink: (PermissionsEvents) -> Unit,
-) {
-    sealed interface Permissions {
-        data object AllGranted : Permissions
-        data object SomeGranted : Permissions
-        data object NoneGranted : Permissions
-    }
+import io.element.android.features.location.impl.common.permissions.PermissionsState
 
-    val isAnyGranted: Boolean
-        get() = permissions is Permissions.SomeGranted || permissions is Permissions.AllGranted
+fun aPermissionsState(
+    permissions: PermissionsState.Permissions = PermissionsState.Permissions.NoneGranted,
+    shouldShowRationale: Boolean = false,
+): PermissionsState {
+    return PermissionsState(
+        permissions = permissions,
+        shouldShowRationale = shouldShowRationale,
+        eventSink = {},
+    )
 }

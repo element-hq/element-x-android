@@ -22,6 +22,7 @@ import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutModifier
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
+import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
 import com.lemonappdev.konsist.api.ext.list.withTopLevel
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.ext.list.withoutNameEndingWith
@@ -81,6 +82,21 @@ class KonsistTest {
                 } else {
                     val fileName = it.containingFile.name.removeSuffix(".kt")
                     fileName == it.name
+                }
+            }
+    }
+
+    @Test
+    fun `Data class state MUST not have default value`() {
+        Konsist
+            .scopeFromProject()
+            .classes()
+            .withNameEndingWith("State")
+            .assertTrue { classDeclaration ->
+                classDeclaration.constructors.all { constructorDeclaration ->
+                    constructorDeclaration.parameters.all { parameterDeclaration ->
+                        parameterDeclaration.defaultValue == null
+                    }
                 }
             }
     }

@@ -19,15 +19,14 @@ package io.element.android.features.roomdetails.impl.invite
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 data class RoomInviteMembersState(
-    val canInvite: Boolean = false,
-    val searchQuery: String = "",
-    val searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.NotSearching(),
-    val selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
-    val isSearchActive: Boolean = false,
-    val eventSink: (RoomInviteMembersEvents) -> Unit = {},
+    val canInvite: Boolean,
+    val searchQuery: String,
+    val searchResults: SearchBarResultState<ImmutableList<InvitableUser>>,
+    val selectedUsers: ImmutableList<MatrixUser>,
+    val isSearchActive: Boolean,
+    val eventSink: (RoomInviteMembersEvents) -> Unit,
 )
 
 data class InvitableUser(
