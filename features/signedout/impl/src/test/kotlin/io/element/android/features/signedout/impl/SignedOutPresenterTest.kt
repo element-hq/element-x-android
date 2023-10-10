@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.tests.testutils.WarmUpRule
@@ -33,18 +34,21 @@ class SignedOutPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
+    private val appName = "AppName"
+
     @Test
     fun `present - initial state`() = runTest {
         val aSessionData = aSessionData()
         val sessionStore = InMemorySessionStore().apply {
             storeData(aSessionData)
         }
-        val presenter = createPresenter(sessionStore = sessionStore)
+        val presenter = createSignedOutPresenter(sessionStore = sessionStore)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
+            assertThat(initialState.appName).isEqualTo(appName)
             assertThat(initialState.signedOutSession).isEqualTo(aSessionData)
         }
     }
@@ -55,7 +59,7 @@ class SignedOutPresenterTest {
         val sessionStore = InMemorySessionStore().apply {
             storeData(aSessionData)
         }
-        val presenter = createPresenter(sessionStore = sessionStore)
+        val presenter = createSignedOutPresenter(sessionStore = sessionStore)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -69,13 +73,14 @@ class SignedOutPresenterTest {
         }
     }
 
-    private fun createPresenter(
+    private fun createSignedOutPresenter(
         sessionId: SessionId = A_SESSION_ID,
         sessionStore: SessionStore = InMemorySessionStore(),
     ): SignedOutPresenter {
         return SignedOutPresenter(
             sessionId = sessionId.value,
             sessionStore = sessionStore,
+            buildMeta = aBuildMeta(applicationName = appName),
         )
     }
 }
