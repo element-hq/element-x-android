@@ -17,7 +17,7 @@
 package io.element.android.libraries.matrix.api.room
 
 sealed interface MatrixRoomNotificationSettingsState {
-    object Unknown : MatrixRoomNotificationSettingsState
+    data object Unknown : MatrixRoomNotificationSettingsState
     data class Pending(val prevRoomNotificationSettings: RoomNotificationSettings? = null) : MatrixRoomNotificationSettingsState
     data class Error(val failure: Throwable, val prevRoomNotificationSettings: RoomNotificationSettings? = null) : MatrixRoomNotificationSettingsState
     data class Ready(val roomNotificationSettings: RoomNotificationSettings) : MatrixRoomNotificationSettingsState
