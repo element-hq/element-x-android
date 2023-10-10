@@ -9,7 +9,6 @@ ksp = "1.9.10-1.0.13"
 molecule = "1.2.1"
 
 # AndroidX
-material = "1.9.0"
 core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
@@ -69,7 +68,6 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 google_firebase_bom = "com.google.firebase:firebase-bom:32.3.1"
 
 # AndroidX
-androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
