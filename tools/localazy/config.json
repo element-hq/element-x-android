@@ -26,6 +26,12 @@
       ]
     },
     {
+      "name": ":features:signedout:impl",
+      "includeRegex": [
+        "screen_signed_out_.*"
+      ]
+    },
+    {
       "name": ":features:invitelist:impl",
       "includeRegex": [
         "screen_invites_.*"

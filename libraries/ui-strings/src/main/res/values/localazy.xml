@@ -64,6 +64,7 @@
   <string name="action_send_message">"Send message"</string>
   <string name="action_share">"Share"</string>
   <string name="action_share_link">"Share link"</string>
+  <string name="action_sign_in_again">"Sign in again"</string>
   <string name="action_skip">"Skip"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
