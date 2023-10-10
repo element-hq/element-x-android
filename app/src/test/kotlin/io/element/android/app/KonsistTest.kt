@@ -20,9 +20,11 @@ import androidx.compose.runtime.Composable
 import com.lemonappdev.konsist.api.KoModifier
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutModifier
+import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutOverrideModifier
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
+import com.lemonappdev.konsist.api.ext.list.withReturnType
 import com.lemonappdev.konsist.api.ext.list.withTopLevel
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.ext.list.withoutNameEndingWith
@@ -98,6 +100,18 @@ class KonsistTest {
                         parameterDeclaration.defaultValue == null
                     }
                 }
+            }
+    }
+
+    @Test
+    fun `Function which creates Presenter in test MUST be named 'createPresenterName'`() {
+        Konsist
+            .scopeFromTest()
+            .functions()
+            .withReturnType { it.name.endsWith("Presenter") }
+            .withoutOverrideModifier()
+            .assertTrue { functionDeclaration ->
+                functionDeclaration.name == "create${functionDeclaration.returnType?.name}"
             }
     }
 }

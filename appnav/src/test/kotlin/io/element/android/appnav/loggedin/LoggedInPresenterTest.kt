@@ -42,7 +42,7 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createPresenter()
+        val presenter = createLoggedInPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -54,7 +54,7 @@ class LoggedInPresenterTest {
     @Test
     fun `present - show sync spinner`() = runTest {
         val roomListService = FakeRoomListService()
-        val presenter = createPresenter(roomListService, NetworkStatus.Online)
+        val presenter = createLoggedInPresenter(roomListService, NetworkStatus.Online)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -66,7 +66,7 @@ class LoggedInPresenterTest {
         }
     }
 
-    private fun createPresenter(
+    private fun createLoggedInPresenter(
         roomListService: RoomListService = FakeRoomListService(),
         networkStatus: NetworkStatus = NetworkStatus.Offline
     ): LoggedInPresenter {

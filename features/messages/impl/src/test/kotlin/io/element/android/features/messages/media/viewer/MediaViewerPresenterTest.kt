@@ -55,7 +55,7 @@ class MediaViewerPresenterTest {
     fun `present - download media success scenario`() = runTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
-        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
+        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -76,7 +76,7 @@ class MediaViewerPresenterTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
         val snackbarDispatcher = SnackbarDispatcher()
-        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions, snackbarDispatcher)
+        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions, snackbarDispatcher)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -122,7 +122,7 @@ class MediaViewerPresenterTest {
     fun `present - download media failure then retry with success scenario`() = runTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
-        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
+        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -147,7 +147,7 @@ class MediaViewerPresenterTest {
         }
     }
 
-    private fun aMediaViewerPresenter(
+    private fun createMediaViewerPresenter(
         mediaLoader: FakeMediaLoader,
         localMediaActions: FakeLocalMediaActions,
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),

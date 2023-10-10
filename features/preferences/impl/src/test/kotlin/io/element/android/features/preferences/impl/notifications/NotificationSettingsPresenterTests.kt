@@ -32,7 +32,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class NotificationSettingsPresenterTests {
     @Test
     fun `present - ensures initial state is correct`() = runTest {
-        val presenter = aNotificationPresenter()
+        val presenter = createNotificationSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -58,7 +58,7 @@ class NotificationSettingsPresenterTests {
     @Test
     fun `present - default group notification mode changed`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        val presenter = aNotificationPresenter(notificationSettingsService)
+        val presenter = createNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -77,7 +77,7 @@ class NotificationSettingsPresenterTests {
     @Test
     fun `present - notification settings mismatched`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        val presenter = aNotificationPresenter(notificationSettingsService)
+        val presenter = createNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -108,7 +108,7 @@ class NotificationSettingsPresenterTests {
             initialEncryptedOneToOneDefaultMode = RoomNotificationMode.ALL_MESSAGES,
             initialOneToOneDefaultMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
         )
-        val presenter = aNotificationPresenter(notificationSettingsService)
+        val presenter = createNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -125,7 +125,7 @@ class NotificationSettingsPresenterTests {
 
     @Test
     fun `present - set notifications enabled`() = runTest {
-        val presenter = aNotificationPresenter()
+        val presenter = createNotificationSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -145,7 +145,7 @@ class NotificationSettingsPresenterTests {
 
     @Test
     fun `present - set call notifications enabled`() = runTest {
-        val presenter = aNotificationPresenter()
+        val presenter = createNotificationSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -167,7 +167,7 @@ class NotificationSettingsPresenterTests {
 
     @Test
     fun `present - set atRoom notifications enabled`() = runTest {
-        val presenter = aNotificationPresenter()
+        val presenter = createNotificationSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -187,7 +187,7 @@ class NotificationSettingsPresenterTests {
         }
     }
 
-    private fun aNotificationPresenter(
+    private fun createNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
     ) : NotificationSettingsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
