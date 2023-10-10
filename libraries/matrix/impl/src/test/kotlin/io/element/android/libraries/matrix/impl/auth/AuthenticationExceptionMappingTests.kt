@@ -94,11 +94,10 @@ class AuthenticationExceptionMappingTests {
         hasMessageThat().isEqualTo(message)
     }
 
-    private inline fun assertIsOidcError(throwable: Throwable, type: String, message: String) {
+    private fun assertIsOidcError(throwable: Throwable, type: String, message: String) {
         val authenticationException = throwable.mapAuthenticationException()
         assertThat(authenticationException).isInstanceOf(AuthenticationException.OidcError::class.java)
         assertThat((authenticationException as? AuthenticationException.OidcError)?.type).isEqualTo(type)
         assertThat(authenticationException.message).isEqualTo(message)
     }
-
 }

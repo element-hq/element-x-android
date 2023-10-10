@@ -191,7 +191,6 @@ class RoomSummaryListProcessorTests {
     fun `Clear removes all the entries`() = runTest {
         summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
         val processor = createProcessor()
-        val index = 0
 
         // Start processing updates
         processor.postEntries(listOf())
