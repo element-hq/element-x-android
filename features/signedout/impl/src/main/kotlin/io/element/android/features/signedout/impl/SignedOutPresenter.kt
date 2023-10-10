@@ -26,12 +26,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.launch
 
 class SignedOutPresenter @AssistedInject constructor(
     @Assisted private val sessionId: String, /* Cannot inject SessionId */
     private val sessionStore: SessionStore,
+    private val buildMeta: BuildMeta,
 ) : Presenter<SignedOutState> {
 
     @AssistedFactory
@@ -56,6 +58,7 @@ class SignedOutPresenter @AssistedInject constructor(
         }
 
         return SignedOutState(
+            appName = buildMeta.applicationName,
             signedOutSession = signedOutSession,
             eventSink = ::handleEvents
         )

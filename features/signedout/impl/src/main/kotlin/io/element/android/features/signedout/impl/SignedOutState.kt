@@ -20,6 +20,7 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 
 // Do not use default value, so no member get forgotten in the presenters.
 data class SignedOutState(
+    val appName: String,
     val signedOutSession: SessionData?,
     val eventSink: (SignedOutEvents) -> Unit,
 )

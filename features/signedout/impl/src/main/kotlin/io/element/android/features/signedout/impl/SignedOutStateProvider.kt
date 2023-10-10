@@ -30,8 +30,9 @@ open class SignedOutStateProvider : PreviewParameterProvider<SignedOutState> {
 }
 
 fun aSignedOutState() = SignedOutState(
+    appName = "AppName",
+    signedOutSession = aSessionData(),
     eventSink = {},
-    signedOutSession = aSessionData()
 )
 
 fun aSessionData(

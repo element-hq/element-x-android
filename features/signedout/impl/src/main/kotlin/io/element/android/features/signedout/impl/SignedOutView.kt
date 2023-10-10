@@ -17,7 +17,7 @@
 package io.element.android.features.signedout.impl
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,13 +25,12 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -44,8 +43,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -59,7 +58,7 @@ fun SignedOutView(
             .fillMaxSize()
             .systemBarsPadding()
             .imePadding(),
-        header = { SignedOutHeader() },
+        header = { SignedOutHeader(state) },
         content = { SignedOutContent() },
         footer = {
             SignedOutFooter(
@@ -70,12 +69,13 @@ fun SignedOutView(
 }
 
 @Composable
-private fun SignedOutHeader() {
+private fun SignedOutHeader(state: SignedOutState) {
     IconTitleSubtitleMolecule(
         modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
-        title = "You’re signed out",
-        subTitle = "It can be due to various reasons:",
-        iconImageVector = Icons.Filled.AccountCircle
+        title = stringResource(id = R.string.screen_signed_out_title),
+        subTitle = stringResource(id = R.string.screen_signed_out_subtitle, state.appName),
+        iconImageVector = Icons.Filled.AccountCircle,
+        iconTint = ElementTheme.colors.iconSecondary,
     )
 }
 
@@ -93,16 +93,16 @@ private fun SignedOutContent(
         InfoListOrganism(
             items = persistentListOf(
                 InfoListItem(
-                    message = "You’ve changed your password on another session.",
-                    iconComposable = { CheckIcon() },
+                    message = stringResource(id = R.string.screen_signed_out_reason_1),
+                    iconComposable = { Icon(R.drawable.ic_lock_outline) },
                 ),
                 InfoListItem(
-                    message = "You have deleted this session from another session.",
-                    iconComposable = { CheckIcon() },
+                    message = stringResource(id = R.string.screen_signed_out_reason_2),
+                    iconComposable = { Icon(R.drawable.ic_devices) },
                 ),
                 InfoListItem(
-                    message = "The administrator of your server has invalidated your access for security reason.",
-                    iconComposable = { CheckIcon() },
+                    message = stringResource(id = R.string.screen_signed_out_reason_3),
+                    iconComposable = { Icon(R.drawable.ic_do_disturb_alt) },
                 ),
             ),
             textStyle = ElementTheme.typography.fontBodyMdMedium,
@@ -113,15 +113,16 @@ private fun SignedOutContent(
 }
 
 @Composable
-private fun CheckIcon(modifier: Modifier = Modifier) {
+private fun Icon(
+    @DrawableRes iconResourceId: Int,
+    modifier: Modifier = Modifier,
+) {
     Icon(
         modifier = modifier
-            .size(20.dp)
-            .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
-            .padding(2.dp),
-        resourceId = CommonDrawables.ic_compound_check,
+            .size(20.dp),
+        resourceId = iconResourceId,
         contentDescription = null,
-        tint = ElementTheme.colors.textActionAccent,
+        tint = ElementTheme.colors.iconSecondary,
     )
 }
 
@@ -134,7 +135,7 @@ private fun SignedOutFooter(
         modifier = modifier,
     ) {
         Button(
-            text = "Sign in again",
+            text = stringResource(id = CommonStrings.action_sign_in_again),
             onClick = onSignInAgain,
             modifier = Modifier.fillMaxWidth(),
         )
