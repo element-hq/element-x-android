@@ -39,7 +39,7 @@ class DatabaseSessionStoreTests {
         slidingSyncProxy = null,
         loginTimestamp = null,
         oidcData = "aOidcData",
-        isTokenValid = null,
+        isTokenValid = 1,
         loginType = null,
     )
 
@@ -124,7 +124,7 @@ class DatabaseSessionStoreTests {
             slidingSyncProxy = "slidingSyncProxy",
             loginTimestamp = 1,
             oidcData = "aOidcData",
-            isTokenValid = null,
+            isTokenValid = 1,
             loginType = null,
         )
         val secondSessionData = SessionData(
@@ -136,7 +136,7 @@ class DatabaseSessionStoreTests {
             slidingSyncProxy = "slidingSyncProxyAltered",
             loginTimestamp = 2,
             oidcData = "aOidcDataAltered",
-            isTokenValid = null,
+            isTokenValid = 1,
             loginType = null,
         )
         assertThat(firstSessionData.userId).isEqualTo(secondSessionData.userId)

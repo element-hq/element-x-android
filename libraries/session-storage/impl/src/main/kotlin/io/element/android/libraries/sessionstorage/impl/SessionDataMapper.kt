@@ -46,7 +46,7 @@ internal fun DbSessionData.toApiModel(): SessionData {
         oidcData = oidcData,
         slidingSyncProxy = slidingSyncProxy,
         loginTimestamp = loginTimestamp?.let { Date(it) },
-        isTokenValid = (isTokenValid ?: 1) == 1L,
+        isTokenValid = isTokenValid == 1L,
         loginType = LoginType.fromName(loginType ?: LoginType.UNKNOWN.name),
     )
 }

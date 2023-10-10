@@ -46,7 +46,7 @@ class DatabaseSessionStore @Inject constructor(
                 } else {
                     LoggedInState.LoggedIn(
                         sessionId = it.userId,
-                        isTokenValid = (it.isTokenValid ?: 1) == 1L
+                        isTokenValid = it.isTokenValid == 1L
                     )
                 }
             }
