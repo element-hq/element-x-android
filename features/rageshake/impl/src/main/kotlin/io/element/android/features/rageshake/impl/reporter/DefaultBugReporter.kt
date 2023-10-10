@@ -101,10 +101,10 @@ class DefaultBugReporter @Inject constructor(
     }
 
     // the pending bug report call
-    private var mBugReportCall: Call? = null
+    private var bugReportCall: Call? = null
 
     // boolean to cancel the bug report
-    private val mIsCancelled = false
+    private val isCancelled = false
 
     /*
     val adapter = MatrixJsonParser.getMoshi()
@@ -151,7 +151,7 @@ class DefaultBugReporter @Inject constructor(
         listener: BugReporterListener?
     ) {
         // enumerate files to delete
-        val mBugReportFiles: MutableList<File> = ArrayList()
+        val bugReportFiles: MutableList<File> = ArrayList()
 
         try {
 
@@ -172,7 +172,7 @@ class DefaultBugReporter @Inject constructor(
                     val files = getLogFiles()
                     files.mapNotNullTo(gzippedFiles) { f ->
                         when {
-                            mIsCancelled -> null
+                            isCancelled -> null
                             f.extension == "gz" -> f
                             else -> compressFile(f)
                         }
@@ -180,7 +180,7 @@ class DefaultBugReporter @Inject constructor(
                     files.deleteAllExceptMostRecent()
                 }
 
-                if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
+                if (!isCancelled && (withCrashLogs || withDevicesLogs)) {
                     val gzippedLogcat = saveLogCat(false)
 
                     if (null != gzippedLogcat) {
@@ -215,7 +215,7 @@ class DefaultBugReporter @Inject constructor(
                 val userId = sessionData?.userId ?: "undefined"
                 var olmVersion = "undefined"
 
-                if (!mIsCancelled) {
+                if (!isCancelled) {
                     val text = when (reportType) {
                         ReportType.BUG_REPORT -> bugDescription
                         ReportType.SUGGESTION -> "[Suggestion] $bugDescription"
@@ -268,7 +268,7 @@ class DefaultBugReporter @Inject constructor(
                         }
                     }
 
-                    mBugReportFiles.addAll(gzippedFiles)
+                    bugReportFiles.addAll(gzippedFiles)
 
                     if (gzippedFiles.isNotEmpty() && !uploadedSomeLogs) {
                         serverError = "Couldn't upload any logs, please retry."
@@ -336,8 +336,8 @@ class DefaultBugReporter @Inject constructor(
                             0
                         }
 
-                        if (mIsCancelled && null != mBugReportCall) {
-                            mBugReportCall!!.cancel()
+                        if (isCancelled && null != bugReportCall) {
+                            bugReportCall!!.cancel()
                         }
 
                         Timber.v("## onWrite() : $percentage%")
@@ -360,8 +360,8 @@ class DefaultBugReporter @Inject constructor(
 
                     // trigger the request
                     try {
-                        mBugReportCall = okHttpClient.get().newCall(request)
-                        response = mBugReportCall!!.execute()
+                        bugReportCall = okHttpClient.get().newCall(request)
+                        response = bugReportCall!!.execute()
                         responseCode = response.code
                     } catch (e: CancellationException) {
                         throw e
@@ -423,11 +423,11 @@ class DefaultBugReporter @Inject constructor(
             }
 
             withContext(coroutineDispatchers.main) {
-                mBugReportCall = null
+                bugReportCall = null
 
                 if (null != listener) {
                     try {
-                        if (mIsCancelled) {
+                        if (isCancelled) {
                             listener.onUploadCancelled()
                         } else if (null == serverError) {
                             listener.onUploadSucceed(reportURL)
@@ -443,7 +443,7 @@ class DefaultBugReporter @Inject constructor(
             }
         } finally {
             // delete the generated files when the bug report process has finished
-            for (file in mBugReportFiles) {
+            for (file in bugReportFiles) {
                 file.safeDelete()
             }
         }

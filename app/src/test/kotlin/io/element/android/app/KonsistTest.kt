@@ -23,6 +23,7 @@ import com.lemonappdev.konsist.api.ext.list.constructors
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutModifier
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutOverrideModifier
 import com.lemonappdev.konsist.api.ext.list.parameters
+import com.lemonappdev.konsist.api.ext.list.properties
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
@@ -30,6 +31,7 @@ import com.lemonappdev.konsist.api.ext.list.withReturnType
 import com.lemonappdev.konsist.api.ext.list.withTopLevel
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.ext.list.withoutNameEndingWith
+import com.lemonappdev.konsist.api.verify.assertFalse
 import com.lemonappdev.konsist.api.verify.assertTrue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -120,6 +122,18 @@ class KonsistTest {
             .withoutOverrideModifier()
             .assertTrue { functionDeclaration ->
                 functionDeclaration.name == "create${functionDeclaration.returnType?.name}"
+            }
+    }
+
+    @Test
+    fun `no field should have 'm' prefix`() {
+        Konsist
+            .scopeFromProject()
+            .classes()
+            .properties()
+            .assertFalse {
+                val secondCharacterIsUppercase = it.name.getOrNull(1)?.isUpperCase() ?: false
+                it.name.startsWith('m') && secondCharacterIsUppercase
             }
     }
 }
