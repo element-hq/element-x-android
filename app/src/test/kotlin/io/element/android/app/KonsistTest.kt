@@ -36,7 +36,7 @@ import org.junit.Test
 class KonsistTest {
 
     @Test
-    fun `classes extending 'Presenter' should have 'Presenter' suffix`() {
+    fun `Classes extending 'Presenter' should have 'Presenter' suffix`() {
         Konsist.scopeFromProject()
             .classes()
             .withAllParentsOf(Presenter::class)
@@ -44,7 +44,7 @@ class KonsistTest {
     }
 
     @Test
-    fun `function with '@PreviewsDayNight' annotation should have 'Preview' suffix`() {
+    fun `Functions with '@PreviewsDayNight' annotation should have 'Preview' suffix`() {
         Konsist
             .scopeFromProject()
             .functions()
@@ -57,7 +57,7 @@ class KonsistTest {
     }
 
     @Test
-    fun `top level function with '@Composable' annotation starting with a upper case should be placed in a file with the same name`() {
+    fun `Top level function with '@Composable' annotation starting with a upper case should be placed in a file with the same name`() {
         Konsist
             .scopeFromProject()
             .functions()
