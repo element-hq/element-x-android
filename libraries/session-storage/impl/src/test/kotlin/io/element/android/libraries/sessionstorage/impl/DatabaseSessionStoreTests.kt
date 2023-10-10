@@ -21,6 +21,7 @@ import com.google.common.truth.Truth.assertThat
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import io.element.android.libraries.matrix.session.SessionData
 import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.libraries.sessionstorage.api.LoginType
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -40,7 +41,7 @@ class DatabaseSessionStoreTests {
         loginTimestamp = null,
         oidcData = "aOidcData",
         isTokenValid = 1,
-        loginType = null,
+        loginType = LoginType.UNKNOWN.name,
     )
 
     @Before
