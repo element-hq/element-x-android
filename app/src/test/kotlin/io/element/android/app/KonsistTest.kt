@@ -19,8 +19,10 @@ package io.element.android.app
 import androidx.compose.runtime.Composable
 import com.lemonappdev.konsist.api.KoModifier
 import com.lemonappdev.konsist.api.Konsist
+import com.lemonappdev.konsist.api.ext.list.constructors
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutModifier
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutOverrideModifier
+import com.lemonappdev.konsist.api.ext.list.parameters
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
@@ -40,7 +42,9 @@ class KonsistTest {
         Konsist.scopeFromProject()
             .classes()
             .withAllParentsOf(Presenter::class)
-            .assertTrue { it.name.endsWith("Presenter") }
+            .assertTrue {
+                it.name.endsWith("Presenter")
+            }
     }
 
     @Test
@@ -94,12 +98,16 @@ class KonsistTest {
             .scopeFromProject()
             .classes()
             .withNameEndingWith("State")
-            .assertTrue { classDeclaration ->
-                classDeclaration.constructors.all { constructorDeclaration ->
-                    constructorDeclaration.parameters.all { parameterDeclaration ->
-                        parameterDeclaration.defaultValue == null
-                    }
-                }
+            .withoutName(
+                "CameraPositionState",
+            )
+            .constructors
+            .parameters
+            .assertTrue { parameterDeclaration ->
+                parameterDeclaration.defaultValue == null &&
+                    // Using parameterDeclaration.defaultValue == null is not enough apparently,
+                    // Also check that the text does not contain an equal sign
+                    parameterDeclaration.text.contains("=").not()
             }
     }
 

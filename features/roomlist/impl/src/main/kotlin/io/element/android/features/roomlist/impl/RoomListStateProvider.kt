@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -58,7 +59,7 @@ internal fun aRoomListState() = RoomListState(
     invitesState = InvitesState.NoInvites,
     displaySearchResults = false,
     contextMenu = RoomListState.ContextMenu.Hidden,
-    leaveRoomState = LeaveRoomState(),
+    leaveRoomState = aLeaveRoomState(),
     eventSink = {}
 )
 
