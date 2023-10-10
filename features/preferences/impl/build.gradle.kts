@@ -55,7 +55,6 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
     implementation(libs.datetime)
-    implementation(libs.accompanist.placeholder)
     implementation(libs.coil.compose)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.datastore.preferences)

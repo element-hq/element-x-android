@@ -9,7 +9,6 @@ ksp = "1.9.10-1.0.13"
 molecule = "1.2.1"
 
 # AndroidX
-material = "1.9.0"
 core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
@@ -69,7 +68,6 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 google_firebase_bom = "com.google.firebase:firebase-bom:32.3.1"
 
 # AndroidX
-androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
@@ -94,8 +92,6 @@ androidx_preference = "androidx.preference:preference:1.2.1"
 androidx_webkit = "androidx.webkit:webkit:1.8.0"
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
-# Warning: issue on alpha07, make sure this is working when upgrading
-# Context in https://github.com/vector-im/element-x-android/pull/1239#issuecomment-1711500332
 androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha09"
 
 # Coroutines
@@ -103,12 +99,8 @@ coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # Accompanist
-accompanist_animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist_permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-accompanist_material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
 accompanist_systemui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-accompanist_placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
-accompanist_flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 
 # Libraries
 squareup_seismic = "com.squareup:seismic:1.0.3"
