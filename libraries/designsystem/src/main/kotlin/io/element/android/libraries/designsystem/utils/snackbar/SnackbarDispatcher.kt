@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.utils
+package io.element.android.libraries.designsystem.utils.snackbar
 
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,11 +23,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.components.button.ButtonVisuals
-import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Snackbar
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
@@ -38,7 +31,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.sync.Mutex
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A global dispatcher of [SnackbarMessage] to be displayed in [Snackbar] via a [SnackbarHostState].
@@ -78,23 +70,6 @@ fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> 
     return snackbarMessage.collectAsState(initial = null)
 }
 
-@Composable
-fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
-    androidx.compose.material3.SnackbarHost(hostState, modifier) { data ->
-        Snackbar(
-            modifier = Modifier.padding(12.dp), // Add default padding
-            message = data.visuals.message,
-            action = data.visuals.actionLabel?.let { ButtonVisuals.Text(it, data::performAction) },
-            dismissAction = if (data.visuals.withDismissAction) {
-                ButtonVisuals.Icon(
-                    IconSource.Resource(CommonDrawables.ic_compound_close),
-                    data::dismiss
-                )
-            } else null,
-        )
-    }
-}
-
 /**
  * Helper method to display a [SnackbarMessage] in a [SnackbarHostState] handling cancellations.
  */
@@ -127,19 +102,3 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
     }
     return snackbarHostState
 }
-
-/**
- * A message to be displayed in a [Snackbar].
- * @param messageResId The message to be displayed.
- * @param duration The duration of the message. The default value is [SnackbarDuration.Short].
- * @param actionResId The action text to be displayed. The default value is `null`.
- * @param isDisplayed Used to track if the current message is already displayed or not.
- * @param action The action to be performed when the action is clicked.
- */
-data class SnackbarMessage(
-    @StringRes val messageResId: Int,
-    val duration: SnackbarDuration = SnackbarDuration.Short,
-    @StringRes val actionResId: Int? = null,
-    val isDisplayed: AtomicBoolean = AtomicBoolean(false),
-    val action: () -> Unit = {},
-)

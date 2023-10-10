@@ -16,9 +16,15 @@
 
 package io.element.android.app
 
+import androidx.compose.runtime.Composable
+import com.lemonappdev.konsist.api.KoModifier
 import com.lemonappdev.konsist.api.Konsist
+import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutModifier
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
+import com.lemonappdev.konsist.api.ext.list.withTopLevel
+import com.lemonappdev.konsist.api.ext.list.withoutName
+import com.lemonappdev.konsist.api.ext.list.withoutNameEndingWith
 import com.lemonappdev.konsist.api.verify.assertTrue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -44,6 +50,38 @@ class KonsistTest {
                 it.hasNameEndingWith("Preview") &&
                     it.hasNameEndingWith("LightPreview").not() &&
                     it.hasNameEndingWith("DarkPreview").not()
+            }
+    }
+
+    @Test
+    fun `top level function with '@Composable' annotation starting with a upper case should be placed in a file with the same name`() {
+        Konsist
+            .scopeFromProject()
+            .functions()
+            .withTopLevel()
+            .withoutModifier(KoModifier.PRIVATE)
+            .withoutNameEndingWith("Preview")
+            .withAllAnnotationsOf(Composable::class)
+            .withoutName(
+                // Add some exceptions...
+                "OutlinedButton",
+                "TextButton",
+                "SimpleAlertDialogContent",
+            )
+            .assertTrue(
+                additionalMessage =
+                """
+                Please check the filename. It should match the top level Composable function. If the filename is correct:
+                - consider making the Composable private or moving it to its own file
+                - at last resort, you can add an exception in the Konsist test
+                """.trimIndent()
+            ) {
+                if (it.name.first().isLowerCase()) {
+                    true
+                } else {
+                    val fileName = it.containingFile.name.removeSuffix(".kt")
+                    fileName == it.name
+                }
             }
     }
 }

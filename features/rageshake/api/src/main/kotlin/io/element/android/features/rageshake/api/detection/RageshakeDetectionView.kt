@@ -81,7 +81,7 @@ private fun TakeScreenshot(
 }
 
 @Composable
-fun RageshakeDialogContent(
+private fun RageshakeDialogContent(
     onNoClicked: () -> Unit = { },
     onDisableClicked: () -> Unit = { },
     onYesClicked: () -> Unit = { },

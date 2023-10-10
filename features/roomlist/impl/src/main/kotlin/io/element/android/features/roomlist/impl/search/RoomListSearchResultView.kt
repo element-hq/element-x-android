@@ -100,7 +100,7 @@ internal fun RoomListSearchResultView(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-internal fun RoomListSearchResultContent(
+private fun RoomListSearchResultContent(
     state: RoomListState,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,

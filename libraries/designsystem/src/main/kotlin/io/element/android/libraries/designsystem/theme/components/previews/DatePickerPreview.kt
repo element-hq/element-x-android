@@ -30,13 +30,13 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
-internal fun DatePickerPreviewLight() {
+internal fun DatePickerLightPreview() {
     ElementPreviewLight { ContentToPreview() }
 }
 
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
-internal fun DatePickerPreviewDark() {
+internal fun DatePickerDarkPreview() {
     ElementPreviewDark { ContentToPreview() }
 }
 

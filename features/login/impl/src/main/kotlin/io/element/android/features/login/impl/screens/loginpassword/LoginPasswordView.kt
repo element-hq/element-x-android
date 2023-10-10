@@ -167,7 +167,7 @@ fun LoginPasswordView(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun LoginForm(
+private fun LoginForm(
     state: LoginPasswordState,
     isLoading: Boolean,
     onSubmit: () -> Unit,
@@ -272,7 +272,7 @@ internal fun LoginForm(
 }
 
 @Composable
-internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
+private fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
         title = stringResource(id = CommonStrings.dialog_title_error),
         content = stringResource(loginError(error)),

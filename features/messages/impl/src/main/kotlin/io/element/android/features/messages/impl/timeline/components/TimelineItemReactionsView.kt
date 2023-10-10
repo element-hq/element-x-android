@@ -37,7 +37,7 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun TimelineItemReactions(
+fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
     isOutgoing: Boolean,
     onReactionClicked: (emoji: String) -> Unit,
@@ -46,16 +46,16 @@ fun TimelineItemReactions(
     modifier: Modifier = Modifier,
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
-        TimelineItemReactionsView(
-            modifier = modifier,
-            reactions = reactionsState.reactions,
-            expanded = expanded,
-            isOutgoing = isOutgoing,
-            onReactionClick = onReactionClicked,
-            onReactionLongClick = onReactionLongClicked,
-            onMoreReactionsClick = onMoreReactionsClicked,
-            onToggleExpandClick = { expanded = !expanded },
-        )
+    TimelineItemReactionsView(
+        modifier = modifier,
+        reactions = reactionsState.reactions,
+        expanded = expanded,
+        isOutgoing = isOutgoing,
+        onReactionClick = onReactionClicked,
+        onReactionLongClick = onReactionLongClicked,
+        onMoreReactionsClick = onMoreReactionsClicked,
+        onToggleExpandClick = { expanded = !expanded },
+    )
 }
 
 @Composable
@@ -153,7 +153,7 @@ private fun ContentToPreview(
     reactions: ImmutableList<AggregatedReaction>,
     isOutgoing: Boolean = false
 ) {
-    TimelineItemReactions(
+    TimelineItemReactionsView(
         reactionsState = TimelineItemReactions(
             reactions
         ),

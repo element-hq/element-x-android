@@ -111,7 +111,7 @@ fun RoomInviteMembersView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomInviteMembersTopBar(
+private fun RoomInviteMembersTopBar(
     canSend: Boolean,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},

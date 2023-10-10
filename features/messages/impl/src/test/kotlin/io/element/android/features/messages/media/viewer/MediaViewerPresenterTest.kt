@@ -30,7 +30,7 @@ import io.element.android.features.messages.impl.media.viewer.MediaViewerPresent
 import io.element.android.features.messages.media.FakeLocalMediaActions
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.tests.testutils.WarmUpRule

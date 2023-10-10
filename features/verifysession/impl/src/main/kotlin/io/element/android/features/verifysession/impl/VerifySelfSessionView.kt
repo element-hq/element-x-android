@@ -89,7 +89,7 @@ fun VerifySelfSessionView(
 }
 
 @Composable
-internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = Modifier) {
+private fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = Modifier) {
     val iconResourceId = when (verificationFlowStep) {
         FlowStep.Initial -> R.drawable.ic_verification_devices
         FlowStep.Canceled -> R.drawable.ic_verification_warning
@@ -118,7 +118,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
 }
 
 @Composable
-internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
+private fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
         when (flowState) {
             FlowStep.Initial, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
@@ -129,14 +129,14 @@ internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun ContentWaiting(modifier: Modifier = Modifier) {
+private fun ContentWaiting(modifier: Modifier = Modifier) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         CircularProgressIndicator()
     }
 }
 
 @Composable
-internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
+private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
     // We want each row to have up to 4 emojis
     val rows = verificationFlowStep.emojiList.chunked(4)
     Column(modifier = modifier.fillMaxWidth()) {
@@ -155,7 +155,7 @@ internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier
 }
 
 @Composable
-internal fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
+private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Text(
             text = emoji.code,
@@ -173,7 +173,7 @@ internal fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifi
 }
 
 @Composable
-internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) {
+private fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) {
     val verificationViewState = screenState.verificationFlowStep
     val eventSink = screenState.eventSink
 

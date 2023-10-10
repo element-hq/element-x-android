@@ -44,7 +44,7 @@ import io.element.android.libraries.theme.ElementTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun PreferenceView(
+fun PreferencePage(
     title: String,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
@@ -79,7 +79,7 @@ fun PreferenceView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreferenceTopAppBar(
+private fun PreferenceTopAppBar(
     title: String,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
@@ -104,7 +104,7 @@ fun PreferenceTopAppBar(
 @PreviewsDayNight
 @Composable
 internal fun PreferenceViewPreview() = ElementPreview {
-    PreferenceView(
+    PreferencePage(
         title = "Preference screen"
     ) {
         PreferenceCategory(

@@ -27,7 +27,6 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
@@ -84,45 +83,4 @@ private fun PreferenceBlockUser(
             modifier = modifier,
         )
     }
-}
-
-@Composable
-internal fun BlockUserDialogs(state: RoomMemberDetailsState) {
-    when (state.displayConfirmationDialog) {
-        null -> Unit
-        RoomMemberDetailsState.ConfirmationDialog.Block -> {
-            BlockConfirmationDialog(
-                onBlockAction = { state.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = false)) },
-                onDismiss = { state.eventSink(RoomMemberDetailsEvents.ClearConfirmationDialog) }
-            )
-        }
-        RoomMemberDetailsState.ConfirmationDialog.Unblock -> {
-            UnblockConfirmationDialog(
-                onUnblockAction = { state.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false)) },
-                onDismiss = { state.eventSink(RoomMemberDetailsEvents.ClearConfirmationDialog) }
-            )
-        }
-    }
-}
-
-@Composable
-internal fun BlockConfirmationDialog(onBlockAction: () -> Unit, onDismiss: () -> Unit) {
-    ConfirmationDialog(
-        title = stringResource(R.string.screen_dm_details_block_user),
-        content = stringResource(R.string.screen_dm_details_block_alert_description),
-        submitText = stringResource(R.string.screen_dm_details_block_alert_action),
-        onSubmitClicked = onBlockAction,
-        onDismiss = onDismiss
-    )
-}
-
-@Composable
-internal fun UnblockConfirmationDialog(onUnblockAction: () -> Unit, onDismiss: () -> Unit) {
-    ConfirmationDialog(
-        title = stringResource(R.string.screen_dm_details_unblock_user),
-        content = stringResource(R.string.screen_dm_details_unblock_alert_description),
-        submitText = stringResource(R.string.screen_dm_details_unblock_alert_action),
-        onSubmitClicked = onUnblockAction,
-        onDismiss = onDismiss
-    )
 }

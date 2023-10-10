@@ -95,7 +95,7 @@ internal fun AttachmentsBottomSheet(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun AttachmentSourcePickerMenu(
+private fun AttachmentSourcePickerMenu(
     state: MessageComposerState,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
