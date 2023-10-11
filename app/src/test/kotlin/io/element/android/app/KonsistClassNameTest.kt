@@ -16,6 +16,7 @@
 
 package io.element.android.app
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bumble.appyx.core.node.Node
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
@@ -41,6 +42,22 @@ class KonsistClassNameTest {
             .withAllParentsOf(Node::class)
             .assertTrue {
                 it.name.endsWith("Node")
+            }
+    }
+
+    @Test
+    fun `Classes extending 'PreviewParameterProvider' name MUST end with "Provider" and MUST contain provided class name`() {
+        Konsist.scopeFromProject()
+            .classes()
+            .withAllParentsOf(PreviewParameterProvider::class)
+            .assertTrue {
+                // Cannot find a better way to get the type of the generic
+                val providedType = it.text
+                    .substringBefore(">")
+                    .substringAfter("<")
+                    .removeSuffix("?")
+                    .replace(".", "")
+                it.name.endsWith("Provider") && it.name.contains(providedType)
             }
     }
 }
