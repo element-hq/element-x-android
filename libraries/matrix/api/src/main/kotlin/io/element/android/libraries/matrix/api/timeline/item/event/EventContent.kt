@@ -93,27 +93,3 @@ data class FailedToParseStateContent(
 ) : EventContent
 
 data object UnknownContent : EventContent
-
-sealed interface OtherState {
-    data object PolicyRuleRoom : OtherState
-    data object PolicyRuleServer : OtherState
-    data object PolicyRuleUser : OtherState
-    data object RoomAliases : OtherState
-    data class RoomAvatar(val url: String?) : OtherState
-    data object RoomCanonicalAlias : OtherState
-    data object RoomCreate : OtherState
-    data object RoomEncryption : OtherState
-    data object RoomGuestAccess : OtherState
-    data object RoomHistoryVisibility : OtherState
-    data object RoomJoinRules : OtherState
-    data class RoomName(val name: String?) : OtherState
-    data object RoomPinnedEvents : OtherState
-    data object RoomPowerLevels : OtherState
-    data object RoomServerAcl : OtherState
-    data class RoomThirdPartyInvite(val displayName: String?) : OtherState
-    data object RoomTombstone : OtherState
-    data class RoomTopic(val topic: String?) : OtherState
-    data object SpaceChild : OtherState
-    data object SpaceParent : OtherState
-    data class Custom(val eventType: String) : OtherState
-}
