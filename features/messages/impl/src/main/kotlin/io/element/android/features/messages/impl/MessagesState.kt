@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
@@ -36,6 +37,7 @@ data class MessagesState(
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToRedact: Boolean,
     val composerState: MessageComposerState,
+    val voiceMessageComposerState: VoiceMessageComposerState,
     val timelineState: TimelineState,
     val actionListState: ActionListState,
     val customReactionState: CustomReactionState,

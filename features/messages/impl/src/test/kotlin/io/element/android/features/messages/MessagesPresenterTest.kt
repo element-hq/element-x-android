@@ -40,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerPresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
@@ -73,7 +74,7 @@ import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -619,6 +620,7 @@ class MessagesPresenterTest {
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
             permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
         )
+        val voiceMessageComposerPresenter = VoiceMessageComposerPresenter()
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
@@ -634,6 +636,7 @@ class MessagesPresenterTest {
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
+            voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenter = timelinePresenter,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
@@ -645,6 +648,7 @@ class MessagesPresenterTest {
             navigator = navigator,
             clipboardHelper = clipboardHelper,
             preferencesStore = preferencesStore,
+            featureFlagsService = FakeFeatureFlagService(),
             dispatchers = coroutineDispatchers,
         )
     }

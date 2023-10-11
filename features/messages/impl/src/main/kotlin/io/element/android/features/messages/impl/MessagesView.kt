@@ -317,6 +317,7 @@ private fun MessagesViewContent(
                 if (state.userHasPermissionToSendMessage) {
                     MessageComposerView(
                         state = state.composerState,
+                        voiceMessageState = state.voiceMessageComposerState,
                         subcomposing = subcomposing,
                         enableTextFormatting = state.enableTextFormatting,
                         enableVoiceMessages = state.enableVoiceMessages,

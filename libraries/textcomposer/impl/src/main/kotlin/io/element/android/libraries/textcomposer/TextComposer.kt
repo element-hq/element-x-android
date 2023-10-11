@@ -68,6 +68,10 @@ import io.element.android.libraries.textcomposer.components.RecordingProgress
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
+import io.element.android.libraries.textcomposer.model.Message
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
@@ -90,8 +94,7 @@ fun TextComposer(
     onResetComposerMode: () -> Unit = {},
     onAddAttachment: () -> Unit = {},
     onDismissTextFormatting: () -> Unit = {},
-    onRecordClicked: () -> Unit = {},
-    onRecordReleased: () -> Unit = {},
+    onVoiceRecordButtonEvent: (PressEvent) -> Unit = {},
     onError: (Throwable) -> Unit = {},
 ) {
     val onSendClicked = {
@@ -136,11 +139,9 @@ fun TextComposer(
     }
     val recordButton = @Composable {
         RecordButton(
-            onLongPressStart = onRecordClicked,
-            onLongPressEnd = onRecordReleased,
-            onTap = {
-                // TODO: show 'hold to record' tooltip
-            }
+            onPressStart = { onVoiceRecordButtonEvent(PressEvent.PressStart) },
+            onLongPressEnd = { onVoiceRecordButtonEvent(PressEvent.LongPressEnd) },
+            onTap = { onVoiceRecordButtonEvent(PressEvent.Tapped) },
         )
     }
 

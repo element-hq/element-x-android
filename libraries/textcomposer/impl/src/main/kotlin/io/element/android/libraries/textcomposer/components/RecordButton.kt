@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun RecordButton(
     modifier: Modifier = Modifier,
-    onLongPressStart: () -> Unit = {},
+    onPressStart: () -> Unit = {},
     onLongPressEnd: () -> Unit = {},
     onTap: () -> Unit = {},
 ) {
@@ -50,7 +50,7 @@ internal fun RecordButton(
 
     PressStateEffects(
         pressState = pressState.value,
-        onLongPressStart = onLongPressStart,
+        onPressStart = onPressStart,
         onLongPressEnd = onLongPressEnd,
         onTap = onTap,
     )

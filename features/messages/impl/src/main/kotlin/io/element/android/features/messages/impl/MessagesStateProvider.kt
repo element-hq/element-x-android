@@ -25,11 +25,12 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.voicemessages.aVoiceMessageComposerState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -60,6 +61,7 @@ fun aMessagesState() = MessagesState(
         isFullScreen = false,
         mode = MessageComposerMode.Normal("Hello"),
     ),
+    voiceMessageComposerState = aVoiceMessageComposerState(),
     timelineState = aTimelineState().copy(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
     ),

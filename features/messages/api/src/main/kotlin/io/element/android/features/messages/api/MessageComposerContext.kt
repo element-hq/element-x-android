@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.api
 
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 /**
  * Hoist-able state of the message composer.

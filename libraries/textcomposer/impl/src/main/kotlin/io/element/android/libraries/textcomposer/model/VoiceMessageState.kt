@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.test
+package io.element.android.libraries.textcomposer.model
 
-import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.libraries.textcomposer.model.MessageComposerMode
-
-class MessageComposerContextFake(
-    override var composerMode: MessageComposerMode = MessageComposerMode.Normal(null)
-) : MessageComposerContext
+sealed class VoiceMessageState {
+    data object Idle: VoiceMessageState()
+    data object Recording: VoiceMessageState()
+}

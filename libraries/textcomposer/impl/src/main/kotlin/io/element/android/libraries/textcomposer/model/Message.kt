@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.textcomposer
+package io.element.android.libraries.textcomposer.model
 
 data class Message(
     val html: String?,

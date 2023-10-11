@@ -22,7 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.text.applyScaleUp
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 @Composable
 internal fun textInputRoundedCornerShape(

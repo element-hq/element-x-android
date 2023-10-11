@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.textcomposer
+package io.element.android.features.messages.impl.voicemessages
 
-sealed class VoiceMessageState {
-    data object Idle: VoiceMessageState()
-    data object Recording: VoiceMessageState()
-}
+import androidx.compose.runtime.Stable
+import io.element.android.libraries.textcomposer.model.VoiceMessageState
+
+@Stable
+data class VoiceMessageComposerState(
+    val voiceMessageState: VoiceMessageState,
+    val eventSink: (VoiceMessageComposerEvents) -> Unit,
+)
+

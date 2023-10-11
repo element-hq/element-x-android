@@ -55,6 +55,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.PreferencesStore
@@ -77,7 +78,7 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -86,6 +87,7 @@ import timber.log.Timber
 class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
+    private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
@@ -110,6 +112,7 @@ class MessagesPresenter @AssistedInject constructor(
     override fun present(): MessagesState {
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
+        val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
@@ -185,6 +188,7 @@ class MessagesPresenter @AssistedInject constructor(
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             userHasPermissionToRedact = userHasPermissionToRedact,
             composerState = composerState,
+            voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
             actionListState = actionListState,
             customReactionState = customReactionState,

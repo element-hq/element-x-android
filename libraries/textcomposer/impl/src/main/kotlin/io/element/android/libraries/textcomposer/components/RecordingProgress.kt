@@ -58,7 +58,7 @@ internal fun RecordingProgress(
         )
         Spacer(Modifier.size(8.dp))
 
-        // TODO: Replace with timer UI
+        // TODO Replace with timer UI
         Text(
             text = "Recording...", // Not localized because it is a placeholder
             color = ElementTheme.colors.textSecondary,

@@ -25,9 +25,10 @@ import androidx.compose.runtime.LaunchedEffect
 @Composable
 internal fun PressStateEffects(
     pressState: PressState,
-    onTap: () -> Unit,
-    onLongPressStart: () -> Unit,
-    onLongPressEnd: () -> Unit,
+    onPressStart: () -> Unit = {},
+    onLongPressStart: () -> Unit = {},
+    onTap: () -> Unit = {},
+    onLongPressEnd: () -> Unit = {},
 ) {
     LaunchedEffect(pressState) {
         when (pressState) {
@@ -38,7 +39,7 @@ internal fun PressStateEffects(
                     null -> {} // Do nothing
                 }
             is PressState.LongPressing -> onLongPressStart()
-            PressState.Tapping -> {} // Do nothing
+            PressState.Tapping -> onPressStart()
         }
     }
 }
