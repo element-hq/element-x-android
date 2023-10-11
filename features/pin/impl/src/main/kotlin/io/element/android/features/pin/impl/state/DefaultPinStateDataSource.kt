@@ -21,22 +21,30 @@ import io.element.android.features.pin.api.PinState
 import io.element.android.features.pin.api.PinStateDataSource
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultPinStateDataSource @Inject constructor() : PinStateDataSource {
+class DefaultPinStateDataSource @Inject constructor(
+    private val featureFlagService: FeatureFlagService,
+) : PinStateDataSource {
 
-    private val _pinState = MutableStateFlow<PinState>(PinState.Locked)
+    private val _pinState = MutableStateFlow<PinState>(PinState.Unlocked)
     override val pinState: StateFlow<PinState> = _pinState
 
-    override fun unlock() {
-        _pinState.value = PinState.Unlocked
+    override suspend fun unlock() {
+        if (featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)) {
+            _pinState.value = PinState.Unlocked
+        }
     }
 
-    override fun lock() {
-        _pinState.value = PinState.Locked
+    override suspend fun lock() {
+        if (featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)) {
+            _pinState.value = PinState.Locked
+        }
     }
 }

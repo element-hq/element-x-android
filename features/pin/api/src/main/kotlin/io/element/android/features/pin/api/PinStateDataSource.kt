@@ -21,6 +21,6 @@ import kotlinx.coroutines.flow.StateFlow
 interface PinStateDataSource {
     val pinState: StateFlow<PinState>
 
-    fun lock()
-    fun unlock()
+    suspend fun lock()
+    suspend fun unlock()
 }

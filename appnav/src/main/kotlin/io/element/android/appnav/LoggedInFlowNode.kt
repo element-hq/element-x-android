@@ -135,9 +135,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                 }
             },
             onStop = {
-                pinStateDataSource.lock()
-                //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                 coroutineScope.launch {
+                    pinStateDataSource.lock()
+                    //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                     syncService.stopSync()
                 }
             },
