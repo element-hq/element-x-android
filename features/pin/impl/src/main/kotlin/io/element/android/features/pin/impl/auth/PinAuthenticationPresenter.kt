@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PinAuthenticationPresenter @Inject constructor(
-    private val pinStateService PinStateService,
+    private val pinStateService: PinStateService,
     private val coroutineScope: CoroutineScope,
 ) : Presenter<PinAuthenticationState> {
 
@@ -33,7 +33,7 @@ class PinAuthenticationPresenter @Inject constructor(
 
         fun handleEvents(event: PinAuthenticationEvents) {
             when (event) {
-                PinAuthenticationEvents.Unlock -> coroutineScope.launch { pinStateDataSource.unlock() }
+                PinAuthenticationEvents.Unlock -> coroutineScope.launch { pinStateService.unlock() }
             }
         }
         return PinAuthenticationState(

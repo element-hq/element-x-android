@@ -94,7 +94,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueState: FtueState,
     private val pinEntryPoint: PinEntryPoint,
-    private val pinStateService PinStateService,
+    private val pinStateService: PinStateService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
@@ -134,9 +134,18 @@ class LoggedInFlowNode @AssistedInject constructor(
                     backstack.push(NavTarget.Ftue)
                 }
             },
+            onResume = {
+                coroutineScope.launch {
+                    pinStateService.entersForeground()
+                }
+            },
+            onPause = {
+                coroutineScope.launch {
+                    pinStateService.entersBackground()
+                }
+            },
             onStop = {
                 coroutineScope.launch {
-                    pinStateDataSource.lock()
                     //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                     syncService.stopSync()
                 }
@@ -336,7 +345,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
-            val pinState by pinStateDataSource.pinState.collectAsState()
+            val pinState by pinStateService.pinState.collectAsState()
             when (pinState) {
                 PinState.Unlocked -> {
                     Children(
