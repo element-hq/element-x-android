@@ -130,7 +130,8 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 sp.getString(CommonStrings.common_audio)
             }
             UnknownMessageType -> {
-                sp.getString(CommonStrings.common_unsupported_event)
+                // Display the body as a fallback
+                messageContent.body
             }
             is NoticeMessageType -> {
                 messageType.body

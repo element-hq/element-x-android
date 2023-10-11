@@ -25,7 +25,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
@@ -131,7 +130,12 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
                 isEdited = content.isEdited,
             )
-            UnknownMessageType -> TimelineItemUnknownContent
+            UnknownMessageType -> TimelineItemTextContent(
+                // Display the body as a fallback
+                body = content.body,
+                htmlDocument = null,
+                isEdited = content.isEdited,
+            )
         }
     }
 
