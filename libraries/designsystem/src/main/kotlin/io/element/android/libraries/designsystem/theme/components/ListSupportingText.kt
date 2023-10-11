@@ -16,15 +16,10 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -39,43 +34,6 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=425%3A24208&mode=design&t=G5hCfkLB6GgXDuWe-1
-
-/**
- * List section header.
- * @param title The title of the section.
- * @param modifier The modifier to be applied to the section.
- * @param hasDivider Whether to show a divider above the section or not. Default is `true`.
- * @param description A description for the section. It's empty by default.
- */
-@Composable
-fun ListSectionHeader(
-    title: String,
-    modifier: Modifier = Modifier,
-    hasDivider: Boolean = true,
-    description: @Composable () -> Unit = {},
-) {
-    Column(modifier.fillMaxWidth()) {
-        if (hasDivider) {
-            HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
-        }
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = title,
-                style = ElementTheme.typography.fontBodyLgMedium,
-                color = ElementTheme.colors.textPrimary,
-            )
-            CompositionLocalProvider(
-                LocalTextStyle provides ElementTheme.typography.fontBodySmRegular,
-                LocalContentColor provides ElementTheme.colors.textSecondary,
-            ) {
-                description()
-            }
-        }
-    }
-}
 
 /**
  * List supporting text item. Used to display an explanation in the list with a pre-formatted style.
@@ -167,68 +125,6 @@ object ListSupportingTextDefaults {
     }
 }
 
-// region: List header previews
-
-@Preview(group = PreviewGroup.ListSections, name = "List section header")
-@Composable
-internal fun ListSectionHeaderPreview() {
-    ElementThemedPreview {
-        ListSectionHeader(
-            title = "List section",
-            hasDivider = false,
-        )
-    }
-}
-
-@Preview(group = PreviewGroup.ListSections, name = "List section header with divider")
-@Composable
-internal fun ListSectionHeaderWithDividerPreview() {
-    ElementThemedPreview {
-        ListSectionHeader(
-            title = "List section",
-            hasDivider = true,
-        )
-    }
-}
-
-@Preview(group = PreviewGroup.ListSections, name = "List section header with description")
-@Composable
-internal fun ListSectionHeaderWithDescriptionPreview() {
-    ElementThemedPreview {
-        ListSectionHeader(
-            title = "List section",
-            description = {
-                ListSupportingText(
-                    text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
-                    contentPadding = ListSupportingTextDefaults.Padding.None,
-                )
-            },
-            hasDivider = false,
-        )
-    }
-}
-
-@Preview(group = PreviewGroup.ListSections, name = "List section header with description and divider")
-@Composable
-internal fun ListSectionHeaderWithDescriptionAndDividerPreview() {
-    ElementThemedPreview {
-        ListSectionHeader(
-            title = "List section",
-            description = {
-                ListSupportingText(
-                    text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
-                    contentPadding = ListSupportingTextDefaults.Padding.None,
-                )
-            },
-            hasDivider = true,
-        )
-    }
-}
-
-// endregion
-
-// region: List supporting text previews
-
 @Preview(group = PreviewGroup.ListSections, name = "List supporting text - no padding")
 @Composable
 internal fun ListSupportingTextNoPaddingPreview() {
@@ -298,5 +194,3 @@ internal fun ListSupportingTextCustomPaddingPreview() {
         }
     }
 }
-
-// endregion

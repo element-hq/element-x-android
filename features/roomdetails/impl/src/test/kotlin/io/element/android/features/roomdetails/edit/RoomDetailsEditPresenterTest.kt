@@ -77,7 +77,7 @@ class RoomDetailsEditPresenterTest {
         unmockkAll()
     }
 
-    private fun aRoomDetailsEditPresenter(
+    private fun createRoomDetailsEditPresenter(
         room: MatrixRoom,
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
     ): RoomDetailsEditPresenter {
@@ -92,7 +92,7 @@ class RoomDetailsEditPresenterTest {
     @Test
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom(avatarUrl = AN_AVATAR_URL)
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -119,7 +119,7 @@ class RoomDetailsEditPresenterTest {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(false))
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.failure(Throwable("Oops")))
         }
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -145,7 +145,7 @@ class RoomDetailsEditPresenterTest {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.failure(Throwable("Oops")))
         }
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -171,7 +171,7 @@ class RoomDetailsEditPresenterTest {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.failure(Throwable("Oops")))
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
         }
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -193,7 +193,7 @@ class RoomDetailsEditPresenterTest {
     @Test
     fun `present - updates state in response to changes`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -239,7 +239,7 @@ class RoomDetailsEditPresenterTest {
 
         fakePickerProvider.givenResult(anotherAvatarUri)
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -260,7 +260,7 @@ class RoomDetailsEditPresenterTest {
 
         fakePickerProvider.givenResult(anotherAvatarUri)
         val fakePermissionsPresenter = FakePermissionsPresenter()
-        val presenter = aRoomDetailsEditPresenter(
+        val presenter = createRoomDetailsEditPresenter(
             room = room,
             permissionsPresenter = fakePermissionsPresenter,
         )
@@ -293,7 +293,7 @@ class RoomDetailsEditPresenterTest {
 
         fakePickerProvider.givenResult(roomAvatarUri)
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -345,7 +345,7 @@ class RoomDetailsEditPresenterTest {
 
         fakePickerProvider.givenResult(roomAvatarUri)
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -395,7 +395,7 @@ class RoomDetailsEditPresenterTest {
     fun `present - save changes room details if different`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -420,7 +420,7 @@ class RoomDetailsEditPresenterTest {
     fun `present - save doesn't change room details if they're the same trimmed`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -444,7 +444,7 @@ class RoomDetailsEditPresenterTest {
     fun `present - save doesn't change topic if it was unset and is now blank`() = runTest {
         val room = aMatrixRoom(topic = null, name = "Name", avatarUrl = AN_AVATAR_URL)
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -467,7 +467,7 @@ class RoomDetailsEditPresenterTest {
     fun `present - save doesn't change name if it's now empty`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -492,7 +492,7 @@ class RoomDetailsEditPresenterTest {
 
         givenPickerReturnsFile()
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -517,7 +517,7 @@ class RoomDetailsEditPresenterTest {
         fakePickerProvider.givenResult(anotherAvatarUri)
         fakeMediaPreProcessor.givenResult(Result.failure(Throwable("Oh no")))
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -583,7 +583,7 @@ class RoomDetailsEditPresenterTest {
             givenSetTopicResult(Result.failure(Throwable("!")))
         }
 
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -602,7 +602,7 @@ class RoomDetailsEditPresenterTest {
     }
 
     private suspend fun saveAndAssertFailure(room: MatrixRoom, event: RoomDetailsEditEvents) {
-        val presenter = aRoomDetailsEditPresenter(room)
+        val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

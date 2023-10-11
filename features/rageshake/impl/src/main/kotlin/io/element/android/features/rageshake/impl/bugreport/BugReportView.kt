@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceView
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
@@ -72,7 +72,7 @@ fun BugReportView(
     }
 
     Box(modifier = modifier) {
-        PreferenceView(
+        PreferencePage(
             title = stringResource(id = CommonStrings.common_report_a_bug),
             onBackPressed = onBackPressed
         ) {

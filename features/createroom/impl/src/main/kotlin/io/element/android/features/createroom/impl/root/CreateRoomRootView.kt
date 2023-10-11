@@ -126,7 +126,7 @@ fun CreateRoomRootView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateRoomRootViewTopBar(
+private fun CreateRoomRootViewTopBar(
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
 ) {
@@ -148,7 +148,7 @@ fun CreateRoomRootViewTopBar(
 }
 
 @Composable
-fun CreateRoomActionButtonsList(
+private fun CreateRoomActionButtonsList(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
     onNewRoomClicked: () -> Unit = {},
@@ -169,7 +169,7 @@ fun CreateRoomActionButtonsList(
 }
 
 @Composable
-fun CreateRoomActionButton(
+private fun CreateRoomActionButton(
     @DrawableRes iconRes: Int,
     text: String,
     modifier: Modifier = Modifier,

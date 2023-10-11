@@ -17,11 +17,11 @@
 package io.element.android.features.location.impl.send
 
 data class SendLocationState(
-    val permissionDialog: Dialog = Dialog.None,
-    val mode: Mode = Mode.PinLocation,
-    val hasLocationPermission: Boolean = false,
-    val appName: String = "AppName",
-    val eventSink: (SendLocationEvents) -> Unit = {},
+    val permissionDialog: Dialog,
+    val mode: Mode,
+    val hasLocationPermission: Boolean,
+    val appName: String,
+    val eventSink: (SendLocationEvents) -> Unit,
 ) {
     sealed interface Mode {
         data object SenderLocation : Mode

@@ -142,7 +142,7 @@ private fun MediaImageView(
 
 @UnstableApi
 @Composable
-fun MediaVideoView(
+private fun MediaVideoView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
@@ -196,7 +196,7 @@ fun MediaVideoView(
 }
 
 @Composable
-fun MediaPDFView(
+private fun MediaPDFView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     zoomableState: ZoomableState,
@@ -211,7 +211,7 @@ fun MediaPDFView(
 }
 
 @Composable
-fun MediaFileView(
+private fun MediaFileView(
     localMediaViewState: LocalMediaViewState,
     uri: Uri?,
     info: MediaInfo?,

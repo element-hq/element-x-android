@@ -72,7 +72,7 @@ internal fun RetrySendMessageMenu(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun RetrySendMessageMenuBottomSheet(
+private fun RetrySendMessageMenuBottomSheet(
     isVisible: Boolean,
     onRetry: () -> Unit,
     onRemoveFailed: () -> Unit,

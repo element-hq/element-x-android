@@ -74,7 +74,7 @@ fun SingleSelectionDialog(
 }
 
 @Composable
-internal fun SingleSelectionDialogContent(
+private fun SingleSelectionDialogContent(
     options: ImmutableList<ListOption>,
     onOptionSelected: (Int) -> Unit,
     onDismissRequest: () -> Unit,

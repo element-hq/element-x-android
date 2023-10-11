@@ -77,7 +77,7 @@ internal fun InviteSummaryRow(
 }
 
 @Composable
-internal fun DefaultInviteSummaryRow(
+private fun DefaultInviteSummaryRow(
     invite: InviteListInviteSummary,
     onAcceptClicked: () -> Unit = {},
     onDeclineClicked: () -> Unit = {},

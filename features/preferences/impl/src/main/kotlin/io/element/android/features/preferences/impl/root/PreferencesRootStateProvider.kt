@@ -17,7 +17,7 @@
 package io.element.android.features.preferences.impl.root
 
 import io.element.android.features.logout.api.aLogoutPreferenceState
-import io.element.android.libraries.designsystem.utils.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.ui.strings.CommonStrings
 
 fun aPreferencesRootState() = PreferencesRootState(

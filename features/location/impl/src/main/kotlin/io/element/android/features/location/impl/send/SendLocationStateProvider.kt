@@ -23,35 +23,44 @@ private const val APP_NAME = "ApplicationName"
 class SendLocationStateProvider : PreviewParameterProvider<SendLocationState> {
     override val values: Sequence<SendLocationState>
         get() = sequenceOf(
-            SendLocationState(
+            aSendLocationState(
                 permissionDialog = SendLocationState.Dialog.None,
                 mode = SendLocationState.Mode.PinLocation,
                 hasLocationPermission = false,
-                appName = APP_NAME,
             ),
-            SendLocationState(
+            aSendLocationState(
                 permissionDialog = SendLocationState.Dialog.PermissionDenied,
                 mode = SendLocationState.Mode.PinLocation,
                 hasLocationPermission = false,
-                appName = APP_NAME,
             ),
-            SendLocationState(
+            aSendLocationState(
                 permissionDialog = SendLocationState.Dialog.PermissionRationale,
                 mode = SendLocationState.Mode.PinLocation,
                 hasLocationPermission = false,
-                appName = APP_NAME,
             ),
-            SendLocationState(
+            aSendLocationState(
                 permissionDialog = SendLocationState.Dialog.None,
                 mode = SendLocationState.Mode.PinLocation,
                 hasLocationPermission = true,
-                appName = APP_NAME,
             ),
-            SendLocationState(
+            aSendLocationState(
                 permissionDialog = SendLocationState.Dialog.None,
                 mode = SendLocationState.Mode.SenderLocation,
                 hasLocationPermission = true,
-                appName = APP_NAME,
             ),
         )
+}
+
+private fun aSendLocationState(
+    permissionDialog: SendLocationState.Dialog,
+    mode: SendLocationState.Mode,
+    hasLocationPermission: Boolean,
+): SendLocationState {
+    return SendLocationState(
+        permissionDialog = permissionDialog,
+        mode = mode,
+        hasLocationPermission = hasLocationPermission,
+        appName = APP_NAME,
+        eventSink = {}
+    )
 }

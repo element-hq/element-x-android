@@ -16,6 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-object TimelineItemRedactedContent : TimelineItemEventContent{
+data object TimelineItemRedactedContent : TimelineItemEventContent {
     override val type: String = "TimelineItemRedactedContent"
 }

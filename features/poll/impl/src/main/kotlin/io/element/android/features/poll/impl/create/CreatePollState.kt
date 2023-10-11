@@ -26,7 +26,7 @@ data class CreatePollState(
     val answers: ImmutableList<Answer>,
     val pollKind: PollKind,
     val showConfirmation: Boolean,
-    val eventSink: (CreatePollEvents) -> Unit = {},
+    val eventSink: (CreatePollEvents) -> Unit,
 )
 
 data class Answer(

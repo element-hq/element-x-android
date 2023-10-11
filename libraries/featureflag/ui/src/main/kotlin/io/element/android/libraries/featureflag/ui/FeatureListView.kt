@@ -46,7 +46,7 @@ fun FeatureListView(
 }
 
 @Composable
-fun FeaturePreferenceView(
+private fun FeaturePreferenceView(
     feature: FeatureUiModel,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier

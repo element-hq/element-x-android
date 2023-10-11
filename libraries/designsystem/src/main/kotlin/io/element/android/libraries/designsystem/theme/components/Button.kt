@@ -117,7 +117,7 @@ fun TextButton(
 )
 
 @Composable
-internal fun ButtonInternal(
+private fun ButtonInternal(
     text: String,
     onClick: () -> Unit,
     style: ButtonStyle,

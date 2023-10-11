@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.components.preferences.PreferenceView
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -67,7 +67,7 @@ fun NotificationSettingsView(
             else -> Unit
         }
     }
-    PreferenceView(
+    PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
         title = stringResource(id = CommonStrings.screen_notification_settings_title)
@@ -79,7 +79,7 @@ fun NotificationSettingsView(
                 onContinueClicked = { state.eventSink(NotificationSettingsEvents.FixConfigurationMismatch) },
                 onDismissError = { state.eventSink(NotificationSettingsEvents.ClearConfigurationMismatchError) },
             )
-            NotificationSettingsState.MatrixSettings.Uninitialized -> return@PreferenceView
+            NotificationSettingsState.MatrixSettings.Uninitialized -> return@PreferencePage
             is NotificationSettingsState.MatrixSettings.Valid -> NotificationSettingsContentView(
                 matrixSettings = state.matrixSettings,
                 systemSettings = state.appSettings,
