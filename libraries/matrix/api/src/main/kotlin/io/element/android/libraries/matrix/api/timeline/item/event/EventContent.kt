@@ -94,11 +94,6 @@ data class FailedToParseStateContent(
 
 data object UnknownContent : EventContent
 
-data class FormattedBody(
-    val format: MessageFormat,
-    val body: String
-)
-
 sealed interface OtherState {
     data object PolicyRuleRoom : OtherState
     data object PolicyRuleServer : OtherState
