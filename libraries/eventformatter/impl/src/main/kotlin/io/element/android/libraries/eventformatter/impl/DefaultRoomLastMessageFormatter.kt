@@ -106,9 +106,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     }
 
     private fun processMessageContents(messageContent: MessageContent, senderDisplayName: String, isDmRoom: Boolean): CharSequence? {
-        val messageType: MessageType = messageContent.type ?: return null
-
-        val internalMessage = when (messageType) {
+        val internalMessage = when (val messageType: MessageType = messageContent.type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
                 return "* $senderDisplayName ${messageType.body}"
