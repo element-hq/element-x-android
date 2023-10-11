@@ -20,5 +20,5 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 
 sealed interface CustomReactionEvents {
     data class ShowCustomReactionSheet(val event: TimelineItem.Event) : CustomReactionEvents
-    object DismissCustomReactionSheet : CustomReactionEvents
+    data object DismissCustomReactionSheet : CustomReactionEvents
 }

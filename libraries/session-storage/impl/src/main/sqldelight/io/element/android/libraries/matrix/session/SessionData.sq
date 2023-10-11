@@ -6,7 +6,9 @@ CREATE TABLE SessionData (
     homeserverUrl TEXT NOT NULL,
     slidingSyncProxy TEXT,
     loginTimestamp INTEGER,
-    oidcData TEXT
+    oidcData TEXT,
+    isTokenValid INTEGER NOT NULL,
+    loginType TEXT
 );
 
 

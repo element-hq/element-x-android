@@ -74,7 +74,7 @@ fun LogoutPreferenceView(
 }
 
 @Composable
-fun LogoutPreferenceContent(
+private fun LogoutPreferenceContent(
     onClick: () -> Unit = {},
 ) {
     PreferenceText(

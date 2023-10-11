@@ -1,0 +1,1 @@
+Improve deleted session behavior.

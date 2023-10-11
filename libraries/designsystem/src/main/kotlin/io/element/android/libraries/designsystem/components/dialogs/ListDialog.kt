@@ -72,7 +72,7 @@ fun ListDialog(
 }
 
 @Composable
-internal fun ListDialogContent(
+private fun ListDialogContent(
     listItems: LazyListScope.() -> Unit,
     onDismissRequest: () -> Unit,
     onSubmitClicked: () -> Unit,

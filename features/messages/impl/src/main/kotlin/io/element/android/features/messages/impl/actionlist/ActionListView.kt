@@ -336,7 +336,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
 private val emojiRippleRadius = 24.dp
 
 @Composable
-internal fun EmojiReactionsRow(
+private fun EmojiReactionsRow(
     highlightedEmojis: ImmutableList<String>,
     onEmojiReactionClicked: (String) -> Unit,
     onCustomReactionClicked: () -> Unit,

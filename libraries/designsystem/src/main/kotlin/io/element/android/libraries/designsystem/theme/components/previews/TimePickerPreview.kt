@@ -55,7 +55,7 @@ internal fun TimePickerHorizontalPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
-internal fun TimePickerVerticalPreviewLight() {
+internal fun TimePickerVerticalLightPreview() {
     ElementPreviewLight {
         AlertDialogContent(
             buttons = { /*TODO*/ },
@@ -77,7 +77,7 @@ internal fun TimePickerVerticalPreviewLight() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
-internal fun TimePickerVerticalPreviewDark() {
+internal fun TimePickerVerticalDarkPreview() {
     val pickerState = rememberTimePickerState(
         initialHour = 12,
         initialMinute = 0,

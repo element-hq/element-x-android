@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
 import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.services.toolbox.impl.systemclock.DefaultSystemClock
@@ -64,8 +65,8 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ElementTheme {
-                val isLoggedIn by matrixAuthenticationService.isLoggedIn().collectAsState(initial = false)
-                Content(isLoggedIn = isLoggedIn, modifier = Modifier.fillMaxSize())
+                val loggedInState by matrixAuthenticationService.loggedInStateFlow().collectAsState(initial = LoggedInState.NotLoggedIn)
+                Content(isLoggedIn = loggedInState is LoggedInState.LoggedIn, modifier = Modifier.fillMaxSize())
             }
 
         }

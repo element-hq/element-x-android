@@ -68,7 +68,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         data object InviteMembers : NavTarget
 
         @Parcelize
-        object RoomNotificationSettings : NavTarget
+        data object RoomNotificationSettings : NavTarget
 
         @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget

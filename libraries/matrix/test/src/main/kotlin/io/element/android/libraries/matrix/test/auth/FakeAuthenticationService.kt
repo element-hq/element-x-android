@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,8 +39,8 @@ class FakeAuthenticationService : MatrixAuthenticationService {
     private var changeServerError: Throwable? = null
     private var matrixClient: MatrixClient? = null
 
-    override fun isLoggedIn(): Flow<Boolean> {
-        return flowOf(false)
+    override fun loggedInStateFlow(): Flow<LoggedInState> {
+        return flowOf(LoggedInState.NotLoggedIn)
     }
 
     override suspend fun getLatestSessionId(): SessionId? {

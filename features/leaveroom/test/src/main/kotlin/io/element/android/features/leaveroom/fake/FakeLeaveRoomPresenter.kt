@@ -21,7 +21,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
 
-class FakeLeaveRoomPresenter: LeaveRoomPresenter {
+class FakeLeaveRoomPresenter : LeaveRoomPresenter {
 
     val events = mutableListOf<LeaveRoomEvent>()
 
@@ -29,7 +29,12 @@ class FakeLeaveRoomPresenter: LeaveRoomPresenter {
         events += event
     }
 
-    private var state = LeaveRoomState(eventSink = ::handleEvent)
+    private var state = LeaveRoomState(
+        confirmation = LeaveRoomState.Confirmation.Hidden,
+        progress = LeaveRoomState.Progress.Hidden,
+        error = LeaveRoomState.Error.Hidden,
+        eventSink = ::handleEvent,
+    )
         set(value) {
             field = value.copy(eventSink = ::handleEvent)
         }

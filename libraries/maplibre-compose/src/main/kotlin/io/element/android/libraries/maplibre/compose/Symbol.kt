@@ -50,7 +50,7 @@ internal class SymbolNode(
  * @param position the initial symbol position
  */
 public class SymbolState(
-    position: LatLng = LatLng(0.0, 0.0)
+    position: LatLng
 ) {
     /**
      * Current position of the symbol.

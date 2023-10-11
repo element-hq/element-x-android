@@ -122,6 +122,7 @@ test_uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 test_junitext = "androidx.test.ext:junit:1.1.5"
 test_mockk = "io.mockk:mockk:1.13.8"
 test_barista = "com.adevinta.android:barista:4.3.0"
+test_konsist = "com.lemonappdev:konsist:0.13.0"
 test_hamcrest = "org.hamcrest:hamcrest:2.2"
 test_orchestrator = "androidx.test:orchestrator:1.4.2"
 test_turbine = "app.cash.turbine:turbine:1.0.0"
@@ -142,14 +143,14 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.60"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.61"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
-sqlite = "androidx.sqlite:sqlite:2.3.1"
+sqlite = "androidx.sqlite:sqlite-ktx:2.3.1"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.1.0"

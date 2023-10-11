@@ -52,7 +52,7 @@ fun PreferenceCategory(
 }
 
 @Composable
-fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
+private fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
     Text(
         modifier = modifier.padding(
             top = 20.dp,

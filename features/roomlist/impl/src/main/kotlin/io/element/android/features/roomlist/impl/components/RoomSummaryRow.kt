@@ -85,7 +85,7 @@ internal fun RoomSummaryRow(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun RoomSummaryRealRow(
+private fun RoomSummaryRealRow(
     room: RoomListRoomSummary,
     onClick: (RoomListRoomSummary) -> Unit,
     onLongClick: (RoomListRoomSummary) -> Unit,

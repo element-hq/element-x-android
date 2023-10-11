@@ -78,7 +78,7 @@ fun MultipleSelectionDialog(
 }
 
 @Composable
-internal fun MultipleSelectionDialogContent(
+private fun MultipleSelectionDialogContent(
     options: ImmutableList<ListOption>,
     confirmButtonTitle: String,
     onConfirmClicked: (List<Int>) -> Unit,

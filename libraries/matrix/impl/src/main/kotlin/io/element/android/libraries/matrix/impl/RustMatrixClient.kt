@@ -126,7 +126,16 @@ class RustMatrixClient constructor(
                 Timber.v("didReceiveAuthError -> do the cleanup")
                 //TODO handle isSoftLogout parameter.
                 appCoroutineScope.launch {
-                    doLogout(doRequest = false)
+                    val existingData = sessionStore.getSession(client.userId())
+                    if (existingData != null) {
+                        // Set isTokenValid to false
+                        val newData = client.session().toSessionData(
+                            isTokenValid = false,
+                            loginType = existingData.loginType,
+                        )
+                        sessionStore.updateData(newData)
+                    }
+                    doLogout(doRequest = false, removeSession = false)
                 }
             } else {
                 Timber.v("didReceiveAuthError -> already cleaning up")
@@ -136,7 +145,12 @@ class RustMatrixClient constructor(
         override fun didRefreshTokens() {
             Timber.w("didRefreshTokens()")
             appCoroutineScope.launch {
-                sessionStore.updateData(client.session().toSessionData())
+                val existingData = sessionStore.getSession(client.userId()) ?: return@launch
+                val newData = client.session().toSessionData(
+                    isTokenValid = existingData.isTokenValid,
+                    loginType = existingData.loginType,
+                )
+                sessionStore.updateData(newData)
             }
         }
     }
@@ -328,9 +342,9 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout(): String? = doLogout(doRequest = true)
+    override suspend fun logout(): String? = doLogout(doRequest = true, removeSession = true)
 
-    private suspend fun doLogout(doRequest: Boolean): String? {
+    private suspend fun doLogout(doRequest: Boolean, removeSession: Boolean): String? {
         var result: String? = null
         withContext(sessionDispatcher) {
             if (doRequest) {
@@ -342,7 +356,9 @@ class RustMatrixClient constructor(
             }
             close()
             baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
-            sessionStore.removeSession(sessionId.value)
+            if (removeSession) {
+                sessionStore.removeSession(sessionId.value)
+            }
         }
         return result
     }

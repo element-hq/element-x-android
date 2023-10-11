@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
@@ -65,7 +66,7 @@ class SendLocationPresenterTest {
     @Test
     fun `initial state with permissions granted`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
                 shouldShowRationale = false,
             )
@@ -92,7 +93,7 @@ class SendLocationPresenterTest {
     @Test
     fun `initial state with permissions partially granted`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.SomeGranted,
                 shouldShowRationale = false,
             )
@@ -119,7 +120,7 @@ class SendLocationPresenterTest {
     @Test
     fun `initial state with permissions denied`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
             )
@@ -145,7 +146,7 @@ class SendLocationPresenterTest {
     @Test
     fun `initial state with permissions denied once`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
             )
@@ -171,7 +172,7 @@ class SendLocationPresenterTest {
     @Test
     fun `rationale dialog dismiss`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
             )
@@ -202,7 +203,7 @@ class SendLocationPresenterTest {
     @Test
     fun `rationale dialog continue`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
             )
@@ -230,7 +231,7 @@ class SendLocationPresenterTest {
     @Test
     fun `permission denied dialog dismiss`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
             )
@@ -261,7 +262,7 @@ class SendLocationPresenterTest {
     @Test
     fun `share sender location`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
                 shouldShowRationale = false,
             )
@@ -317,7 +318,7 @@ class SendLocationPresenterTest {
     @Test
     fun `share pin location`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
             )
@@ -373,7 +374,7 @@ class SendLocationPresenterTest {
     @Test
     fun `composer context passes through analytics`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
             )
@@ -419,7 +420,7 @@ class SendLocationPresenterTest {
     @Test
     fun `open settings activity`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
             )

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.utils
+package io.element.android.libraries.designsystem.utils.snackbar
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat

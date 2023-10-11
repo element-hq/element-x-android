@@ -108,7 +108,7 @@ fun RoomNotificationSettingsView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomNotificationSettingsTopBar(
+private fun RoomNotificationSettingsTopBar(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
@@ -125,7 +125,7 @@ fun RoomNotificationSettingsTopBar(
 }
 
 @Composable
-fun RoomNotificationSettingsOptions(
+private fun RoomNotificationSettingsOptions(
     selected: RoomNotificationMode?,
     enabled: Boolean,
     modifier: Modifier = Modifier,

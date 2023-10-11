@@ -155,7 +155,7 @@ fun TimelineView(
 }
 
 @Composable
-fun TimelineItemRow(
+private fun TimelineItemRow(
     timelineItem: TimelineItem,
     highlightedItem: String?,
     userHasPermissionToSendMessage: Boolean,
