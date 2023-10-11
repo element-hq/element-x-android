@@ -27,4 +27,6 @@ data class SessionData(
     val oidcData: String?,
     val slidingSyncProxy: String?,
     val loginTimestamp: Date?,
+    val isTokenValid: Boolean,
+    val loginType: LoginType,
 )

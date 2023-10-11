@@ -45,10 +45,18 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.sqldelight.driver.jvm)
+
+    coreLibraryDesugaring(libs.android.desugar)
 }
 
 sqldelight {
     database("SessionDatabase") {
+        // https://cashapp.github.io/sqldelight/1.5.4/multiplatform_sqlite/migrations/
+        // To generate a .db file from your latest schema, run this task
+        // ./gradlew generateDebugSessionDatabaseSchema
+        // Test migration by running
+        // ./gradlew verifySqlDelightMigration
+        schemaOutputDirectory = File("src/main/sqldelight/databases")
         verifyMigrations = true
     }
 }

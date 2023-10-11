@@ -45,6 +45,7 @@ import io.element.android.appnav.root.RootView
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
+import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -54,6 +55,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -69,6 +71,7 @@ class RootFlowNode @AssistedInject constructor(
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
+    private val signedOutEntryPoint: SignedOutEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
 ) : BackstackNode<RootFlowNode.NavTarget>(
@@ -97,13 +100,20 @@ class RootFlowNode @AssistedInject constructor(
             .distinctUntilChanged()
             .onEach { navState ->
                 Timber.v("navState=$navState")
-                if (navState.isLoggedIn) {
-                    tryToRestoreLatestSession(
-                        onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
-                        onFailure = { switchToNotLoggedInFlow() }
-                    )
-                } else {
-                    switchToNotLoggedInFlow()
+                when (navState.loggedInState) {
+                    is LoggedInState.LoggedIn -> {
+                        if (navState.loggedInState.isTokenValid) {
+                            tryToRestoreLatestSession(
+                                onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
+                                onFailure = { switchToNotLoggedInFlow() }
+                            )
+                        } else {
+                            switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
+                        }
+                    }
+                    LoggedInState.NotLoggedIn -> {
+                        switchToNotLoggedInFlow()
+                    }
                 }
             }
             .launchIn(lifecycleScope)
@@ -116,6 +126,10 @@ class RootFlowNode @AssistedInject constructor(
     private fun switchToNotLoggedInFlow() {
         matrixClientsHolder.removeAll()
         backstack.safeRoot(NavTarget.NotLoggedInFlow)
+    }
+
+    private fun switchToSignedOutFlow(sessionId: SessionId) {
+        backstack.safeRoot(NavTarget.SignedOutFlow(sessionId))
     }
 
     private suspend fun restoreSessionIfNeeded(
@@ -180,6 +194,11 @@ class RootFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
+        data class SignedOutFlow(
+            val sessionId: SessionId
+        ) : NavTarget
+
+        @Parcelize
         data object BugReport : NavTarget
     }
 
@@ -198,6 +217,15 @@ class RootFlowNode @AssistedInject constructor(
                 createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
             NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
+            is NavTarget.SignedOutFlow -> {
+                signedOutEntryPoint.nodeBuilder(this, buildContext)
+                    .params(
+                        SignedOutEntryPoint.Params(
+                            sessionId = navTarget.sessionId
+                        )
+                    )
+                    .build()
+            }
             NavTarget.SplashScreen -> splashNode(buildContext)
             NavTarget.BugReport -> {
                 val callback = object : BugReportEntryPoint.Callback {

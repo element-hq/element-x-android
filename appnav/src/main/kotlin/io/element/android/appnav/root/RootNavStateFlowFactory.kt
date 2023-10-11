@@ -22,9 +22,9 @@ import io.element.android.appnav.di.MatrixClientsHolder
 import io.element.android.features.login.api.LoginUserStory
 import io.element.android.features.preferences.api.CacheService
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -47,9 +47,14 @@ class RootNavStateFlowFactory @Inject constructor(
     fun create(savedStateMap: SavedStateMap?): Flow<RootNavState> {
         return combine(
             cacheIndexFlow(savedStateMap),
-            isUserLoggedInFlow(),
-        ) { cacheIndex, isLoggedIn ->
-            RootNavState(cacheIndex = cacheIndex, isLoggedIn = isLoggedIn)
+            authenticationService.loggedInStateFlow(),
+            loginUserStory.loginFlowIsDone,
+        ) { cacheIndex, loggedInState, loginFlowIsDone ->
+            if (loginFlowIsDone) {
+                RootNavState(cacheIndex = cacheIndex, loggedInState = loggedInState)
+            } else {
+                RootNavState(cacheIndex = cacheIndex, loggedInState = LoggedInState.NotLoggedIn)
+            }
         }
     }
 
@@ -70,16 +75,6 @@ class RootNavStateFlowFactory @Inject constructor(
             .onEach { cacheIndex ->
                 currentCacheIndex = cacheIndex
             }
-    }
-
-    private fun isUserLoggedInFlow(): Flow<Boolean> {
-        return combine(
-            authenticationService.isLoggedIn(),
-            loginUserStory.loginFlowIsDone
-        ) { isLoggedIn, loginFlowIsDone ->
-            isLoggedIn && loginFlowIsDone
-        }
-            .distinctUntilChanged()
     }
 
     /**
