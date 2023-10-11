@@ -16,6 +16,7 @@
 
 package io.element.android.app
 
+import com.bumble.appyx.core.node.Node
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
 import com.lemonappdev.konsist.api.verify.assertTrue
@@ -30,6 +31,16 @@ class KonsistClassNameTest {
             .withAllParentsOf(Presenter::class)
             .assertTrue {
                 it.name.endsWith("Presenter")
+            }
+    }
+
+    @Test
+    fun `Classes extending 'Node' should have 'Node' suffix`() {
+        Konsist.scopeFromProject()
+            .classes()
+            .withAllParentsOf(Node::class)
+            .assertTrue {
+                it.name.endsWith("Node")
             }
     }
 }
