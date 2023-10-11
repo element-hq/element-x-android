@@ -30,15 +30,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.features.location.api.R
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.BooleanProvider
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -81,7 +81,7 @@ internal fun StaticMapPlaceholder(
 @PreviewsDayNight
 @Composable
 internal fun StaticMapPlaceholderPreview(
-    @PreviewParameter(BooleanParameterProvider::class) values: Boolean
+    @PreviewParameter(BooleanProvider::class) values: Boolean
 ) = ElementPreview {
     StaticMapPlaceholder(
         showProgress = values,
@@ -90,9 +90,4 @@ internal fun StaticMapPlaceholderPreview(
         height = 400.dp,
         onLoadMapClick = {},
     )
-}
-
-internal class BooleanParameterProvider : PreviewParameterProvider<Boolean> {
-    override val values: Sequence<Boolean>
-        get() = sequenceOf(true, false)
 }
