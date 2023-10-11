@@ -18,7 +18,7 @@ package io.element.android.features.pin.impl.state
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.pin.api.PinState
-import io.element.android.features.pin.api.PinStateDataSource
+import io.element.android.features.pin.api.PinStateService
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -29,9 +29,9 @@ import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultPinStateDataSource @Inject constructor(
+class DefaultPinStateService @Inject constructor(
     private val featureFlagService: FeatureFlagService,
-) : PinStateDataSource {
+) : PinStateService {
 
     private val _pinState = MutableStateFlow<PinState>(PinState.Unlocked)
     override val pinState: StateFlow<PinState> = _pinState

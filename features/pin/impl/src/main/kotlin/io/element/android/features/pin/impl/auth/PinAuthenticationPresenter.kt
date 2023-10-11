@@ -17,14 +17,14 @@
 package io.element.android.features.pin.impl.auth
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.pin.api.PinStateDataSource
+import io.element.android.features.pin.api.PinStateService
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PinAuthenticationPresenter @Inject constructor(
-    private val pinStateDataSource: PinStateDataSource,
+    private val pinStateService PinStateService,
     private val coroutineScope: CoroutineScope,
 ) : Presenter<PinAuthenticationState> {
 

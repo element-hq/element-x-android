@@ -52,7 +52,7 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.pin.api.PinEntryPoint
 import io.element.android.features.pin.api.PinState
-import io.element.android.features.pin.api.PinStateDataSource
+import io.element.android.features.pin.api.PinStateService
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
@@ -94,7 +94,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueState: FtueState,
     private val pinEntryPoint: PinEntryPoint,
-    private val pinStateDataSource: PinStateDataSource,
+    private val pinStateService PinStateService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(

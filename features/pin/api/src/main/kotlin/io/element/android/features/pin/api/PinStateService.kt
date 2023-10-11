@@ -18,7 +18,7 @@ package io.element.android.features.pin.api
 
 import kotlinx.coroutines.flow.StateFlow
 
-interface PinStateDataSource {
+interface PinStateService {
     val pinState: StateFlow<PinState>
 
     suspend fun lock()
