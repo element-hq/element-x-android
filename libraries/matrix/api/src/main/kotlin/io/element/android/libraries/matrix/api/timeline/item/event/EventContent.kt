@@ -94,10 +94,6 @@ data class FailedToParseStateContent(
 
 data object UnknownContent : EventContent
 
-enum class MessageFormat {
-    HTML, UNKNOWN
-}
-
 data class FormattedBody(
     val format: MessageFormat,
     val body: String
