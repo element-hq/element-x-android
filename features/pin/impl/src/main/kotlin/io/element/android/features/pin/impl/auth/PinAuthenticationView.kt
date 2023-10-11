@@ -16,27 +16,62 @@
 
 package io.element.android.features.pin.impl.auth
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 
 @Composable
 fun PinAuthenticationView(
     state: PinAuthenticationState,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier, contentAlignment = Alignment.Center) {
-        Text(
-            "PinAuthentication feature view",
-            color = MaterialTheme.colorScheme.primary,
+    Surface(modifier) {
+        HeaderFooterPage(
+            modifier = Modifier
+                .systemBarsPadding()
+                .fillMaxSize(),
+            header = { PinAuthenticationHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)) },
+            footer = { PinAuthenticationFooter(state) },
         )
     }
+}
+
+@Composable
+private fun PinAuthenticationHeader(
+    modifier: Modifier = Modifier,
+) {
+    IconTitleSubtitleMolecule(
+        modifier = modifier,
+        title = "Element X is locked",
+        subTitle = null,
+        iconImageVector = Icons.Default.Lock,
+    )
+}
+
+@Composable
+private fun PinAuthenticationFooter(state: PinAuthenticationState) {
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        text = "Unlock",
+        onClick = {
+            state.eventSink(PinAuthenticationEvents.Unlock)
+        }
+    )
 }
 
 @Composable

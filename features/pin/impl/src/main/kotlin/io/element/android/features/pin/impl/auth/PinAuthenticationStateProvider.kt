@@ -22,7 +22,6 @@ open class PinAuthenticationStateProvider : PreviewParameterProvider<PinAuthenti
     override val values: Sequence<PinAuthenticationState>
         get() = sequenceOf(
             aPinAuthenticationState(),
-            // Add other states here
         )
 }
 

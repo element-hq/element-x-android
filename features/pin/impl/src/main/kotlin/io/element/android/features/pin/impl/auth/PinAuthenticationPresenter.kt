@@ -17,20 +17,21 @@
 package io.element.android.features.pin.impl.auth
 
 import androidx.compose.runtime.Composable
+import io.element.android.features.pin.api.PinStateDataSource
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
-class PinAuthenticationPresenter @Inject constructor() : Presenter<PinAuthenticationState> {
+class PinAuthenticationPresenter @Inject constructor(
+    private val pinStateDataSource: PinStateDataSource,
+) : Presenter<PinAuthenticationState> {
 
     @Composable
     override fun present(): PinAuthenticationState {
-
         fun handleEvents(event: PinAuthenticationEvents) {
             when (event) {
-                PinAuthenticationEvents.MyEvent -> Unit
+                PinAuthenticationEvents.Unlock -> pinStateDataSource.unlock()
             }
         }
-
         return PinAuthenticationState(
             eventSink = ::handleEvents
         )
