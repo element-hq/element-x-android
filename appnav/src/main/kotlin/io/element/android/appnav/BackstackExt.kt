@@ -48,7 +48,7 @@ fun <T : Any> BackStack<T>.removeLast(element: T) {
 }
 
 @Composable
-fun FinishActivityBackHandler(enabled: Boolean = true) {
+fun MoveActivityToBackgroundBackHandler(enabled: Boolean = true) {
 
     fun Context.findActivity(): ComponentActivity? = when (this) {
         is ComponentActivity -> this
@@ -58,7 +58,7 @@ fun FinishActivityBackHandler(enabled: Boolean = true) {
 
     val context = LocalContext.current
     BackHandler(enabled = enabled) {
-        context.findActivity()?.finish()
+        context.findActivity()?.moveTaskToBack(false)
     }
 }
 

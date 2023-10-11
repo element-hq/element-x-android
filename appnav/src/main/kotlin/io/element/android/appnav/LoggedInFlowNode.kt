@@ -351,7 +351,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                 }
                 PinState.Locked -> {
-                    FinishActivityBackHandler()
+                    MoveActivityToBackgroundBackHandler()
                     PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
                 }
             }
