@@ -17,11 +17,7 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.media.AudioInfo
-import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 
@@ -98,10 +94,6 @@ data class FailedToParseStateContent(
 
 data object UnknownContent : EventContent
 
-sealed interface MessageType
-
-data object UnknownMessageType : MessageType
-
 enum class MessageFormat {
     HTML, UNKNOWN
 }
@@ -110,51 +102,6 @@ data class FormattedBody(
     val format: MessageFormat,
     val body: String
 )
-
-data class EmoteMessageType(
-    val body: String,
-    val formatted: FormattedBody?
-) : MessageType
-
-data class ImageMessageType(
-    val body: String,
-    val source: MediaSource,
-    val info: ImageInfo?
-) : MessageType
-
-data class LocationMessageType(
-    val body: String,
-    val geoUri: String,
-    val description: String?,
-) : MessageType
-
-data class AudioMessageType(
-    val body: String,
-    val source: MediaSource,
-    val info: AudioInfo?
-) : MessageType
-
-data class VideoMessageType(
-    val body: String,
-    val source: MediaSource,
-    val info: VideoInfo?
-) : MessageType
-
-data class FileMessageType(
-    val body: String,
-    val source: MediaSource,
-    val info: FileInfo?
-) : MessageType
-
-data class NoticeMessageType(
-    val body: String,
-    val formatted: FormattedBody?
-) : MessageType
-
-data class TextMessageType(
-    val body: String,
-    val formatted: FormattedBody?
-) : MessageType
 
 enum class MembershipChange {
     NONE,
