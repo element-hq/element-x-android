@@ -99,26 +99,6 @@ data class FormattedBody(
     val body: String
 )
 
-enum class MembershipChange {
-    NONE,
-    ERROR,
-    JOINED,
-    LEFT,
-    BANNED,
-    UNBANNED,
-    KICKED,
-    INVITED,
-    KICKED_AND_BANNED,
-    INVITATION_ACCEPTED,
-    INVITATION_REJECTED,
-    INVITATION_REVOKED,
-    KNOCKED,
-    KNOCK_ACCEPTED,
-    KNOCK_RETRACTED,
-    KNOCK_DENIED,
-    NOT_IMPLEMENTED;
-}
-
 sealed interface OtherState {
     data object PolicyRuleRoom : OtherState
     data object PolicyRuleServer : OtherState
