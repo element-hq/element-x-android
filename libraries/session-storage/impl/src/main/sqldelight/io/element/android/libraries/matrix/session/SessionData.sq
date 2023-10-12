@@ -1,6 +1,12 @@
-------------------------------------
---  Current version of the DB: 4  --
-------------------------------------
+--------------------------------------------------------------------
+-- Current version of the DB is the highest value of filename
+-- in the folder `sqldelight/databases`.
+--
+-- When upgrading the schema, you have to create a file .sqm in the
+-- `sqldelight/databases` folder and run the following task to
+-- generate a .db file using the latest schema
+-- > ./gradlew generateDebugSessionDatabaseSchema
+--------------------------------------------------------------------
 
 CREATE TABLE SessionData (
     userId TEXT NOT NULL PRIMARY KEY,
