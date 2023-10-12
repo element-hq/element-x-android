@@ -31,7 +31,6 @@ import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.textcomposer.R
 import io.element.android.libraries.textcomposer.utils.PressState
 import io.element.android.libraries.textcomposer.utils.PressStateEffects
 import io.element.android.libraries.textcomposer.utils.rememberPressState
