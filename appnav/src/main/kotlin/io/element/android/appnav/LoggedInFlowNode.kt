@@ -218,7 +218,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 createNode<LoggedInNode>(buildContext)
             }
             NavTarget.LockPermanent -> {
-                pinEntryPoint.nodeBuilder(this, buildContext).build()
+                pinEntryPoint.createNode(this, buildContext)
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {

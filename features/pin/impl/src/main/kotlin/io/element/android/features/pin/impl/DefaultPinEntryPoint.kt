@@ -18,7 +18,6 @@ package io.element.android.features.pin.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.pin.api.PinEntryPoint
 import io.element.android.libraries.architecture.createNode
@@ -28,19 +27,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultPinEntryPoint @Inject constructor() : PinEntryPoint {
 
-    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): PinEntryPoint.NodeBuilder {
-        val plugins = ArrayList<Plugin>()
-
-        return object : PinEntryPoint.NodeBuilder {
-
-            override fun callback(callback: PinEntryPoint.Callback): PinEntryPoint.NodeBuilder {
-                plugins += callback
-                return this
-            }
-
-            override fun build(): Node {
-                return parentNode.createNode<PinFlowNode>(buildContext, plugins)
-            }
-        }
+    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
+        return parentNode.createNode<PinFlowNode>(buildContext)
     }
 }
