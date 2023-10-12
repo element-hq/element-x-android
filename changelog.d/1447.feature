@@ -1,1 +1,0 @@
-[Rich text editor] Add full screen mode
