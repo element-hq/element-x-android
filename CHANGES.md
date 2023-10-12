@@ -1,3 +1,24 @@
+Changes in Element X v0.2.4 (2023-10-12)
+========================================
+
+Features ✨
+----------
+ - [Rich text editor] Add full screen mode ([#1447](https://github.com/vector-im/element-x-android/issues/1447))
+ - Improve rendering of m.emote. ([#1497](https://github.com/vector-im/element-x-android/issues/1497))
+ - Improve deleted session behavior. ([#1520](https://github.com/vector-im/element-x-android/issues/1520))
+
+Bugfixes 🐛
+----------
+ - WebP images can't be sent as media. ([#1483](https://github.com/vector-im/element-x-android/issues/1483))
+ - Fix back button not working in bottom sheets. ([#1517](https://github.com/vector-im/element-x-android/issues/1517))
+ - Render body of unknown msgtype in the timeline and in the room list ([#1539](https://github.com/vector-im/element-x-android/issues/1539))
+
+Other changes
+-------------
+ - Room : makes subscribeToSync/unsubscribeFromSync suspendable. ([#1457](https://github.com/vector-im/element-x-android/issues/1457))
+ - Add some Konsist tests. ([#1526](https://github.com/vector-im/element-x-android/issues/1526))
+
+
 Changes in Element X v0.2.3 (2023-09-27)
 ========================================
 
