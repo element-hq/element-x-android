@@ -18,9 +18,11 @@ package io.element.android.app
 
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.constructors
+import com.lemonappdev.konsist.api.ext.list.modifierprovider.withSealedModifier
 import com.lemonappdev.konsist.api.ext.list.parameters
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
 import com.lemonappdev.konsist.api.ext.list.withoutName
+import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.Test
 
@@ -42,5 +44,14 @@ class KonsistArchitectureTest {
                     // Also check that the text does not contain an equal sign
                     parameterDeclaration.text.contains("=").not()
             }
+    }
+
+    @Test
+    fun `Events MUST be sealed interface`() {
+        Konsist.scopeFromProject()
+            .classes()
+            .withSealedModifier()
+            .withNameEndingWith("Events")
+            .assertEmpty(additionalMessage = "Events class MUST be sealed interface")
     }
 }
