@@ -19,7 +19,7 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 

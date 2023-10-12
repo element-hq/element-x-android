@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.test
+package io.element.android.features.messages.impl.voicemessages
 
-import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import androidx.compose.runtime.Stable
+import io.element.android.libraries.textcomposer.model.VoiceMessageState
 
-class MessageComposerContextFake(
-    override var composerMode: MessageComposerMode = MessageComposerMode.Normal(null)
-) : MessageComposerContext
+@Stable
+data class VoiceMessageComposerState(
+    val voiceMessageState: VoiceMessageState,
+    val eventSink: (VoiceMessageComposerEvents) -> Unit,
+)
+

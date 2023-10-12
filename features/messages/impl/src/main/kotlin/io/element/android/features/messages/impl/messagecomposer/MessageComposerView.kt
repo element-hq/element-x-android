@@ -24,17 +24,24 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerEvents
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerState
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerStateProvider
+import io.element.android.features.messages.impl.voicemessages.aVoiceMessageComposerState
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.textcomposer.Message
+import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.TextComposer
+import io.element.android.libraries.textcomposer.model.PressEvent
 import kotlinx.coroutines.launch
 
 @Composable
-fun MessageComposerView(
+internal fun MessageComposerView(
     state: MessageComposerState,
+    voiceMessageState: VoiceMessageComposerState,
     subcomposing: Boolean,
     enableTextFormatting: Boolean,
+    enableVoiceMessages: Boolean,
     modifier: Modifier = Modifier,
 ) {
     fun sendMessage(message: Message) {
@@ -64,9 +71,14 @@ fun MessageComposerView(
         }
     }
 
+    fun onVoiceRecordButtonEvent(press: PressEvent) {
+        voiceMessageState.eventSink(VoiceMessageComposerEvents.RecordButtonEvent(press))
+    }
+
     TextComposer(
         modifier = modifier,
         state = state.richTextEditorState,
+        voiceMessageState = voiceMessageState.voiceMessageState,
         subcomposing = subcomposing,
         onRequestFocus = ::onRequestFocus,
         onSendMessage = ::sendMessage,
@@ -76,24 +88,49 @@ fun MessageComposerView(
         onAddAttachment = ::onAddAttachment,
         onDismissTextFormatting = ::onDismissTextFormatting,
         enableTextFormatting = enableTextFormatting,
+        enableVoiceMessages = enableVoiceMessages,
+        onVoiceRecordButtonEvent = ::onVoiceRecordButtonEvent,
         onError = ::onError,
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun MessageComposerViewPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) = ElementPreview {
+internal fun MessageComposerViewPreview(
+    @PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState,
+) = ElementPreview {
     Column {
         MessageComposerView(
             modifier = Modifier.height(IntrinsicSize.Min),
             state = state,
+            voiceMessageState = aVoiceMessageComposerState(),
             enableTextFormatting = true,
+            enableVoiceMessages = true,
             subcomposing = false,
         )
         MessageComposerView(
             modifier = Modifier.height(200.dp),
             state = state,
+            voiceMessageState = aVoiceMessageComposerState(),
             enableTextFormatting = true,
+            enableVoiceMessages = true,
+            subcomposing = false,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MessageComposerViewVoicePreview(
+    @PreviewParameter(VoiceMessageComposerStateProvider::class) state: VoiceMessageComposerState,
+) = ElementPreview {
+    Column {
+        MessageComposerView(
+            modifier = Modifier.height(IntrinsicSize.Min),
+            state = aMessageComposerState(),
+            voiceMessageState = state,
+            enableTextFormatting = true,
+            enableVoiceMessages = true,
             subcomposing = false,
         )
     }

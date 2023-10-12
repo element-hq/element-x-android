@@ -17,7 +17,7 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
 
 open class MessageComposerStateProvider : PreviewParameterProvider<MessageComposerState> {

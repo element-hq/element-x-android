@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.test
+package io.element.android.libraries.textcomposer.utils
 
-import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.libraries.textcomposer.model.MessageComposerMode
+/**
+ * State of a press gesture.
+ */
+internal sealed class PressState {
+    data class Idle(
+        val lastPress: Pressing?
+    ) : PressState()
 
-class MessageComposerContextFake(
-    override var composerMode: MessageComposerMode = MessageComposerMode.Normal(null)
-) : MessageComposerContext
+    sealed class Pressing : PressState()
+    data object Tapping : Pressing()
+    data object LongPressing : Pressing()
+}
+

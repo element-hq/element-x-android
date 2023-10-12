@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.test
+package io.element.android.features.messages.impl.voicemessages
 
-import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.PressEvent
 
-class MessageComposerContextFake(
-    override var composerMode: MessageComposerMode = MessageComposerMode.Normal(null)
-) : MessageComposerContext
+sealed class VoiceMessageComposerEvents {
+    data class RecordButtonEvent(
+        val pressEvent: PressEvent
+    ): VoiceMessageComposerEvents()
+}

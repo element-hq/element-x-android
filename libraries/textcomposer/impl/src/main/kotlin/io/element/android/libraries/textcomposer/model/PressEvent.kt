@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.test
+package io.element.android.libraries.textcomposer.model
 
-import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.libraries.textcomposer.model.MessageComposerMode
-
-class MessageComposerContextFake(
-    override var composerMode: MessageComposerMode = MessageComposerMode.Normal(null)
-) : MessageComposerContext
+sealed class PressEvent {
+    data object PressStart: PressEvent()
+    data object Tapped: PressEvent()
+    data object LongPressEnd: PressEvent()
+}

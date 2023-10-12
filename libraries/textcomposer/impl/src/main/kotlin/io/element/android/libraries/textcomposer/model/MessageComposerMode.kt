@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.textcomposer
+package io.element.android.libraries.textcomposer.model
 
 import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.EventId
