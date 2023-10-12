@@ -29,6 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
+import timber.log.Timber
 
 @Composable
 internal fun rememberPressState(
@@ -73,7 +74,7 @@ internal class PressStateHolder(
                 state = PressState.Tapping
             }
             is PressState.Pressing ->
-                error("Pointer pressed but it has not been released")
+                Timber.e("Pointer pressed but it has not been released")
         }
 
         longPressTimer = launch {
@@ -89,11 +90,11 @@ internal class PressStateHolder(
     fun release() {
         longPressTimer?.cancel()
         longPressTimer = null
-        state = when (val lastState = state) {
+        when (val lastState = state) {
             is PressState.Pressing ->
-                PressState.Idle(lastPress = lastState)
+                state = PressState.Idle(lastPress = lastState)
             is PressState.Idle ->
-                error("Press released but it was not in pressed state")
+                Timber.e("Pointer pressed but it has not been released")
         }
     }
 }

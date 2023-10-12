@@ -83,21 +83,21 @@ import kotlin.time.Duration.Companion.milliseconds
         press2.await()
     }
 
-    @Test(expected = IllegalStateException::class)
-    fun `when press twice without releasing, it throws`() = runTest {
+    @Test
+    fun `when press twice without releasing, it doesn't throw an error`() = runTest {
         val stateHolder = createStateHolder()
         stateHolder.press()
         stateHolder.press()
     }
 
-    @Test(expected = IllegalStateException::class)
-    fun `when release without first pressing, it throws`() = runTest {
+    @Test
+    fun `when release without first pressing, it doesn't throw an error`() = runTest {
         val stateHolder = createStateHolder()
         stateHolder.release()
     }
 
-    @Test(expected = IllegalStateException::class)
-    fun `when release twice without pressing, it throws`() = runTest {
+    @Test
+    fun `when release twice without pressing, it doesn't throw an error `() = runTest {
         val stateHolder = createStateHolder()
         stateHolder.press()
         stateHolder.release()
