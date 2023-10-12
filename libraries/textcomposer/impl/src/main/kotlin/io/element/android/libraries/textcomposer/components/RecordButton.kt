@@ -36,6 +36,7 @@ import io.element.android.libraries.textcomposer.utils.PressState
 import io.element.android.libraries.textcomposer.utils.PressStateEffects
 import io.element.android.libraries.textcomposer.utils.rememberPressState
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
 @Composable
@@ -91,7 +92,7 @@ private fun RecordButtonView(
             } else {
                 CommonDrawables.ic_compound_mic_on_outline
             },
-            contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
+            contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
             tint = ElementTheme.colors.iconSecondary,
         )
     }
