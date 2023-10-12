@@ -1,3 +1,7 @@
+------------------------------------
+--  Current version of the DB: 4  --
+------------------------------------
+
 CREATE TABLE SessionData (
     userId TEXT NOT NULL PRIMARY KEY,
     deviceId TEXT NOT NULL,
@@ -5,8 +9,11 @@ CREATE TABLE SessionData (
     refreshToken TEXT,
     homeserverUrl TEXT NOT NULL,
     slidingSyncProxy TEXT,
+    -- added in version 2
     loginTimestamp INTEGER,
+    -- added in version 3
     oidcData TEXT,
+    -- added in version 4
     isTokenValid INTEGER NOT NULL DEFAULT 1,
     loginType TEXT
 );
