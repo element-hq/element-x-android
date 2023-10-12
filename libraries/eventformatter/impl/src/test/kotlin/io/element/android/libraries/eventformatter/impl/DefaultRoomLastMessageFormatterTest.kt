@@ -61,7 +61,7 @@ import org.robolectric.annotation.Config
 
 @Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
-class DefaultRoomLastMessageFormatterTests {
+class DefaultRoomLastMessageFormatterTest {
 
     private lateinit var context: Context
     private lateinit var fakeMatrixClient: FakeMatrixClient

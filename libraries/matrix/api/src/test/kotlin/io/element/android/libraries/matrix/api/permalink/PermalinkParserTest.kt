@@ -22,7 +22,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class PermalinkParserTests {
+class PermalinkParserTest {
 
     @Test
     fun `parsing an invalid url returns a fallback link`() {

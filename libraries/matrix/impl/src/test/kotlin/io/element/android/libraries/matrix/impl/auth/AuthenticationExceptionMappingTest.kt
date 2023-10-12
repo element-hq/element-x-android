@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.AuthenticationException as RustAuthenticationException
 
-class AuthenticationExceptionMappingTests {
+class AuthenticationExceptionMappingTest {
 
     @Test
     fun `mapping an exception with no message returns 'Unknown error' message`() {

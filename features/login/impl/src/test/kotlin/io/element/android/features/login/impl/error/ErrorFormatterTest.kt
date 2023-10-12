@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.ui.strings.CommonStrings
 import org.junit.Test
 
-class ErrorFormatterTests {
+class ErrorFormatterTest {
 
     // region loginError
     @Test
