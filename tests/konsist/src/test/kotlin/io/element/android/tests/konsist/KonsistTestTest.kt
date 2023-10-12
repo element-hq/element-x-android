@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.app
+package io.element.android.tests.konsist
 
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutOverrideModifier
