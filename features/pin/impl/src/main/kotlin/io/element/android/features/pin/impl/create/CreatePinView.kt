@@ -25,12 +25,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
+import timber.log.Timber
 
 @Composable
 fun CreatePinView(
     state: CreatePinState,
     modifier: Modifier = Modifier,
 ) {
+    Timber.d("CreatePinView: $state")
     Box(modifier, contentAlignment = Alignment.Center) {
         Text(
             "CreatePin feature view",
@@ -41,9 +43,10 @@ fun CreatePinView(
 
 @Composable
 @PreviewsDayNight
-fun CreatePinViewLightPreview(@PreviewParameter(CreatePinStateProvider::class) state: CreatePinState) =
+internal fun CreatePinViewLightPreview(@PreviewParameter(CreatePinStateProvider::class) state: CreatePinState) {
     ElementPreview {
         CreatePinView(
             state = state,
         )
     }
+}

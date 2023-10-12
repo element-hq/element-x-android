@@ -26,14 +26,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Surface
-import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 
 @Composable
 fun PinAuthenticationView(
@@ -76,10 +74,11 @@ private fun PinAuthenticationFooter(state: PinAuthenticationState) {
 
 @Composable
 @PreviewsDayNight
-fun PinAuthenticationViewLightPreview(@PreviewParameter(PinAuthenticationStateProvider::class) state: PinAuthenticationState) =
+internal fun PinAuthenticationViewPreview(@PreviewParameter(PinAuthenticationStateProvider::class) state: PinAuthenticationState) {
     ElementPreview {
         PinAuthenticationView(
             state = state,
         )
     }
+}
 

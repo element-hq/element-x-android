@@ -54,7 +54,7 @@ class DefaultPinStateService @Inject constructor(
         lockJob?.cancel()
     }
 
-    override suspend fun entersBackground(): Unit = coroutineScope {
+    override suspend fun entersBackground() = coroutineScope {
         lockJob = launch {
             if (featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)) {
                 delay(GRACE_PERIOD_IN_MILLIS)
