@@ -18,8 +18,8 @@ package io.element.android.features.messages.impl.voicemessages
 
 import io.element.android.libraries.textcomposer.model.PressEvent
 
-sealed class VoiceMessageComposerEvents {
+sealed interface VoiceMessageComposerEvents {
     data class RecordButtonEvent(
         val pressEvent: PressEvent
-    ): VoiceMessageComposerEvents()
+    ): VoiceMessageComposerEvents
 }
