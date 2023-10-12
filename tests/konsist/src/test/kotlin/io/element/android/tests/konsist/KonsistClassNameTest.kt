@@ -46,7 +46,7 @@ class KonsistClassNameTest {
     }
 
     @Test
-    fun `Classes extending 'PreviewParameterProvider' name MUST end with "Provider" and MUST contain provided class name`() {
+    fun `Classes extending 'PreviewParameterProvider' name MUST end with 'Provider' and MUST contain provided class name`() {
         Konsist.scopeFromProject()
             .classes()
             .withAllParentsOf(PreviewParameterProvider::class)
