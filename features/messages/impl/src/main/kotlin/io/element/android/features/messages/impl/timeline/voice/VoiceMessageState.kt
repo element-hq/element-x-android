@@ -17,10 +17,15 @@
 package io.element.android.features.messages.impl.timeline.voice
 
 data class VoiceMessageState(
-    val isLoading: Boolean,
-    val isError: Boolean,
-    val isPlaying: Boolean,
+    val button: Button,
     val progress: Float,
     val elapsed: String,
     val eventSink: (event: VoiceMessageEvents) -> Unit,
-)
+) {
+    enum class Button {
+        Play,
+        Pause,
+        Downloading,
+        Retry,
+    }
+}

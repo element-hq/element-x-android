@@ -18,37 +18,29 @@ package io.element.android.features.messages.impl.timeline.voice
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-open class VoiceMessageStateProvider: PreviewParameterProvider<VoiceMessageState> {
+open class VoiceMessageStateProvider : PreviewParameterProvider<VoiceMessageState> {
     override val values: Sequence<VoiceMessageState>
         get() = sequenceOf(
             VoiceMessageState(
-                isLoading = true,
-                isError = false,
-                isPlaying = false,
+                VoiceMessageState.Button.Downloading,
                 progress = 0f,
                 elapsed = "00:00",
                 eventSink = {},
             ),
             VoiceMessageState(
-                isLoading = false,
-                isError = true,
-                isPlaying = false,
+                VoiceMessageState.Button.Retry,
                 progress = 0.5f,
                 elapsed = "00:00",
                 eventSink = {}
             ),
             VoiceMessageState(
-                isLoading = false,
-                isError = false,
-                isPlaying = true,
+                VoiceMessageState.Button.Play,
                 progress = 1f,
                 elapsed = "00:00",
                 eventSink = {}
             ),
             VoiceMessageState(
-                isLoading = false,
-                isError = false,
-                isPlaying = false,
+                VoiceMessageState.Button.Pause,
                 progress = 0.2f,
                 elapsed = "00:00",
                 eventSink = {}

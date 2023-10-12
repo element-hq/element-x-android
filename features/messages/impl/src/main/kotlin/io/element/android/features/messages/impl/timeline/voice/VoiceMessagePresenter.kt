@@ -19,16 +19,12 @@ package io.element.android.features.messages.impl.timeline.voice
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
@@ -39,7 +35,7 @@ import dagger.multibindings.IntoMap
 import io.element.android.features.messages.impl.timeline.TimelineItemEventContentKey
 import io.element.android.features.messages.impl.timeline.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.libraries.architecture.Async
+import io.element.android.features.messages.impl.timeline.voice.player.VoiceMessagePlayer
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
@@ -59,7 +55,7 @@ interface VoiceMessagePresenterModule {
 
 class VoiceMessagePresenter @AssistedInject constructor(
     private val mediaLoader: MatrixMediaLoader,
-    private val playerFactory: PlayerFactory,
+    private val voiceMessagePlayer: VoiceMessagePlayer,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
 
@@ -72,122 +68,76 @@ class VoiceMessagePresenter @AssistedInject constructor(
     override fun present(): VoiceMessageState {
 
         val scope = rememberCoroutineScope()
+        val durationMinutes = remember { content.duration / 1000 / 60 }
+        val durationSeconds = remember { content.duration / 1000 % 60 }
+        val isPlaying by voiceMessagePlayer.isPlaying.collectAsState()
 
-        var internalState: InternalState by remember { mutableStateOf(InternalState.UNINITIALIZED) }
-        var player: Player? by remember { mutableStateOf(null) }
+        var button by remember { mutableStateOf(VoiceMessageState.Button.Play) }
+        var progress by remember { mutableStateOf(VoiceMessagePlayer.Progress.Zero) }
         var mediaFile: MediaFile? by remember { mutableStateOf(null) }
-        var elapsedMillis: Long by remember { mutableLongStateOf(0L) }
-        val asyncMediaFile: MutableState<Async<MediaFile>> = remember { mutableStateOf(Async.Uninitialized) }
-
-        val listener = remember {
-            object : Player.Listener {
-                override fun onIsPlayingChanged(playing: Boolean) {
-                    internalState = if (playing) InternalState.PLAYING
-                    else InternalState.PAUSED
-                }
-            }
-        }
 
         DisposableEffect(Unit) {
             Timber.d("ABAB Presenter composed")
             onDispose {
-                player?.let {
-                    it.removeListener(listener)
-                    it.release()
-                }
+                voiceMessagePlayer.close()
                 mediaFile?.close()
                 Timber.d("ABAB Presenter disposed")
             }
         }
 
-        val progress: Float by remember { derivedStateOf { elapsedMillis.toProgress(content.duration) } }
-        val durationMinutes = content.duration / 1000 / 60
-        val durationSeconds = content.duration / 1000 % 60
-        val elapsedMinutes by remember { derivedStateOf { elapsedMillis / 1000 / 60 } }
-        val elapsedSeconds by remember { derivedStateOf { elapsedMillis / 1000 % 60 } }
-
-        LaunchedEffect(internalState) {
-            while (internalState == InternalState.PLAYING) {
-                player?.let {
-                    elapsedMillis = it.contentPosition
+        LaunchedEffect(isPlaying) {
+            Timber.d("ABAB Presenter isPlaying: $isPlaying")
+            if (isPlaying) {
+                button = VoiceMessageState.Button.Pause
+                while (true) {
+                    progress = voiceMessagePlayer.progress
+                    delay(100)
                 }
-                delay(100)
+            } else {
+                button = VoiceMessageState.Button.Play
             }
         }
 
-        fun pause() {
-            player?.pause()
-        }
-
-        fun play() {
-            player?.let {
-                if (it.playbackState == Player.STATE_ENDED) it.seekTo(0)
-                it.play()
-            }
-        }
-
-        suspend fun createPlayerAndDownloadMedia() {
-            internalState = InternalState.DOWNLOADING
+        suspend fun downloadMediaAndPlay() {
+            button = VoiceMessageState.Button.Downloading
             mediaLoader.downloadMediaFile(
                 source = content.audioSource,
                 mimeType = content.mimeType,
                 body = content.body,
             ).onSuccess {
                 mediaFile = it
-                player = playerFactory.create()
-                player?.addListener(listener)
-                player?.setMediaItem(MediaItem.fromUri(it.path()))
-                player?.prepare()
-                play()
+                voiceMessagePlayer.playMediaUri(it.path())
             }.onFailure {
-                internalState = InternalState.DOWNLOAD_ERROR
+                button = VoiceMessageState.Button.Retry
             }
         }
 
         fun eventSink(event: VoiceMessageEvents) {
             when (event) {
                 is VoiceMessageEvents.PlayPause -> scope.launch {
-                    when (internalState) {
-                        InternalState.UNINITIALIZED -> createPlayerAndDownloadMedia()
-                        InternalState.DOWNLOADING -> {
-                            // Do nothing. Ideally it should stop a very long download.
+                    if (mediaFile == null) {
+                        downloadMediaAndPlay()
+                    } else {
+                        if (!voiceMessagePlayer.isPlaying.value) {
+                            voiceMessagePlayer.play()
+                        } else {
+                            voiceMessagePlayer.pause()
                         }
-                        InternalState.DOWNLOAD_ERROR -> createPlayerAndDownloadMedia()
-                        InternalState.PLAYING -> pause()
-                        InternalState.PAUSED -> play()
                     }
                 }
-                is VoiceMessageEvents.Seek -> player?.let {
-                    it.seekTo(event.progress.toElapsedMillis(content.duration))
-                    elapsedMillis = it.contentPosition
+                is VoiceMessageEvents.Seek -> {
+                    voiceMessagePlayer.seekTo(event.percentage)
+                    progress = voiceMessagePlayer.progress
                 }
             }
         }
 
         return VoiceMessageState(
-            isLoading = asyncMediaFile.value.isLoading(),
-            isError = asyncMediaFile.value.isFailure(),
-            isPlaying = internalState == InternalState.PLAYING,
-            progress = progress,
-            elapsed = if (internalState == InternalState.PLAYING) "%02d:%02d".format(elapsedMinutes, elapsedSeconds)
+            button = button,
+            progress = progress.percentage,
+            elapsed = if (isPlaying) "%02d:%02d".format(progress.elapsedMinutes, progress.elapsedSeconds)
             else "%02d:%02d".format(durationMinutes, durationSeconds),
             eventSink = ::eventSink
         )
     }
-}
-
-private fun Long.toProgress(durationMillis: Long): Float {
-    return this.toFloat() / durationMillis.toFloat()
-}
-
-private fun Float.toElapsedMillis(durationMillis: Long): Long {
-    return (this * durationMillis).toLong()
-}
-
-private enum class InternalState {
-    UNINITIALIZED,
-    DOWNLOADING,
-    DOWNLOAD_ERROR,
-    PLAYING,
-    PAUSED,
 }

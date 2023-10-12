@@ -26,8 +26,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowCircleDown
 import androidx.compose.material.icons.outlined.Downloading
-import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.Composable
@@ -69,11 +69,11 @@ fun TimelineItemVoiceView(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = when {
-                    state.isError -> Icons.Outlined.Error
-                    state.isLoading -> Icons.Outlined.Downloading
-                    state.isPlaying -> Icons.Outlined.Pause
-                    else -> Icons.Outlined.PlayArrow
+                imageVector = when (state.button) {
+                    VoiceMessageState.Button.Play -> Icons.Outlined.PlayArrow
+                    VoiceMessageState.Button.Pause -> Icons.Outlined.Pause
+                    VoiceMessageState.Button.Downloading -> Icons.Outlined.Downloading
+                    VoiceMessageState.Button.Retry -> Icons.Outlined.ArrowCircleDown
                 },
                 contentDescription = null,
                 tint = ElementTheme.materialColors.primary,

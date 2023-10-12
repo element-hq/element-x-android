@@ -18,5 +18,5 @@ package io.element.android.features.messages.impl.timeline.voice
 
 sealed interface VoiceMessageEvents {
     data object PlayPause : VoiceMessageEvents
-    data class Seek(val progress: Float) : VoiceMessageEvents
+    data class Seek(val percentage: Float) : VoiceMessageEvents
 }
