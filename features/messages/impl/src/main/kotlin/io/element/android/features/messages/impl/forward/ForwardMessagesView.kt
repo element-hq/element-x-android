@@ -135,7 +135,7 @@ fun ForwardMessagesView(
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
         ) {
-            SearchBar<ImmutableList<RoomSummaryDetails>>(
+            SearchBar(
                 placeHolderTitle = stringResource(CommonStrings.action_search),
                 query = state.query,
                 onQueryChange = { state.eventSink(ForwardMessagesEvents.UpdateQuery(it)) },
@@ -204,7 +204,7 @@ fun ForwardMessagesView(
 }
 
 @Composable
-internal fun SelectedRooms(
+private fun SelectedRooms(
     selectedRooms: ImmutableList<RoomSummaryDetails>,
     onRoomRemoved: (RoomSummaryDetails) -> Unit,
     modifier: Modifier = Modifier,
@@ -221,7 +221,7 @@ internal fun SelectedRooms(
 }
 
 @Composable
-internal fun RoomSummaryView(
+private fun RoomSummaryView(
     summary: RoomSummaryDetails,
     isSelected: Boolean,
     onSelection: (RoomSummaryDetails) -> Unit,

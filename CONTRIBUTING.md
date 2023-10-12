@@ -18,6 +18,7 @@
     * [knit](#knit)
     * [lint](#lint)
   * [Unit tests](#unit-tests)
+    * [konsist](#konsist)
   * [Tests](#tests)
   * [Accessibility](#accessibility)
   * [Jetpack Compose](#jetpack-compose)
@@ -155,6 +156,10 @@ Make sure the following commands execute without any error:
 <pre>
 ./gradlew test
 </pre>
+
+#### konsist
+
+[konsist](https://github.com/LemonAppDev/konsist) is setup in the project to check that the architecture and the naming rules are followed. Konsist tests are classical Unit tests.
 
 ### Tests
 

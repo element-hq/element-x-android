@@ -160,7 +160,7 @@ private fun SheetContent(
 }
 
 @Composable
-fun AggregatedReactionButton(
+private fun AggregatedReactionButton(
     reaction: AggregatedReaction,
     isHighlighted: Boolean,
     onClick: () -> Unit,
@@ -215,7 +215,7 @@ fun AggregatedReactionButton(
 }
 
 @Composable
-fun SenderRow(
+private fun SenderRow(
     avatarData: AvatarData,
     name: String,
     userId: String,

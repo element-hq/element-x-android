@@ -16,11 +16,15 @@
 
 package io.element.android.libraries.matrix.impl.mapper
 
+import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import org.matrix.rustcomponents.sdk.Session
 import java.util.Date
 
-internal fun Session.toSessionData() = SessionData(
+internal fun Session.toSessionData(
+    isTokenValid: Boolean,
+    loginType: LoginType,
+) = SessionData(
     userId = userId,
     deviceId = deviceId,
     accessToken = accessToken,
@@ -29,4 +33,6 @@ internal fun Session.toSessionData() = SessionData(
     oidcData = oidcData,
     slidingSyncProxy = slidingSyncProxy,
     loginTimestamp = Date(),
+    isTokenValid = isTokenValid,
+    loginType = loginType,
 )

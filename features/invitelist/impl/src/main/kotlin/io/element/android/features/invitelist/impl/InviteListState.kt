@@ -25,10 +25,10 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 data class InviteListState(
     val inviteList: ImmutableList<InviteListInviteSummary>,
-    val declineConfirmationDialog: InviteDeclineConfirmationDialog = InviteDeclineConfirmationDialog.Hidden,
-    val acceptedAction: Async<RoomId> = Async.Uninitialized,
-    val declinedAction: Async<Unit> = Async.Uninitialized,
-    val eventSink: (InviteListEvents) -> Unit = {}
+    val declineConfirmationDialog: InviteDeclineConfirmationDialog,
+    val acceptedAction: Async<RoomId>,
+    val declinedAction: Async<Unit>,
+    val eventSink: (InviteListEvents) -> Unit
 )
 
 sealed interface InviteDeclineConfirmationDialog {

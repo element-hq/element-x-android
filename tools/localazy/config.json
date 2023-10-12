@@ -26,6 +26,12 @@
       ]
     },
     {
+      "name": ":features:signedout:impl",
+      "includeRegex": [
+        "screen_signed_out_.*"
+      ]
+    },
+    {
       "name": ":features:invitelist:impl",
       "includeRegex": [
         "screen_invites_.*"
@@ -138,6 +144,7 @@
     {
       "name": ":features:preferences:impl",
       "includeRegex": [
+        "screen_advanced_settings_.*",
         "screen_edit_profile_.*"
       ]
     },

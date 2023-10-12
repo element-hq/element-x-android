@@ -18,20 +18,22 @@ package io.element.android.features.roomdetails.impl.invite
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 internal class RoomInviteMembersStateProvider : PreviewParameterProvider<RoomInviteMembersState> {
     override val values: Sequence<RoomInviteMembersState>
         get() = sequenceOf(
-            RoomInviteMembersState(),
-            RoomInviteMembersState(canInvite = true, selectedUsers = aMatrixUserList().toImmutableList()),
-            RoomInviteMembersState(isSearchActive = true, searchQuery = "some query"),
-            RoomInviteMembersState(isSearchActive = true, searchQuery = "some query", selectedUsers = aMatrixUserList().toImmutableList()),
-            RoomInviteMembersState(isSearchActive = true, searchQuery = "some query", searchResults = SearchBarResultState.NoResults()),
-            RoomInviteMembersState(
+            aRoomInviteMembersState(),
+            aRoomInviteMembersState(canInvite = true, selectedUsers = aMatrixUserList().toImmutableList()),
+            aRoomInviteMembersState(isSearchActive = true, searchQuery = "some query"),
+            aRoomInviteMembersState(isSearchActive = true, searchQuery = "some query", selectedUsers = aMatrixUserList().toImmutableList()),
+            aRoomInviteMembersState(isSearchActive = true, searchQuery = "some query", searchResults = SearchBarResultState.NoResults()),
+            aRoomInviteMembersState(
                 isSearchActive = true,
                 canInvite = true,
                 searchQuery = "some query",
@@ -48,7 +50,7 @@ internal class RoomInviteMembersStateProvider : PreviewParameterProvider<RoomInv
                     )
                 )
             ),
-            RoomInviteMembersState(
+            aRoomInviteMembersState(
                 isSearchActive = true,
                 canInvite = true,
                 searchQuery = "@alice:server.org",
@@ -63,4 +65,21 @@ internal class RoomInviteMembersStateProvider : PreviewParameterProvider<RoomInv
                 )
             ),
         )
+}
+
+private fun aRoomInviteMembersState(
+    canInvite: Boolean = false,
+    searchQuery: String = "",
+    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.NotSearching(),
+    selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
+    isSearchActive: Boolean = false,
+): RoomInviteMembersState {
+    return RoomInviteMembersState(
+        canInvite = canInvite,
+        searchQuery = searchQuery,
+        searchResults = searchResults,
+        selectedUsers = selectedUsers,
+        isSearchActive = isSearchActive,
+        eventSink = {},
+    )
 }

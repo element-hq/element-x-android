@@ -56,7 +56,7 @@ class DefaultPushHandler @Inject constructor(
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     // UI handler
-    private val mUIHandler by lazy {
+    private val uiHandler by lazy {
         Handler(Looper.getMainLooper())
     }
 
@@ -81,7 +81,7 @@ class DefaultPushHandler @Inject constructor(
             return
         }
 
-        mUIHandler.post {
+        uiHandler.post {
             coroutineScope.launch(Dispatchers.IO) { handleInternal(pushData) }
         }
     }

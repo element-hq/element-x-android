@@ -36,6 +36,7 @@
   <string name="action_invite_friends_to_app">"Pozvať priateľov do %1$s"</string>
   <string name="action_invite_people_to_app">"Pozvať ľudí do %1$s"</string>
   <string name="action_invites_list">"Pozvánky"</string>
+  <string name="action_join">"Pripojiť sa"</string>
   <string name="action_learn_more">"Zistiť viac"</string>
   <string name="action_leave">"Opustiť"</string>
   <string name="action_leave_room">"Opustiť miestnosť"</string>
@@ -45,6 +46,7 @@
   <string name="action_no">"Nie"</string>
   <string name="action_not_now">"Teraz nie"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_settings">"Otvoriť nastavenia"</string>
   <string name="action_open_with">"Otvoriť pomocou"</string>
   <string name="action_quick_reply">"Rýchla odpoveď"</string>
   <string name="action_quote">"Citovať"</string>
@@ -70,6 +72,7 @@
   <string name="action_take_photo">"Urobiť fotku"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
+  <string name="action_edit_poll">"Upraviť anketu"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
@@ -92,6 +95,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Obrázok"</string>
   <string name="common_in_reply_to">"V odpovedi na %1$s"</string>
+  <string name="common_install_apk_android">"Inštalovať APK"</string>
   <string name="common_invite_unknown_profile">"Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá."</string>
   <string name="common_leaving_room">"Opustenie miestnosti"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
@@ -106,6 +110,7 @@
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Ľudia"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
+  <string name="common_permission">"Povolenie"</string>
   <string name="common_poll_total_votes">"Celkový počet hlasov: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Výsledky sa zobrazia po ukončení ankety"</string>
   <string name="common_privacy_policy">"Zásady ochrany osobných údajov"</string>
@@ -120,6 +125,7 @@
   <string name="common_room_name_placeholder">"napr. názov vášho projektu"</string>
   <string name="common_search_for_someone">"Vyhľadať niekoho"</string>
   <string name="common_search_results">"Výsledky hľadania"</string>
+  <string name="common_secure_backup">"Bezpečné zálohovanie"</string>
   <string name="common_security">"Bezpečnosť"</string>
   <string name="common_select_your_server">"Vyberte svoj server"</string>
   <string name="common_sending">"Odosiela sa…"</string>
@@ -146,7 +152,10 @@
   <string name="common_verification_cancelled">"Overovanie zrušené"</string>
   <string name="common_verification_complete">"Overovanie je dokončené"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_voice_message">"Hlasová správa"</string>
   <string name="common_waiting">"Čaká sa…"</string>
+  <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
+  <string name="common_poll_summary">"Anketa: %1$s"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
   <string name="emoji_picker_category_activity">"Aktivity"</string>

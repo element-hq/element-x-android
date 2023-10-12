@@ -16,13 +16,8 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.media.AudioInfo
-import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 
@@ -33,37 +28,10 @@ data class MessageContent(
     val inReplyTo: InReplyTo?,
     val isEdited: Boolean,
     val isThreaded: Boolean,
-    val type: MessageType?
+    val type: MessageType
 ) : EventContent
 
-sealed interface InReplyTo {
-    /** The event details are not loaded yet. We can fetch them. */
-    data class NotLoaded(val eventId: EventId) : InReplyTo
-
-    /** The event details are pending to be fetched. We should **not** fetch them again. */
-    data object Pending : InReplyTo
-
-    /** The event details are available. */
-    data class Ready(
-        val eventId: EventId,
-        val content: EventContent,
-        val senderId: UserId,
-        val senderDisplayName: String?,
-        val senderAvatarUrl: String?,
-    ) : InReplyTo
-
-    /**
-     * Fetching the event details failed.
-     *
-     * We can try to fetch them again **with a proper retry strategy**, but not blindly:
-     *
-     * If the reason for the failure is consistent on the server, we'd enter a loop
-     * where we keep trying to fetch the same event.
-     * */
-    data object Error : InReplyTo
-}
-
-object RedactedContent : EventContent
+data object RedactedContent : EventContent
 
 data class StickerContent(
     val body: String,
@@ -124,106 +92,4 @@ data class FailedToParseStateContent(
     val error: String
 ) : EventContent
 
-object UnknownContent : EventContent
-
-sealed interface MessageType
-
-object UnknownMessageType : MessageType
-
-enum class MessageFormat {
-    HTML, UNKNOWN
-}
-
-data class FormattedBody(
-    val format: MessageFormat,
-    val body: String
-)
-
-data class EmoteMessageType(
-    val body: String,
-    val formatted: FormattedBody?
-) : MessageType
-
-data class ImageMessageType(
-    val body: String,
-    val source: MediaSource,
-    val info: ImageInfo?
-) : MessageType
-
-data class LocationMessageType(
-    val body: String,
-    val geoUri: String,
-    val description: String?,
-) : MessageType
-
-data class AudioMessageType(
-    val body: String,
-    val source: MediaSource,
-    val info: AudioInfo?
-) : MessageType
-
-data class VideoMessageType(
-    val body: String,
-    val source: MediaSource,
-    val info: VideoInfo?
-) : MessageType
-
-data class FileMessageType(
-    val body: String,
-    val source: MediaSource,
-    val info: FileInfo?
-) : MessageType
-
-data class NoticeMessageType(
-    val body: String,
-    val formatted: FormattedBody?
-) : MessageType
-
-data class TextMessageType(
-    val body: String,
-    val formatted: FormattedBody?
-) : MessageType
-
-enum class MembershipChange {
-    NONE,
-    ERROR,
-    JOINED,
-    LEFT,
-    BANNED,
-    UNBANNED,
-    KICKED,
-    INVITED,
-    KICKED_AND_BANNED,
-    INVITATION_ACCEPTED,
-    INVITATION_REJECTED,
-    INVITATION_REVOKED,
-    KNOCKED,
-    KNOCK_ACCEPTED,
-    KNOCK_RETRACTED,
-    KNOCK_DENIED,
-    NOT_IMPLEMENTED;
-}
-
-sealed interface OtherState {
-    data object PolicyRuleRoom : OtherState
-    data object PolicyRuleServer : OtherState
-    data object PolicyRuleUser : OtherState
-    data object RoomAliases : OtherState
-    data class RoomAvatar(val url: String?) : OtherState
-    data object RoomCanonicalAlias : OtherState
-    data object RoomCreate : OtherState
-    data object RoomEncryption : OtherState
-    data object RoomGuestAccess : OtherState
-    data object RoomHistoryVisibility : OtherState
-    data object RoomJoinRules : OtherState
-    data class RoomName(val name: String?) : OtherState
-    data object RoomPinnedEvents : OtherState
-    data object RoomPowerLevels : OtherState
-    data object RoomServerAcl : OtherState
-    data class RoomThirdPartyInvite(val displayName: String?) : OtherState
-    data object RoomTombstone : OtherState
-    data class RoomTopic(val topic: String?) : OtherState
-    data object SpaceChild : OtherState
-    data object SpaceParent : OtherState
-    data class Custom(val eventType: String) : OtherState
-}
+data object UnknownContent : EventContent

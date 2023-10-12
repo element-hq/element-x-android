@@ -23,7 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.meta.BuildType
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL

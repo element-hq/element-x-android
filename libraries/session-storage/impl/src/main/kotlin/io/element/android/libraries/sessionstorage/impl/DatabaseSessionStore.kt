@@ -22,6 +22,7 @@ import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
@@ -35,11 +36,20 @@ class DatabaseSessionStore @Inject constructor(
     private val database: SessionDatabase,
 ) : SessionStore {
 
-    override fun isLoggedIn(): Flow<Boolean> {
+    override fun isLoggedIn(): Flow<LoggedInState> {
         return database.sessionDataQueries.selectFirst()
             .asFlow()
             .mapToOneOrNull()
-            .map { it != null }
+            .map {
+                if (it == null) {
+                    LoggedInState.NotLoggedIn
+                } else {
+                    LoggedInState.LoggedIn(
+                        sessionId = it.userId,
+                        isTokenValid = it.isTokenValid == 1L
+                    )
+                }
+            }
     }
 
     override suspend fun storeData(sessionData: SessionData) {

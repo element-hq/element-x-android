@@ -36,6 +36,7 @@
   <string name="action_invite_friends_to_app">"Inviter des amis à %1$s"</string>
   <string name="action_invite_people_to_app">"Invitez des personnes à %1$s"</string>
   <string name="action_invites_list">"Invitations"</string>
+  <string name="action_join">"Rejoindre"</string>
   <string name="action_learn_more">"En savoir plus"</string>
   <string name="action_leave">"Quitter"</string>
   <string name="action_leave_room">"Quitter le salon"</string>
@@ -71,6 +72,7 @@
   <string name="action_take_photo">"Prendre une photo"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
+  <string name="action_edit_poll">"Modifier le sondage"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d’utilisation acceptable"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>
@@ -93,6 +95,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"En réponse à %1$s"</string>
+  <string name="common_install_apk_android">"Installer l’APK"</string>
   <string name="common_invite_unknown_profile">"Cet identifiant Matrix est introuvable, il est donc possible que l’invitation ne soit pas reçue."</string>
   <string name="common_leaving_room">"Quitter le salon…"</string>
   <string name="common_link_copied_to_clipboard">"Lien copié dans le presse-papiers"</string>
@@ -149,6 +152,7 @@
   <string name="common_verification_complete">"Vérification terminée"</string>
   <string name="common_video">"Vidéo"</string>
   <string name="common_waiting">"En attente…"</string>
+  <string name="common_poll_end_confirmation">"Êtes-vous sûr de vouloir mettre fin à ce sondage ?"</string>
   <string name="common_poll_summary">"Sondage : %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Attention"</string>

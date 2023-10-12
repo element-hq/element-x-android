@@ -19,8 +19,8 @@ package io.element.android.features.messages.impl
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -32,13 +32,13 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -50,6 +50,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
@@ -71,14 +72,15 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.designsystem.utils.SnackbarHost
-import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.theme.ElementTheme
@@ -86,7 +88,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
@@ -277,40 +278,58 @@ private fun MessagesViewContent(
     modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
 ) {
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .navigationBarsPadding()
-            .imePadding()
+            .imePadding(),
     ) {
-        // Hide timeline if composer is full screen
-        if (!state.composerState.isFullScreen) {
-            TimelineView(
-                state = state.timelineState,
-                modifier = Modifier.weight(1f),
-                onMessageClicked = onMessageClicked,
-                onMessageLongClicked = onMessageLongClicked,
-                onUserDataClicked = onUserDataClicked,
-                onTimestampClicked = onTimestampClicked,
-                onReactionClicked = onReactionClicked,
-                onReactionLongClicked = onReactionLongClicked,
-                onMoreReactionsClicked = onMoreReactionsClicked,
-                onSwipeToReply = onSwipeToReply,
-            )
-        }
-        if (state.userHasPermissionToSendMessage) {
-            MessageComposerView(
-                state = state.composerState,
-                onSendLocationClicked = onSendLocationClicked,
-                onCreatePollClicked = onCreatePollClicked,
-                enableTextFormatting = state.enableTextFormatting,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(Alignment.Bottom)
-            )
-        } else {
-            CantSendMessageBanner()
-        }
+        AttachmentsBottomSheet(
+            state = state.composerState,
+            onSendLocationClicked = onSendLocationClicked,
+            onCreatePollClicked = onCreatePollClicked,
+            enableTextFormatting = state.enableTextFormatting,
+        )
+
+        ExpandableBottomSheetScaffold(
+            sheetDragHandle = if (state.composerState.showTextFormatting) {
+                @Composable { BottomSheetDragHandle() }
+            } else {
+                @Composable {}
+            },
+            sheetSwipeEnabled = state.composerState.showTextFormatting,
+            sheetShape = if (state.composerState.showTextFormatting) MaterialTheme.shapes.large else RectangleShape,
+            content = { paddingValues ->
+                TimelineView(
+                    modifier = Modifier.padding(paddingValues),
+                    state = state.timelineState,
+                    onMessageClicked = onMessageClicked,
+                    onMessageLongClicked = onMessageLongClicked,
+                    onUserDataClicked = onUserDataClicked,
+                    onTimestampClicked = onTimestampClicked,
+                    onReactionClicked = onReactionClicked,
+                    onReactionLongClicked = onReactionLongClicked,
+                    onMoreReactionsClicked = onMoreReactionsClicked,
+                    onSwipeToReply = onSwipeToReply,
+                )
+            },
+            sheetContent = { subcomposing: Boolean ->
+                if (state.userHasPermissionToSendMessage) {
+                    MessageComposerView(
+                        state = state.composerState,
+                        subcomposing = subcomposing,
+                        enableTextFormatting = state.enableTextFormatting,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                } else {
+                    CantSendMessageBanner()
+                }
+            },
+            sheetContentKey = state.composerState.richTextEditorState.lineCount,
+            sheetTonalElevation = 0.dp,
+            sheetShadowElevation = 0.dp,
+        )
     }
 }
 

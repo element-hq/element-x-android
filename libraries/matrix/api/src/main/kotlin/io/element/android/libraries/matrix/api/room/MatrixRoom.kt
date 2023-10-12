@@ -77,9 +77,9 @@ interface MatrixRoom : Closeable {
 
     fun destroy()
 
-    fun subscribeToSync()
+    suspend fun subscribeToSync()
 
-    fun unsubscribeFromSync()
+    suspend fun unsubscribeFromSync()
 
     suspend fun userDisplayName(userId: UserId): Result<String?>
 
@@ -89,7 +89,7 @@ interface MatrixRoom : Closeable {
 
     suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit>
 
-    suspend fun enterReplyMode(eventId: EventId): Result<Unit>
+    suspend fun enterSpecialMode(eventId: EventId?): Result<Unit>
 
     suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit>
 

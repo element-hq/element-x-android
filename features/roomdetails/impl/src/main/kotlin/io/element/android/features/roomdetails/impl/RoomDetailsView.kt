@@ -183,7 +183,7 @@ fun RoomDetailsView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun RoomDetailsTopBar(
+private fun RoomDetailsTopBar(
     goBack: () -> Unit,
     onActionClicked: (RoomDetailsAction) -> Unit,
     showEdit: Boolean,
@@ -220,7 +220,7 @@ internal fun RoomDetailsTopBar(
 }
 
 @Composable
-internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
+private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         val roomNotificationSettings = state.roomNotificationSettings
         if (state.canShowNotificationSettings && roomNotificationSettings != null) {
@@ -252,7 +252,7 @@ internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit
 }
 
 @Composable
-internal fun RoomHeaderSection(
+private fun RoomHeaderSection(
     avatarUrl: String?,
     roomId: String,
     roomName: String,
@@ -289,7 +289,7 @@ internal fun RoomHeaderSection(
 }
 
 @Composable
-internal fun TopicSection(
+private fun TopicSection(
     roomTopic: RoomTopicState,
     onActionClicked: (RoomDetailsAction) -> Unit,
     modifier: Modifier = Modifier
@@ -315,7 +315,7 @@ internal fun TopicSection(
 }
 
 @Composable
-internal fun NotificationSection(
+private fun NotificationSection(
     isDefaultMode: Boolean,
     openRoomNotificationSettings: () -> Unit,
     modifier: Modifier = Modifier
@@ -336,14 +336,14 @@ internal fun NotificationSection(
 }
 
 @Composable
-internal fun MembersSection(
+private fun MembersSection(
     memberCount: Long,
     openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
-            title = stringResource(R.string.screen_room_details_people_title),
+            title = stringResource(CommonStrings.common_people),
             icon = Icons.Outlined.Person,
             currentValue = memberCount.toString(),
             onClick = openRoomMemberList,
@@ -352,7 +352,7 @@ internal fun MembersSection(
 }
 
 @Composable
-internal fun InviteSection(
+private fun InviteSection(
     invitePeople: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -366,7 +366,7 @@ internal fun InviteSection(
 }
 
 @Composable
-internal fun SecuritySection(modifier: Modifier = Modifier) {
+private fun SecuritySection(modifier: Modifier = Modifier) {
     PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title), modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_encryption_enabled_title),
@@ -377,7 +377,7 @@ internal fun SecuritySection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
+private fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_leave_room_title),

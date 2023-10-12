@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
-import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
@@ -61,12 +60,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
-import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
-import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
@@ -84,6 +81,7 @@ class RustMatrixRoom(
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
     private val sessionData: SessionData,
+    private val roomSyncSubscriber: RoomSyncSubscriber,
 ) : MatrixRoom {
 
     override val roomId = RoomId(innerRoom.id())
@@ -118,28 +116,15 @@ class RustMatrixRoom(
 
     override val timeline: MatrixTimeline = _timeline
 
-    override fun subscribeToSync() {
-        val settings = RoomSubscription(
-            requiredState = listOf(
-                RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_TOPIC, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
-            ),
-            timelineLimit = null
-        )
-        roomListItem.subscribe(settings)
-    }
+    override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
-    override fun unsubscribeFromSync() {
-        roomListItem.unsubscribe()
-    }
+    override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
 
     override fun destroy() {
         roomCoroutineScope.cancel()
         innerRoom.destroy()
         roomListItem.destroy()
-        inReplyToEventTimelineItem?.destroy()
+        specialModeEventTimelineItem?.destroy()
     }
 
     override val name: String?
@@ -253,7 +238,14 @@ class RustMatrixRoom(
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
-                    innerRoom.edit(messageEventContentFromParts(body, htmlBody), originalEventId.value)
+                    val editedEvent = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(originalEventId.value)
+                    editedEvent.use {
+                        innerRoom.edit(
+                            newContent = messageEventContentFromParts(body, htmlBody),
+                            editItem = it,
+                        )
+                    }
+                    specialModeEventTimelineItem = null
                 }
             } else {
                 runCatching {
@@ -263,23 +255,23 @@ class RustMatrixRoom(
             }
         }
 
-    private var inReplyToEventTimelineItem: EventTimelineItem? = null
+    private var specialModeEventTimelineItem: EventTimelineItem? = null
 
-    override suspend fun enterReplyMode(eventId: EventId): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            inReplyToEventTimelineItem?.destroy()
-            inReplyToEventTimelineItem = null
-            inReplyToEventTimelineItem = innerRoom.getEventTimelineItemByEventId(eventId.value)
+            specialModeEventTimelineItem?.destroy()
+            specialModeEventTimelineItem = null
+            specialModeEventTimelineItem = eventId?.let { innerRoom.getEventTimelineItemByEventId(it.value) }
         }
     }
 
     override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            val inReplyTo = inReplyToEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
+            val inReplyTo = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
             inReplyTo.use { eventTimelineItem ->
                 innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventTimelineItem)
             }
-            inReplyToEventTimelineItem = null
+            specialModeEventTimelineItem = null
         }
     }
 

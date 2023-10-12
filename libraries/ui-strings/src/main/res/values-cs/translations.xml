@@ -36,6 +36,7 @@
   <string name="action_invite_friends_to_app">"Pozvat přátele do %1$s"</string>
   <string name="action_invite_people_to_app">"Pozvat lidi na %1$s"</string>
   <string name="action_invites_list">"Pozvánky"</string>
+  <string name="action_join">"Vstoupit"</string>
   <string name="action_learn_more">"Zjistit více"</string>
   <string name="action_leave">"Odejít"</string>
   <string name="action_leave_room">"Opustit místnost"</string>
@@ -71,6 +72,7 @@
   <string name="action_take_photo">"Vyfotit"</string>
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
+  <string name="action_edit_poll">"Upravit hlasování"</string>
   <string name="common_about">"O aplikaci"</string>
   <string name="common_acceptable_use_policy">"Zásady používání"</string>
   <string name="common_advanced_settings">"Pokročilá nastavení"</string>
@@ -93,6 +95,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Obrázek"</string>
   <string name="common_in_reply_to">"V odpovědi na %1$s"</string>
+  <string name="common_install_apk_android">"Nainstalovat APK"</string>
   <string name="common_invite_unknown_profile">"Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata."</string>
   <string name="common_leaving_room">"Opuštění místnosti"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
@@ -122,6 +125,7 @@
   <string name="common_room_name_placeholder">"např. název vašeho projektu"</string>
   <string name="common_search_for_someone">"Hledat někoho"</string>
   <string name="common_search_results">"Výsledky hledání"</string>
+  <string name="common_secure_backup">"Zabezpečená záloha"</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_select_your_server">"Vyberte svůj server"</string>
   <string name="common_sending">"Odesílání…"</string>
@@ -148,7 +152,9 @@
   <string name="common_verification_cancelled">"Ověření zrušeno"</string>
   <string name="common_verification_complete">"Ověření dokončeno"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
+  <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
   <string name="common_poll_summary">"Hlasování: %1$s"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_warning">"Upozornění"</string>

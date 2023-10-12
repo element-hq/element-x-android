@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -29,29 +29,37 @@ open class ForwardMessagesStateProvider : PreviewParameterProvider<ForwardMessag
     override val values: Sequence<ForwardMessagesState>
         get() = sequenceOf(
             aForwardMessagesState(),
-            aForwardMessagesState(query = "Test"),
+            aForwardMessagesState(query = "Test", isSearchActive = true),
             aForwardMessagesState(resultState = SearchBarResultState.Results(aForwardMessagesRoomList())),
-            aForwardMessagesState(resultState = SearchBarResultState.Results(aForwardMessagesRoomList()), query = "Test"),
             aForwardMessagesState(
                 resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
                 query = "Test",
+                isSearchActive = true,
+            ),
+            aForwardMessagesState(
+                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                query = "Test",
+                isSearchActive = true,
                 selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain")))
             ),
             aForwardMessagesState(
                 resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
                 query = "Test",
+                isSearchActive = true,
                 selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain"))),
                 isForwarding = true,
             ),
             aForwardMessagesState(
                 resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
                 query = "Test",
+                isSearchActive = true,
                 selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain"))),
                 forwardingSucceeded = persistentListOf(RoomId("!room2:domain")),
             ),
             aForwardMessagesState(
                 resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
                 query = "Test",
+                isSearchActive = true,
                 selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain"))),
                 error = Throwable("error"),
             ),
@@ -78,7 +86,7 @@ fun aForwardMessagesState(
     eventSink = {}
 )
 
-internal fun aForwardMessagesRoomList() = listOf(
+internal fun aForwardMessagesRoomList() = persistentListOf(
     aRoomDetailsState(),
     aRoomDetailsState(roomId = RoomId("!room2:domain"), canonicalAlias = "#element-x-room:matrix.org"),
 )
@@ -94,13 +102,13 @@ fun aRoomDetailsState(
     unreadNotificationCount: Int = 0,
     inviter: RoomMember? = null,
 ) = RoomSummaryDetails(
-        roomId = roomId,
-        name = name,
-        canonicalAlias = canonicalAlias,
-        isDirect = isDirect,
-        avatarURLString = avatarURLString,
-        lastMessage = lastMessage,
-        lastMessageTimestamp = lastMessageTimestamp,
-        unreadNotificationCount = unreadNotificationCount,
-        inviter = inviter,
-    )
+    roomId = roomId,
+    name = name,
+    canonicalAlias = canonicalAlias,
+    isDirect = isDirect,
+    avatarURLString = avatarURLString,
+    lastMessage = lastMessage,
+    lastMessageTimestamp = lastMessageTimestamp,
+    unreadNotificationCount = unreadNotificationCount,
+    inviter = inviter,
+)

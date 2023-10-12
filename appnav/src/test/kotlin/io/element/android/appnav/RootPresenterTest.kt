@@ -42,7 +42,7 @@ class RootPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createPresenter()
+        val presenter = createRootPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -54,7 +54,7 @@ class RootPresenterTest {
 
     @Test
     fun `present - passes app error state`() = runTest {
-        val presenter = createPresenter(
+        val presenter = createRootPresenter(
             appErrorService = DefaultAppErrorStateService().apply {
                 showError("Bad news", "Something bad happened")
             }
@@ -75,7 +75,7 @@ class RootPresenterTest {
         }
     }
 
-    private fun createPresenter(
+    private fun createRootPresenter(
         appErrorService: AppErrorStateService = DefaultAppErrorStateService()
     ): RootPresenter {
         val crashDataStore = FakeCrashDataStore()

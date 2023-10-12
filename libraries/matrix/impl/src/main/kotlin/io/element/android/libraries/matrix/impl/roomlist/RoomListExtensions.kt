@@ -23,14 +23,14 @@ import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.catch
-import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
+import org.matrix.rustcomponents.sdk.RoomListInterface
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListLoadingStateListener
-import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.RoomListServiceStateListener
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
@@ -40,7 +40,7 @@ import timber.log.Timber
 private const val SYNC_INDICATOR_DELAY_BEFORE_SHOWING = 1000u
 private const val SYNC_INDICATOR_DELAY_BEFORE_HIDING = 0u
 
-fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
+fun RoomListInterface.loadingStateFlow(): Flow<RoomListLoadingState> =
     mxCallbackFlow {
         val listener = object : RoomListLoadingStateListener {
             override fun onUpdate(state: RoomListLoadingState) {
@@ -58,7 +58,7 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
         Timber.d(it, "loadingStateFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<List<RoomListEntriesUpdate>> =
+fun RoomListInterface.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<List<RoomListEntriesUpdate>> =
     mxCallbackFlow {
         val listener = object : RoomListEntriesListener {
             override fun onUpdate(roomEntriesUpdate: List<RoomListEntriesUpdate>) {
@@ -76,7 +76,7 @@ fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): 
         Timber.d(it, "entriesFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
+fun RoomListServiceInterface.stateFlow(): Flow<RoomListServiceState> =
     mxCallbackFlow {
         val listener = object : RoomListServiceStateListener {
             override fun onUpdate(state: RoomListServiceState) {
@@ -88,7 +88,7 @@ fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
         }
     }.buffer(Channel.UNLIMITED)
 
-fun RoomListService.syncIndicator(): Flow<RoomListServiceSyncIndicator> =
+fun RoomListServiceInterface.syncIndicator(): Flow<RoomListServiceSyncIndicator> =
     mxCallbackFlow {
         val listener = object : RoomListServiceSyncIndicatorListener {
             override fun onUpdate(syncIndicator: RoomListServiceSyncIndicator) {
@@ -104,7 +104,7 @@ fun RoomListService.syncIndicator(): Flow<RoomListServiceSyncIndicator> =
         }
     }.buffer(Channel.UNLIMITED)
 
-fun RoomListService.roomOrNull(roomId: String): RoomListItem? {
+fun RoomListServiceInterface.roomOrNull(roomId: String): RoomListItem? {
     return try {
         room(roomId)
     } catch (exception: Exception) {

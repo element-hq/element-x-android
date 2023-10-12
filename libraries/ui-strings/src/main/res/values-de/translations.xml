@@ -36,6 +36,7 @@
   <string name="action_invite_friends_to_app">"Freunde einladen %1$s"</string>
   <string name="action_invite_people_to_app">"Lade Personen in %1$s ein"</string>
   <string name="action_invites_list">"Einladungen"</string>
+  <string name="action_join">"Beitreten"</string>
   <string name="action_learn_more">"Mehr erfahren"</string>
   <string name="action_leave">"Verlassen"</string>
   <string name="action_leave_room">"Raum verlassen"</string>
@@ -71,6 +72,7 @@
   <string name="action_take_photo">"Foto machen"</string>
   <string name="action_view_source">"Quelle anzeigen"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="action_edit_poll">"Umfrage bearbeiten"</string>
   <string name="common_about">"Über"</string>
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
@@ -93,6 +95,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Bild"</string>
   <string name="common_in_reply_to">"Als Antwort auf %1$s"</string>
+  <string name="common_install_apk_android">"APK installieren"</string>
   <string name="common_invite_unknown_profile">"Diese Matrix-ID kann nicht gefunden werden, daher wird die Einladung möglicherweise nicht empfangen."</string>
   <string name="common_leaving_room">"Raum verlassen"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
@@ -149,6 +152,7 @@
   <string name="common_verification_complete">"Verifizierung abgeschlossen"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Warten…"</string>
+  <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
   <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_warning">"Warnung"</string>

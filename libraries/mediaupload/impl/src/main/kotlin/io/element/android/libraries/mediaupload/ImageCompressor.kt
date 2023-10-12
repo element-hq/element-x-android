@@ -27,7 +27,6 @@ import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.BufferedInputStream
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
@@ -42,14 +41,14 @@ class ImageCompressor @Inject constructor(
      * @return a [Result] containing the resulting [ImageCompressionResult] with the temporary [File] and some metadata.
      */
     suspend fun compressToTmpFile(
-        inputStream: InputStream,
+        inputStreamProvider: () -> InputStream,
         resizeMode: ResizeMode,
         format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
         orientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         desiredQuality: Int = 80,
     ): Result<ImageCompressionResult> = withContext(Dispatchers.IO) {
         runCatching {
-            val compressedBitmap = compressToBitmap(inputStream, resizeMode, orientation).getOrThrow()
+            val compressedBitmap = compressToBitmap(inputStreamProvider, resizeMode, orientation).getOrThrow()
             // Encode bitmap to the destination temporary file
             val tmpFile = context.createTmpFile(extension = "jpeg")
             tmpFile.outputStream().use {
@@ -65,17 +64,24 @@ class ImageCompressor @Inject constructor(
     }
 
     /**
-     * Decodes the [inputStream] into a [Bitmap] and applies the needed transformations (rotation, scale) based on [resizeMode] and [orientation].
+     * Decodes the inputStream from [inputStreamProvider] into a [Bitmap] and applies the needed transformations (rotation, scale)
+     * based on [resizeMode] and [orientation].
      * @return a [Result] containing the resulting [Bitmap].
      */
     fun compressToBitmap(
-        inputStream: InputStream,
+        inputStreamProvider: () -> InputStream,
         resizeMode: ResizeMode,
         orientation: Int,
     ): Result<Bitmap> = runCatching {
-        BufferedInputStream(inputStream).use { input ->
-            val options = BitmapFactory.Options()
+        val options = BitmapFactory.Options()
+        // Decode bounds
+        inputStreamProvider().use { input ->
             calculateDecodingScale(input, resizeMode, options)
+        }
+        // Decode the actual bitmap
+        inputStreamProvider().use { input ->
+            // Now read the actual image and rotate it to match its metadata
+            options.inJustDecodeBounds = false
             val decodedBitmap = BitmapFactory.decodeStream(input, null, options)
                 ?: error("Decoding Bitmap from InputStream failed")
             val rotatedBitmap = decodedBitmap.rotateToMetadataOrientation(orientation)
@@ -88,7 +94,7 @@ class ImageCompressor @Inject constructor(
     }
 
     private fun calculateDecodingScale(
-        inputStream: BufferedInputStream,
+        inputStream: InputStream,
         resizeMode: ResizeMode,
         options: BitmapFactory.Options
     ) {
@@ -98,14 +104,10 @@ class ImageCompressor @Inject constructor(
             is ResizeMode.None -> return
         }
         // Read bounds only
-        inputStream.mark(inputStream.available())
         options.inJustDecodeBounds = true
         BitmapFactory.decodeStream(inputStream, null, options)
         // Set sample size based on the outWidth and outHeight
         options.inSampleSize = options.calculateInSampleSize(width, height)
-        // Now read the actual image and rotate it to match its metadata
-        inputStream.reset()
-        options.inJustDecodeBounds = false
     }
 }
 

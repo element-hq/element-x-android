@@ -213,7 +213,7 @@ fun TimelineItemEventRow(
  * @param content the content to display.
  */
 @Composable
-fun SwipeSensitivity(
+private fun SwipeSensitivity(
     sensitivityFactor: Float,
     content: @Composable () -> Unit,
 ) {
@@ -306,7 +306,7 @@ private fun TimelineItemEventRowContent(
 
         // Reactions
         if (event.reactionsState.reactions.isNotEmpty()) {
-            TimelineItemReactions(
+            TimelineItemReactionsView(
                 reactionsState = event.reactionsState,
                 isOutgoing = event.isMine,
                 onReactionClicked = onReactionClicked,
@@ -315,7 +315,7 @@ private fun TimelineItemEventRowContent(
                 modifier = Modifier
                     .constrainAs(reactions) {
                         top.linkTo(message.bottom, margin = (-4).dp)
-                        this.linkStartOrEnd(event)
+                        linkStartOrEnd(event)
                     }
                     .zIndex(1f)
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)

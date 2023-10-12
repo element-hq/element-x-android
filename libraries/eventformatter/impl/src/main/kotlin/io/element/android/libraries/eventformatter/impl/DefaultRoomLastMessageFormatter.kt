@@ -106,12 +106,10 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     }
 
     private fun processMessageContents(messageContent: MessageContent, senderDisplayName: String, isDmRoom: Boolean): CharSequence? {
-        val messageType: MessageType = messageContent.type ?: return null
-
-        val internalMessage = when (messageType) {
+        val internalMessage = when (val messageType: MessageType = messageContent.type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
-                return "- $senderDisplayName ${messageType.body}"
+                return "* $senderDisplayName ${messageType.body}"
             }
             is TextMessageType -> {
                 messageType.body
@@ -132,7 +130,8 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 sp.getString(CommonStrings.common_audio)
             }
             UnknownMessageType -> {
-                sp.getString(CommonStrings.common_unsupported_event)
+                // Display the body as a fallback
+                messageContent.body
             }
             is NoticeMessageType -> {
                 messageType.body

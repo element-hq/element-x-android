@@ -39,6 +39,10 @@ open class InviteListStateProvider : PreviewParameterProvider<InviteListState> {
 
 internal fun aInviteListState() = InviteListState(
     inviteList = aInviteListInviteSummaryList(),
+    declineConfirmationDialog = InviteDeclineConfirmationDialog.Hidden,
+    acceptedAction = Async.Uninitialized,
+    declinedAction = Async.Uninitialized,
+    eventSink = {},
 )
 
 internal fun aInviteListInviteSummaryList(): ImmutableList<InviteListInviteSummary> {

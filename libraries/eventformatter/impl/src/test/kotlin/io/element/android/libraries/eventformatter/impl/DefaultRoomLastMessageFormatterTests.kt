@@ -201,11 +201,12 @@ class DefaultRoomLastMessageFormatterTests {
                 is ImageMessageType -> "Image"
                 is FileMessageType -> "File"
                 is LocationMessageType -> "Shared location"
-                is EmoteMessageType -> "- $senderName ${type.body}"
-                is TextMessageType, is NoticeMessageType -> body
-                UnknownMessageType -> "Unsupported event"
+                is EmoteMessageType -> "* $senderName ${type.body}"
+                is TextMessageType,
+                is NoticeMessageType,
+                UnknownMessageType -> body
             }
-            Truth.assertWithMessage("$type was not properly handled").that(result).isEqualTo(expectedResult)
+            Truth.assertWithMessage("$type was not properly handled for DM").that(result).isEqualTo(expectedResult)
         }
 
         // Verify results of Room mode
@@ -217,9 +218,10 @@ class DefaultRoomLastMessageFormatterTests {
                 is ImageMessageType -> "$senderName: Image"
                 is FileMessageType -> "$senderName: File"
                 is LocationMessageType -> "$senderName: Shared location"
-                is EmoteMessageType -> "- $senderName ${type.body}"
-                is TextMessageType, is NoticeMessageType -> "$senderName: $body"
-                UnknownMessageType -> "$senderName: Unsupported event"
+                is TextMessageType,
+                is NoticeMessageType,
+                UnknownMessageType -> "$senderName: $body"
+                is EmoteMessageType -> "* $senderName ${type.body}"
             }
             val shouldCreateAnnotatedString = when (type) {
                 is VideoMessageType -> true
@@ -236,7 +238,7 @@ class DefaultRoomLastMessageFormatterTests {
                     .that(result)
                     .isInstanceOf(AnnotatedString::class.java)
             }
-            Truth.assertWithMessage("$type was not properly handled").that(string).isEqualTo(expectedResult)
+            Truth.assertWithMessage("$type was not properly handled for room").that(string).isEqualTo(expectedResult)
         }
     }
 

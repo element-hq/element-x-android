@@ -36,6 +36,7 @@
   <string name="action_invite_friends_to_app">"Invite friends to %1$s"</string>
   <string name="action_invite_people_to_app">"Invite people to %1$s"</string>
   <string name="action_invites_list">"Invites"</string>
+  <string name="action_join">"Join"</string>
   <string name="action_learn_more">"Learn more"</string>
   <string name="action_leave">"Leave"</string>
   <string name="action_leave_room">"Leave room"</string>
@@ -54,7 +55,7 @@
   <string name="action_reply">"Reply"</string>
   <string name="action_reply_in_thread">"Reply in thread"</string>
   <string name="action_report_bug">"Report bug"</string>
-  <string name="action_report_content">"Report Content"</string>
+  <string name="action_report_content">"Report content"</string>
   <string name="action_retry">"Retry"</string>
   <string name="action_retry_decryption">"Retry decryption"</string>
   <string name="action_save">"Save"</string>
@@ -63,13 +64,14 @@
   <string name="action_send_message">"Send message"</string>
   <string name="action_share">"Share"</string>
   <string name="action_share_link">"Share link"</string>
+  <string name="action_sign_in_again">"Sign in again"</string>
   <string name="action_skip">"Skip"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
   <string name="action_start_verification">"Start verification"</string>
   <string name="action_static_map_load">"Tap to load map"</string>
   <string name="action_take_photo">"Take photo"</string>
-  <string name="action_view_source">"View Source"</string>
+  <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="action_edit_poll">"Edit poll"</string>
   <string name="common_about">"About"</string>
@@ -124,6 +126,7 @@
   <string name="common_room_name_placeholder">"e.g. your project name"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
   <string name="common_search_results">"Search results"</string>
+  <string name="common_secure_backup">"Secure backup"</string>
   <string name="common_security">"Security"</string>
   <string name="common_select_your_server">"Select your server"</string>
   <string name="common_sending">"Sending…"</string>
@@ -150,6 +153,7 @@
   <string name="common_verification_cancelled">"Verification cancelled"</string>
   <string name="common_verification_complete">"Verification complete"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>

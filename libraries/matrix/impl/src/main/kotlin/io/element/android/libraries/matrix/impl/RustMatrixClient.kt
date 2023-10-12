@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
+import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
@@ -114,6 +115,7 @@ class RustMatrixClient constructor(
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
+    private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -124,7 +126,16 @@ class RustMatrixClient constructor(
                 Timber.v("didReceiveAuthError -> do the cleanup")
                 //TODO handle isSoftLogout parameter.
                 appCoroutineScope.launch {
-                    doLogout(doRequest = false)
+                    val existingData = sessionStore.getSession(client.userId())
+                    if (existingData != null) {
+                        // Set isTokenValid to false
+                        val newData = client.session().toSessionData(
+                            isTokenValid = false,
+                            loginType = existingData.loginType,
+                        )
+                        sessionStore.updateData(newData)
+                    }
+                    doLogout(doRequest = false, removeSession = false)
                 }
             } else {
                 Timber.v("didReceiveAuthError -> already cleaning up")
@@ -134,7 +145,12 @@ class RustMatrixClient constructor(
         override fun didRefreshTokens() {
             Timber.w("didRefreshTokens()")
             appCoroutineScope.launch {
-                sessionStore.updateData(client.session().toSessionData())
+                val existingData = sessionStore.getSession(client.userId()) ?: return@launch
+                val newData = client.session().toSessionData(
+                    isTokenValid = existingData.isTokenValid,
+                    loginType = existingData.loginType,
+                )
+                sessionStore.updateData(newData)
             }
         }
     }
@@ -185,6 +201,7 @@ class RustMatrixClient constructor(
                 systemClock = clock,
                 roomContentForwarder = roomContentForwarder,
                 sessionData = sessionStore.getSession(sessionId.value)!!,
+                roomSyncSubscriber = roomSyncSubscriber
             )
         }
     }
@@ -292,7 +309,6 @@ class RustMatrixClient constructor(
             runCatching { client.removeAvatar() }
         }
 
-
     override fun syncService(): SyncService = rustSyncService
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
@@ -326,9 +342,9 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout(): String? = doLogout(doRequest = true)
+    override suspend fun logout(): String? = doLogout(doRequest = true, removeSession = true)
 
-    private suspend fun doLogout(doRequest: Boolean): String? {
+    private suspend fun doLogout(doRequest: Boolean, removeSession: Boolean): String? {
         var result: String? = null
         withContext(sessionDispatcher) {
             if (doRequest) {
@@ -340,7 +356,9 @@ class RustMatrixClient constructor(
             }
             close()
             baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
-            sessionStore.removeSession(sessionId.value)
+            if (removeSession) {
+                sessionStore.removeSession(sessionId.value)
+            }
         }
         return result
     }

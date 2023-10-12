@@ -9,6 +9,7 @@
   <string name="a11y_show_password">"顯示密碼"</string>
   <string name="a11y_user_menu">"使用者選單"</string>
   <string name="action_accept">"接受"</string>
+  <string name="action_add_to_timeline">"新增至時間軸"</string>
   <string name="action_back">"返回"</string>
   <string name="action_cancel">"取消"</string>
   <string name="action_choose_photo">"選擇照片"</string>
@@ -30,9 +31,10 @@
   <string name="action_forward">"轉寄"</string>
   <string name="action_invite">"邀請"</string>
   <string name="action_invite_friends">"邀請朋友"</string>
-  <string name="action_invite_friends_to_app">"邀請朋友使用%1$s"</string>
-  <string name="action_invite_people_to_app">"邀請夥伴使用%1$s"</string>
+  <string name="action_invite_friends_to_app">"邀請朋友使用 %1$s"</string>
+  <string name="action_invite_people_to_app">"邀請夥伴使用 %1$s"</string>
   <string name="action_invites_list">"邀請"</string>
+  <string name="action_join">"加入"</string>
   <string name="action_learn_more">"了解更多"</string>
   <string name="action_leave">"離開"</string>
   <string name="action_leave_room">"離開聊天室"</string>
@@ -68,6 +70,7 @@
   <string name="action_take_photo">"拍照"</string>
   <string name="action_view_source">"檢視原始碼"</string>
   <string name="action_yes">"是"</string>
+  <string name="action_edit_poll">"編輯投票"</string>
   <string name="common_about">"關於"</string>
   <string name="common_acceptable_use_policy">"可接受使用政策"</string>
   <string name="common_advanced_settings">"進階設定"</string>
@@ -89,6 +92,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"圖片"</string>
   <string name="common_in_reply_to">"回覆 %1$s"</string>
+  <string name="common_install_apk_android">"安裝 APK"</string>
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能沒有人會收到邀請。"</string>
   <string name="common_leaving_room">"正在離開聊天室"</string>
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
@@ -119,6 +123,7 @@
   <string name="common_security">"安全性"</string>
   <string name="common_select_your_server">"選擇您的伺服器"</string>
   <string name="common_sending">"傳送中…"</string>
+  <string name="common_server_not_supported">"伺服器不支援"</string>
   <string name="common_server_url">"伺服器 URL"</string>
   <string name="common_settings">"設定"</string>
   <string name="common_sticker">"貼圖"</string>
@@ -132,11 +137,14 @@
   <string name="common_unable_to_invite_message">"無法發送邀請給一或多個使用者。"</string>
   <string name="common_unable_to_invite_title">"無法發送邀請"</string>
   <string name="common_unmute">"開啟通知"</string>
+  <string name="common_unsupported_event">"不支援的事件"</string>
   <string name="common_username">"使用者名稱"</string>
   <string name="common_verification_cancelled">"驗證已取消"</string>
   <string name="common_verification_complete">"驗證完成"</string>
   <string name="common_video">"影片"</string>
+  <string name="common_voice_message">"語音訊息"</string>
   <string name="common_waiting">"等待中…"</string>
+  <string name="common_poll_end_confirmation">"您確定要結束這項投票嗎？"</string>
   <string name="common_poll_summary">"投票：%1$s"</string>
   <string name="dialog_title_confirmation">"確認"</string>
   <string name="dialog_title_warning">"警告"</string>
@@ -152,7 +160,10 @@
   <string name="error_failed_loading_map">"%1$s無法載入地圖。請稍後再試。"</string>
   <string name="error_failed_loading_messages">"無法載入訊息"</string>
   <string name="error_failed_locating_user">"%1$s無法取得您的位置。請稍後再試。"</string>
+  <string name="error_missing_location_auth_android">"%1$s 沒有權限存取您的位置。您可以到設定中開啟權限。"</string>
+  <string name="error_missing_location_rationale_android">"%1$s 沒有權限存取您的位置。請在下方開啟權限。"</string>
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>
+  <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="leave_room_alert_empty_subtitle">"您確定要離開聊天室嗎？這裡只有您一個人。如果您離開了，包含您在內的所有人都無法再進入此聊天室。"</string>
   <string name="leave_room_alert_private_subtitle">"您確定要離開聊天室嗎？此聊天室不是公開的，如果沒有收到邀請，您無法重新加入。"</string>
   <string name="leave_room_alert_subtitle">"您確定要離開聊天室嗎？"</string>
@@ -169,6 +180,8 @@
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
   <string name="screen_notification_settings_direct_chats">"私訊"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知設定時發生錯誤。"</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"所有訊息"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
   <string name="screen_notification_settings_enable_notifications">"在這個裝置上開啟通知"</string>
   <string name="screen_notification_settings_group_chats">"群組聊天"</string>
@@ -190,7 +203,7 @@
   <string name="test_language_identifier">"zh-tw"</string>
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
-  <string name="screen_analytics_settings_help_us_improve">"分享匿名的使用數據以協助我們釐清問題"</string>
+  <string name="screen_analytics_settings_help_us_improve">"分享匿名的使用數據以協助我們釐清問題。"</string>
   <string name="screen_analytics_settings_read_terms">"您可以到%1$s閱讀我們的條款。"</string>
   <string name="screen_analytics_settings_read_terms_content_link">"這裡"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>

@@ -139,7 +139,7 @@ fun ConfigureTracingView(
 }
 
 @Composable
-fun CrateListContent(
+private fun CrateListContent(
     state: ConfigureTracingState,
     modifier: Modifier = Modifier
 ) {
@@ -178,7 +178,7 @@ private fun TargetAndLogLevelListView(
 }
 
 @Composable
-fun TargetAndLogLevelView(
+private fun TargetAndLogLevelView(
     target: Target,
     logLevel: LogLevel,
     onLogLevelChange: (LogLevel) -> Unit,
@@ -197,7 +197,7 @@ fun TargetAndLogLevelView(
 }
 
 @Composable
-fun LogLevelDropdownMenu(
+private fun LogLevelDropdownMenu(
     logLevel: LogLevel,
     onLogLevelChange: (LogLevel) -> Unit,
     modifier: Modifier = Modifier,

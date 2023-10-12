@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
@@ -49,7 +50,10 @@ class TimelineItemContentFactory @Inject constructor(
         return when (val itemContent = eventTimelineItem.content) {
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
-            is MessageContent -> messageFactory.create(itemContent)
+            is MessageContent -> {
+                val senderDisplayName = (eventTimelineItem.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: eventTimelineItem.sender.value
+                messageFactory.create(itemContent, senderDisplayName)
+            }
             is ProfileChangeContent -> profileChangeFactory.create(eventTimelineItem)
             is RedactedContent -> redactedMessageFactory.create(itemContent)
             is RoomMembershipContent -> roomMembershipFactory.create(eventTimelineItem)

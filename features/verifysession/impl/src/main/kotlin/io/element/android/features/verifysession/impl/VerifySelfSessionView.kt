@@ -42,8 +42,8 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -51,7 +51,6 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.sync.Mutex
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
 @Composable
@@ -74,7 +73,6 @@ fun VerifySelfSessionView(
     val buttonsVisible by remember(verificationFlowStep) {
         derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
-    Mutex()
     HeaderFooterPage(
         modifier = modifier,
         header = {
@@ -91,7 +89,7 @@ fun VerifySelfSessionView(
 }
 
 @Composable
-internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = Modifier) {
+private fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = Modifier) {
     val iconResourceId = when (verificationFlowStep) {
         FlowStep.Initial -> R.drawable.ic_verification_devices
         FlowStep.Canceled -> R.drawable.ic_verification_warning
@@ -100,7 +98,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
     }
     val titleTextId = when (verificationFlowStep) {
         FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_title
-        FlowStep.Canceled -> R.string.screen_session_verification_cancelled_title
+        FlowStep.Canceled -> CommonStrings.common_verification_cancelled
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_title
         FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_title
     }
@@ -120,7 +118,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
 }
 
 @Composable
-internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
+private fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
         when (flowState) {
             FlowStep.Initial, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
@@ -131,14 +129,14 @@ internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun ContentWaiting(modifier: Modifier = Modifier) {
+private fun ContentWaiting(modifier: Modifier = Modifier) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         CircularProgressIndicator()
     }
 }
 
 @Composable
-internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
+private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
     // We want each row to have up to 4 emojis
     val rows = verificationFlowStep.emojiList.chunked(4)
     Column(modifier = modifier.fillMaxWidth()) {
@@ -157,7 +155,7 @@ internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier
 }
 
 @Composable
-internal fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
+private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Text(
             text = emoji.code,
@@ -175,7 +173,7 @@ internal fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifi
 }
 
 @Composable
-internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) {
+private fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) {
     val verificationViewState = screenState.verificationFlowStep
     val eventSink = screenState.eventSink
 
@@ -190,7 +188,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 R.string.screen_session_verification_they_match
             }
         }
-        FlowStep.Ready -> R.string.screen_session_verification_positive_button_ready
+        FlowStep.Ready -> CommonStrings.action_start
         else -> null
     }
     val negativeButtonTitle = when (verificationViewState) {

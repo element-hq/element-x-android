@@ -25,7 +25,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
@@ -39,6 +38,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import javax.inject.Inject
 
@@ -47,11 +47,11 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private val fileExtensionExtractor: FileExtensionExtractor,
 ) {
 
-    fun create(content: MessageContent): TimelineItemEventContent {
+    fun create(content: MessageContent, senderDisplayName: String): TimelineItemEventContent {
         return when (val messageType = content.type) {
             is EmoteMessageType -> TimelineItemEmoteContent(
-                body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                body = "* $senderDisplayName ${messageType.body}",
+                htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* senderDisplayName"),
                 isEdited = content.isEdited,
             )
             is ImageMessageType -> {
@@ -130,7 +130,12 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
                 isEdited = content.isEdited,
             )
-            else -> TimelineItemUnknownContent
+            UnknownMessageType -> TimelineItemTextContent(
+                // Display the body as a fallback
+                body = content.body,
+                htmlDocument = null,
+                isEdited = content.isEdited,
+            )
         }
     }
 

@@ -21,6 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
@@ -55,7 +56,7 @@ class ShowLocationPresenterTest {
     @Test
     fun `emits initial state with no location permission`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
             )
@@ -75,7 +76,7 @@ class ShowLocationPresenterTest {
     @Test
     fun `emits initial state location permission denied once`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
             )
@@ -94,7 +95,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `emits initial state with location permission`() = runTest {
-        permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.AllGranted))
+        permissionsPresenterFake.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -109,7 +110,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `emits initial state with partial location permission`() = runTest {
-        permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.SomeGranted))
+        permissionsPresenterFake.givenState(aPermissionsState(permissions = PermissionsState.Permissions.SomeGranted))
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -137,7 +138,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `centers on user location`() = runTest {
-        permissionsPresenterFake.givenState(PermissionsState(permissions = PermissionsState.Permissions.AllGranted))
+        permissionsPresenterFake.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -166,7 +167,7 @@ class ShowLocationPresenterTest {
     @Test
     fun `rationale dialog dismiss`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
             )
@@ -197,7 +198,7 @@ class ShowLocationPresenterTest {
     @Test
     fun `rationale dialog continue`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
             )
@@ -225,7 +226,7 @@ class ShowLocationPresenterTest {
     @Test
     fun `permission denied dialog dismiss`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
             )
@@ -256,7 +257,7 @@ class ShowLocationPresenterTest {
     @Test
     fun `open settings activity`() = runTest {
         permissionsPresenterFake.givenState(
-            PermissionsState(
+            aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
             )
@@ -289,7 +290,6 @@ class ShowLocationPresenterTest {
             Truth.assertThat(initialState.appName).isEqualTo("app name")
         }
     }
-
 
     companion object {
         private const val A_DESCRIPTION = "My happy place"

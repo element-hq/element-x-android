@@ -21,7 +21,6 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawBehind
@@ -94,8 +93,8 @@ fun Modifier.blurredShapeShadow(
 fun Modifier.blurCompat(
     radius: Dp,
     edgeTreatment: BlurredEdgeTreatment = BlurredEdgeTreatment.Rectangle
-): Modifier = composed {
-    when {
+): Modifier {
+    return when {
         radius.value == 0f -> this
         canUseBlur() -> blur(radius, edgeTreatment)
         else -> this // Added in case we find a way to make this work on older devices

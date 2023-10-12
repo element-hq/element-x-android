@@ -16,27 +16,27 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.textcomposer.Message
 import io.element.android.libraries.textcomposer.TextComposer
+import kotlinx.coroutines.launch
 
 @Composable
 fun MessageComposerView(
     state: MessageComposerState,
-    onSendLocationClicked: () -> Unit,
-    onCreatePollClicked: () -> Unit,
+    subcomposing: Boolean,
     enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    fun onFullscreenToggle() {
-        state.eventSink(MessageComposerEvents.ToggleFullScreenState)
-    }
-
     fun sendMessage(message: Message) {
         state.eventSink(MessageComposerEvents.SendMessage(message))
     }
@@ -57,37 +57,44 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.Error(error))
     }
 
-    Box(modifier = modifier) {
-        AttachmentsBottomSheet(
-            state = state,
-            onSendLocationClicked = onSendLocationClicked,
-            onCreatePollClicked = onCreatePollClicked,
-            enableTextFormatting = enableTextFormatting,
-        )
-
-        TextComposer(
-            state = state.richTextEditorState,
-            canSendMessage = state.canSendMessage,
-            onRequestFocus = { state.richTextEditorState.requestFocus() },
-            onSendMessage = ::sendMessage,
-            composerMode = state.mode,
-            showTextFormatting = state.showTextFormatting,
-            onResetComposerMode = ::onCloseSpecialMode,
-            onAddAttachment = ::onAddAttachment,
-            onDismissTextFormatting = ::onDismissTextFormatting,
-            enableTextFormatting = enableTextFormatting,
-            onError = ::onError,
-        )
+    val coroutineScope = rememberCoroutineScope()
+    fun onRequestFocus() {
+        coroutineScope.launch {
+            state.richTextEditorState.requestFocus()
+        }
     }
+
+    TextComposer(
+        modifier = modifier,
+        state = state.richTextEditorState,
+        subcomposing = subcomposing,
+        onRequestFocus = ::onRequestFocus,
+        onSendMessage = ::sendMessage,
+        composerMode = state.mode,
+        showTextFormatting = state.showTextFormatting,
+        onResetComposerMode = ::onCloseSpecialMode,
+        onAddAttachment = ::onAddAttachment,
+        onDismissTextFormatting = ::onDismissTextFormatting,
+        enableTextFormatting = enableTextFormatting,
+        onError = ::onError,
+    )
 }
 
 @PreviewsDayNight
 @Composable
 internal fun MessageComposerViewPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) = ElementPreview {
-    MessageComposerView(
-        state = state,
-        onSendLocationClicked = {},
-        onCreatePollClicked = {},
-        enableTextFormatting = true,
-    )
+    Column {
+        MessageComposerView(
+            modifier = Modifier.height(IntrinsicSize.Min),
+            state = state,
+            enableTextFormatting = true,
+            subcomposing = false,
+        )
+        MessageComposerView(
+            modifier = Modifier.height(200.dp),
+            state = state,
+            enableTextFormatting = true,
+            subcomposing = false,
+        )
+    }
 }

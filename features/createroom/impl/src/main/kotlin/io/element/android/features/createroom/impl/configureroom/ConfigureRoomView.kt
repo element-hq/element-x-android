@@ -181,7 +181,7 @@ fun ConfigureRoomView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfigureRoomToolbar(
+private fun ConfigureRoomToolbar(
     isNextActionEnabled: Boolean,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
@@ -207,7 +207,7 @@ fun ConfigureRoomToolbar(
 }
 
 @Composable
-fun RoomNameWithAvatar(
+private fun RoomNameWithAvatar(
     avatarUri: Uri?,
     roomName: String,
     modifier: Modifier = Modifier,
@@ -235,7 +235,7 @@ fun RoomNameWithAvatar(
 }
 
 @Composable
-fun RoomTopic(
+private fun RoomTopic(
     topic: String,
     modifier: Modifier = Modifier,
     onTopicChanged: (String) -> Unit = {},
@@ -254,7 +254,7 @@ fun RoomTopic(
 }
 
 @Composable
-fun RoomPrivacyOptions(
+private fun RoomPrivacyOptions(
     selected: RoomPrivacy?,
     modifier: Modifier = Modifier,
     onOptionSelected: (RoomPrivacyItem) -> Unit = {},

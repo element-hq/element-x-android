@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Entwickler-Modus"</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiviere den Rich-Text-Editor, um Markdown manuell einzugeben."</string>
   <string name="screen_edit_profile_display_name">"Anzeigename"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Dein Anzeigename"</string>
   <string name="screen_edit_profile_error">"Ein unbekannter Fehler ist aufgetreten und die Informationen konnten nicht geändert werden."</string>

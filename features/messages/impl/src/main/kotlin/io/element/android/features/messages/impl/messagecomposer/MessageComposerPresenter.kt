@@ -35,8 +35,8 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.designsystem.utils.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -155,7 +155,9 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
-                    richTextEditorState.setHtml("")
+                    localCoroutineScope.launch {
+                        richTextEditorState.setHtml("")
+                    }
                     messageComposerContext.composerMode = MessageComposerMode.Normal("")
                 }
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
@@ -165,9 +167,14 @@ class MessageComposerPresenter @Inject constructor(
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
-                    if (event.composerMode is MessageComposerMode.Reply) {
+                    when (event.composerMode) {
+                        is MessageComposerMode.Reply -> event.composerMode.eventId
+                        is MessageComposerMode.Edit -> event.composerMode.eventId
+                        is MessageComposerMode.Normal -> null
+                        is MessageComposerMode.Quote -> null
+                    }.let { relatedEventId ->
                         appCoroutineScope.launch {
-                            room.enterReplyMode(event.composerMode.eventId)
+                            room.enterSpecialMode(relatedEventId)
                         }
                     }
                 }

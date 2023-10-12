@@ -37,6 +37,7 @@ fun aRoomMemberDetailsState() = RoomMemberDetailsState(
     userName = "Daniel",
     avatarUrl = null,
     isBlocked = Async.Success(false),
+    displayConfirmationDialog = null,
     isCurrentUser = false,
     eventSink = {},
 )

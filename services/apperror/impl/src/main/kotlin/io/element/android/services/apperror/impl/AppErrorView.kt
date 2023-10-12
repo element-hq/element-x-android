@@ -37,7 +37,7 @@ fun AppErrorView(
 }
 
 @Composable
-fun AppErrorViewContent(
+private fun AppErrorViewContent(
     title: String,
     body: String,
     onDismiss: () -> Unit = { },

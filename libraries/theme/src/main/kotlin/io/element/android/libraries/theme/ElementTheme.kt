@@ -26,7 +26,6 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
@@ -138,27 +137,7 @@ fun ElementTheme(
     }
 }
 
-/**
- * Can be used to force a composable in dark theme.
- * It will automatically change the system ui colors back to normal when leaving the composition.
- */
-@Composable
-fun ForcedDarkElementTheme(
-    lightStatusBar: Boolean = false,
-    content: @Composable () -> Unit,
-) {
-    val systemUiController = rememberSystemUiController()
-    val colorScheme = MaterialTheme.colorScheme
-    val wasDarkTheme = !ElementTheme.colors.isLight
-    DisposableEffect(Unit) {
-        onDispose {
-            systemUiController.applyTheme(colorScheme, wasDarkTheme)
-        }
-    }
-    ElementTheme(darkTheme = true, lightStatusBar = lightStatusBar, content = content)
-}
-
-private fun SystemUiController.applyTheme(
+internal fun SystemUiController.applyTheme(
     colorScheme: ColorScheme,
     darkTheme: Boolean,
 ) {

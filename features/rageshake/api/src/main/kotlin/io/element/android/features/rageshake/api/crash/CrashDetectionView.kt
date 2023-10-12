@@ -49,7 +49,7 @@ fun CrashDetectionView(
 }
 
 @Composable
-fun CrashDetectionContent(
+private fun CrashDetectionContent(
     onNoClicked: () -> Unit = { },
     onYesClicked: () -> Unit = { },
     onDismiss: () -> Unit = { },

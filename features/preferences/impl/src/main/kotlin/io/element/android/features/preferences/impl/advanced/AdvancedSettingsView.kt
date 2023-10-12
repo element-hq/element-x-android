@@ -20,10 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceView
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -32,23 +33,20 @@ fun AdvancedSettingsView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    PreferenceView(
+    PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
         title = stringResource(id = CommonStrings.common_advanced_settings)
     ) {
         PreferenceSwitch(
             title = stringResource(id = CommonStrings.common_rich_text_editor),
-            // TODO i18n
-            subtitle = "Disable the rich text editor to type Markdown manually",
+            subtitle = stringResource(id = R.string.screen_advanced_settings_rich_text_editor_description),
             isChecked = state.isRichTextEditorEnabled,
             onCheckedChange = { state.eventSink(AdvancedSettingsEvents.SetRichTextEditorEnabled(it)) },
         )
         PreferenceSwitch(
-            // TODO i18n
-            title = "Developer mode",
-            // TODO i18n
-            subtitle = "The developer mode activates hidden features. For developers only!",
+            title = stringResource(id = R.string.screen_advanced_settings_developer_mode),
+            subtitle = stringResource(id = R.string.screen_advanced_settings_developer_mode_description),
             isChecked = state.isDeveloperModeEnabled,
             onCheckedChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(it)) },
         )

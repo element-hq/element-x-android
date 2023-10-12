@@ -54,12 +54,13 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderVie
 import io.element.android.features.login.impl.changeserver.ChangeServerEvents
 import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.resolver.HomeserverData
+import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -195,9 +196,9 @@ fun SearchAccountProviderView(
 
 @Composable
 private fun HomeserverData.toAccountProvider(): AccountProvider {
-    val isMatrixOrg = homeserverUrl == "https://matrix.org"
+    val isMatrixOrg = homeserverUrl == LoginConstants.MATRIX_ORG_URL
     return AccountProvider(
-        title = homeserverUrl.removePrefix("http://").removePrefix("https://"),
+        url = homeserverUrl,
         subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
         isPublic = isMatrixOrg, // There is no need to know for other servers right now
         isMatrixOrg = isMatrixOrg,

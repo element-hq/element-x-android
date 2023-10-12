@@ -111,7 +111,7 @@ fun InviteListView(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun InviteListContent(
+private fun InviteListContent(
     state: InviteListState,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},

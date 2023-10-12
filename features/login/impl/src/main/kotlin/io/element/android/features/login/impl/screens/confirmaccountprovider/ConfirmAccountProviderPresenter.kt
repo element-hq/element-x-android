@@ -76,7 +76,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
         fun handleEvents(event: ConfirmAccountProviderEvents) {
             when (event) {
                 ConfirmAccountProviderEvents.Continue -> {
-                    localCoroutineScope.submit(accountProvider.title, loginFlowAction)
+                    localCoroutineScope.submit(accountProvider.url, loginFlowAction)
                 }
                 ConfirmAccountProviderEvents.ClearError -> loginFlowAction.value = Async.Uninitialized
             }

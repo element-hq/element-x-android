@@ -31,15 +31,15 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.components.preferences.PreferenceView
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.designsystem.utils.SnackbarHost
-import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
 import io.element.android.libraries.theme.ElementTheme
@@ -64,7 +64,7 @@ fun PreferencesRootView(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     // Include pref from other modules
-    PreferenceView(
+    PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
         title = stringResource(id = CommonStrings.common_settings),
@@ -151,7 +151,7 @@ fun PreferencesRootView(
 }
 
 @Composable
-fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
+private fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
     PreferenceText(
         title = stringResource(id = CommonStrings.common_developer_options),
         iconResourceId = CommonDrawables.ic_developer_mode,

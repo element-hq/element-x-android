@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.sessionstorage.impl.memory
 
+import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
@@ -26,8 +27,17 @@ class InMemorySessionStore : SessionStore {
 
     private var sessionDataFlow = MutableStateFlow<SessionData?>(null)
 
-    override fun isLoggedIn(): Flow<Boolean> {
-        return sessionDataFlow.map { it != null }
+    override fun isLoggedIn(): Flow<LoggedInState> {
+        return sessionDataFlow.map {
+            if (it == null) {
+                LoggedInState.NotLoggedIn
+            } else {
+                LoggedInState.LoggedIn(
+                    sessionId = it.userId,
+                    isTokenValid = it.isTokenValid,
+                )
+            }
+        }
     }
 
     override fun sessionsFlow(): Flow<List<SessionData>> {
