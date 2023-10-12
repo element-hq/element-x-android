@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class MatrixToConverterTests {
+class MatrixToConverterTest {
 
     @Test
     fun `converting a matrix-to url does nothing`() {

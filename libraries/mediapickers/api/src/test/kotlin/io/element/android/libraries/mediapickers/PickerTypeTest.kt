@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class PickerTypeTests {
+class PickerTypeTest {
 
     @Test
     fun `ImageAndVideo - assert types`() {

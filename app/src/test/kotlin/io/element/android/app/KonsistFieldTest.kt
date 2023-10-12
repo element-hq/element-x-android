@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.utils
+package io.element.android.app
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.lemonappdev.konsist.api.Konsist
+import com.lemonappdev.konsist.api.ext.list.properties
+import com.lemonappdev.konsist.api.verify.assertFalse
+import org.junit.Test
 
-open class PairCombinedProvider<T1, T2>(
-    private val provider: Pair<PreviewParameterProvider<T1>, PreviewParameterProvider<T2>>
-) : PreviewParameterProvider<Pair<T1, T2>> {
-    override val values: Sequence<Pair<T1, T2>>
-        get() = provider.first.values.flatMap { first ->
-            provider.second.values.map { second ->
-                first to second
+class KonsistFieldTest {
+    @Test
+    fun `no field should have 'm' prefix`() {
+        Konsist
+            .scopeFromProject()
+            .classes()
+            .properties()
+            .assertFalse {
+                val secondCharacterIsUppercase = it.name.getOrNull(1)?.isUpperCase() ?: false
+                it.name.startsWith('m') && secondCharacterIsUppercase
             }
-        }
+    }
 }

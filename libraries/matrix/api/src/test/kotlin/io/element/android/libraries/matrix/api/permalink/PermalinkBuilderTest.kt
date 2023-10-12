@@ -23,7 +23,7 @@ import io.element.android.tests.testutils.assertThrowsInDebug
 import io.element.android.tests.testutils.isInDebug
 import org.junit.Test
 
-class PermalinkBuilderTests {
+class PermalinkBuilderTest {
 
     fun `building a permalink for an invalid user id throws when verifying the id`() {
         assertThrowsInDebug {

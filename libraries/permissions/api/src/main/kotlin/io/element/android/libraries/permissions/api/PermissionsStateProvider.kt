@@ -19,7 +19,7 @@ package io.element.android.libraries.permissions.api
 import android.Manifest
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-open class PermissionsViewStateProvider : PreviewParameterProvider<PermissionsState> {
+open class PermissionsStateProvider : PreviewParameterProvider<PermissionsState> {
     override val values: Sequence<PermissionsState>
         get() = sequenceOf(
             aPermissionsState(showDialog = true, permission = Manifest.permission.POST_NOTIFICATIONS),

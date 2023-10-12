@@ -57,7 +57,7 @@ private fun String.toDialogContent(): String {
 
 @PreviewsDayNight
 @Composable
-internal fun PermissionsViewPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) = ElementPreview {
+internal fun PermissionsViewPreview(@PreviewParameter(PermissionsStateProvider::class) state: PermissionsState) = ElementPreview {
     PermissionsView(
         state = state,
     )

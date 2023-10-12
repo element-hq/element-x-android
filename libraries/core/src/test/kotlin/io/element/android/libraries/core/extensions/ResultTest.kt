@@ -19,7 +19,7 @@ package io.element.android.libraries.core.extensions
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class ResultTests {
+class ResultTest {
 
     @Test
     fun testFlatMap() {
