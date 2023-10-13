@@ -44,7 +44,7 @@ internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -
         }
         val roomId = id()
         Timber.d("Open timelineDiffFlow for room $roomId")
-        val result = addTimelineListenerBlocking(listener)
+        val result = addTimelineListener(listener)
         try {
             onInitialList(result.items)
         } catch (exception: Exception) {

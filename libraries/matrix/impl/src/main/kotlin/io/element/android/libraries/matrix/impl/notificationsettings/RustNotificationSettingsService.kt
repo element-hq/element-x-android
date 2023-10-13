@@ -47,19 +47,15 @@ class RustNotificationSettingsService(
         notificationSettings.setDelegate(notificationSettingsDelegate)
     }
 
-    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> = withContext(
-        dispatchers.io
-    ) {
+    override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> =
         runCatching {
-            notificationSettings.getRoomNotificationSettingsBlocking(roomId.value, isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::map)
+            notificationSettings.getRoomNotificationSettings(roomId.value, isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::map)
         }
-    }
 
-    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode> = withContext(dispatchers.io) {
+    override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode> =
         runCatching {
-            notificationSettings.getDefaultRoomNotificationModeBlocking(isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::mapMode)
+            notificationSettings.getDefaultRoomNotificationMode(isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::mapMode)
         }
-    }
 
     override suspend fun setDefaultRoomNotificationMode(
         isEncrypted: Boolean,
@@ -67,19 +63,19 @@ class RustNotificationSettingsService(
         isOneToOne: Boolean
     ): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.setDefaultRoomNotificationModeBlocking(isEncrypted, isOneToOne, mode.let(RoomNotificationSettingsMapper::mapMode))
+            notificationSettings.setDefaultRoomNotificationMode(isEncrypted, isOneToOne, mode.let(RoomNotificationSettingsMapper::mapMode))
         }
     }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.setRoomNotificationModeBlocking(roomId.value, mode.let(RoomNotificationSettingsMapper::mapMode))
+            notificationSettings.setRoomNotificationMode(roomId.value, mode.let(RoomNotificationSettingsMapper::mapMode))
         }
     }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.restoreDefaultRoomNotificationModeBlocking(roomId.value)
+            notificationSettings.restoreDefaultRoomNotificationMode(roomId.value)
         }
     }
 
@@ -87,31 +83,31 @@ class RustNotificationSettingsService(
 
     override suspend fun unmuteRoom(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean) = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.unmuteRoomBlocking(roomId.value, isEncrypted, isOneToOne)
+            notificationSettings.unmuteRoom(roomId.value, isEncrypted, isOneToOne)
         }
     }
 
     override suspend fun isRoomMentionEnabled(): Result<Boolean> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.isRoomMentionEnabledBlocking()
+            notificationSettings.isRoomMentionEnabled()
         }
     }
 
     override suspend fun setRoomMentionEnabled(enabled: Boolean): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.setRoomMentionEnabledBlocking(enabled)
+            notificationSettings.setRoomMentionEnabled(enabled)
         }
     }
 
     override suspend fun isCallEnabled(): Result<Boolean> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.isCallEnabledBlocking()
+            notificationSettings.isCallEnabled()
         }
     }
 
     override suspend fun setCallEnabled(enabled: Boolean): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.setCallEnabledBlocking(enabled)
+            notificationSettings.setCallEnabled(enabled)
         }
     }
 }
