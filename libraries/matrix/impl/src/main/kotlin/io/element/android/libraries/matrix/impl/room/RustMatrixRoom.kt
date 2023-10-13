@@ -376,7 +376,7 @@ class RustMatrixRoom(
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList(), null)
+            innerRoom.uploadAvatar(mimeType, data, null)
         }
     }
 
@@ -463,6 +463,20 @@ class RustMatrixRoom(
                 text = text,
             )
         }
+    }
+
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Int>,
+        progressWatcher: ProgressCallback?,
+    ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
+        innerRoom.sendVoiceMessage(
+            url = file.path,
+            audioInfo = audioInfo.map(),
+            waveform = waveform.map { it.toUShort() },
+            progressWatcher = progressWatcher?.toProgressWatcher(),
+        )
     }
 
     private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
