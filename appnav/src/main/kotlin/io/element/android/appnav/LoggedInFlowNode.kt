@@ -50,6 +50,9 @@ import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.pin.api.PinEntryPoint
+import io.element.android.features.pin.api.PinState
+import io.element.android.features.pin.api.PinStateService
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
@@ -90,6 +93,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val networkMonitor: NetworkMonitor,
     private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueState: FtueState,
+    private val pinEntryPoint: PinEntryPoint,
+    private val pinStateService: PinStateService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
@@ -98,7 +103,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         savedStateMap = buildContext.savedStateMap,
     ),
     permanentNavModel = PermanentNavModel(
-        NavTarget.Permanent,
+        navTargets = setOf(NavTarget.LoggedInPermanent, NavTarget.LockPermanent),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -129,9 +134,19 @@ class LoggedInFlowNode @AssistedInject constructor(
                     backstack.push(NavTarget.Ftue)
                 }
             },
-            onStop = {
-                //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
+            onResume = {
                 coroutineScope.launch {
+                    pinStateService.entersForeground()
+                }
+            },
+            onPause = {
+                coroutineScope.launch {
+                    pinStateService.entersBackground()
+                }
+            },
+            onStop = {
+                coroutineScope.launch {
+                    //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                     syncService.stopSync()
                 }
             },
@@ -167,7 +182,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Permanent : NavTarget
+        data object LoggedInPermanent : NavTarget
+
+        @Parcelize
+        data object LockPermanent : NavTarget
 
         @Parcelize
         data object RoomList : NavTarget
@@ -196,8 +214,11 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Permanent -> {
+            NavTarget.LoggedInPermanent -> {
                 createNode<LoggedInNode>(buildContext)
+            }
+            NavTarget.LockPermanent -> {
+                pinEntryPoint.createNode(this, buildContext)
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
@@ -324,17 +345,24 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
-            Children(
-                navModel = backstack,
-                modifier = Modifier,
-                // Animate navigation to settings and to a room
-                transitionHandler = rememberDefaultTransitionHandler(),
-            )
-
-            val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
-
-            if (!isFtueDisplayed) {
-                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.Permanent)
+            val pinState by pinStateService.pinState.collectAsState()
+            when (pinState) {
+                PinState.Unlocked -> {
+                    Children(
+                        navModel = backstack,
+                        modifier = Modifier,
+                        // Animate navigation to settings and to a room
+                        transitionHandler = rememberDefaultTransitionHandler(),
+                    )
+                    val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
+                    if (!isFtueDisplayed) {
+                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                    }
+                }
+                PinState.Locked -> {
+                    MoveActivityToBackgroundBackHandler()
+                    PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
+                }
             }
         }
     }

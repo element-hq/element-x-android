@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.loggedin
+package io.element.android.features.pin.impl.auth
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,23 +24,20 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.AppScope
 
-@ContributesNode(SessionScope::class)
-class LoggedInNode @AssistedInject constructor(
+@ContributesNode(AppScope::class)
+class PinAuthenticationNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val loggedInPresenter: LoggedInPresenter,
-) : Node(
-    buildContext = buildContext,
-    plugins = plugins
-) {
+    private val presenter: PinAuthenticationPresenter,
+) : Node(buildContext, plugins = plugins) {
 
     @Composable
     override fun View(modifier: Modifier) {
-        val loggedInState = loggedInPresenter.present()
-        LoggedInView(
-            state = loggedInState,
+        val state = presenter.present()
+        PinAuthenticationView(
+            state = state,
             modifier = modifier
         )
     }
