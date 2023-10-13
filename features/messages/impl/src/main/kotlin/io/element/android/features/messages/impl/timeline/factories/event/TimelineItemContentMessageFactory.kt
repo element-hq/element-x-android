@@ -53,7 +53,11 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private val featureFlagService: FeatureFlagService,
 ) {
 
-    suspend fun create(content: MessageContent, senderDisplayName: String): TimelineItemEventContent {
+    suspend fun create(
+        uniqueId: Long,
+        content: MessageContent,
+        senderDisplayName: String
+    ): TimelineItemEventContent {
         return when (val messageType = content.type) {
             is EmoteMessageType -> TimelineItemEmoteContent(
                 body = "* $senderDisplayName ${messageType.body}",
@@ -109,6 +113,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             }
             is AudioMessageType -> when {
                 featureFlagService.isFeatureEnabled(FeatureFlags.VoiceMessages) && messageType.isVoiceMessage -> TimelineItemVoiceContent(
+                    uniqueId = uniqueId,
                     body = messageType.body,
                     audioSource = messageType.source,
                     duration = messageType.info?.duration?.toMillis() ?: 0L,

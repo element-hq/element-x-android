@@ -30,9 +30,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 interface VoiceMessagePlayer : AutoCloseable {
+    val ownerId: StateFlow<Long?>
     val isPlaying: StateFlow<Boolean>
     val progress: Progress
-    fun playMediaUri(uri: String)
+    fun acquireAndPlay(ownerId: Long, mediaUri: String)
     fun play()
     fun pause()
     fun seekTo(percentage: Float)
@@ -76,6 +77,9 @@ class VoiceMessagePlayerImpl @Inject constructor(
         }
     }
 
+    private val _owner = MutableStateFlow<Long?>(null)
+    override val ownerId: StateFlow<Long?> = _owner.asStateFlow()
+
     private val _isPlaying = MutableStateFlow(false)
     override val isPlaying: StateFlow<Boolean> = _isPlaying.asStateFlow()
 
@@ -86,8 +90,9 @@ class VoiceMessagePlayerImpl @Inject constructor(
             percentage = player.currentPosition.toFloat() / player.duration,
         )
 
-    override fun playMediaUri(uri: String) {
-        player.setMediaItem(MediaItem.fromUri(uri))
+    override fun acquireAndPlay(ownerId: Long, mediaUri: String) {
+        _owner.value = ownerId
+        player.setMediaItem(MediaItem.fromUri(mediaUri))
         player.prepare()  // Will play right away because of `playWhenReady = true`.
     }
 

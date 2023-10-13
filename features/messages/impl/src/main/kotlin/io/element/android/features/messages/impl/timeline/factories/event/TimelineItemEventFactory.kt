@@ -79,7 +79,10 @@ class TimelineItemEventFactory @Inject constructor(
             senderId = currentSender,
             senderDisplayName = senderDisplayName,
             senderAvatar = senderAvatarData,
-            content = contentFactory.create(currentTimelineItem.event),
+            content = contentFactory.create(
+                uniqueId = currentTimelineItem.uniqueId,
+                eventTimelineItem = currentTimelineItem.event,
+            ),
             isMine = currentTimelineItem.event.isOwn,
             sentTime = sentTime,
             groupPosition = groupPosition,

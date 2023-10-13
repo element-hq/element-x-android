@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlinx.collections.immutable.ImmutableList
 
 data class TimelineItemVoiceContent(
+    val uniqueId: Long,
     val body: String,
     val duration: Long,
     val audioSource: MediaSource,

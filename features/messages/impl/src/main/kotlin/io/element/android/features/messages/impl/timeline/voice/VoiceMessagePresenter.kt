@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,10 +72,13 @@ class VoiceMessagePresenter @AssistedInject constructor(
         val durationMinutes = remember { content.duration / 1000 / 60 }
         val durationSeconds = remember { content.duration / 1000 % 60 }
         val isPlaying by voiceMessagePlayer.isPlaying.collectAsState()
+        val owner by voiceMessagePlayer.ownerId.collectAsState()
 
         var button by remember { mutableStateOf(VoiceMessageState.Button.Play) }
         var progress by remember { mutableStateOf(VoiceMessagePlayer.Progress.Zero) }
         var mediaFile: MediaFile? by remember { mutableStateOf(null) }
+
+        val isOwner: Boolean by remember { derivedStateOf { owner == content.uniqueId } }
 
         DisposableEffect(Unit) {
             Timber.d("ABAB Presenter composed")
@@ -84,9 +88,9 @@ class VoiceMessagePresenter @AssistedInject constructor(
             }
         }
 
-        LaunchedEffect(isPlaying) {
+        LaunchedEffect(isOwner, isPlaying) {
             Timber.d("ABAB Presenter isPlaying: $isPlaying")
-            if (isPlaying) {
+            if (isOwner && isPlaying) {
                 button = VoiceMessageState.Button.Pause
                 while (true) {
                     progress = voiceMessagePlayer.progress
@@ -105,7 +109,7 @@ class VoiceMessagePresenter @AssistedInject constructor(
                 body = content.body,
             ).onSuccess {
                 mediaFile = it
-                voiceMessagePlayer.playMediaUri(it.path())
+                voiceMessagePlayer.acquireAndPlay(content.uniqueId, it.path())
             }.onFailure {
                 button = VoiceMessageState.Button.Retry
             }
@@ -116,12 +120,14 @@ class VoiceMessagePresenter @AssistedInject constructor(
                 is VoiceMessageEvents.PlayPause -> scope.launch {
                     if (mediaFile == null) {
                         downloadMediaAndPlay()
+                    } else if (!isOwner) {
+                        voiceMessagePlayer.acquireAndPlay(content.uniqueId, mediaFile!!.path())
+                    } else if (isPlaying) {
+                        voiceMessagePlayer.pause()
+                        button = VoiceMessageState.Button.Play
                     } else {
-                        if (!voiceMessagePlayer.isPlaying.value) {
-                            voiceMessagePlayer.play()
-                        } else {
-                            voiceMessagePlayer.pause()
-                        }
+                        voiceMessagePlayer.play()
+                        button = VoiceMessageState.Button.Pause
                     }
                 }
                 is VoiceMessageEvents.Seek -> {
@@ -134,7 +140,7 @@ class VoiceMessagePresenter @AssistedInject constructor(
         return VoiceMessageState(
             button = button,
             progress = progress.percentage,
-            elapsed = if (isPlaying) "%02d:%02d".format(progress.elapsedMinutes, progress.elapsedSeconds)
+            elapsed = if (isOwner && isPlaying) "%02d:%02d".format(progress.elapsedMinutes, progress.elapsedSeconds)
             else "%02d:%02d".format(durationMinutes, durationSeconds),
             eventSink = ::eventSink
         )

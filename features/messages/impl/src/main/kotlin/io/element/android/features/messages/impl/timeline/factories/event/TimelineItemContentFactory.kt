@@ -46,13 +46,20 @@ class TimelineItemContentFactory @Inject constructor(
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory
 ) {
 
-    suspend fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
+    suspend fun create(
+        uniqueId: Long,
+        eventTimelineItem: EventTimelineItem,
+    ): TimelineItemEventContent {
         return when (val itemContent = eventTimelineItem.content) {
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
             is MessageContent -> {
                 val senderDisplayName = (eventTimelineItem.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: eventTimelineItem.sender.value
-                messageFactory.create(itemContent, senderDisplayName)
+                messageFactory.create(
+                    uniqueId = uniqueId,
+                    content = itemContent,
+                    senderDisplayName = senderDisplayName,
+                )
             }
             is ProfileChangeContent -> profileChangeFactory.create(eventTimelineItem)
             is RedactedContent -> redactedMessageFactory.create(itemContent)

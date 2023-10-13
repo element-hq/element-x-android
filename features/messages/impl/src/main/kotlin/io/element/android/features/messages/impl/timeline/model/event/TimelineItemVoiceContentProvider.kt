@@ -33,6 +33,7 @@ open class TimelineItemVoiceContentProvider : PreviewParameterProvider<TimelineI
 fun aTimelineItemVoiceContent(
     fileName: String = "A sound.mp3",
 ) = TimelineItemVoiceContent(
+    uniqueId = 0,
     body = fileName,
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "100kB",
