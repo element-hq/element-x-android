@@ -43,7 +43,7 @@ fun WaveformProgressIndicator(
         spikeRadius = 0.8.dp,
         spikePadding = 3.dp,
         progress = progress,
-        amplitudes = amplitudes,
+        amplitudes = amplitudes.scaleAmplitudes(),
         onProgressChange = onSeek,
     )
 }
@@ -55,4 +55,18 @@ internal fun WaveformProgressIndicatorPreview() = ElementPreview {
         progress = 0.5f,
         amplitudes = persistentListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
     )
+}
+
+/**
+ * Scale amplitudes to fit in the waveform view.
+ *
+ * It seems amplitudes > 128 are clipped by the waveform library.
+ * Workaround for https://github.com/lincollincol/compose-audiowaveform/issues/22
+ *
+ * TODO Voice messages: Remove this workaround when the waveform library is fixed.
+ */
+private fun ImmutableList<Int>.scaleAmplitudes(): List<Int> {
+    val maxAmplitude = maxOf { it }
+    val scalingFactor = 128 / maxAmplitude.toFloat()
+    return map { (it * scalingFactor).toInt() }
 }
