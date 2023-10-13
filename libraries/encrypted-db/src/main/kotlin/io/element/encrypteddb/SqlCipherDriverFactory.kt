@@ -17,8 +17,10 @@
 package io.element.encrypteddb
 
 import android.content.Context
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.QueryResult
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlSchema
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import io.element.encrypteddb.passphrase.PassphraseProvider
 import net.sqlcipher.database.SupportFactory
 
@@ -35,7 +37,7 @@ class SqlCipherDriverFactory(
      * @param name The name of the database to create.
      * @param context Android [Context], used to instantiate the driver.
      */
-    fun create(schema: SqlDriver.Schema, name: String, context: Context): SqlDriver {
+    fun create(schema: SqlSchema<QueryResult.Value<Unit>>, name: String, context: Context): SqlDriver {
         val passphrase = passphraseProvider.getPassphrase()
         val factory = SupportFactory(passphrase)
         return AndroidSqliteDriver(schema = schema, context = context, name = name, factory = factory)
