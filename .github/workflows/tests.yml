@@ -22,6 +22,18 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
+      - name: Free Up GitHub Actions Ubuntu Runner Disk Space 🔧
+        uses: jlumbroso/free-disk-space@v1.3.0
+        with:
+          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
+          tool-cache: false
+
+          # All of these default to true, but feel free to set to "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true
       # Increase swapfile size to prevent screenshot tests getting terminated
       # https://github.com/actions/runner-images/discussions/7188#discussioncomment-6750749
       - name: 💽 Increase swapfile size
