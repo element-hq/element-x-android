@@ -73,3 +73,8 @@ data class TextMessageType(
     val body: String,
     val formatted: FormattedBody?
 ) : MessageType
+
+data class OtherMessageType(
+    val msgType: String,
+    val body: String,
+) : MessageType
