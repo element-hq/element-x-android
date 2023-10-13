@@ -73,7 +73,7 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
+    private suspend fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
         when (update) {
             is RoomListEntriesUpdate.Append -> {
                 val roomSummaries = update.values.map {
@@ -119,7 +119,7 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
+    private suspend fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
         return when (entry) {
             RoomListEntry.Empty -> buildEmptyRoomSummary()
             is RoomListEntry.Filled -> buildAndCacheRoomSummaryForIdentifier(entry.roomId)
@@ -133,9 +133,9 @@ class RoomSummaryListProcessor(
         return RoomSummary.Empty(UUID.randomUUID().toString())
     }
 
-    private fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
+    private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
-            roomListItem.roomInfoBlocking().use { roomInfo ->
+            roomListItem.roomInfo().use { roomInfo ->
                 RoomSummary.Filled(
                     details = roomSummaryDetailsFactory.create(roomInfo)
                 )

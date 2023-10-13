@@ -98,8 +98,8 @@ class RustMatrixClient constructor(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
-    private val rustSyncService = RustSyncService(syncService, dispatchers, sessionCoroutineScope)
-    private val verificationService = RustSessionVerificationService(rustSyncService, dispatchers)
+    private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
+    private val verificationService = RustSessionVerificationService(rustSyncService)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -208,6 +208,7 @@ class RustMatrixClient constructor(
 
     private fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
+        // Keep using fullRoomBlocking for now as it's faster.
         val fullRoom = cachedRoomListItem?.fullRoomBlocking()
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")

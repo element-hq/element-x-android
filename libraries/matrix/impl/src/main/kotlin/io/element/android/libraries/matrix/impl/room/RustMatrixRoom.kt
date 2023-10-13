@@ -174,7 +174,7 @@ class RustMatrixRoom(
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         var rustMembers: List<RoomMember>? = null
         try {
-            rustMembers = innerRoom.membersBlocking().use { membersIterator ->
+            rustMembers = innerRoom.members().use { membersIterator ->
                 buildList {
                     while (true) {
                         // Loading the whole membersIterator as a stop-gap measure.
@@ -299,27 +299,27 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun canUserInvite(userId: UserId): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.canUserInviteBlocking(userId.value)
+    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserInvite(userId.value)
         }
     }
 
-    override suspend fun canUserRedact(userId: UserId): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.canUserRedactBlocking(userId.value)
+    override suspend fun canUserRedact(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserRedact(userId.value)
         }
     }
 
-    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.canUserSendStateBlocking(userId.value, type.map())
+    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendState(userId.value, type.map())
         }
     }
 
-    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.canUserSendMessageBlocking(userId.value, type.map())
+    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendMessage(userId.value, type.map())
         }
     }
 

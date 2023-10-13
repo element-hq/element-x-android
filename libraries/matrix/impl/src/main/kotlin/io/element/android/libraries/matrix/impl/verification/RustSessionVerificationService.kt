@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.verification
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -28,7 +27,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
@@ -37,7 +35,6 @@ import javax.inject.Inject
 
 class RustSessionVerificationService @Inject constructor(
     private val syncService: RustSyncService,
-    private val dispatchers: CoroutineDispatchers,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
 
     var verificationController: SessionVerificationControllerInterface? = null
@@ -64,31 +61,21 @@ class RustSessionVerificationService @Inject constructor(
         syncState == SyncState.Running && verificationStatus == SessionVerifiedStatus.NotVerified
     }
 
-    override suspend fun requestVerification() {
-        tryOrFail {
-            verificationController?.requestVerificationBlocking()
-        }
+    override suspend fun requestVerification() = tryOrFail {
+        verificationController?.requestVerification()
     }
 
-    override suspend fun cancelVerification() {
-        tryOrFail { verificationController?.cancelVerificationBlocking() }
+    override suspend fun cancelVerification() = tryOrFail { verificationController?.cancelVerification() }
+
+    override suspend fun approveVerification() = tryOrFail { verificationController?.approveVerification() }
+
+    override suspend fun declineVerification() = tryOrFail { verificationController?.declineVerification() }
+
+    override suspend fun startVerification() = tryOrFail {
+        verificationController?.startSasVerification()
     }
 
-    override suspend fun approveVerification() {
-        tryOrFail { verificationController?.approveVerificationBlocking() }
-    }
-
-    override suspend fun declineVerification() {
-        tryOrFail { verificationController?.declineVerificationBlocking() }
-    }
-
-    override suspend fun startVerification() {
-        tryOrFail {
-            verificationController?.startSasVerificationBlocking()
-        }
-    }
-
-    private suspend fun tryOrFail(block: suspend () -> Unit) = withContext(dispatchers.io) {
+    private suspend fun tryOrFail(block: suspend () -> Unit) {
         runCatching {
             block()
         }.onFailure { didFail() }
