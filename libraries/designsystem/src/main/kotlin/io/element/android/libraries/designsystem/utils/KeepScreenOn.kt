@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.local
+package io.element.android.libraries.designsystem.utils
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-
-@Stable
-class LocalMediaViewState {
-    var isReady: Boolean by mutableStateOf(false)
-    var isPlaying: Boolean by mutableStateOf(false)
-}
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalView
 
 @Composable
-fun rememberLocalMediaViewState(): LocalMediaViewState {
-    return remember {
-        LocalMediaViewState()
+fun KeepScreenOn(
+    keepScreenOn: Boolean = true
+) {
+    if (keepScreenOn) {
+        val currentView = LocalView.current
+        DisposableEffect(Unit) {
+            currentView.keepScreenOn = true
+            onDispose {
+                currentView.keepScreenOn = false
+            }
+        }
     }
 }
