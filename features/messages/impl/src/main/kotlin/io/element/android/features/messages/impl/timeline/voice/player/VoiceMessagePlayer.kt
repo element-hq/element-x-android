@@ -23,6 +23,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,6 +54,7 @@ interface VoiceMessagePlayer : AutoCloseable {
  * The inner [ExoPlayer] is lazy initialized to avoid creating it when not needed.
  */
 @ContributesBinding(RoomScope::class)
+@SingleIn(RoomScope::class)
 class VoiceMessagePlayerImpl @Inject constructor(
     @ApplicationContext context: Context,
 ) : VoiceMessagePlayer {

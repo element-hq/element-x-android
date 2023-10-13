@@ -79,7 +79,6 @@ class VoiceMessagePresenter @AssistedInject constructor(
         DisposableEffect(Unit) {
             Timber.d("ABAB Presenter composed")
             onDispose {
-                voiceMessagePlayer.close()
                 mediaFile?.close()
                 Timber.d("ABAB Presenter disposed")
             }

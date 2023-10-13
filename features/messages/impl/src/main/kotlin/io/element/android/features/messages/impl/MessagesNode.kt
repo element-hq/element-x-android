@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.TimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.voice.player.VoiceMessagePlayer
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -48,6 +49,7 @@ class MessagesNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val presenterFactory: MessagesPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
+    private val voiceMessagePlayer: VoiceMessagePlayer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
 
     private val presenter = presenterFactory.create(this)
@@ -69,6 +71,9 @@ class MessagesNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 analyticsService.capture(room.toAnalyticsViewRoom())
+            },
+            onDestroy = {
+                voiceMessagePlayer.close()
             }
         )
     }
