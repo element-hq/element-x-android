@@ -373,7 +373,6 @@ class RustMatrixRoom(
         }
     }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.uploadAvatar(mimeType, data, null)

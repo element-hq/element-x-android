@@ -298,7 +298,6 @@ class RustMatrixClient constructor(
             runCatching { client.setDisplayName(displayName) }
         }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> =
         withContext(sessionDispatcher) {
             runCatching { client.uploadAvatar(mimeType, data) }
@@ -382,7 +381,6 @@ class RustMatrixClient constructor(
         }
     }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.uploadMedia(mimeType, data, progressCallback?.toProgressWatcher())
