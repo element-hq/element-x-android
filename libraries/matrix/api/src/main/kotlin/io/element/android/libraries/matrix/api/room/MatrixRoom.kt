@@ -185,5 +185,12 @@ interface MatrixRoom : Closeable {
      */
     suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
 
+    suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Int>,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler>
+
     override fun close() = destroy()
 }

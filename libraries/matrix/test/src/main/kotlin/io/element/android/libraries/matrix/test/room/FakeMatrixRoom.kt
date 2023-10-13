@@ -361,6 +361,13 @@ class FakeMatrixRoom(
         return endPollResult
     }
 
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Int>,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
+
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
     }
