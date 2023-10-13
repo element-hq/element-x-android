@@ -17,8 +17,8 @@
 package io.element.encrypteddb
 
 import android.content.Context
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.db.SqlDriver
+import app.cash.sqldelight.android.AndroidSqliteDriver
+import app.cash.sqldelight.db.SqlDriver
 import io.element.encrypteddb.passphrase.PassphraseProvider
 import net.sqlcipher.database.SupportFactory
 

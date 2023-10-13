@@ -18,7 +18,7 @@ package io.element.android.libraries.sessionstorage.impl
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import app.cash.sqldelight.sqlite.driver.JdbcSqliteDriver
 import io.element.android.libraries.matrix.session.SessionData
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
