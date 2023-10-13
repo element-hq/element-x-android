@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.app
+package io.element.android.tests.konsist
 
 import com.lemonappdev.konsist.api.Konsist
-import com.lemonappdev.konsist.api.ext.list.properties
-import com.lemonappdev.konsist.api.verify.assertFalse
+import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
+import com.lemonappdev.konsist.api.verify.assertTrue
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import org.junit.Test
 
-class KonsistFieldTest {
+class KonsistPreviewTest {
     @Test
-    fun `no field should have 'm' prefix`() {
+    fun `Functions with '@PreviewsDayNight' annotation should have 'Preview' suffix`() {
         Konsist
             .scopeFromProject()
-            .classes()
-            .properties()
-            .assertFalse {
-                val secondCharacterIsUppercase = it.name.getOrNull(1)?.isUpperCase() ?: false
-                it.name.startsWith('m') && secondCharacterIsUppercase
+            .functions()
+            .withAllAnnotationsOf(PreviewsDayNight::class)
+            .assertTrue {
+                it.hasNameEndingWith("Preview") &&
+                    it.hasNameEndingWith("LightPreview").not() &&
+                    it.hasNameEndingWith("DarkPreview").not()
             }
     }
 }

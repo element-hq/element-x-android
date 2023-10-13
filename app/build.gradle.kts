@@ -230,7 +230,6 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(libs.test.konsist)
 
     ksp(libs.showkase.processor)
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.app
+package io.element.android.tests.konsist
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bumble.appyx.core.node.Node
@@ -46,7 +46,7 @@ class KonsistClassNameTest {
     }
 
     @Test
-    fun `Classes extending 'PreviewParameterProvider' name MUST end with "Provider" and MUST contain provided class name`() {
+    fun `Classes extending 'PreviewParameterProvider' name MUST end with 'Provider' and MUST contain provided class name`() {
         Konsist.scopeFromProject()
             .classes()
             .withAllParentsOf(PreviewParameterProvider::class)

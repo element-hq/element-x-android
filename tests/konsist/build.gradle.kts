@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.voicemessages
+plugins {
+    id("io.element.android-compose-library")
+}
 
-import io.element.android.libraries.textcomposer.model.PressEvent
+android {
+    namespace = "io.element.android.tests.konsist"
+}
 
-sealed interface VoiceMessageComposerEvents {
-    data class RecordButtonEvent(
-        val pressEvent: PressEvent
-    ): VoiceMessageComposerEvents
+dependencies {
+    val composeBom = platform(libs.androidx.compose.bom)
+    testImplementation(composeBom)
+    testImplementation("androidx.compose.ui:ui-tooling-preview")
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.konsist)
+    testImplementation(libs.test.truth)
+    testImplementation(projects.libraries.architecture)
+    testImplementation(projects.libraries.designsystem)
 }

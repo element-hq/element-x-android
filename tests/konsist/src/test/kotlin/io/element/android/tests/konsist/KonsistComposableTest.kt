@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.app
+package io.element.android.tests.konsist
 
 import androidx.compose.runtime.Composable
 import com.lemonappdev.konsist.api.KoModifier
