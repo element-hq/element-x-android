@@ -43,7 +43,7 @@ fun CreatePinView(
 
 @Composable
 @PreviewsDayNight
-internal fun CreatePinViewLightPreview(@PreviewParameter(CreatePinStateProvider::class) state: CreatePinState) {
+internal fun CreatePinViewPreview(@PreviewParameter(CreatePinStateProvider::class) state: CreatePinState) {
     ElementPreview {
         CreatePinView(
             state = state,

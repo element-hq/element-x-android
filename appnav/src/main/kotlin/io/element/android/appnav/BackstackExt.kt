@@ -16,12 +16,6 @@
 
 package io.element.android.appnav
 
-import android.content.Context
-import android.content.ContextWrapper
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.NewRoot
 import com.bumble.appyx.navmodel.backstack.operation.Remove
@@ -45,20 +39,5 @@ fun <T : Any> BackStack<T>.removeLast(element: T) {
         it.key.navTarget == element
     } ?: return
     accept(Remove(lastExpectedNavElement.key))
-}
-
-@Composable
-fun MoveActivityToBackgroundBackHandler(enabled: Boolean = true) {
-
-    fun Context.findActivity(): ComponentActivity? = when (this) {
-        is ComponentActivity -> this
-        is ContextWrapper -> baseContext.findActivity()
-        else -> null
-    }
-
-    val context = LocalContext.current
-    BackHandler(enabled = enabled) {
-        context.findActivity()?.moveTaskToBack(false)
-    }
 }
 
