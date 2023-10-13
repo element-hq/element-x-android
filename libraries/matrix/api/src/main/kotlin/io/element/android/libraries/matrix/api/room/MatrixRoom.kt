@@ -189,7 +189,7 @@ interface MatrixRoom : Closeable {
         file: File,
         audioInfo: AudioInfo,
         waveform: List<Int>,
-        progressWatcher: ProgressCallback?
+        progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
     override fun close() = destroy()

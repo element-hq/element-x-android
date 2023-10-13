@@ -469,13 +469,13 @@ class RustMatrixRoom(
         file: File,
         audioInfo: AudioInfo,
         waveform: List<Int>,
-        progressWatcher: ProgressCallback?,
+        progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
         innerRoom.sendVoiceMessage(
             url = file.path,
             audioInfo = audioInfo.map(),
             waveform = waveform.map { it.toUShort() },
-            progressWatcher = progressWatcher?.toProgressWatcher(),
+            progressWatcher = progressCallback?.toProgressWatcher(),
         )
     }
 
