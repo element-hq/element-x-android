@@ -15,7 +15,6 @@
   <string name="screen_dm_details_unblock_alert_description">"Dopo aver sbloccato l\'utente, potrai vedere nuovamente tutti i suoi messaggi."</string>
   <string name="screen_dm_details_unblock_user">"Sblocca utente"</string>
   <string name="screen_room_details_leave_room_title">"Esci dalla stanza"</string>
-  <string name="screen_room_details_people_title">"Persone"</string>
   <string name="screen_room_details_security_title">"Sicurezza"</string>
   <string name="screen_room_details_topic_title">"Oggetto"</string>
 </resources>

@@ -94,6 +94,7 @@
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Encryption enabled"</string>
   <string name="common_error">"Error"</string>
+  <string name="common_everyone">"Everyone"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_saved_on_disk_android">"File saved to Downloads"</string>
   <string name="common_forward_message">"Forward message"</string>
@@ -132,7 +133,6 @@
   <string name="common_search_results">"Search results"</string>
   <string name="common_secure_backup">"Secure backup"</string>
   <string name="common_security">"Security"</string>
-  <string name="common_select_your_server">"Select your server"</string>
   <string name="common_sending">"Sending…"</string>
   <string name="common_server_not_supported">"Server not supported"</string>
   <string name="common_server_url">"Server URL"</string>
@@ -194,7 +194,6 @@
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="rageshake_dialog_content">"You seem to be shaking the phone in frustration. Would you like to open the bug report screen?"</string>
   <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
   <string name="report_content_hint">"Reason for reporting this content"</string>
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
@@ -230,7 +229,6 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
-  <string name="screen_settings_oidc_account">"Account and devices"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
@@ -240,7 +238,6 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_view_location_title">"Location"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
-  <string name="settings_title_general">"General"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
