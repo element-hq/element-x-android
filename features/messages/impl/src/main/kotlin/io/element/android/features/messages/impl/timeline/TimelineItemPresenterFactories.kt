@@ -56,7 +56,7 @@ data class TimelineItemPresenterFactories @Inject constructor(
 @Composable
 inline fun <reified C : TimelineItemEventContent, reified S : Any> TimelineItemPresenterFactories.rememberPresenter(
     content: C
-): Presenter<S> = remember {
+): Presenter<S> = remember(content) {
     factories.getValue(C::class.java).let {
         @Suppress("UNCHECKED_CAST")
         (it as TimelineItemPresenterFactory<C, S>).create(content)
