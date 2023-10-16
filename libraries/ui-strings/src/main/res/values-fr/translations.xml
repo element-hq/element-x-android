@@ -126,7 +126,6 @@
   <string name="common_search_for_someone">"Rechercher quelqu’un"</string>
   <string name="common_search_results">"Résultats de la recherche"</string>
   <string name="common_security">"Sécurité"</string>
-  <string name="common_select_your_server">"Sélectionnez votre serveur"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_server_not_supported">"Serveur non pris en charge"</string>
   <string name="common_server_url">"URL du serveur"</string>
@@ -187,7 +186,6 @@
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
-  <string name="rageshake_dialog_content">"Vous semblez secouer le téléphone avec frustration. Voulez-vous ouvrir le formulaire de rapport de problème ?"</string>
   <string name="report_content_explanation">"Ce message sera signalé à l’administrateur de votre serveur d’accueil. Il ne pourra lire aucun message chiffré."</string>
   <string name="report_content_hint">"Raison du signalement de ce contenu"</string>
   <string name="room_timeline_beginning_of_room">"Ceci est le début de %1$s."</string>
@@ -225,7 +223,6 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
   <string name="screen_report_content_block_user_hint">"Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur."</string>
-  <string name="screen_settings_oidc_account">"Compte et sessions"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>
@@ -235,7 +232,6 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_view_location_title">"Position"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Seuil de détection"</string>
-  <string name="settings_title_general">"Général"</string>
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="test_language_identifier">"Ang."</string>
   <string name="dialog_title_error">"Erreur"</string>

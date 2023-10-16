@@ -44,7 +44,6 @@
   <string name="screen_dm_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
   <string name="screen_dm_details_unblock_user">"Deblocați utilizatorul"</string>
   <string name="screen_room_details_leave_room_title">"Părăsiți camera"</string>
-  <string name="screen_room_details_people_title">"Persoane"</string>
   <string name="screen_room_details_security_title">"Securitate"</string>
   <string name="screen_room_details_topic_title">"Subiect"</string>
 </resources>

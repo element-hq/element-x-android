@@ -77,7 +77,6 @@
   <string name="common_report_submitted">"Segnalazione inviata"</string>
   <string name="common_search_for_someone">"Cerca qualcuno"</string>
   <string name="common_security">"Sicurezza"</string>
-  <string name="common_select_your_server">"Seleziona il tuo server"</string>
   <string name="common_sending">"Invio in corso…"</string>
   <string name="common_server_not_supported">"Server non supportato"</string>
   <string name="common_server_url">"URL del server"</string>
@@ -117,7 +116,6 @@
     <item quantity="other">"%1$d membri"</item>
   </plurals>
   <string name="preference_rageshake">"Scuoti per segnalare un problema"</string>
-  <string name="rageshake_dialog_content">"Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?"</string>
   <string name="report_content_explanation">"Questo messaggio verrà segnalato all\'amministratore dell\'homeserver. Questi non sarà in grado di leggere i messaggi criptati."</string>
   <string name="report_content_hint">"Motivo della segnalazione di questo contenuto"</string>
   <string name="room_timeline_beginning_of_room">"Questo è l\'inizio di %1$s."</string>
@@ -126,7 +124,6 @@
   <string name="screen_report_content_block_user_hint">"Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Soglia di rilevamento"</string>
-  <string name="settings_title_general">"Generali"</string>
   <string name="settings_version_number">"Versione: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"it"</string>
   <string name="dialog_title_error">"Errore"</string>
