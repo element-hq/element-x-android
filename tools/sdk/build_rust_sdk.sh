@@ -46,7 +46,7 @@ fi
 read -p "Do you want to build the app after (yes/no) default to yes? " buildApp
 buildApp=${buildApp:-yes}
 
-# If folder ../matrix-rust-components-kotlin does not exist, close the repo
+# If folder ../matrix-rust-components-kotlin does not exist, clone the repo
 if [ ! -d "../matrix-rust-components-kotlin" ]; then
     printf "\nFolder ../matrix-rust-components-kotlin does not exist. Cloning the repository into ../matrix-rust-components-kotlin.\n\n"
     git clone https://github.com/matrix-org/matrix-rust-components-kotlin.git ../matrix-rust-components-kotlin
@@ -58,7 +58,7 @@ git reset --hard
 git checkout main
 git pull
 
-printf "\nBuilding the SDK...\n\n"
+printf "\nBuilding the SDK for aarch64-linux-android...\n\n"
 ./scripts/build.sh -p ${rustSdkPath} -m sdk -t aarch64-linux-android -o ../element-x-android/libraries/rustsdk
 
 cd ../element-x-android
@@ -67,7 +67,7 @@ mkdir -p ./libraries/rustsdk/sdks
 cp ./libraries/rustsdk/matrix-rust-sdk.aar ./libraries/rustsdk/matrix-rust-sdk-${date}.aar
 
 
-if [ ${buildApp} != "yes" ]; then
+if [ ${buildApp} == "yes" ]; then
     printf "\nBuilding the application...\n\n"
     ./gradlew assembleDebug
 fi
