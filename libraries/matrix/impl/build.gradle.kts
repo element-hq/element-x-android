@@ -29,8 +29,12 @@ anvil {
 }
 
 dependencies {
-    // implementation(projects.libraries.rustsdk)
-    implementation(libs.matrix.sdk)
+    if (file("${rootDir.path}/libraries/rustsdk/matrix-rust-sdk.aar").exists()) {
+        println("\nNote: Using local binary of the Rust SDK.\n")
+        implementation(projects.libraries.rustsdk)
+    } else {
+        implementation(libs.matrix.sdk)
+    }
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)
