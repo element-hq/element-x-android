@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.auth
+package io.element.android.libraries.cryptography.api
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import javax.crypto.Cipher
+import javax.crypto.SecretKey
 
-open class PinAuthenticationStateProvider : PreviewParameterProvider<PinAuthenticationState> {
-    override val values: Sequence<PinAuthenticationState>
-        get() = sequenceOf(
-            aPinAuthenticationState(),
-        )
+/**
+ * Simple service to provide cryptographic operations.
+ */
+interface CryptoService {
+    fun getOrCreateSecretKey(alias: String): SecretKey
+    fun createEncryptionCipher(key: SecretKey): Cipher
+    fun createDecryptionCipher(key: SecretKey, initializationVector: ByteArray): Cipher
+    fun encrypt(key: SecretKey, input: ByteArray): EncryptionResult
+    fun decrypt(key: SecretKey, encryptionResult: EncryptionResult): ByteArray
 }
-
-fun aPinAuthenticationState() = PinAuthenticationState(
-    eventSink = {}
-)

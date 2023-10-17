@@ -19,7 +19,8 @@ package io.element.android.libraries.cryptography.impl
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.cryptography.api.CipherFactory
+import io.element.android.libraries.cryptography.api.CryptoService
+import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.di.AppScope
 import java.security.KeyStore
 import javax.crypto.Cipher
@@ -34,28 +35,10 @@ private const val ENCRYPTION_PADDING = KeyProperties.ENCRYPTION_PADDING_NONE
 private const val ENCRYPTION_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
 private const val ENCRYPTION_AES_TRANSFORMATION = "$ENCRYPTION_ALGORITHM/$ENCRYPTION_BLOCK_MODE/$ENCRYPTION_PADDING"
 
-/**
- * Implementation of [CipherFactory] that uses the Android Keystore to store the keys.
- */
 @ContributesBinding(AppScope::class)
-class KeyStoreCipherFactory @Inject constructor() : CipherFactory {
+class DefaultCryptoService @Inject constructor() : CryptoService {
 
-    override fun createEncryptionCipher(alias: String): Cipher {
-        val cipher = Cipher.getInstance(ENCRYPTION_AES_TRANSFORMATION)
-        val secretKey = getOrGenerateKeyForAlias(alias)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-        return cipher
-    }
-
-    override fun createDecryptionCipher(alias: String, initializationVector: ByteArray): Cipher {
-        val cipher = Cipher.getInstance(ENCRYPTION_AES_TRANSFORMATION)
-        val secretKey = getOrGenerateKeyForAlias(alias)
-        val spec = GCMParameterSpec(128, initializationVector)
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
-        return cipher
-    }
-
-    private fun getOrGenerateKeyForAlias(alias: String): SecretKey {
+    override fun getOrCreateSecretKey(alias: String): SecretKey {
         val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
         val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
             ?.secretKey
@@ -72,5 +55,29 @@ class KeyStoreCipherFactory @Inject constructor() : CipherFactory {
             generator.init(keyGenSpec)
             generator.generateKey()
         } else secretKeyEntry
+    }
+
+    override fun createEncryptionCipher(key: SecretKey): Cipher {
+        return Cipher.getInstance(ENCRYPTION_AES_TRANSFORMATION).apply {
+            init(Cipher.ENCRYPT_MODE, key)
+        }
+    }
+
+    override fun createDecryptionCipher(key: SecretKey, initializationVector: ByteArray): Cipher {
+        val spec = GCMParameterSpec(128, initializationVector)
+        return Cipher.getInstance(ENCRYPTION_AES_TRANSFORMATION).apply {
+            init(Cipher.DECRYPT_MODE, key, spec)
+        }
+    }
+
+    override fun encrypt(key: SecretKey, input: ByteArray): EncryptionResult {
+        val cipher = createEncryptionCipher(key)
+        val encryptedData = cipher.doFinal(input)
+        return EncryptionResult(encryptedData, cipher.iv)
+    }
+
+    override fun decrypt(key: SecretKey, encryptionResult: EncryptionResult): ByteArray {
+        val cipher = createDecryptionCipher(key, encryptionResult.initializationVector)
+        return cipher.doFinal(encryptionResult.encryptedByteArray)
     }
 }
