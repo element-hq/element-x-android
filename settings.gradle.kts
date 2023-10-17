@@ -1,5 +1,7 @@
 import java.net.URI
 
+include(":libraries:cryptography:api")
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
