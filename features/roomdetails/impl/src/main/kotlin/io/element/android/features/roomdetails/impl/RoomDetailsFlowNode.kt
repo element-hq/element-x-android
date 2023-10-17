@@ -68,7 +68,13 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         data object InviteMembers : NavTarget
 
         @Parcelize
-        object RoomNotificationSettings : NavTarget
+        data class RoomNotificationSettings(
+            /**
+             * When presented from oursite the context of the room, the rooms settings UI is different.
+             * Figma designs: https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?type=design&node-id=5199-198932&mode=design&t=fTTvpuxYFjewYQOe-0
+             */
+            val showUserDefinedSettingStyle: Boolean
+        ) : NavTarget
 
         @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
@@ -91,7 +97,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     }
 
                     override fun openRoomNotificationSettings() {
-                        backstack.push(NavTarget.RoomNotificationSettings)
+                        backstack.push(NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = false))
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -118,8 +124,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 createNode<RoomInviteMembersNode>(buildContext)
             }
 
-            NavTarget.RoomNotificationSettings -> {
-                createNode<RoomNotificationSettingsNode>(buildContext)
+            is NavTarget.RoomNotificationSettings -> {
+                val plugins = listOf(RoomNotificationSettingsNode.RoomNotificationSettingInput(navTarget.showUserDefinedSettingStyle))
+                createNode<RoomNotificationSettingsNode>(buildContext, plugins)
             }
 
             is NavTarget.RoomMemberDetails -> {

@@ -33,6 +33,9 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
 
         @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : InitialTarget
+
+        @Parcelize
+        data object RoomNotificationSettings : InitialTarget
     }
 
     data class Inputs(val initialElement: InitialTarget) : NodeInputs

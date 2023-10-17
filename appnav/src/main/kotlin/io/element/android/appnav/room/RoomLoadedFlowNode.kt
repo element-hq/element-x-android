@@ -142,6 +142,10 @@ class RoomLoadedFlowNode @AssistedInject constructor(
                 val inputs = RoomDetailsEntryPoint.Inputs(RoomDetailsEntryPoint.InitialTarget.RoomMemberDetails(navTarget.userId))
                 roomDetailsEntryPoint.createNode(this, buildContext, inputs, emptyList())
             }
+            NavTarget.RoomNotificationSettings -> {
+                val inputs = RoomDetailsEntryPoint.Inputs(RoomDetailsEntryPoint.InitialTarget.RoomNotificationSettings)
+                roomDetailsEntryPoint.createNode(this, buildContext, inputs, emptyList())
+            }
         }
     }
 
@@ -154,6 +158,9 @@ class RoomLoadedFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class RoomMemberDetails(val userId: UserId) : NavTarget
+
+        @Parcelize
+        data object RoomNotificationSettings : NavTarget
     }
 
     @Composable

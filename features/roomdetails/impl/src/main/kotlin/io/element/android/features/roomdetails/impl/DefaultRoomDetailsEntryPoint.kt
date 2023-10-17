@@ -42,4 +42,5 @@ class DefaultRoomDetailsEntryPoint @Inject constructor() : RoomDetailsEntryPoint
 internal fun InitialTarget.toNavTarget() = when (this) {
     is InitialTarget.RoomDetails -> NavTarget.RoomDetails
     is InitialTarget.RoomMemberDetails -> NavTarget.RoomMemberDetails(roomMemberId)
+    is InitialTarget.RoomNotificationSettings -> NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = true)
 }

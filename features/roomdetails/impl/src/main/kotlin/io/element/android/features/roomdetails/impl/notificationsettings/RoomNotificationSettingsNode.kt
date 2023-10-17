@@ -26,6 +26,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
 
@@ -36,6 +38,12 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
     private val presenter: RoomNotificationSettingsPresenter,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
+
+    data class RoomNotificationSettingInput(
+        val showUserDefinedSettingStyle: Boolean
+    ) : NodeInputs
+
+    private val inputs = inputs<RoomNotificationSettingInput>()
 
     init {
         lifecycle.subscribe(
@@ -48,10 +56,18 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        RoomNotificationSettingsView(
-            state = state,
-            modifier = modifier,
-            onBackPressed = this::navigateUp,
-        )
+        if(inputs.showUserDefinedSettingStyle) {
+            UserDefinedRoomNotificationSettingsView(
+                state = state,
+                modifier = modifier,
+                onBackPressed = this::navigateUp,
+            )
+        } else {
+            RoomNotificationSettingsView(
+                state = state,
+                modifier = modifier,
+                onBackPressed = this::navigateUp,
+            )
+        }
     }
 }

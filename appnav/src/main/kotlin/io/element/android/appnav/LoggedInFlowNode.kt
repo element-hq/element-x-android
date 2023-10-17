@@ -244,6 +244,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                     override fun onVerifyClicked() {
                         backstack.push(NavTarget.VerifySession)
                     }
+
+                    override fun onOpenRoomNotificationSettings(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId, initialElement = RoomLoadedFlowNode.NavTarget.RoomNotificationSettings))
+                    }
                 }
                 preferencesEntryPoint.nodeBuilder(this, buildContext)
                     .callback(callback)

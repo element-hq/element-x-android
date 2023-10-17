@@ -24,4 +24,5 @@ sealed interface NotificationSettingsEvents {
     data class SetCallNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvents
     data object FixConfigurationMismatch : NotificationSettingsEvents
     data object ClearConfigurationMismatchError : NotificationSettingsEvents
+    data object ClearNotificationChangeError : NotificationSettingsEvents
 }

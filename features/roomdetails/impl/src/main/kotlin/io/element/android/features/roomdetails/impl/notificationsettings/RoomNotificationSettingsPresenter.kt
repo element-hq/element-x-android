@@ -22,9 +22,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -42,16 +45,18 @@ class RoomNotificationSettingsPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val notificationSettingsService: NotificationSettingsService,
 ) : Presenter<RoomNotificationSettingsState> {
-
     @Composable
     override fun present(): RoomNotificationSettingsState {
         val defaultRoomNotificationMode: MutableState<RoomNotificationMode?> = rememberSaveable {
             mutableStateOf(null)
         }
         val localCoroutineScope = rememberCoroutineScope()
+        val changeNotificationSettingAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val deleteCustomNotificationSettingAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
 
         LaunchedEffect(Unit) {
             getDefaultRoomNotificationMode(defaultRoomNotificationMode)
+            room.updateRoomNotificationSettings()
             observeNotificationSettings()
         }
 
@@ -60,23 +65,32 @@ class RoomNotificationSettingsPresenter @Inject constructor(
         fun handleEvents(event: RoomNotificationSettingsEvents) {
             when (event) {
                 is RoomNotificationSettingsEvents.RoomNotificationModeChanged -> {
-                    localCoroutineScope.setRoomNotificationMode(event.mode)
+                    localCoroutineScope.setRoomNotificationMode(event.mode, changeNotificationSettingAction)
                 }
                 is RoomNotificationSettingsEvents.SetNotificationMode -> {
                     if (event.isDefault) {
-                        localCoroutineScope.restoreDefaultRoomNotificationMode()
+                        localCoroutineScope.restoreDefaultRoomNotificationMode(changeNotificationSettingAction)
                     } else {
                         defaultRoomNotificationMode.value?.let {
-                            localCoroutineScope.setRoomNotificationMode(it)
+                            localCoroutineScope.setRoomNotificationMode(it, changeNotificationSettingAction)
                         }
                     }
+                }
+                is RoomNotificationSettingsEvents.DeleteCustomNotification -> {
+                    localCoroutineScope.restoreDefaultRoomNotificationMode(deleteCustomNotificationSettingAction)
+                }
+                RoomNotificationSettingsEvents.ClearError -> {
+                    changeNotificationSettingAction.value = Async.Uninitialized
                 }
             }
         }
 
         return RoomNotificationSettingsState(
+            roomName = room.displayName,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             defaultRoomNotificationMode = defaultRoomNotificationMode.value,
+            changeNotificationSettingAction = changeNotificationSettingAction.value,
+            deleteCustomNotificationSettingAction = deleteCustomNotificationSettingAction.value,
             eventSink = ::handleEvents,
         )
     }
@@ -98,11 +112,15 @@ class RoomNotificationSettingsPresenter @Inject constructor(
         ).getOrThrow()
     }
 
-    private fun CoroutineScope.setRoomNotificationMode(mode: RoomNotificationMode) = launch {
-        notificationSettingsService.setRoomNotificationMode(room.roomId, mode)
+    private fun CoroutineScope.setRoomNotificationMode(mode: RoomNotificationMode, action: MutableState<Async<Unit>>) = launch {
+        suspend {
+            notificationSettingsService.setRoomNotificationMode(room.roomId, mode).getOrThrow()
+        }.runCatchingUpdatingState(action)
     }
 
-    private fun CoroutineScope.restoreDefaultRoomNotificationMode() = launch {
-        notificationSettingsService.restoreDefaultRoomNotificationMode(room.roomId)
+    private fun CoroutineScope.restoreDefaultRoomNotificationMode(action: MutableState<Async<Unit>>) = launch {
+        suspend {
+            notificationSettingsService.restoreDefaultRoomNotificationMode(room.roomId).getOrThrow()
+        }.runCatchingUpdatingState(action)
     }
 }

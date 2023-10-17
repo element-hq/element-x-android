@@ -20,6 +20,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.core.RoomId
 
 interface PreferencesEntryPoint : FeatureEntryPoint {
 
@@ -33,5 +34,6 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onOpenBugReport()
         fun onVerifyClicked()
+        fun onOpenRoomNotificationSettings(roomId: RoomId)
     }
 }

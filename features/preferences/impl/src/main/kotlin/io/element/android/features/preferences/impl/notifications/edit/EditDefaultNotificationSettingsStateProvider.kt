@@ -17,6 +17,7 @@
 package io.element.android.features.preferences.impl.notifications.edit
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -33,6 +34,7 @@ fun anEditDefaultNotificationSettingsState() = EditDefaultNotificationSettingSta
     isOneToOne = false,
     mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
     roomsWithUserDefinedMode = listOf(aRoomSummary()),
+    changeNotificationSettingAction = Async.Uninitialized,
     eventSink = {}
 )
 

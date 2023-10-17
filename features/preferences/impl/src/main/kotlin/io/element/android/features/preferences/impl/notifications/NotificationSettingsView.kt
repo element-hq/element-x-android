@@ -36,6 +36,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -90,6 +92,19 @@ fun NotificationSettingsView(
                 onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
             )
+        }
+        when (state.changeNotificationSettingAction) {
+            is Async.Loading -> {
+                ProgressDialog()
+            }
+            is Async.Failure -> {
+                ErrorDialog(
+                    title = stringResource(CommonStrings.dialog_title_error),
+                    content = stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode),
+                    onDismiss = { state.eventSink(NotificationSettingsEvents.ClearNotificationChangeError) },
+                )
+            }
+            else -> Unit
         }
     }
 }

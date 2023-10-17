@@ -18,7 +18,6 @@ package io.element.android.features.roomdetails.impl.notificationsettings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,8 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orTrue
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
@@ -45,7 +47,6 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
@@ -74,7 +75,6 @@ fun RoomNotificationSettingsView(
                 null -> ""
             }
 
-
             PreferenceCategory(title = stringResource(id = R.string.screen_room_notification_settings_custom_settings_title)) {
                 PreferenceSwitch(
                     isChecked = state.roomNotificationSettings?.isDefault.orTrue(),
@@ -101,6 +101,16 @@ fun RoomNotificationSettingsView(
                         },
                     )
                 }
+            }
+
+            when (state.changeNotificationSettingAction) {
+                is Async.Loading -> {
+                    ProgressDialog()
+                }
+                is Async.Failure -> {
+                    ShowChangeNotificationSettingError(state)
+                }
+                else -> Unit
             }
         }
     }
@@ -142,6 +152,15 @@ fun RoomNotificationSettingsOptions(
             )
         }
     }
+}
+
+@Composable
+fun ShowChangeNotificationSettingError(state: RoomNotificationSettingsState) {
+    ErrorDialog(
+        title = stringResource(CommonStrings.dialog_title_error),
+        content = stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode),
+        onDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearError) },
+    )
 }
 
 @DayNightPreviews

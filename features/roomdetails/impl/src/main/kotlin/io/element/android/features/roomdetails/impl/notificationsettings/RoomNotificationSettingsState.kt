@@ -16,11 +16,15 @@
 
 package io.element.android.features.roomdetails.impl.notificationsettings
 
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 data class RoomNotificationSettingsState(
+    val roomName: String,
     val roomNotificationSettings: RoomNotificationSettings?,
     val defaultRoomNotificationMode: RoomNotificationMode?,
+    val changeNotificationSettingAction: Async<Unit>,
+    val deleteCustomNotificationSettingAction: Async<Unit>,
     val eventSink: (RoomNotificationSettingsEvents) -> Unit
 )

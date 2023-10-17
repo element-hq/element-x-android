@@ -17,6 +17,7 @@
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 open class NotificationSettingsStateProvider : PreviewParameterProvider<NotificationSettingsState> {
@@ -37,5 +38,6 @@ fun aNotificationSettingsState() = NotificationSettingsState(
         systemNotificationsEnabled = false,
         appNotificationsEnabled = true,
     ),
+    changeNotificationSettingAction = Async.Uninitialized,
     eventSink = {}
 )

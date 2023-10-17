@@ -25,7 +25,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -57,6 +59,8 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
 
+        val changeNotificationSettingAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+
         val roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>> = remember {
             mutableStateOf(listOf())
         }
@@ -70,7 +74,10 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
 
         fun handleEvents(event: EditDefaultNotificationSettingStateEvents) {
             when (event) {
-                is EditDefaultNotificationSettingStateEvents.SetNotificationMode -> localCoroutineScope.setDefaultNotificationMode(event.mode)
+                is EditDefaultNotificationSettingStateEvents.SetNotificationMode -> {
+                    localCoroutineScope.setDefaultNotificationMode(event.mode, changeNotificationSettingAction)
+                }
+                EditDefaultNotificationSettingStateEvents.ClearError -> changeNotificationSettingAction.value = Async.Uninitialized
             }
         }
 
@@ -78,6 +85,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             isOneToOne = isOneToOne,
             mode = mode.value,
             roomsWithUserDefinedMode = roomsWithUserDefinedMode.value,
+            changeNotificationSettingAction = changeNotificationSettingAction.value,
             eventSink = ::handleEvents
         )
     }
@@ -105,9 +113,13 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             .launchIn(this)
     }
 
-    private fun CoroutineScope.updateRoomsWithUserDefinedMode(summaries: List<RoomSummary>, roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>) = launch {
-        val roomWithUserDefinedRules = notificationSettingsService.getRoomsWithUserDefinedRules().getOrThrow().toSet()
-        roomsWithUserDefinedMode.value = summaries
+    private fun CoroutineScope.updateRoomsWithUserDefinedMode(
+        summaries: List<RoomSummary>,
+        roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>
+    ) = launch {
+        val roomWithUserDefinedRules: Set<String> = notificationSettingsService.getRoomsWithUserDefinedRules().getOrThrow().toSet()
+
+        val sortedSummaries = summaries
             .filterIsInstance<RoomSummary.Filled>()
             .filter {
                 val room = matrixClient.getRoom(it.details.roomId) ?: return@filter false
@@ -115,12 +127,16 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             }
             // locale sensitive sorting
             .sortedWith(compareBy(Collator.getInstance()){ it.details.name })
+
+        roomsWithUserDefinedMode.value = sortedSummaries
     }
 
-    private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode) = launch {
-        // On modern clients, we don't have different settings for encrypted and non-encrypted rooms (Legacy clients did).
-        notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isOneToOne)
-        notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isOneToOne)
+    private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode,  action: MutableState<Async<Unit>>) = launch {
+        suspend {
+            // On modern clients, we don't have different settings for encrypted and non-encrypted rooms (Legacy clients did).
+            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isOneToOne).getOrThrow()
+            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isOneToOne).getOrThrow()
+        }.runCatchingUpdatingState(action)
     }
 
 }
