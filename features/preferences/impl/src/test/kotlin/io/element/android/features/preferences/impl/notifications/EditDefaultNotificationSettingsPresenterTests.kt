@@ -23,7 +23,13 @@ import com.google.common.truth.Truth
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingPresenter
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingStateEvents
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
+import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -32,7 +38,7 @@ class EditDefaultNotificationSettingsPresenterTests {
     @Test
     fun `present - ensures initial state is correct`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        val presenter = EditDefaultNotificationSettingPresenter(notificationSettingsService = notificationSettingsService, isOneToOne = false)
+        val presenter = createPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -48,9 +54,31 @@ class EditDefaultNotificationSettingsPresenterTests {
     }
 
     @Test
+    fun `present - ensure list of rooms with user defined mode`() = runTest {
+        val room = FakeMatrixRoom()
+        val notificationSettingsService = FakeNotificationSettingsService(
+            initialRoomMode = RoomNotificationMode.ALL_MESSAGES,
+            initialRoomModeIsDefault = false
+        )
+        val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService).apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val roomListService = FakeRoomListService()
+        val presenter = createPresenter(notificationSettingsService, roomListService, matrixClient)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            roomListService.postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetail(notificationMode = RoomNotificationMode.ALL_MESSAGES))))
+            val loadedState = consumeItemsUntilPredicate { state ->
+                state.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }
+            }.last()
+            Truth.assertThat(loadedState.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
+        }
+    }
+
+    @Test
     fun `present - edit default notification setting`() = runTest {
-        val notificationSettingsService = FakeNotificationSettingsService()
-        val presenter = EditDefaultNotificationSettingPresenter(notificationSettingsService = notificationSettingsService, isOneToOne = false)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -61,4 +89,18 @@ class EditDefaultNotificationSettingsPresenterTests {
             Truth.assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
         }
     }
+
+    private fun createPresenter(
+        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
+        roomListService: FakeRoomListService = FakeRoomListService(),
+        matrixClient: FakeMatrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
+    ): EditDefaultNotificationSettingPresenter {
+        return EditDefaultNotificationSettingPresenter(
+            notificationSettingsService = notificationSettingsService,
+            isOneToOne = false,
+            roomListService = roomListService,
+            matrixClient = matrixClient
+        )
+    }
+
 }

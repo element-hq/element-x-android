@@ -24,14 +24,17 @@ import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsEvents
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsPresenter
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class RoomNotificationSettingsPresenterTests {
     @Test
     fun `present - initial state is created from room info`() = runTest {
-        val presenter = aNotificationPresenter
+        val presenter = aNotificationPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -44,7 +47,7 @@ class RoomNotificationSettingsPresenterTests {
 
     @Test
     fun `present - notification mode changed`() = runTest {
-        val presenter = aNotificationPresenter
+        val presenter = aNotificationPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -57,26 +60,60 @@ class RoomNotificationSettingsPresenterTests {
     }
 
     @Test
+    fun `present - observe notification mode changed`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService()
+        val presenter = aNotificationPresenter(notificationSettingsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            val updatedState = consumeItemsUntilPredicate() {
+                it.roomNotificationSettings?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
+            }.last()
+            Truth.assertThat(updatedState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+        }
+    }
+
+
+    @Test
+    fun `present - notification settings set custom`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService()
+        val presenter = aNotificationPresenter(notificationSettingsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(false))
+            val defaultState = consumeItemsUntilPredicate(timeout = 8000.milliseconds) {
+                it.roomNotificationSettings?.isDefault == false
+            }.last()
+            Truth.assertThat(defaultState.roomNotificationSettings?.isDefault).isFalse()
+        }
+    }
+
+    @Test
     fun `present - notification settings restore default`() = runTest {
-        val presenter = aNotificationPresenter
+        val presenter = aNotificationPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
             initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(true))
-            val defaultState = consumeItemsUntilPredicate {
+            val defaultState = consumeItemsUntilPredicate(timeout = 2000.milliseconds) {
                 it.roomNotificationSettings?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
             Truth.assertThat(defaultState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         }
     }
 
-    private val aNotificationPresenter: RoomNotificationSettingsPresenter get() {
-        val room = aMatrixRoom()
+    private fun aNotificationPresenter(
+        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
+    ): RoomNotificationSettingsPresenter{
+        val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         return RoomNotificationSettingsPresenter(
             room = room,
-            notificationSettingsService = room.notificationSettingsService
+            notificationSettingsService = notificationSettingsService
         )
     }
 }
