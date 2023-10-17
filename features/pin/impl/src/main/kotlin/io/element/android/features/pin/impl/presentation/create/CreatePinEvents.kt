@@ -14,25 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.create
+package io.element.android.features.pin.impl.presentation.create
 
-import androidx.compose.runtime.Composable
-import io.element.android.libraries.architecture.Presenter
-import javax.inject.Inject
-
-class CreatePinPresenter @Inject constructor() : Presenter<CreatePinState> {
-
-    @Composable
-    override fun present(): CreatePinState {
-
-        fun handleEvents(event: CreatePinEvents) {
-            when (event) {
-                CreatePinEvents.MyEvent -> Unit
-            }
-        }
-
-        return CreatePinState(
-            eventSink = ::handleEvents
-        )
-    }
+sealed interface CreatePinEvents {
+    object MyEvent : CreatePinEvents
 }

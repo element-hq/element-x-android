@@ -14,31 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.create
+package io.element.android.features.pin.impl.presentation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.pin.api.PinEntryPoint
+import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
 
-@ContributesNode(AppScope::class)
-class CreatePinNode @AssistedInject constructor(
-    @Assisted buildContext: BuildContext,
-    @Assisted plugins: List<Plugin>,
-    private val presenter: CreatePinPresenter,
-) : Node(buildContext, plugins = plugins) {
+@ContributesBinding(AppScope::class)
+class DefaultPinEntryPoint @Inject constructor() : PinEntryPoint {
 
-    @Composable
-    override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        CreatePinView(
-            state = state,
-            modifier = modifier
-        )
+    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
+        return parentNode.createNode<PinFlowNode>(buildContext)
     }
 }

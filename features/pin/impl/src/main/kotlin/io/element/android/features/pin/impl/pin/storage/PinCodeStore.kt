@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.storage
+package io.element.android.features.pin.impl.pin.storage
 
 interface PinCodeStore : EncryptedPinCodeStorage {
 

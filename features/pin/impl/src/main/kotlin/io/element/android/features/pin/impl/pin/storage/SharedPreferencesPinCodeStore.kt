@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.storage
+package io.element.android.features.pin.impl.pin.storage
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -26,6 +26,10 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 
+private const val ENCODED_PIN_CODE_KEY = "ENCODED_PIN_CODE_KEY"
+private const val REMAINING_PIN_CODE_ATTEMPTS_KEY = "REMAINING_PIN_CODE_ATTEMPTS_KEY"
+private const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
+
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class SharedPreferencesPinCodeStore @Inject constructor(
@@ -35,11 +39,11 @@ class SharedPreferencesPinCodeStore @Inject constructor(
 
     private val listeners = CopyOnWriteArrayList<PinCodeStore.Listener>()
 
-    override suspend fun getPinCode(): String? = withContext(dispatchers.io) {
+    override suspend fun getEncryptedCode(): String? = withContext(dispatchers.io) {
         sharedPreferences.getString(ENCODED_PIN_CODE_KEY, null)
     }
 
-    override suspend fun savePinCode(pinCode: String) = withContext(dispatchers.io) {
+    override suspend fun saveEncryptedPinCode(pinCode: String) = withContext(dispatchers.io) {
         sharedPreferences.edit {
             putString(ENCODED_PIN_CODE_KEY, pinCode)
         }
@@ -48,7 +52,7 @@ class SharedPreferencesPinCodeStore @Inject constructor(
         }
     }
 
-    override suspend fun deletePinCode() = withContext(dispatchers.io) {
+    override suspend fun deleteEncryptedPinCode() = withContext(dispatchers.io) {
         // Also reset the counters
         resetCounter()
         sharedPreferences.edit {
@@ -78,7 +82,6 @@ class SharedPreferencesPinCodeStore @Inject constructor(
     override suspend fun resetCounter() = withContext(dispatchers.io) {
         sharedPreferences.edit {
             remove(REMAINING_PIN_CODE_ATTEMPTS_KEY)
-            remove(REMAINING_BIOMETRICS_ATTEMPTS_KEY)
         }
     }
 
@@ -88,13 +91,5 @@ class SharedPreferencesPinCodeStore @Inject constructor(
 
     override fun removeListener(listener: PinCodeStore.Listener) {
         listeners.remove(listener)
-    }
-
-    companion object {
-        private const val ENCODED_PIN_CODE_KEY = "ENCODED_PIN_CODE_KEY"
-        private const val REMAINING_PIN_CODE_ATTEMPTS_KEY = "REMAINING_PIN_CODE_ATTEMPTS_KEY"
-        private const val REMAINING_BIOMETRICS_ATTEMPTS_KEY = "REMAINING_BIOMETRICS_ATTEMPTS_KEY"
-
-        private const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
     }
 }

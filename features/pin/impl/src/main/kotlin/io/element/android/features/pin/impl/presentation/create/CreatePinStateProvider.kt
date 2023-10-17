@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.create
+package io.element.android.features.pin.impl.presentation.create
 
-sealed interface CreatePinEvents {
-    object MyEvent : CreatePinEvents
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+open class CreatePinStateProvider : PreviewParameterProvider<CreatePinState> {
+    override val values: Sequence<CreatePinState>
+        get() = sequenceOf(
+            aCreatePinState(),
+            // Add other states here
+        )
 }
+
+fun aCreatePinState() = CreatePinState(
+    eventSink = {}
+)

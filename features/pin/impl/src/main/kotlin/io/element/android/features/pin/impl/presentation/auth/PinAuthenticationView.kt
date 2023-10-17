@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.auth
+package io.element.android.features.pin.impl.presentation.auth
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth

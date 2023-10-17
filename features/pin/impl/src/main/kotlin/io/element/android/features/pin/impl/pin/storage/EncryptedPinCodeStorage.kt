@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.storage
+package io.element.android.features.pin.impl.pin.storage
 
 /**
  * Should be implemented by any class that provides access to the encrypted PIN code.
@@ -24,17 +24,17 @@ interface EncryptedPinCodeStorage {
     /**
      * Returns the encrypted PIN code.
      */
-    suspend fun getPinCode(): String?
+    suspend fun getEncryptedCode(): String?
 
     /**
      * Saves the encrypted PIN code to some persistable storage.
      */
-    suspend fun savePinCode(pinCode: String)
+    suspend fun saveEncryptedPinCode(pinCode: String)
 
     /**
      * Deletes the PIN code from some persistable storage.
      */
-    suspend fun deletePinCode()
+    suspend fun deleteEncryptedPinCode()
 
     /**
      * Returns whether the PIN code is stored or not.

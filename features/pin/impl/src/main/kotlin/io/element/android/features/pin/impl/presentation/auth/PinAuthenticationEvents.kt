@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.auth
+package io.element.android.features.pin.impl.presentation.auth
 
 sealed interface PinAuthenticationEvents {
     data object Unlock : PinAuthenticationEvents

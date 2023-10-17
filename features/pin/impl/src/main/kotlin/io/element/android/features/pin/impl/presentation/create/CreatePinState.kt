@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.create
+package io.element.android.features.pin.impl.presentation.create
 
 data class CreatePinState(
     val eventSink: (CreatePinEvents) -> Unit

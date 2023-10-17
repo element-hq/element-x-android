@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.auth
+package io.element.android.features.pin.impl.presentation.create
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.pin.api.PinStateService
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class PinAuthenticationPresenter @Inject constructor(
-    private val pinStateService: PinStateService,
-    private val coroutineScope: CoroutineScope,
-) : Presenter<PinAuthenticationState> {
+class CreatePinPresenter @Inject constructor() : Presenter<CreatePinState> {
 
     @Composable
-    override fun present(): PinAuthenticationState {
+    override fun present(): CreatePinState {
 
-        fun handleEvents(event: PinAuthenticationEvents) {
+        fun handleEvents(event: CreatePinEvents) {
             when (event) {
-                PinAuthenticationEvents.Unlock -> coroutineScope.launch { pinStateService.unlock() }
+                CreatePinEvents.MyEvent -> Unit
             }
         }
-        return PinAuthenticationState(
+
+        return CreatePinState(
             eventSink = ::handleEvents
         )
     }

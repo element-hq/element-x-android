@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.auth
+package io.element.android.features.pin.impl.presentation.auth
 
-data class PinAuthenticationState(
-    val eventSink: (PinAuthenticationEvents) -> Unit
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+open class PinAuthenticationStateProvider : PreviewParameterProvider<PinAuthenticationState> {
+    override val values: Sequence<PinAuthenticationState>
+        get() = sequenceOf(
+            aPinAuthenticationState(),
+        )
+}
+
+fun aPinAuthenticationState() = PinAuthenticationState(
+    eventSink = {}
 )

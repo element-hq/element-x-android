@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl
+package io.element.android.features.pin.impl.presentation
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -27,8 +27,8 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.pin.impl.auth.PinAuthenticationNode
-import io.element.android.features.pin.impl.create.CreatePinNode
+import io.element.android.features.pin.impl.presentation.auth.PinAuthenticationNode
+import io.element.android.features.pin.impl.presentation.create.CreatePinNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode

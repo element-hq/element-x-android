@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.pin.impl.auth
+package io.element.android.features.pin.impl.presentation.create
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,16 +27,16 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class PinAuthenticationNode @AssistedInject constructor(
+class CreatePinNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: PinAuthenticationPresenter,
+    private val presenter: CreatePinPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        PinAuthenticationView(
+        CreatePinView(
             state = state,
             modifier = modifier
         )
