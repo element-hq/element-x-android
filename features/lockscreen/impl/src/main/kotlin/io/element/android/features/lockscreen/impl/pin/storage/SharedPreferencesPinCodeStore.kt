@@ -22,6 +22,8 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
@@ -38,6 +40,7 @@ class SharedPreferencesPinCodeStore @Inject constructor(
 ) : PinCodeStore {
 
     private val listeners = CopyOnWriteArrayList<PinCodeStore.Listener>()
+    private val mutex = Mutex()
 
     override suspend fun getEncryptedCode(): String? = withContext(dispatchers.io) {
         sharedPreferences.getString(ENCODED_PIN_CODE_KEY, null)
@@ -68,20 +71,26 @@ class SharedPreferencesPinCodeStore @Inject constructor(
     }
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int = withContext(dispatchers.io) {
-        sharedPreferences.getInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT)
+        mutex.withLock {
+            sharedPreferences.getInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT)
+        }
     }
 
     override suspend fun onWrongPin(): Int = withContext(dispatchers.io) {
-        val remaining = getRemainingPinCodeAttemptsNumber() - 1
-        sharedPreferences.edit {
-            putInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, remaining)
+        mutex.withLock {
+            val remaining = getRemainingPinCodeAttemptsNumber() - 1
+            sharedPreferences.edit {
+                putInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, remaining)
+            }
+            remaining
         }
-        remaining
     }
 
     override suspend fun resetCounter() = withContext(dispatchers.io) {
-        sharedPreferences.edit {
-            remove(REMAINING_PIN_CODE_ATTEMPTS_KEY)
+        mutex.withLock {
+            sharedPreferences.edit {
+                remove(REMAINING_PIN_CODE_ATTEMPTS_KEY)
+            }
         }
     }
 

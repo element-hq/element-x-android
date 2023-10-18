@@ -16,10 +16,12 @@
 
 package io.element.android.features.lockscreen.impl.pin.storage
 
+private const val DEFAULT_REMAINING_ATTEMPTS = 3
+
 class InMemoryPinCodeStore : PinCodeStore {
 
     private var pinCode: String? = null
-    private var remainingAttempts: Int = 3
+    private var remainingAttempts: Int = DEFAULT_REMAINING_ATTEMPTS
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return remainingAttempts
@@ -30,7 +32,7 @@ class InMemoryPinCodeStore : PinCodeStore {
     }
 
     override suspend fun resetCounter() {
-        remainingAttempts = 3
+        remainingAttempts = DEFAULT_REMAINING_ATTEMPTS
     }
 
     override fun addListener(listener: PinCodeStore.Listener) {

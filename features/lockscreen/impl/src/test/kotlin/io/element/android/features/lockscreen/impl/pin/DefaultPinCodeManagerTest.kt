@@ -31,7 +31,7 @@ class DefaultPinCodeManagerTest {
     private val pinCodeManager = DefaultPinCodeManager(secretKeyProvider, encryptionDecryptionService, pinCodeStore)
 
     @Test
-    fun given_a_pin_code_when_create_and_delete_assert_no_pin_code_left() = runTest {
+    fun `given a pin code when create and delete assert no pin code left`() = runTest {
         pinCodeManager.createPinCode("1234")
         assertThat(pinCodeManager.isPinCodeAvailable()).isTrue()
         pinCodeManager.deletePinCode()
@@ -39,14 +39,14 @@ class DefaultPinCodeManagerTest {
     }
 
     @Test
-    fun given_a_pin_code_when_create_and_verify_with_the_same_pin_succeed() = runTest {
+    fun `given a pin code when create and verify with the same pin succeed`() = runTest {
         val pinCode = "1234"
         pinCodeManager.createPinCode(pinCode)
         assertThat(pinCodeManager.verifyPinCode(pinCode)).isTrue()
     }
 
     @Test
-    fun given_a_pin_code_when_create_and_verify_with_a_different_pin_fails() = runTest {
+    fun `given a pin code when create and verify with a different pin fails`() = runTest {
         pinCodeManager.createPinCode("1234")
         assertThat(pinCodeManager.verifyPinCode("1235")).isFalse()
     }

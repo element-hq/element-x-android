@@ -28,7 +28,7 @@ class AESEncryptionDecryptionServiceTest {
     private val encryptionDecryptionService = AESEncryptionDecryptionService()
 
     @Test
-    fun given_a_valid_key_then_encrypt_decrypt_work() {
+    fun `given a valid key then encrypt decrypt work`() {
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES)
         keyGenerator.init(128)
         val key = keyGenerator.generateKey()
@@ -39,7 +39,7 @@ class AESEncryptionDecryptionServiceTest {
     }
 
     @Test
-    fun given_a_wrong_key_then_decrypt_fail() {
+    fun `given a wrong key then decrypt fail`() {
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES)
         keyGenerator.init(128)
         val encryptionKey = keyGenerator.generateKey()
