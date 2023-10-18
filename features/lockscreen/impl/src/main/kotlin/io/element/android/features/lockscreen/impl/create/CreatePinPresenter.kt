@@ -17,6 +17,10 @@
 package io.element.android.features.lockscreen.impl.create
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import io.element.android.features.lockscreen.impl.create.model.PinEntry
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
@@ -24,14 +28,20 @@ class CreatePinPresenter @Inject constructor() : Presenter<CreatePinState> {
 
     @Composable
     override fun present(): CreatePinState {
+        val pinEntry by remember {
+            mutableStateOf(PinEntry.empty(4))
+        }
 
         fun handleEvents(event: CreatePinEvents) {
             when (event) {
-                CreatePinEvents.MyEvent -> Unit
+                is CreatePinEvents.OnPinEntryChanged -> {
+                    pinEntry.fillWith(event.entryAsText)
+                }
             }
         }
 
         return CreatePinState(
+            pinEntry = pinEntry,
             eventSink = ::handleEvents
         )
     }

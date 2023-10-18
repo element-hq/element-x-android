@@ -18,15 +18,30 @@
 
 package io.element.android.features.lockscreen.impl.create
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import io.element.android.features.lockscreen.impl.create.model.PinDigit
+import io.element.android.features.lockscreen.impl.create.model.PinEntry
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -34,7 +49,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.pinDigitBg
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun CreatePinView(
@@ -59,6 +77,7 @@ fun CreatePinView(
                     .consumeWindowInsets(padding),
                 header = { CreatePinHeader() },
                 footer = { CreatePinFooter() },
+                content = { CreatePinContent(state) }
             )
         }
     )
@@ -85,6 +104,89 @@ private fun CreatePinFooter() {
 
         }
     )
+}
+
+@Composable
+private fun CreatePinContent(
+    state: CreatePinState,
+    modifier: Modifier = Modifier,
+) {
+
+    PinEntryTextField(
+        state.pinEntry,
+        onValueChange = {
+            state.eventSink(CreatePinEvents.OnPinEntryChanged(it))
+        },
+        modifier = modifier
+            .padding(top = 36.dp)
+            .fillMaxWidth()
+    )
+}
+
+@Composable
+fun PinEntryTextField(
+    pinEntry: PinEntry,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BasicTextField(
+        modifier = modifier,
+        value = TextFieldValue(pinEntry.toText()),
+        onValueChange = {
+            onValueChange(it.text)
+        },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        decorationBox = {
+            PinEntryRow(pinEntry = pinEntry)
+        }
+    )
+}
+
+@Composable
+private fun PinEntryRow(
+    pinEntry: PinEntry,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        for (digit in pinEntry.digits) {
+            PinDigitView(digit = digit)
+        }
+    }
+}
+
+@Composable
+private fun PinDigitView(
+    digit: PinDigit,
+    modifier: Modifier = Modifier,
+) {
+    val shape = RoundedCornerShape(8.dp)
+    val appearanceModifier = when (digit) {
+        PinDigit.Empty -> {
+            Modifier.border(1.dp, ElementTheme.colors.iconPrimary, shape)
+        }
+        is PinDigit.Filled -> {
+            Modifier.background(ElementTheme.colors.pinDigitBg, shape)
+        }
+    }
+    Box(
+        modifier = modifier
+            .size(40.dp, 50.dp)
+            .then(appearanceModifier),
+        contentAlignment = Alignment.Center,
+
+        ) {
+        if (digit is PinDigit.Filled) {
+            Text(
+                text = digit.toText(),
+                style = ElementTheme.typography.fontHeadingMdBold
+            )
+        }
+
+    }
 }
 
 @Composable

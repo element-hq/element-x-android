@@ -17,6 +17,9 @@
 package io.element.android.features.lockscreen.impl.create
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.lockscreen.impl.create.model.PinDigit
+import io.element.android.features.lockscreen.impl.create.model.PinEntry
+import kotlinx.collections.immutable.persistentListOf
 
 open class CreatePinStateProvider : PreviewParameterProvider<CreatePinState> {
     override val values: Sequence<CreatePinState>
@@ -27,5 +30,13 @@ open class CreatePinStateProvider : PreviewParameterProvider<CreatePinState> {
 }
 
 fun aCreatePinState() = CreatePinState(
+    pinEntry = PinEntry(
+        digits = persistentListOf(
+            PinDigit.Filled('1'),
+            PinDigit.Filled('2'),
+            PinDigit.Empty,
+            PinDigit.Empty,
+        )
+    ),
     eventSink = {}
 )

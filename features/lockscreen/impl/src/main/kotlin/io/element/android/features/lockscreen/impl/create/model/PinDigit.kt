@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.create.model
 
-import io.element.android.features.lockscreen.impl.create.model.PinEntry
+sealed interface PinDigit {
+    data object Empty : PinDigit
+    data class Filled(val value: Char) : PinDigit
 
-data class CreatePinState(
-    val pinEntry: PinEntry,
-    val eventSink: (CreatePinEvents) -> Unit
-)
+    fun toText(): String {
+        return when (this) {
+            is Empty -> ""
+            is Filled -> value.toString()
+        }
+    }
+}
