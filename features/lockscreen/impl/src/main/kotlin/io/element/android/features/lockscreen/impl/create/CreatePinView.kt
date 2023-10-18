@@ -14,31 +14,77 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package io.element.android.features.lockscreen.impl.create
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Text
-import timber.log.Timber
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
 @Composable
 fun CreatePinView(
     state: CreatePinState,
+    onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Timber.d("CreatePinView: $state")
-    Box(modifier, contentAlignment = Alignment.Center) {
-        Text(
-            "CreatePin feature view",
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    BackButton(onClick = onBackClicked)
+                },
+                title = {}
+            )
+        },
+        content = { padding ->
+            HeaderFooterPage(
+                modifier = Modifier
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
+                header = { CreatePinHeader() },
+                footer = { CreatePinFooter() },
+            )
+        }
+    )
+}
+
+@Composable
+private fun CreatePinHeader(
+    modifier: Modifier = Modifier,
+) {
+    IconTitleSubtitleMolecule(
+        modifier = modifier,
+        title = "Choose 4 digit PIN",
+        subTitle = "Lock Element to add extra security to your chats.\n\nChoose something memorable. If you forget this PIN, you will be logged out of the app",
+        iconImageVector = Icons.Default.Lock,
+    )
+}
+
+@Composable
+private fun CreatePinFooter() {
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        text = "Continue",
+        onClick = {
+
+        }
+    )
 }
 
 @Composable
@@ -47,6 +93,7 @@ internal fun CreatePinViewPreview(@PreviewParameter(CreatePinStateProvider::clas
     ElementPreview {
         CreatePinView(
             state = state,
+            onBackClicked = {},
         )
     }
 }
