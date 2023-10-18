@@ -32,13 +32,14 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.VectorIcons
+import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun UserDefinedRoomNotificationSettingsView(
@@ -66,7 +67,7 @@ fun UserDefinedRoomNotificationSettingsView(
             if (roomNotificationSettings != null && state.displayNotificationMode != null) {
                 RoomNotificationSettingsOptions(
                     selected = state.displayNotificationMode,
-                    enabled = roomNotificationSettings.isDefault,
+                    enabled = !state.displayIsDefault.orTrue(),
                     onOptionSelected = {
                         state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
                     },
@@ -75,7 +76,7 @@ fun UserDefinedRoomNotificationSettingsView(
 
             PreferenceText(
                 title = stringResource(R.string.screen_room_notification_settings_edit_remove_setting),
-                icon = ImageVector.vectorResource(VectorIcons.Delete),
+                icon = ImageVector.vectorResource(CommonDrawables.ic_compound_delete),
                 tintColor = MaterialTheme.colorScheme.error,
                 onClick = {
                     state.eventSink(RoomNotificationSettingsEvents.DeleteCustomNotification)
@@ -87,7 +88,7 @@ fun UserDefinedRoomNotificationSettingsView(
                     ProgressDialog()
                 }
                 is Async.Failure -> {
-                    ShowChangeNotificationSettingError(state)
+                    ShowChangeNotificationSettingError(state, RoomNotificationSettingsEvents.ClearSetNotificationError)
                 }
                 else -> Unit
             }
@@ -97,7 +98,7 @@ fun UserDefinedRoomNotificationSettingsView(
                     ProgressDialog()
                 }
                 is Async.Failure -> {
-                    ShowChangeNotificationSettingError(state)
+                    ShowChangeNotificationSettingError(state, RoomNotificationSettingsEvents.ClearRestoreDefaultError)
                 }
                 is Async.Success -> {
                     LaunchedEffect(state.restoreDefaultAction) {
