@@ -7,8 +7,10 @@
   <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
   <string name="screen_room_attachment_source_camera_video">"錄影"</string>
   <string name="screen_room_attachment_source_files">"附件"</string>
+  <string name="screen_room_attachment_source_gallery">"照片與影片庫"</string>
   <string name="screen_room_attachment_source_location">"位置"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
+  <string name="screen_room_attachment_text_formatting">"格式化文字"</string>
   <string name="screen_room_invite_again_alert_title">"此聊天室只有您一個人"</string>
   <string name="screen_room_message_copied">"訊息已複製"</string>
   <string name="screen_room_no_permission_to_post">"您沒有權限在此聊天室傳送訊息"</string>
@@ -17,8 +19,11 @@
   <string name="screen_room_notification_settings_error_restoring_default">"無法重設為預設模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"無法設定模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"所有訊息"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"只限提及與關鍵字"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
+  <string name="screen_room_reactions_show_less">"較少"</string>
+  <string name="screen_room_reactions_show_more">"更多"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"重傳"</string>
   <string name="screen_room_retry_send_menu_title">"無法傳送您的訊息"</string>
-  <string name="screen_room_retry_send_menu_remove_action">"移除"</string>
+  <string name="screen_room_timeline_add_reaction">"新增表情符號"</string>
+  <string name="screen_room_timeline_less_reactions">"較少"</string>
 </resources>

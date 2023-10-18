@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,9 +34,9 @@ import io.element.android.features.messages.impl.media.local.LocalMediaActions
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.designsystem.utils.SnackbarMessage
-import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -59,7 +60,7 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        var loadMediaTrigger by remember { mutableStateOf(0) }
+        var loadMediaTrigger by remember { mutableIntStateOf(0) }
         val mediaFile: MutableState<MediaFile?> = remember {
             mutableStateOf(null)
         }

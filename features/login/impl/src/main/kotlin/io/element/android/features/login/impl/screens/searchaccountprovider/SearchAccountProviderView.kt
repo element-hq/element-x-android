@@ -32,9 +32,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -57,18 +54,20 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderVie
 import io.element.android.features.login.impl.changeserver.ChangeServerEvents
 import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.resolver.HomeserverData
+import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -105,7 +104,7 @@ fun SearchAccountProviderView(
                 item {
                     IconTitleSubtitleMolecule(
                         modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
-                        iconImageVector = Icons.Filled.Search,
+                        iconResourceId = CommonDrawables.ic_compound_search,
                         title = stringResource(id = R.string.screen_account_provider_form_title),
                         subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
                     )
@@ -141,7 +140,7 @@ fun SearchAccountProviderView(
                                     eventSink(SearchAccountProviderEvents.UserInput(""))
                                 }) {
                                     Icon(
-                                        imageVector = Icons.Filled.Close,
+                                        resourceId = CommonDrawables.ic_compound_close,
                                         contentDescription = stringResource(CommonStrings.action_clear)
                                     )
                                 }
@@ -197,9 +196,9 @@ fun SearchAccountProviderView(
 
 @Composable
 private fun HomeserverData.toAccountProvider(): AccountProvider {
-    val isMatrixOrg = homeserverUrl == "https://matrix.org"
+    val isMatrixOrg = homeserverUrl == LoginConstants.MATRIX_ORG_URL
     return AccountProvider(
-        title = homeserverUrl.removePrefix("http://").removePrefix("https://"),
+        url = homeserverUrl,
         subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
         isPublic = isMatrixOrg, // There is no need to know for other servers right now
         isMatrixOrg = isMatrixOrg,
@@ -208,7 +207,7 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun SearchAccountProviderViewPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) = ElementPreview {
     SearchAccountProviderView(

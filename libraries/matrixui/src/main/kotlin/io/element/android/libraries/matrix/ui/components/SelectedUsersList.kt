@@ -29,7 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -37,7 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -55,7 +55,7 @@ fun SelectedUsersList(
 ) {
     val lazyListState = rememberLazyListState()
     if (autoScroll) {
-        var currentSize by rememberSaveable { mutableStateOf(selectedUsers.size) }
+        var currentSize by rememberSaveable { mutableIntStateOf(selectedUsers.size) }
         LaunchedEffect(selectedUsers.size) {
             val isItemAdded = selectedUsers.size > currentSize
             if (isItemAdded) {
@@ -128,7 +128,7 @@ fun SelectedUsersList(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun SelectedUsersListPreview() = ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

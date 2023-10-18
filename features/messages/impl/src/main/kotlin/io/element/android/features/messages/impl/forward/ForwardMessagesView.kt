@@ -48,7 +48,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
@@ -135,7 +135,7 @@ fun ForwardMessagesView(
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
         ) {
-            SearchBar<ImmutableList<RoomSummaryDetails>>(
+            SearchBar(
                 placeHolderTitle = stringResource(CommonStrings.action_search),
                 query = state.query,
                 onQueryChange = { state.eventSink(ForwardMessagesEvents.UpdateQuery(it)) },
@@ -204,7 +204,7 @@ fun ForwardMessagesView(
 }
 
 @Composable
-internal fun SelectedRooms(
+private fun SelectedRooms(
     selectedRooms: ImmutableList<RoomSummaryDetails>,
     onRoomRemoved: (RoomSummaryDetails) -> Unit,
     modifier: Modifier = Modifier,
@@ -221,7 +221,7 @@ internal fun SelectedRooms(
 }
 
 @Composable
-internal fun RoomSummaryView(
+private fun RoomSummaryView(
     summary: RoomSummaryDetails,
     isSelected: Boolean,
     onSelection: (RoomSummaryDetails) -> Unit,
@@ -279,7 +279,7 @@ private fun ForwardingErrorDialog(onDismiss: () -> Unit, modifier: Modifier = Mo
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ForwardMessagesViewPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) = ElementPreview {
     ForwardMessagesView(

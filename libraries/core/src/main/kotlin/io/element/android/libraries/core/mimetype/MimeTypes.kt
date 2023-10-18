@@ -31,6 +31,7 @@ object MimeTypes {
     const val BadJpg = "image/jpg"
     const val Jpeg = "image/jpeg"
     const val Gif = "image/gif"
+    const val WebP = "image/webp"
 
     const val Videos = "video/*"
     const val Mp4 = "video/mp4"
@@ -51,4 +52,12 @@ object MimeTypes {
     fun String?.isMimeTypeFile() = this?.startsWith("file/").orFalse()
     fun String?.isMimeTypeText() = this?.startsWith("text/").orFalse()
     fun String?.isMimeTypeAny() = this?.startsWith("*/").orFalse()
+
+    fun fromFileExtension(fileExtension: String): String {
+        return when (fileExtension.lowercase()) {
+            "apk" -> Apk
+            "pdf" -> Pdf
+            else -> OctetStream
+        }
+    }
 }

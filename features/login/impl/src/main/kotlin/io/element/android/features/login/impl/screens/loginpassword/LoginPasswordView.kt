@@ -31,9 +31,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -61,7 +58,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -72,6 +69,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.autofill
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
@@ -141,7 +139,7 @@ fun LoginPasswordView(
             Spacer(modifier = Modifier.weight(1f))
             // Submit
             Button(
-                text = stringResource(R.string.screen_login_submit),
+                text = stringResource(CommonStrings.action_continue),
                 showProgress = isLoading,
                 onClick = ::submit,
                 enabled = state.submitEnabled || isLoading,
@@ -169,7 +167,7 @@ fun LoginPasswordView(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun LoginForm(
+private fun LoginForm(
     state: LoginPasswordState,
     isLoading: Boolean,
     onSubmit: () -> Unit,
@@ -201,7 +199,7 @@ internal fun LoginForm(
                     eventSink(LoginPasswordEvents.SetLogin(it))
                 }),
             placeholder = {
-                Text(text = stringResource(R.string.screen_login_username_hint))
+                Text(text = stringResource(CommonStrings.common_username))
             },
             onValueChange = {
                 loginFieldState = it
@@ -220,7 +218,7 @@ internal fun LoginForm(
                     IconButton(onClick = {
                         loginFieldState = ""
                     }) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(CommonStrings.action_clear))
+                        Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = stringResource(CommonStrings.action_clear))
                     }
                 }
             } else null,
@@ -248,17 +246,17 @@ internal fun LoginForm(
                 eventSink(LoginPasswordEvents.SetPassword(it))
             },
             placeholder = {
-                Text(text = stringResource(R.string.screen_login_password_hint))
+                Text(text = stringResource(CommonStrings.common_password))
             },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val image =
-                    if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    if (passwordVisible) CommonDrawables.ic_compound_visibility_on else CommonDrawables.ic_compound_visibility_off
                 val description =
                     if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
 
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = image, description)
+                    Icon(resourceId = image, description)
                 }
             },
             keyboardOptions = KeyboardOptions(
@@ -274,7 +272,7 @@ internal fun LoginForm(
 }
 
 @Composable
-internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
+private fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
         title = stringResource(id = CommonStrings.dialog_title_error),
         content = stringResource(loginError(error)),
@@ -282,7 +280,7 @@ internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) = ElementPreview {
     LoginPasswordView(

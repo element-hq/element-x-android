@@ -21,8 +21,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-fun FormattedBody.toHtmlDocument(): Document? {
+fun FormattedBody.toHtmlDocument(prefix: String? = null): Document? {
     return takeIf { it.format == MessageFormat.HTML }?.body?.let { formattedBody ->
-        Jsoup.parse(formattedBody)
+        if (prefix != null) {
+            Jsoup.parse("$prefix $formattedBody")
+        } else {
+            Jsoup.parse(formattedBody)
+        }
     }
 }

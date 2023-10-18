@@ -94,6 +94,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             }
             MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction
             MessageLikeEventContent.Sticker -> NotificationContent.MessageLike.Sticker
+            is MessageLikeEventContent.Poll -> NotificationContent.MessageLike.Poll(senderId, question)
         }
     }
 }

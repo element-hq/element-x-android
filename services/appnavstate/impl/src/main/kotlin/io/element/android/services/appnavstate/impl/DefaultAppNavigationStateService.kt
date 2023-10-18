@@ -25,9 +25,9 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.services.appnavstate.api.AppForegroundStateService
-import io.element.android.services.appnavstate.api.NavigationState
-import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.AppNavigationState
+import io.element.android.services.appnavstate.api.AppNavigationStateService
+import io.element.android.services.appnavstate.api.NavigationState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,16 +50,15 @@ class DefaultAppNavigationStateService @Inject constructor(
 
     private val state = MutableStateFlow(
         AppNavigationState(
-                navigationState = NavigationState.Root,
-                isInForeground = true,
-            )
+            navigationState = NavigationState.Root,
+            isInForeground = true,
+        )
     )
     override val appNavigationState: StateFlow<AppNavigationState> = state
 
     init {
         coroutineScope.launch {
             appForegroundStateService.start()
-
             appForegroundStateService.isInForeground.collect { isInForeground ->
                 state.getAndUpdate { it.copy(isInForeground = isInForeground) }
             }
@@ -83,7 +82,7 @@ class DefaultAppNavigationStateService @Inject constructor(
         val currentValue = state.value.navigationState
         Timber.tag(loggerTag.value).d("Navigating to space $spaceId. Current state: $currentValue")
         val newValue: NavigationState.Space = when (currentValue) {
-            NavigationState.Root -> error("onNavigateToSession() must be called first")
+            NavigationState.Root -> return logError("onNavigateToSession()")
             is NavigationState.Session -> NavigationState.Space(owner, spaceId, currentValue)
             is NavigationState.Space -> NavigationState.Space(owner, spaceId, currentValue.parentSession)
             is NavigationState.Room -> NavigationState.Space(owner, spaceId, currentValue.parentSpace.parentSession)
@@ -96,8 +95,8 @@ class DefaultAppNavigationStateService @Inject constructor(
         val currentValue = state.value.navigationState
         Timber.tag(loggerTag.value).d("Navigating to room $roomId. Current state: $currentValue")
         val newValue: NavigationState.Room = when (currentValue) {
-            NavigationState.Root -> error("onNavigateToSession() must be called first")
-            is NavigationState.Session -> error("onNavigateToSpace() must be called first")
+            NavigationState.Root -> return logError("onNavigateToSession()")
+            is NavigationState.Session -> return logError("onNavigateToSpace()")
             is NavigationState.Space -> NavigationState.Room(owner, roomId, currentValue)
             is NavigationState.Room -> NavigationState.Room(owner, roomId, currentValue.parentSpace)
             is NavigationState.Thread -> NavigationState.Room(owner, roomId, currentValue.parentRoom.parentSpace)
@@ -109,9 +108,9 @@ class DefaultAppNavigationStateService @Inject constructor(
         val currentValue = state.value.navigationState
         Timber.tag(loggerTag.value).d("Navigating to thread $threadId. Current state: $currentValue")
         val newValue: NavigationState.Thread = when (currentValue) {
-            NavigationState.Root -> error("onNavigateToSession() must be called first")
-            is NavigationState.Session -> error("onNavigateToSpace() must be called first")
-            is NavigationState.Space -> error("onNavigateToRoom() must be called first")
+            NavigationState.Root -> return logError("onNavigateToSession()")
+            is NavigationState.Session -> return logError("onNavigateToSpace()")
+            is NavigationState.Space -> return logError("onNavigateToRoom()")
             is NavigationState.Room -> NavigationState.Thread(owner, threadId, currentValue)
             is NavigationState.Thread -> NavigationState.Thread(owner, threadId, currentValue.parentRoom)
         }
@@ -123,10 +122,10 @@ class DefaultAppNavigationStateService @Inject constructor(
         Timber.tag(loggerTag.value).d("Leaving thread. Current state: $currentValue")
         if (!currentValue.assertOwner(owner)) return
         val newValue: NavigationState.Room = when (currentValue) {
-            NavigationState.Root -> error("onNavigateToSession() must be called first")
-            is NavigationState.Session -> error("onNavigateToSpace() must be called first")
-            is NavigationState.Space -> error("onNavigateToRoom() must be called first")
-            is NavigationState.Room -> error("onNavigateToThread() must be called first")
+            NavigationState.Root -> return logError("onNavigateToSession()")
+            is NavigationState.Session -> return logError("onNavigateToSpace()")
+            is NavigationState.Space -> return logError("onNavigateToRoom()")
+            is NavigationState.Room -> return logError("onNavigateToThread()")
             is NavigationState.Thread -> currentValue.parentRoom
         }
         state.getAndUpdate { it.copy(navigationState = newValue) }
@@ -137,9 +136,9 @@ class DefaultAppNavigationStateService @Inject constructor(
         Timber.tag(loggerTag.value).d("Leaving room. Current state: $currentValue")
         if (!currentValue.assertOwner(owner)) return
         val newValue: NavigationState.Space = when (currentValue) {
-            NavigationState.Root -> error("onNavigateToSession() must be called first")
-            is NavigationState.Session -> error("onNavigateToSpace() must be called first")
-            is NavigationState.Space -> error("onNavigateToRoom() must be called first")
+            NavigationState.Root -> return logError("onNavigateToSession()")
+            is NavigationState.Session -> return logError("onNavigateToSpace()")
+            is NavigationState.Space -> return logError("onNavigateToRoom()")
             is NavigationState.Room -> currentValue.parentSpace
             is NavigationState.Thread -> currentValue.parentRoom.parentSpace
         }
@@ -151,8 +150,8 @@ class DefaultAppNavigationStateService @Inject constructor(
         Timber.tag(loggerTag.value).d("Leaving space. Current state: $currentValue")
         if (!currentValue.assertOwner(owner)) return
         val newValue: NavigationState.Session = when (currentValue) {
-            NavigationState.Root -> error("onNavigateToSession() must be called first")
-            is NavigationState.Session -> error("onNavigateToSpace() must be called first")
+            NavigationState.Root -> return logError("onNavigateToSession()")
+            is NavigationState.Session -> return logError("onNavigateToSpace()")
             is NavigationState.Space -> currentValue.parentSession
             is NavigationState.Room -> currentValue.parentSpace.parentSession
             is NavigationState.Thread -> currentValue.parentRoom.parentSpace.parentSession
@@ -165,6 +164,10 @@ class DefaultAppNavigationStateService @Inject constructor(
         Timber.tag(loggerTag.value).d("Leaving session. Current state: $currentValue")
         if (!currentValue.assertOwner(owner)) return
         state.getAndUpdate { it.copy(navigationState = NavigationState.Root) }
+    }
+
+    private fun logError(logPrefix: String) {
+        Timber.tag(loggerTag.value).w("$logPrefix must be call first.")
     }
 
     private fun NavigationState.assertOwner(owner: String): Boolean {

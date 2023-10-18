@@ -30,12 +30,12 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
-import io.element.android.libraries.designsystem.components.preferences.PreferenceView
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -56,7 +56,7 @@ fun EditDefaultNotificationSettingView(
     } else {
         CommonStrings.screen_notification_settings_group_chats
     }
-    PreferenceView(
+    PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
         title = stringResource(id = title)
@@ -133,8 +133,7 @@ fun EditDefaultNotificationSettingView(
         }
     }
 }
-
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun EditDefaultNotificationSettingViewPreview(
     @PreviewParameter(EditDefaultNotificationSettingsStateProvider::class) state: EditDefaultNotificationSettingState

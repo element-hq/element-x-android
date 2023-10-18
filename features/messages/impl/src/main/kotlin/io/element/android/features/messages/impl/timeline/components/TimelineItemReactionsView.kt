@@ -16,8 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -33,12 +31,13 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun TimelineItemReactions(
+fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
     isOutgoing: Boolean,
     onReactionClicked: (emoji: String) -> Unit,
@@ -47,16 +46,16 @@ fun TimelineItemReactions(
     modifier: Modifier = Modifier,
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
-        TimelineItemReactionsView(
-            modifier = modifier,
-            reactions = reactionsState.reactions,
-            expanded = expanded,
-            isOutgoing = isOutgoing,
-            onReactionClick = onReactionClicked,
-            onReactionLongClick = onReactionLongClicked,
-            onMoreReactionsClick = onMoreReactionsClicked,
-            onToggleExpandClick = { expanded = !expanded },
-        )
+    TimelineItemReactionsView(
+        modifier = modifier,
+        reactions = reactionsState.reactions,
+        expanded = expanded,
+        isOutgoing = isOutgoing,
+        onReactionClick = onReactionClicked,
+        onReactionLongClick = onReactionLongClicked,
+        onMoreReactionsClick = onMoreReactionsClicked,
+        onToggleExpandClick = { expanded = !expanded },
+    )
 }
 
 @Composable
@@ -96,7 +95,7 @@ private fun TimelineItemReactionsView(
             },
             addMoreButton = {
                 MessagesReactionButton(
-                    content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+                    content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_september_add_reaction),
                     onClick = onMoreReactionsClick,
                     onLongClick = {}
                 )
@@ -116,7 +115,7 @@ private fun TimelineItemReactionsView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsViewPreview() = ElementPreview {
     ContentToPreview(
@@ -124,7 +123,7 @@ internal fun TimelineItemReactionsViewPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsViewFewPreview() = ElementPreview {
     ContentToPreview(
@@ -132,7 +131,7 @@ internal fun TimelineItemReactionsViewFewPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
     ContentToPreview(
@@ -140,7 +139,7 @@ internal fun TimelineItemReactionsViewIncomingPreview() = ElementPreview {
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsViewOutgoingPreview() = ElementPreview {
     ContentToPreview(
@@ -154,7 +153,7 @@ private fun ContentToPreview(
     reactions: ImmutableList<AggregatedReaction>,
     isOutgoing: Boolean = false
 ) {
-    TimelineItemReactions(
+    TimelineItemReactionsView(
         reactionsState = TimelineItemReactions(
             reactions
         ),

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_bullet_list">"Přepnout seznam s odrážkami"</string>
+  <string name="rich_text_editor_close_formatting_options">"Zavřít možnosti formátování"</string>
   <string name="rich_text_editor_code_block">"Přepnout blok kódu"</string>
   <string name="rich_text_editor_composer_placeholder">"Zpráva…"</string>
+  <string name="rich_text_editor_create_link">"Vytvořit odkaz"</string>
+  <string name="rich_text_editor_edit_link">"Upravit odkaz"</string>
   <string name="rich_text_editor_format_bold">"Použít tučný text"</string>
   <string name="rich_text_editor_format_italic">"Použít kurzívu"</string>
   <string name="rich_text_editor_format_strikethrough">"Použít přeškrtnutí"</string>
@@ -12,7 +15,10 @@
   <string name="rich_text_editor_inline_code">"Použít formát inline kódu"</string>
   <string name="rich_text_editor_link">"Nastavit odkaz"</string>
   <string name="rich_text_editor_numbered_list">"Přepnout číslovaný seznam"</string>
+  <string name="rich_text_editor_open_compose_options">"Otevřít možnosti psaní"</string>
   <string name="rich_text_editor_quote">"Přepnout citaci"</string>
+  <string name="rich_text_editor_remove_link">"Odstranit odkaz"</string>
   <string name="rich_text_editor_unindent">"Zrušit odsazení"</string>
+  <string name="rich_text_editor_url_placeholder">"Odkaz"</string>
   <string name="rich_text_editor_a11y_add_attachment">"Přidat přílohu"</string>
 </resources>

@@ -31,8 +31,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalContentColor
@@ -53,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&mode=design&t=U03tOFZz5FSLVUMa-1
@@ -118,7 +117,7 @@ fun TextButton(
 )
 
 @Composable
-internal fun ButtonInternal(
+private fun ButtonInternal(
     text: String,
     onClick: () -> Unit,
     style: ButtonStyle,
@@ -346,7 +345,7 @@ private fun ButtonCombinationPreview(
             // With icon
             ButtonRowPreview(
                 modifier = Modifier.then(modifier),
-                leadingIcon = IconSource.Vector(Icons.Outlined.Share),
+                leadingIcon = IconSource.Resource(CommonDrawables.ic_compound_share_android),
                 style = style,
                 size = size,
             )

@@ -61,7 +61,7 @@ import io.element.android.features.messages.impl.timeline.model.AggregatedReacti
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -160,7 +160,7 @@ private fun SheetContent(
 }
 
 @Composable
-fun AggregatedReactionButton(
+private fun AggregatedReactionButton(
     reaction: AggregatedReaction,
     isHighlighted: Boolean,
     onClick: () -> Unit,
@@ -215,7 +215,7 @@ fun AggregatedReactionButton(
 }
 
 @Composable
-fun SenderRow(
+private fun SenderRow(
     avatarData: AvatarData,
     name: String,
     userId: String,
@@ -266,7 +266,7 @@ fun SenderRow(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun SheetContentPreview(
     @PreviewParameter(ReactionSummaryStateProvider::class) state: ReactionSummaryState

@@ -11,10 +11,4 @@
   <string name="screen_login_error_unsupported_authentication">"El servidor seleccionado no admite contraseñas ni inicio de sesión OIDC. Póngase en contacto con su administrador o elija otro homeserver."</string>
   <string name="screen_login_form_header">"Introduce tus datos"</string>
   <string name="screen_login_title">"¡Hola de nuevo!"</string>
-  <string name="screen_account_provider_continue">"Continuar"</string>
-  <string name="screen_change_server_submit">"Continuar"</string>
-  <string name="screen_change_server_title">"Selecciona tu servidor"</string>
-  <string name="screen_login_password_hint">"Contraseña"</string>
-  <string name="screen_login_submit">"Continuar"</string>
-  <string name="screen_login_username_hint">"Usuario"</string>
 </resources>

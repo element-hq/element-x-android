@@ -42,7 +42,7 @@ import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -203,7 +203,7 @@ private fun RoomMemberListTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(R.string.screen_room_details_people_title),
+                text = stringResource(CommonStrings.common_people),
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         },
@@ -249,7 +249,7 @@ private fun RoomMemberSearchBar(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun RoomMemberListPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) = ElementPreview {
     RoomMemberListView(

@@ -33,8 +33,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -100,20 +98,20 @@ import androidx.compose.ui.unit.toSize
 import coil.imageLoader
 import coil.request.DefaultRequestOptions
 import coil.request.ImageRequest
-import coil.size.Size
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -130,7 +128,9 @@ object BloomDefaults {
      * Number of components to use with BlurHash to generate the blur effect.
      * Larger values mean more detailed blurs.
      */
-    const val HASH_COMPONENTS = 5
+    const val HASH_COMPONENTS = 4
+    const val ENCODE_SIZE_PX = 20
+    const val DECODE_SIZE_PX = 5
 
     /** Default bloom layers. */
     @Composable
@@ -190,7 +190,11 @@ fun Modifier.bloom(
     if (hash == null) return@composed this
 
     val hashedBitmap = remember(hash) {
-        BlurHash.decode(hash, BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)?.asImageBitmap()
+        BlurHash.decode(
+            blurHash = hash,
+            width = BloomDefaults.DECODE_SIZE_PX,
+            height = BloomDefaults.DECODE_SIZE_PX,
+        )?.asImageBitmap()
     } ?: return@composed this
     val density = LocalDensity.current
     val pixelSize = remember(blurSize, density) { blurSize.toIntSize(density) }
@@ -328,7 +332,6 @@ fun Modifier.avatarBloom(
 
     // Request the avatar contents to use as the bloom source
     val context = LocalContext.current
-    val density = LocalDensity.current
     if (avatarData.url != null) {
         val painterRequest = remember(avatarData) {
             ImageRequest.Builder(context)
@@ -338,7 +341,7 @@ fun Modifier.avatarBloom(
                 // Needed to be able to read pixels from the Bitmap for the hash
                 .allowHardware(false)
                 // Reduce size so it loads faster for large avatars
-                .size(with(density) { Size(64.dp.roundToPx(), 64.dp.roundToPx()) })
+                .size(BloomDefaults.ENCODE_SIZE_PX, BloomDefaults.ENCODE_SIZE_PX)
                 .build()
         }
 
@@ -350,9 +353,9 @@ fun Modifier.avatarBloom(
                     context.imageLoader.execute(painterRequest).drawable ?: return@withContext
                 val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@withContext
                 blurHash = BlurHash.encode(
-                    bitmap,
-                    BloomDefaults.HASH_COMPONENTS,
-                    BloomDefaults.HASH_COMPONENTS
+                    bitmap = bitmap,
+                    componentX = BloomDefaults.HASH_COMPONENTS,
+                    componentY = BloomDefaults.HASH_COMPONENTS,
                 )
             }
         }
@@ -372,14 +375,18 @@ fun Modifier.avatarBloom(
         // There is no URL so we'll generate an avatar with the initials and use that as the bloom source
         val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
         val initialsBitmap = initialsBitmap(
-            width = avatarData.size.dp,
-            height = avatarData.size.dp,
+            width = BloomDefaults.ENCODE_SIZE_PX.toDp(),
+            height = BloomDefaults.ENCODE_SIZE_PX.toDp(),
             text = avatarData.initial,
-            textColor =  avatarColors.foreground,
+            textColor = avatarColors.foreground,
             backgroundColor = avatarColors.background,
         )
         val hash = remember(avatarData, avatarColors) {
-            BlurHash.encode(initialsBitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+            BlurHash.encode(
+                bitmap = initialsBitmap.asAndroidBitmap(),
+                componentX = BloomDefaults.HASH_COMPONENTS,
+                componentY = BloomDefaults.HASH_COMPONENTS,
+            )
         }
         bloom(
             hash = hash,
@@ -430,7 +437,7 @@ private fun initialsBitmap(
         val bitmap = Bitmap.createBitmap(width.roundToPx(), height.roundToPx(), Bitmap.Config.ARGB_8888).asImageBitmap()
         androidx.compose.ui.graphics.Canvas(bitmap).also { canvas ->
             canvas.drawCircle(centerPx.toOffset(), width.toPx() / 2, backgroundPaint)
-            canvas.nativeCanvas.drawText(text, centerPx.x.toFloat() - result.size.width/2, centerPx.y * 2f - result.size.height/2 - 4, textPaint)
+            canvas.nativeCanvas.drawText(text, centerPx.x.toFloat() - result.size.width / 2, centerPx.y * 2f - result.size.height / 2 - 4, textPaint)
         }
         bitmap
     }
@@ -457,7 +464,7 @@ fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@DayNightPreviews
+@PreviewsDayNight
 @ShowkaseComposable(group = PreviewGroup.Bloom)
 @Composable
 internal fun BloomPreview() {
@@ -467,7 +474,9 @@ internal fun BloomPreview() {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
     ElementPreview {
         Scaffold(
-            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 Box {
                     MediumTopAppBar(
@@ -499,7 +508,10 @@ internal fun BloomPreview() {
                         },
                         actions = {
                             IconButton(onClick = {}) {
-                                Icon(imageVector = Icons.Default.Share, contentDescription = null)
+                                Icon(
+                                    resourceId = CommonDrawables.ic_compound_share_android,
+                                    contentDescription = null,
+                                )
                             }
                         },
                         title = {
@@ -525,21 +537,26 @@ internal fun BloomPreview() {
     }
 }
 
-class InitialsColorStateProvider : PreviewParameterProvider<Int> {
+class InitialsColorIntProvider : PreviewParameterProvider<Int> {
     override val values: Sequence<Int>
         get() = sequenceOf(0, 1, 2, 3, 4, 5, 6, 7)
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 @ShowkaseComposable(group = PreviewGroup.Bloom)
-internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::class) color: Int) {
+internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorIntProvider::class) color: Int) {
     ElementPreview {
         val avatarColors = AvatarColorsProvider.provide("$color", ElementTheme.isLightTheme)
         val bitmap = initialsBitmap(text = "F", backgroundColor = avatarColors.background, textColor = avatarColors.foreground)
-        val hash = BlurHash.encode(bitmap.asAndroidBitmap(), BloomDefaults.HASH_COMPONENTS, BloomDefaults.HASH_COMPONENTS)
+        val hash = BlurHash.encode(
+            bitmap = bitmap.asAndroidBitmap(),
+            componentX = BloomDefaults.HASH_COMPONENTS,
+            componentY = BloomDefaults.HASH_COMPONENTS,
+        )
         Box(
-            modifier = Modifier.size(256.dp)
+            modifier = Modifier
+                .size(256.dp)
                 .bloom(
                     hash = hash,
                     background = if (ElementTheme.isLightTheme) {

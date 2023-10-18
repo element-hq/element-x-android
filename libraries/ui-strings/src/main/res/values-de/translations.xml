@@ -9,6 +9,7 @@
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_user_menu">"Benutzermenü"</string>
   <string name="action_accept">"Akzeptieren"</string>
+  <string name="action_add_to_timeline">"Zur Zeitleiste hinzufügen"</string>
   <string name="action_back">"Zurück"</string>
   <string name="action_cancel">"Abbrechen"</string>
   <string name="action_choose_photo">"Foto auswählen"</string>
@@ -35,6 +36,7 @@
   <string name="action_invite_friends_to_app">"Freunde einladen %1$s"</string>
   <string name="action_invite_people_to_app">"Lade Personen in %1$s ein"</string>
   <string name="action_invites_list">"Einladungen"</string>
+  <string name="action_join">"Beitreten"</string>
   <string name="action_learn_more">"Mehr erfahren"</string>
   <string name="action_leave">"Verlassen"</string>
   <string name="action_leave_room">"Raum verlassen"</string>
@@ -44,6 +46,7 @@
   <string name="action_no">"Nein"</string>
   <string name="action_not_now">"Nicht jetzt"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_settings">"Einstellungen öffnen"</string>
   <string name="action_open_with">"Öffnen mit"</string>
   <string name="action_quick_reply">"Schnelle Antwort"</string>
   <string name="action_quote">"Zitat"</string>
@@ -69,6 +72,7 @@
   <string name="action_take_photo">"Foto machen"</string>
   <string name="action_view_source">"Quelle anzeigen"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="action_edit_poll">"Umfrage bearbeiten"</string>
   <string name="common_about">"Über"</string>
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
@@ -91,6 +95,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Bild"</string>
   <string name="common_in_reply_to">"Als Antwort auf %1$s"</string>
+  <string name="common_install_apk_android">"APK installieren"</string>
   <string name="common_invite_unknown_profile">"Diese Matrix-ID kann nicht gefunden werden, daher wird die Einladung möglicherweise nicht empfangen."</string>
   <string name="common_leaving_room">"Raum verlassen"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
@@ -105,6 +110,7 @@
   <string name="common_password">"Passwort"</string>
   <string name="common_people">"Personen"</string>
   <string name="common_permalink">"Permalink"</string>
+  <string name="common_permission">"Erlaubnis"</string>
   <string name="common_poll_total_votes">"Stimmen insgesamt: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Die Ergebnisse werden nach Ende der Umfrage angezeigt"</string>
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
@@ -120,7 +126,6 @@
   <string name="common_search_for_someone">"Nach jemandem suchen"</string>
   <string name="common_search_results">"Suchergebnisse"</string>
   <string name="common_security">"Sicherheit"</string>
-  <string name="common_select_your_server">"Wähle deinen Server aus"</string>
   <string name="common_sending">"Wird gesendet…"</string>
   <string name="common_server_not_supported">"Server wird nicht unterstützt"</string>
   <string name="common_server_url">"Server-URL"</string>
@@ -146,6 +151,8 @@
   <string name="common_verification_complete">"Verifizierung abgeschlossen"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Warten…"</string>
+  <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
+  <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_warning">"Warnung"</string>
   <string name="emoji_picker_category_activity">"Aktivitäten"</string>
@@ -179,7 +186,6 @@
     <item quantity="other">"%d Stimmen"</item>
   </plurals>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
-  <string name="rageshake_dialog_content">"Du scheinst das Telefon aus Frustration zu schütteln. Möchtest du den Bildschirm für den Fehlerbericht öffnen?"</string>
   <string name="report_content_explanation">"Diese Meldung wird an den Administrator deines Homeservers weitergeleitet. Dieser kann keine verschlüsselten Nachrichten lesen."</string>
   <string name="report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
   <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
@@ -213,7 +219,6 @@
   <string name="screen_notification_settings_system_notifications_turned_off">"Systembenachrichtigungen deaktiviert"</string>
   <string name="screen_notification_settings_title">"Benachrichtigungen"</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
-  <string name="screen_settings_oidc_account">"Konto und Geräte"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>
   <string name="screen_share_my_location_action">"Meinen Standort teilen"</string>
   <string name="screen_share_open_apple_maps">"In Apple Maps öffnen"</string>
@@ -223,7 +228,6 @@
   <string name="screen_view_location_title">"Standort"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>
-  <string name="settings_title_general">"Allgemein"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Fehler"</string>

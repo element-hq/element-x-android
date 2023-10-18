@@ -36,13 +36,14 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun ConfirmAccountProviderView(
@@ -86,7 +87,7 @@ fun ConfirmAccountProviderView(
         footer = {
             ButtonColumnMolecule {
                 Button(
-                    text = stringResource(id = R.string.screen_account_provider_continue),
+                    text = stringResource(id = CommonStrings.action_continue),
                     showProgress = isLoading,
                     onClick = { eventSink.invoke(ConfirmAccountProviderEvents.Continue) },
                     enabled = state.submitEnabled || isLoading,
@@ -138,7 +139,7 @@ fun ConfirmAccountProviderView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ConfirmAccountProviderViewPreview(
     @PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState

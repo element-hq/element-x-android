@@ -20,13 +20,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.DeveloperMode
-import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.InsertChart
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -37,14 +31,15 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.components.preferences.PreferenceView
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.preview.LargeHeightPreview
+import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.SnackbarHost
-import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
+import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
 import io.element.android.libraries.theme.ElementTheme
@@ -69,7 +64,7 @@ fun PreferencesRootView(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     // Include pref from other modules
-    PreferenceView(
+    PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
         title = stringResource(id = CommonStrings.common_settings),
@@ -92,7 +87,7 @@ fun PreferencesRootView(
         if (state.accountManagementUrl != null) {
             PreferenceText(
                 title = stringResource(id = CommonStrings.action_manage_account),
-                icon = Icons.Outlined.OpenInNew,
+                iconResourceId = CommonDrawables.ic_compound_pop_out,
                 onClick = { onManageAccountClicked(state.accountManagementUrl) },
             )
             HorizontalDivider()
@@ -107,32 +102,32 @@ fun PreferencesRootView(
         if (state.showNotificationSettings) {
             PreferenceText(
                 title = stringResource(id = CommonStrings.screen_notification_settings_title),
-                icon = Icons.Outlined.Notifications,
+                iconResourceId = CommonDrawables.ic_compound_notifications,
                 onClick = onOpenNotificationSettings,
             )
         }
         PreferenceText(
             title = stringResource(id = CommonStrings.action_report_bug),
-            icon = Icons.Outlined.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
             onClick = onOpenRageShake
         )
         PreferenceText(
             title = stringResource(id = CommonStrings.common_about),
-            icon = Icons.Outlined.Help,
+            iconResourceId = CommonDrawables.ic_compound_info,
             onClick = onOpenAbout,
         )
         HorizontalDivider()
         if (state.devicesManagementUrl != null) {
             PreferenceText(
                 title = stringResource(id = CommonStrings.action_manage_devices),
-                icon = Icons.Outlined.OpenInNew,
+                iconResourceId = CommonDrawables.ic_compound_pop_out,
                 onClick = { onManageAccountClicked(state.devicesManagementUrl) },
             )
             HorizontalDivider()
         }
         PreferenceText(
             title = stringResource(id = CommonStrings.common_advanced_settings),
-            icon = Icons.Outlined.Settings,
+            iconResourceId = CommonDrawables.ic_compound_settings,
             onClick = onOpenAdvancedSettings,
         )
         if (state.showDeveloperSettings) {
@@ -156,20 +151,20 @@ fun PreferencesRootView(
 }
 
 @Composable
-fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
+private fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
     PreferenceText(
         title = stringResource(id = CommonStrings.common_developer_options),
-        icon = Icons.Outlined.DeveloperMode,
+        iconResourceId = CommonDrawables.ic_developer_mode,
         onClick = onOpenDeveloperSettings
     )
 }
 
-@LargeHeightPreview
+@PreviewWithLargeHeight
 @Composable
 internal fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewLight { ContentToPreview(matrixUser) }
 
-@LargeHeightPreview
+@PreviewWithLargeHeight
 @Composable
 internal fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }

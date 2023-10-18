@@ -18,6 +18,7 @@
     * [knit](#knit)
     * [lint](#lint)
   * [Unit tests](#unit-tests)
+    * [konsist](#konsist)
   * [Tests](#tests)
   * [Accessibility](#accessibility)
   * [Jetpack Compose](#jetpack-compose)
@@ -156,6 +157,10 @@ Make sure the following commands execute without any error:
 ./gradlew test
 </pre>
 
+#### konsist
+
+[konsist](https://github.com/LemonAppDev/konsist) is setup in the project to check that the architecture and the naming rules are followed. Konsist tests are classical Unit tests.
+
 ### Tests
 
 Element X is currently supported on Android Marshmallow (API 23+): please test your change on an Android device (or Android emulator) running with API 23. Many issues can happen (including crashes) on older devices.
@@ -171,11 +176,11 @@ For instance, when updating the image `src` of an ImageView, please also conside
 
 ### Jetpack Compose
 
-When adding or editing `@Composable`, make sure that you create an internal function annotated with `@DayNightPreviews`, with a name suffixed by `Preview`, and having `ElementPreview` as the root composable.
+When adding or editing `@Composable`, make sure that you create an internal function annotated with `@PreviewsDayNight`, with a name suffixed by `Preview`, and having `ElementPreview` as the root composable.
 
 Example:
 ```kotlin
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PinIconPreview() = ElementPreview {
     PinIcon()

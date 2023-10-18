@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
+import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
@@ -114,6 +115,7 @@ class RustMatrixClient constructor(
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
+    private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -124,7 +126,16 @@ class RustMatrixClient constructor(
                 Timber.v("didReceiveAuthError -> do the cleanup")
                 //TODO handle isSoftLogout parameter.
                 appCoroutineScope.launch {
-                    doLogout(doRequest = false)
+                    val existingData = sessionStore.getSession(client.userId())
+                    if (existingData != null) {
+                        // Set isTokenValid to false
+                        val newData = client.session().toSessionData(
+                            isTokenValid = false,
+                            loginType = existingData.loginType,
+                        )
+                        sessionStore.updateData(newData)
+                    }
+                    doLogout(doRequest = false, removeSession = false)
                 }
             } else {
                 Timber.v("didReceiveAuthError -> already cleaning up")
@@ -134,7 +145,12 @@ class RustMatrixClient constructor(
         override fun didRefreshTokens() {
             Timber.w("didRefreshTokens()")
             appCoroutineScope.launch {
-                sessionStore.updateData(client.session().toSessionData())
+                val existingData = sessionStore.getSession(client.userId()) ?: return@launch
+                val newData = client.session().toSessionData(
+                    isTokenValid = existingData.isTokenValid,
+                    loginType = existingData.loginType,
+                )
+                sessionStore.updateData(newData)
             }
         }
     }
@@ -185,13 +201,15 @@ class RustMatrixClient constructor(
                 systemClock = clock,
                 roomContentForwarder = roomContentForwarder,
                 sessionData = sessionStore.getSession(sessionId.value)!!,
+                roomSyncSubscriber = roomSyncSubscriber
             )
         }
     }
 
     private fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
-        val fullRoom = cachedRoomListItem?.fullRoom()
+        // Keep using fullRoomBlocking for now as it's faster.
+        val fullRoom = cachedRoomListItem?.fullRoomBlocking()
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
             null
@@ -281,17 +299,15 @@ class RustMatrixClient constructor(
             runCatching { client.setDisplayName(displayName) }
         }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> =
         withContext(sessionDispatcher) {
-            runCatching { client.uploadAvatar(mimeType, data.toUByteArray().toList()) }
+            runCatching { client.uploadAvatar(mimeType, data) }
         }
 
     override suspend fun removeAvatar(): Result<Unit> =
         withContext(sessionDispatcher) {
             runCatching { client.removeAvatar() }
         }
-
 
     override fun syncService(): SyncService = rustSyncService
 
@@ -326,9 +342,9 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout(): String? = doLogout(doRequest = true)
+    override suspend fun logout(): String? = doLogout(doRequest = true, removeSession = true)
 
-    private suspend fun doLogout(doRequest: Boolean): String? {
+    private suspend fun doLogout(doRequest: Boolean, removeSession: Boolean): String? {
         var result: String? = null
         withContext(sessionDispatcher) {
             if (doRequest) {
@@ -340,7 +356,9 @@ class RustMatrixClient constructor(
             }
             close()
             baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
-            sessionStore.removeSession(sessionId.value)
+            if (removeSession) {
+                sessionStore.removeSession(sessionId.value)
+            }
         }
         return result
     }
@@ -364,10 +382,9 @@ class RustMatrixClient constructor(
         }
     }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
         runCatching {
-            client.uploadMedia(mimeType, data.toUByteArray().toList(), progressCallback?.toProgressWatcher())
+            client.uploadMedia(mimeType, data, progressCallback?.toProgressWatcher())
         }
     }
 

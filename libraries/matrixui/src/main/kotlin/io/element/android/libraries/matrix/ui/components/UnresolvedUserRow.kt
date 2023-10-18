@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,14 +23,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,10 +36,9 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
-import io.element.android.libraries.designsystem.theme.components.Checkbox
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -83,7 +78,7 @@ fun UnresolvedUserRow(
                     .padding(top = 3.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Error,
+                    resourceId = CommonDrawables.ic_compound_error,
                     contentDescription = "",
                     modifier = Modifier
                         .size(18.dp)
@@ -102,58 +97,9 @@ fun UnresolvedUserRow(
     }
 }
 
+@Preview
 @Composable
-fun CheckableUnresolvedUserRow(
-    checked: Boolean,
-    avatarData: AvatarData,
-    id: String,
-    modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> Unit = {},
-    enabled: Boolean = true,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(role = Role.Checkbox, enabled = enabled) {
-                onCheckedChange(!checked)
-            },
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        UnresolvedUserRow(
-            modifier = Modifier.weight(1f),
-            avatarData = avatarData,
-            id = id,
-        )
-
-        Checkbox(
-            modifier = Modifier.padding(end = 16.dp),
-            checked = checked,
-            onCheckedChange = null,
-            enabled = enabled,
-        )
-    }
+internal fun UnresolvedUserRowPreview() = ElementThemedPreview {
+    val matrixUser = aMatrixUser()
+    UnresolvedUserRow(matrixUser.getAvatarData(size = AvatarSize.UserListItem), matrixUser.userId.value)
 }
-
-@Preview
-@Composable
-internal fun UnresolvedUserRowPreview() =
-    ElementThemedPreview {
-        val matrixUser = aMatrixUser()
-        UnresolvedUserRow(matrixUser.getAvatarData(size = AvatarSize.UserListItem), matrixUser.userId.value)
-    }
-
-@Preview
-@Composable
-internal fun CheckableUnresolvedUserRowPreview() =
-    ElementThemedPreview {
-        val matrixUser = aMatrixUser()
-        Column {
-            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
-            HorizontalDivider()
-            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
-            HorizontalDivider()
-            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
-            HorizontalDivider()
-            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
-        }
-    }

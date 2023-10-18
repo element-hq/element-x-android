@@ -17,9 +17,11 @@
 package io.element.android.features.rageshake.impl.bugreport
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -43,27 +45,27 @@ class BugReportPresenter @Inject constructor(
 ) : Presenter<BugReportState> {
 
     private class BugReporterUploadListener(
-        private val sendingProgress: MutableState<Float>,
+        private val sendingProgress: MutableFloatState,
         private val sendingAction: MutableState<Async<Unit>>
     ) : BugReporterListener {
 
         override fun onUploadCancelled() {
-            sendingProgress.value = 0f
+            sendingProgress.floatValue = 0f
             sendingAction.value = Async.Uninitialized
         }
 
         override fun onUploadFailed(reason: String?) {
-            sendingProgress.value = 0f
+            sendingProgress.floatValue = 0f
             sendingAction.value = Async.Failure(Exception(reason))
         }
 
         override fun onProgress(progress: Int) {
-            sendingProgress.value = progress.toFloat() / 100
+            sendingProgress.floatValue = progress.toFloat() / 100
             sendingAction.value = Async.Loading()
         }
 
         override fun onUploadSucceed(reportUrl: String?) {
-            sendingProgress.value = 0f
+            sendingProgress.floatValue = 0f
             sendingAction.value = Async.Success(Unit)
         }
     }
@@ -80,7 +82,7 @@ class BugReportPresenter @Inject constructor(
             .collectAsState(initial = "")
 
         val sendingProgress = remember {
-            mutableStateOf(0f)
+            mutableFloatStateOf(0f)
         }
         val sendingAction: MutableState<Async<Unit>> = remember {
             mutableStateOf(Async.Uninitialized)
@@ -107,7 +109,7 @@ class BugReportPresenter @Inject constructor(
                     copy(sendScreenshot = event.sendScreenshot)
                 }
                 BugReportEvents.ClearError -> {
-                    sendingProgress.value = 0f
+                    sendingProgress.floatValue = 0f
                     sendingAction.value = Async.Uninitialized
                 }
             }
@@ -115,7 +117,7 @@ class BugReportPresenter @Inject constructor(
 
         return BugReportState(
             hasCrashLogs = crashInfo.isNotEmpty(),
-            sendingProgress = sendingProgress.value,
+            sendingProgress = sendingProgress.floatValue,
             sending = sendingAction.value,
             formState = formState.value,
             screenshotUri = screenshotUri.value,

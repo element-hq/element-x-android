@@ -17,8 +17,8 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.textcomposer.Message
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.Message
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 @Immutable
 sealed interface MessageComposerEvents {

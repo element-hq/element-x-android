@@ -26,8 +26,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumble.appyx.core.composable.Children
+import com.bumble.appyx.core.composable.PermanentChild
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
@@ -48,14 +50,18 @@ import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.lockscreen.api.LockScreenState
+import io.element.android.features.lockscreen.api.LockScreenStateService
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.deeplink.DeeplinkData
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
@@ -68,6 +74,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -86,11 +93,17 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val networkMonitor: NetworkMonitor,
     private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueState: FtueState,
+    private val lockScreenEntryPoint: LockScreenEntryPoint,
+    private val lockScreenStateService: LockScreenStateService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
+        savedStateMap = buildContext.savedStateMap,
+    ),
+    permanentNavModel = PermanentNavModel(
+        navTargets = setOf(NavTarget.LoggedInPermanent, NavTarget.LockPermanent),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -121,9 +134,19 @@ class LoggedInFlowNode @AssistedInject constructor(
                     backstack.push(NavTarget.Ftue)
                 }
             },
-            onStop = {
-                //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
+            onResume = {
                 coroutineScope.launch {
+                    lockScreenStateService.entersForeground()
+                }
+            },
+            onPause = {
+                coroutineScope.launch {
+                    lockScreenStateService.entersBackground()
+                }
+            },
+            onStop = {
+                coroutineScope.launch {
+                    //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                     syncService.stopSync()
                 }
             },
@@ -159,7 +182,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Permanent : NavTarget
+        data object LoggedInPermanent : NavTarget
+
+        @Parcelize
+        data object LockPermanent : NavTarget
 
         @Parcelize
         data object RoomList : NavTarget
@@ -188,8 +214,11 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Permanent -> {
+            NavTarget.LoggedInPermanent -> {
                 createNode<LoggedInNode>(buildContext)
+            }
+            NavTarget.LockPermanent -> {
+                lockScreenEntryPoint.createNode(this, buildContext)
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
@@ -308,30 +337,37 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    @Composable
-    override fun View(modifier: Modifier) {
-        Box(modifier = modifier) {
-            Children(
-                navModel = backstack,
-                modifier = Modifier,
-                // Animate navigation to settings and to a room
-                transitionHandler = rememberDefaultTransitionHandler(),
-            )
-
-            val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
-
-            if (!isFtueDisplayed) {
-                PermanentChild(navTarget = NavTarget.Permanent)
-            }
+    internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
+        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
+        backstack.singleTop(NavTarget.RoomList)
+        backstack.push(NavTarget.InviteList)
+        waitForChildAttached<Node, NavTarget> { navTarget ->
+            navTarget is NavTarget.InviteList
         }
     }
 
-    internal suspend fun attachRoom(deeplinkData: DeeplinkData.Room) {
-        backstack.push(NavTarget.Room(deeplinkData.roomId))
-    }
-
-    internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) {
-        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
-        backstack.push(NavTarget.InviteList)
+    @Composable
+    override fun View(modifier: Modifier) {
+        Box(modifier = modifier) {
+            val lockScreenState by lockScreenStateService.state.collectAsState()
+            when (lockScreenState) {
+                LockScreenState.Unlocked -> {
+                    Children(
+                        navModel = backstack,
+                        modifier = Modifier,
+                        // Animate navigation to settings and to a room
+                        transitionHandler = rememberDefaultTransitionHandler(),
+                    )
+                    val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
+                    if (!isFtueDisplayed) {
+                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                    }
+                }
+                LockScreenState.Locked -> {
+                    MoveActivityToBackgroundBackHandler()
+                    PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
+                }
+            }
+        }
     }
 }

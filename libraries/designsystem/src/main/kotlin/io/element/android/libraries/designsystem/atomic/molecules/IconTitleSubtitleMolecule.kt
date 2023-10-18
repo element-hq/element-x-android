@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
@@ -49,7 +49,7 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun IconTitleSubtitleMolecule(
     title: String,
-    subTitle: String,
+    subTitle: String?,
     modifier: Modifier = Modifier,
     iconResourceId: Int? = null,
     iconImageVector: ImageVector? = null,
@@ -73,23 +73,25 @@ fun IconTitleSubtitleMolecule(
             style = ElementTheme.typography.fontHeadingMdBold,
             color = MaterialTheme.colorScheme.primary,
         )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = subTitle,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.secondary,
-        )
+        if (subTitle != null) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = subTitle,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = MaterialTheme.colorScheme.secondary,
+            )
+        }
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun IconTitleSubtitleMoleculePreview() = ElementPreview {
     IconTitleSubtitleMolecule(
-        iconResourceId = R.drawable.ic_edit,
+        iconResourceId = R.drawable.ic_compound_chat,
         title = "Title",
-        subTitle = "Sub iitle",
+        subTitle = "Subtitle",
     )
 }

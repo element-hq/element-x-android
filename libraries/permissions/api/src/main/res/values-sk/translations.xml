@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Aby aplikácia mohla používať fotoaparát, udeľte povolenie v systémových nastaveniach."</string>
+  <string name="dialog_permission_generic">"Udeľte prosím povolenie v systémových nastaveniach."</string>
+  <string name="dialog_permission_microphone">"Aby aplikácia mohla používať mikrofón, udeľte povolenie v systémových nastaveniach."</string>
+  <string name="dialog_permission_notification">"Ak chcete, aby aplikácia zobrazovala oznámenia, udeľte povolenie v nastaveniach systému."</string>
+</resources>

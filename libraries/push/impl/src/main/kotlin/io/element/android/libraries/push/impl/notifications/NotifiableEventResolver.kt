@@ -87,7 +87,7 @@ class NotifiableEventResolver @Inject constructor(
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderName = senderDisplayName,
-                    body = descriptionFromMessageContent(content),
+                    body = descriptionFromMessageContent(content, senderDisplayName ?: content.senderId.value),
                     imageUriString = this.contentUrl,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
@@ -114,10 +114,76 @@ class NotifiableEventResolver @Inject constructor(
                         title = null, // TODO check if title is needed anymore
                     )
                 } else {
-                    fallbackNotifiableEvent(userId, roomId, eventId)
+                    Timber.tag(loggerTag.value).d("Ignoring notification state event for membership ${content.membershipState}")
+                    null
                 }
             }
-            else -> fallbackNotifiableEvent(userId, roomId, eventId)
+            NotificationContent.MessageLike.CallAnswer,
+            NotificationContent.MessageLike.CallCandidates,
+            NotificationContent.MessageLike.CallHangup,
+            NotificationContent.MessageLike.CallInvite -> null.also {
+                Timber.tag(loggerTag.value).d("Ignoring notification for call ${content.javaClass.simpleName}")
+            }
+            NotificationContent.MessageLike.KeyVerificationAccept,
+            NotificationContent.MessageLike.KeyVerificationCancel,
+            NotificationContent.MessageLike.KeyVerificationDone,
+            NotificationContent.MessageLike.KeyVerificationKey,
+            NotificationContent.MessageLike.KeyVerificationMac,
+            NotificationContent.MessageLike.KeyVerificationReady,
+            NotificationContent.MessageLike.KeyVerificationStart -> null.also {
+                Timber.tag(loggerTag.value).d("Ignoring notification for verification ${content.javaClass.simpleName}")
+            }
+            is NotificationContent.MessageLike.Poll -> {
+                buildNotifiableMessageEvent(
+                    sessionId = userId,
+                    senderId = content.senderId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    senderName = senderDisplayName,
+                    body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
+                    imageUriString = null,
+                    roomName = roomDisplayName,
+                    roomIsDirect = isDirect,
+                    roomAvatarPath = roomAvatarUrl,
+                    senderAvatarPath = senderAvatarUrl,
+                )
+            }
+            is NotificationContent.MessageLike.ReactionContent -> null.also {
+                Timber.tag(loggerTag.value).d("Ignoring notification for reaction")
+            }
+            NotificationContent.MessageLike.RoomEncrypted -> fallbackNotifiableEvent(userId, roomId, eventId).also {
+                Timber.tag(loggerTag.value).w("Notification with encrypted content -> fallback")
+            }
+            NotificationContent.MessageLike.RoomRedaction -> null.also {
+                Timber.tag(loggerTag.value).d("Ignoring notification for redaction")
+            }
+            NotificationContent.MessageLike.Sticker -> null.also {
+                Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
+            }
+            NotificationContent.StateEvent.PolicyRuleRoom,
+            NotificationContent.StateEvent.PolicyRuleServer,
+            NotificationContent.StateEvent.PolicyRuleUser,
+            NotificationContent.StateEvent.RoomAliases,
+            NotificationContent.StateEvent.RoomAvatar,
+            NotificationContent.StateEvent.RoomCanonicalAlias,
+            NotificationContent.StateEvent.RoomCreate,
+            NotificationContent.StateEvent.RoomEncryption,
+            NotificationContent.StateEvent.RoomGuestAccess,
+            NotificationContent.StateEvent.RoomHistoryVisibility,
+            NotificationContent.StateEvent.RoomJoinRules,
+            NotificationContent.StateEvent.RoomName,
+            NotificationContent.StateEvent.RoomPinnedEvents,
+            NotificationContent.StateEvent.RoomPowerLevels,
+            NotificationContent.StateEvent.RoomServerAcl,
+            NotificationContent.StateEvent.RoomThirdPartyInvite,
+            NotificationContent.StateEvent.RoomTombstone,
+            NotificationContent.StateEvent.RoomTopic,
+            NotificationContent.StateEvent.SpaceChild,
+            NotificationContent.StateEvent.SpaceParent -> null.also {
+                Timber.tag(loggerTag.value).d("Ignoring notification for state event ${content.javaClass.simpleName}")
+            }
         }
     }
 
@@ -139,10 +205,11 @@ class NotifiableEventResolver @Inject constructor(
 
     private fun descriptionFromMessageContent(
         content: NotificationContent.MessageLike.RoomMessage,
+        senderDisplayName: String,
     ): String {
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.body
-            is EmoteMessageType -> messageType.body
+            is EmoteMessageType -> "* $senderDisplayName ${messageType.body}"
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
             is NoticeMessageType -> messageType.body

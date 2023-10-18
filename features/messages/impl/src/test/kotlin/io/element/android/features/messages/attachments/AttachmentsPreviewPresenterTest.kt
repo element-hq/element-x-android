@@ -59,7 +59,7 @@ class AttachmentsPreviewPresenterTest {
                 Pair(10, 10)
             )
         )
-        val presenter = anAttachmentsPreviewPresenter(room = room)
+        val presenter = createAttachmentsPreviewPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -81,7 +81,7 @@ class AttachmentsPreviewPresenterTest {
         val room = FakeMatrixRoom()
         val failure = MediaPreProcessor.Failure(null)
         room.givenSendMediaResult(Result.failure(failure))
-        val presenter = anAttachmentsPreviewPresenter(room = room)
+        val presenter = createAttachmentsPreviewPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -101,7 +101,7 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - dismissing the progress dialog stops media upload`() = runTest {
-        val presenter = anAttachmentsPreviewPresenter()
+        val presenter = createAttachmentsPreviewPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -114,7 +114,7 @@ class AttachmentsPreviewPresenterTest {
         }
     }
 
-    private fun anAttachmentsPreviewPresenter(
+    private fun createAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
         ),

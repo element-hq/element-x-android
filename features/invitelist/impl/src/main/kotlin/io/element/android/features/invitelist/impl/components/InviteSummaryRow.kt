@@ -45,7 +45,7 @@ import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
@@ -77,7 +77,7 @@ internal fun InviteSummaryRow(
 }
 
 @Composable
-internal fun DefaultInviteSummaryRow(
+private fun DefaultInviteSummaryRow(
     invite: InviteListInviteSummary,
     onAcceptClicked: () -> Unit = {},
     onDeclineClicked: () -> Unit = {},
@@ -184,7 +184,7 @@ private fun SenderRow(sender: InviteSender) {
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun InviteSummaryRowPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) = ElementPreview {
     InviteSummaryRow(data)

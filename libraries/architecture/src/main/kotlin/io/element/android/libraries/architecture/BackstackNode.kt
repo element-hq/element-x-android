@@ -19,6 +19,8 @@ package io.element.android.libraries.architecture
 import androidx.compose.runtime.Stable
 import com.bumble.appyx.core.children.ChildEntry
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.model.combined.plus
+import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
@@ -33,10 +35,11 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 abstract class BackstackNode<NavTarget : Any>(
     val backstack: BackStack<NavTarget>,
     buildContext: BuildContext,
+    plugins: List<Plugin>,
+    val permanentNavModel: PermanentNavModel<NavTarget> = PermanentNavModel(emptySet(), null),
     childKeepMode: ChildEntry.KeepMode = ChildEntry.KeepMode.KEEP,
-    plugins: List<Plugin>
 ) : ParentNode<NavTarget>(
-    navModel = backstack,
+    navModel = backstack + permanentNavModel,
     buildContext = buildContext,
     plugins = plugins,
     childKeepMode = childKeepMode,

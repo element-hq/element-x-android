@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.preferences.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,15 +35,17 @@ import io.element.android.libraries.designsystem.toSecondaryEnabledColor
 
 @Composable
 fun PreferenceIcon(
-    icon: ImageVector?,
     modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    @DrawableRes iconResourceId: Int? = null,
     tintColor: Color? = null,
     enabled: Boolean = true,
     isVisible: Boolean = true,
 ) {
-    if (icon != null) {
+    if (icon != null || iconResourceId != null) {
         Icon(
             imageVector = icon,
+            resourceId = iconResourceId,
             contentDescription = "",
             tint = tintColor ?: enabled.toSecondaryEnabledColor(),
             modifier = modifier
@@ -61,5 +64,5 @@ internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorProvider::class)
 
 @Composable
 private fun ContentToPreview(content: ImageVector?) {
-    PreferenceIcon(content)
+    PreferenceIcon(icon = content)
 }

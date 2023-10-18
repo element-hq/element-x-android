@@ -20,18 +20,19 @@ import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.matrix.rustcomponents.sdk.AuthenticationException as RustAuthenticationException
 
 fun Throwable.mapAuthenticationException(): AuthenticationException {
+    val message = this.message ?: "Unknown error"
     return when (this) {
-        is RustAuthenticationException.ClientMissing -> AuthenticationException.ClientMissing(this.message!!)
-        is RustAuthenticationException.Generic -> AuthenticationException.Generic(this.message!!)
-        is RustAuthenticationException.InvalidServerName -> AuthenticationException.InvalidServerName(this.message!!)
-        is RustAuthenticationException.SessionMissing -> AuthenticationException.SessionMissing(this.message!!)
-        is RustAuthenticationException.SlidingSyncNotAvailable -> AuthenticationException.SlidingSyncNotAvailable(this.message!!)
-        is RustAuthenticationException.OidcException -> AuthenticationException.OidcError("OidcException", message!!)
-        is RustAuthenticationException.OidcMetadataInvalid -> AuthenticationException.OidcError("OidcMetadataInvalid", message!!)
-        is RustAuthenticationException.OidcMetadataMissing -> AuthenticationException.OidcError("OidcMetadataMissing", message!!)
-        is RustAuthenticationException.OidcNotSupported -> AuthenticationException.OidcError("OidcNotSupported", message!!)
-        is RustAuthenticationException.OidcCancelled -> AuthenticationException.OidcError("OidcCancelled", message!!)
-        is RustAuthenticationException.OidcCallbackUrlInvalid -> AuthenticationException.OidcError("OidcCallbackUrlInvalid", message!!)
-        else -> AuthenticationException.Generic(this.message ?: "Unknown error")
+        is RustAuthenticationException.ClientMissing -> AuthenticationException.ClientMissing(message)
+        is RustAuthenticationException.Generic -> AuthenticationException.Generic(message)
+        is RustAuthenticationException.InvalidServerName -> AuthenticationException.InvalidServerName(message)
+        is RustAuthenticationException.SessionMissing -> AuthenticationException.SessionMissing(message)
+        is RustAuthenticationException.SlidingSyncNotAvailable -> AuthenticationException.SlidingSyncNotAvailable(message)
+        is RustAuthenticationException.OidcException -> AuthenticationException.OidcError("OidcException", message)
+        is RustAuthenticationException.OidcMetadataInvalid -> AuthenticationException.OidcError("OidcMetadataInvalid", message)
+        is RustAuthenticationException.OidcMetadataMissing -> AuthenticationException.OidcError("OidcMetadataMissing", message)
+        is RustAuthenticationException.OidcNotSupported -> AuthenticationException.OidcError("OidcNotSupported", message)
+        is RustAuthenticationException.OidcCancelled -> AuthenticationException.OidcError("OidcCancelled", message)
+        is RustAuthenticationException.OidcCallbackUrlInvalid -> AuthenticationException.OidcError("OidcCallbackUrlInvalid", message)
+        else -> AuthenticationException.Generic(message)
     }
 }

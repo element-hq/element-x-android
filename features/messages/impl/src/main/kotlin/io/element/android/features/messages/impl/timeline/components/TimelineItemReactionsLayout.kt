@@ -16,8 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.MeasureResult
@@ -28,8 +26,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
  * A flow layout for reactions that will show a collapse/expand button when the layout wraps over a defined number of rows.
@@ -181,7 +180,7 @@ fun TimelineItemReactionsLayout(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineItemReactionsLayoutPreview() = ElementPreview {
     TimelineItemReactionsLayout(
@@ -197,7 +196,7 @@ internal fun TimelineItemReactionsLayoutPreview() = ElementPreview {
         },
         addMoreButton = {
             MessagesReactionButton(
-                content = MessagesReactionsButtonContent.Icon(Icons.Outlined.AddReaction),
+                content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_september_add_reaction),
                 onClick = {},
                 onLongClick = {}
             )

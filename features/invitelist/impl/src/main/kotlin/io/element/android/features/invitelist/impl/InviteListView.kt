@@ -39,7 +39,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
@@ -111,7 +111,7 @@ fun InviteListView(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun InviteListContent(
+private fun InviteListContent(
     state: InviteListState,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
@@ -170,7 +170,7 @@ fun InviteListContent(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun InviteListViewPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) = ElementPreview {
     InviteListView(state)

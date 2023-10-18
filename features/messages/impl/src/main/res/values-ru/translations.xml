@@ -12,6 +12,7 @@
   <string name="screen_room_attachment_source_gallery">"Фото и видео"</string>
   <string name="screen_room_attachment_source_location">"Местоположение"</string>
   <string name="screen_room_attachment_source_poll">"Опрос"</string>
+  <string name="screen_room_attachment_text_formatting">"Форматирование текста"</string>
   <string name="screen_room_encrypted_history_banner">"В настоящее время история сообщений недоступна в этой комнате"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <string name="screen_room_invite_again_alert_message">"Хотите пригласить их снова?"</string>
@@ -38,5 +39,4 @@
   <string name="screen_room_timeline_add_reaction">"Добавить эмодзи"</string>
   <string name="screen_room_timeline_less_reactions">"Показать меньше"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
-  <string name="screen_room_retry_send_menu_remove_action">"Удалить"</string>
 </resources>

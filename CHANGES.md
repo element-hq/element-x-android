@@ -1,3 +1,66 @@
+Changes in Element X v0.2.4 (2023-10-12)
+========================================
+
+Features ✨
+----------
+ - [Rich text editor] Add full screen mode ([#1447](https://github.com/vector-im/element-x-android/issues/1447))
+ - Improve rendering of m.emote. ([#1497](https://github.com/vector-im/element-x-android/issues/1497))
+ - Improve deleted session behavior. ([#1520](https://github.com/vector-im/element-x-android/issues/1520))
+
+Bugfixes 🐛
+----------
+ - WebP images can't be sent as media. ([#1483](https://github.com/vector-im/element-x-android/issues/1483))
+ - Fix back button not working in bottom sheets. ([#1517](https://github.com/vector-im/element-x-android/issues/1517))
+ - Render body of unknown msgtype in the timeline and in the room list ([#1539](https://github.com/vector-im/element-x-android/issues/1539))
+
+Other changes
+-------------
+ - Room : makes subscribeToSync/unsubscribeFromSync suspendable. ([#1457](https://github.com/vector-im/element-x-android/issues/1457))
+ - Add some Konsist tests. ([#1526](https://github.com/vector-im/element-x-android/issues/1526))
+
+
+Changes in Element X v0.2.3 (2023-09-27)
+========================================
+
+Features ✨
+----------
+ - Handle installation of Apks from the media viewer. ([#1432](https://github.com/vector-im/element-x-android/pull/1432))
+ - Integrate SDK 0.1.58 ([#1437](https://github.com/vector-im/element-x-android/pull/1437))
+
+Other changes
+-------------
+ - Element call: add custom parameters to Element Call urls. ([#1434](https://github.com/vector-im/element-x-android/issues/1434))
+
+
+Changes in Element X v0.2.2 (2023-09-21)
+========================================
+
+Bugfixes 🐛
+----------
+ - Add animation when rendering the timeline to avoid glitches. ([#1323](https://github.com/vector-im/element-x-android/issues/1323))
+ - Fix crash when trying to take a photo or record a video. ([#1395](https://github.com/vector-im/element-x-android/issues/1395))
+
+
+Changes in Element X v0.2.1 (2023-09-20)
+========================================
+
+Features ✨
+----------
+ - Bump Rust SDK to `v0.1.56`
+ - [Rich text editor] Add link support to rich text editor ([#1309](https://github.com/vector-im/element-x-android/issues/1309))
+ - Let the SDK figure the best scheme given an homeserver URL (thus allowing HTTP homeservers) ([#1382](https://github.com/vector-im/element-x-android/issues/1382))
+
+Bugfixes 🐛
+----------
+ - Fix ANR on RoomList when notification settings change. ([#1370](https://github.com/vector-im/element-x-android/issues/1370))
+
+Other changes
+-------------
+ - Element Call: support scheme `io.element.call` ([#1377](https://github.com/vector-im/element-x-android/issues/1377))
+ - [DI] Rework how dagger components are created and provided. ([#1378](https://github.com/vector-im/element-x-android/issues/1378))
+ - Remove usage of async-uniffi as it leads to a deadlocks and memory leaks. ([#1381](https://github.com/vector-im/element-x-android/issues/1381))
+
+
 Changes in Element X v0.2.0 (2023-09-18)
 ========================================
 

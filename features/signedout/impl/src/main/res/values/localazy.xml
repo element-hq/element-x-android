@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"You’ve changed your password on another session"</string>
+  <string name="screen_signed_out_reason_2">"You have deleted the session from another session"</string>
+  <string name="screen_signed_out_reason_3">"Your server’s administrator has invalidated your access"</string>
+  <string name="screen_signed_out_subtitle">"You might have been signed out for one of the reasons listed below. Please sign in again to continue using %s."</string>
+  <string name="screen_signed_out_title">"You’re signed out"</string>
+</resources>

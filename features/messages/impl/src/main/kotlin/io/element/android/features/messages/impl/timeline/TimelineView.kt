@@ -36,8 +36,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,6 +47,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -64,10 +64,12 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.animation.alphaAnimation
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.theme.ElementTheme
@@ -101,11 +103,10 @@ fun TimelineView(
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
-    fun onPollAnswerSelected(pollStartId: EventId, answerId: String) {
-        state.eventSink(TimelineEvents.PollAnswerSelected(pollStartId, answerId))
-    }
+    // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
+    val alpha by alphaAnimation(label = "alpha for timeline")
 
-    Box(modifier = modifier) {
+    Box(modifier = modifier.alpha(alpha)) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
@@ -129,7 +130,7 @@ fun TimelineView(
                     onReactionLongClick = onReactionLongClicked,
                     onMoreReactionsClick = onMoreReactionsClicked,
                     onTimestampClicked = onTimestampClicked,
-                    onPollAnswerSelected = ::onPollAnswerSelected,
+                    eventSink = state.eventSink,
                     onSwipeToReply = onSwipeToReply,
                 )
             }
@@ -154,7 +155,7 @@ fun TimelineView(
 }
 
 @Composable
-fun TimelineItemRow(
+private fun TimelineItemRow(
     timelineItem: TimelineItem,
     highlightedItem: String?,
     userHasPermissionToSendMessage: Boolean,
@@ -167,7 +168,7 @@ fun TimelineItemRow(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
-    onPollAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
+    eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
@@ -184,6 +185,7 @@ fun TimelineItemRow(
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = { onClick(timelineItem) },
                     onLongClick = { onLongClick(timelineItem) },
+                    eventSink = eventSink,
                     modifier = modifier,
                 )
             } else {
@@ -200,7 +202,7 @@ fun TimelineItemRow(
                     onMoreReactionsClick = onMoreReactionsClick,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = { onSwipeToReply(timelineItem) },
-                    onPollAnswerSelected = onPollAnswerSelected,
+                    eventSink = eventSink,
                     modifier = modifier,
                 )
             }
@@ -238,7 +240,7 @@ fun TimelineItemRow(
                                 onReactionClick = onReactionClick,
                                 onReactionLongClick = onReactionLongClick,
                                 onMoreReactionsClick = onMoreReactionsClick,
-                                onPollAnswerSelected = onPollAnswerSelected,
+                                eventSink = eventSink,
                                 onSwipeToReply = {},
                             )
                         }
@@ -315,15 +317,17 @@ private fun JumpToBottomButton(
             contentColor = ElementTheme.colors.iconSecondary
         ) {
             Icon(
-                modifier = Modifier.size(24.dp),
-                imageVector = Icons.Filled.ArrowDownward,
+                modifier = Modifier
+                    .size(24.dp)
+                    .rotate(90f),
+                resourceId = CommonDrawables.ic_compound_arrow_right,
                 contentDescription = "",
             )
         }
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun TimelineViewPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent

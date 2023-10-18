@@ -25,10 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.VectorIcons
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
  * A swipe indicator that appears when swiping to reply to a message.
@@ -49,11 +49,11 @@ fun RowScope.ReplySwipeIndicator(
                 alpha = swipeProgress()
             },
         contentDescription = null,
-        resourceId = VectorIcons.Reply,
+        resourceId = CommonDrawables.ic_september_reply,
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ReplySwipeIndicatorPreview() = ElementPreview {
     Column(modifier = Modifier.fillMaxWidth()) {

@@ -38,7 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.withColoredPeriod
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -134,7 +134,7 @@ private fun SunsetBackground(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun SunsetPagePreview() = ElementPreview {
     SunsetPage(

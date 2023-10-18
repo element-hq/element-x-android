@@ -19,6 +19,7 @@
 package io.element.android.features.messages.textcomposer
 
 import android.net.Uri
+import androidx.compose.runtime.remember
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
@@ -32,7 +33,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -54,8 +55,11 @@ import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
-import io.element.android.libraries.textcomposer.Message
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
+import io.element.android.libraries.textcomposer.model.Message
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.waitForPredicate
@@ -67,6 +71,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
+@Suppress("LargeClass")
 class MessageComposerPresenterTest {
 
     @get:Rule
@@ -98,7 +103,6 @@ class MessageComposerPresenterTest {
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.attachmentsState).isEqualTo(AttachmentsState.None)
-            assertThat(initialState.canSendMessage).isFalse()
         }
     }
 
@@ -128,13 +132,9 @@ class MessageComposerPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.richTextEditorState.setHtml(A_MESSAGE)
-            val withMessageState = awaitItem()
-            assertThat(withMessageState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            assertThat(withMessageState.canSendMessage).isTrue()
-            withMessageState.richTextEditorState.setHtml("")
-            val withEmptyMessageState = awaitItem()
-            assertThat(withEmptyMessageState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(withEmptyMessageState.canSendMessage).isFalse()
+            assertThat(initialState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
+            initialState.richTextEditorState.setHtml("")
+            assertThat(initialState.richTextEditorState.messageHtml).isEqualTo("")
         }
     }
 
@@ -142,7 +142,8 @@ class MessageComposerPresenterTest {
     fun `present - change mode to edit`() = runTest {
         val presenter = createPresenter(this)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            val state = presenter.present()
+            remember(state, state.richTextEditorState.messageHtml) { state }
         }.test {
             skipItems(1)
             var state = awaitItem()
@@ -152,7 +153,6 @@ class MessageComposerPresenterTest {
             assertThat(state.mode).isEqualTo(mode)
             state = awaitItem()
             assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            assertThat(state.canSendMessage).isTrue()
             backToNormalMode(state, skipCount = 1)
         }
     }
@@ -170,7 +170,6 @@ class MessageComposerPresenterTest {
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
             assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(state.canSendMessage).isFalse()
             backToNormalMode(state)
         }
     }
@@ -188,7 +187,6 @@ class MessageComposerPresenterTest {
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
             assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(state.canSendMessage).isFalse()
             backToNormalMode(state)
         }
     }
@@ -197,18 +195,17 @@ class MessageComposerPresenterTest {
     fun `present - send message`() = runTest {
         val presenter = createPresenter(this)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            val state = presenter.present()
+            remember(state, state.richTextEditorState.messageHtml) { state }
         }.test {
             skipItems(1)
             val initialState = awaitItem()
             initialState.richTextEditorState.setHtml(A_MESSAGE)
             val withMessageState = awaitItem()
             assertThat(withMessageState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            assertThat(withMessageState.canSendMessage).isTrue()
             withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
             val messageSentState = awaitItem()
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(messageSentState.canSendMessage).isFalse()
             waitForPredicate { analyticsService.capturedEvents.size == 1 }
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -229,7 +226,8 @@ class MessageComposerPresenterTest {
             fakeMatrixRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            val state = presenter.present()
+            remember(state, state.richTextEditorState.messageHtml) { state }
         }.test {
             skipItems(1)
             val initialState = awaitItem()
@@ -240,7 +238,6 @@ class MessageComposerPresenterTest {
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
             assertThat(withMessageState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            assertThat(withMessageState.canSendMessage).isTrue()
             withMessageState.richTextEditorState.setHtml(ANOTHER_MESSAGE)
             val withEditedMessageState = awaitItem()
             assertThat(withEditedMessageState.richTextEditorState.messageHtml).isEqualTo(ANOTHER_MESSAGE)
@@ -248,7 +245,6 @@ class MessageComposerPresenterTest {
             skipItems(1)
             val messageSentState = awaitItem()
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(messageSentState.canSendMessage).isFalse()
             assertThat(fakeMatrixRoom.editMessageCalls.first()).isEqualTo(ANOTHER_MESSAGE to ANOTHER_MESSAGE)
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -269,7 +265,8 @@ class MessageComposerPresenterTest {
             fakeMatrixRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            val state = presenter.present()
+            remember(state, state.richTextEditorState.messageHtml) { state }
         }.test {
             skipItems(1)
             val initialState = awaitItem()
@@ -280,7 +277,6 @@ class MessageComposerPresenterTest {
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
             assertThat(withMessageState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            assertThat(withMessageState.canSendMessage).isTrue()
             withMessageState.richTextEditorState.setHtml(ANOTHER_MESSAGE)
             val withEditedMessageState = awaitItem()
             assertThat(withEditedMessageState.richTextEditorState.messageHtml).isEqualTo(ANOTHER_MESSAGE)
@@ -288,7 +284,6 @@ class MessageComposerPresenterTest {
             skipItems(1)
             val messageSentState = awaitItem()
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(messageSentState.canSendMessage).isFalse()
             assertThat(fakeMatrixRoom.editMessageCalls.first()).isEqualTo(ANOTHER_MESSAGE to ANOTHER_MESSAGE)
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -319,16 +314,11 @@ class MessageComposerPresenterTest {
             val state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
             assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(state.canSendMessage).isFalse()
             state.richTextEditorState.setHtml(A_REPLY)
-            val withMessageState = awaitItem()
-            assertThat(withMessageState.richTextEditorState.messageHtml).isEqualTo(A_REPLY)
-            assertThat(withMessageState.canSendMessage).isTrue()
-            withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(A_REPLY.toMessage()))
-            skipItems(1)
+            assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_REPLY)
+            state.eventSink.invoke(MessageComposerEvents.SendMessage(A_REPLY.toMessage()))
             val messageSentState = awaitItem()
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(messageSentState.canSendMessage).isFalse()
             assertThat(fakeMatrixRoom.replyMessageParameter).isEqualTo(A_REPLY to A_REPLY)
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -487,7 +477,7 @@ class MessageComposerPresenterTest {
     }
 
     @Test
-    fun `present - Take photo`() = runTest {
+    fun `present - create poll`() = runTest {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(this, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -495,10 +485,76 @@ class MessageComposerPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.AddAttachment)
+            val attachmentOpenState = awaitItem()
+            assertThat(attachmentOpenState.showAttachmentSourcePicker).isTrue()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
+            val finalState = awaitItem()
+            assertThat(finalState.showAttachmentSourcePicker).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - share location`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createPresenter(this, room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.AddAttachment)
+            val attachmentOpenState = awaitItem()
+            assertThat(attachmentOpenState.showAttachmentSourcePicker).isTrue()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
+            val finalState = awaitItem()
+            assertThat(finalState.showAttachmentSourcePicker).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - Take photo`() = runTest {
+        val room = FakeMatrixRoom()
+        val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
+        val presenter = createPresenter(
+            this,
+            room = room,
+            permissionPresenter = permissionPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera)
-            val previewingState = awaitItem()
-            assertThat(previewingState.showAttachmentSourcePicker).isFalse()
-            assertThat(previewingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            val finalState = awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - Take photo with permission request`() = runTest {
+        val room = FakeMatrixRoom()
+        val permissionPresenter = FakePermissionsPresenter()
+        val presenter = createPresenter(
+            this,
+            room = room,
+            permissionPresenter = permissionPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera)
+            val permissionState = awaitItem()
+            assertThat(permissionState.showAttachmentSourcePicker).isFalse()
+            assertThat(permissionState.attachmentsState).isInstanceOf(AttachmentsState.None::class.java)
+            permissionPresenter.setPermissionGranted()
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -506,16 +562,47 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Record video`() = runTest {
         val room = FakeMatrixRoom()
-        val presenter = createPresenter(this, room = room)
+        val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
+        val presenter = createPresenter(
+            this,
+            room = room,
+            permissionPresenter = permissionPresenter,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera)
-            val previewingState = awaitItem()
-            assertThat(previewingState.showAttachmentSourcePicker).isFalse()
-            assertThat(previewingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            val finalState = awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - Record video with permission request`() = runTest {
+        val room = FakeMatrixRoom()
+        val permissionPresenter = FakePermissionsPresenter()
+        val presenter = createPresenter(
+            this,
+            room = room,
+            permissionPresenter = permissionPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera)
+            val permissionState = awaitItem()
+            assertThat(permissionState.showAttachmentSourcePicker).isFalse()
+            assertThat(permissionState.attachmentsState).isInstanceOf(AttachmentsState.None::class.java)
+            permissionPresenter.setPermissionGranted()
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -602,7 +689,6 @@ class MessageComposerPresenterTest {
         val normalState = awaitItem()
         assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal(""))
         assertThat(normalState.richTextEditorState.messageHtml).isEqualTo("")
-        assertThat(normalState.canSendMessage).isFalse()
     }
 
     private fun createPresenter(
@@ -612,6 +698,7 @@ class MessageComposerPresenterTest {
         featureFlagService: FeatureFlagService = this.featureFlagService,
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
+        permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
     ) = MessageComposerPresenter(
         coroutineScope,
         room,
@@ -623,6 +710,7 @@ class MessageComposerPresenterTest {
         analyticsService,
         MessageComposerContextImpl(),
         TestRichTextEditorStateFactory(),
+        permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
     )
 }
 

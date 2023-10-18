@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,12 +37,12 @@ import coil.request.ImageRequest
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.StaticMapUrlBuilder
 import io.element.android.features.location.api.internal.centerBottomEdge
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
-import io.element.android.libraries.designsystem.R as DesignSystemR
 
 /**
  * Shows a static map image downloaded via a third party service's static maps API.
@@ -64,7 +64,7 @@ fun StaticMapView(
         contentAlignment = Alignment.Center
     ) {
         val context = LocalContext.current
-        var retryHash by remember { mutableStateOf(0) }
+        var retryHash by remember { mutableIntStateOf(0) }
         val builder = remember { StaticMapUrlBuilder(context) }
         val painter = rememberAsyncImagePainter(
             model = if (constraints.isZero) {
@@ -102,7 +102,7 @@ fun StaticMapView(
                 contentScale = ContentScale.Fit,
             )
             Icon(
-                resourceId = DesignSystemR.drawable.pin,
+                resourceId = CommonDrawables.pin,
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.centerBottomEdge(this),
@@ -119,7 +119,7 @@ fun StaticMapView(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun StaticMapViewPreview() = ElementPreview {
     StaticMapView(

@@ -14,6 +14,4 @@
   <string name="screen_session_verification_they_match">"Shodují se"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Pro pokračování přijměte požadavek na zahájení ověření v jiné relaci."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Čekání na přijetí žádosti"</string>
-  <string name="screen_session_verification_cancelled_title">"Ověření zrušeno"</string>
-  <string name="screen_session_verification_positive_button_ready">"Začít"</string>
 </resources>

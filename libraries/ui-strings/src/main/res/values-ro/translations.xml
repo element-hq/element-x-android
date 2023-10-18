@@ -111,7 +111,6 @@
   <string name="common_search_for_someone">"Căutați pe cineva"</string>
   <string name="common_search_results">"Rezultatele căutării"</string>
   <string name="common_security">"Securitate"</string>
-  <string name="common_select_your_server">"Selectați serverul"</string>
   <string name="common_sending">"Se trimite…"</string>
   <string name="common_server_not_supported">"Serverul nu este compatibil"</string>
   <string name="common_server_url">"Adresa URL a serverului"</string>
@@ -171,7 +170,6 @@
     <item quantity="other">"%d voturi"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
-  <string name="rageshake_dialog_content">"Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?"</string>
   <string name="report_content_explanation">"Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat."</string>
   <string name="report_content_hint">"Motivul raportării acestui conținut"</string>
   <string name="room_timeline_beginning_of_room">"Acesta este începutul conversației %1$s."</string>
@@ -209,7 +207,6 @@ Dacă continuați, unele dintre setările dumneavoastră pot fi modificate."</st
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificările de sistem sunt dezactivate"</string>
   <string name="screen_notification_settings_title">"Notificări"</string>
   <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
-  <string name="screen_settings_oidc_account">"Cont și dispozitive"</string>
   <string name="screen_share_location_title">"Partajați locația"</string>
   <string name="screen_share_my_location_action">"Distribuiți locația mea"</string>
   <string name="screen_share_open_apple_maps">"Deschideți în Apple Maps"</string>
@@ -219,7 +216,6 @@ Dacă continuați, unele dintre setările dumneavoastră pot fi modificate."</st
   <string name="screen_view_location_title">"Locație"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Prag de detecție"</string>
-  <string name="settings_title_general">"General"</string>
   <string name="settings_version_number">"Versiunea: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"ro"</string>
   <string name="dialog_title_error">"Eroare"</string>

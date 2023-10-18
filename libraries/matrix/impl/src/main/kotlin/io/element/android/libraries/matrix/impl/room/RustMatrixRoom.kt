@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
-import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
@@ -55,19 +54,17 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.yield
-import org.matrix.rustcomponents.sdk.RequiredState
+import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
-import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
-import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
@@ -84,6 +81,7 @@ class RustMatrixRoom(
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
     private val sessionData: SessionData,
+    private val roomSyncSubscriber: RoomSyncSubscriber,
 ) : MatrixRoom {
 
     override val roomId = RoomId(innerRoom.id())
@@ -118,27 +116,15 @@ class RustMatrixRoom(
 
     override val timeline: MatrixTimeline = _timeline
 
-    override fun subscribeToSync() {
-        val settings = RoomSubscription(
-            requiredState = listOf(
-                RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_TOPIC, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
-            ),
-            timelineLimit = null
-        )
-        roomListItem.subscribe(settings)
-    }
+    override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
-    override fun unsubscribeFromSync() {
-        roomListItem.unsubscribe()
-    }
+    override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
 
     override fun destroy() {
         roomCoroutineScope.cancel()
         innerRoom.destroy()
         roomListItem.destroy()
+        specialModeEventTimelineItem?.destroy()
     }
 
     override val name: String?
@@ -193,7 +179,7 @@ class RustMatrixRoom(
                     while (true) {
                         // Loading the whole membersIterator as a stop-gap measure.
                         // We should probably implement some sort of paging in the future.
-                        yield()
+                        ensureActive()
                         addAll(membersIterator.nextChunk(1000u) ?: break)
                     }
                 }
@@ -241,10 +227,9 @@ class RustMatrixRoom(
     }
 
     override suspend fun sendMessage(body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
-        val transactionId = genTransactionId()
         messageEventContentFromParts(body, htmlBody).use { content ->
             runCatching {
-                innerRoom.send(content, transactionId)
+                innerRoom.send(content)
             }
         }
     }
@@ -253,26 +238,46 @@ class RustMatrixRoom(
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
-                    innerRoom.edit(messageEventContentFromParts(body, htmlBody), originalEventId.value, transactionId?.value)
+                    val editedEvent = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(originalEventId.value)
+                    editedEvent.use {
+                        innerRoom.edit(
+                            newContent = messageEventContentFromParts(body, htmlBody),
+                            editItem = it,
+                        )
+                    }
+                    specialModeEventTimelineItem = null
                 }
             } else {
                 runCatching {
                     transactionId?.let { cancelSend(it) }
-                    innerRoom.send(messageEventContentFromParts(body, htmlBody), genTransactionId())
+                    innerRoom.send(messageEventContentFromParts(body, htmlBody))
                 }
             }
         }
 
+    private var specialModeEventTimelineItem: EventTimelineItem? = null
+
+    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            specialModeEventTimelineItem?.destroy()
+            specialModeEventTimelineItem = null
+            specialModeEventTimelineItem = eventId?.let { innerRoom.getEventTimelineItemByEventId(it.value) }
+        }
+    }
+
     override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventId.value, genTransactionId())
+            val inReplyTo = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
+            inReplyTo.use { eventTimelineItem ->
+                innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventTimelineItem)
+            }
+            specialModeEventTimelineItem = null
         }
     }
 
     override suspend fun redactEvent(eventId: EventId, reason: String?) = withContext(roomDispatcher) {
-        val transactionId = genTransactionId()
         runCatching {
-            innerRoom.redact(eventId.value, reason, transactionId)
+            innerRoom.redact(eventId.value, reason)
         }
     }
 
@@ -368,10 +373,9 @@ class RustMatrixRoom(
         }
     }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList())
+            innerRoom.uploadAvatar(mimeType, data, null)
         }
     }
 
@@ -416,7 +420,6 @@ class RustMatrixRoom(
                 description = description,
                 zoomLevel = zoomLevel?.toUByte(),
                 assetType = assetType?.toInner(),
-                txnId = genTransactionId(),
             )
         }
     }
@@ -433,7 +436,6 @@ class RustMatrixRoom(
                 answers = answers,
                 maxSelections = maxSelections.toUByte(),
                 pollKind = pollKind.toInner(),
-                txnId = genTransactionId(),
             )
         }
     }
@@ -446,7 +448,6 @@ class RustMatrixRoom(
             innerRoom.sendPollResponse(
                 pollStartId = pollStartId.value,
                 answers = answers,
-                txnId = genTransactionId(),
             )
         }
     }
@@ -459,9 +460,22 @@ class RustMatrixRoom(
             innerRoom.endPoll(
                 pollStartId = pollStartId.value,
                 text = text,
-                txnId = genTransactionId(),
             )
         }
+    }
+
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Int>,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
+        innerRoom.sendVoiceMessage(
+            url = file.path,
+            audioInfo = audioInfo.map(),
+            waveform = waveform.map { it.toUShort() },
+            progressWatcher = progressCallback?.toProgressWatcher(),
+        )
     }
 
     private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {

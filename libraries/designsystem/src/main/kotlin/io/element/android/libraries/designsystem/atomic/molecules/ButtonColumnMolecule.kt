@@ -24,7 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
@@ -45,7 +45,7 @@ fun ButtonColumnMolecule(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun ButtonColumnMoleculePreview() = ElementPreview {
     ButtonColumnMolecule {

@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.CheckboxListItem
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
@@ -78,7 +78,7 @@ fun MultipleSelectionDialog(
 }
 
 @Composable
-internal fun MultipleSelectionDialogContent(
+private fun MultipleSelectionDialogContent(
     options: ImmutableList<ListOption>,
     confirmButtonTitle: String,
     onConfirmClicked: (List<Int>) -> Unit,
@@ -126,7 +126,7 @@ internal fun MultipleSelectionDialogContent(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @ShowkaseComposable(group = PreviewGroup.Dialogs)
 @Composable
 internal fun MultipleSelectionDialogContentPreview() {

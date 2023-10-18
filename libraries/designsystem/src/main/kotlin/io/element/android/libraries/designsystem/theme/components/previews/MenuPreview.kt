@@ -17,7 +17,6 @@
 package io.element.android.libraries.designsystem.theme.components.previews
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +31,7 @@ import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Preview(group = PreviewGroup.Menus)
 @Composable
@@ -51,7 +51,10 @@ internal fun MenuPreview() {
 
                 val trailingIcon: @Composable (() -> Unit)? = if (i in 3..4) {
                     @Composable {
-                        Icon(Icons.Filled.ArrowRight, contentDescription = "Favorite")
+                        Icon(
+                            resourceId = CommonDrawables.ic_compound_chevron_right,
+                            contentDescription = "Favorite",
+                        )
                     }
                 } else {
                     null

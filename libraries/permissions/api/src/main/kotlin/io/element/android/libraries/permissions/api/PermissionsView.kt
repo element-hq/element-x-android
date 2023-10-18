@@ -16,73 +16,48 @@
 
 package io.element.android.libraries.permissions.api
 
+import android.Manifest
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun PermissionsView(
     state: PermissionsState,
     modifier: Modifier = Modifier,
-    openSystemSettings: () -> Unit = {},
 ) {
     if (state.showDialog.not()) return
 
-    when {
-        state.permissionGranted -> {
-            // Notification Granted, nothing to do
-        }
-        state.permissionAlreadyDenied -> {
-            // In this case, tell the user to go to the settings
-            ConfirmationDialog(
-                modifier = modifier,
-                title = "System",
-                content = "In order to let the application display notification, please grant the permission to the system settings",
-                submitText = "Open settings",
-                onSubmitClicked = {
-                    state.eventSink.invoke(PermissionsEvents.CloseDialog)
-                    openSystemSettings()
-                },
-                onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
-            )
-        }
-        else -> {
-            val textToShow = if (state.shouldShowRationale) {
-                // TODO Move to state
-                // If the user has denied the permission but the rationale can be shown,
-                // then gently explain why the app requires this permission
-                // permissions_rationale_msg_notification
-                "To be able to receive notifications, please grant the permission. Else you will not be able to be alerted if you've got new messages."
-            } else {
-                // TODO Move to state
-                // If it's the first time the user lands on this feature, or the user
-                // doesn't want to be asked again for this permission, explain that the
-                // permission is required
-                "To be able to receive notifications, please grant the permission."
-            }
-            ConfirmationDialog(
-                modifier = modifier,
-                title = "Notifications",
-                content = textToShow,
-                submitText = "Request permission",
-                onSubmitClicked = {
-                    state.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
-                },
-                onCancelClicked = {
-                    state.eventSink.invoke(PermissionsEvents.CloseDialog)
-                },
-                onDismiss = {}
-            )
-        }
+    ConfirmationDialog(
+        modifier = modifier,
+        title = stringResource(id = CommonStrings.common_permission),
+        content = state.permission.toDialogContent(),
+        submitText = stringResource(id = CommonStrings.action_open_settings),
+        onSubmitClicked = {
+            state.eventSink.invoke(PermissionsEvents.OpenSystemSettingAndCloseDialog)
+        },
+        onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
+    )
+}
+
+@Composable
+private fun String.toDialogContent(): String {
+    return when (this) {
+        Manifest.permission.POST_NOTIFICATIONS -> stringResource(id = R.string.dialog_permission_notification)
+        Manifest.permission.CAMERA -> stringResource(id = R.string.dialog_permission_camera)
+        Manifest.permission.RECORD_AUDIO -> stringResource(id = R.string.dialog_permission_microphone)
+        else -> stringResource(id = R.string.dialog_permission_generic)
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
-internal fun PermissionsViewPreview(@PreviewParameter(PermissionsViewStateProvider::class) state: PermissionsState) = ElementPreview {
+internal fun PermissionsViewPreview(@PreviewParameter(PermissionsStateProvider::class) state: PermissionsState) = ElementPreview {
     PermissionsView(
         state = state,
     )

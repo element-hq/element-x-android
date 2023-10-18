@@ -22,7 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
-import io.element.android.features.leaveroom.fake.LeaveRoomPresenterFake
+import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
@@ -34,7 +34,7 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -316,7 +316,7 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - leave room calls into leave room presenter`() = runTest {
-        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(leaveRoomPresenter = leaveRoomPresenter, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -364,7 +364,7 @@ class RoomListPresenterTests {
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource: InviteStateDataSource = FakeInviteDataSource(),
-        leaveRoomPresenter: LeaveRoomPresenter = LeaveRoomPresenterFake(),
+        leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
         lastMessageTimestampFormatter: LastMessageTimestampFormatter = FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
         },

@@ -14,6 +14,7 @@
   <string name="rich_text_editor_link">"設定連結"</string>
   <string name="rich_text_editor_numbered_list">"切換數字編號"</string>
   <string name="rich_text_editor_quote">"切換引用"</string>
+  <string name="rich_text_editor_remove_link">"移除連結"</string>
   <string name="rich_text_editor_unindent">"減少縮排"</string>
   <string name="rich_text_editor_url_placeholder">"連結"</string>
   <string name="rich_text_editor_a11y_add_attachment">"新增附件"</string>

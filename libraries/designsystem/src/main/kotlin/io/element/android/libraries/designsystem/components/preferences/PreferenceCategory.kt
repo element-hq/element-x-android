@@ -20,9 +20,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Announcement
-import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -54,7 +52,7 @@ fun PreferenceCategory(
 }
 
 @Composable
-fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
+private fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
     Text(
         modifier = modifier.padding(
             top = 20.dp,
@@ -79,11 +77,11 @@ private fun ContentToPreview() {
     ) {
         PreferenceText(
             title = "Title",
-            icon = Icons.Default.BugReport,
+            iconResourceId = CommonDrawables.ic_compound_chat_problem,
         )
         PreferenceSwitch(
             title = "Switch",
-            icon = Icons.Default.Announcement,
+            iconResourceId = CommonDrawables.ic_compound_threads,
             isChecked = true
         )
         PreferenceSlide(

@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCheckbox
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
@@ -46,7 +46,7 @@ fun FeatureListView(
 }
 
 @Composable
-fun FeaturePreferenceView(
+private fun FeaturePreferenceView(
     feature: FeatureUiModel,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
@@ -60,7 +60,7 @@ fun FeaturePreferenceView(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun FeatureListViewPreview() = ElementPreview {
     FeatureListView(

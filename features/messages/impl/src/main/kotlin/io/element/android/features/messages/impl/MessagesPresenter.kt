@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.features.analytics.plan.PollEnd
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -39,6 +38,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
@@ -55,6 +55,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.PreferencesStore
@@ -64,9 +65,11 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.designsystem.utils.SnackbarMessage
-import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -75,8 +78,7 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
-import io.element.android.libraries.textcomposer.MessageComposerMode
-import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -85,6 +87,7 @@ import timber.log.Timber
 class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
+    private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
@@ -95,8 +98,8 @@ class MessagesPresenter @AssistedInject constructor(
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
-    private val analyticsService: AnalyticsService,
     private val preferencesStore: PreferencesStore,
+    private val featureFlagsService: FeatureFlagService,
     @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
 
@@ -109,6 +112,7 @@ class MessagesPresenter @AssistedInject constructor(
     override fun present(): MessagesState {
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
+        val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
@@ -147,6 +151,11 @@ class MessagesPresenter @AssistedInject constructor(
 
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
+        var enableVoiceMessages by remember { mutableStateOf(false) }
+        LaunchedEffect(featureFlagsService) {
+            enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
+        }
+
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> {
@@ -155,6 +164,7 @@ class MessagesPresenter @AssistedInject constructor(
                         targetEvent = event.event,
                         composerState = composerState,
                         enableTextFormatting = enableTextFormatting,
+                        timelineState = timelineState,
                     )
                 }
                 is MessagesEvents.ToggleReaction -> {
@@ -178,6 +188,7 @@ class MessagesPresenter @AssistedInject constructor(
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             userHasPermissionToRedact = userHasPermissionToRedact,
             composerState = composerState,
+            voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
             actionListState = actionListState,
             customReactionState = customReactionState,
@@ -188,6 +199,7 @@ class MessagesPresenter @AssistedInject constructor(
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
             enableTextFormatting = enableTextFormatting,
+            enableVoiceMessages = enableVoiceMessages,
             eventSink = { handleEvents(it) }
         )
     }
@@ -206,6 +218,7 @@ class MessagesPresenter @AssistedInject constructor(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
         enableTextFormatting: Boolean,
+        timelineState: TimelineState,
     ) = launch {
         when (action) {
             TimelineItemAction.Copy -> handleCopyContents(targetEvent)
@@ -216,7 +229,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
-            TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent)
+            TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
         }
     }
 
@@ -266,7 +279,7 @@ class MessagesPresenter @AssistedInject constructor(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
         enableTextFormatting: Boolean,
-        ) {
+    ) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.eventId,
             (targetEvent.content as? TimelineItemTextBasedContent)?.let {
@@ -344,11 +357,11 @@ class MessagesPresenter @AssistedInject constructor(
         navigator.onReportContentClicked(event.eventId, event.senderId)
     }
 
-    private suspend fun handleEndPollAction(event: TimelineItem.Event) {
-        event.eventId?.let {
-            room.endPoll(it, "The poll with event id: $it has ended.")
-            analyticsService.capture(PollEnd())
-        }
+    private fun handleEndPollAction(
+        event: TimelineItem.Event,
+        timelineState: TimelineState,
+    ) {
+        event.eventId?.let { timelineState.eventSink(TimelineEvents.PollEndClicked(it)) }
     }
 
     private suspend fun handleCopyContents(event: TimelineItem.Event) {

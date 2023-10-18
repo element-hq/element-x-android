@@ -27,8 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -41,17 +39,17 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -128,7 +126,7 @@ fun CreateRoomRootView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateRoomRootViewTopBar(
+private fun CreateRoomRootViewTopBar(
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
 ) {
@@ -141,19 +139,16 @@ fun CreateRoomRootViewTopBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = onClosePressed) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(id = CommonStrings.action_close),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
+            BackButton(
+                resourceId = CommonDrawables.ic_compound_close,
+                onClick = onClosePressed,
+            )
         }
     )
 }
 
 @Composable
-fun CreateRoomActionButtonsList(
+private fun CreateRoomActionButtonsList(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
     onNewRoomClicked: () -> Unit = {},
@@ -161,12 +156,12 @@ fun CreateRoomActionButtonsList(
 ) {
     Column(modifier = modifier) {
         CreateRoomActionButton(
-            iconRes = VectorIcons.Groups,
+            iconRes = CommonDrawables.ic_groups,
             text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
-            iconRes = VectorIcons.Share,
+            iconRes = CommonDrawables.ic_compound_share_android,
             text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
             onClick = onInvitePeopleClicked,
         )
@@ -174,7 +169,7 @@ fun CreateRoomActionButtonsList(
 }
 
 @Composable
-fun CreateRoomActionButton(
+private fun CreateRoomActionButton(
     @DrawableRes iconRes: Int,
     text: String,
     modifier: Modifier = Modifier,
@@ -202,7 +197,7 @@ fun CreateRoomActionButton(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun CreateRoomRootViewPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) =
     ElementPreview {

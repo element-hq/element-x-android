@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.theme.ElementTheme
@@ -49,7 +49,7 @@ fun PlaceholderAtom(
     )
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun PlaceholderAtomPreview() = ElementPreview {
     // Use a Red background to see the shape

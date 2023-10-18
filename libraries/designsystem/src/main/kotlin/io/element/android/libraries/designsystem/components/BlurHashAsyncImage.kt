@@ -71,7 +71,7 @@ fun BlurHashAsyncImage(
 }
 
 @Composable
-fun BlurHashImage(
+private fun BlurHashImage(
     blurHash: String?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,

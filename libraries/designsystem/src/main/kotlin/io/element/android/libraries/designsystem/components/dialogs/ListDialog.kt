@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.TextFieldListItem
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
@@ -72,7 +72,7 @@ fun ListDialog(
 }
 
 @Composable
-internal fun ListDialogContent(
+private fun ListDialogContent(
     listItems: LazyListScope.() -> Unit,
     onDismissRequest: () -> Unit,
     onSubmitClicked: () -> Unit,
@@ -98,7 +98,7 @@ internal fun ListDialogContent(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @ShowkaseComposable(group = PreviewGroup.Dialogs)
 @Composable
 internal fun ListDialogContentPreview() {

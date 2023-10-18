@@ -35,7 +35,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
@@ -100,7 +100,7 @@ private fun AvatarActionBottomSheetContent(
                 },
                 leadingContent = {
                     Icon(
-                        imageVector = action.icon,
+                        resourceId = action.iconResourceId,
                         contentDescription = stringResource(action.titleResId),
                         tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
                     )
@@ -110,7 +110,7 @@ private fun AvatarActionBottomSheetContent(
     }
 }
 
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun AvatarActionBottomSheetPreview() = ElementPreview {
     AvatarActionBottomSheet(

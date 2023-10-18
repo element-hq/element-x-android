@@ -29,9 +29,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.OpenInNew
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
@@ -49,11 +47,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.local.rememberLocalMediaViewState
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -61,8 +61,9 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.SnackbarHost
-import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
+import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -93,6 +94,7 @@ fun MediaViewerView(
         topBar = {
             MediaViewerTopBar(
                 actionsEnabled = state.downloadedMedia is Async.Success,
+                mimeType = state.mediaInfo.mimeType,
                 onBackPressed = onBackPressed,
                 eventSink = state.eventSink
             )
@@ -163,6 +165,7 @@ private fun rememberShowProgress(downloadedMedia: Async<LocalMedia>): Boolean {
 @Composable
 private fun MediaViewerTopBar(
     actionsEnabled: Boolean,
+    mimeType: String,
     onBackPressed: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
@@ -176,7 +179,16 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.OpenWith)
                 },
             ) {
-                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = stringResource(id = CommonStrings.action_open_with))
+                when (mimeType) {
+                    MimeTypes.Apk -> Icon(
+                        resourceId = R.drawable.ic_apk_install,
+                        contentDescription = stringResource(id = CommonStrings.common_install_apk_android)
+                    )
+                    else -> Icon(
+                        imageVector = Icons.AutoMirrored.Filled.OpenInNew,
+                        contentDescription = stringResource(id = CommonStrings.action_open_with)
+                    )
+                }
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -184,7 +196,10 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.SaveOnDisk)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Download, contentDescription = stringResource(id = CommonStrings.action_save))
+                Icon(
+                    resourceId = CommonDrawables.ic_compound_download,
+                    contentDescription = stringResource(id = CommonStrings.action_save),
+                )
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -192,7 +207,10 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.Share)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = CommonStrings.action_share))
+                Icon(
+                    resourceId = CommonDrawables.ic_compound_share_android,
+                    contentDescription = stringResource(id = CommonStrings.action_share)
+                )
             }
         }
     )

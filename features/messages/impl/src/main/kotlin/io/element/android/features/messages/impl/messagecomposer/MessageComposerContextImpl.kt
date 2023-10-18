@@ -23,7 +23,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import javax.inject.Inject
 
 @SingleIn(RoomScope::class)

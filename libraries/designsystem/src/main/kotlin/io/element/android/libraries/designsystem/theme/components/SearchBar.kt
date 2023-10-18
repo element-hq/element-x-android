@@ -24,9 +24,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarColors
@@ -46,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -99,7 +97,7 @@ fun <T> SearchBar(
                 {
                     IconButton(onClick = { onQueryChange("") }) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            resourceId = CommonDrawables.ic_compound_close,
                             contentDescription = stringResource(CommonStrings.action_clear),
                         )
                     }
@@ -109,7 +107,7 @@ fun <T> SearchBar(
             !active -> {
                 {
                     Icon(
-                        imageVector = Icons.Default.Search,
+                        resourceId = CommonDrawables.ic_compound_search,
                         contentDescription = stringResource(CommonStrings.action_search),
                         tint = MaterialTheme.colorScheme.tertiary,
                     )
@@ -195,11 +193,11 @@ sealed interface SearchBarResultState<in T> {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewInactive() = ElementThemedPreview { ContentToPreview() }
+internal fun SearchBarInactivePreview() = ElementThemedPreview { ContentToPreview() }
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveEmptyQuery() = ElementThemedPreview {
+internal fun SearchBarActiveEmptyQueryPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "",
         active = true,
@@ -208,7 +206,7 @@ internal fun SearchBarPreviewActiveEmptyQuery() = ElementThemedPreview {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithQuery() = ElementThemedPreview {
+internal fun SearchBarActiveWithQueryPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,
@@ -217,7 +215,7 @@ internal fun SearchBarPreviewActiveWithQuery() = ElementThemedPreview {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithQueryNoBackButton() = ElementThemedPreview {
+internal fun SearchBarActiveWithQueryNoBackButtonPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,
@@ -227,7 +225,7 @@ internal fun SearchBarPreviewActiveWithQueryNoBackButton() = ElementThemedPrevie
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithNoResults() = ElementThemedPreview {
+internal fun SearchBarActiveWithNoResultsPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,
@@ -237,7 +235,7 @@ internal fun SearchBarPreviewActiveWithNoResults() = ElementThemedPreview {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithContent() = ElementThemedPreview {
+internal fun SearchBarActiveWithContentPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,

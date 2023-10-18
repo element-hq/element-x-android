@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -31,12 +29,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.VectorIcons
-import io.element.android.libraries.designsystem.preview.DayNightPreviews
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -92,7 +90,7 @@ private fun RoomListModalBottomSheetContent(
             modifier = Modifier.clickable { onRoomSettingsClicked(contextMenu.roomId) },
             leadingContent = {
                 Icon(
-                    imageVector = Icons.Outlined.Settings,
+                    resourceId = CommonDrawables.ic_compound_settings,
                     contentDescription = stringResource(id = CommonStrings.common_settings),
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onSurface,
@@ -110,7 +108,7 @@ private fun RoomListModalBottomSheetContent(
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
             leadingContent = {
                 Icon(
-                    resourceId = VectorIcons.DoorOpen,
+                    resourceId = CommonDrawables.ic_compound_leave,
                     contentDescription = stringResource(id = CommonStrings.action_leave_room),
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.error,
@@ -124,7 +122,7 @@ private fun RoomListModalBottomSheetContent(
 // TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
 // see: https://issuetracker.google.com/issues/283843380
 // Remove this preview when the issue is fixed.
-@DayNightPreviews
+@PreviewsDayNight
 @Composable
 internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
     RoomListModalBottomSheetContent(

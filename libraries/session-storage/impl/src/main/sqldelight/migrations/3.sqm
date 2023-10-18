@@ -1,0 +1,4 @@
+-- Migrate DB from version 3
+
+ALTER TABLE SessionData ADD COLUMN isTokenValid INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE SessionData ADD COLUMN loginType TEXT;

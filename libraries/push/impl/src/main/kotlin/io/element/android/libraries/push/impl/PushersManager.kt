@@ -63,20 +63,19 @@ class PushersManager @Inject constructor(
     override suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
         val userDataStore = userPushStoreFactory.create(matrixClient.sessionId)
         if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
-            Timber.tag(loggerTag.value).d("Unnecessary to register again the same pusher")
-        } else {
-            // Register the pusher to the server
-            matrixClient.pushersService().setHttpPusher(
-                createHttpPusher(pushKey, gateway, matrixClient.sessionId)
-            ).fold(
-                {
-                    userDataStore.setCurrentRegisteredPushKey(pushKey)
-                },
-                { throwable ->
-                    Timber.tag(loggerTag.value).e(throwable, "Unable to register the pusher")
-                }
-            )
+            Timber.tag(loggerTag.value)
+                .d("Unnecessary to register again the same pusher, but do it in case the pusher has been removed from the server")
         }
+        matrixClient.pushersService().setHttpPusher(
+            createHttpPusher(pushKey, gateway, matrixClient.sessionId)
+        ).fold(
+            {
+                userDataStore.setCurrentRegisteredPushKey(pushKey)
+            },
+            { throwable ->
+                Timber.tag(loggerTag.value).e(throwable, "Unable to register the pusher")
+            }
+        )
     }
 
     private suspend fun createHttpPusher(
