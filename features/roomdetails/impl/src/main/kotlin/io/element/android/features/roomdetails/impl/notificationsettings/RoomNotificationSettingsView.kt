@@ -75,27 +75,29 @@ fun RoomNotificationSettingsView(
                 null -> ""
             }
 
+            val roomNotificationSettings = state.roomNotificationSettings.dataOrNull()
+
             PreferenceCategory(title = stringResource(id = R.string.screen_room_notification_settings_custom_settings_title)) {
                 PreferenceSwitch(
-                    isChecked = state.roomNotificationSettings?.isDefault.orTrue(),
+                    isChecked = state.displayIsDefault.orTrue(),
                     onCheckedChange = {
                         state.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(it))
                     },
                     title = "Match default setting",
                     subtitle = subtitle,
-                    enabled = state.roomNotificationSettings != null
+                    enabled = roomNotificationSettings != null
                 )
 
                 PreferenceText(
                     title = stringResource(id = R.string.screen_room_notification_settings_allow_custom),
                     subtitle = stringResource(id = R.string.screen_room_notification_settings_allow_custom_footnote),
-                    enabled = state.roomNotificationSettings != null && !state.roomNotificationSettings.isDefault,
+                    enabled = !state.displayIsDefault.orTrue(),
                 )
 
-                if (state.roomNotificationSettings != null) {
+                if (roomNotificationSettings != null &&  state.displayNotificationMode != null) {
                     RoomNotificationSettingsOptions(
-                        selected = state.roomNotificationSettings.mode,
-                        enabled = !state.roomNotificationSettings.isDefault,
+                        selected = state.displayNotificationMode,
+                        enabled = !state.displayIsDefault.orTrue(),
                         onOptionSelected = {
                             state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
                         },
@@ -103,12 +105,22 @@ fun RoomNotificationSettingsView(
                 }
             }
 
-            when (state.changeNotificationSettingAction) {
+            when (state.setNotificationSettingAction) {
                 is Async.Loading -> {
                     ProgressDialog()
                 }
                 is Async.Failure -> {
-                    ShowChangeNotificationSettingError(state)
+                    ShowChangeNotificationSettingError(state, RoomNotificationSettingsEvents.ClearSetNotificationError)
+                }
+                else -> Unit
+            }
+
+            when (state.restoreDefaultAction) {
+                is Async.Loading -> {
+                    ProgressDialog()
+                }
+                is Async.Failure -> {
+                    ShowChangeNotificationSettingError(state, RoomNotificationSettingsEvents.ClearRestoreDefaultError)
                 }
                 else -> Unit
             }
@@ -155,11 +167,11 @@ fun RoomNotificationSettingsOptions(
 }
 
 @Composable
-fun ShowChangeNotificationSettingError(state: RoomNotificationSettingsState) {
+fun ShowChangeNotificationSettingError(state: RoomNotificationSettingsState, event: RoomNotificationSettingsEvents) {
     ErrorDialog(
         title = stringResource(CommonStrings.dialog_title_error),
         content = stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode),
-        onDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearError) },
+        onDismiss = { state.eventSink(event) },
     )
 }
 

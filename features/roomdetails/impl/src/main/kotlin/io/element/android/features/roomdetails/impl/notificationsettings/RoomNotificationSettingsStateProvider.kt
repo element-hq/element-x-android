@@ -26,12 +26,14 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
         get() = sequenceOf(
             RoomNotificationSettingsState(
                 roomName = "Room 1",
-                RoomNotificationSettings(
+                Async.Success(RoomNotificationSettings(
                     mode = RoomNotificationMode.MUTE,
-                    isDefault = true),
-                RoomNotificationMode.ALL_MESSAGES,
-                changeNotificationSettingAction = Async.Uninitialized,
-                deleteCustomNotificationSettingAction = Async.Uninitialized,
+                    isDefault = true)),
+                pendingRoomNotificationMode = null,
+                pendingSetDefault = null,
+                defaultRoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
+                setNotificationSettingAction = Async.Uninitialized,
+                restoreDefaultAction = Async.Uninitialized,
                 eventSink = { },
             ),
         )

@@ -22,5 +22,6 @@ sealed interface RoomNotificationSettingsEvents {
     data class RoomNotificationModeChanged(val mode: RoomNotificationMode) : RoomNotificationSettingsEvents
     data class SetNotificationMode(val isDefault: Boolean): RoomNotificationSettingsEvents
     data object DeleteCustomNotification: RoomNotificationSettingsEvents
-    data object ClearError: RoomNotificationSettingsEvents
+    data object ClearSetNotificationError: RoomNotificationSettingsEvents
+    data object ClearRestoreDefaultError: RoomNotificationSettingsEvents
 }

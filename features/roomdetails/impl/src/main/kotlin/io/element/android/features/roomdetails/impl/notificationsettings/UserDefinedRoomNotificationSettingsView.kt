@@ -62,10 +62,11 @@ fun UserDefinedRoomNotificationSettingsView(
                 .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            if (state.roomNotificationSettings != null) {
+            val roomNotificationSettings = state.roomNotificationSettings.dataOrNull()
+            if (roomNotificationSettings != null && state.displayNotificationMode != null) {
                 RoomNotificationSettingsOptions(
-                    selected = state.roomNotificationSettings.mode,
-                    enabled = !state.roomNotificationSettings.isDefault,
+                    selected = state.displayNotificationMode,
+                    enabled = roomNotificationSettings.isDefault,
                     onOptionSelected = {
                         state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
                     },
@@ -81,7 +82,7 @@ fun UserDefinedRoomNotificationSettingsView(
                 }
             )
 
-            when (state.changeNotificationSettingAction) {
+            when (state.setNotificationSettingAction) {
                 is Async.Loading -> {
                     ProgressDialog()
                 }
@@ -91,7 +92,7 @@ fun UserDefinedRoomNotificationSettingsView(
                 else -> Unit
             }
 
-            when (state.deleteCustomNotificationSettingAction) {
+            when (state.restoreDefaultAction) {
                 is Async.Loading -> {
                     ProgressDialog()
                 }
@@ -99,7 +100,7 @@ fun UserDefinedRoomNotificationSettingsView(
                     ShowChangeNotificationSettingError(state)
                 }
                 is Async.Success -> {
-                    LaunchedEffect(state.deleteCustomNotificationSettingAction) {
+                    LaunchedEffect(state.restoreDefaultAction) {
                         onBackPressed()
                     }
                 }

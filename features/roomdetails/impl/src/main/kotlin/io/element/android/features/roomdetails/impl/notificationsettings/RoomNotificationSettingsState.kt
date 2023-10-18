@@ -22,9 +22,19 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 data class RoomNotificationSettingsState(
     val roomName: String,
-    val roomNotificationSettings: RoomNotificationSettings?,
+    val roomNotificationSettings: Async<RoomNotificationSettings>,
+    val pendingRoomNotificationMode: RoomNotificationMode?,
+    val pendingSetDefault: Boolean?,
     val defaultRoomNotificationMode: RoomNotificationMode?,
-    val changeNotificationSettingAction: Async<Unit>,
-    val deleteCustomNotificationSettingAction: Async<Unit>,
+    val setNotificationSettingAction: Async<Unit>,
+    val restoreDefaultAction: Async<Unit>,
     val eventSink: (RoomNotificationSettingsEvents) -> Unit
 )
+
+val RoomNotificationSettingsState.displayNotificationMode: RoomNotificationMode? get() {
+    return pendingRoomNotificationMode ?: roomNotificationSettings.dataOrNull()?.mode
+}
+
+val RoomNotificationSettingsState.displayIsDefault: Boolean? get() {
+    return pendingSetDefault ?: roomNotificationSettings.dataOrNull()?.isDefault
+}
