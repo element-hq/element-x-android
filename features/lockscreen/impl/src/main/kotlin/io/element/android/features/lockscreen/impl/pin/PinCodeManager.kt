@@ -27,28 +27,30 @@ interface PinCodeManager {
     suspend fun isPinCodeAvailable(): Boolean
 
     /**
-     * creates a new encrypted pin code.
+     * Creates a new encrypted pin code.
      * @param pinCode the clear pin code to create
      */
     suspend fun createPinCode(pinCode: String)
 
     /**
-     * @return true if the pin code is correct
+     * @return true if the pin code is correct.
      */
     suspend fun verifyPinCode(pinCode: String): Boolean
 
     /**
-     * deletes the previously created pin code
+     * Deletes the previously created pin code.
      */
     suspend fun deletePinCode()
 
     /**
-     * @return the number of remaining attempts before the pin code is blocked
+     * @return the number of remaining attempts before the pin code is blocked.
      */
     suspend fun getRemainingPinCodeAttemptsNumber(): Int
 
     /**
-     * @return the number of remaining attempts before the pin code is blocked
+     * Should be called when the pin code is incorrect.
+     * Will decrement the remaining attempts number.
+     * @return the number of remaining attempts before the pin code is blocked.
      */
     suspend fun onWrongPin(): Int
 
