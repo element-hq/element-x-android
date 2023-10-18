@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-}
+package io.element.android.libraries.cryptography.api
 
-android {
-    namespace = "io.element.android.libraries.cryptography.impl"
-}
+import javax.crypto.SecretKey
 
-anvil {
-    generateDaggerFactories.set(true)
-}
-
-dependencies {
-    anvil(projects.anvilcodegen)
-    implementation(libs.dagger)
-    implementation(projects.anvilannotations)
-    implementation(projects.libraries.di)
-    implementation(projects.libraries.cryptography.api)
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
+/**
+ * Simple interface to get or create a secret key for a given alias.
+ * Implementation should be able to store the generated key securely.
+ */
+interface SecretKeyProvider {
+    fun getOrCreateKey(alias: String): SecretKey
 }

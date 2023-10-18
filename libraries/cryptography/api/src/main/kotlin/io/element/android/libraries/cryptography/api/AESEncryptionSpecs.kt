@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-}
+package io.element.android.libraries.cryptography.api
 
-android {
-    namespace = "io.element.android.libraries.cryptography.impl"
-}
+import android.security.keystore.KeyProperties
 
-anvil {
-    generateDaggerFactories.set(true)
-}
-
-dependencies {
-    anvil(projects.anvilcodegen)
-    implementation(libs.dagger)
-    implementation(projects.anvilannotations)
-    implementation(projects.libraries.di)
-    implementation(projects.libraries.cryptography.api)
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
+object AESEncryptionSpecs {
+    const val BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
+    const val PADDINGS = KeyProperties.ENCRYPTION_PADDING_NONE
+    const val ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
+    const val KEY_SIZE = 128
+    const val CIPHER_TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDINGS"
 }

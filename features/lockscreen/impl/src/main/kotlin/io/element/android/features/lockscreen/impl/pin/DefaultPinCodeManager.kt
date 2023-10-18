@@ -18,8 +18,9 @@ package io.element.android.features.lockscreen.impl.pin
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.lockscreen.impl.pin.storage.PinCodeStore
-import io.element.android.libraries.cryptography.api.CryptoService
+import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
+import io.element.android.libraries.cryptography.api.SecretKeyProvider
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
@@ -27,7 +28,8 @@ private const val SECRET_KEY_ALIAS = "SECRET_KEY_ALIAS_PIN_CODE"
 
 @ContributesBinding(AppScope::class)
 class DefaultPinCodeManager @Inject constructor(
-    private val cryptoService: CryptoService,
+    private val secretKeyProvider: SecretKeyProvider,
+    private val encryptionDecryptionService: EncryptionDecryptionService,
     private val pinCodeStore: PinCodeStore,
 ) : PinCodeManager {
 
@@ -36,16 +38,16 @@ class DefaultPinCodeManager @Inject constructor(
     }
 
     override suspend fun createPinCode(pinCode: String) {
-        val secretKey = cryptoService.getOrCreateSecretKey(SECRET_KEY_ALIAS)
-        val encryptedPinCode = cryptoService.encrypt(secretKey, pinCode.toByteArray()).toBase64()
+        val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
+        val encryptedPinCode = encryptionDecryptionService.encrypt(secretKey, pinCode.toByteArray()).toBase64()
         pinCodeStore.saveEncryptedPinCode(encryptedPinCode)
     }
 
     override suspend fun verifyPinCode(pinCode: String): Boolean {
         val encryptedPinCode = pinCodeStore.getEncryptedCode() ?: return false
         return try {
-            val secretKey = cryptoService.getOrCreateSecretKey(SECRET_KEY_ALIAS)
-            val decryptedPinCode = cryptoService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
+            val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
+            val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
             decryptedPinCode.contentEquals(pinCode.toByteArray())
         } catch (failure: Throwable) {
             false

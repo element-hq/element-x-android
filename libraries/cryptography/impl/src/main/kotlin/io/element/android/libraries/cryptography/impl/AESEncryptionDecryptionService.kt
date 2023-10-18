@@ -16,56 +16,31 @@
 
 package io.element.android.libraries.cryptography.impl
 
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.cryptography.api.CryptoService
+import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
+import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.di.AppScope
-import java.security.KeyStore
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 import javax.inject.Inject
 
-private const val ANDROID_KEYSTORE = "AndroidKeyStore"
-private const val ENCRYPTION_BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
-private const val ENCRYPTION_PADDING = KeyProperties.ENCRYPTION_PADDING_NONE
-private const val ENCRYPTION_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
-private const val ENCRYPTION_AES_TRANSFORMATION = "$ENCRYPTION_ALGORITHM/$ENCRYPTION_BLOCK_MODE/$ENCRYPTION_PADDING"
-
+/**
+ * Default implementation of [EncryptionDecryptionService] using AES encryption.
+ */
 @ContributesBinding(AppScope::class)
-class DefaultCryptoService @Inject constructor() : CryptoService {
-
-    override fun getOrCreateSecretKey(alias: String): SecretKey {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
-        val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
-            ?.secretKey
-        return if (secretKeyEntry == null) {
-            val generator = KeyGenerator.getInstance(ENCRYPTION_ALGORITHM, ANDROID_KEYSTORE)
-            val keyGenSpec = KeyGenParameterSpec.Builder(
-                alias,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-            )
-                .setBlockModes(ENCRYPTION_BLOCK_MODE)
-                .setEncryptionPaddings(ENCRYPTION_PADDING)
-                .setKeySize(128)
-                .build()
-            generator.init(keyGenSpec)
-            generator.generateKey()
-        } else secretKeyEntry
-    }
+class AESEncryptionDecryptionService @Inject constructor() : EncryptionDecryptionService {
 
     override fun createEncryptionCipher(key: SecretKey): Cipher {
-        return Cipher.getInstance(ENCRYPTION_AES_TRANSFORMATION).apply {
+        return Cipher.getInstance(AESEncryptionSpecs.CIPHER_TRANSFORMATION).apply {
             init(Cipher.ENCRYPT_MODE, key)
         }
     }
 
     override fun createDecryptionCipher(key: SecretKey, initializationVector: ByteArray): Cipher {
         val spec = GCMParameterSpec(128, initializationVector)
-        return Cipher.getInstance(ENCRYPTION_AES_TRANSFORMATION).apply {
+        return Cipher.getInstance(AESEncryptionSpecs.CIPHER_TRANSFORMATION).apply {
             init(Cipher.DECRYPT_MODE, key, spec)
         }
     }

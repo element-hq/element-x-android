@@ -14,26 +14,17 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-}
+package io.element.android.libraries.cryptography.api
 
-android {
-    namespace = "io.element.android.libraries.cryptography.impl"
-}
+import javax.crypto.Cipher
+import javax.crypto.SecretKey
 
-anvil {
-    generateDaggerFactories.set(true)
-}
-
-dependencies {
-    anvil(projects.anvilcodegen)
-    implementation(libs.dagger)
-    implementation(projects.anvilannotations)
-    implementation(projects.libraries.di)
-    implementation(projects.libraries.cryptography.api)
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
+/**
+ * Simple service to provide encryption and decryption operations.
+ */
+interface EncryptionDecryptionService {
+    fun createEncryptionCipher(key: SecretKey): Cipher
+    fun createDecryptionCipher(key: SecretKey, initializationVector: ByteArray): Cipher
+    fun encrypt(key: SecretKey, input: ByteArray): EncryptionResult
+    fun decrypt(key: SecretKey, encryptionResult: EncryptionResult): ByteArray
 }

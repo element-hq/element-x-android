@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.cryptography.api
+plugins {
+    id("io.element.android-library")
+}
 
-import javax.crypto.Cipher
-import javax.crypto.SecretKey
+android {
+    namespace = "io.element.android.libraries.cryptography.test"
 
-/**
- * Simple service to provide cryptographic operations.
- */
-interface CryptoService {
-    fun getOrCreateSecretKey(alias: String): SecretKey
-    fun createEncryptionCipher(key: SecretKey): Cipher
-    fun createDecryptionCipher(key: SecretKey, initializationVector: ByteArray): Cipher
-    fun encrypt(key: SecretKey, input: ByteArray): EncryptionResult
-    fun decrypt(key: SecretKey, encryptionResult: EncryptionResult): ByteArray
+    dependencies {
+        api(projects.libraries.cryptography.api)
+    }
 }

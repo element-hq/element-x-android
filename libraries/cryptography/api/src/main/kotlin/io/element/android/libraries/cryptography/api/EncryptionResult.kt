@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalEncodingApi::class)
+
 package io.element.android.libraries.cryptography.api
 
-import android.util.Base64
 import java.nio.ByteBuffer
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * Holds the result of an encryption operation.
@@ -34,7 +37,7 @@ class EncryptionResult(
                 .put(initializationVector)
                 .put(encryptedByteArray)
                 .array()
-        return Base64.encodeToString(cipherTextWithIv, Base64.NO_WRAP)
+        return Base64.encode(cipherTextWithIv)
     }
 
     companion object {
@@ -43,7 +46,7 @@ class EncryptionResult(
          * @return the [EncryptionResult] from the base64 representation.
          */
         fun fromBase64(base64: String): EncryptionResult {
-            val cipherTextWithIv = Base64.decode(base64, Base64.NO_WRAP)
+            val cipherTextWithIv = Base64.decode(base64)
             val buffer = ByteBuffer.wrap(cipherTextWithIv)
             val initializationVectorSize = buffer.int
             val initializationVector = ByteArray(initializationVectorSize)
