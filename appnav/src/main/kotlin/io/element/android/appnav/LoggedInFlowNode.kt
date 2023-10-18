@@ -50,9 +50,9 @@ import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.features.pin.api.PinEntryPoint
-import io.element.android.features.pin.api.PinState
-import io.element.android.features.pin.api.PinStateService
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.lockscreen.api.LockScreenState
+import io.element.android.features.lockscreen.api.LockScreenStateService
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
@@ -93,8 +93,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val networkMonitor: NetworkMonitor,
     private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueState: FtueState,
-    private val pinEntryPoint: PinEntryPoint,
-    private val pinStateService: PinStateService,
+    private val lockScreenEntryPoint: LockScreenEntryPoint,
+    private val lockScreenStateService: LockScreenStateService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
@@ -136,12 +136,12 @@ class LoggedInFlowNode @AssistedInject constructor(
             },
             onResume = {
                 coroutineScope.launch {
-                    pinStateService.entersForeground()
+                    lockScreenStateService.entersForeground()
                 }
             },
             onPause = {
                 coroutineScope.launch {
-                    pinStateService.entersBackground()
+                    lockScreenStateService.entersBackground()
                 }
             },
             onStop = {
@@ -218,7 +218,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 createNode<LoggedInNode>(buildContext)
             }
             NavTarget.LockPermanent -> {
-                pinEntryPoint.createNode(this, buildContext)
+                lockScreenEntryPoint.createNode(this, buildContext)
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
@@ -345,9 +345,9 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
-            val pinState by pinStateService.pinState.collectAsState()
-            when (pinState) {
-                PinState.Unlocked -> {
+            val lockScreenState by lockScreenStateService.state.collectAsState()
+            when (lockScreenState) {
+                LockScreenState.Unlocked -> {
                     Children(
                         navModel = backstack,
                         modifier = Modifier,
@@ -359,7 +359,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
                     }
                 }
-                PinState.Locked -> {
+                LockScreenState.Locked -> {
                     MoveActivityToBackgroundBackHandler()
                     PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
                 }

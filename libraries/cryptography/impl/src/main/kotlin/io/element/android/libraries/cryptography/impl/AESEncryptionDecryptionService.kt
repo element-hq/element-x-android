@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2023 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.element.android.libraries.cryptography.impl
+
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
+import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
+import io.element.android.libraries.cryptography.api.EncryptionResult
+import io.element.android.libraries.di.AppScope
+import javax.crypto.Cipher
+import javax.crypto.SecretKey
+import javax.crypto.spec.GCMParameterSpec
+import javax.inject.Inject
+
+/**
+ * Default implementation of [EncryptionDecryptionService] using AES encryption.
+ */
+@ContributesBinding(AppScope::class)
+class AESEncryptionDecryptionService @Inject constructor() : EncryptionDecryptionService {
+
+    override fun createEncryptionCipher(key: SecretKey): Cipher {
+        return Cipher.getInstance(AESEncryptionSpecs.CIPHER_TRANSFORMATION).apply {
+            init(Cipher.ENCRYPT_MODE, key)
+        }
+    }
+
+    override fun createDecryptionCipher(key: SecretKey, initializationVector: ByteArray): Cipher {
+        val spec = GCMParameterSpec(128, initializationVector)
+        return Cipher.getInstance(AESEncryptionSpecs.CIPHER_TRANSFORMATION).apply {
+            init(Cipher.DECRYPT_MODE, key, spec)
+        }
+    }
+
+    override fun encrypt(key: SecretKey, input: ByteArray): EncryptionResult {
+        val cipher = createEncryptionCipher(key)
+        val encryptedData = cipher.doFinal(input)
+        return EncryptionResult(encryptedData, cipher.iv)
+    }
+
+    override fun decrypt(key: SecretKey, encryptionResult: EncryptionResult): ByteArray {
+        val cipher = createDecryptionCipher(key, encryptionResult.initializationVector)
+        return cipher.doFinal(encryptionResult.encryptedByteArray)
+    }
+}
