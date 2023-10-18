@@ -35,7 +35,7 @@ dependencies {
 
 // Make sure Konsist tests are always run. This is needed because otherwise we'd have to either:
 // - Add every single module as a dependency of this one.
-// - Move the Konsist tests to a the app module, which was causing issues.
+// - Move the Konsist tests to the `app` module, but the `app` module does not need to know about Konsist.
 tasks.withType<Test>().configureEach {
     outputs.upToDateWhen { false }
 }
