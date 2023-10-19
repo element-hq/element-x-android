@@ -38,7 +38,7 @@ class CreatePinPresenterTest {
     @Test
     fun `present - complete flow`() = runTest {
 
-        val presenter = createPresenter()
+        val presenter = createCreatePinPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -107,7 +107,7 @@ class CreatePinPresenterTest {
         assertThat(isEmpty).isTrue()
     }
 
-    private fun createPresenter(): CreatePinPresenter {
+    private fun createCreatePinPresenter(): CreatePinPresenter {
         return CreatePinPresenter(PinValidator())
     }
 }

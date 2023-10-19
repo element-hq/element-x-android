@@ -161,7 +161,7 @@ private fun CreatePinFailure.title(): String {
 }
 
 @Composable
-fun PinEntryTextField(
+private fun PinEntryTextField(
     pinEntry: PinEntry,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
