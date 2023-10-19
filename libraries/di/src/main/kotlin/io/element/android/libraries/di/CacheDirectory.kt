@@ -18,4 +18,10 @@ package io.element.android.libraries.di
 
 import javax.inject.Qualifier
 
-@Qualifier annotation class CacheDir
+/**
+ * Qualifies a [File] object which represents the application cache directory.
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@MustBeDocumented
+@Qualifier
+annotation class CacheDirectory

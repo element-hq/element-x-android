@@ -31,7 +31,7 @@ import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.CacheDir
+import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.di.SingleIn
 import io.element.android.x.BuildConfig
@@ -53,7 +53,7 @@ object AppModule {
     }
 
     @Provides
-    @CacheDir
+    @CacheDirectory
     fun providesCacheDirectory(@ApplicationContext context: Context): File {
         return context.cacheDir
     }
