@@ -31,6 +31,7 @@ import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.di.SingleIn
 import io.element.android.x.BuildConfig
@@ -49,6 +50,12 @@ object AppModule {
     @Provides
     fun providesBaseDirectory(@ApplicationContext context: Context): File {
         return File(context.filesDir, "sessions")
+    }
+
+    @Provides
+    @CacheDirectory
+    fun providesCacheDirectory(@ApplicationContext context: Context): File {
+        return context.cacheDir
     }
 
     @Provides
