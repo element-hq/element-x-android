@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
 
     private val matrixAuthenticationService: MatrixAuthenticationService by lazy {
         val baseDirectory = File(applicationContext.filesDir, "sessions")
+        val cacheDir = applicationContext.cacheDir
         val userAgentProvider = SimpleUserAgentProvider("MinimalSample")
         val sessionStore = InMemorySessionStore()
         RustMatrixAuthenticationService(
@@ -49,8 +50,8 @@ class MainActivity : ComponentActivity() {
             sessionStore = sessionStore,
             userAgentProvider = userAgentProvider,
             rustMatrixClientFactory = RustMatrixClientFactory(
-                context = applicationContext,
                 baseDirectory = baseDirectory,
+                cacheDir = cacheDir,
                 appCoroutineScope = Singleton.appScope,
                 coroutineDispatchers = Singleton.coroutineDispatchers,
                 sessionStore = sessionStore,
