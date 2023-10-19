@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.create.validation
 
-import io.element.android.features.lockscreen.impl.create.model.PinEntry
-import io.element.android.features.lockscreen.impl.create.validation.PinCreationFailure
-
-data class CreatePinState(
-    val choosePinEntry: PinEntry,
-    val confirmPinEntry: PinEntry,
-    val isConfirmationStep: Boolean,
-    val creationFailure: PinCreationFailure?,
-    val eventSink: (CreatePinEvents) -> Unit
-) {
-    val activePinEntry = if (isConfirmationStep) {
-        confirmPinEntry
-    } else {
-        choosePinEntry
-    }
+sealed interface PinCreationFailure {
+    data object ChosenPinBlacklisted : PinCreationFailure
+    data object ConfirmationPinNotMatching : PinCreationFailure
 }

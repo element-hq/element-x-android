@@ -75,7 +75,7 @@ fun CreatePinView(
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding),
-                header = { CreatePinHeader() },
+                header = { CreatePinHeader(state.isConfirmationStep) },
                 footer = { CreatePinFooter() },
                 content = { CreatePinContent(state) }
             )
@@ -85,11 +85,12 @@ fun CreatePinView(
 
 @Composable
 private fun CreatePinHeader(
+    isValidationStep: Boolean,
     modifier: Modifier = Modifier,
 ) {
     IconTitleSubtitleMolecule(
         modifier = modifier,
-        title = "Choose 4 digit PIN",
+        title = if (isValidationStep) "Confirm PIN" else "Choose 4 digit PIN",
         subTitle = "Lock Element to add extra security to your chats.\n\nChoose something memorable. If you forget this PIN, you will be logged out of the app",
         iconImageVector = Icons.Default.Lock,
     )
@@ -111,9 +112,8 @@ private fun CreatePinContent(
     state: CreatePinState,
     modifier: Modifier = Modifier,
 ) {
-
     PinEntryTextField(
-        state.pinEntry,
+        state.activePinEntry,
         onValueChange = {
             state.eventSink(CreatePinEvents.OnPinEntryChanged(it))
         },
@@ -135,7 +135,7 @@ fun PinEntryTextField(
         onValueChange = {
             onValueChange(it.text)
         },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         decorationBox = {
             PinEntryRow(pinEntry = pinEntry)
         }

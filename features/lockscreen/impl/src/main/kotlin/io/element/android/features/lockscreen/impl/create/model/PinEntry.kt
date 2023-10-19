@@ -50,6 +50,10 @@ data class PinEntry(
         return copy(digits = newDigits.toPersistentList())
     }
 
+    fun clear(): PinEntry {
+        return fillWith("")
+    }
+
     fun isPinComplete(): Boolean {
         return digits.all { it is PinDigit.Filled }
     }

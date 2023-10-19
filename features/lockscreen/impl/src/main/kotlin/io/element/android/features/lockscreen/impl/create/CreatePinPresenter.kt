@@ -20,28 +20,73 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
+import io.element.android.features.lockscreen.impl.create.validation.PinCreationFailure
+import io.element.android.features.lockscreen.impl.create.validation.PinValidator
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
-class CreatePinPresenter @Inject constructor() : Presenter<CreatePinState> {
+private const val PIN_SIZE = 4
+
+class CreatePinPresenter @Inject constructor(
+    private val pinValidator: PinValidator,
+    private val pinCodeManager: PinCodeManager,
+) : Presenter<CreatePinState> {
 
     @Composable
     override fun present(): CreatePinState {
-        val pinEntry by remember {
-            mutableStateOf(PinEntry.empty(4))
+        var choosePinEntry by remember {
+            mutableStateOf(PinEntry.empty(PIN_SIZE))
+        }
+        var confirmPinEntry by remember {
+            mutableStateOf(PinEntry.empty(PIN_SIZE))
+        }
+        var isConfirmationStep by remember {
+            mutableStateOf(false)
+        }
+        var creationFailure by remember {
+            mutableStateOf<PinCreationFailure?>(null)
         }
 
         fun handleEvents(event: CreatePinEvents) {
             when (event) {
                 is CreatePinEvents.OnPinEntryChanged -> {
-                    pinEntry.fillWith(event.entryAsText)
+                    if (isConfirmationStep) {
+                        confirmPinEntry = confirmPinEntry.fillWith(event.entryAsText)
+                        if (confirmPinEntry.isPinComplete()) {
+                            if (confirmPinEntry == choosePinEntry) {
+                                //pinCodeManager.savePin(confirmPinEntry.toText())
+                            } else {
+                                confirmPinEntry = PinEntry.empty(PIN_SIZE)
+                                creationFailure = PinCreationFailure.ConfirmationPinNotMatching
+                            }
+                        }
+                    } else {
+                        choosePinEntry = choosePinEntry.fillWith(event.entryAsText)
+                        if (choosePinEntry.isPinComplete()) {
+                            when (val pinValidationResult = pinValidator.isPinValid(choosePinEntry)) {
+                                is PinValidator.Result.Invalid -> {
+                                    choosePinEntry = PinEntry.empty(PIN_SIZE)
+                                    creationFailure = pinValidationResult.failure
+                                }
+                                PinValidator.Result.Valid -> isConfirmationStep = true
+                            }
+                        }
+                    }
+                }
+                CreatePinEvents.OnClearValidationFailure -> {
+                    creationFailure = null
                 }
             }
         }
 
         return CreatePinState(
-            pinEntry = pinEntry,
+            choosePinEntry = choosePinEntry,
+            confirmPinEntry = confirmPinEntry,
+            isConfirmationStep = isConfirmationStep,
+            creationFailure = creationFailure,
             eventSink = ::handleEvents
         )
     }

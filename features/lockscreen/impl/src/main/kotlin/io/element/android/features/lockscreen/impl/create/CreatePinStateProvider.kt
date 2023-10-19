@@ -17,26 +17,33 @@
 package io.element.android.features.lockscreen.impl.create
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.lockscreen.impl.create.model.PinDigit
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
-import kotlinx.collections.immutable.persistentListOf
+import io.element.android.features.lockscreen.impl.create.validation.PinCreationFailure
 
 open class CreatePinStateProvider : PreviewParameterProvider<CreatePinState> {
     override val values: Sequence<CreatePinState>
         get() = sequenceOf(
             aCreatePinState(),
-            // Add other states here
+            aCreatePinState(
+                choosePinEntry = PinEntry.empty(4).fillWith("12")
+            ),
+            aCreatePinState(
+                choosePinEntry = PinEntry.empty(4).fillWith("1789"),
+                isConfirmationStep = true,
+            ),
         )
 }
 
-fun aCreatePinState() = CreatePinState(
-    pinEntry = PinEntry(
-        digits = persistentListOf(
-            PinDigit.Filled('1'),
-            PinDigit.Filled('2'),
-            PinDigit.Empty,
-            PinDigit.Empty,
-        )
-    ),
+fun aCreatePinState(
+    choosePinEntry: PinEntry = PinEntry.empty(4),
+    confirmPinEntry: PinEntry = PinEntry.empty(4),
+    isConfirmationStep: Boolean = false,
+    creationFailure: PinCreationFailure? = null,
+) = CreatePinState(
+    choosePinEntry = choosePinEntry,
+    confirmPinEntry = confirmPinEntry,
+    isConfirmationStep = isConfirmationStep,
+    creationFailure = creationFailure,
     eventSink = {}
 )
+

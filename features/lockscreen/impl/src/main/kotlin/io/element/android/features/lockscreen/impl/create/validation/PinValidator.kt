@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.create.validation
 
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
-import io.element.android.features.lockscreen.impl.create.validation.PinCreationFailure
+import javax.inject.Inject
 
-data class CreatePinState(
-    val choosePinEntry: PinEntry,
-    val confirmPinEntry: PinEntry,
-    val isConfirmationStep: Boolean,
-    val creationFailure: PinCreationFailure?,
-    val eventSink: (CreatePinEvents) -> Unit
-) {
-    val activePinEntry = if (isConfirmationStep) {
-        confirmPinEntry
-    } else {
-        choosePinEntry
+private val BLACKLIST = listOf("0000", "1234")
+
+class PinValidator @Inject constructor() {
+
+    sealed interface Result {
+        data object Valid : Result
+        data class Invalid(val failure: PinCreationFailure) : Result
+    }
+
+    fun isPinValid(pinEntry: PinEntry): Result {
+        val pinAsText = pinEntry.toText()
+        val isBlacklisted = BLACKLIST.any { it == pinAsText }
+        return if (isBlacklisted) {
+            Result.Invalid(PinCreationFailure.ChosenPinBlacklisted)
+        } else {
+            Result.Valid
+        }
     }
 }
