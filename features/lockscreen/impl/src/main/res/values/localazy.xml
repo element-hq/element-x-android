@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Wrong PIN. You have %1$d more chance"</item>
+    <item quantity="other">"Wrong PIN. You have %1$d more chances"</item>
+  </plurals>
+  <string name="screen_app_lock_forgot_pin">"Forgot PIN?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Change PIN code"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Allow biometric unlock"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Remove PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Are you sure you want to remove PIN?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Remove PIN?"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Choose %1$d digit PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Confirm PIN"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"You cannot choose this as your PIN code for security reasons"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Choose a different PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"Lock Element to add extra security to your chats."</string>
+  <string name="screen_app_lock_setup_pin_context_warning">"Choose something memorable. If you forget this PIN, you will be logged out of the app."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Please enter the same PIN twice"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs don\'t match"</string>
+  <string name="screen_app_lock_signout_alert_message">"You’ll need to re-login and create a new PIN to proceed"</string>
+  <string name="screen_app_lock_signout_alert_title">"You are being signed out"</string>
+  <string name="screen_app_lock_subtitle">"You have 3 attempts to unlock"</string>
+</resources>

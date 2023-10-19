@@ -32,7 +32,7 @@ data class PinEntry(
         }
     }
 
-    private val size = digits.size
+    val size = digits.size
 
     /**
      * Fill the first digits with the given text.

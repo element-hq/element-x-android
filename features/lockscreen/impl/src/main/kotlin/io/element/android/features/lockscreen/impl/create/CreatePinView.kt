@@ -22,6 +22,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,13 +34,17 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.create.model.PinDigit
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
 import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
@@ -76,7 +81,7 @@ fun CreatePinView(
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding),
-                header = { CreatePinHeader(state.isConfirmationStep) },
+                header = { CreatePinHeader(state.isConfirmationStep, state.pinSize) },
                 content = { CreatePinContent(state) }
             )
         }
@@ -86,14 +91,31 @@ fun CreatePinView(
 @Composable
 private fun CreatePinHeader(
     isValidationStep: Boolean,
+    pinSize: Int,
     modifier: Modifier = Modifier,
 ) {
-    IconTitleSubtitleMolecule(
+    Column(
         modifier = modifier,
-        title = if (isValidationStep) "Confirm PIN" else "Choose 4 digit PIN",
-        subTitle = "Lock Element to add extra security to your chats.\n\nChoose something memorable. If you forget this PIN, you will be logged out of the app",
-        iconImageVector = Icons.Default.Lock,
-    )
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        IconTitleSubtitleMolecule(
+            modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
+            title = if (isValidationStep) {
+                stringResource(id = R.string.screen_app_lock_setup_confirm_pin)
+            } else {
+                stringResource(id = R.string.screen_app_lock_setup_choose_pin, pinSize)
+            },
+            subTitle = stringResource(id = R.string.screen_app_lock_setup_pin_context),
+            iconImageVector = Icons.Filled.Lock,
+        )
+        Text(
+            text = stringResource(id = R.string.screen_app_lock_setup_pin_context_warning),
+            modifier = Modifier.padding(8.dp),
+            textAlign = TextAlign.Center,
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = MaterialTheme.colorScheme.secondary,
+        )
+    }
 }
 
 @Composable
@@ -125,16 +147,16 @@ private fun CreatePinContent(
 @Composable
 private fun CreatePinFailure.content(): String {
     return when (this) {
-        CreatePinFailure.PinBlacklisted -> "You cannot choose this as your PIN code for security reasons"
-        CreatePinFailure.PinsDontMatch -> "Please enter the same PIN twice"
+        CreatePinFailure.PinBlacklisted -> stringResource(id = R.string.screen_app_lock_setup_pin_blacklisted_dialog_content)
+        CreatePinFailure.PinsDontMatch -> stringResource(id = R.string.screen_app_lock_setup_pin_mismatch_dialog_content)
     }
 }
 
 @Composable
 private fun CreatePinFailure.title(): String {
     return when (this) {
-        CreatePinFailure.PinBlacklisted -> "Choose a different PIN"
-        CreatePinFailure.PinsDontMatch -> "PINs don't match"
+        CreatePinFailure.PinBlacklisted -> stringResource(id = R.string.screen_app_lock_setup_pin_blacklisted_dialog_title)
+        CreatePinFailure.PinsDontMatch -> stringResource(id = R.string.screen_app_lock_setup_pin_mismatch_dialog_title)
     }
 }
 

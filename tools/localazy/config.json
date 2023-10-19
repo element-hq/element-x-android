@@ -153,6 +153,12 @@
       "includeRegex": [
         "call_.*"
       ]
+    },
+    {
+      "name": ":features:lockscreen:impl",
+      "includeRegex": [
+        "screen_app_lock_.*"
+      ]
     }
   ]
 }
