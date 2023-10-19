@@ -45,8 +45,6 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.sqldelight.driver.jvm)
-
-    coreLibraryDesugaring(libs.android.desugar)
 }
 
 sqldelight {

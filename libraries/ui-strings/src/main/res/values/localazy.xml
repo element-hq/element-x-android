@@ -211,9 +211,6 @@
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
-  <string name="screen_advanced_settings_element_call_base_url">"Custom Element Call base URL"</string>
-  <string name="screen_advanced_settings_element_call_base_url_description">"Set a custom base URL for Element Call."</string>
-  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Invalid URL, please make sure you include the protocol (http/https) and the correct address."</string>
   <string name="screen_analytics_settings_share_data">"Share analytics data"</string>
   <string name="screen_chat_backup_key_backup_action_disable">"Turn off backup"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Turn on backup"</string>

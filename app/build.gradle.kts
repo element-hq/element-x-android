@@ -203,7 +203,6 @@ dependencies {
     implementation(projects.appnav)
     anvil(projects.anvilcodegen)
 
-    coreLibraryDesugaring(libs.android.desugar)
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.core)

@@ -49,8 +49,8 @@ class MainActivity : ComponentActivity() {
             sessionStore = sessionStore,
             userAgentProvider = userAgentProvider,
             rustMatrixClientFactory = RustMatrixClientFactory(
-                context = applicationContext,
                 baseDirectory = baseDirectory,
+                cacheDirectory = applicationContext.cacheDir,
                 appCoroutineScope = Singleton.appScope,
                 coroutineDispatchers = Singleton.coroutineDispatchers,
                 sessionStore = sessionStore,

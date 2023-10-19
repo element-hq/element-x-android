@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.config
+package io.element.android.libraries.matrix.api.widget
 
-object MatrixConfiguration {
-    const val matrixToPermalinkBaseUrl: String = "https://matrix.to/#/"
-    val clientPermalinkBaseUrl: String? = null
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+class MatrixWidgetSettings(
+    val id: String,
+    val initAfterContentLoad: Boolean,
+    val rawUrl: String,
+) : Parcelable {
+    companion object
 }

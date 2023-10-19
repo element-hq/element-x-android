@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call
+package io.element.android.features.call.utils
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test

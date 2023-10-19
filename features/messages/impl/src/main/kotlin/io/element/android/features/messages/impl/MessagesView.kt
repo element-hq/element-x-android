@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,9 +76,12 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
@@ -98,6 +102,7 @@ fun MessagesView(
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
@@ -159,8 +164,10 @@ fun MessagesView(
                 MessagesViewTopBar(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
+                    inRoomCallsEnabled = state.enableInRoomCalls,
                     onBackPressed = onBackPressed,
                     onRoomDetailsClicked = onRoomDetailsClicked,
+                    onJoinCallClicked = onJoinCallClicked,
                 )
             }
         },
@@ -222,6 +229,14 @@ fun MessagesView(
     ReinviteDialog(
         state = state
     )
+
+    // Since the textfield is now based on an Android view, this is no longer done automatically.
+    // We need to hide the keyboard automatically when navigating out of this screen.
+    DisposableEffect(Unit) {
+        onDispose {
+            localView.hideKeyboard()
+        }
+    }
 }
 
 @Composable
@@ -340,8 +355,10 @@ private fun MessagesViewContent(
 private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
+    inRoomCallsEnabled: Boolean,
     modifier: Modifier = Modifier,
     onRoomDetailsClicked: () -> Unit = {},
+    onJoinCallClicked: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
@@ -362,6 +379,13 @@ private fun MessagesViewTopBar(
                     iconSize = AvatarSize.TimelineRoom.dp,
                     modifier = titleModifier
                 )
+            }
+        },
+        actions = {
+            if (inRoomCallsEnabled) {
+                IconButton(onClick = onJoinCallClicked) {
+                    Icon(CommonDrawables.ic_compound_video_call, contentDescription = null) // TODO add proper content description once we have the state
+                }
             }
         },
         windowInsets = WindowInsets(0.dp)
@@ -423,5 +447,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onUserDataClicked = {},
         onSendLocationClicked = {},
         onCreatePollClicked = {},
+        onJoinCallClicked = {},
     )
 }
