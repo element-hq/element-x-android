@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.di
+package io.element.android.features.messages.impl.timeline.di
 
-import javax.inject.Qualifier
+import dagger.MapKey
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import kotlin.reflect.KClass
 
 /**
- * Qualifies a [Context] object that represents the application context.
+ * Annotation to add a factory of type [TimelineItemPresenterFactory] to a
+ * Dagger map multi binding keyed with a subclass of [TimelineItemEventContent].
  */
 @Retention(AnnotationRetention.RUNTIME)
-@MustBeDocumented
-@Qualifier
-annotation class ApplicationContext
+@MapKey
+annotation class TimelineItemEventContentKey(val value: KClass<out TimelineItemEventContent>)

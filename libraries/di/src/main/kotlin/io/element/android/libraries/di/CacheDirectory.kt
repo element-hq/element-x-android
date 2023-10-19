@@ -19,9 +19,9 @@ package io.element.android.libraries.di
 import javax.inject.Qualifier
 
 /**
- * Qualifies a [Context] object that represents the application context.
+ * Qualifies a [File] object which represents the application cache directory.
  */
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 @Qualifier
-annotation class ApplicationContext
+annotation class CacheDirectory

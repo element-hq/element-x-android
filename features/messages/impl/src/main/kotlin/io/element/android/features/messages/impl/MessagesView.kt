@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -222,6 +223,14 @@ fun MessagesView(
     ReinviteDialog(
         state = state
     )
+
+    // Since the textfield is now based on an Android view, this is no longer done automatically.
+    // We need to hide the keyboard automatically when navigating out of this screen.
+    DisposableEffect(Unit) {
+        onDispose {
+            localView.hideKeyboard()
+        }
+    }
 }
 
 @Composable
