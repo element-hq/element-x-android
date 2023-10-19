@@ -32,9 +32,13 @@ plugins {
 android {
     androidConfig(project)
     composeConfig(libs)
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
 }
 
 dependencies {
     commonDependencies(libs)
     composeDependencies(libs)
+    coreLibraryDesugaring(libs.android.desugar)
 }

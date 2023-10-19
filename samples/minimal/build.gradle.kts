@@ -65,5 +65,4 @@ dependencies {
     implementation(projects.services.toolbox.impl)
     implementation(projects.libraries.featureflag.impl)
     implementation(libs.coroutines.core)
-    coreLibraryDesugaring(libs.android.desugar)
 }
