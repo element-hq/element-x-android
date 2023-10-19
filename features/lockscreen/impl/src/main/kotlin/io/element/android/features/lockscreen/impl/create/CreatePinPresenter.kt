@@ -59,7 +59,6 @@ class CreatePinPresenter @Inject constructor(
                             if (confirmPinEntry == choosePinEntry) {
                                 //pinCodeManager.savePin(confirmPinEntry.toText())
                             } else {
-                                confirmPinEntry = PinEntry.empty(PIN_SIZE)
                                 creationFailure = PinCreationFailure.ConfirmationPinNotMatching
                             }
                         }
@@ -68,7 +67,6 @@ class CreatePinPresenter @Inject constructor(
                         if (choosePinEntry.isPinComplete()) {
                             when (val pinValidationResult = pinValidator.isPinValid(choosePinEntry)) {
                                 is PinValidator.Result.Invalid -> {
-                                    choosePinEntry = PinEntry.empty(PIN_SIZE)
                                     creationFailure = pinValidationResult.failure
                                 }
                                 PinValidator.Result.Valid -> isConfirmationStep = true
@@ -77,6 +75,17 @@ class CreatePinPresenter @Inject constructor(
                     }
                 }
                 CreatePinEvents.OnClearValidationFailure -> {
+                    when (creationFailure) {
+                        is PinCreationFailure.ConfirmationPinNotMatching -> {
+                            choosePinEntry = PinEntry.empty(PIN_SIZE)
+                            confirmPinEntry = PinEntry.empty(PIN_SIZE)
+                        }
+                        is PinCreationFailure.ChosenPinBlacklisted -> {
+                            choosePinEntry = PinEntry.empty(PIN_SIZE)
+                        }
+                        null -> Unit
+                    }
+                    isConfirmationStep = false
                     creationFailure = null
                 }
             }
