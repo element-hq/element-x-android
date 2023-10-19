@@ -211,7 +211,7 @@ private fun PinDigitView(
     }
     Box(
         modifier = modifier
-            .size(40.dp, 50.dp)
+            .size(48.dp)
             .then(appearanceModifier),
         contentAlignment = Alignment.Center,
 
