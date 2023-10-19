@@ -219,7 +219,7 @@ Compose:
   CompositionLocalAllowlist:
     active: true
     # You can optionally define a list of CompositionLocals that are allowed here
-    allowedCompositionLocals: LocalCompoundColors, LocalSnackbarDispatcher, LocalCameraPositionState
+    allowedCompositionLocals: LocalCompoundColors, LocalSnackbarDispatcher, LocalCameraPositionState, LocalTimelineItemPresenterFactories
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
