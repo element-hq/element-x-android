@@ -14,106 +14,128 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call
+package io.element.android.features.call.ui
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
+import io.element.android.features.call.R
+import io.element.android.features.call.utils.WebViewWidgetMessageInterceptor
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 typealias RequestPermissionCallback = (Array<String>) -> Unit
+
+interface CallScreenNavigator {
+    fun close()
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CallScreenView(
-    url: String?,
-    userAgent: String,
+    state: CallScreenState,
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
-    onClose: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ElementTheme {
-        Scaffold(
-            modifier = modifier,
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.element_call)) },
-                    navigationIcon = {
-                        BackButton(
-                            resourceId = CommonDrawables.ic_compound_close,
-                            onClick = onClose
-                        )
-                    }
-                )
-            }
-        ) { padding ->
-            CallWebView(
-                modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .fillMaxSize(),
-                url = url,
-                userAgent = userAgent,
-                onPermissionsRequested = { request ->
-                    val androidPermissions = mapWebkitPermissions(request.resources)
-                    val callback: RequestPermissionCallback = { request.grant(it) }
-                    requestPermissions(androidPermissions.toTypedArray(), callback)
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.element_call)) },
+                navigationIcon = {
+                    BackButton(
+                        resourceId = CommonDrawables.ic_compound_close,
+                        onClick = { state.eventSink(CallScreeEvents.Hangup) }
+                    )
                 }
             )
         }
+    ) { padding ->
+        BackHandler {
+            state.eventSink(CallScreeEvents.Hangup)
+        }
+        CallWebView(
+            modifier = Modifier
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .fillMaxSize(),
+            url = state.urlState,
+            userAgent = state.userAgent,
+            onPermissionsRequested = { request ->
+                val androidPermissions = mapWebkitPermissions(request.resources)
+                val callback: RequestPermissionCallback = { request.grant(it) }
+                requestPermissions(androidPermissions.toTypedArray(), callback)
+            },
+            onWebViewCreated = { webView ->
+                val interceptor = WebViewWidgetMessageInterceptor(webView)
+                state.eventSink(CallScreeEvents.SetupMessageChannels(interceptor))
+            }
+        )
     }
 }
 
 @Composable
 private fun CallWebView(
-    url: String?,
+    url: Async<String>,
     userAgent: String,
     onPermissionsRequested: (PermissionRequest) -> Unit,
+    onWebViewCreated: (WebView) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isInpectionMode = LocalInspectionMode.current
-    AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            WebView(context).apply {
-                if (!isInpectionMode) {
-                    setup(userAgent, onPermissionsRequested)
-                    if (url != null) {
-                        loadUrl(url)
-                    }
-                }
-            }
-        },
-        update = { webView ->
-            if (!isInpectionMode && url != null) {
-                webView.loadUrl(url)
-            }
-        },
-        onRelease = { webView ->
-            webView.destroy()
+    if (LocalInspectionMode.current) {
+        Box(modifier = modifier, contentAlignment = Alignment.Center) {
+            Text("WebView - can't be previewed")
         }
-    )
+    } else {
+        AndroidView(
+            modifier = modifier,
+            factory = { context ->
+                WebView(context).apply {
+                    setup(userAgent, onPermissionsRequested)
+                    if (url is Async.Success) {
+                        loadUrl(url.data)
+                    }
+
+                    onWebViewCreated(this)
+                }
+            },
+            update = { webView ->
+                if (url is Async.Success && webView.url != url.data) {
+                    webView.loadUrl(url.data)
+                }
+            },
+            onRelease = { webView ->
+                webView.destroy()
+            }
+        )
+    }
 }
 
 @SuppressLint("SetJavaScriptEnabled")
-private fun WebView.setup(userAgent: String, onPermissionsRequested: (PermissionRequest) -> Unit) {
+private fun WebView.setup(
+    userAgent: String,
+    onPermissionsRequested: (PermissionRequest) -> Unit,
+) {
     layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT
@@ -140,12 +162,15 @@ private fun WebView.setup(userAgent: String, onPermissionsRequested: (Permission
 @PreviewsDayNight
 @Composable
 internal fun CallScreenViewPreview() {
-    ElementTheme {
+    ElementPreview {
         CallScreenView(
-            url = "https://call.element.io/some-actual-call?with=parameters",
-            userAgent = "",
+            state = CallScreenState(
+                urlState = Async.Success("https://call.element.io/some-actual-call?with=parameters"),
+                isInWidgetMode = false,
+                userAgent = "",
+                eventSink = {},
+            ),
             requestPermissions = { _, _ -> },
-            onClose = { },
         )
     }
 }

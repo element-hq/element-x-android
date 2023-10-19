@@ -152,8 +152,10 @@ class MessagesPresenter @AssistedInject constructor(
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
+        var enableInRoomCalls by remember { mutableStateOf(false) }
         LaunchedEffect(featureFlagsService) {
             enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
+            enableInRoomCalls = featureFlagsService.isFeatureEnabled(FeatureFlags.InRoomCalls)
         }
 
         fun handleEvents(event: MessagesEvents) {
@@ -200,6 +202,7 @@ class MessagesPresenter @AssistedInject constructor(
             inviteProgress = inviteProgress.value,
             enableTextFormatting = enableTextFormatting,
             enableVoiceMessages = enableVoiceMessages,
+            enableInRoomCalls = enableInRoomCalls,
             eventSink = { handleEvents(it) }
         )
     }

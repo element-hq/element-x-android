@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call
+package io.element.android.features.call.utils
 
 import android.net.Uri
 import javax.inject.Inject

@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPr
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -63,6 +64,7 @@ class MessagesNode @AssistedInject constructor(
         fun onReportMessage(eventId: EventId, senderId: UserId)
         fun onSendLocationClicked()
         fun onCreatePollClicked()
+        fun onJoinCallClicked(roomId: RoomId)
     }
 
     init {
@@ -108,6 +110,10 @@ class MessagesNode @AssistedInject constructor(
         callback?.onCreatePollClicked()
     }
 
+    private fun onJoinCallClicked() {
+        callback?.onJoinCallClicked(room.roomId)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         CompositionLocalProvider(
@@ -123,6 +129,7 @@ class MessagesNode @AssistedInject constructor(
                 onUserDataClicked = this::onUserDataClicked,
                 onSendLocationClicked = this::onSendLocationClicked,
                 onCreatePollClicked = this::onCreatePollClicked,
+                onJoinCallClicked = this::onJoinCallClicked,
                 modifier = modifier,
             )
         }
