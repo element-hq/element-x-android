@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
 import io.element.android.features.lockscreen.impl.create.validation.PinCreationFailure
 import io.element.android.features.lockscreen.impl.create.validation.PinValidator
-import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
@@ -32,7 +31,6 @@ private const val PIN_SIZE = 4
 
 class CreatePinPresenter @Inject constructor(
     private val pinValidator: PinValidator,
-    private val pinCodeManager: PinCodeManager,
 ) : Presenter<CreatePinState> {
 
     @Composable
@@ -57,7 +55,7 @@ class CreatePinPresenter @Inject constructor(
                         confirmPinEntry = confirmPinEntry.fillWith(event.entryAsText)
                         if (confirmPinEntry.isPinComplete()) {
                             if (confirmPinEntry == choosePinEntry) {
-                                //pinCodeManager.savePin(confirmPinEntry.toText())
+                                //TODO save in db and navigate to next screen
                             } else {
                                 creationFailure = PinCreationFailure.ConfirmationPinNotMatching
                             }
