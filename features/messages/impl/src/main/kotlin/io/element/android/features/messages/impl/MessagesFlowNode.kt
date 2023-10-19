@@ -238,7 +238,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 backstack.push(navTarget)
             }
             is TimelineItemAudioContent -> {
-                val mediaSource = event.content.audioSource
+                val mediaSource = event.content.mediaSource
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
                         name = event.content.body,

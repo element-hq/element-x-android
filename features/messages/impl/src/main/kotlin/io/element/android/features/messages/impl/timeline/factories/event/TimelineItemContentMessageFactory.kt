@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessage
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import java.time.Duration
 import javax.inject.Inject
 
 class TimelineItemContentMessageFactory @Inject constructor(
@@ -103,11 +104,11 @@ class TimelineItemContentMessageFactory @Inject constructor(
             }
             is AudioMessageType -> TimelineItemAudioContent(
                 body = messageType.body,
-                audioSource = messageType.source,
-                duration = messageType.info?.duration?.toMillis() ?: 0L,
+                mediaSource = messageType.source,
+                duration = messageType.info?.duration ?: Duration.ZERO,
                 mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                 formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
-                fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+                fileExtension = fileExtensionExtractor.extractFromName(messageType.body),
             )
             is FileMessageType -> {
                 val fileExtension = fileExtensionExtractor.extractFromName(messageType.body)

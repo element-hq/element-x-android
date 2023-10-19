@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.model.event
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaSource
+import java.time.Duration
 
 open class TimelineItemAudioContentProvider : PreviewParameterProvider<TimelineItemAudioContent> {
     override val values: Sequence<TimelineItemAudioContent>
@@ -34,6 +35,6 @@ fun aTimelineItemAudioContent(fileName: String = "A sound.mp3") = TimelineItemAu
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "100kB",
     fileExtension = "mp3",
-    duration = 100,
-    audioSource = MediaSource(""),
+    duration = Duration.ofMillis(100),
+    mediaSource = MediaSource(""),
 )
