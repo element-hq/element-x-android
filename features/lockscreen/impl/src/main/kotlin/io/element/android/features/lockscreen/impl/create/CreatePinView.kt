@@ -25,12 +25,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,7 +53,6 @@ import io.element.android.features.lockscreen.impl.create.model.PinDigit
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
 import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -77,13 +80,18 @@ fun CreatePinView(
             )
         },
         content = { padding ->
-            HeaderFooterPage(
+            val scrollState = rememberScrollState()
+            Column(
                 modifier = Modifier
+                    .imePadding()
                     .padding(padding)
-                    .consumeWindowInsets(padding),
-                header = { CreatePinHeader(state.isConfirmationStep, state.pinSize) },
-                content = { CreatePinContent(state) }
-            )
+                    .consumeWindowInsets(padding)
+                    .verticalScroll(state = scrollState)
+                    .padding(vertical = 16.dp, horizontal = 20.dp),
+            ) {
+                CreatePinHeader(state.isConfirmationStep, state.pinSize)
+                CreatePinContent(state)
+            }
         }
     )
 }
@@ -99,7 +107,6 @@ private fun CreatePinHeader(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         IconTitleSubtitleMolecule(
-            modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
             title = if (isValidationStep) {
                 stringResource(id = R.string.screen_app_lock_setup_confirm_pin)
             } else {
@@ -110,7 +117,7 @@ private fun CreatePinHeader(
         )
         Text(
             text = stringResource(id = R.string.screen_app_lock_setup_pin_context_warning),
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(top = 24.dp),
             textAlign = TextAlign.Center,
             style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.secondary,
