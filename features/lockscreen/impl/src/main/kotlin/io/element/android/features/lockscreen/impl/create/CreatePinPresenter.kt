@@ -57,7 +57,7 @@ class CreatePinPresenter @Inject constructor(
                             if (confirmPinEntry == choosePinEntry) {
                                 //TODO save in db and navigate to next screen
                             } else {
-                                createPinFailure = CreatePinFailure.ConfirmationPinNotMatching
+                                createPinFailure = CreatePinFailure.PinsDontMatch
                             }
                         }
                     } else {
@@ -74,11 +74,11 @@ class CreatePinPresenter @Inject constructor(
                 }
                 CreatePinEvents.ClearFailure -> {
                     when (createPinFailure) {
-                        is CreatePinFailure.ConfirmationPinNotMatching -> {
+                        is CreatePinFailure.PinsDontMatch -> {
                             choosePinEntry = PinEntry.empty(PIN_SIZE)
                             confirmPinEntry = PinEntry.empty(PIN_SIZE)
                         }
-                        is CreatePinFailure.ChosenPinBlacklisted -> {
+                        is CreatePinFailure.PinBlacklisted -> {
                             choosePinEntry = PinEntry.empty(PIN_SIZE)
                         }
                         null -> Unit

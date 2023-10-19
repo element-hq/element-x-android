@@ -16,12 +16,16 @@
 
 package io.element.android.features.lockscreen.impl.create.validation
 
+import androidx.annotation.VisibleForTesting
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
 import javax.inject.Inject
 
-private val BLACKLIST = listOf("0000", "1234")
-
 class PinValidator @Inject constructor() {
+
+    companion object {
+        @VisibleForTesting
+        val BLACKLIST = listOf("0000", "1234")
+    }
 
     sealed interface Result {
         data object Valid : Result
@@ -32,7 +36,7 @@ class PinValidator @Inject constructor() {
         val pinAsText = pinEntry.toText()
         val isBlacklisted = BLACKLIST.any { it == pinAsText }
         return if (isBlacklisted) {
-            Result.Invalid(CreatePinFailure.ChosenPinBlacklisted)
+            Result.Invalid(CreatePinFailure.PinBlacklisted)
         } else {
             Result.Valid
         }

@@ -33,6 +33,16 @@ suspend fun <T : Any> ReceiveTurbine<T>.consumeItemsUntilTimeout(timeout: Durati
 }
 
 /**
+ * Consume all items which are emitted sequentially.
+ * Use the smallest timeout possible internally to avoid wasting time.
+ * Same as calling skipItems(x) and then awaitItem() but without assumption on the number of items.
+ * @return the last item emitted.
+ */
+suspend fun <T : Any> ReceiveTurbine<T>.awaitLastSequentialItem(): T {
+    return consumeItemsUntilTimeout(1.milliseconds).last()
+}
+
+/**
  * Consume items until predicate is true, or timeout is reached waiting for an event, or we receive terminal event.
  * The timeout is applied for each event.
  * @return the list of consumed items.

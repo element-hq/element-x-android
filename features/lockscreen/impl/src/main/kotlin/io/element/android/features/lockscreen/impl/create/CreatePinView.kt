@@ -125,16 +125,16 @@ private fun CreatePinContent(
 @Composable
 private fun CreatePinFailure.content(): String {
     return when (this) {
-        CreatePinFailure.ChosenPinBlacklisted -> "You cannot choose this as your PIN code for security reasons"
-        CreatePinFailure.ConfirmationPinNotMatching -> "Please enter the same PIN twice"
+        CreatePinFailure.PinBlacklisted -> "You cannot choose this as your PIN code for security reasons"
+        CreatePinFailure.PinsDontMatch -> "Please enter the same PIN twice"
     }
 }
 
 @Composable
 private fun CreatePinFailure.title(): String {
     return when (this) {
-        CreatePinFailure.ChosenPinBlacklisted -> "Choose a different PIN"
-        CreatePinFailure.ConfirmationPinNotMatching -> "PINs don't match"
+        CreatePinFailure.PinBlacklisted -> "Choose a different PIN"
+        CreatePinFailure.PinsDontMatch -> "PINs don't match"
     }
 }
 

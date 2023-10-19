@@ -35,11 +35,11 @@ open class CreatePinStateProvider : PreviewParameterProvider<CreatePinState> {
                 choosePinEntry = PinEntry.empty(4).fillWith("1789"),
                 confirmPinEntry = PinEntry.empty(4).fillWith("1788"),
                 isConfirmationStep = true,
-                creationFailure = CreatePinFailure.ConfirmationPinNotMatching
+                creationFailure = CreatePinFailure.PinsDontMatch
             ),
             aCreatePinState(
                 choosePinEntry = PinEntry.empty(4).fillWith("1111"),
-                creationFailure = CreatePinFailure.ChosenPinBlacklisted
+                creationFailure = CreatePinFailure.PinBlacklisted
             ),
 
         )
