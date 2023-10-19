@@ -75,7 +75,13 @@ class EventMessageMapper {
 
     fun mapMessageType(type: RustMessageType?) = when (type) {
         is RustMessageType.Audio -> {
-            AudioMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
+            AudioMessageType(
+                body = type.content.body,
+                source = type.content.source.map(),
+                info = type.content.info?.map(),
+                details = type.content.audio?.map(),
+                isVoiceMessage = type.content.voice != null,
+            )
         }
         is RustMessageType.File -> {
             FileMessageType(type.content.body, type.content.source.map(), type.content.info?.map())

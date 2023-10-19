@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import io.element.android.libraries.matrix.api.media.AudioDetails
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -46,7 +47,9 @@ data class LocationMessageType(
 data class AudioMessageType(
     val body: String,
     val source: MediaSource,
-    val info: AudioInfo?
+    val info: AudioInfo?,
+    val details: AudioDetails?,
+    val isVoiceMessage: Boolean,
 ) : MessageType
 
 data class VideoMessageType(
