@@ -70,7 +70,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         @Parcelize
         data class RoomNotificationSettings(
             /**
-             * When presented from oursite the context of the room, the rooms settings UI is different.
+             * When presented from outsite the context of the room, the rooms settings UI is different.
              * Figma designs: https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?type=design&node-id=5199-198932&mode=design&t=fTTvpuxYFjewYQOe-0
              */
             val showUserDefinedSettingStyle: Boolean
