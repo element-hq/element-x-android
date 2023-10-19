@@ -55,6 +55,4 @@ dependencies {
     androidTestImplementation(libs.test.truth)
     androidTestImplementation(libs.test.runner)
     androidTestImplementation(projects.libraries.sessionStorage.test)
-
-    coreLibraryDesugaring(libs.android.desugar)
 }
