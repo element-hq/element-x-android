@@ -42,6 +42,7 @@ class FakeNotificationSettingsService(
     private var roomNotificationModeIsDefault: Boolean = initialRoomModeIsDefault
     private var callNotificationsEnabled = false
     private var atRoomNotificationsEnabled = false
+    private var setNotificationModeError: Throwable? = null
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _notificationSettingsStateFlow
 
@@ -89,10 +90,15 @@ class FakeNotificationSettingsService(
     }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> {
-        roomNotificationModeIsDefault = false
-        roomNotificationMode = mode
-        _notificationSettingsStateFlow.emit(Unit)
-        return Result.success(Unit)
+        val error = setNotificationModeError
+        return if (error != null) {
+            Result.failure(error)
+        } else {
+            roomNotificationModeIsDefault = false
+            roomNotificationMode = mode
+            _notificationSettingsStateFlow.emit(Unit)
+            Result.success(Unit)
+        }
     }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> {
@@ -130,5 +136,9 @@ class FakeNotificationSettingsService(
 
     override suspend fun getRoomsWithUserDefinedRules(): Result<List<String>> {
         return Result.success(if (roomNotificationModeIsDefault) listOf() else listOf(A_ROOM_ID.value))
+    }
+
+    fun givenSetNotificationModeError(throwable: Throwable?) {
+        setNotificationModeError = throwable
     }
 }

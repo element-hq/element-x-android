@@ -38,7 +38,7 @@ class EditDefaultNotificationSettingsPresenterTests {
     @Test
     fun `present - ensures initial state is correct`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        val presenter = createPresenter(notificationSettingsService)
+        val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -64,7 +64,7 @@ class EditDefaultNotificationSettingsPresenterTests {
             givenGetRoomResult(A_ROOM_ID, room)
         }
         val roomListService = FakeRoomListService()
-        val presenter = createPresenter(notificationSettingsService, roomListService, matrixClient)
+        val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService, roomListService, matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -78,7 +78,7 @@ class EditDefaultNotificationSettingsPresenterTests {
 
     @Test
     fun `present - edit default notification setting`() = runTest {
-        val presenter = createPresenter()
+        val presenter = createEditDefaultNotificationSettingPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -90,7 +90,7 @@ class EditDefaultNotificationSettingsPresenterTests {
         }
     }
 
-    private fun createPresenter(
+    private fun createEditDefaultNotificationSettingPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         roomListService: FakeRoomListService = FakeRoomListService(),
         matrixClient: FakeMatrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)

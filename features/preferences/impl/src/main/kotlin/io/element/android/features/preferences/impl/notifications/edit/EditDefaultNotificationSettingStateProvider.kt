@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 
-open class EditDefaultNotificationSettingsStateProvider: PreviewParameterProvider<EditDefaultNotificationSettingState> {
+open class EditDefaultNotificationSettingStateProvider: PreviewParameterProvider<EditDefaultNotificationSettingState> {
     override val values: Sequence<EditDefaultNotificationSettingState>
         get() = sequenceOf(
             anEditDefaultNotificationSettingsState(),

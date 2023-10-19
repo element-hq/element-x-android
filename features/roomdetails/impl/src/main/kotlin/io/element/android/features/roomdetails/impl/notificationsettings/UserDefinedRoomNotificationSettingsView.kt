@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.Async
@@ -36,6 +37,8 @@ import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -113,7 +116,7 @@ fun UserDefinedRoomNotificationSettingsView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserDefinedRoomNotificationSettingsTopBar(
+private fun UserDefinedRoomNotificationSettingsTopBar(
     roomName: String,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
@@ -127,4 +130,12 @@ fun UserDefinedRoomNotificationSettingsTopBar(
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun UserDefinedRoomNotificationSettingsPreview(
+    @PreviewParameter(UserDefinedRoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState
+) = ElementPreview {
+    UserDefinedRoomNotificationSettingsView(state)
 }

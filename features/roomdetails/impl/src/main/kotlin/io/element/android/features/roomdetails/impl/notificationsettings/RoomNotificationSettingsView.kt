@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,12 +32,11 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -143,35 +141,6 @@ private fun RoomNotificationSettingsTopBar(
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
-    )
-}
-
-@Composable
-fun RoomNotificationSettingsOptions(
-    selected: RoomNotificationMode?,
-    enabled: Boolean,
-    modifier: Modifier = Modifier,
-    onOptionSelected: (RoomNotificationSettingsItem) -> Unit = {},
-) {
-    val items = roomNotificationSettingsItems()
-    Column(modifier = modifier.selectableGroup()) {
-        items.forEach { item ->
-            RoomNotificationSettingsOption(
-                roomNotificationSettingsItem = item,
-                isSelected = selected == item.mode,
-                onOptionSelected = onOptionSelected,
-                enabled = enabled
-            )
-        }
-    }
-}
-
-@Composable
-fun ShowChangeNotificationSettingError(state: RoomNotificationSettingsState, event: RoomNotificationSettingsEvents) {
-    ErrorDialog(
-        title = stringResource(CommonStrings.dialog_title_error),
-        content = stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode),
-        onDismiss = { state.eventSink(event) },
     )
 }
 

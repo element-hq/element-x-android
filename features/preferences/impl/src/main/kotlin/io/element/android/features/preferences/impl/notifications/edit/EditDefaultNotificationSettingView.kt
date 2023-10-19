@@ -136,7 +136,7 @@ fun EditDefaultNotificationSettingView(
 @PreviewsDayNight
 @Composable
 internal fun EditDefaultNotificationSettingViewPreview(
-    @PreviewParameter(EditDefaultNotificationSettingsStateProvider::class) state: EditDefaultNotificationSettingState
+    @PreviewParameter(EditDefaultNotificationSettingStateProvider::class) state: EditDefaultNotificationSettingState
 ) = ElementPreview {
     EditDefaultNotificationSettingView(
         state = state,
