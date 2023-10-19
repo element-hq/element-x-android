@@ -18,5 +18,5 @@ package io.element.android.features.lockscreen.impl.create
 
 sealed interface CreatePinEvents {
     data class OnPinEntryChanged(val entryAsText: String) : CreatePinEvents
-    data object OnClearValidationFailure : CreatePinEvents
+    data object ClearFailure : CreatePinEvents
 }

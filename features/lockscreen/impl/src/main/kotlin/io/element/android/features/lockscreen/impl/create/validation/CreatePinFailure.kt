@@ -16,7 +16,7 @@
 
 package io.element.android.features.lockscreen.impl.create.validation
 
-sealed interface PinCreationFailure {
-    data object ChosenPinBlacklisted : PinCreationFailure
-    data object ConfirmationPinNotMatching : PinCreationFailure
+sealed interface CreatePinFailure {
+    data object ChosenPinBlacklisted : CreatePinFailure
+    data object ConfirmationPinNotMatching : CreatePinFailure
 }

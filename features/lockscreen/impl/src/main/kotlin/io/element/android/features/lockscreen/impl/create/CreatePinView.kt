@@ -42,12 +42,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.create.model.PinDigit
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
+import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -76,7 +77,6 @@ fun CreatePinView(
                     .padding(padding)
                     .consumeWindowInsets(padding),
                 header = { CreatePinHeader(state.isConfirmationStep) },
-                footer = { CreatePinFooter() },
                 content = { CreatePinContent(state) }
             )
         }
@@ -97,17 +97,6 @@ private fun CreatePinHeader(
 }
 
 @Composable
-private fun CreatePinFooter() {
-    Button(
-        modifier = Modifier.fillMaxWidth(),
-        text = "Continue",
-        onClick = {
-
-        }
-    )
-}
-
-@Composable
 private fun CreatePinContent(
     state: CreatePinState,
     modifier: Modifier = Modifier,
@@ -121,6 +110,32 @@ private fun CreatePinContent(
             .padding(top = 36.dp)
             .fillMaxWidth()
     )
+    if (state.createPinFailure != null) {
+        ErrorDialog(
+            modifier = modifier,
+            title = state.createPinFailure.title(),
+            content = state.createPinFailure.content(),
+            onDismiss = {
+                state.eventSink(CreatePinEvents.ClearFailure)
+            }
+        )
+    }
+}
+
+@Composable
+private fun CreatePinFailure.content(): String {
+    return when (this) {
+        CreatePinFailure.ChosenPinBlacklisted -> "You cannot choose this as your PIN code for security reasons"
+        CreatePinFailure.ConfirmationPinNotMatching -> "Please enter the same PIN twice"
+    }
+}
+
+@Composable
+private fun CreatePinFailure.title(): String {
+    return when (this) {
+        CreatePinFailure.ChosenPinBlacklisted -> "Choose a different PIN"
+        CreatePinFailure.ConfirmationPinNotMatching -> "PINs don't match"
+    }
 }
 
 @Composable

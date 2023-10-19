@@ -22,7 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
-import io.element.android.features.lockscreen.impl.create.validation.PinCreationFailure
+import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
 import io.element.android.features.lockscreen.impl.create.validation.PinValidator
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
@@ -44,8 +44,8 @@ class CreatePinPresenter @Inject constructor(
         var isConfirmationStep by remember {
             mutableStateOf(false)
         }
-        var creationFailure by remember {
-            mutableStateOf<PinCreationFailure?>(null)
+        var createPinFailure by remember {
+            mutableStateOf<CreatePinFailure?>(null)
         }
 
         fun handleEvents(event: CreatePinEvents) {
@@ -57,7 +57,7 @@ class CreatePinPresenter @Inject constructor(
                             if (confirmPinEntry == choosePinEntry) {
                                 //TODO save in db and navigate to next screen
                             } else {
-                                creationFailure = PinCreationFailure.ConfirmationPinNotMatching
+                                createPinFailure = CreatePinFailure.ConfirmationPinNotMatching
                             }
                         }
                     } else {
@@ -65,26 +65,26 @@ class CreatePinPresenter @Inject constructor(
                         if (choosePinEntry.isPinComplete()) {
                             when (val pinValidationResult = pinValidator.isPinValid(choosePinEntry)) {
                                 is PinValidator.Result.Invalid -> {
-                                    creationFailure = pinValidationResult.failure
+                                    createPinFailure = pinValidationResult.failure
                                 }
                                 PinValidator.Result.Valid -> isConfirmationStep = true
                             }
                         }
                     }
                 }
-                CreatePinEvents.OnClearValidationFailure -> {
-                    when (creationFailure) {
-                        is PinCreationFailure.ConfirmationPinNotMatching -> {
+                CreatePinEvents.ClearFailure -> {
+                    when (createPinFailure) {
+                        is CreatePinFailure.ConfirmationPinNotMatching -> {
                             choosePinEntry = PinEntry.empty(PIN_SIZE)
                             confirmPinEntry = PinEntry.empty(PIN_SIZE)
                         }
-                        is PinCreationFailure.ChosenPinBlacklisted -> {
+                        is CreatePinFailure.ChosenPinBlacklisted -> {
                             choosePinEntry = PinEntry.empty(PIN_SIZE)
                         }
                         null -> Unit
                     }
                     isConfirmationStep = false
-                    creationFailure = null
+                    createPinFailure = null
                 }
             }
         }
@@ -93,7 +93,7 @@ class CreatePinPresenter @Inject constructor(
             choosePinEntry = choosePinEntry,
             confirmPinEntry = confirmPinEntry,
             isConfirmationStep = isConfirmationStep,
-            creationFailure = creationFailure,
+            createPinFailure = createPinFailure,
             eventSink = ::handleEvents
         )
     }

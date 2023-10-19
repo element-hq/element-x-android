@@ -25,14 +25,14 @@ class PinValidator @Inject constructor() {
 
     sealed interface Result {
         data object Valid : Result
-        data class Invalid(val failure: PinCreationFailure) : Result
+        data class Invalid(val failure: CreatePinFailure) : Result
     }
 
     fun isPinValid(pinEntry: PinEntry): Result {
         val pinAsText = pinEntry.toText()
         val isBlacklisted = BLACKLIST.any { it == pinAsText }
         return if (isBlacklisted) {
-            Result.Invalid(PinCreationFailure.ChosenPinBlacklisted)
+            Result.Invalid(CreatePinFailure.ChosenPinBlacklisted)
         } else {
             Result.Valid
         }
