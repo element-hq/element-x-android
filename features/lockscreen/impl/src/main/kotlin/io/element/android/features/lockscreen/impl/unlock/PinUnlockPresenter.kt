@@ -18,8 +18,9 @@ package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.lockscreen.api.LockScreenStateService
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
@@ -36,9 +37,17 @@ class PinUnlockPresenter @Inject constructor(
 
     @Composable
     override fun present(): PinUnlockState {
-
-        var pinEntry by remember {
+        var pinEntry by rememberSaveable {
             mutableStateOf(PinEntry.empty(4))
+        }
+        var remainingAttempts by rememberSaveable {
+            mutableIntStateOf(3)
+        }
+        var showWrongPinTitle by rememberSaveable {
+            mutableStateOf(false)
+        }
+        var showSignOutPrompt by rememberSaveable {
+            mutableStateOf(false)
         }
 
         fun handleEvents(event: PinUnlockEvents) {
@@ -50,10 +59,14 @@ class PinUnlockPresenter @Inject constructor(
                         coroutineScope.launch { pinStateService.unlock() }
                     }
                 }
+                PinUnlockEvents.OnForgetPin -> showSignOutPrompt = true
             }
         }
         return PinUnlockState(
             pinEntry = pinEntry,
+            showWrongPinTitle = showWrongPinTitle,
+            remainingAttempts = remainingAttempts,
+            showSignOutPrompt = showSignOutPrompt,
             eventSink = ::handleEvents
         )
     }

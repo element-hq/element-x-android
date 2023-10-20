@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.cryptography.api)
+    implementation(projects.libraries.uiStrings)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

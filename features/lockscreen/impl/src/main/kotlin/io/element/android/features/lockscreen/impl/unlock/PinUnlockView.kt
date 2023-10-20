@@ -38,6 +38,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -46,6 +47,8 @@ import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.numpad.PinKeypad
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -53,6 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun PinUnlockView(
@@ -100,6 +104,22 @@ fun PinUnlockView(
                     content = content,
                     modifier = commonModifier,
                 )
+            }
+            if (state.showSignOutPrompt) {
+                if (state.isSignOutPromptCancellable) {
+                    ConfirmationDialog(
+                        title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
+                        content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
+                        onSubmitClicked = {},
+                        onDismiss = {},
+                    )
+                } else {
+                    ErrorDialog(
+                        title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
+                        content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
+                        onDismiss = {},
+                    )
+                }
             }
         }
     }
@@ -196,7 +216,7 @@ private fun PinUnlockHeader(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Enter your PIN",
+            text = stringResource(id = CommonStrings.common_enter_your_pin),
             modifier = Modifier
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
@@ -204,12 +224,22 @@ private fun PinUnlockHeader(
             color = MaterialTheme.colorScheme.primary,
         )
         Spacer(Modifier.height(8.dp))
+        val subtitle = if (state.showWrongPinTitle) {
+            pluralStringResource(id = R.plurals.screen_app_lock_subtitle_wrong_pin, count = state.remainingAttempts, state.remainingAttempts)
+        } else {
+            stringResource(id = R.string.screen_app_lock_subtitle)
+        }
+        val subtitleColor = if (state.showWrongPinTitle) {
+            MaterialTheme.colorScheme.error
+        } else {
+            MaterialTheme.colorScheme.secondary
+        }
         Text(
-            text = "You have 3 attempts to unlock",
+            text = subtitle,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.secondary,
+            color = subtitleColor,
         )
         Spacer(Modifier.height(24.dp))
         PinDotsRow(state.pinEntry)

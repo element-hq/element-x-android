@@ -30,7 +30,7 @@ interface PinCodeManager {
      * Creates a new encrypted pin code.
      * @param pinCode the clear pin code to create
      */
-    suspend fun SetupPinCode(pinCode: String)
+    suspend fun setupPinCode(pinCode: String)
 
     /**
      * @return true if the pin code is correct.

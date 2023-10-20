@@ -20,5 +20,10 @@ import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 
 data class PinUnlockState(
     val pinEntry: PinEntry,
+    val showWrongPinTitle: Boolean,
+    val remainingAttempts: Int,
+    val showSignOutPrompt: Boolean,
     val eventSink: (PinUnlockEvents) -> Unit
-)
+) {
+    val isSignOutPromptCancellable = remainingAttempts > 0
+}
