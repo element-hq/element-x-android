@@ -18,11 +18,10 @@ package io.element.android.features.lockscreen.impl.pin.model
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import java.io.Serializable
 
 data class PinEntry(
     val digits: ImmutableList<PinDigit>,
-): Serializable {
+) {
 
     companion object {
         fun empty(size: Int): PinEntry {
