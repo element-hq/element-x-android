@@ -95,7 +95,7 @@ class SetupPinPresenter @Inject constructor(
             choosePinEntry = choosePinEntry,
             confirmPinEntry = confirmPinEntry,
             isConfirmationStep = isConfirmationStep,
-            SetupPinFailure = setupPinFailure,
+            setupPinFailure = setupPinFailure,
             appName = buildMeta.applicationName,
             eventSink = ::handleEvents
         )

@@ -114,11 +114,11 @@ private fun SetupPinContent(
             .padding(top = 36.dp)
             .fillMaxWidth()
     )
-    if (state.SetupPinFailure != null) {
+    if (state.setupPinFailure != null) {
         ErrorDialog(
             modifier = modifier,
-            title = state.SetupPinFailure.title(),
-            content = state.SetupPinFailure.content(),
+            title = state.setupPinFailure.title(),
+            content = state.setupPinFailure.content(),
             onDismiss = {
                 state.eventSink(SetupPinEvents.ClearFailure)
             }

@@ -23,11 +23,10 @@ data class SetupPinState(
     val choosePinEntry: PinEntry,
     val confirmPinEntry: PinEntry,
     val isConfirmationStep: Boolean,
-    val SetupPinFailure: SetupPinFailure?,
+    val setupPinFailure: SetupPinFailure?,
     val appName: String,
     val eventSink: (SetupPinEvents) -> Unit
 ) {
-    val pinSize = choosePinEntry.size
     val activePinEntry = if (isConfirmationStep) {
         confirmPinEntry
     } else {

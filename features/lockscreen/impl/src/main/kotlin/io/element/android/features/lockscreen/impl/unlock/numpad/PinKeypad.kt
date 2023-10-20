@@ -46,6 +46,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 private val spaceBetweenPinKey = 8.dp
 private val maxSizePinKey = 80.dp
@@ -74,28 +76,28 @@ fun PinKeypad(
             pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = listOf(PinKeypadModel.Number('1'), PinKeypadModel.Number('2'), PinKeypadModel.Number('3')),
+            models = persistentListOf(PinKeypadModel.Number('1'), PinKeypadModel.Number('2'), PinKeypadModel.Number('3')),
             onClick = onClick,
         )
         PinKeypadRow(
             pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = listOf(PinKeypadModel.Number('4'), PinKeypadModel.Number('5'), PinKeypadModel.Number('6')),
+            models = persistentListOf(PinKeypadModel.Number('4'), PinKeypadModel.Number('5'), PinKeypadModel.Number('6')),
             onClick = onClick,
         )
         PinKeypadRow(
             pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = listOf(PinKeypadModel.Number('7'), PinKeypadModel.Number('8'), PinKeypadModel.Number('9')),
+            models = persistentListOf(PinKeypadModel.Number('7'), PinKeypadModel.Number('8'), PinKeypadModel.Number('9')),
             onClick = onClick,
         )
         PinKeypadRow(
             pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = listOf(PinKeypadModel.Empty, PinKeypadModel.Number('0'), PinKeypadModel.Back),
+            models = persistentListOf(PinKeypadModel.Empty, PinKeypadModel.Number('0'), PinKeypadModel.Back),
             onClick = onClick,
         )
     }
@@ -103,7 +105,7 @@ fun PinKeypad(
 
 @Composable
 private fun PinKeypadRow(
-    models: List<PinKeypadModel>,
+    models: ImmutableList<PinKeypadModel>,
     onClick: (PinKeypadModel) -> Unit,
     pinKeySize: Dp,
     modifier: Modifier = Modifier,

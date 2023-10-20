@@ -127,9 +127,9 @@ fun PinUnlockView(
 
 @Composable
 fun PinUnlockCompactView(
-    modifier: Modifier = Modifier,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable BoxWithConstraintsScope.() -> Unit,
 ) {
     Row(modifier = modifier) {
@@ -151,9 +151,9 @@ fun PinUnlockCompactView(
 
 @Composable
 fun PinUnlockExpandedView(
-    modifier: Modifier = Modifier,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable BoxWithConstraintsScope.() -> Unit,
 ) {
     Column(
