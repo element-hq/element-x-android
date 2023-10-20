@@ -31,6 +31,11 @@ class DefaultPreferencesEntryPoint @Inject constructor() : PreferencesEntryPoint
         return object : PreferencesEntryPoint.NodeBuilder {
             val plugins = ArrayList<Plugin>()
 
+            override fun params(params: PreferencesEntryPoint.Params): PreferencesEntryPoint.NodeBuilder {
+                plugins += params
+                return this
+            }
+
             override fun callback(callback: PreferencesEntryPoint.Callback): PreferencesEntryPoint.NodeBuilder {
                 plugins += callback
                 return this
@@ -41,4 +46,9 @@ class DefaultPreferencesEntryPoint @Inject constructor() : PreferencesEntryPoint
             }
         }
     }
+}
+
+internal fun PreferencesEntryPoint.InitialTarget.toNavTarget() = when (this) {
+    is PreferencesEntryPoint.InitialTarget.Root -> PreferencesFlowNode.NavTarget.Root
+    is PreferencesEntryPoint.InitialTarget.NotificationSettings -> PreferencesFlowNode.NavTarget.NotificationSettings
 }

@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
+import org.matrix.rustcomponents.sdk.NotificationSettingsException
+import timber.log.Timber
 
 class RustNotificationSettingsService(
     private val notificationSettings: NotificationSettings,
@@ -63,7 +65,13 @@ class RustNotificationSettingsService(
         isOneToOne: Boolean
     ): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            notificationSettings.setDefaultRoomNotificationMode(isEncrypted, isOneToOne, mode.let(RoomNotificationSettingsMapper::mapMode))
+            try {
+                notificationSettings.setDefaultRoomNotificationMode(isEncrypted, isOneToOne, mode.let(RoomNotificationSettingsMapper::mapMode))
+            } catch (exception: NotificationSettingsException.RuleNotFound) {
+                // `setDefaultRoomNotificationMode` updates multiple rules including unstable rules (e.g. the polls push rules defined in the MSC3930)
+                // since production home servers may not have these rules yet, we drop the RuleNotFound error
+                Timber.w("Unable to find the rule: ${exception.ruleId}")
+            }
         }
     }
 

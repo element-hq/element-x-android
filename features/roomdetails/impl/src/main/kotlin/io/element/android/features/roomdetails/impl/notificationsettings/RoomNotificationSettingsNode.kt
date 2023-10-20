@@ -22,6 +22,7 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -42,8 +43,15 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
     data class RoomNotificationSettingInput(
         val showUserDefinedSettingStyle: Boolean
     ) : NodeInputs
-
+    interface Callback : Plugin {
+        fun openGlobalNotificationSettings()
+    }
     private val inputs = inputs<RoomNotificationSettingInput>()
+    private val callbacks = plugins<Callback>()
+
+    private fun openGlobalNotificationSettings() {
+        callbacks.forEach { it.openGlobalNotificationSettings() }
+    }
 
     init {
         lifecycle.subscribe(
@@ -66,6 +74,7 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
             RoomNotificationSettingsView(
                 state = state,
                 modifier = modifier,
+                onShowGlobalNotifications = this::openGlobalNotificationSettings,
                 onBackPressed = this::navigateUp,
             )
         }

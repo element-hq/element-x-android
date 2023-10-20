@@ -31,6 +31,7 @@ import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.childNode
+import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -71,14 +72,22 @@ class RoomFlowNodeTest {
 
         var nodeId: String? = null
 
-        override fun createNode(
-            parentNode: Node,
-            buildContext: BuildContext,
-            inputs: RoomDetailsEntryPoint.Inputs,
-            plugins: List<Plugin>
-        ): Node {
-            return node(buildContext) {}.also {
-                nodeId = it.id
+        override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDetailsEntryPoint.NodeBuilder {
+            return object : RoomDetailsEntryPoint.NodeBuilder {
+
+                override fun params(params: RoomDetailsEntryPoint.Params): RoomDetailsEntryPoint.NodeBuilder {
+                    return this
+                }
+
+                override fun callback(callback: RoomDetailsEntryPoint.Callback): RoomDetailsEntryPoint.NodeBuilder {
+                    return this
+                }
+
+                override fun build(): Node {
+                    return  node(buildContext) {}.also {
+                        nodeId = it.id
+                    }
+                }
             }
         }
     }
