@@ -22,6 +22,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,18 +44,29 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -73,11 +85,48 @@ class MessageComposerPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContextImpl,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
+    private val currentSessionIdHolder: CurrentSessionIdHolder,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<MessageComposerState> {
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
+
+    private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
+    private val suggestionsMemberResult = MutableStateFlow<ImmutableList<RoomMember>>(persistentListOf())
+
+    init {
+        suggestionSearchTrigger.combine(room.membersStateFlow) { suggestion, membersState ->
+            val members = membersState.roomMembers()
+            when {
+                members.isNullOrEmpty() || suggestion == null || suggestion.text.length < 3 -> {
+                    // Hide suggestions
+                    suggestionsMemberResult.tryEmit(persistentListOf())
+                }
+                else -> {
+                    when (suggestion.type) {
+                        SuggestionType.Mention -> {
+                            val query = suggestion.text.lowercase()
+                            val matchingMembers = members.filter { member ->
+                                if (member.membership != RoomMembershipState.JOIN || currentSessionIdHolder.isCurrentSession(member.userId)) {
+                                    false
+                                } else {
+                                    member.displayName?.contains(query, ignoreCase = true) == true
+                                        || member.userId.value.contains(query, ignoreCase = true)
+                                }
+                            }
+                            println("Matching members: ${matchingMembers.map { it.userId }}")
+                            suggestionsMemberResult.tryEmit(matchingMembers.toPersistentList())
+                        }
+                        else -> {
+                            // Hide suggestions
+                            suggestionsMemberResult.tryEmit(persistentListOf())
+                        }
+                    }
+                }
+            }
+        }.launchIn(appCoroutineScope) // TODO: use a CoroutineScope that gets cancelled when exiting the screen
+    }
 
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
@@ -88,6 +137,8 @@ class MessageComposerPresenter @Inject constructor(
         val attachmentsState = remember {
             mutableStateOf<AttachmentsState>(AttachmentsState.None)
         }
+
+        val memberSuggestions by suggestionsMemberResult.collectAsState()
 
         val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -231,6 +282,9 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.Error -> {
                     analyticsService.trackError(event.error)
                 }
+                is MessageComposerEvents.SuggestionReceived -> {
+                    suggestionSearchTrigger.tryEmit(event.suggestion)
+                }
             }
         }
 
@@ -243,6 +297,7 @@ class MessageComposerPresenter @Inject constructor(
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
+            memberSuggestions = memberSuggestions,
             eventSink = { handleEvents(it) }
         )
     }

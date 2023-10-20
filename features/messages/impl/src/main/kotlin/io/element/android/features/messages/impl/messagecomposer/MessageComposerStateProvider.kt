@@ -17,8 +17,11 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 open class MessageComposerStateProvider : PreviewParameterProvider<MessageComposerState> {
     override val values: Sequence<MessageComposerState>
@@ -36,6 +39,7 @@ fun aMessageComposerState(
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
+    memberSuggestions: ImmutableList<RoomMember> = persistentListOf(),
 ) = MessageComposerState(
     richTextEditorState = composerState,
     isFullScreen = isFullScreen,
@@ -45,5 +49,6 @@ fun aMessageComposerState(
     canShareLocation = canShareLocation,
     canCreatePoll = canCreatePoll,
     attachmentsState = attachmentsState,
+    memberSuggestions = memberSuggestions,
     eventSink = {},
 )

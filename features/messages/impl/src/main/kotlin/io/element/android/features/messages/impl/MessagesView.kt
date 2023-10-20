@@ -44,7 +44,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -355,15 +357,27 @@ private fun MessagesViewContent(
             },
             sheetContent = { subcomposing: Boolean ->
                 if (state.userHasPermissionToSendMessage) {
-                    MessageComposerView(
-                        state = state.composerState,
-                        voiceMessageState = state.voiceMessageComposerState,
-                        subcomposing = subcomposing,
-                        enableTextFormatting = state.enableTextFormatting,
-                        enableVoiceMessages = state.enableVoiceMessages,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
+                    Column(modifier = Modifier.fillMaxWidth().nestedScroll(rememberNestedScrollInteropConnection())) {
+//                        LazyColumn(modifier = Modifier.fillMaxWidth().heightIn(max = 200.dp)) {
+//                            items(state.composerState.memberSuggestions, key = { it.userId.value }) {
+//                                Text(it.userId.value, modifier = Modifier.clickable {  })
+//                            }
+//                        }
+                        Column(modifier = Modifier.fillMaxWidth().heightIn(max = 200.dp)) {
+                            for (item in state.composerState.memberSuggestions) {
+                                Text(item.userId.value, modifier = Modifier.clickable {  })
+                            }
+                        }
+                        MessageComposerView(
+                            state = state.composerState,
+                            voiceMessageState = state.voiceMessageComposerState,
+                            subcomposing = subcomposing,
+                            enableTextFormatting = state.enableTextFormatting,
+                            enableVoiceMessages = state.enableVoiceMessages,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                        )
+                    }
                 } else {
                     CantSendMessageBanner()
                 }

@@ -37,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -75,6 +76,7 @@ import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.PressEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
+import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -83,6 +85,7 @@ import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlin.time.Duration.Companion.seconds
+import uniffi.wysiwyg_composer.MenuAction
 
 @Composable
 fun TextComposer(
@@ -104,6 +107,7 @@ fun TextComposer(
     onSendVoiceMessage: () -> Unit = {},
     onDeleteVoiceMessage: () -> Unit = {},
     onError: (Throwable) -> Unit = {},
+    onSuggestionReceived: (Suggestion?) -> Unit = {},
 ) {
     val onSendClicked = {
         val html = if (enableTextFormatting) state.messageHtml else null
@@ -248,6 +252,16 @@ fun TextComposer(
         }
 
         SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
+    }
+
+    val menuAction = state.menuAction
+    LaunchedEffect(menuAction) {
+        if (menuAction is MenuAction.Suggestion) {
+            val suggestion = Suggestion(menuAction.suggestionPattern)
+            onSuggestionReceived(suggestion)
+        } else {
+            onSuggestionReceived(null)
+        }
     }
 }
 
