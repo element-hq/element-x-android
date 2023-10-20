@@ -19,10 +19,11 @@ package io.element.android.features.lockscreen.impl.unlock.numpad
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,56 +31,68 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 
+private val spaceBetweenPinKey = 8.dp
+private val maxSizePinKey = 80.dp
+
 @Composable
 fun PinKeypad(
     onClick: (PinKeypadModel) -> Unit,
+    maxWidth: Dp,
+    maxHeight: Dp,
     modifier: Modifier = Modifier,
-    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
     verticalAlignment: Alignment.Vertical = Alignment.Top,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
 ) {
+    val pinKeyMaxWidth = ((maxWidth - 2 * spaceBetweenPinKey) / 3).coerceAtMost(maxSizePinKey)
+    val pinKeyMaxHeight = ((maxHeight - 3 * spaceBetweenPinKey) / 4).coerceAtMost(maxSizePinKey)
+    val pinKeySize = if (pinKeyMaxWidth < pinKeyMaxHeight) pinKeyMaxWidth else pinKeyMaxHeight
+
+    val horizontalArrangement = spacedBy(spaceBetweenPinKey, Alignment.CenterHorizontally)
+    val verticalArrangement = spacedBy(spaceBetweenPinKey, Alignment.CenterVertically)
     Column(
         modifier = modifier,
         verticalArrangement = verticalArrangement,
         horizontalAlignment = horizontalAlignment,
     ) {
         PinKeypadRow(
+            pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
             models = listOf(PinKeypadModel.Number('1'), PinKeypadModel.Number('2'), PinKeypadModel.Number('3')),
             onClick = onClick,
         )
         PinKeypadRow(
+            pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
             models = listOf(PinKeypadModel.Number('4'), PinKeypadModel.Number('5'), PinKeypadModel.Number('6')),
             onClick = onClick,
         )
         PinKeypadRow(
+            pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
             models = listOf(PinKeypadModel.Number('7'), PinKeypadModel.Number('8'), PinKeypadModel.Number('9')),
             onClick = onClick,
         )
         PinKeypadRow(
+            pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
             models = listOf(PinKeypadModel.Empty, PinKeypadModel.Number('0'), PinKeypadModel.Back),
@@ -92,6 +105,7 @@ fun PinKeypad(
 private fun PinKeypadRow(
     models: List<PinKeypadModel>,
     onClick: (PinKeypadModel) -> Unit,
+    pinKeySize: Dp,
     modifier: Modifier = Modifier,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     verticalAlignment: Alignment.Vertical = Alignment.Top,
@@ -101,7 +115,7 @@ private fun PinKeypadRow(
         verticalAlignment = verticalAlignment,
         modifier = modifier.fillMaxWidth(),
     ) {
-        val commonModifier = Modifier.size(80.dp)
+        val commonModifier = Modifier.size(pinKeySize)
         for (model in models) {
             when (model) {
                 is PinKeypadModel.Empty -> {
@@ -115,7 +129,7 @@ private fun PinKeypadRow(
                 }
                 is PinKeypadModel.Number -> {
                     PinKeyBadDigitButton(
-                        size = 80.dp,
+                        size = pinKeySize,
                         modifier = commonModifier,
                         digit = model.number.toString(),
                         onClick = { onClick(model) },
@@ -153,7 +167,7 @@ private fun PinKeyBadDigitButton(
         modifier = modifier,
         onClick = { onClick(digit) }
     ) {
-        val fontSize = 80.dp.toSp() / 2
+        val fontSize = size.toSp() / 2
         val originalFont = ElementTheme.typography.fontHeadingXlBold
         val ratio = fontSize.value / originalFont.fontSize.value
         val lineHeight = originalFont.lineHeight * ratio
@@ -183,9 +197,15 @@ private fun PinKeypadBackButton(
 
 @Composable
 @PreviewsDayNight
-fun PinKeypad() {
+fun PinKeypadPreview() {
     ElementPreview {
-        PinKeypad(onClick = {})
+        BoxWithConstraints {
+            PinKeypad(
+                maxWidth = maxWidth,
+                maxHeight = maxHeight,
+                onClick = {}
+            )
+        }
     }
 }
 

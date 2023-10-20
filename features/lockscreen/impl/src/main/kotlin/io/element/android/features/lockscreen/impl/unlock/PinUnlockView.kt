@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -79,15 +80,14 @@ fun PinUnlockView(
             val footer = @Composable {
                 PinUnlockFooter()
             }
-            val content = @Composable {
+            val content = @Composable { constraints: BoxWithConstraintsScope ->
                 PinKeypad(
                     onClick = {
                         state.eventSink(PinUnlockEvents.OnPinKeypadPressed(it))
                     },
-                    horizontalArrangement = spacedBy(24.dp, Alignment.CenterHorizontally),
-                    verticalArrangement = spacedBy(16.dp, Alignment.CenterVertically),
+                    maxWidth = constraints.maxWidth,
+                    maxHeight = constraints.maxHeight,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalAlignment = Alignment.CenterVertically,
                 )
             }
             if (maxHeight < 600.dp) {
@@ -130,7 +130,7 @@ fun PinUnlockCompactView(
     modifier: Modifier = Modifier,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable BoxWithConstraintsScope.() -> Unit,
 ) {
     Row(modifier = modifier) {
         Column(Modifier.weight(1f)) {
@@ -138,7 +138,7 @@ fun PinUnlockCompactView(
             Spacer(modifier = Modifier.height(24.dp))
             footer()
         }
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight(),
@@ -154,13 +154,13 @@ fun PinUnlockExpandedView(
     modifier: Modifier = Modifier,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable BoxWithConstraintsScope.() -> Unit,
 ) {
     Column(
         modifier = modifier,
     ) {
         header()
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
