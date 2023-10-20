@@ -127,6 +127,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
             awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
+            assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Sending)
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
@@ -148,6 +149,7 @@ class VoiceMessageComposerPresenterTest {
                 eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
                 eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             }
+            assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Sending)
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
@@ -167,11 +169,13 @@ class VoiceMessageComposerPresenterTest {
         }.test {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
-
-            val finalState = awaitItem().apply {
+            awaitItem().apply {
                 assertThat(voiceMessageState).isEqualTo(VoiceMessageState.Preview)
                 eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             }
+
+            val finalState = awaitItem()
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Sending)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
             assertThat(analyticsService.trackedErrors).hasSize(0)
 
@@ -192,6 +196,7 @@ class VoiceMessageComposerPresenterTest {
             val previewState = awaitItem()
 
             previewState.eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
+            assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Sending)
 
             ensureAllEventsConsumed()
             assertThat(previewState.voiceMessageState).isEqualTo(VoiceMessageState.Preview)
@@ -349,7 +354,8 @@ class VoiceMessageComposerPresenterTest {
 
         val onPauseState = when (mostRecentState.voiceMessageState) {
             VoiceMessageState.Idle,
-            VoiceMessageState.Preview -> {
+            VoiceMessageState.Preview,
+            VoiceMessageState.Sending -> {
                 mostRecentState
             }
             is VoiceMessageState.Recording -> {
@@ -364,7 +370,8 @@ class VoiceMessageComposerPresenterTest {
         )
 
         when (onPauseState.voiceMessageState) {
-            VoiceMessageState.Idle ->
+            VoiceMessageState.Idle,
+            VoiceMessageState.Sending ->
                 ensureAllEventsConsumed()
             is VoiceMessageState.Recording,
             VoiceMessageState.Preview ->

@@ -17,6 +17,7 @@
 package io.element.android.libraries.textcomposer.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -33,6 +34,7 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 internal fun VoiceMessagePreview(
+    isInteractive: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -49,7 +51,11 @@ internal fun VoiceMessagePreview(
         // TODO Replace with recording preview UI
         Text(
             text = "Finished recording", // Not localized because it is a placeholder
-            color = ElementTheme.colors.textSecondary,
+            color = if (isInteractive) {
+                ElementTheme.colors.textSecondary
+            } else {
+                ElementTheme.colors.textDisabled
+            },
             style = ElementTheme.typography.fontBodySmMedium
         )
     }
@@ -58,5 +64,8 @@ internal fun VoiceMessagePreview(
 @PreviewsDayNight
 @Composable
 internal fun VoiceMessagePreviewPreview() = ElementPreview {
-    VoiceMessagePreview()
+    Column {
+        VoiceMessagePreview(isInteractive = true)
+        VoiceMessagePreview(isInteractive = false)
+    }
 }
