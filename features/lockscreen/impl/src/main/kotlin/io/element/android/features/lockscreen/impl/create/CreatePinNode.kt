@@ -38,6 +38,7 @@ class CreatePinNode @AssistedInject constructor(
         val state = presenter.present()
         CreatePinView(
             state = state,
+            onBackClicked = { },
             modifier = modifier
         )
     }

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.create.validation
 
-sealed interface CreatePinEvents {
-    data class OnPinEntryChanged(val entryAsText: String) : CreatePinEvents
-    data object ClearFailure : CreatePinEvents
+sealed interface CreatePinFailure {
+    data object PinBlacklisted : CreatePinFailure
+    data object PinsDontMatch : CreatePinFailure
 }

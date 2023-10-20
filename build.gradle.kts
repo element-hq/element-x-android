@@ -253,7 +253,6 @@ koverMerged {
                 // Temporary until we have actually something to test.
                 excludes += "io.element.android.features.lockscreen.impl.auth.PinAuthenticationPresenter"
                 excludes += "io.element.android.features.lockscreen.impl.auth.PinAuthenticationPresenter$*"
-                excludes += "io.element.android.features.lockscreen.impl.create.CreatePinPresenter"
             }
             bound {
                 minValue = 85

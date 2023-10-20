@@ -5,6 +5,7 @@
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
   <string name="a11y_pause">"Pause"</string>
+  <string name="a11y_pin_field">"PIN field"</string>
   <string name="a11y_play">"Play"</string>
   <string name="a11y_poll">"Poll"</string>
   <string name="a11y_poll_end">"Ended poll"</string>
@@ -96,6 +97,7 @@
   <string name="common_editing">"Editing"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Encryption enabled"</string>
+  <string name="common_enter_your_pin">"Enter your PIN"</string>
   <string name="common_error">"Error"</string>
   <string name="common_everyone">"Everyone"</string>
   <string name="common_file">"File"</string>
@@ -133,6 +135,7 @@
   <string name="common_rich_text_editor">"Rich text editor"</string>
   <string name="common_room_name">"Room name"</string>
   <string name="common_room_name_placeholder">"e.g. your project name"</string>
+  <string name="common_screen_lock">"Screen lock"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
   <string name="common_search_results">"Search results"</string>
   <string name="common_security">"Security"</string>
@@ -154,6 +157,7 @@
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
   <string name="common_unable_to_invite_message">"Invites couldn\'t be sent to one or more users."</string>
   <string name="common_unable_to_invite_title">"Unable to send invite(s)"</string>
+  <string name="common_unlock">"Unlock"</string>
   <string name="common_unmute">"Unmute"</string>
   <string name="common_unsupported_event">"Unsupported event"</string>
   <string name="common_username">"Username"</string>
@@ -180,6 +184,7 @@
   <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
@@ -188,6 +193,10 @@
   <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you won\'t be able to rejoin without an invite."</string>
   <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d digit entered"</item>
+    <item quantity="other">"%1$d digits entered"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
     <item quantity="other">"%1$d members"</item>
@@ -205,19 +214,19 @@
   <string name="screen_analytics_settings_share_data">"Share analytics data"</string>
   <string name="screen_chat_backup_key_backup_action_disable">"Turn off backup"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Turn on backup"</string>
-  <string name="screen_chat_backup_key_backup_description">"Backup ensures that you don\'t lose your message history."</string>
+  <string name="screen_chat_backup_key_backup_description">"Backup ensures that you don\'t lose your message history. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Backup"</string>
   <string name="screen_chat_backup_recovery_action_change">"Change recovery key"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Confirm recovery key"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Your chat backup is currently out of sync."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Set up recovery"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere."</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Get access to your encrypted messages if you lose all your devices or are signed out of %1$s everywhere."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Turn off"</string>
   <string name="screen_key_backup_disable_confirmation_description">"You will lose your encrypted messages if you are signed out of all devices."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Are you sure you want to turn off backup?"</string>
   <string name="screen_key_backup_disable_description">"Turning off backup will remove your current encryption key backup and turn off other security features. In this case, you will:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Not have encrypted message history on new devices"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Lose access to your encrypted messages if you are signed out of %1$@ everywhere"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Lose access to your encrypted messages if you are signed out of %1$s everywhere"</string>
   <string name="screen_key_backup_disable_title">"Are you sure you want to turn off backup?"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>

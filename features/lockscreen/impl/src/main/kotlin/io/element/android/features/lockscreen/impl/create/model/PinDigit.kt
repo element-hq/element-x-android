@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.create.model
 
-sealed interface CreatePinEvents {
-    data class OnPinEntryChanged(val entryAsText: String) : CreatePinEvents
-    data object ClearFailure : CreatePinEvents
+sealed interface PinDigit {
+    data object Empty : PinDigit
+    data class Filled(val value: Char) : PinDigit
+
+    fun toText(): String {
+        return when (this) {
+            is Empty -> ""
+            is Filled -> value.toString()
+        }
+    }
 }
