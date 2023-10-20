@@ -17,9 +17,9 @@
 package io.element.android.features.login.impl.screens.changeaccountprovider
 
 import androidx.compose.runtime.Composable
+import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
-import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
@@ -34,7 +34,7 @@ class ChangeAccountProviderPresenter @Inject constructor(
             // Just matrix.org by default for now
             accountProviders = listOf(
                 AccountProvider(
-                    url = LoginConstants.MATRIX_ORG_URL,
+                    url = AuthenticationConfig.MATRIX_ORG_URL,
                     subtitle = null,
                     isPublic = true,
                     isMatrixOrg = true,

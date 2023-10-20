@@ -55,4 +55,10 @@ enum class FeatureFlags(
         description = "Allow user to lock/unlock the app with a pin code or biometrics",
         defaultValue = false,
     ),
+    InRoomCalls(
+        key = "feature.elementcall",
+        title = "Element call in rooms",
+        description = "Allow user to start or join a call in a room",
+        defaultValue = false,
+    )
 }

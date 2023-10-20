@@ -23,9 +23,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class InMemoryPreferencesStore(
     isRichTextEditorEnabled: Boolean = false,
     isDeveloperModeEnabled: Boolean = false,
+    customElementCallBaseUrl: String? = null,
 ) : PreferencesStore {
     private var _isRichTextEditorEnabled = MutableStateFlow(isRichTextEditorEnabled)
     private var _isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
+    private var _customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
 
     override suspend fun setRichTextEditorEnabled(enabled: Boolean) {
         _isRichTextEditorEnabled.value = enabled
@@ -41,6 +43,14 @@ class InMemoryPreferencesStore(
 
     override fun isDeveloperModeEnabledFlow(): Flow<Boolean> {
         return _isDeveloperModeEnabled
+    }
+
+    override suspend fun setCustomElementCallBaseUrl(string: String?) {
+        _customElementCallBaseUrl.tryEmit(string)
+    }
+
+    override fun getCustomElementCallBaseUrlFlow(): Flow<String?> {
+        return _customElementCallBaseUrl
     }
 
     override suspend fun reset() {

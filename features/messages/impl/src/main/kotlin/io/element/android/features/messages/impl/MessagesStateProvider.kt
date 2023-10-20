@@ -85,5 +85,6 @@ fun aMessagesState() = MessagesState(
     showReinvitePrompt = false,
     enableTextFormatting = true,
     enableVoiceMessages = true,
+    enableInRoomCalls = true,
     eventSink = {}
 )

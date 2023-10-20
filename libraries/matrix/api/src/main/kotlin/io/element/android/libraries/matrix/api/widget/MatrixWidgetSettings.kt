@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.services.toolbox.api.appname
+package io.element.android.libraries.matrix.api.widget
 
-interface AppNameProvider {
-    fun getAppName(): String
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+class MatrixWidgetSettings(
+    val id: String,
+    val initAfterContentLoad: Boolean,
+    val rawUrl: String,
+) : Parcelable {
+    companion object
 }

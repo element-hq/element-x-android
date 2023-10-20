@@ -96,6 +96,7 @@ internal fun SimpleAlertDialogContent(
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
     applyPaddingToContents: Boolean = true,
+    enabled: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
@@ -122,6 +123,7 @@ internal fun SimpleAlertDialogContent(
                 if (submitText != null) {
                     Button(
                         text = submitText,
+                        enabled = enabled,
                         size = ButtonSize.Medium,
                         onClick = onSubmitClicked,
                     )

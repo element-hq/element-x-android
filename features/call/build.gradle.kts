@@ -18,20 +18,44 @@ plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "io.element.android.features.call"
+
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
+    implementation(projects.appnav)
+    implementation(projects.appconfig)
+    implementation(projects.anvilannotations)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.core)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.matrix.impl)
     implementation(projects.libraries.network)
+    implementation(projects.libraries.preferences.api)
+    implementation(projects.services.toolbox.api)
     implementation(libs.androidx.webkit)
+    implementation(libs.serialization.json)
     ksp(libs.showkase.processor)
 
-    testImplementation(libs.test.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
     testImplementation(libs.test.robolectric)
+    testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
 }

@@ -131,7 +131,6 @@
   <string name="common_room_name_placeholder">"např. název vašeho projektu"</string>
   <string name="common_search_for_someone">"Hledat někoho"</string>
   <string name="common_search_results">"Výsledky hledání"</string>
-  <string name="common_secure_backup">"Zabezpečená záloha"</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_sending">"Odesílání…"</string>
   <string name="common_server_not_supported">"Server není podporován"</string>
@@ -208,9 +207,9 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Další nastavení"</string>
   <string name="screen_notification_settings_calls_label">"Halsové a video hovory"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Neshoda konfigurace"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Zjednodušili jsme nastavení oznámení, abychom usnadnili hledání možností. 
+  <string name="screen_notification_settings_configuration_mismatch_description">"Zjednodušili jsme nastavení oznámení, abychom usnadnili hledání možností.
 
-Některá vlastní nastavení, která jste si vybrali v minulosti, se zde nezobrazují, ale jsou stále aktivní. 
+Některá vlastní nastavení, která jste si vybrali v minulosti, se zde nezobrazují, ale jsou stále aktivní.
 
 Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_notification_settings_direct_chats">"Přímé zprávy"</string>

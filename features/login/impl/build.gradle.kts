@@ -38,6 +38,7 @@ anvil {
 
 dependencies {
     implementation(projects.anvilannotations)
+    implementation(projects.appconfig)
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)

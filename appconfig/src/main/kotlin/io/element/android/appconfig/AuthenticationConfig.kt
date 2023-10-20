@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.config
+package io.element.android.appconfig
 
-object MatrixConfiguration {
-    const val matrixToPermalinkBaseUrl: String = "https://matrix.to/#/"
-    val clientPermalinkBaseUrl: String? = null
+object AuthenticationConfig {
+    const val MATRIX_ORG_URL = "https://matrix.org"
+
+    const val DEFAULT_HOMESERVER_URL = MATRIX_ORG_URL
+    const val SLIDING_SYNC_READ_MORE_URL = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
 }

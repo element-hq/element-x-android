@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call
+package io.element.android.features.call.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.res.Configuration
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
@@ -26,20 +28,40 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import android.webkit.PermissionRequest
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.IntentCompat
+import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
+import io.element.android.features.call.CallForegroundService
+import io.element.android.features.call.CallType
 import io.element.android.features.call.di.CallBindings
+import io.element.android.features.call.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.theme.ElementTheme
 import javax.inject.Inject
 
-class ElementCallActivity : ComponentActivity() {
+class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
+    companion object {
+        private const val EXTRA_CALL_WIDGET_SETTINGS = "EXTRA_CALL_WIDGET_SETTINGS"
 
-    @Inject lateinit var userAgentProvider: UserAgentProvider
+        fun start(
+            context: Context,
+            callInputs: CallType,
+        ) {
+            val intent = Intent(context, ElementCallActivity::class.java).apply {
+                putExtra(EXTRA_CALL_WIDGET_SETTINGS, callInputs)
+                addFlags(FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
+        }
+    }
+
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
+    @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
+
+    private lateinit var presenter: CallScreenPresenter
 
     private lateinit var audioManager: AudioManager
 
@@ -51,7 +73,7 @@ class ElementCallActivity : ComponentActivity() {
     private val requestPermissionsLauncher = registerPermissionResultLauncher()
 
     private var isDarkMode = false
-    private val urlState = mutableStateOf<String?>(null)
+    private val webViewTarget = mutableStateOf<CallType?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,10 +82,7 @@ class ElementCallActivity : ComponentActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        urlState.value = intent?.dataString?.let(::parseUrl) ?: run {
-            finish()
-            return
-        }
+        setCallType(intent)
 
         if (savedInstanceState == null) {
             updateUiMode(resources.configuration)
@@ -72,18 +91,17 @@ class ElementCallActivity : ComponentActivity() {
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         requestAudioFocus()
 
-        val userAgent = userAgentProvider.provide()
-
         setContent {
-            CallScreenView(
-                url = urlState.value,
-                userAgent = userAgent,
-                onClose = this::finish,
-                requestPermissions = { permissions, callback ->
-                    requestPermissionCallback = callback
-                    requestPermissionsLauncher.launch(permissions)
-                }
-            )
+            val state = presenter.present()
+            ElementTheme {
+                CallScreenView(
+                    state = state,
+                    requestPermissions = { permissions, callback ->
+                        requestPermissionCallback = callback
+                        requestPermissionsLauncher.launch(permissions)
+                    }
+                )
+            }
         }
     }
 
@@ -96,15 +114,7 @@ class ElementCallActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        val intentUrl = intent?.dataString?.let(::parseUrl)
-        when {
-            // New URL, update it and reload the webview
-            intentUrl != null -> urlState.value = intentUrl
-            // Re-opened the activity but we have no url to load or a cached one, finish the activity
-            intent?.dataString == null && urlState.value == null -> finish()
-            // Coming back from notification, do nothing
-            else -> return
-        }
+        setCallType(intent)
     }
 
     override fun onStart() {
@@ -128,6 +138,32 @@ class ElementCallActivity : ComponentActivity() {
     override fun finish() {
         // Also remove the task from recents
         finishAndRemoveTask()
+    }
+
+    override fun close() {
+        finish()
+    }
+
+    private fun setCallType(intent: Intent?) {
+        val inputs = intent?.let {
+            IntentCompat.getParcelableExtra(it, EXTRA_CALL_WIDGET_SETTINGS, CallType::class.java)
+        }
+        val intentUrl = intent?.dataString?.let(::parseUrl)
+        when {
+            // Re-opened the activity but we have no url to load or a cached one, finish the activity
+            intent?.dataString == null && inputs == null && webViewTarget.value == null -> finish()
+            inputs != null -> {
+                webViewTarget.value = inputs
+                presenter = presenterFactory.create(inputs, this)
+            }
+            intentUrl != null -> {
+                val fallbackInputs = CallType.ExternalUrl(intentUrl)
+                webViewTarget.value = fallbackInputs
+                presenter = presenterFactory.create(fallbackInputs, this)
+            }
+            // Coming back from notification, do nothing
+            else -> return
+        }
     }
 
     private fun parseUrl(url: String?): String? = callIntentDataParser.parse(url)

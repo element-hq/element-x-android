@@ -27,7 +27,7 @@
 
     <application>
         <activity
-            android:name=".ElementCallActivity"
+            android:name=".ui.ElementCallActivity"
             android:label="@string/element_call"
             android:exported="true"
             android:taskAffinity="io.element.android.features.call"

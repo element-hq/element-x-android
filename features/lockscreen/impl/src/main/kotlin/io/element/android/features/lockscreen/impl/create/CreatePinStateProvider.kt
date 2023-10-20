@@ -17,15 +17,45 @@
 package io.element.android.features.lockscreen.impl.create
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.lockscreen.impl.create.model.PinEntry
+import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
 
 open class CreatePinStateProvider : PreviewParameterProvider<CreatePinState> {
     override val values: Sequence<CreatePinState>
         get() = sequenceOf(
             aCreatePinState(),
-            // Add other states here
+            aCreatePinState(
+                choosePinEntry = PinEntry.empty(4).fillWith("12")
+            ),
+            aCreatePinState(
+                choosePinEntry = PinEntry.empty(4).fillWith("1789"),
+                isConfirmationStep = true,
+            ),
+            aCreatePinState(
+                choosePinEntry = PinEntry.empty(4).fillWith("1789"),
+                confirmPinEntry = PinEntry.empty(4).fillWith("1788"),
+                isConfirmationStep = true,
+                creationFailure = CreatePinFailure.PinsDontMatch
+            ),
+            aCreatePinState(
+                choosePinEntry = PinEntry.empty(4).fillWith("1111"),
+                creationFailure = CreatePinFailure.PinBlacklisted
+            ),
+
         )
 }
 
-fun aCreatePinState() = CreatePinState(
+fun aCreatePinState(
+    choosePinEntry: PinEntry = PinEntry.empty(4),
+    confirmPinEntry: PinEntry = PinEntry.empty(4),
+    isConfirmationStep: Boolean = false,
+    creationFailure: CreatePinFailure? = null,
+) = CreatePinState(
+    choosePinEntry = choosePinEntry,
+    confirmPinEntry = confirmPinEntry,
+    isConfirmationStep = isConfirmationStep,
+    createPinFailure = creationFailure,
+    appName = "Element",
     eventSink = {}
 )
+

@@ -49,5 +49,6 @@ data class MessagesState(
     val showReinvitePrompt: Boolean,
     val enableTextFormatting: Boolean,
     val enableVoiceMessages: Boolean,
+    val enableInRoomCalls: Boolean,
     val eventSink: (MessagesEvents) -> Unit
 )

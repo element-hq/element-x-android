@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.matrix.api.permalink
 
-import io.element.android.libraries.matrix.api.config.MatrixConfiguration
+import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
