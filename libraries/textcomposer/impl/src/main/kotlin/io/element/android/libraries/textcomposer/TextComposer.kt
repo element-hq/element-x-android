@@ -64,7 +64,8 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
 import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
 import io.element.android.libraries.textcomposer.components.RecordButton
-import io.element.android.libraries.textcomposer.components.RecordingProgress
+import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
+import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
@@ -95,6 +96,7 @@ fun TextComposer(
     onAddAttachment: () -> Unit = {},
     onDismissTextFormatting: () -> Unit = {},
     onVoiceRecordButtonEvent: (PressEvent) -> Unit = {},
+    onSendVoiceMessage: () -> Unit = {},
     onError: (Throwable) -> Unit = {},
 ) {
     val onSendClicked = {
@@ -137,24 +139,39 @@ fun TextComposer(
             composerMode = composerMode,
         )
     }
-    val recordButton = @Composable {
+    val recordVoiceButton = @Composable {
         RecordButton(
             onPressStart = { onVoiceRecordButtonEvent(PressEvent.PressStart) },
             onLongPressEnd = { onVoiceRecordButtonEvent(PressEvent.LongPressEnd) },
             onTap = { onVoiceRecordButtonEvent(PressEvent.Tapped) },
         )
     }
+    val sendVoiceButton = @Composable {
+        SendButton(
+            canSendMessage = voiceMessageState is VoiceMessageState.Preview,
+            onClick = { onSendVoiceMessage() },
+            composerMode = composerMode,
+        )
+    }
 
     val textFormattingOptions = @Composable { TextFormatting(state = state) }
 
-    val sendOrRecordButton = if (canSendMessage || !enableVoiceMessages) {
-        sendButton
-    } else {
-        recordButton
+    val sendOrRecordButton = when {
+        enableVoiceMessages && !canSendMessage ->
+            when (voiceMessageState) {
+                is VoiceMessageState.Preview -> sendVoiceButton
+                else -> recordVoiceButton
+            }
+        else ->
+            sendButton
     }
 
-    val recordingProgress = @Composable {
-        RecordingProgress()
+    val voiceRecording = @Composable {
+        if (voiceMessageState is VoiceMessageState.Recording) {
+            VoiceMessageRecording(voiceMessageState.level)
+        } else if (voiceMessageState is VoiceMessageState.Preview) {
+            VoiceMessagePreview()
+        }
     }
 
     if (showTextFormatting) {
@@ -170,11 +187,12 @@ fun TextComposer(
     } else {
         StandardLayout(
             voiceMessageState = voiceMessageState,
+            enableVoiceMessages = enableVoiceMessages,
             modifier = layoutModifier,
             composerOptionsButton = composerOptionsButton,
             textInput = textInput,
             endButton = sendOrRecordButton,
-            recordingProgress = recordingProgress,
+            voiceRecording = voiceRecording,
         )
     }
 
@@ -190,9 +208,10 @@ fun TextComposer(
 @Composable
 private fun StandardLayout(
     voiceMessageState: VoiceMessageState,
+    enableVoiceMessages: Boolean,
     textInput: @Composable () -> Unit,
     composerOptionsButton: @Composable () -> Unit,
-    recordingProgress: @Composable () -> Unit,
+    voiceRecording: @Composable () -> Unit,
     endButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -200,13 +219,13 @@ private fun StandardLayout(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom,
     ) {
-        if (voiceMessageState is VoiceMessageState.Recording) {
+        if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
             Box(
                 modifier = Modifier
                     .padding(start = 16.dp, bottom = 8.dp, top = 8.dp)
                     .weight(1f)
             ) {
-                recordingProgress()
+                voiceRecording()
             }
         } else {
             Box(

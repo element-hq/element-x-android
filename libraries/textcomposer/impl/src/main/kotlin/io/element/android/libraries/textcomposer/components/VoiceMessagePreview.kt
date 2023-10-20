@@ -17,25 +17,22 @@
 package io.element.android.libraries.textcomposer.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-internal fun RecordingProgress(
+internal fun VoiceMessagePreview(
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -46,21 +43,12 @@ internal fun RecordingProgress(
                 shape = MaterialTheme.shapes.medium,
             )
             .padding(start = 12.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-            .heightIn(26.dp)
-
-            ,
+            .heightIn(26.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier
-                .size(8.dp)
-                .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)
-        )
-        Spacer(Modifier.size(8.dp))
-
-        // TODO Replace with timer UI
+        // TODO Replace with recording preview UI
         Text(
-            text = "Recording...", // Not localized because it is a placeholder
+            text = "Finished recording", // Not localized because it is a placeholder
             color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodySmMedium
         )
@@ -69,6 +57,6 @@ internal fun RecordingProgress(
 
 @PreviewsDayNight
 @Composable
-internal fun RecordingProgressPreview() {
-    RecordingProgress()
+internal fun VoiceMessagePreviewPreview() = ElementPreview {
+    VoiceMessagePreview()
 }

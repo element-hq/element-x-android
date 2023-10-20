@@ -71,8 +71,12 @@ internal fun MessageComposerView(
         }
     }
 
-    fun onVoiceRecordButtonEvent(press: PressEvent) {
+    val onVoiceRecordButtonEvent = { press: PressEvent ->
         voiceMessageState.eventSink(VoiceMessageComposerEvents.RecordButtonEvent(press))
+    }
+
+    fun onSendVoiceMessage() {
+        voiceMessageState.eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
     }
 
     TextComposer(
@@ -89,7 +93,8 @@ internal fun MessageComposerView(
         onDismissTextFormatting = ::onDismissTextFormatting,
         enableTextFormatting = enableTextFormatting,
         enableVoiceMessages = enableVoiceMessages,
-        onVoiceRecordButtonEvent = ::onVoiceRecordButtonEvent,
+        onVoiceRecordButtonEvent = onVoiceRecordButtonEvent,
+        onSendVoiceMessage = ::onSendVoiceMessage,
         onError = ::onError,
     )
 }

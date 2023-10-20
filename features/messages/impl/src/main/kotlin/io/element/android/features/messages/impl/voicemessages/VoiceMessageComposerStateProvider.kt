@@ -22,7 +22,7 @@ import io.element.android.libraries.textcomposer.model.VoiceMessageState
 internal open class VoiceMessageComposerStateProvider : PreviewParameterProvider<VoiceMessageComposerState> {
     override val values: Sequence<VoiceMessageComposerState>
         get() = sequenceOf(
-            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording),
+            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(level = 0.5)),
         )
 }
 
@@ -30,5 +30,6 @@ internal fun aVoiceMessageComposerState(
     voiceMessageState: VoiceMessageState = VoiceMessageState.Idle,
 ) = VoiceMessageComposerState(
     voiceMessageState = voiceMessageState,
+    showPermissionRationaleDialog = false,
     eventSink = {},
 )

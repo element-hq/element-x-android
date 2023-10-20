@@ -50,5 +50,6 @@ data class MessagesState(
     val enableTextFormatting: Boolean,
     val enableVoiceMessages: Boolean,
     val enableInRoomCalls: Boolean,
+    val appName: String,
     val eventSink: (MessagesEvents) -> Unit
 )

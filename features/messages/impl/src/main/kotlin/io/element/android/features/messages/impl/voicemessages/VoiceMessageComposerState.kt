@@ -22,6 +22,7 @@ import io.element.android.libraries.textcomposer.model.VoiceMessageState
 @Stable
 data class VoiceMessageComposerState(
     val voiceMessageState: VoiceMessageState,
+    val showPermissionRationaleDialog: Boolean,
     val eventSink: (VoiceMessageComposerEvents) -> Unit,
 )
 

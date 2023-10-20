@@ -63,6 +63,7 @@ import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -101,6 +102,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val preferencesStore: PreferencesStore,
     private val featureFlagsService: FeatureFlagService,
     @Assisted private val navigator: MessagesNavigator,
+    private val buildMeta: BuildMeta,
 ) : Presenter<MessagesState> {
 
     @AssistedFactory
@@ -203,6 +205,7 @@ class MessagesPresenter @AssistedInject constructor(
             enableTextFormatting = enableTextFormatting,
             enableVoiceMessages = enableVoiceMessages,
             enableInRoomCalls = enableInRoomCalls,
+            appName = buildMeta.applicationName,
             eventSink = { handleEvents(it) }
         )
     }

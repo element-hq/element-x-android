@@ -16,15 +16,11 @@
 
 package io.element.android.features.messages.impl.voicemessages
 
-import androidx.lifecycle.Lifecycle
-import io.element.android.libraries.textcomposer.model.PressEvent
-
-sealed interface VoiceMessageComposerEvents {
-    data class RecordButtonEvent(
-        val pressEvent: PressEvent
-    ): VoiceMessageComposerEvents
-    data object SendVoiceMessage: VoiceMessageComposerEvents
-    data object AcceptPermissionRationale: VoiceMessageComposerEvents
-    data object DismissPermissionsRationale: VoiceMessageComposerEvents
-    data class LifecycleEvent(val event: Lifecycle.Event): VoiceMessageComposerEvents
+internal sealed class VoiceMessageException : Exception() {
+    data class FileException(
+        override val message: String?, override val cause: Throwable? = null
+    ) : VoiceMessageException()
+    data class PermissionMissing(
+        override val message: String?, override val cause: Throwable?
+    ) : VoiceMessageException()
 }
