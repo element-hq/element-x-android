@@ -93,7 +93,7 @@ internal fun SendButton(
 @PreviewsDayNight
 @Composable
 internal fun SendButtonPreview() = ElementPreview {
-    val normalMode = MessageComposerMode.Normal("")
+    val normalMode = MessageComposerMode.Normal
     val editMode = MessageComposerMode.Edit(null, "", null)
     Row {
         SendButton(canSendMessage = true, onClick = {}, composerMode = normalMode)

@@ -99,7 +99,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.isFullScreen).isFalse()
             assertThat(initialState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal(""))
+            assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.attachmentsState).isEqualTo(AttachmentsState.None)
@@ -710,7 +710,7 @@ class MessageComposerPresenterTest {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)
         val normalState = awaitItem()
-        assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal(""))
+        assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal)
         return normalState
     }
 

@@ -158,7 +158,7 @@ class MessageComposerPresenter @Inject constructor(
                     localCoroutineScope.launch {
                         richTextEditorState.setHtml("")
                     }
-                    messageComposerContext.composerMode = MessageComposerMode.Normal("")
+                    messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
                     message = event.message,
@@ -253,7 +253,7 @@ class MessageComposerPresenter @Inject constructor(
         val capturedMode = messageComposerContext.composerMode
         // Reset composer right away
         richTextEditorState.setHtml("")
-        updateComposerMode(MessageComposerMode.Normal(""))
+        updateComposerMode(MessageComposerMode.Normal)
         when (capturedMode) {
             is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html)
             is MessageComposerMode.Edit -> {
