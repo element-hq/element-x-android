@@ -153,7 +153,10 @@ class MessageComposerPresenterTest {
             assertThat(state.mode).isEqualTo(mode)
             state = awaitItem()
             assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            backToNormalMode(state, skipCount = 1)
+            state = backToNormalMode(state, skipCount = 1)
+
+            // The message that was being edited is cleared
+            assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
         }
     }
 
@@ -171,6 +174,26 @@ class MessageComposerPresenterTest {
             assertThat(state.mode).isEqualTo(mode)
             assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
             backToNormalMode(state)
+        }
+    }
+
+    @Test
+    fun `present - cancel reply`() = runTest {
+        val presenter = createPresenter(this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            var state = awaitItem()
+            val mode = aReplyMode()
+            state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(mode)
+            state.richTextEditorState.setHtml(A_REPLY)
+            state = backToNormalMode(state)
+
+            // The message typed while replying is not cleared
+            assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_REPLY)
         }
     }
 
@@ -683,12 +706,12 @@ class MessageComposerPresenterTest {
         }
     }
 
-    private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0) {
+    private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0): MessageComposerState {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)
         val normalState = awaitItem()
         assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal(""))
-        assertThat(normalState.richTextEditorState.messageHtml).isEqualTo("")
+        return normalState
     }
 
     private fun createPresenter(
