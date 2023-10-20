@@ -17,7 +17,7 @@
 package io.element.android.features.lockscreen.impl.setup
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.lockscreen.impl.setup.model.PinEntry
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 
 open class SetupPinStateProvider : PreviewParameterProvider<SetupPinState> {

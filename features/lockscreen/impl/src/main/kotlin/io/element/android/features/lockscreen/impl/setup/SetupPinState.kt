@@ -16,7 +16,7 @@
 
 package io.element.android.features.lockscreen.impl.setup
 
-import io.element.android.features.lockscreen.impl.setup.model.PinEntry
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 
 data class SetupPinState(

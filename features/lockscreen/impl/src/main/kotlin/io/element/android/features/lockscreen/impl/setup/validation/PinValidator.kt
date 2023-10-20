@@ -17,7 +17,7 @@
 package io.element.android.features.lockscreen.impl.setup.validation
 
 import androidx.annotation.VisibleForTesting
-import io.element.android.features.lockscreen.impl.setup.model.PinEntry
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import javax.inject.Inject
 
 class PinValidator @Inject constructor() {

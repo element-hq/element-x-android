@@ -20,8 +20,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.lockscreen.impl.setup.model.PinDigit
-import io.element.android.features.lockscreen.impl.setup.model.PinEntry
+import io.element.android.features.lockscreen.impl.pin.model.PinDigit
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.setup.validation.CreatePinFailure
 import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
 import io.element.android.libraries.matrix.test.core.aBuildMeta
