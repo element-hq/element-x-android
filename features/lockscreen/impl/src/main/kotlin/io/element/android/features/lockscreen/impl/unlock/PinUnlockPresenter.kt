@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.auth
+package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.lockscreen.api.LockScreenStateService
@@ -23,20 +23,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class PinAuthenticationPresenter @Inject constructor(
+class PinUnlockPresenter @Inject constructor(
     private val pinStateService: LockScreenStateService,
     private val coroutineScope: CoroutineScope,
-) : Presenter<PinAuthenticationState> {
+) : Presenter<PinUnlockState> {
 
     @Composable
-    override fun present(): PinAuthenticationState {
+    override fun present(): PinUnlockState {
 
-        fun handleEvents(event: PinAuthenticationEvents) {
+        fun handleEvents(event: PinUnlockEvents) {
             when (event) {
-                PinAuthenticationEvents.Unlock -> coroutineScope.launch { pinStateService.unlock() }
+                PinUnlockEvents.Unlock -> coroutineScope.launch { pinStateService.unlock() }
             }
         }
-        return PinAuthenticationState(
+        return PinUnlockState(
             eventSink = ::handleEvents
         )
     }

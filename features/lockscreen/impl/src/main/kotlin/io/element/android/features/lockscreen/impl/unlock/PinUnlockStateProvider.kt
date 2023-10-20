@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.auth
+package io.element.android.features.lockscreen.impl.unlock
 
-sealed interface PinAuthenticationEvents {
-    data object Unlock : PinAuthenticationEvents
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
+    override val values: Sequence<PinUnlockState>
+        get() = sequenceOf(
+            aPinUnlockState(),
+        )
 }
+
+fun aPinUnlockState() = PinUnlockState(
+    eventSink = {}
+)

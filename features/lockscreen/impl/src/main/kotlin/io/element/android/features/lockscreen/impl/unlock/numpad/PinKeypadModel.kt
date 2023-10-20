@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.unlock.numpad
 
-sealed interface CreatePinEvents {
-    data class OnPinEntryChanged(val entryAsText: String) : CreatePinEvents
-    data object ClearFailure : CreatePinEvents
+import androidx.compose.runtime.Immutable
+
+@Immutable
+sealed interface PinKeypadModel {
+    data object Empty : PinKeypadModel
+    data object Back : PinKeypadModel
+    data class Number(val number: String) : PinKeypadModel
 }

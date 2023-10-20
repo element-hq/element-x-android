@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,18 +27,17 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class CreatePinNode @AssistedInject constructor(
+class PinUnlockNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: CreatePinPresenter,
+    private val presenter: PinUnlockPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        CreatePinView(
+        PinUnlockView(
             state = state,
-            onBackClicked = { },
             modifier = modifier
         )
     }

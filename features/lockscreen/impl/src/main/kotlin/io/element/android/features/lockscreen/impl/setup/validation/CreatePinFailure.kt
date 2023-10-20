@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.auth
+package io.element.android.features.lockscreen.impl.setup.validation
 
-data class PinAuthenticationState(
-    val eventSink: (PinAuthenticationEvents) -> Unit
-)
+sealed interface SetupPinFailure {
+    data object PinBlacklisted : SetupPinFailure
+    data object PinsDontMatch : SetupPinFailure
+}

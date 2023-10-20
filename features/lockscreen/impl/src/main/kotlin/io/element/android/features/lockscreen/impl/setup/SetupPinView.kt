@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.setup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -46,9 +46,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.R
-import io.element.android.features.lockscreen.impl.create.model.PinDigit
-import io.element.android.features.lockscreen.impl.create.model.PinEntry
-import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
+import io.element.android.features.lockscreen.impl.setup.model.PinDigit
+import io.element.android.features.lockscreen.impl.setup.model.PinEntry
+import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -61,8 +61,8 @@ import io.element.android.libraries.designsystem.theme.pinDigitBg
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun CreatePinView(
-    state: CreatePinState,
+fun SetupPinView(
+    state: SetupPinState,
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -86,15 +86,15 @@ fun CreatePinView(
                     .verticalScroll(state = scrollState)
                     .padding(vertical = 16.dp, horizontal = 20.dp),
             ) {
-                CreatePinHeader(state.isConfirmationStep, state.appName)
-                CreatePinContent(state)
+                SetupPinHeader(state.isConfirmationStep, state.appName)
+                SetupPinContent(state)
             }
         }
     )
 }
 
 @Composable
-private fun CreatePinHeader(
+private fun SetupPinHeader(
     isValidationStep: Boolean,
     appName: String,
     modifier: Modifier = Modifier,
@@ -116,44 +116,44 @@ private fun CreatePinHeader(
 }
 
 @Composable
-private fun CreatePinContent(
-    state: CreatePinState,
+private fun SetupPinContent(
+    state: SetupPinState,
     modifier: Modifier = Modifier,
 ) {
     PinEntryTextField(
         state.activePinEntry,
         onValueChange = {
-            state.eventSink(CreatePinEvents.OnPinEntryChanged(it))
+            state.eventSink(SetupPinEvents.OnPinEntryChanged(it))
         },
         modifier = modifier
             .padding(top = 36.dp)
             .fillMaxWidth()
     )
-    if (state.createPinFailure != null) {
+    if (state.SetupPinFailure != null) {
         ErrorDialog(
             modifier = modifier,
-            title = state.createPinFailure.title(),
-            content = state.createPinFailure.content(),
+            title = state.SetupPinFailure.title(),
+            content = state.SetupPinFailure.content(),
             onDismiss = {
-                state.eventSink(CreatePinEvents.ClearFailure)
+                state.eventSink(SetupPinEvents.ClearFailure)
             }
         )
     }
 }
 
 @Composable
-private fun CreatePinFailure.content(): String {
+private fun SetupPinFailure.content(): String {
     return when (this) {
-        CreatePinFailure.PinBlacklisted -> stringResource(id = R.string.screen_app_lock_setup_pin_blacklisted_dialog_content)
-        CreatePinFailure.PinsDontMatch -> stringResource(id = R.string.screen_app_lock_setup_pin_mismatch_dialog_content)
+        SetupPinFailure.PinBlacklisted -> stringResource(id = R.string.screen_app_lock_setup_pin_blacklisted_dialog_content)
+        SetupPinFailure.PinsDontMatch -> stringResource(id = R.string.screen_app_lock_setup_pin_mismatch_dialog_content)
     }
 }
 
 @Composable
-private fun CreatePinFailure.title(): String {
+private fun SetupPinFailure.title(): String {
     return when (this) {
-        CreatePinFailure.PinBlacklisted -> stringResource(id = R.string.screen_app_lock_setup_pin_blacklisted_dialog_title)
-        CreatePinFailure.PinsDontMatch -> stringResource(id = R.string.screen_app_lock_setup_pin_mismatch_dialog_title)
+        SetupPinFailure.PinBlacklisted -> stringResource(id = R.string.screen_app_lock_setup_pin_blacklisted_dialog_title)
+        SetupPinFailure.PinsDontMatch -> stringResource(id = R.string.screen_app_lock_setup_pin_mismatch_dialog_title)
     }
 }
 
@@ -225,9 +225,9 @@ private fun PinDigitView(
 
 @Composable
 @PreviewsDayNight
-internal fun CreatePinViewPreview(@PreviewParameter(CreatePinStateProvider::class) state: CreatePinState) {
+internal fun SetupPinViewPreview(@PreviewParameter(SetupPinStateProvider::class) state: SetupPinState) {
     ElementPreview {
-        CreatePinView(
+        SetupPinView(
             state = state,
             onBackClicked = {},
         )

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create.validation
+package io.element.android.features.lockscreen.impl.unlock
 
-sealed interface CreatePinFailure {
-    data object PinBlacklisted : CreatePinFailure
-    data object PinsDontMatch : CreatePinFailure
+sealed interface PinUnlockEvents {
+    data object Unlock : PinUnlockEvents
 }

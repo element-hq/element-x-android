@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create.validation
+package io.element.android.features.lockscreen.impl.setup.validation
 
 import androidx.annotation.VisibleForTesting
-import io.element.android.features.lockscreen.impl.create.model.PinEntry
+import io.element.android.features.lockscreen.impl.setup.model.PinEntry
 import javax.inject.Inject
 
 class PinValidator @Inject constructor() {
@@ -29,14 +29,14 @@ class PinValidator @Inject constructor() {
 
     sealed interface Result {
         data object Valid : Result
-        data class Invalid(val failure: CreatePinFailure) : Result
+        data class Invalid(val failure: SetupPinFailure) : Result
     }
 
     fun isPinValid(pinEntry: PinEntry): Result {
         val pinAsText = pinEntry.toText()
         val isBlacklisted = BLACKLIST.any { it == pinAsText }
         return if (isBlacklisted) {
-            Result.Invalid(CreatePinFailure.PinBlacklisted)
+            Result.Invalid(SetupPinFailure.PinBlacklisted)
         } else {
             Result.Valid
         }

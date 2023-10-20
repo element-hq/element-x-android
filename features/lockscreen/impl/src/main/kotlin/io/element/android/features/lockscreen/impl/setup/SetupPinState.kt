@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.setup
 
-import io.element.android.features.lockscreen.impl.create.model.PinEntry
-import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
+import io.element.android.features.lockscreen.impl.setup.model.PinEntry
+import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 
-data class CreatePinState(
+data class SetupPinState(
     val choosePinEntry: PinEntry,
     val confirmPinEntry: PinEntry,
     val isConfirmationStep: Boolean,
-    val createPinFailure: CreatePinFailure?,
+    val SetupPinFailure: SetupPinFailure?,
     val appName: String,
-    val eventSink: (CreatePinEvents) -> Unit
+    val eventSink: (SetupPinEvents) -> Unit
 ) {
     val pinSize = choosePinEntry.size
     val activePinEntry = if (isConfirmationStep) {

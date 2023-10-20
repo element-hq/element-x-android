@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.auth.numpad
+package io.element.android.features.lockscreen.impl.setup.model
 
-import androidx.compose.runtime.Immutable
+sealed interface PinDigit {
+    data object Empty : PinDigit
+    data class Filled(val value: Char) : PinDigit
 
-@Immutable
-sealed interface PinKeypadModel {
-    data object Empty : PinKeypadModel
-    data object Back : PinKeypadModel
-    data class Number(val number: String) : PinKeypadModel
+    fun toText(): String {
+        return when (this) {
+            is Empty -> ""
+            is Filled -> value.toString()
+        }
+    }
 }

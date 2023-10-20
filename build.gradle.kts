@@ -251,8 +251,7 @@ koverMerged {
                 // Some options can't be tested at the moment
                 excludes += "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*"
                 // Temporary until we have actually something to test.
-                excludes += "io.element.android.features.lockscreen.impl.auth.PinAuthenticationPresenter"
-                excludes += "io.element.android.features.lockscreen.impl.auth.PinAuthenticationPresenter$*"
+                excludes += "io.element.android.features.lockscreen.impl.unlock.PinUnlockPresenter$*"
             }
             bound {
                 minValue = 85

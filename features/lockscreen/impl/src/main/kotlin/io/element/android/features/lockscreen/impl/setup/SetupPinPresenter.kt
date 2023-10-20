@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.setup
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.element.android.features.lockscreen.impl.create.model.PinEntry
-import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
-import io.element.android.features.lockscreen.impl.create.validation.PinValidator
+import io.element.android.features.lockscreen.impl.setup.model.PinEntry
+import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
+import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import javax.inject.Inject
 
 private const val PIN_SIZE = 4
 
-class CreatePinPresenter @Inject constructor(
+class SetupPinPresenter @Inject constructor(
     private val pinValidator: PinValidator,
     private val buildMeta: BuildMeta,
-) : Presenter<CreatePinState> {
+) : Presenter<SetupPinState> {
 
     @Composable
-    override fun present(): CreatePinState {
+    override fun present(): SetupPinState {
         var choosePinEntry by remember {
             mutableStateOf(PinEntry.empty(PIN_SIZE))
         }
@@ -46,20 +46,20 @@ class CreatePinPresenter @Inject constructor(
         var isConfirmationStep by remember {
             mutableStateOf(false)
         }
-        var createPinFailure by remember {
-            mutableStateOf<CreatePinFailure?>(null)
+        var setupPinFailure by remember {
+            mutableStateOf<SetupPinFailure?>(null)
         }
 
-        fun handleEvents(event: CreatePinEvents) {
+        fun handleEvents(event: SetupPinEvents) {
             when (event) {
-                is CreatePinEvents.OnPinEntryChanged -> {
+                is SetupPinEvents.OnPinEntryChanged -> {
                     if (isConfirmationStep) {
                         confirmPinEntry = confirmPinEntry.fillWith(event.entryAsText)
                         if (confirmPinEntry.isPinComplete()) {
                             if (confirmPinEntry == choosePinEntry) {
                                 //TODO save in db and navigate to next screen
                             } else {
-                                createPinFailure = CreatePinFailure.PinsDontMatch
+                                setupPinFailure = SetupPinFailure.PinsDontMatch
                             }
                         }
                     } else {
@@ -67,35 +67,35 @@ class CreatePinPresenter @Inject constructor(
                         if (choosePinEntry.isPinComplete()) {
                             when (val pinValidationResult = pinValidator.isPinValid(choosePinEntry)) {
                                 is PinValidator.Result.Invalid -> {
-                                    createPinFailure = pinValidationResult.failure
+                                    setupPinFailure = pinValidationResult.failure
                                 }
                                 PinValidator.Result.Valid -> isConfirmationStep = true
                             }
                         }
                     }
                 }
-                CreatePinEvents.ClearFailure -> {
-                    when (createPinFailure) {
-                        is CreatePinFailure.PinsDontMatch -> {
+                SetupPinEvents.ClearFailure -> {
+                    when (setupPinFailure) {
+                        is SetupPinFailure.PinsDontMatch -> {
                             choosePinEntry = PinEntry.empty(PIN_SIZE)
                             confirmPinEntry = PinEntry.empty(PIN_SIZE)
                         }
-                        is CreatePinFailure.PinBlacklisted -> {
+                        is SetupPinFailure.PinBlacklisted -> {
                             choosePinEntry = PinEntry.empty(PIN_SIZE)
                         }
                         null -> Unit
                     }
                     isConfirmationStep = false
-                    createPinFailure = null
+                    setupPinFailure = null
                 }
             }
         }
 
-        return CreatePinState(
+        return SetupPinState(
             choosePinEntry = choosePinEntry,
             confirmPinEntry = confirmPinEntry,
             isConfirmationStep = isConfirmationStep,
-            createPinFailure = createPinFailure,
+            SetupPinFailure = setupPinFailure,
             appName = buildMeta.applicationName,
             eventSink = ::handleEvents
         )

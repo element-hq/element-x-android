@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.auth
+package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -41,7 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.lockscreen.impl.auth.numpad.PinKeypad
+import io.element.android.features.lockscreen.impl.unlock.numpad.PinKeypad
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -52,13 +47,13 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun PinAuthenticationView(
-    state: PinAuthenticationState,
+fun PinUnlockView(
+    state: PinUnlockState,
     modifier: Modifier = Modifier,
 ) {
     Surface(modifier) {
         HeaderFooterPage(
-            header = { PinAuthenticationHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)) },
+            header = { PinUnlockHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)) },
             content = {
                 Box(
                     modifier = Modifier
@@ -76,12 +71,12 @@ fun PinAuthenticationView(
 }
 
 @Composable
-private fun PinAuthenticationFooter(state: PinAuthenticationState) {
+private fun PinUnlockFooter(state: PinUnlockState) {
     Button(
         modifier = Modifier.fillMaxWidth(),
         text = "Unlock",
         onClick = {
-            state.eventSink(PinAuthenticationEvents.Unlock)
+            state.eventSink(PinUnlockEvents.Unlock)
         }
     )
 }
@@ -116,7 +111,7 @@ private fun PinDot(
 }
 
 @Composable
-private fun PinAuthenticationHeader(
+private fun PinUnlockHeader(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -151,9 +146,9 @@ private fun PinAuthenticationHeader(
 
 @Composable
 @PreviewsDayNight
-internal fun PinAuthenticationViewPreview(@PreviewParameter(PinAuthenticationStateProvider::class) state: PinAuthenticationState) {
+internal fun PinUnlockViewPreview(@PreviewParameter(PinUnlockStateProvider::class) state: PinUnlockState) {
     ElementPreview {
-        PinAuthenticationView(
+        PinUnlockView(
             state = state,
         )
     }

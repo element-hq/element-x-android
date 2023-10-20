@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.create
+package io.element.android.features.lockscreen.impl.setup
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.lockscreen.impl.create.model.PinDigit
-import io.element.android.features.lockscreen.impl.create.model.PinEntry
-import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
-import io.element.android.features.lockscreen.impl.create.validation.PinValidator
+import io.element.android.features.lockscreen.impl.setup.model.PinDigit
+import io.element.android.features.lockscreen.impl.setup.model.PinEntry
+import io.element.android.features.lockscreen.impl.setup.validation.CreatePinFailure
+import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
