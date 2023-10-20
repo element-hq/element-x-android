@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
@@ -129,8 +130,12 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is AudioMessageType -> {
                 sp.getString(CommonStrings.common_audio)
             }
+            is OtherMessageType -> {
+                messageType.body
+            }
             UnknownMessageType -> {
-                // Display the body as a fallback
+                // Display the body as a fallback, but should not happen anymore
+                // (we have `OtherMessageType` now)
                 messageContent.body
             }
             is NoticeMessageType -> {

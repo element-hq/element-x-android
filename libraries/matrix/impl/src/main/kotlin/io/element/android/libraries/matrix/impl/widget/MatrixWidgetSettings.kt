@@ -23,13 +23,13 @@ import org.matrix.rustcomponents.sdk.WidgetSettings
 import org.matrix.rustcomponents.sdk.generateWebviewUrl
 
 fun MatrixWidgetSettings.toRustWidgetSettings() = WidgetSettings(
-    id = this.id,
+    widgetId = this.id,
     initAfterContentLoad = this.initAfterContentLoad,
     rawUrl = this.rawUrl,
 )
 
 fun MatrixWidgetSettings.Companion.fromRustWidgetSettings(widgetSettings: WidgetSettings) = MatrixWidgetSettings(
-    id = widgetSettings.id,
+    id = widgetSettings.widgetId,
     initAfterContentLoad = widgetSettings.initAfterContentLoad,
     rawUrl = widgetSettings.rawUrl,
 )

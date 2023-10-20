@@ -69,8 +69,8 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
-import org.matrix.rustcomponents.sdk.WidgetPermissions
-import org.matrix.rustcomponents.sdk.WidgetPermissionsProvider
+import org.matrix.rustcomponents.sdk.WidgetCapabilities
+import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import timber.log.Timber
@@ -497,9 +497,9 @@ class RustMatrixRoom(
         RustWidgetDriver(
             widgetSettings = widgetSettings,
             room = innerRoom,
-            widgetPermissionsProvider = object : WidgetPermissionsProvider {
-                override fun acquirePermissions(permissions: WidgetPermissions): WidgetPermissions {
-                    return permissions
+            widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
+                override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
+                    return capabilities
                 }
            },
         )

@@ -37,7 +37,7 @@ class DefaultCallWidgetSettingsProvider @Inject constructor() : CallWidgetSettin
             appPrompt = false,
             skipLobby = true,
             confineToRoom = true,
-            fonts = null,
+            font = null,
             analyticsId = null
         )
         val rustWidgetSettings = newVirtualElementCallWidget(options)

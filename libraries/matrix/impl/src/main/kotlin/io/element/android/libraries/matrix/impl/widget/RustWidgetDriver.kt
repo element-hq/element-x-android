@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.WidgetPermissionsProvider
+import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.makeWidgetDriver
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.coroutineContext
@@ -33,7 +33,7 @@ import kotlin.coroutines.coroutineContext
 class RustWidgetDriver(
     widgetSettings: MatrixWidgetSettings,
     private val room: Room,
-    private val widgetPermissionsProvider: WidgetPermissionsProvider,
+    private val widgetCapabilitiesProvider: WidgetCapabilitiesProvider,
 ): MatrixWidgetDriver {
 
     override val incomingMessages = MutableSharedFlow<String>()
@@ -54,7 +54,7 @@ class RustWidgetDriver(
         val coroutineScope = CoroutineScope(coroutineContext)
         coroutineScope.launch {
             // This call will suspend the coroutine while the driver is running, so it needs to be launched separately
-            driverAndHandle.driver.run(room, widgetPermissionsProvider)
+            driverAndHandle.driver.run(room, widgetCapabilitiesProvider)
         }
         receiveMessageJob = coroutineScope.launch(Dispatchers.IO) {
             try {
