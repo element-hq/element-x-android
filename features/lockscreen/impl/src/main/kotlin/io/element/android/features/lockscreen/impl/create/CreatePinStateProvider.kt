@@ -55,6 +55,7 @@ fun aCreatePinState(
     confirmPinEntry = confirmPinEntry,
     isConfirmationStep = isConfirmationStep,
     createPinFailure = creationFailure,
+    appName = "Element",
     eventSink = {}
 )
 

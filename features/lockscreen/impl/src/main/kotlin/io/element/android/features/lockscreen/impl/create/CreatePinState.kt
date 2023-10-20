@@ -24,6 +24,7 @@ data class CreatePinState(
     val confirmPinEntry: PinEntry,
     val isConfirmationStep: Boolean,
     val createPinFailure: CreatePinFailure?,
+    val appName: String,
     val eventSink: (CreatePinEvents) -> Unit
 ) {
     val pinSize = choosePinEntry.size

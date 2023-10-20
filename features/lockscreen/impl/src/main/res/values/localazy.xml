@@ -10,12 +10,13 @@
   <string name="screen_app_lock_settings_remove_pin">"Remove PIN"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_message">"Are you sure you want to remove PIN?"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_title">"Remove PIN?"</string>
-  <string name="screen_app_lock_setup_choose_pin">"Choose %1$d digit PIN"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Choose PIN"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Confirm PIN"</string>
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"You cannot choose this as your PIN code for security reasons"</string>
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Choose a different PIN"</string>
-  <string name="screen_app_lock_setup_pin_context">"Lock Element to add extra security to your chats."</string>
-  <string name="screen_app_lock_setup_pin_context_warning">"Choose something memorable. If you forget this PIN, you will be logged out of the app."</string>
+  <string name="screen_app_lock_setup_pin_context">"Lock %1$s to add extra security to your chats.
+
+Choose something memorable. If you forget this PIN, you will be logged out of the app."</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Please enter the same PIN twice"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs don\'t match"</string>
   <string name="screen_app_lock_signout_alert_message">"You’ll need to re-login and create a new PIN to proceed"</string>

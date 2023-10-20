@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -38,14 +37,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.R
@@ -89,7 +86,7 @@ fun CreatePinView(
                     .verticalScroll(state = scrollState)
                     .padding(vertical = 16.dp, horizontal = 20.dp),
             ) {
-                CreatePinHeader(state.isConfirmationStep, state.pinSize)
+                CreatePinHeader(state.isConfirmationStep, state.appName)
                 CreatePinContent(state)
             }
         }
@@ -99,7 +96,7 @@ fun CreatePinView(
 @Composable
 private fun CreatePinHeader(
     isValidationStep: Boolean,
-    pinSize: Int,
+    appName: String,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -110,17 +107,10 @@ private fun CreatePinHeader(
             title = if (isValidationStep) {
                 stringResource(id = R.string.screen_app_lock_setup_confirm_pin)
             } else {
-                stringResource(id = R.string.screen_app_lock_setup_choose_pin, pinSize)
+                stringResource(id = R.string.screen_app_lock_setup_choose_pin)
             },
-            subTitle = stringResource(id = R.string.screen_app_lock_setup_pin_context),
+            subTitle = stringResource(id = R.string.screen_app_lock_setup_pin_context, appName),
             iconImageVector = Icons.Filled.Lock,
-        )
-        Text(
-            text = stringResource(id = R.string.screen_app_lock_setup_pin_context_warning),
-            modifier = Modifier.padding(top = 24.dp),
-            textAlign = TextAlign.Center,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.secondary,
         )
     }
 }

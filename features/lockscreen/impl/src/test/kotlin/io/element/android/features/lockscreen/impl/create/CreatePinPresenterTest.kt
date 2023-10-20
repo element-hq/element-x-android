@@ -24,6 +24,7 @@ import io.element.android.features.lockscreen.impl.create.model.PinDigit
 import io.element.android.features.lockscreen.impl.create.model.PinEntry
 import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
 import io.element.android.features.lockscreen.impl.create.validation.PinValidator
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -108,6 +109,6 @@ class CreatePinPresenterTest {
     }
 
     private fun createCreatePinPresenter(): CreatePinPresenter {
-        return CreatePinPresenter(PinValidator())
+        return CreatePinPresenter(PinValidator(), aBuildMeta())
     }
 }

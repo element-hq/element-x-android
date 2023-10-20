@@ -25,12 +25,14 @@ import io.element.android.features.lockscreen.impl.create.model.PinEntry
 import io.element.android.features.lockscreen.impl.create.validation.CreatePinFailure
 import io.element.android.features.lockscreen.impl.create.validation.PinValidator
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import javax.inject.Inject
 
 private const val PIN_SIZE = 4
 
 class CreatePinPresenter @Inject constructor(
     private val pinValidator: PinValidator,
+    private val buildMeta: BuildMeta,
 ) : Presenter<CreatePinState> {
 
     @Composable
@@ -94,6 +96,7 @@ class CreatePinPresenter @Inject constructor(
             confirmPinEntry = confirmPinEntry,
             isConfirmationStep = isConfirmationStep,
             createPinFailure = createPinFailure,
+            appName = buildMeta.applicationName,
             eventSink = ::handleEvents
         )
     }
