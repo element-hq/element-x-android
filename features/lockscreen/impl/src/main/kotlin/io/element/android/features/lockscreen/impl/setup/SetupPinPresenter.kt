@@ -55,7 +55,7 @@ class SetupPinPresenter @Inject constructor(
                 is SetupPinEvents.OnPinEntryChanged -> {
                     if (isConfirmationStep) {
                         confirmPinEntry = confirmPinEntry.fillWith(event.entryAsText)
-                        if (confirmPinEntry.isPinComplete()) {
+                        if (confirmPinEntry.isComplete()) {
                             if (confirmPinEntry == choosePinEntry) {
                                 //TODO save in db and navigate to next screen
                             } else {
@@ -64,7 +64,7 @@ class SetupPinPresenter @Inject constructor(
                         }
                     } else {
                         choosePinEntry = choosePinEntry.fillWith(event.entryAsText)
-                        if (choosePinEntry.isPinComplete()) {
+                        if (choosePinEntry.isComplete()) {
                             when (val pinValidationResult = pinValidator.isPinValid(choosePinEntry)) {
                                 is PinValidator.Result.Invalid -> {
                                     setupPinFailure = pinValidationResult.failure

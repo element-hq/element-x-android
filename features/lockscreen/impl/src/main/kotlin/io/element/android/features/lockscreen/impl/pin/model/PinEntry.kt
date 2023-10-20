@@ -50,12 +50,34 @@ data class PinEntry(
         return copy(digits = newDigits.toPersistentList())
     }
 
+    fun deleteLast(): PinEntry {
+        if (isEmpty()) return this
+        val newDigits = digits.toMutableList()
+        newDigits.indexOfLast { it is PinDigit.Filled }.also { lastFilled ->
+            newDigits[lastFilled] = PinDigit.Empty
+        }
+        return copy(digits = newDigits.toPersistentList())
+    }
+
+    fun addDigit(digit: Char): PinEntry {
+        if (isComplete()) return this
+        val newDigits = digits.toMutableList()
+        newDigits.indexOfFirst { it is PinDigit.Empty }.also { firstEmpty ->
+            newDigits[firstEmpty] = PinDigit.Filled(digit)
+        }
+        return copy(digits = newDigits.toPersistentList())
+    }
+
     fun clear(): PinEntry {
         return fillWith("")
     }
 
-    fun isPinComplete(): Boolean {
+    fun isComplete(): Boolean {
         return digits.all { it is PinDigit.Filled }
+    }
+
+    fun isEmpty(): Boolean {
+        return digits.all { it is PinDigit.Empty }
     }
 
     fun toText(): String {

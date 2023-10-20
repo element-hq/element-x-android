@@ -17,6 +17,7 @@
 package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 
 open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
     override val values: Sequence<PinUnlockState>
@@ -25,6 +26,9 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
         )
 }
 
-fun aPinUnlockState() = PinUnlockState(
+fun aPinUnlockState(
+    pinEntry: PinEntry = PinEntry.empty(4),
+) = PinUnlockState(
+    pinEntry = pinEntry,
     eventSink = {}
 )

@@ -36,11 +36,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.lockscreen.impl.pin.model.PinDigit
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.numpad.PinKeypad
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -53,7 +54,12 @@ fun PinUnlockView(
 ) {
     Surface(modifier) {
         HeaderFooterPage(
-            header = { PinUnlockHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)) },
+            header = {
+                PinUnlockHeader(
+                    state = state,
+                    modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)
+                )
+            },
             content = {
                 Box(
                     modifier = Modifier
@@ -62,7 +68,9 @@ fun PinUnlockView(
                     contentAlignment = Alignment.Center,
                 ) {
                     PinKeypad(
-                        onClick = {}
+                        onClick = {
+                            state.eventSink(PinUnlockEvents.OnPinKeypadPressed(it))
+                        }
                     )
                 }
             }
@@ -71,25 +79,14 @@ fun PinUnlockView(
 }
 
 @Composable
-private fun PinUnlockFooter(state: PinUnlockState) {
-    Button(
-        modifier = Modifier.fillMaxWidth(),
-        text = "Unlock",
-        onClick = {
-            state.eventSink(PinUnlockEvents.Unlock)
-        }
-    )
-}
-
-@Composable
 private fun PinDotsRow(
+    pinEntry: PinEntry,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier, horizontalArrangement = spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-        PinDot(isFilled = true)
-        PinDot(isFilled = true)
-        PinDot(isFilled = false)
-        PinDot(isFilled = false)
+        for (digit in pinEntry.digits) {
+            PinDot(isFilled = digit is PinDigit.Filled)
+        }
     }
 }
 
@@ -112,6 +109,7 @@ private fun PinDot(
 
 @Composable
 private fun PinUnlockHeader(
+    state: PinUnlockState,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -140,7 +138,7 @@ private fun PinUnlockHeader(
             color = MaterialTheme.colorScheme.secondary,
         )
         Spacer(Modifier.height(24.dp))
-        PinDotsRow()
+        PinDotsRow(state.pinEntry)
     }
 }
 

@@ -16,6 +16,9 @@
 
 package io.element.android.features.lockscreen.impl.unlock
 
+import io.element.android.features.lockscreen.impl.unlock.numpad.PinKeypadModel
+
 sealed interface PinUnlockEvents {
+    data class OnPinKeypadPressed(val pinKeypadModel: PinKeypadModel) : PinUnlockEvents
     data object Unlock : PinUnlockEvents
 }

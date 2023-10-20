@@ -16,6 +16,9 @@
 
 package io.element.android.features.lockscreen.impl.unlock
 
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
+
 data class PinUnlockState(
+    val pinEntry: PinEntry,
     val eventSink: (PinUnlockEvents) -> Unit
 )

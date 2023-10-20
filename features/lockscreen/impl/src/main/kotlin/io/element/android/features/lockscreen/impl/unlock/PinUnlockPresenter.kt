@@ -17,7 +17,13 @@
 package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.element.android.features.lockscreen.api.LockScreenStateService
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
+import io.element.android.features.lockscreen.impl.unlock.numpad.PinKeypadModel
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -31,13 +37,32 @@ class PinUnlockPresenter @Inject constructor(
     @Composable
     override fun present(): PinUnlockState {
 
+        var pinEntry by remember {
+            mutableStateOf(PinEntry.empty(4))
+        }
+
         fun handleEvents(event: PinUnlockEvents) {
             when (event) {
                 PinUnlockEvents.Unlock -> coroutineScope.launch { pinStateService.unlock() }
+                is PinUnlockEvents.OnPinKeypadPressed -> {
+                    pinEntry = pinEntry.process(event.pinKeypadModel)
+                    if (pinEntry.isComplete()) {
+                        coroutineScope.launch { pinStateService.unlock() }
+                    }
+                }
             }
         }
         return PinUnlockState(
+            pinEntry = pinEntry,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun PinEntry.process(pinKeypadModel: PinKeypadModel): PinEntry {
+        return when (pinKeypadModel) {
+            PinKeypadModel.Back -> deleteLast()
+            is PinKeypadModel.Number -> addDigit(pinKeypadModel.number)
+            PinKeypadModel.Empty -> this
+        }
     }
 }

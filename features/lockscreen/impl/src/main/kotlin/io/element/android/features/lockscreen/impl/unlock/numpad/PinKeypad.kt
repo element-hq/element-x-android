@@ -61,25 +61,25 @@ fun PinKeypad(
         PinKeypadRow(
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = listOf(PinKeypadModel.Number("1"), PinKeypadModel.Number("2"), PinKeypadModel.Number("3")),
+            models = listOf(PinKeypadModel.Number('1'), PinKeypadModel.Number('2'), PinKeypadModel.Number('3')),
             onClick = onClick,
         )
         PinKeypadRow(
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = listOf(PinKeypadModel.Number("4"), PinKeypadModel.Number("5"), PinKeypadModel.Number("6")),
+            models = listOf(PinKeypadModel.Number('4'), PinKeypadModel.Number('5'), PinKeypadModel.Number('6')),
             onClick = onClick,
         )
         PinKeypadRow(
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = listOf(PinKeypadModel.Number("7"), PinKeypadModel.Number("8"), PinKeypadModel.Number("9")),
+            models = listOf(PinKeypadModel.Number('7'), PinKeypadModel.Number('8'), PinKeypadModel.Number('9')),
             onClick = onClick,
         )
         PinKeypadRow(
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = listOf(PinKeypadModel.Empty, PinKeypadModel.Number("0"), PinKeypadModel.Back),
+            models = listOf(PinKeypadModel.Empty, PinKeypadModel.Number('0'), PinKeypadModel.Back),
             onClick = onClick,
         )
     }
@@ -114,7 +114,7 @@ private fun PinKeypadRow(
                     PinKeyBadDigitButton(
                         size = 80.dp,
                         modifier = commonModifier,
-                        digit = model.number,
+                        digit = model.number.toString(),
                         onClick = { onClick(model) },
                     )
                 }

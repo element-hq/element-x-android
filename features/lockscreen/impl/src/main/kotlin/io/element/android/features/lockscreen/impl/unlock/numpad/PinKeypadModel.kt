@@ -22,5 +22,5 @@ import androidx.compose.runtime.Immutable
 sealed interface PinKeypadModel {
     data object Empty : PinKeypadModel
     data object Back : PinKeypadModel
-    data class Number(val number: String) : PinKeypadModel
+    data class Number(val number: Char) : PinKeypadModel
 }
