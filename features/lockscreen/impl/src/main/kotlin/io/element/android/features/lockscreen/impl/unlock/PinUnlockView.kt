@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -65,12 +66,15 @@ fun PinUnlockView(
                     modifier = Modifier
                         .padding(top = 40.dp)
                         .fillMaxWidth(),
-                    contentAlignment = Alignment.Center,
                 ) {
                     PinKeypad(
                         onClick = {
                             state.eventSink(PinUnlockEvents.OnPinKeypadPressed(it))
-                        }
+                        },
+                        horizontalArrangement = spacedBy(24.dp, Alignment.CenterHorizontally),
+                        verticalArrangement = spacedBy(16.dp, Alignment.CenterVertically),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalAlignment = Alignment.CenterVertically,
                     )
                 }
             }

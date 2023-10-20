@@ -17,18 +17,21 @@
 package io.element.android.features.lockscreen.impl.unlock.numpad
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -96,7 +99,7 @@ private fun PinKeypadRow(
     Row(
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = verticalAlignment,
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
     ) {
         val commonModifier = Modifier.size(80.dp)
         for (model in models) {
@@ -124,21 +127,30 @@ private fun PinKeypadRow(
 }
 
 @Composable
+private fun PinKeypadButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .clip(CircleShape)
+            .background(color = ElementTheme.colors.bgSubtlePrimary)
+            .clickable(onClick = onClick),
+        content = content
+    )
+}
+
+@Composable
 private fun PinKeyBadDigitButton(
     digit: String,
     size: Dp,
     onClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Button(
-        colors = ButtonDefaults.buttonColors(
-            containerColor = ElementTheme.colors.bgSubtlePrimary,
-            contentColor = Color.Transparent,
-        ),
-        shape = CircleShape,
-        contentPadding = PaddingValues(0.dp),
-        modifier = modifier
-            .clip(CircleShape),
+    PinKeypadButton(
+        modifier = modifier,
         onClick = { onClick(digit) }
     ) {
         val fontSize = 80.dp.toSp() / 2
@@ -158,10 +170,8 @@ private fun PinKeypadBackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    IconButton(
-        modifier = modifier
-            .clip(CircleShape)
-            .background(color = Color.Transparent, shape = CircleShape),
+    PinKeypadButton(
+        modifier = modifier,
         onClick = onClick,
     ) {
         Icon(
