@@ -155,8 +155,10 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
-                    localCoroutineScope.launch {
-                        richTextEditorState.setHtml("")
+                    if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
+                        localCoroutineScope.launch {
+                            richTextEditorState.setHtml("")
+                        }
                     }
                     messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
