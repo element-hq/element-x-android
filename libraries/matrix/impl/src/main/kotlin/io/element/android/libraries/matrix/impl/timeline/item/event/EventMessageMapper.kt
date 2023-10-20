@@ -104,7 +104,7 @@ class EventMessageMapper {
         is RustMessageType.Location -> {
             LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
         }
-        null -> UnknownMessageType
+        else -> UnknownMessageType
     }
 }
 
