@@ -78,7 +78,9 @@ fun PinUnlockView(
                 )
             }
             val footer = @Composable {
-                PinUnlockFooter()
+                PinUnlockFooter(
+                    modifier = Modifier.padding(top = 24.dp)
+                )
             }
             val content = @Composable { constraints: BoxWithConstraintsScope ->
                 PinKeypad(

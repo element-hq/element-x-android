@@ -49,7 +49,7 @@ import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-private val spaceBetweenPinKey = 8.dp
+private val spaceBetweenPinKey = 16.dp
 private val maxSizePinKey = 80.dp
 
 @Composable
