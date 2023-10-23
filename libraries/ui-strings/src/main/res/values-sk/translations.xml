@@ -219,7 +219,7 @@
   <string name="screen_analytics_settings_share_data">"Zdieľať analytické údaje"</string>
   <string name="screen_chat_backup_key_backup_action_disable">"Vypnúť zálohovanie"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Zapnúť zálohovanie"</string>
-  <string name="screen_chat_backup_key_backup_description">"Zálohovanie zaisťuje, že nestratíte históriu správ."</string>
+  <string name="screen_chat_backup_key_backup_description">"Zálohovanie zaisťuje, že nestratíte históriu správ. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Zálohovanie"</string>
   <string name="screen_chat_backup_recovery_action_change">"Zmeniť kľúč na obnovenie"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Potvrdiť kľúč na obnovenie"</string>
