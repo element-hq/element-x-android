@@ -78,6 +78,7 @@
   <string name="action_start_verification">"Start verification"</string>
   <string name="action_static_map_load">"Tap to load map"</string>
   <string name="action_take_photo">"Take photo"</string>
+  <string name="action_try_again">"Try again"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="action_edit_poll">"Edit poll"</string>
@@ -182,6 +183,7 @@
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
   <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
+  <string name="error_failed_uploading_voice_message">"Failed to upload your voice message."</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
