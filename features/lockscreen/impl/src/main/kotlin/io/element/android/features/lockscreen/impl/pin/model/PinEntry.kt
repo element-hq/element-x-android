@@ -41,9 +41,9 @@ data class PinEntry(
      * @return the new PinEntry
      */
     fun fillWith(text: String): PinEntry {
-        val newDigits = digits.toMutableList()
+        val newDigits = MutableList<PinDigit>(size) { PinDigit.Empty }
         text.forEachIndexed { index, char ->
-            if (index < size) {
+            if (index < size && char.isDigit()) {
                 newDigits[index] = PinDigit.Filled(char)
             }
         }

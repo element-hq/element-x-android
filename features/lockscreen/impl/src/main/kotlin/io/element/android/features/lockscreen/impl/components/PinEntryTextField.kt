@@ -47,11 +47,11 @@ fun PinEntryTextField(
 ) {
     BasicTextField(
         modifier = modifier,
-        value = TextFieldValue(pinEntry.toText()),
+        value = pinEntry.toText(),
         onValueChange = {
-            onValueChange(it.text)
+            onValueChange(it)
         },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         decorationBox = {
             PinEntryRow(pinEntry = pinEntry)
         }

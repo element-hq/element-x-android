@@ -38,7 +38,7 @@ class SetupPinNode @AssistedInject constructor(
         val state = presenter.present()
         SetupPinView(
             state = state,
-            onBackClicked = { },
+            onBackClicked = this::navigateUp,
             modifier = modifier
         )
     }
