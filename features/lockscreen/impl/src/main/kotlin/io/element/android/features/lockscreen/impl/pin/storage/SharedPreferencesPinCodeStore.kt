@@ -21,6 +21,7 @@ import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.di.SingleIn
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -36,7 +37,7 @@ private const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
 @ContributesBinding(AppScope::class)
 class SharedPreferencesPinCodeStore @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
-    private val sharedPreferences: SharedPreferences,
+    @DefaultPreferences private val sharedPreferences: SharedPreferences,
 ) : PinCodeStore {
 
     private val listeners = CopyOnWriteArrayList<PinCodeStore.Listener>()
