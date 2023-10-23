@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.textcomposer.BuildConfig
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
@@ -81,19 +80,17 @@ private fun DebugAudioLevel(
     level: Double,
     modifier: Modifier = Modifier,
 ) {
-    if (BuildConfig.DEBUG) {
+    Box(
+        modifier = modifier
+            .height(26.dp)
+    ) {
         Box(
-            modifier = modifier
-                .height(26.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .fillMaxWidth(level.toFloat())
-                    .background(ElementTheme.colors.iconQuaternary, shape = MaterialTheme.shapes.small)
-                    .fillMaxHeight()
-            )
-        }
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .fillMaxWidth(level.toFloat())
+                .background(ElementTheme.colors.iconQuaternary, shape = MaterialTheme.shapes.small)
+                .fillMaxHeight()
+        )
     }
 }
 

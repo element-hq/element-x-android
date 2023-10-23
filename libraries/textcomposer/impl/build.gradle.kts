@@ -22,9 +22,6 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.textcomposer"
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 dependencies {
