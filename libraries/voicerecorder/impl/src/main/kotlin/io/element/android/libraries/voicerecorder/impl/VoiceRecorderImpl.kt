@@ -66,9 +66,9 @@ class VoiceRecorderImpl @Inject constructor(
     override val state: StateFlow<VoiceRecorderState> = _state
 
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    override suspend fun startRecord(groupId: String) {
+    override suspend fun startRecord() {
         Timber.i("Voice recorder started recording")
-        outputFile = fileManager.createFile(groupId)
+        outputFile = fileManager.createFile()
             .also(encoder::init)
 
         val audioRecorder = audioReaderFactory.create(config, dispatchers).also { audioReader = it }

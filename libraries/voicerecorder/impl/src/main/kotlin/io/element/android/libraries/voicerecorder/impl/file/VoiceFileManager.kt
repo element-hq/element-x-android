@@ -19,7 +19,7 @@ package io.element.android.libraries.voicerecorder.impl.file
 import java.io.File
 
 interface VoiceFileManager {
-    fun createFile(groupId: String): File
+    fun createFile(): File
 
     fun deleteFile(file: File)
 }

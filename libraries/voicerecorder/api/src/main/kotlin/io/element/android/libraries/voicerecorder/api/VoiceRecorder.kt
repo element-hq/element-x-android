@@ -28,11 +28,9 @@ interface VoiceRecorder {
      * Start a recording.
      *
      * Call [stopRecord] to stop the recording and release resources.
-     *
-     * @param groupId A unique ID to identify a group of recordings. Used to generate the cache subdirectory.
      */
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    suspend fun startRecord(groupId: String)
+    suspend fun startRecord()
 
     /**
      * Stop the current recording.

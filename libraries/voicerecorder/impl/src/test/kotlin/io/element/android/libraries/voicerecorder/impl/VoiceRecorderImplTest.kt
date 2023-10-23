@@ -54,7 +54,7 @@ class VoiceRecorderImplTest {
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
-            voiceRecorder.startRecord("room-id")
+            voiceRecorder.startRecord()
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.0))
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.0))
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.0))
@@ -67,7 +67,7 @@ class VoiceRecorderImplTest {
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
-            voiceRecorder.startRecord(ROOM_ID)
+            voiceRecorder.startRecord()
             skipItems(3)
             voiceRecorder.stopRecord()
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Finished(File(FILE_PATH), "audio/ogg"))
@@ -81,7 +81,7 @@ class VoiceRecorderImplTest {
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
-            voiceRecorder.startRecord(ROOM_ID)
+            voiceRecorder.startRecord()
             skipItems(3)
             voiceRecorder.stopRecord(cancelled = true)
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
@@ -103,15 +103,15 @@ class VoiceRecorderImplTest {
                 source = MediaRecorder.AudioSource.MIC,
             ),
             fileConfig = fileConfig,
-            fileManager = FakeVoiceFileManager(fakeFileSystem, fileConfig),
+            fileManager = FakeVoiceFileManager(fakeFileSystem, fileConfig, FILE_ID),
             audioLevelCalculator = FakeAudioLevelCalculator(),
             appCoroutineScope = backgroundScope,
         )
     }
 
     companion object {
-        const val ROOM_ID = "room-id"
-        const val FILE_PATH = "voice_recordings/room-id.ogg"
+        const val FILE_ID: String = "recording"
+        const val FILE_PATH = "voice_recordings/${FILE_ID}.ogg"
         private lateinit var AUDIO_FORMAT: AudioFormat
 
         // FakeEncoder doesn't actually encode, it just writes the data to the file

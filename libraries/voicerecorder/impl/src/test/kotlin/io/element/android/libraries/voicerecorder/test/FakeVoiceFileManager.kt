@@ -23,9 +23,10 @@ import java.io.File
 class FakeVoiceFileManager(
     private val fakeFileSystem: FakeFileSystem,
     private val config: VoiceFileConfig,
+    private val fileId: String,
 ) : VoiceFileManager {
-    override fun createFile(groupId: String): File {
-        val file = File("${config.cacheSubdir}/$groupId.${config.fileExt}")
+    override fun createFile(): File {
+        val file = File("${config.cacheSubdir}/$fileId.${config.fileExt}")
         fakeFileSystem.createFile(file)
         return file
     }

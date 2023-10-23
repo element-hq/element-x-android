@@ -32,13 +32,13 @@ class FakeVoiceRecorder(
 
     private var securityException: SecurityException? = null
 
-    override suspend fun startRecord(groupId: String) {
+    override suspend fun startRecord() {
         securityException?.let { throw it }
 
         if (curRecording != null) {
             error("Previous recording was not cleared")
         }
-        curRecording = File("$groupId/file.ogg")
+        curRecording = File("file.ogg")
 
         levels.forEach {
             _state.emit(VoiceRecorderState.Recording(it))

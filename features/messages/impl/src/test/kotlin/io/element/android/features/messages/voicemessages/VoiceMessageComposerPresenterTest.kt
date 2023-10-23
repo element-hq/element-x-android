@@ -379,7 +379,6 @@ class VoiceMessageComposerPresenterTest {
             this,
             voiceRecorder,
             analyticsService,
-            matrixRoom,
             mediaSender,
             FakePermissionsPresenterFactory(permissionsPresenter),
         )

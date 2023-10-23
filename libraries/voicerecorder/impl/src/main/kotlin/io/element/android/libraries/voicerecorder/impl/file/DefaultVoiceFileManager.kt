@@ -21,30 +21,30 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.hash.md5
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
 @ContributesBinding(RoomScope::class)
 class DefaultVoiceFileManager @Inject constructor(
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     private val config: VoiceFileConfig,
+    room: MatrixRoom,
 ) : VoiceFileManager {
-    private val outputDirectory: File by lazy { ensureCacheDirectory(context) }
-    override fun createFile(groupId: String): File {
+
+    private val roomId: RoomId = room.roomId
+
+    override fun createFile(): File {
         val fileName = "${UUID.randomUUID()}.${config.fileExt}"
-        val groupDir = File(outputDirectory, groupId.md5()).apply {
-            mkdirs()
-        }
-        return File(groupDir, fileName)
+        val outputDirectory = File(context.cacheDir, config.cacheSubdir)
+        val roomDir = File(outputDirectory, roomId.value.md5())
+            .apply(File::mkdirs)
+        return File(roomDir, fileName)
     }
 
     override fun deleteFile(file: File) {
         file.delete()
     }
-
-    private fun ensureCacheDirectory(
-        context: Context
-    ): File = File(context.cacheDir, config.cacheSubdir)
-        .apply(File::mkdirs)
 }

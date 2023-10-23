@@ -628,7 +628,6 @@ class MessagesPresenterTest {
             this,
             FakeVoiceRecorder(),
             analyticsService,
-            matrixRoom,
             mediaSender,
             permissionsPresenterFactory,
         )

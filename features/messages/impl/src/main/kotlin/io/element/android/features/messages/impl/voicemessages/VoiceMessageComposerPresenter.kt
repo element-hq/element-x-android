@@ -29,7 +29,6 @@ import androidx.lifecycle.Lifecycle
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -49,7 +48,6 @@ class VoiceMessageComposerPresenter @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
     private val voiceRecorder: VoiceRecorder,
     private val analyticsService: AnalyticsService,
-    private val room: MatrixRoom,
     private val mediaSender: MediaSender,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<VoiceMessageComposerState> {
@@ -154,7 +152,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
     private fun CoroutineScope.startRecording() = launch {
         try {
-            voiceRecorder.startRecord(groupId = room.roomId.value)
+            voiceRecorder.startRecord()
         } catch (e: SecurityException) {
             Timber.e(e, "Voice message error")
             analyticsService.trackError(VoiceMessageException.PermissionMissing("Expected permission to record but none", e))
