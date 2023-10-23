@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
@@ -28,7 +29,6 @@ import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyReque
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
-import io.element.android.services.toolbox.api.appname.AppNameProvider
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,7 +39,7 @@ private val loggerTag = LoggerTag("PushersManager", LoggerTag.PushLoggerTag)
 @ContributesBinding(AppScope::class)
 class PushersManager @Inject constructor(
     // private val localeProvider: LocaleProvider,
-    private val appNameProvider: AppNameProvider,
+    private val buildMeta: BuildMeta,
     // private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
     private val pushGatewayNotifyRequest: PushGatewayNotifyRequest,
     private val pushClientSecret: PushClientSecret,
@@ -88,7 +88,7 @@ class PushersManager @Inject constructor(
             appId = PushConfig.pusher_app_id,
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" /* TODO + abs(activeSessionHolder.getActiveSession().myUserId.hashCode())*/,
             lang = "en", // TODO localeProvider.current().language,
-            appDisplayName = appNameProvider.getAppName(),
+            appDisplayName = buildMeta.applicationName,
             deviceDisplayName = "MyDevice", // TODO getDeviceInfoUseCase.execute().displayName().orEmpty(),
             url = gateway,
             defaultPayload = createDefaultPayload(pushClientSecret.getSecretForUser(userId))

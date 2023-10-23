@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.TextFieldListItem
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -200,7 +201,7 @@ private fun EditLinkDialog(
 
 @PreviewsDayNight
 @Composable
-internal fun TextComposerLinkDialogCreateLinkPreview() {
+internal fun TextComposerLinkDialogCreateLinkPreview() = ElementPreview {
     TextComposerLinkDialog(
         onDismissRequest = {},
         linkAction = LinkAction.InsertLink,
@@ -212,7 +213,7 @@ internal fun TextComposerLinkDialogCreateLinkPreview() {
 
 @PreviewsDayNight
 @Composable
-internal fun TextComposerLinkDialogCreateLinkWithoutTextPreview() {
+internal fun TextComposerLinkDialogCreateLinkWithoutTextPreview() = ElementPreview {
     TextComposerLinkDialog(
         onDismissRequest = {},
         linkAction = LinkAction.SetLink(null),
@@ -224,7 +225,7 @@ internal fun TextComposerLinkDialogCreateLinkWithoutTextPreview() {
 
 @PreviewsDayNight
 @Composable
-internal fun TextComposerLinkDialogEditLinkPreview() {
+internal fun TextComposerLinkDialogEditLinkPreview() = ElementPreview {
     TextComposerLinkDialog(
         onDismissRequest = {},
         linkAction = LinkAction.SetLink("https://element.io"),

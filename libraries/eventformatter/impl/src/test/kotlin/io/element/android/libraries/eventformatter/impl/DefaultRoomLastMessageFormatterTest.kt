@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
@@ -204,6 +205,7 @@ class DefaultRoomLastMessageFormatterTest {
                 is EmoteMessageType -> "* $senderName ${type.body}"
                 is TextMessageType,
                 is NoticeMessageType,
+                is OtherMessageType,
                 UnknownMessageType -> body
             }
             Truth.assertWithMessage("$type was not properly handled for DM").that(result).isEqualTo(expectedResult)
@@ -220,6 +222,7 @@ class DefaultRoomLastMessageFormatterTest {
                 is LocationMessageType -> "$senderName: Shared location"
                 is TextMessageType,
                 is NoticeMessageType,
+                is OtherMessageType,
                 UnknownMessageType -> "$senderName: $body"
                 is EmoteMessageType -> "* $senderName ${type.body}"
             }
@@ -231,6 +234,7 @@ class DefaultRoomLastMessageFormatterTest {
                 is LocationMessageType -> false
                 is EmoteMessageType -> false
                 is TextMessageType, is NoticeMessageType -> true
+                is OtherMessageType -> true
                 UnknownMessageType -> true
             }
             if (shouldCreateAnnotatedString) {

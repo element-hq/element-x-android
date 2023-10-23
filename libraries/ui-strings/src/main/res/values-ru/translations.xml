@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_delete">"Удалить"</string>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
   <string name="a11y_notifications_muted">"Звук отключен"</string>
+  <string name="a11y_pause">"Приостановить"</string>
+  <string name="a11y_play">"Воспроизвести"</string>
   <string name="a11y_poll">"Опрос"</string>
   <string name="a11y_poll_end">"Опрос завершен"</string>
   <string name="a11y_send_files">"Отправить файлы"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
+  <string name="a11y_voice_message_record">"Запишите голосовое сообщение. Дважды нажмите и удерживайте, чтобы записать. Отпустите, чтобы закончить запись."</string>
   <string name="action_accept">"Разрешить"</string>
   <string name="action_add_to_timeline">"Добавить в хронологию"</string>
   <string name="action_back">"Назад"</string>
@@ -90,6 +94,7 @@
   <string name="common_emote">"%1$s%2$s"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
   <string name="common_error">"Ошибка"</string>
+  <string name="common_everyone">"Для всех"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_saved_on_disk_android">"Файл сохранен в «Загрузки»"</string>
   <string name="common_forward_message">"Переслать сообщение"</string>

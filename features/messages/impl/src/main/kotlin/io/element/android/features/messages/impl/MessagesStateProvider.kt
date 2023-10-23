@@ -59,7 +59,7 @@ fun aMessagesState() = MessagesState(
     composerState = aMessageComposerState().copy(
         richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
         isFullScreen = false,
-        mode = MessageComposerMode.Normal("Hello"),
+        mode = MessageComposerMode.Normal,
     ),
     voiceMessageComposerState = aVoiceMessageComposerState(),
     timelineState = aTimelineState().copy(

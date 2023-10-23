@@ -8,8 +8,6 @@ appId: ${APP_ID}
 # Back from timeline
 - back
 - assertVisible: "MyR"
-# Close keyboard
-- hideKeyboard
 # Back from search
 - back
 - runFlow: ../assertions/assertHomeDisplayed.yaml
