@@ -38,5 +38,6 @@
   <string name="screen_room_retry_send_menu_title">"Не удалось отправить ваше сообщение"</string>
   <string name="screen_room_timeline_add_reaction">"Добавить эмодзи"</string>
   <string name="screen_room_timeline_less_reactions">"Показать меньше"</string>
+  <string name="screen_room_voice_message_tooltip">"Удерживайте для записи"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
 </resources>

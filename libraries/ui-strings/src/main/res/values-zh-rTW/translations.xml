@@ -25,6 +25,7 @@
   <string name="action_copy_link">"複製連結"</string>
   <string name="action_create">"建立"</string>
   <string name="action_create_a_room">"建立聊天室"</string>
+  <string name="action_decline">"拒絕"</string>
   <string name="action_disable">"停用"</string>
   <string name="action_done">"完成"</string>
   <string name="action_edit">"編輯"</string>
