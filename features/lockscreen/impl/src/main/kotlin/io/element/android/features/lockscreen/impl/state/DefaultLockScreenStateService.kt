@@ -25,13 +25,12 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val GRACE_PERIOD_IN_MILLIS = 90 * 1000L
+//private const val GRACE_PERIOD_IN_MILLIS = 90 * 1000L
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -57,7 +56,7 @@ class DefaultLockScreenStateService @Inject constructor(
     override suspend fun entersBackground() = coroutineScope {
         lockJob = launch {
             if (featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)) {
-                delay(GRACE_PERIOD_IN_MILLIS)
+                //delay(GRACE_PERIOD_IN_MILLIS)
                 _lockScreenState.value = LockScreenState.Locked
             }
         }
