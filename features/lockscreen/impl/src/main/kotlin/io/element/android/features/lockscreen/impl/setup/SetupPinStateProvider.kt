@@ -25,20 +25,20 @@ open class SetupPinStateProvider : PreviewParameterProvider<SetupPinState> {
         get() = sequenceOf(
             aSetupPinState(),
             aSetupPinState(
-                choosePinEntry = PinEntry.empty(4).fillWith("12")
+                choosePinEntry = PinEntry.createEmpty(4).fillWith("12")
             ),
             aSetupPinState(
-                choosePinEntry = PinEntry.empty(4).fillWith("1789"),
+                choosePinEntry = PinEntry.createEmpty(4).fillWith("1789"),
                 isConfirmationStep = true,
             ),
             aSetupPinState(
-                choosePinEntry = PinEntry.empty(4).fillWith("1789"),
-                confirmPinEntry = PinEntry.empty(4).fillWith("1788"),
+                choosePinEntry = PinEntry.createEmpty(4).fillWith("1789"),
+                confirmPinEntry = PinEntry.createEmpty(4).fillWith("1788"),
                 isConfirmationStep = true,
                 creationFailure = SetupPinFailure.PinsDontMatch
             ),
             aSetupPinState(
-                choosePinEntry = PinEntry.empty(4).fillWith("1111"),
+                choosePinEntry = PinEntry.createEmpty(4).fillWith("1111"),
                 creationFailure = SetupPinFailure.PinBlacklisted
             ),
 
@@ -46,8 +46,8 @@ open class SetupPinStateProvider : PreviewParameterProvider<SetupPinState> {
 }
 
 fun aSetupPinState(
-    choosePinEntry: PinEntry = PinEntry.empty(4),
-    confirmPinEntry: PinEntry = PinEntry.empty(4),
+    choosePinEntry: PinEntry = PinEntry.createEmpty(4),
+    confirmPinEntry: PinEntry = PinEntry.createEmpty(4),
     isConfirmationStep: Boolean = false,
     creationFailure: SetupPinFailure? = null,
 ) = SetupPinState(

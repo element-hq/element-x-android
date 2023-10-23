@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
-import io.element.android.features.lockscreen.impl.unlock.numpad.PinKeypad
+import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypad
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview

@@ -21,14 +21,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
-import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
+import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import javax.inject.Inject
-
-private const val PIN_SIZE = 4
 
 class SetupPinPresenter @Inject constructor(
     private val pinValidator: PinValidator,
@@ -38,10 +37,10 @@ class SetupPinPresenter @Inject constructor(
     @Composable
     override fun present(): SetupPinState {
         var choosePinEntry by remember {
-            mutableStateOf(PinEntry.empty(PIN_SIZE))
+            mutableStateOf(PinEntry.createEmpty(LockScreenConfig.PIN_SIZE))
         }
         var confirmPinEntry by remember {
-            mutableStateOf(PinEntry.empty(PIN_SIZE))
+            mutableStateOf(PinEntry.createEmpty(LockScreenConfig.PIN_SIZE))
         }
         var isConfirmationStep by remember {
             mutableStateOf(false)
@@ -77,11 +76,11 @@ class SetupPinPresenter @Inject constructor(
                 SetupPinEvents.ClearFailure -> {
                     when (setupPinFailure) {
                         is SetupPinFailure.PinsDontMatch -> {
-                            choosePinEntry = PinEntry.empty(PIN_SIZE)
-                            confirmPinEntry = PinEntry.empty(PIN_SIZE)
+                            choosePinEntry = choosePinEntry.clear()
+                            confirmPinEntry = confirmPinEntry.clear()
                         }
                         is SetupPinFailure.PinBlacklisted -> {
-                            choosePinEntry = PinEntry.empty(PIN_SIZE)
+                            choosePinEntry = choosePinEntry.clear()
                         }
                         null -> Unit
                     }

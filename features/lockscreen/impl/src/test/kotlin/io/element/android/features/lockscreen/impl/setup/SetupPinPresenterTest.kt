@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
@@ -31,7 +32,7 @@ import org.junit.Test
 
 class SetupPinPresenterTest {
 
-    private val blacklistedPin = PinValidator.BLACKLIST.first()
+    private val blacklistedPin = LockScreenConfig.PIN_BLACKLIST
     private val halfCompletePin = "12"
     private val completePin = "1235"
     private val mismatchedPin = "1236"

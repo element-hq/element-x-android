@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.unlock.numpad
+package io.element.android.appconfig
 
-import androidx.compose.runtime.Immutable
+object LockScreenConfig {
 
-@Immutable
-sealed interface PinKeypadModel {
-    data object Empty : PinKeypadModel
-    data object Back : PinKeypadModel
-    data class Number(val number: Char) : PinKeypadModel
+    /**
+     * Whether the LockScreen is mandatory or not.
+     */
+    const val IS_MANDATORY: Boolean = false
+
+    /**
+     * Some PINs are blacklisted.
+     */
+    val PIN_BLACKLIST = listOf("0000", "1234")
+
+    /**
+     * The size of the PIN.
+     */
+    const val PIN_SIZE = 4
 }

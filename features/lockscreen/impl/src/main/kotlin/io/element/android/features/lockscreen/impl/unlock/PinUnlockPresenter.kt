@@ -23,9 +23,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.api.LockScreenStateService
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
-import io.element.android.features.lockscreen.impl.unlock.numpad.PinKeypadModel
+import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -39,9 +40,11 @@ class PinUnlockPresenter @Inject constructor(
     @Composable
     override fun present(): PinUnlockState {
         var pinEntry by remember {
-            mutableStateOf(PinEntry.empty(4))
+            //TODO fetch size from db
+            mutableStateOf(PinEntry.createEmpty(LockScreenConfig.PIN_SIZE))
         }
         var remainingAttempts by rememberSaveable {
+            //TODO fetch from db
             mutableIntStateOf(3)
         }
         var showWrongPinTitle by rememberSaveable {
@@ -56,6 +59,7 @@ class PinUnlockPresenter @Inject constructor(
                 is PinUnlockEvents.OnPinKeypadPressed -> {
                     pinEntry = pinEntry.process(event.pinKeypadModel)
                     if (pinEntry.isComplete()) {
+                        //TODO check pin with PinCodeManager
                         coroutineScope.launch { pinStateService.unlock() }
                     }
                 }

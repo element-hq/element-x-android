@@ -30,9 +30,11 @@ anvil {
 }
 
 dependencies {
+    ksp(libs.showkase.processor)
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     api(projects.features.lockscreen.api)
+    implementation(projects.appconfig)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
@@ -52,7 +54,4 @@ dependencies {
     testImplementation(projects.libraries.cryptography.test)
     testImplementation(projects.libraries.cryptography.impl)
     testImplementation(projects.libraries.featureflag.test)
-
-
-    ksp(libs.showkase.processor)
 }

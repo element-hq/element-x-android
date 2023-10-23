@@ -23,7 +23,7 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
     override val values: Sequence<PinUnlockState>
         get() = sequenceOf(
             aPinUnlockState(),
-            aPinUnlockState(pinEntry = PinEntry.empty(4).fillWith("12")),
+            aPinUnlockState(pinEntry = PinEntry.createEmpty(4).fillWith("12")),
             aPinUnlockState(showWrongPinTitle = true),
             aPinUnlockState(showSignOutPrompt = true),
             aPinUnlockState(showSignOutPrompt = true, remainingAttempts = 0),
@@ -31,7 +31,7 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
 }
 
 fun aPinUnlockState(
-    pinEntry: PinEntry = PinEntry.empty(4),
+    pinEntry: PinEntry = PinEntry.createEmpty(4),
     remainingAttempts: Int = 3,
     showWrongPinTitle: Boolean = false,
     showSignOutPrompt: Boolean = false,

@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.unlock
+package io.element.android.features.lockscreen.impl.unlock.keypad
 
-import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
+import androidx.compose.runtime.Immutable
 
-sealed interface PinUnlockEvents {
-    data class OnPinKeypadPressed(val pinKeypadModel: PinKeypadModel) : PinUnlockEvents
-    data object OnForgetPin : PinUnlockEvents
-    data object ClearSignOutPrompt : PinUnlockEvents
+@Immutable
+sealed interface PinKeypadModel {
+    data object Empty : PinKeypadModel
+    data object Back : PinKeypadModel
+    data class Number(val number: Char) : PinKeypadModel
 }

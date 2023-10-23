@@ -110,7 +110,7 @@ private fun PinDigitView(
 internal fun PinEntryTextFieldPreview() {
     ElementPreview {
         PinEntryTextField(
-            pinEntry = PinEntry.empty(4).fillWith("12"),
+            pinEntry = PinEntry.createEmpty(4).fillWith("12"),
             onValueChange = {},
         )
     }

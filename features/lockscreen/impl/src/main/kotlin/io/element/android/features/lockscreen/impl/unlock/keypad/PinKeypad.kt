@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.unlock.numpad
+package io.element.android.features.lockscreen.impl.unlock.keypad
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -24,7 +24,7 @@ data class PinEntry(
 ) {
 
     companion object {
-        fun empty(size: Int): PinEntry {
+        fun createEmpty(size: Int): PinEntry {
             val digits = List(size) { PinDigit.Empty }
             return PinEntry(
                 digits = digits.toPersistentList()
@@ -69,7 +69,7 @@ data class PinEntry(
     }
 
     fun clear(): PinEntry {
-        return fillWith("")
+        return createEmpty(size)
     }
 
     fun isComplete(): Boolean {
