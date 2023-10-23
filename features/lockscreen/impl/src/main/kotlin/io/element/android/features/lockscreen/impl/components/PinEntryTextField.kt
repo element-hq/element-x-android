@@ -106,7 +106,7 @@ private fun PinDigitView(
 
 @PreviewsDayNight
 @Composable
-fun PinEntryTextFieldPreview() {
+internal fun PinEntryTextFieldPreview() {
     ElementTheme {
         PinEntryTextField(
             pinEntry = PinEntry.empty(4).fillWith("12"),

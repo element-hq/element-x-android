@@ -199,7 +199,7 @@ private fun PinKeypadBackButton(
 
 @Composable
 @PreviewsDayNight
-fun PinKeypadPreview() {
+internal fun PinKeypadPreview() {
     ElementPreview {
         BoxWithConstraints {
             PinKeypad(
