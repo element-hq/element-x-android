@@ -16,6 +16,22 @@
 
 package io.element.android.features.lockscreen.api
 
-import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.FeatureEntryPoint
 
-interface LockScreenEntryPoint : SimpleFeatureEntryPoint
+interface LockScreenEntryPoint : FeatureEntryPoint {
+
+    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+
+    interface NodeBuilder {
+        fun target(target: Target): NodeBuilder
+        fun build(): Node
+    }
+
+    enum class Target {
+        Settings,
+        Setup,
+        Unlock
+    }
+}

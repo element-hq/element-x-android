@@ -48,11 +48,11 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenState
 import io.element.android.features.lockscreen.api.LockScreenStateService
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
@@ -218,7 +218,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                 createNode<LoggedInNode>(buildContext)
             }
             NavTarget.LockPermanent -> {
-                lockScreenEntryPoint.createNode(this, buildContext)
+                lockScreenEntryPoint.nodeBuilder(this, buildContext)
+                    .target(LockScreenEntryPoint.Target.Unlock)
+                    .build()
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {

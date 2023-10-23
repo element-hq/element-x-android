@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import io.element.android.appconfig.LockScreenConfig
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
@@ -29,9 +30,6 @@ class LockScreenSettingsPresenter @Inject constructor() : Presenter<LockScreenSe
     @Composable
     override fun present(): LockScreenSettingsState {
 
-        var isLockMandatory by remember {
-            mutableStateOf(false)
-        }
         var isBiometricEnabled by remember {
             mutableStateOf(false)
         }
@@ -50,7 +48,7 @@ class LockScreenSettingsPresenter @Inject constructor() : Presenter<LockScreenSe
         }
 
         return LockScreenSettingsState(
-            isLockMandatory = isLockMandatory,
+            isPinMandatory = LockScreenConfig.IS_PIN_MANDATORY,
             isBiometricEnabled = isBiometricEnabled,
             showRemovePinConfirmation = showRemovePinConfirmation,
             eventSink = ::handleEvents

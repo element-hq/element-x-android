@@ -17,7 +17,7 @@
 package io.element.android.features.lockscreen.impl.settings
 
 data class LockScreenSettingsState(
-    val isLockMandatory: Boolean,
+    val isPinMandatory: Boolean,
     val isBiometricEnabled: Boolean,
     val showRemovePinConfirmation: Boolean,
     val eventSink: (LockScreenSettingsEvents) -> Unit

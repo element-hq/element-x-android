@@ -29,6 +29,7 @@ data class PreferencesRootState(
     val devicesManagementUrl: String?,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
+    val showLockScreenSettings: Boolean,
     val showNotificationSettings: Boolean,
     val snackbarMessage: SnackbarMessage?,
 )

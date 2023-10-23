@@ -27,7 +27,26 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultLockScreenEntryPoint @Inject constructor() : LockScreenEntryPoint {
 
-    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
-        return parentNode.createNode<LockScreenFlowNode>(buildContext)
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): LockScreenEntryPoint.NodeBuilder {
+
+        var innerTarget: LockScreenEntryPoint.Target = LockScreenEntryPoint.Target.Unlock
+
+        return object : LockScreenEntryPoint.NodeBuilder {
+            override fun target(target: LockScreenEntryPoint.Target): LockScreenEntryPoint.NodeBuilder {
+                innerTarget = target
+                return this
+            }
+
+            override fun build(): Node {
+                val inputs = LockScreenFlowNode.Inputs(
+                    when (innerTarget) {
+                        LockScreenEntryPoint.Target.Unlock -> LockScreenFlowNode.NavTarget.Unlock
+                        LockScreenEntryPoint.Target.Setup -> LockScreenFlowNode.NavTarget.Setup
+                        LockScreenEntryPoint.Target.Settings -> LockScreenFlowNode.NavTarget.Settings
+                    }
+                )
+                return parentNode.createNode<LockScreenFlowNode>(buildContext, listOf(inputs))
+            }
+        }
     }
 }

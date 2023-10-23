@@ -20,6 +20,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.runtime.Composable
@@ -53,6 +54,7 @@ fun PreferencesRootView(
     onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
+    onOpenLockScreenSettings: ()->Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onOpenAdvancedSettings: () -> Unit,
@@ -116,6 +118,13 @@ fun PreferencesRootView(
             iconResourceId = CommonDrawables.ic_compound_info,
             onClick = onOpenAbout,
         )
+        if (state.showLockScreenSettings) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.common_screen_lock),
+                icon = Icons.Default.Lock,
+                onClick = onOpenLockScreenSettings,
+            )
+        }
         HorizontalDivider()
         if (state.devicesManagementUrl != null) {
             PreferenceText(
@@ -183,6 +192,7 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onSuccessLogout = {},
         onManageAccountClicked = {},
         onOpenNotificationSettings = {},
+        onOpenLockScreenSettings = {},
         onOpenUserProfile = {},
     )
 }

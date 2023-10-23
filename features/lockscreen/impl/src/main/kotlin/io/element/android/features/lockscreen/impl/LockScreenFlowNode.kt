@@ -27,9 +27,11 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsNode
 import io.element.android.features.lockscreen.impl.setup.SetupPinNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
@@ -41,12 +43,16 @@ class LockScreenFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BackstackNode<LockScreenFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Unlock,
+        initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialNavTarget,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
     plugins = plugins,
 ) {
+
+    data class Inputs(
+        val initialNavTarget: NavTarget = NavTarget.Unlock,
+    ) : NodeInputs
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -54,6 +60,9 @@ class LockScreenFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object Setup : NavTarget
+
+        @Parcelize
+        data object Settings : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -63,6 +72,9 @@ class LockScreenFlowNode @AssistedInject constructor(
             }
             NavTarget.Setup -> {
                 createNode<SetupPinNode>(buildContext)
+            }
+            NavTarget.Settings -> {
+                createNode<LockScreenSettingsNode>(buildContext)
             }
         }
     }

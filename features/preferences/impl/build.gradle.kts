@@ -50,6 +50,7 @@ dependencies {
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.features.rageshake.api)
+    implementation(projects.features.lockscreen.api)
     implementation(projects.features.analytics.api)
     implementation(projects.features.ftue.api)
     implementation(projects.features.logout.api)

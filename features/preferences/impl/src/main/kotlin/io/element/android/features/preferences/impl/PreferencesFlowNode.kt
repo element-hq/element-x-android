@@ -29,6 +29,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
@@ -50,6 +51,7 @@ import kotlinx.parcelize.Parcelize
 class PreferencesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val lockScreenEntryPoint: LockScreenEntryPoint,
 ) : BackstackNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -80,6 +82,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object NotificationSettings : NavTarget
+
+        @Parcelize
+        data object LockScreenSettings : NavTarget
 
         @Parcelize
         data class EditDefaultNotificationSetting(val isOneToOne: Boolean) : NavTarget
@@ -114,6 +119,10 @@ class PreferencesFlowNode @AssistedInject constructor(
 
                     override fun onOpenNotificationSettings() {
                         backstack.push(NavTarget.NotificationSettings)
+                    }
+
+                    override fun onOpenLockScreenSettings() {
+                        backstack.push(NavTarget.LockScreenSettings)
                     }
 
                     override fun onOpenAdvancedSettings() {
@@ -161,6 +170,11 @@ class PreferencesFlowNode @AssistedInject constructor(
             is NavTarget.UserProfile -> {
                 val inputs = EditUserProfileNode.Inputs(navTarget.matrixUser)
                 createNode<EditUserProfileNode>(buildContext, listOf(inputs))
+            }
+            NavTarget.LockScreenSettings -> {
+                lockScreenEntryPoint.nodeBuilder(this, buildContext)
+                    .target(LockScreenEntryPoint.Target.Settings)
+                    .build()
             }
         }
     }

@@ -48,7 +48,7 @@ fun LockScreenSettingsView(
                 }
             )
             PreferenceDivider()
-            if (!state.isLockMandatory) {
+            if (!state.isPinMandatory) {
                 PreferenceText(
                     title = stringResource(id = R.string.screen_app_lock_settings_remove_pin),
                     tintColor = ElementTheme.colors.textCriticalPrimary,
