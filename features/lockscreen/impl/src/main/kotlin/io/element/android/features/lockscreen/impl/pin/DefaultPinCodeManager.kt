@@ -37,7 +37,7 @@ class DefaultPinCodeManager @Inject constructor(
         return pinCodeStore.hasPinCode()
     }
 
-    override suspend fun setupPinCode(pinCode: String) {
+    override suspend fun createPinCode(pinCode: String) {
         val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
         val encryptedPinCode = encryptionDecryptionService.encrypt(secretKey, pinCode.toByteArray()).toBase64()
         pinCodeStore.saveEncryptedPinCode(encryptedPinCode)
