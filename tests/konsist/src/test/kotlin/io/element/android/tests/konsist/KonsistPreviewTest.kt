@@ -46,4 +46,15 @@ class KonsistPreviewTest {
                 it.text.contains("ElementPreview")
             }
     }
+
+    @Test
+    fun `Functions with '@PreviewsDayNight' are internal`() {
+        Konsist
+            .scopeFromProject()
+            .functions()
+            .withAllAnnotationsOf(PreviewsDayNight::class)
+            .assertTrue {
+                it.hasInternalModifier
+            }
+    }
 }
