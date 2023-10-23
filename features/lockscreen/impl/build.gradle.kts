@@ -51,6 +51,8 @@ dependencies {
     testImplementation(projects.tests.testutils)
     testImplementation(projects.libraries.cryptography.test)
     testImplementation(projects.libraries.cryptography.impl)
+    testImplementation(projects.libraries.featureflag.test)
+
 
     ksp(libs.showkase.processor)
 }

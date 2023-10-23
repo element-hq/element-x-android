@@ -22,6 +22,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
+import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
+import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
 import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -97,15 +99,6 @@ class SetupPinPresenterTest {
                 state.confirmPinEntry.assertText(completePin)
             }
         }
-    }
-
-    private fun PinEntry.assertText(text: String) {
-        assertThat(toText()).isEqualTo(text)
-    }
-
-    private fun PinEntry.assertEmpty() {
-        val isEmpty = digits.all { it is PinDigit.Empty }
-        assertThat(isEmpty).isTrue()
     }
 
     private fun createSetupPinPresenter(): SetupPinPresenter {

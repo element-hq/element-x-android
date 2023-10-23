@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.unlock
+package io.element.android.features.lockscreen.impl.pin.model
 
-import io.element.android.features.lockscreen.impl.unlock.numpad.PinKeypadModel
+import com.google.common.truth.Truth.assertThat
 
-sealed interface PinUnlockEvents {
-    data class OnPinKeypadPressed(val pinKeypadModel: PinKeypadModel) : PinUnlockEvents
-    data object OnForgetPin : PinUnlockEvents
-    data object ClearSignOutPrompt : PinUnlockEvents
+fun PinEntry.assertText(text: String) {
+    assertThat(toText()).isEqualTo(text)
+}
+
+fun PinEntry.assertEmpty() {
+    val isEmpty = digits.all { it is PinDigit.Empty }
+    assertThat(isEmpty).isTrue()
 }

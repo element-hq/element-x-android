@@ -53,7 +53,6 @@ class PinUnlockPresenter @Inject constructor(
 
         fun handleEvents(event: PinUnlockEvents) {
             when (event) {
-                PinUnlockEvents.Unlock -> coroutineScope.launch { pinStateService.unlock() }
                 is PinUnlockEvents.OnPinKeypadPressed -> {
                     pinEntry = pinEntry.process(event.pinKeypadModel)
                     if (pinEntry.isComplete()) {
@@ -61,6 +60,7 @@ class PinUnlockPresenter @Inject constructor(
                     }
                 }
                 PinUnlockEvents.OnForgetPin -> showSignOutPrompt = true
+                PinUnlockEvents.ClearSignOutPrompt -> showSignOutPrompt = false
             }
         }
         return PinUnlockState(
