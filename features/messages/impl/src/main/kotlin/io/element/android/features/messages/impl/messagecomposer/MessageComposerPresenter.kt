@@ -93,13 +93,13 @@ class MessageComposerPresenter @Inject constructor(
     private var pendingEvent: MessageComposerEvents? = null
 
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
-    private val suggestionsMemberResult = MutableStateFlow<ImmutableList<RoomMember>>(persistentListOf())
+    private val suggestionsMemberResult = MutableStateFlow<ImmutableList<RoomMemberSuggestion>>(persistentListOf())
 
     init {
         suggestionSearchTrigger.combine(room.membersStateFlow) { suggestion, membersState ->
             val members = membersState.roomMembers()
             when {
-                members.isNullOrEmpty() || suggestion == null || suggestion.text.length < 3 -> {
+                members.isNullOrEmpty() || suggestion == null -> {
                     // Hide suggestions
                     suggestionsMemberResult.tryEmit(persistentListOf())
                 }
@@ -107,7 +107,7 @@ class MessageComposerPresenter @Inject constructor(
                     when (suggestion.type) {
                         SuggestionType.Mention -> {
                             val query = suggestion.text.lowercase()
-                            val matchingMembers = members.filter { member ->
+                            val matchingMembers: MutableList<RoomMemberSuggestion> = members.filter { member ->
                                 if (member.membership != RoomMembershipState.JOIN || currentSessionIdHolder.isCurrentSession(member.userId)) {
                                     false
                                 } else {
@@ -115,7 +115,16 @@ class MessageComposerPresenter @Inject constructor(
                                         || member.userId.value.contains(query, ignoreCase = true)
                                 }
                             }
-                            println("Matching members: ${matchingMembers.map { it.userId }}")
+                                .map {
+                                    RoomMemberSuggestion.Member(it)
+                                }
+                                .toMutableList()
+
+                            val shouldAddRoom = query.isEmpty() || "room".contains(query, ignoreCase = true)
+                            if (shouldAddRoom) {
+                                matchingMembers.add(0, RoomMemberSuggestion.Room)
+                            }
+
                             suggestionsMemberResult.tryEmit(matchingMembers.toPersistentList())
                         }
                         else -> {
@@ -409,4 +418,9 @@ class MessageComposerPresenter @Inject constructor(
                 snackbarDispatcher.post(snackbarMessage)
             }
         }
+}
+
+sealed interface RoomMemberSuggestion {
+    object Room : RoomMemberSuggestion
+    data class Member(val roomMember: RoomMember) : RoomMemberSuggestion
 }

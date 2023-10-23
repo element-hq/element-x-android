@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
@@ -34,7 +33,7 @@ data class MessageComposerState(
     val canShareLocation: Boolean,
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
-    val memberSuggestions: ImmutableList<RoomMember>,
+    val memberSuggestions: ImmutableList<RoomMemberSuggestion>,
     val eventSink: (MessageComposerEvents) -> Unit,
 ) {
     val hasFocus: Boolean = richTextEditorState.hasFocus
