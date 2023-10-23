@@ -20,6 +20,7 @@ import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.hash.md5
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -29,7 +30,7 @@ import javax.inject.Inject
 
 @ContributesBinding(RoomScope::class)
 class DefaultVoiceFileManager @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @CacheDirectory private val cacheDir: File,
     private val config: VoiceFileConfig,
     room: MatrixRoom,
 ) : VoiceFileManager {
@@ -38,7 +39,7 @@ class DefaultVoiceFileManager @Inject constructor(
 
     override fun createFile(): File {
         val fileName = "${UUID.randomUUID()}.${config.fileExt}"
-        val outputDirectory = File(context.cacheDir, config.cacheSubdir)
+        val outputDirectory = File(cacheDir, config.cacheSubdir)
         val roomDir = File(outputDirectory, roomId.value.md5())
             .apply(File::mkdirs)
         return File(roomDir, fileName)
