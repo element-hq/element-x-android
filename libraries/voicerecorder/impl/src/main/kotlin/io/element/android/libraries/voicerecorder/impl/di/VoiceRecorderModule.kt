@@ -39,7 +39,7 @@ object VoiceRecorderModule {
                 .setSampleRate(SampleRate.Rate48kHz.toHz().value)
                 .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
                 .build(),
-            bitRate = 24 * 1000, // 24 kbps
+            bitRate = 24_000, // 24 kbps
             source = MediaRecorder.AudioSource.MIC,
         )
 
