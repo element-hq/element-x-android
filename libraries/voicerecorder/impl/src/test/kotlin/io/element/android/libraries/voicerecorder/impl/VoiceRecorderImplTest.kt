@@ -23,6 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.libraries.voicerecorder.impl.audio.Audio
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
+import io.element.android.libraries.voicerecorder.impl.audio.SampleRate
 import io.element.android.libraries.voicerecorder.impl.di.VoiceRecorderModule
 import io.element.android.libraries.voicerecorder.test.FakeAudioLevelCalculator
 import io.element.android.libraries.voicerecorder.test.FakeAudioRecorderFactory
@@ -99,7 +100,8 @@ class VoiceRecorderImplTest {
             encoder = FakeEncoder(fakeFileSystem),
             config = AudioConfig(
                 format = AUDIO_FORMAT,
-                bitRate = 24 * 1000,
+                bitRate = 24_000, // 24 kbps
+                sampleRate = SampleRate,
                 source = MediaRecorder.AudioSource.MIC,
             ),
             fileConfig = fileConfig,

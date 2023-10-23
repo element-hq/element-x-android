@@ -23,25 +23,27 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
-import io.element.android.libraries.voicerecorder.impl.audio.toHz
+import io.element.android.libraries.voicerecorder.impl.audio.SampleRate
 import io.element.android.libraries.voicerecorder.impl.file.VoiceFileConfig
 import io.element.android.opusencoder.OggOpusEncoder
-import io.element.android.opusencoder.configuration.SampleRate
 
 @Module
 @ContributesTo(RoomScope::class)
 object VoiceRecorderModule {
     @Provides
-    fun provideAudioConfig(): AudioConfig =
-        AudioConfig(
+    fun provideAudioConfig(): AudioConfig {
+        val sampleRate = SampleRate
+        return AudioConfig(
             format = AudioFormat.Builder()
                 .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                .setSampleRate(SampleRate.Rate48kHz.toHz().value)
+                .setSampleRate(sampleRate.hz)
                 .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
                 .build(),
             bitRate = 24_000, // 24 kbps
+            sampleRate = sampleRate,
             source = MediaRecorder.AudioSource.MIC,
         )
+    }
 
     @Provides
     fun provideVoiceFileConfig(): VoiceFileConfig =

@@ -39,7 +39,7 @@ class AndroidAudioReader
     private val outputBuffer: ShortArray
 
     init {
-        outputBuffer = createOutputBuffer(config.format.sampleRateHz())
+        outputBuffer = createOutputBuffer(config.sampleRate)
         audioRecord = AudioRecord.Builder().setAudioSource(config.source).setAudioFormat(config.format).setBufferSizeInBytes(outputBuffer.sizeInBytes()).build()
         noiseSuppressor = requestNoiseSuppressor(audioRecord)
         automaticGainControl = requestAutomaticGainControl(audioRecord)
@@ -90,9 +90,9 @@ class AndroidAudioReader
         automaticGainControl = null
     }
 
-    private fun createOutputBuffer(sampleRate: Hz): ShortArray {
+    private fun createOutputBuffer(sampleRate: SampleRate): ShortArray {
         val bufferSizeInShorts = AudioRecord.getMinBufferSize(
-            sampleRate.value,
+            sampleRate.hz,
             config.format.channelMask,
             config.format.encoding
         )

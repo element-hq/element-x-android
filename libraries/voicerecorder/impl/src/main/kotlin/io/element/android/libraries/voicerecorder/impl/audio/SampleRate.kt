@@ -16,20 +16,9 @@
 
 package io.element.android.libraries.voicerecorder.impl.audio
 
-import android.media.AudioFormat
-import android.media.MediaRecorder.AudioSource
+import io.element.android.opusencoder.configuration.SampleRate as LibOpusOggSampleRate
 
-/**
- * Audio configuration for voice recording.
- *
- * @property source the audio source to use, see constants in [AudioSource]
- * @property format the audio format to use, see [AudioFormat]
- * @property sampleRate the sample rate to use. Ensure this matches the value set in [format].
- * @property bitRate the bitrate in bps
- */
-data class AudioConfig(
-    val source: Int,
-    val format: AudioFormat,
-    val sampleRate: SampleRate,
-    val bitRate: Int,
-)
+data object SampleRate {
+    const val hz = 48_000
+    fun asEncoderModel() = LibOpusOggSampleRate.Rate48kHz
+}

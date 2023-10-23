@@ -16,10 +16,8 @@
 
 package io.element.android.libraries.voicerecorder.impl.file
 
-import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.hash.md5
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
