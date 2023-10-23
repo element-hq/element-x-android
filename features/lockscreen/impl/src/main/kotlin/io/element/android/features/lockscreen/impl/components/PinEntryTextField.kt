@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.pinDigitBg
 import io.element.android.libraries.theme.ElementTheme
@@ -107,7 +108,7 @@ private fun PinDigitView(
 @PreviewsDayNight
 @Composable
 internal fun PinEntryTextFieldPreview() {
-    ElementTheme {
+    ElementPreview {
         PinEntryTextField(
             pinEntry = PinEntry.empty(4).fillWith("12"),
             onValueChange = {},

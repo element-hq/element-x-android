@@ -35,4 +35,15 @@ class KonsistPreviewTest {
                     it.hasNameEndingWith("DarkPreview").not()
             }
     }
+
+    @Test
+    fun `Functions with '@PreviewsDayNight' annotation should contain 'ElementPreview' composable`() {
+        Konsist
+            .scopeFromProject()
+            .functions()
+            .withAllAnnotationsOf(PreviewsDayNight::class)
+            .assertTrue {
+                it.text.contains("ElementPreview")
+            }
+    }
 }
