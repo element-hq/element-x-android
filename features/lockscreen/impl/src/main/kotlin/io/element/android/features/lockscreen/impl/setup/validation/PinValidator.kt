@@ -20,7 +20,10 @@ import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import javax.inject.Inject
 
-class PinValidator @Inject constructor() {
+class PinValidator internal constructor(private val pinBlacklist: Set<String>) {
+
+    @Inject
+    constructor() : this(LockScreenConfig.PIN_BLACKLIST)
 
     sealed interface Result {
         data object Valid : Result
@@ -29,7 +32,7 @@ class PinValidator @Inject constructor() {
 
     fun isPinValid(pinEntry: PinEntry): Result {
         val pinAsText = pinEntry.toText()
-        val isBlacklisted = LockScreenConfig.PIN_BLACKLIST.any { it == pinAsText }
+        val isBlacklisted = pinBlacklist.any { it == pinAsText }
         return if (isBlacklisted) {
             Result.Invalid(SetupPinFailure.PinBlacklisted)
         } else {

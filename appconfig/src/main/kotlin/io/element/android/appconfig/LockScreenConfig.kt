@@ -19,14 +19,14 @@ package io.element.android.appconfig
 object LockScreenConfig {
 
     /**
-     * Whether the LockScreen is mandatory or not.
+     * Whether the PIN is mandatory or not.
      */
-    const val IS_MANDATORY: Boolean = false
+    const val IS_PIN_MANDATORY: Boolean = false
 
     /**
      * Some PINs are blacklisted.
      */
-    val PIN_BLACKLIST = listOf("0000", "1234")
+    val PIN_BLACKLIST = setOf("0000", "1234")
 
     /**
      * The size of the PIN.
