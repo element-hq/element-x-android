@@ -46,17 +46,25 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 class VoiceMessageComposerPresenterTest {
 
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private val voiceRecorder = FakeVoiceRecorder()
+    private val voiceRecorder = FakeVoiceRecorder(
+        recordingDuration = RECORDING_DURATION
+    )
     private val analyticsService = FakeAnalyticsService()
     private val matrixRoom = FakeMatrixRoom()
     private val mediaPreProcessor = FakeMediaPreProcessor().apply { givenAudioResult() }
     private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom)
+
+    companion object {
+        private val RECORDING_DURATION = 1.seconds
+        private val RECORDING_STATE = VoiceMessageState.Recording(RECORDING_DURATION, 0.2)
+    }
 
     @Test
     fun `present - initial state`() = runTest {
@@ -80,7 +88,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
 
             val finalState = awaitItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Recording(0.2))
+            assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
 
             testPauseAndDestroy(finalState)
         }
@@ -265,7 +273,7 @@ class VoiceMessageComposerPresenterTest {
 
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             val finalState = awaitItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Recording(0.2))
+            assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
 
             testPauseAndDestroy(finalState)
         }
@@ -298,7 +306,7 @@ class VoiceMessageComposerPresenterTest {
 
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             val finalState = awaitItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Recording(0.2))
+            assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
 
             testPauseAndDestroy(finalState)
         }

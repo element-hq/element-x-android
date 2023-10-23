@@ -21,8 +21,13 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TestTimeSource
 
 class FakeVoiceRecorder(
+    private val timeSource: TestTimeSource = TestTimeSource(),
+    private val recordingDuration: Duration = 0.seconds,
     private val levels: List<Double> = listOf(0.1, 0.2)
 ) : VoiceRecorder {
     private val _state = MutableStateFlow<VoiceRecorderState>(VoiceRecorderState.Idle)
@@ -33,6 +38,7 @@ class FakeVoiceRecorder(
     private var securityException: SecurityException? = null
 
     override suspend fun startRecord() {
+        val startedAt = timeSource.markNow()
         securityException?.let { throw it }
 
         if (curRecording != null) {
@@ -40,8 +46,9 @@ class FakeVoiceRecorder(
         }
         curRecording = File("file.ogg")
 
+        timeSource += recordingDuration
         levels.forEach {
-            _state.emit(VoiceRecorderState.Recording(it))
+            _state.emit(VoiceRecorderState.Recording(startedAt.elapsedNow(), it))
         }
     }
 

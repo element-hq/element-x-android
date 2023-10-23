@@ -141,7 +141,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         return VoiceMessageComposerState(
             voiceMessageState = when (val state = recorderState) {
-                is VoiceRecorderState.Recording -> VoiceMessageState.Recording(level = state.level)
+                is VoiceRecorderState.Recording -> VoiceMessageState.Recording(
+                    duration = state.elapsedTime,
+                    level = state.level
+                )
                 is VoiceRecorderState.Finished -> VoiceMessageState.Preview
                 else -> VoiceMessageState.Idle
             },

@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.textcomposer.model
+plugins {
+    id("io.element.android-library")
+}
 
-import kotlin.time.Duration
+android {
+    namespace = "io.element.android.libraries.ui.utils"
 
-sealed class VoiceMessageState {
-    data object Idle: VoiceMessageState()
-
-    data object Preview: VoiceMessageState()
-    data class Recording(
-        val duration: Duration,
-        val level: Double,
-    ): VoiceMessageState()
+    dependencies {
+        testImplementation(libs.test.junit)
+        testImplementation(libs.test.truth)
+    }
 }

@@ -37,9 +37,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.BeforeClass
 import org.junit.Test
 import java.io.File
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.TestTimeSource
 
 class VoiceRecorderImplTest {
     private val fakeFileSystem = FakeFileSystem()
+    private val timeSource = TestTimeSource()
 
     @Test
     fun `it emits the initial state`() = runTest {
@@ -56,9 +59,10 @@ class VoiceRecorderImplTest {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
             voiceRecorder.startRecord()
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.0))
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.0))
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.0))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.milliseconds, 1.0))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.milliseconds,0.0))
+            timeSource.plusAssign(1000.milliseconds)
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1000.milliseconds, 1.0))
         }
     }
 
@@ -94,6 +98,7 @@ class VoiceRecorderImplTest {
         val fileConfig = VoiceRecorderModule.provideVoiceFileConfig()
         return VoiceRecorderImpl(
             dispatchers = testCoroutineDispatchers(),
+            timeSource = timeSource,
             audioReaderFactory = FakeAudioRecorderFactory(
                 audio = AUDIO,
             ),

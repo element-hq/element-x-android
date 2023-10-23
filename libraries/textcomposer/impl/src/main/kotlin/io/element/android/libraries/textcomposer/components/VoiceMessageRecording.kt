@@ -36,10 +36,14 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.utils.time.formatShort
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 internal fun VoiceMessageRecording(
     level: Double,
+    duration: Duration,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -62,7 +66,7 @@ internal fun VoiceMessageRecording(
 
         // TODO Replace with timer UI
         Text(
-            text = "Recording...", // Not localized because it is a placeholder
+            text = "Recording ${duration.formatShort()}", // Not localized because it is a placeholder
             color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodySmMedium
         )
@@ -98,5 +102,5 @@ private fun DebugAudioLevel(
 @PreviewsDayNight
 @Composable
 internal fun VoiceMessageRecordingPreview() = ElementPreview {
-    VoiceMessageRecording(0.5)
+    VoiceMessageRecording(0.5, 0.seconds)
 }

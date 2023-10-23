@@ -14,16 +14,28 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.textcomposer.model
+package io.element.android.libraries.ui.utils.time
 
 import kotlin.time.Duration
 
-sealed class VoiceMessageState {
-    data object Idle: VoiceMessageState()
+/**
+ * Format a duration as minutes:seconds.
+ *
+ * For example,
+ * - 0 seconds will be formatted as "0:00".
+ * - 65 seconds will be formatted as "1:05".
+ * - 2 hours will be formatted as "120:00".
+ * - negative 10 seconds will be formatted as "-0:10".
+ *
+ * @return the formatted duration.
+ */
+fun Duration.formatShort(): String {
+    // Format as minutes:seconds
+    val seconds = (absoluteValue.inWholeSeconds % 60)
+        .toString()
+        .padStart(2, '0')
 
-    data object Preview: VoiceMessageState()
-    data class Recording(
-        val duration: Duration,
-        val level: Double,
-    ): VoiceMessageState()
+    val sign = isNegative().let { if (it) "-" else "" }
+
+    return "$sign${absoluteValue.inWholeMinutes}:$seconds"
 }
