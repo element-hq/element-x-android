@@ -86,5 +86,6 @@ fun aMessagesState() = MessagesState(
     enableTextFormatting = true,
     enableVoiceMessages = true,
     enableInRoomCalls = true,
+    appName = "Element",
     eventSink = {}
 )

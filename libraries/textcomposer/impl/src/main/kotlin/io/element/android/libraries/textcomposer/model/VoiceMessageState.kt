@@ -18,5 +18,9 @@ package io.element.android.libraries.textcomposer.model
 
 sealed class VoiceMessageState {
     data object Idle: VoiceMessageState()
-    data object Recording: VoiceMessageState()
+
+    data object Preview: VoiceMessageState()
+    data class Recording(
+        val level: Double,
+    ): VoiceMessageState()
 }
