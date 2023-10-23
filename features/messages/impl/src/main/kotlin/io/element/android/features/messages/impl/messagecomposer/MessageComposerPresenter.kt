@@ -155,10 +155,12 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
-                    localCoroutineScope.launch {
-                        richTextEditorState.setHtml("")
+                    if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
+                        localCoroutineScope.launch {
+                            richTextEditorState.setHtml("")
+                        }
                     }
-                    messageComposerContext.composerMode = MessageComposerMode.Normal("")
+                    messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
                     message = event.message,
@@ -253,7 +255,7 @@ class MessageComposerPresenter @Inject constructor(
         val capturedMode = messageComposerContext.composerMode
         // Reset composer right away
         richTextEditorState.setHtml("")
-        updateComposerMode(MessageComposerMode.Normal(""))
+        updateComposerMode(MessageComposerMode.Normal)
         when (capturedMode) {
             is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html)
             is MessageComposerMode.Edit -> {
