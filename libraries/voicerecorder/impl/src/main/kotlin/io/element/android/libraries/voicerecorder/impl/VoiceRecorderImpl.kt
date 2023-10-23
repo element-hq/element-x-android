@@ -37,10 +37,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.TimeSource
 
 @SingleIn(RoomScope::class)
@@ -78,7 +80,16 @@ class VoiceRecorderImpl @Inject constructor(
         recordingJob = voiceCoroutineScope.launch {
             val startedAt = timeSource.markNow()
             audioRecorder.record { audio ->
+                yield()
+
                 val elapsedTime = startedAt.elapsedNow()
+
+                if (elapsedTime >= 30.minutes) {
+                    Timber.w("Voice message time limit reached")
+                    stopRecord(false)
+                    return@record
+                }
+
                 when (audio) {
                     is Audio.Data -> {
                         val audioLevel = audioLevelCalculator.calculateAudioLevel(audio.buffer)

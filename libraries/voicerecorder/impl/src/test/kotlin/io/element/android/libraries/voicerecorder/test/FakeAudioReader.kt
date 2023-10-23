@@ -35,6 +35,7 @@ class FakeAudioReader(
             while (audios.hasNext()) {
                 if (!isRecording) break
                 onAudio(audios.next())
+                yield()
             }
             while (isActive) {
                 // do not return from the coroutine until it is cancelled
