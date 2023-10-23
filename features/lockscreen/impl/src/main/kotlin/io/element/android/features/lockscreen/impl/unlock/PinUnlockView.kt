@@ -126,7 +126,7 @@ fun PinUnlockView(
 }
 
 @Composable
-fun PinUnlockCompactView(
+private fun PinUnlockCompactView(
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
@@ -150,7 +150,7 @@ fun PinUnlockCompactView(
 }
 
 @Composable
-fun PinUnlockExpandedView(
+private fun PinUnlockExpandedView(
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
