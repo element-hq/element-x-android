@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import com.google.common.truth.Truth
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -183,6 +184,35 @@ class NotificationSettingsPresenterTests {
             }.last()
             val updatedMatrixState = updatedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
             Truth.assertThat(updatedMatrixState?.atRoomNotificationsEnabled).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - clear notification settings change error`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService()
+        val presenter = createNotificationSettingsPresenter(notificationSettingsService)
+        notificationSettingsService.givenSetAtRoomError(A_THROWABLE)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val loadedState = consumeItemsUntilPredicate {
+                (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.atRoomNotificationsEnabled == false
+            }.last()
+            val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
+            Truth.assertThat(validMatrixState?.atRoomNotificationsEnabled).isFalse()
+
+            loadedState.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(true))
+            val errorState = consumeItemsUntilPredicate {
+                it.changeNotificationSettingAction.isFailure()
+            }.last()
+            Truth.assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
+            errorState.eventSink(NotificationSettingsEvents.ClearNotificationChangeError)
+
+            val clearErrorState = consumeItemsUntilPredicate {
+                it.changeNotificationSettingAction.isUninitialized()
+            }.last()
+            Truth.assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }

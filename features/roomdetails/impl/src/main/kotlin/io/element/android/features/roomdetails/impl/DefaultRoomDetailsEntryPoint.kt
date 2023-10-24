@@ -29,17 +29,30 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultRoomDetailsEntryPoint @Inject constructor() : RoomDetailsEntryPoint {
-    override fun createNode(
-        parentNode: Node,
-        buildContext: BuildContext,
-        inputs: RoomDetailsEntryPoint.Inputs,
-        plugins: List<Plugin>
-    ): Node {
-        return parentNode.createNode<RoomDetailsFlowNode>(buildContext, plugins + inputs)
+
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDetailsEntryPoint.NodeBuilder {
+        return object : RoomDetailsEntryPoint.NodeBuilder {
+            val plugins = ArrayList<Plugin>()
+
+            override fun params(params: RoomDetailsEntryPoint.Params): RoomDetailsEntryPoint.NodeBuilder {
+                plugins += params
+                return this
+            }
+
+            override fun callback(callback: RoomDetailsEntryPoint.Callback): RoomDetailsEntryPoint.NodeBuilder {
+                plugins += callback
+                return this
+            }
+
+            override fun build(): Node {
+                return parentNode.createNode<RoomDetailsFlowNode>(buildContext, plugins)
+            }
+        }
     }
 }
 
 internal fun InitialTarget.toNavTarget() = when (this) {
     is InitialTarget.RoomDetails -> NavTarget.RoomDetails
     is InitialTarget.RoomMemberDetails -> NavTarget.RoomMemberDetails(roomMemberId)
+    is InitialTarget.RoomNotificationSettings -> NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = true)
 }
