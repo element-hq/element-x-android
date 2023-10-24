@@ -40,7 +40,7 @@ class KeyStoreSecretKeyProvider @Inject constructor() : SecretKeyProvider {
     // False positive lint issue
     @SuppressLint("WrongConstant")
     override fun getOrCreateKey(alias: String): SecretKey {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
+        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).also { it.load(null) }
         val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
             ?.secretKey
         return if (secretKeyEntry == null) {

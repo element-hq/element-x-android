@@ -23,5 +23,4 @@ interface LockScreenStateService {
 
     suspend fun entersForeground()
     suspend fun entersBackground()
-    suspend fun unlock()
 }

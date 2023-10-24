@@ -32,4 +32,9 @@ object LockScreenConfig {
      * The size of the PIN.
      */
     const val PIN_SIZE = 4
+
+    /**
+     * Number of attempts before the user is logged out.
+     */
+    const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
 }

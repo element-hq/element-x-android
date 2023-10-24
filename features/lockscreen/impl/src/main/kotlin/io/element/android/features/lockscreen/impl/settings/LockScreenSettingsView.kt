@@ -34,21 +34,22 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun LockScreenSettingsView(
     state: LockScreenSettingsState,
+    onChangePinClicked: () -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         title = stringResource(id = io.element.android.libraries.ui.strings.R.string.common_screen_lock),
+        onBackPressed = onBackPressed,
         modifier = modifier
     ) {
         PreferenceCategory(showDivider = false) {
             PreferenceText(
                 title = stringResource(id = R.string.screen_app_lock_settings_change_pin),
-                onClick = {
-                    state.eventSink(LockScreenSettingsEvents.ChangePin)
-                }
+                onClick = onChangePinClicked
             )
             PreferenceDivider()
-            if (!state.isPinMandatory) {
+            if (state.showRemovePinOption) {
                 PreferenceText(
                     title = stringResource(id = R.string.screen_app_lock_settings_remove_pin),
                     tintColor = ElementTheme.colors.textCriticalPrimary,
@@ -80,6 +81,10 @@ internal fun LockScreenSettingsViewPreview(
     @PreviewParameter(LockScreenSettingsStateProvider::class) state: LockScreenSettingsState,
 ) {
     ElementPreview {
-        LockScreenSettingsView(state)
+        LockScreenSettingsView(
+            state = state,
+            onChangePinClicked = {},
+            onBackPressed = {},
+        )
     }
 }

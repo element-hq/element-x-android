@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -33,12 +34,22 @@ class LockScreenSettingsNode @AssistedInject constructor(
     private val presenter: LockScreenSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    interface Callback : Plugin {
+        fun onChangePinClicked()
+    }
+
+    private fun onChangePinClicked() {
+        plugins<Callback>().forEach { it.onChangePinClicked() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         LockScreenSettingsView(
             state = state,
-            modifier = modifier
+            onBackPressed = this::navigateUp,
+            onChangePinClicked = this::onChangePinClicked,
+            modifier = modifier,
         )
     }
 }

@@ -226,10 +226,15 @@ private fun PinUnlockHeader(
             color = MaterialTheme.colorScheme.primary,
         )
         Spacer(Modifier.height(8.dp))
-        val subtitle = if (state.showWrongPinTitle) {
-            pluralStringResource(id = R.plurals.screen_app_lock_subtitle_wrong_pin, count = state.remainingAttempts, state.remainingAttempts)
+        val remainingAttempts = state.remainingAttempts.dataOrNull()
+        val subtitle = if (remainingAttempts != null) {
+            if (state.showWrongPinTitle) {
+                pluralStringResource(id = R.plurals.screen_app_lock_subtitle_wrong_pin, count = remainingAttempts, remainingAttempts)
+            } else {
+                stringResource(id = R.string.screen_app_lock_subtitle)
+            }
         } else {
-            stringResource(id = R.string.screen_app_lock_subtitle)
+            ""
         }
         val subtitleColor = if (state.showWrongPinTitle) {
             MaterialTheme.colorScheme.error

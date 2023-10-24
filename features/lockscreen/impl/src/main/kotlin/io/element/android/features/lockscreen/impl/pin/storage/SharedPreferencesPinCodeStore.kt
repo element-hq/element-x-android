@@ -19,6 +19,7 @@ package io.element.android.features.lockscreen.impl.pin.storage
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appconfig.LockScreenConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DefaultPreferences
@@ -31,7 +32,6 @@ import javax.inject.Inject
 
 private const val ENCODED_PIN_CODE_KEY = "ENCODED_PIN_CODE_KEY"
 private const val REMAINING_PIN_CODE_ATTEMPTS_KEY = "REMAINING_PIN_CODE_ATTEMPTS_KEY"
-private const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -57,8 +57,6 @@ class SharedPreferencesPinCodeStore @Inject constructor(
     }
 
     override suspend fun deleteEncryptedPinCode() = withContext(dispatchers.io) {
-        // Also reset the counters
-        resetCounter()
         sharedPreferences.edit {
             remove(ENCODED_PIN_CODE_KEY)
         }
@@ -72,14 +70,12 @@ class SharedPreferencesPinCodeStore @Inject constructor(
     }
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int = withContext(dispatchers.io) {
-        mutex.withLock {
-            sharedPreferences.getInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT)
-        }
+        sharedPreferences.getInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, LockScreenConfig.MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT)
     }
 
     override suspend fun onWrongPin(): Int = withContext(dispatchers.io) {
         mutex.withLock {
-            val remaining = getRemainingPinCodeAttemptsNumber() - 1
+            val remaining = (getRemainingPinCodeAttemptsNumber() - 1).coerceAtLeast(0)
             sharedPreferences.edit {
                 putInt(REMAINING_PIN_CODE_ATTEMPTS_KEY, remaining)
             }

@@ -17,24 +17,22 @@
 package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.appconfig.LockScreenConfig
-import io.element.android.features.lockscreen.api.LockScreenStateService
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PinUnlockPresenter @Inject constructor(
-    private val pinStateService: LockScreenStateService,
-    private val coroutineScope: CoroutineScope,
+    private val pinCodeManager: PinCodeManager,
 ) : Presenter<PinUnlockState> {
 
     @Composable
@@ -43,9 +41,8 @@ class PinUnlockPresenter @Inject constructor(
             //TODO fetch size from db
             mutableStateOf(PinEntry.createEmpty(LockScreenConfig.PIN_SIZE))
         }
-        var remainingAttempts by rememberSaveable {
-            //TODO fetch from db
-            mutableIntStateOf(3)
+        var remainingAttempts by remember {
+            mutableStateOf<Async<Int>>(Async.Uninitialized)
         }
         var showWrongPinTitle by rememberSaveable {
             mutableStateOf(false)
@@ -54,14 +51,25 @@ class PinUnlockPresenter @Inject constructor(
             mutableStateOf(false)
         }
 
+        LaunchedEffect(pinEntry) {
+            if (pinEntry.isComplete()) {
+                val isVerified = pinCodeManager.verifyPinCode(pinEntry.toText())
+                if (!isVerified) {
+                    pinEntry = pinEntry.clear()
+                    showWrongPinTitle = true
+                }
+            }
+            val remainingAttemptsNumber = pinCodeManager.getRemainingPinCodeAttemptsNumber()
+            remainingAttempts = Async.Success(remainingAttemptsNumber)
+            if (remainingAttemptsNumber == 0) {
+                showSignOutPrompt = true
+            }
+        }
+
         fun handleEvents(event: PinUnlockEvents) {
             when (event) {
                 is PinUnlockEvents.OnPinKeypadPressed -> {
                     pinEntry = pinEntry.process(event.pinKeypadModel)
-                    if (pinEntry.isComplete()) {
-                        //TODO check pin with PinCodeManager
-                        coroutineScope.launch { pinStateService.unlock() }
-                    }
                 }
                 PinUnlockEvents.OnForgetPin -> showSignOutPrompt = true
                 PinUnlockEvents.ClearSignOutPrompt -> showSignOutPrompt = false

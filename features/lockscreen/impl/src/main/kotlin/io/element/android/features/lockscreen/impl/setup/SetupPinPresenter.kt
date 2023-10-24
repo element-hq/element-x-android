@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
 import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
@@ -34,6 +35,7 @@ import javax.inject.Inject
 class SetupPinPresenter @Inject constructor(
     private val pinValidator: PinValidator,
     private val buildMeta: BuildMeta,
+    private val pinCodeManager: PinCodeManager,
 ) : Presenter<SetupPinState> {
 
     @Composable
@@ -68,7 +70,7 @@ class SetupPinPresenter @Inject constructor(
         LaunchedEffect(confirmPinEntry) {
             if (confirmPinEntry.isComplete()) {
                 if (confirmPinEntry == choosePinEntry) {
-                    //TODO save in db and navigate to next screen
+                    pinCodeManager.createPinCode(confirmPinEntry.toText())
                 } else {
                     setupPinFailure = SetupPinFailure.PinsDontMatch
                 }
