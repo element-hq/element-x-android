@@ -89,6 +89,7 @@ fun NotificationSettingsView(
                 onGroupChatsClicked = { onOpenEditDefault(false) },
                 onDirectChatsClicked = { onOpenEditDefault(true) },
                 onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
+                // TODO We are removing the call notification toggle until support for call notifications has been added
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
             )
         }
@@ -116,6 +117,7 @@ private fun NotificationSettingsContentView(
     onGroupChatsClicked: () -> Unit,
     onDirectChatsClicked: () -> Unit,
     onMentionNotificationsChanged: (Boolean) -> Unit,
+    // TODO We are removing the call notification toggle until support for call notifications has been added
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -166,7 +168,7 @@ private fun NotificationSettingsContentView(
                 onCheckedChange = onMentionNotificationsChanged
             )
         }
-        // We are removing the call notification toggle until call support has been added
+        // TODO We are removing the call notification toggle until support for call notifications has been added
 //            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_additional_settings_section_title)) {
 //                PreferenceSwitch(
 //                    modifier = Modifier,

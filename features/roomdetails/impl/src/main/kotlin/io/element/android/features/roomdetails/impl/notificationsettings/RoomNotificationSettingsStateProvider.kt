@@ -25,6 +25,7 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
     override val values: Sequence<RoomNotificationSettingsState>
         get() = sequenceOf(
             RoomNotificationSettingsState(
+                showUserDefinedSettingStyle = false,
                 roomName = "Room 1",
                 Async.Success(RoomNotificationSettings(
                     mode = RoomNotificationMode.MUTE,

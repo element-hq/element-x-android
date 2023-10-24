@@ -49,11 +49,33 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
+
 @Composable
 fun RoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
     modifier: Modifier = Modifier,
     onShowGlobalNotifications: () -> Unit = {},
+    onBackPressed: () -> Unit = {},
+) {
+    if(state.showUserDefinedSettingStyle) {
+        UserDefinedRoomNotificationSettingsView(
+            state = state,
+            modifier = modifier,
+            onBackPressed = onBackPressed,
+        )
+    } else {
+        RoomSpecificNotificationSettingsView(
+            state = state,
+            modifier = modifier,
+            onBackPressed = onBackPressed,
+        )
+    }
+}
+
+@Composable
+private fun RoomSpecificNotificationSettingsView(
+    state: RoomNotificationSettingsState,
+    modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
     Scaffold(

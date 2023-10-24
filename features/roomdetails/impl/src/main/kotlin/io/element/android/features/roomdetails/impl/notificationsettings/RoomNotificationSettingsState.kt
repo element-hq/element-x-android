@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 data class RoomNotificationSettingsState(
+    val showUserDefinedSettingStyle: Boolean,
     val roomName: String,
     val roomNotificationSettings: Async<RoomNotificationSettings>,
     val pendingRoomNotificationMode: RoomNotificationMode?,

@@ -25,6 +25,7 @@ internal class UserDefinedRoomNotificationSettingsStateProvider : PreviewParamet
     override val values: Sequence<RoomNotificationSettingsState>
         get() = sequenceOf(
             RoomNotificationSettingsState(
+                showUserDefinedSettingStyle = false,
                 roomName = "Room 1",
                 Async.Success(
                     RoomNotificationSettings(

@@ -27,11 +27,12 @@ open class EditDefaultNotificationSettingStateProvider: PreviewParameterProvider
     override val values: Sequence<EditDefaultNotificationSettingState>
         get() = sequenceOf(
             anEditDefaultNotificationSettingsState(),
+            anEditDefaultNotificationSettingsState(isOneToOne = true)
         )
 }
 
-fun anEditDefaultNotificationSettingsState() = EditDefaultNotificationSettingState(
-    isOneToOne = false,
+fun anEditDefaultNotificationSettingsState(isOneToOne: Boolean = false) = EditDefaultNotificationSettingState(
+    isOneToOne = isOneToOne,
     mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
     roomsWithUserDefinedMode = listOf(aRoomSummary()),
     changeNotificationSettingAction = Async.Uninitialized,
