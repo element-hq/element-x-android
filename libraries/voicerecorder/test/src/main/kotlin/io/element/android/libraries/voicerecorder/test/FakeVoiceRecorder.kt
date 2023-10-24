@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.voicerecorder.test
 
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +38,12 @@ class FakeVoiceRecorder(
 
     private var securityException: SecurityException? = null
 
+    private var startedCount = 0
+    private var stoppedCount = 0
+    private var deletedCount = 0
+
     override suspend fun startRecord() {
+        startedCount += 1
         val startedAt = timeSource.markNow()
         securityException?.let { throw it }
 
@@ -55,6 +61,8 @@ class FakeVoiceRecorder(
     override suspend fun stopRecord(
         cancelled: Boolean
     ) {
+        stoppedCount++
+
         if (cancelled) {
             deleteRecording()
         }
@@ -68,11 +76,23 @@ class FakeVoiceRecorder(
     }
 
     override suspend fun deleteRecording() {
+        deletedCount++
         curRecording = null
 
         _state.emit(
             VoiceRecorderState.Idle
         )
+    }
+
+
+    fun assertCalls(
+        started: Int = 0,
+        stopped: Int = 0,
+        deleted: Int = 0,
+    ) {
+        assertThat(startedCount).isEqualTo(started)
+        assertThat(stoppedCount).isEqualTo(stopped)
+        assertThat(deletedCount).isEqualTo(deleted)
     }
 
     fun givenThrowsSecurityException(exception: SecurityException) {
