@@ -134,6 +134,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 is VoiceMessageComposerEvents.SendVoiceMessage -> localCoroutineScope.launch {
                     onSendButtonPress()
                 }
+                VoiceMessageComposerEvents.DeleteVoiceMessage -> localCoroutineScope.cancelRecording()
                 VoiceMessageComposerEvents.DismissPermissionsRationale -> onDismissPermissionsRationale()
                 VoiceMessageComposerEvents.AcceptPermissionRationale -> onAcceptPermissionsRationale()
                 is VoiceMessageComposerEvents.LifecycleEvent -> onLifecycleEvent(event.event)

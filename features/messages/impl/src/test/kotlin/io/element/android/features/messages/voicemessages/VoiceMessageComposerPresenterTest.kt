@@ -74,6 +74,7 @@ class VoiceMessageComposerPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
+            voiceRecorder.assertRecordings(started = 0)
 
             testPauseAndDestroy(initialState)
         }
@@ -89,6 +90,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
+            voiceRecorder.assertRecordings(started = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -105,6 +107,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
+            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -121,6 +124,25 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Preview)
+            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 0)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
+    fun `present - delete recording`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.DeleteVoiceMessage)
+
+            val finalState = awaitItem()
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
+            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -140,6 +162,7 @@ class VoiceMessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(1)
+            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -162,6 +185,7 @@ class VoiceMessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(1)
+            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -186,6 +210,7 @@ class VoiceMessageComposerPresenterTest {
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Sending)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
             assertThat(analyticsService.trackedErrors).hasSize(0)
+            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 0)
 
             testPauseAndDestroy(finalState)
         }
@@ -215,6 +240,7 @@ class VoiceMessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(1)
+            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -233,6 +259,7 @@ class VoiceMessageComposerPresenterTest {
             assertThat(initialState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
             assertThat(analyticsService.trackedErrors).hasSize(1)
+            voiceRecorder.assertRecordings(started = 0)
 
             testPauseAndDestroy(initialState)
         }
@@ -253,6 +280,7 @@ class VoiceMessageComposerPresenterTest {
             assertThat(analyticsService.trackedErrors).containsExactly(
                 VoiceMessageException.PermissionMissing(message = "Expected permission to record but none", cause = exception)
             )
+            voiceRecorder.assertRecordings(started = 0)
 
             testPauseAndDestroy(initialState)
         }
@@ -279,6 +307,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
+            voiceRecorder.assertRecordings(started = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -312,6 +341,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
+            voiceRecorder.assertRecordings(started = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -348,6 +378,7 @@ class VoiceMessageComposerPresenterTest {
                 assertThat(it.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
                 assertThat(it.showPermissionRationaleDialog).isTrue()
             }
+            voiceRecorder.assertRecordings(started = 0)
 
             testPauseAndDestroy(finalState)
         }

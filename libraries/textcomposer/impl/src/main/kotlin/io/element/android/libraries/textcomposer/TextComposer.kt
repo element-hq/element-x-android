@@ -65,10 +65,11 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
 import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
 import io.element.android.libraries.textcomposer.components.RecordButton
-import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
-import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
+import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButton
+import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
+import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -99,6 +100,7 @@ fun TextComposer(
     onDismissTextFormatting: () -> Unit = {},
     onVoiceRecordButtonEvent: (PressEvent) -> Unit = {},
     onSendVoiceMessage: () -> Unit = {},
+    onDeleteVoiceMessage: () -> Unit = {},
     onError: (Throwable) -> Unit = {},
 ) {
     val onSendClicked = {
@@ -176,7 +178,7 @@ fun TextComposer(
     }
 
     val voiceRecording = @Composable {
-        when(voiceMessageState) {
+        when (voiceMessageState) {
             VoiceMessageState.Preview ->
                 VoiceMessagePreview(isInteractive = true)
             VoiceMessageState.Sending ->
@@ -185,6 +187,16 @@ fun TextComposer(
                 VoiceMessageRecording(voiceMessageState.level, voiceMessageState.duration)
             VoiceMessageState.Idle -> {}
         }
+    }
+
+    val voiceDeleteButton = @Composable {
+        val enabled = when (voiceMessageState) {
+            VoiceMessageState.Preview -> true
+            VoiceMessageState.Sending,
+            is VoiceMessageState.Recording,
+            VoiceMessageState.Idle -> false
+        }
+        VoiceMessageDeleteButton(enabled = enabled, onClick = onDeleteVoiceMessage)
     }
 
     if (showTextFormatting) {
@@ -206,6 +218,7 @@ fun TextComposer(
             textInput = textInput,
             endButton = sendOrRecordButton,
             voiceRecording = voiceRecording,
+            voiceDeleteButton = voiceDeleteButton,
         )
     }
 
@@ -225,6 +238,7 @@ private fun StandardLayout(
     textInput: @Composable () -> Unit,
     composerOptionsButton: @Composable () -> Unit,
     voiceRecording: @Composable () -> Unit,
+    voiceDeleteButton: @Composable () -> Unit,
     endButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -233,9 +247,21 @@ private fun StandardLayout(
         verticalAlignment = Alignment.Bottom,
     ) {
         if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
+            if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Sending) {
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
+                        .size(48.dp.applyScaleUp()),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    voiceDeleteButton()
+                }
+            } else {
+                Spacer(modifier = Modifier.width(16.dp))
+            }
             Box(
                 modifier = Modifier
-                    .padding(start = 16.dp, bottom = 8.dp, top = 8.dp)
+                    .padding(bottom = 8.dp, top = 8.dp)
                     .weight(1f)
             ) {
                 voiceRecording()

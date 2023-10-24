@@ -27,4 +27,5 @@ dependencies {
     implementation(projects.tests.testutils)
 
     implementation(libs.coroutines.test)
+    implementation(libs.test.truth)
 }
