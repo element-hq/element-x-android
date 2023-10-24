@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -50,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemVoiceView(
@@ -108,7 +110,7 @@ private fun PlayButton(
 ) {
     IconButton(
         drawableRes = R.drawable.play,
-        contentDescription = null, // TODO
+        contentDescription = stringResource(id = CommonStrings.a11y_play),
         onClick = onClick
     )
 }
@@ -119,7 +121,7 @@ private fun PauseButton(
 ) {
     IconButton(
         drawableRes = R.drawable.pause,
-        contentDescription = null, // TODO
+        contentDescription = stringResource(id = CommonStrings.a11y_play),
         onClick = onClick
     )
 }
@@ -130,7 +132,7 @@ private fun RetryButton(
 ) {
     IconButton(
         drawableRes = R.drawable.retry,
-        contentDescription = null, // TODO
+        contentDescription = stringResource(id = CommonStrings.action_retry),
         onClick = onClick
     )
 }
@@ -152,7 +154,7 @@ private fun ProgressButton() {
 private fun DisabledPlayButton() {
     IconButton(
         drawableRes = R.drawable.play,
-        contentDescription = null, // TODO
+        contentDescription = null,
         onClick = null,
     )
 }
