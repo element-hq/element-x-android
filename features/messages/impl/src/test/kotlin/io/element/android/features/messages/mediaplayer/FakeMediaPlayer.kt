@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.update
 /**
  * Fake implementation of [MediaPlayer] for testing purposes.
  */
-class MediaPlayerFake : MediaPlayer {
+class FakeMediaPlayer : MediaPlayer {
     private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L))
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()

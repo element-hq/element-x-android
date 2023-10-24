@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.voicemessages.play
+package io.element.android.features.messages.voicemessages.timeline
 
 import com.google.common.truth.Truth
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageCacheImpl

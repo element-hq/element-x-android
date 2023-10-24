@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.voicemessages.play
+package io.element.android.features.messages.voicemessages.timeline
 
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageCache
 import java.io.File
@@ -22,7 +22,7 @@ import java.io.File
 /**
  * A fake implementation of [VoiceMessageCache] for testing purposes.
  */
-class VoiceMessageCacheFake : VoiceMessageCache {
+class FakeVoiceMessageCache : VoiceMessageCache {
 
     private var _cachePath: String = ""
     private var _isInCache: Boolean = false
