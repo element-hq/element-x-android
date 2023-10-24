@@ -63,8 +63,8 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerEvents
-import io.element.android.features.messages.impl.voicemessages.VoiceMessagePermissionRationaleDialog
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
