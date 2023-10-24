@@ -55,7 +55,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerPresenter
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.PreferencesStore
@@ -63,6 +63,7 @@ import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -101,6 +102,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val preferencesStore: PreferencesStore,
     private val featureFlagsService: FeatureFlagService,
     @Assisted private val navigator: MessagesNavigator,
+    private val buildMeta: BuildMeta,
 ) : Presenter<MessagesState> {
 
     @AssistedFactory
@@ -152,8 +154,10 @@ class MessagesPresenter @AssistedInject constructor(
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
+        var enableInRoomCalls by remember { mutableStateOf(false) }
         LaunchedEffect(featureFlagsService) {
             enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
+            enableInRoomCalls = featureFlagsService.isFeatureEnabled(FeatureFlags.InRoomCalls)
         }
 
         fun handleEvents(event: MessagesEvents) {
@@ -200,6 +204,8 @@ class MessagesPresenter @AssistedInject constructor(
             inviteProgress = inviteProgress.value,
             enableTextFormatting = enableTextFormatting,
             enableVoiceMessages = enableVoiceMessages,
+            enableInRoomCalls = enableInRoomCalls,
+            appName = buildMeta.applicationName,
             eventSink = { handleEvents(it) }
         )
     }

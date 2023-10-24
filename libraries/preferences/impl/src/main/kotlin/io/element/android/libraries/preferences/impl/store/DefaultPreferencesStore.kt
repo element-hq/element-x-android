@@ -21,6 +21,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.store.PreferencesStore
@@ -37,6 +38,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 private val richTextEditorKey = booleanPreferencesKey("richTextEditor")
 private val developerModeKey = booleanPreferencesKey("developerMode")
+private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 
 @ContributesBinding(AppScope::class)
 class DefaultPreferencesStore @Inject constructor(
@@ -68,6 +70,22 @@ class DefaultPreferencesStore @Inject constructor(
         return store.data.map { prefs ->
             // disabled by default on release and nightly, enabled by default on debug
             prefs[developerModeKey] ?: (buildMeta.buildType == BuildType.DEBUG)
+        }
+    }
+
+    override suspend fun setCustomElementCallBaseUrl(string: String?) {
+        store.edit { prefs ->
+            if (string != null) {
+                prefs[customElementCallBaseUrlKey] = string
+            } else {
+                prefs.remove(customElementCallBaseUrlKey)
+            }
+        }
+    }
+
+    override fun getCustomElementCallBaseUrlFlow(): Flow<String?> {
+        return store.data.map { prefs ->
+            prefs[customElementCallBaseUrlKey]
         }
     }
 

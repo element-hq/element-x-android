@@ -25,5 +25,8 @@ interface PreferencesStore {
     suspend fun setDeveloperModeEnabled(enabled: Boolean)
     fun isDeveloperModeEnabledFlow(): Flow<Boolean>
 
+    suspend fun setCustomElementCallBaseUrl(string: String?)
+    fun getCustomElementCallBaseUrlFlow(): Flow<String?>
+
     suspend fun reset()
 }

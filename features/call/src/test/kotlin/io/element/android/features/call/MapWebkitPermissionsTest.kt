@@ -19,6 +19,7 @@ package io.element.android.features.call
 import android.Manifest
 import android.webkit.PermissionRequest
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.call.ui.mapWebkitPermissions
 import org.junit.Test
 
 class MapWebkitPermissionsTest {

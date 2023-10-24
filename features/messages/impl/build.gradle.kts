@@ -33,6 +33,7 @@ dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     api(projects.features.messages.api)
+    implementation(projects.features.call)
     implementation(projects.features.location.api)
     implementation(projects.features.poll.api)
     implementation(projects.libraries.androidutils)
@@ -50,6 +51,7 @@ dependencies {
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.libraries.voicerecorder.api)
     implementation(projects.features.networkmonitor.api)
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
@@ -79,6 +81,7 @@ dependencies {
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.textcomposer.test)
+    testImplementation(projects.libraries.voicerecorder.test)
     testImplementation(libs.test.mockk)
 
     ksp(libs.showkase.processor)

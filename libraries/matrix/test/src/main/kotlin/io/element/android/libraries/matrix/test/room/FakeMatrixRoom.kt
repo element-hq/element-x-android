@@ -36,11 +36,14 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -92,6 +95,8 @@ class FakeMatrixRoom(
     private var sendPollResponseResult = Result.success(Unit)
     private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
+    private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
+    private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
 
     var sendMediaCount = 0
@@ -368,6 +373,15 @@ class FakeMatrixRoom(
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
 
+    override suspend fun generateWidgetWebViewUrl(
+        widgetSettings: MatrixWidgetSettings,
+        clientId: String,
+        languageTag: String?,
+        theme: String?,
+    ): Result<String> = generateWidgetWebViewUrlResult
+
+    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
+
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
     }
@@ -474,6 +488,14 @@ class FakeMatrixRoom(
 
     fun givenProgressCallbackValues(values: List<Pair<Long, Long>>) {
         progressCallbackValues = values
+    }
+
+    fun givenGenerateWidgetWebViewUrlResult(result: Result<String>) {
+        generateWidgetWebViewUrlResult = result
+    }
+
+    fun givenGetWidgetDriverResult(result: Result<MatrixWidgetDriver>) {
+        getWidgetDriverResult = result
     }
 }
 

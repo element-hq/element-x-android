@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
@@ -131,8 +132,14 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
                 isEdited = content.isEdited,
             )
+            is OtherMessageType -> TimelineItemTextContent(
+                body = messageType.body,
+                htmlDocument = null,
+                isEdited = content.isEdited,
+            )
             UnknownMessageType -> TimelineItemTextContent(
-                // Display the body as a fallback
+                // Display the body as a fallback, but should not happen anymore
+                // (we have `OtherMessageType` now)
                 body = content.body,
                 htmlDocument = null,
                 isEdited = content.isEdited,

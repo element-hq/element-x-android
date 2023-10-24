@@ -40,7 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerPresenter
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
@@ -66,6 +66,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -75,6 +76,7 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -607,20 +609,28 @@ class MessagesPresenterTest {
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
     ): MessagesPresenter {
+        val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
+        val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.NotificationSettings.key to true)),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
-            mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
+            mediaSender = mediaSender,
             snackbarDispatcher = SnackbarDispatcher(),
             analyticsService = analyticsService,
             messageComposerContext = MessageComposerContextImpl(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
-            permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
+            permissionsPresenterFactory = permissionsPresenterFactory,
         )
-        val voiceMessageComposerPresenter = VoiceMessageComposerPresenter()
+        val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
+            this,
+            FakeVoiceRecorder(),
+            analyticsService,
+            mediaSender,
+            permissionsPresenterFactory,
+        )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
@@ -649,6 +659,7 @@ class MessagesPresenterTest {
             clipboardHelper = clipboardHelper,
             preferencesStore = preferencesStore,
             featureFlagsService = FakeFeatureFlagService(),
+            buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
         )
     }

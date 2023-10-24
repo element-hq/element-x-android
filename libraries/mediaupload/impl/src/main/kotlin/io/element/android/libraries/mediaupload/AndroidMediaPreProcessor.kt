@@ -118,6 +118,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             is MediaUploadInfo.Audio -> copy(file = renamedFile)
             is MediaUploadInfo.Image -> copy(file = renamedFile)
             is MediaUploadInfo.Video -> copy(file = renamedFile)
+            is MediaUploadInfo.VoiceMessage -> copy(file = renamedFile)
         }
     }
 

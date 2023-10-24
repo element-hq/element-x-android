@@ -17,7 +17,7 @@
 package io.element.android.features.login.impl.accountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.login.impl.util.LoginConstants
+import io.element.android.appconfig.AuthenticationConfig
 
 open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
     override val values: Sequence<AccountProvider>
@@ -32,7 +32,7 @@ open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
 }
 
 fun anAccountProvider() = AccountProvider(
-    url = LoginConstants.MATRIX_ORG_URL,
+    url = AuthenticationConfig.MATRIX_ORG_URL,
     subtitle = "Matrix.org is an open network for secure, decentralized communication.",
     isPublic = true,
     isMatrixOrg = true,

@@ -30,7 +30,7 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 fun aMessageComposerState(
     composerState: RichTextEditorState = RichTextEditorState(""),
     isFullScreen: Boolean = false,
-    mode: MessageComposerMode = MessageComposerMode.Normal(content = ""),
+    mode: MessageComposerMode = MessageComposerMode.Normal,
     showTextFormatting: Boolean = false,
     showAttachmentSourcePicker: Boolean = false,
     canShareLocation: Boolean = true,

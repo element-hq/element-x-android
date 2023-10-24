@@ -16,10 +16,13 @@
 
 package io.element.android.libraries.designsystem.components.list
 
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -29,24 +32,68 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TextFieldListItem(
-    placeholder: String,
+    placeholder: String?,
     text: String,
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
+    error: String? = null,
+    maxLines: Int = 1,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     val textFieldStyle = ElementTheme.materialTypography.bodyLarge
 
     OutlinedTextField(
         value = text,
-        onValueChange = onTextChanged,
-        placeholder = { Text(placeholder) },
+        onValueChange = { onTextChanged(it) },
+        placeholder = placeholder?.let { @Composable { Text(it) } },
         colors = OutlinedTextFieldDefaults.colors(
             disabledBorderColor = Color.Transparent,
             errorBorderColor = Color.Transparent,
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent,
         ),
+        isError = error != null,
+        supportingText = error?.let { @Composable { Text(it) } },
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         textStyle = textFieldStyle,
+        maxLines = maxLines,
+        singleLine = maxLines == 1,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun TextFieldListItem(
+    placeholder: String?,
+    text: TextFieldValue,
+    onTextChanged: (TextFieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    error: String? = null,
+    maxLines: Int = 1,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+) {
+    val textFieldStyle = ElementTheme.materialTypography.bodyLarge
+
+    OutlinedTextField(
+        value = text,
+        onValueChange = { onTextChanged(it) },
+        placeholder = placeholder?.let { @Composable { Text(it) } },
+        colors = OutlinedTextFieldDefaults.colors(
+            disabledBorderColor = Color.Transparent,
+            errorBorderColor = Color.Transparent,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+        ),
+        isError = error != null,
+        supportingText = error?.let { @Composable { Text(it) } },
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        textStyle = textFieldStyle,
+        maxLines = maxLines,
+        singleLine = maxLines == 1,
         modifier = modifier,
     )
 }
@@ -70,6 +117,18 @@ internal fun TextFieldListItemPreview() {
         TextFieldListItem(
             placeholder = "Placeholder",
             text = "Text",
+            onTextChanged = {},
+        )
+    }
+}
+
+@Preview("Text field List item - textfieldvalue", group = PreviewGroup.ListItems)
+@Composable
+internal fun TextFieldListItemTextFieldValuePreview() {
+    ElementThemedPreview {
+        TextFieldListItem(
+            placeholder = "Placeholder",
+            text = TextFieldValue("Text field value"),
             onTextChanged = {},
         )
     }

@@ -34,6 +34,7 @@ anvil {
 }
 
 dependencies {
+    implementation(projects.appconfig)
     implementation(projects.libraries.di)
     implementation(libs.dagger)
     implementation(projects.libraries.core)

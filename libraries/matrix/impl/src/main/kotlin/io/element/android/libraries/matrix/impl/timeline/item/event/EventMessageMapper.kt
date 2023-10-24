@@ -28,11 +28,13 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.impl.media.map
 import org.matrix.rustcomponents.sdk.Message
+import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.ProfileDetails
 import org.matrix.rustcomponents.sdk.RepliedToEventDetails
 import org.matrix.rustcomponents.sdk.use
@@ -103,6 +105,9 @@ class EventMessageMapper {
         }
         is RustMessageType.Location -> {
             LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
+        }
+        is MessageType.Other -> {
+            OtherMessageType(type.msgtype, type.body)
         }
         null -> UnknownMessageType
     }

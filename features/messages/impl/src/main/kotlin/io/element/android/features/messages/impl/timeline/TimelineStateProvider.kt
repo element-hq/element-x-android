@@ -139,7 +139,7 @@ fun aTimelineItemReactions(
     count: Int = 1,
     isHighlighted: Boolean = false,
 ): TimelineItemReactions {
-    val emojis = arrayOf("👍", "😀️", "😁️", "😆️", "😅️", "🤣️", "🥰️", "😇️", "😊️", "😉️", "🙃️", "🙂️", "😍️", "🤗️", "🤭️")
+    val emojis = arrayOf("👍️", "😀️", "😁️", "😆️", "😅️", "🤣️", "🥰️", "😇️", "😊️", "😉️", "🙃️", "🙂️", "😍️", "🤗️", "🤭️")
     return TimelineItemReactions(
         reactions = buildList {
             repeat(count) { index ->
