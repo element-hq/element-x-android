@@ -126,27 +126,31 @@ fun TextComposer(
         .fillMaxSize()
         .height(IntrinsicSize.Min)
 
-    val composerOptionsButton = @Composable {
-        ComposerOptionsButton(
-            modifier = Modifier
-                .size(48.dp),
-            onClick = onAddAttachment
-        )
+    val composerOptionsButton: @Composable () -> Unit = remember {
+        @Composable {
+            ComposerOptionsButton(
+                modifier = Modifier
+                    .size(48.dp),
+                onClick = onAddAttachment
+            )
+        }
     }
 
-    val textInput = @Composable {
-        TextInput(
-            state = state,
-            subcomposing = subcomposing,
-            placeholder = if (composerMode.inThread) {
-                stringResource(id = CommonStrings.action_reply_in_thread)
-            } else {
-                stringResource(id = R.string.rich_text_editor_composer_placeholder)
-            },
-            composerMode = composerMode,
-            onResetComposerMode = onResetComposerMode,
-            onError = onError,
-        )
+    val textInput: @Composable () -> Unit = remember(state, subcomposing, composerMode, onResetComposerMode, onError) {
+        @Composable {
+            TextInput(
+                state = state,
+                subcomposing = subcomposing,
+                placeholder = if (composerMode.inThread) {
+                    stringResource(id = CommonStrings.action_reply_in_thread)
+                } else {
+                    stringResource(id = R.string.rich_text_editor_composer_placeholder)
+                },
+                composerMode = composerMode,
+                onResetComposerMode = onResetComposerMode,
+                onError = onError,
+            )
+        }
     }
 
     val canSendMessage by remember { derivedStateOf { state.messageHtml.isNotEmpty() } }

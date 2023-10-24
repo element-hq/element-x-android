@@ -345,7 +345,11 @@ private fun MessagesViewContent(
                 @Composable {}
             },
             sheetSwipeEnabled = state.composerState.showTextFormatting,
-            sheetShape = if (state.composerState.showTextFormatting || state.composerState.memberSuggestions.isNotEmpty()) MaterialTheme.shapes.large else RectangleShape,
+            sheetShape = if (state.composerState.showTextFormatting || state.composerState.memberSuggestions.isNotEmpty()) {
+                MaterialTheme.shapes.large
+            } else {
+                RectangleShape
+            },
             content = { paddingValues ->
                 TimelineView(
                     modifier = Modifier.padding(paddingValues),

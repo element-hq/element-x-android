@@ -92,10 +92,6 @@ private fun RoomMemberSuggestionView(
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier.clickable { onSuggestionSelected(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        val id = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> "room"
-            is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.userId.value
-        }
         val avatarSize = AvatarSize.TimelineRoom
         val avatarData = when (memberSuggestion) {
             is RoomMemberSuggestion.Room -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)

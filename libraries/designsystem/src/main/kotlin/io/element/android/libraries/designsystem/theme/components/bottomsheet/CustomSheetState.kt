@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2023 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.element.android.libraries.designsystem.theme.components.bottomsheet
 
 import androidx.compose.animation.core.SpringSpec
@@ -43,8 +59,8 @@ class CustomSheetState @Deprecated(
      * enough, should be skipped. If true, the sheet will always expand to the [Expanded] state and move
      * to the [Hidden] state if available when hiding the sheet, either programmatically or by user
      * interaction.
-     * @param initialValue The initial value of the state.
      * @param density The density that this state can use to convert values to and from dp.
+     * @param initialValue The initial value of the state.
      * @param confirmValueChange Optional callback invoked to confirm or veto a pending state change.
      * @param skipHiddenState Whether the hidden state should be skipped. If true, the sheet will always
      * expand to the [Expanded] state and move to the [PartiallyExpanded] if available, either
@@ -192,6 +208,7 @@ class CustomSheetState @Deprecated(
      * gesture interaction or another programmatic interaction like a [animateTo] or [snapTo] call.
      *
      * @param targetValue The target value of the animation
+     * @param velocity The velocity of the animation
      */
     @OptIn(ExperimentalFoundationApi::class)
     internal suspend fun animateTo(
@@ -244,6 +261,7 @@ class CustomSheetState @Deprecated(
         /**
          * The default [Saver] implementation for [SheetState].
          */
+        @SuppressWarnings("FunctionName")
         fun Saver(
             skipPartiallyExpanded: Boolean,
             confirmValueChange: (SheetValue) -> Boolean,
@@ -265,7 +283,7 @@ class CustomSheetState @Deprecated(
                 "Saver(skipPartiallyExpanded, confirmValueChange, LocalDensity.current)"
             )
         )
-        @Suppress("Deprecation")
+        @Suppress("Deprecation", "FunctionName")
         fun Saver(
             skipPartiallyExpanded: Boolean,
             confirmValueChange: (SheetValue) -> Boolean
@@ -288,11 +306,4 @@ internal object AnchoredDraggableDefaults {
     @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
     @ExperimentalMaterial3Api
     val AnimationSpec = SpringSpec<Float>()
-}
-
-private class AnchoredDragFinishedSignal : CancellationException() {
-    override fun fillInStackTrace(): Throwable {
-        stackTrace = emptyArray()
-        return this
-    }
 }

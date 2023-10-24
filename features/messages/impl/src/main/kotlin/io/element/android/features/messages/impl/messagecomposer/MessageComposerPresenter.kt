@@ -426,7 +426,8 @@ class MessageComposerPresenter @Inject constructor(
                         }
                     }
                 }
-            }.collect()
+            }
+            .collect()
         }
 }
 
