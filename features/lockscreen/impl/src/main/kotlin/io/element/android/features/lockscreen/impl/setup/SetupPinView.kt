@@ -114,7 +114,8 @@ private fun SetupPinContent(
         focusRequester.requestFocus()
     }
     PinEntryTextField(
-        state.activePinEntry,
+        pinEntry = state.activePinEntry,
+        isSecured = true,
         onValueChange = {
             state.eventSink(SetupPinEvents.OnPinEntryChanged(it))
         },

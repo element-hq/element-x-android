@@ -30,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
@@ -42,6 +41,7 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun PinEntryTextField(
     pinEntry: PinEntry,
+    isSecured: Boolean,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -53,7 +53,7 @@ fun PinEntryTextField(
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         decorationBox = {
-            PinEntryRow(pinEntry = pinEntry)
+            PinEntryRow(pinEntry = pinEntry, isSecured = isSecured)
         }
     )
 }
@@ -61,6 +61,7 @@ fun PinEntryTextField(
 @Composable
 private fun PinEntryRow(
     pinEntry: PinEntry,
+    isSecured: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -69,7 +70,7 @@ private fun PinEntryRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         for (digit in pinEntry.digits) {
-            PinDigitView(digit = digit)
+            PinDigitView(digit = digit, isSecured = isSecured)
         }
     }
 }
@@ -77,6 +78,7 @@ private fun PinEntryRow(
 @Composable
 private fun PinDigitView(
     digit: PinDigit,
+    isSecured: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val shape = RoundedCornerShape(8.dp)
@@ -96,8 +98,13 @@ private fun PinDigitView(
 
         ) {
         if (digit is PinDigit.Filled) {
+            val text = if(isSecured) {
+                "•"
+            } else {
+                digit.value.toString()
+            }
             Text(
-                text = digit.toText(),
+                text = text,
                 style = ElementTheme.typography.fontHeadingMdBold
             )
         }
@@ -111,6 +118,7 @@ internal fun PinEntryTextFieldPreview() {
     ElementPreview {
         PinEntryTextField(
             pinEntry = PinEntry.createEmpty(4).fillWith("12"),
+            isSecured = true,
             onValueChange = {},
         )
     }
