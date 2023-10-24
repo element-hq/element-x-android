@@ -38,6 +38,7 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
                 eventSink = { },
             ),
             RoomNotificationSettingsState(
+                showUserDefinedSettingStyle = false,
                 roomName = "Room 1",
                 Async.Success(RoomNotificationSettings(
                     mode = RoomNotificationMode.MUTE,

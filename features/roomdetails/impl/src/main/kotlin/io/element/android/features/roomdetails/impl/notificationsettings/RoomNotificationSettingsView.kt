@@ -67,6 +67,7 @@ fun RoomNotificationSettingsView(
         RoomSpecificNotificationSettingsView(
             state = state,
             modifier = modifier,
+            onShowGlobalNotifications = onShowGlobalNotifications,
             onBackPressed = onBackPressed,
         )
     }
@@ -76,6 +77,7 @@ fun RoomNotificationSettingsView(
 private fun RoomSpecificNotificationSettingsView(
     state: RoomNotificationSettingsState,
     modifier: Modifier = Modifier,
+    onShowGlobalNotifications: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
     Scaffold(
