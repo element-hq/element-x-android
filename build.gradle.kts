@@ -198,6 +198,8 @@ koverMerged {
                     // We do not cover Nodes (normally covered by maestro, but code coverage is not computed with maestro)
                     "*Node",
                     "*Node$*",
+                    // Exclude `:libraries:matrix:impl` module, it contains only wrappers to access the Rust Matrix SDK api, so it is not really relevant to unit test it: there is no logic to test.
+                    "io.element.android.libraries.matrix.impl.*",
                 )
             )
         }
