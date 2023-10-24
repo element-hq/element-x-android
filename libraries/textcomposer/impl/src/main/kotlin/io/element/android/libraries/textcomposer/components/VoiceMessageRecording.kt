@@ -57,16 +57,13 @@ internal fun VoiceMessageRecording(
             .heightIn(26.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier
-                .size(8.dp)
-                .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)
-        )
+        RedRecordingDot()
+
         Spacer(Modifier.size(8.dp))
 
-        // TODO Replace with timer UI
+        // Timer
         Text(
-            text = "Recording ${duration.formatShort()}", // Not localized because it is a placeholder
+            text = duration.formatShort(),
             color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodySmMedium
         )
@@ -98,6 +95,15 @@ private fun DebugAudioLevel(
         )
     }
 }
+
+@Composable
+private fun RedRecordingDot(
+    modifier: Modifier = Modifier,
+) = Box(
+    modifier = modifier
+        .size(8.dp)
+        .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)
+)
 
 @PreviewsDayNight
 @Composable
