@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.applyScaleUp
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -154,24 +155,35 @@ fun TextComposer(
             composerMode = composerMode,
         )
     }
+    val uploadVoiceProgress = @Composable {
+        CircularProgressIndicator(
+            modifier = Modifier.size(24.dp),
+        )
+    }
 
     val textFormattingOptions = @Composable { TextFormatting(state = state) }
 
     val sendOrRecordButton = when {
         enableVoiceMessages && !canSendMessage ->
             when (voiceMessageState) {
+                VoiceMessageState.Idle,
+                is VoiceMessageState.Recording -> recordVoiceButton
                 is VoiceMessageState.Preview -> sendVoiceButton
-                else -> recordVoiceButton
+                is VoiceMessageState.Sending -> uploadVoiceProgress
             }
         else ->
             sendButton
     }
 
     val voiceRecording = @Composable {
-        if (voiceMessageState is VoiceMessageState.Recording) {
-            VoiceMessageRecording(voiceMessageState.level, voiceMessageState.duration)
-        } else if (voiceMessageState is VoiceMessageState.Preview) {
-            VoiceMessagePreview()
+        when(voiceMessageState) {
+            VoiceMessageState.Preview ->
+                VoiceMessagePreview(isInteractive = true)
+            VoiceMessageState.Sending ->
+                VoiceMessagePreview(isInteractive = false)
+            is VoiceMessageState.Recording ->
+                VoiceMessageRecording(voiceMessageState.level, voiceMessageState.duration)
+            VoiceMessageState.Idle -> {}
         }
     }
 
@@ -246,6 +258,8 @@ private fun StandardLayout(
         Box(
             Modifier
                 .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                .size(48.dp.applyScaleUp()),
+            contentAlignment = Alignment.Center,
         ) {
             endButton()
         }
@@ -741,6 +755,8 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, 0.5))
     }, {
         VoicePreview(voiceMessageState = VoiceMessageState.Preview)
+    }, {
+        VoicePreview(voiceMessageState = VoiceMessageState.Sending)
     }))
 }
 

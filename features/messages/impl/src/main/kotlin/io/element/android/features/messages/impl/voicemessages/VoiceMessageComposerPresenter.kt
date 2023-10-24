@@ -145,7 +145,11 @@ class VoiceMessageComposerPresenter @Inject constructor(
                     duration = state.elapsedTime,
                     level = state.level
                 )
-                is VoiceRecorderState.Finished -> VoiceMessageState.Preview
+                is VoiceRecorderState.Finished -> if (isSending) {
+                    VoiceMessageState.Sending
+                } else {
+                    VoiceMessageState.Preview
+                }
                 else -> VoiceMessageState.Idle
             },
             showPermissionRationaleDialog = permissionState.showDialog,

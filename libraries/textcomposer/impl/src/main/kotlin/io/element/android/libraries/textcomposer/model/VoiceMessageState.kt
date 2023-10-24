@@ -22,6 +22,7 @@ sealed class VoiceMessageState {
     data object Idle: VoiceMessageState()
 
     data object Preview: VoiceMessageState()
+    data object Sending: VoiceMessageState()
     data class Recording(
         val duration: Duration,
         val level: Double,
