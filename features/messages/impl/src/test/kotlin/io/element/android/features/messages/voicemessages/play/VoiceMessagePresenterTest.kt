@@ -45,7 +45,7 @@ class VoiceMessagePresenterTest {
             awaitItem().let {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("01:01")
+                Truth.assertThat(it.time).isEqualTo("1:01")
             }
         }
     }
@@ -63,7 +63,7 @@ class VoiceMessagePresenterTest {
             val initialState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("00:02")
+                Truth.assertThat(it.time).isEqualTo("0:02")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -71,7 +71,7 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
-                Truth.assertThat(it.time).isEqualTo("00:01")
+                Truth.assertThat(it.time).isEqualTo("0:01")
             }
         }
     }
@@ -92,7 +92,7 @@ class VoiceMessagePresenterTest {
             val initialState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("01:01")
+                Truth.assertThat(it.time).isEqualTo("1:01")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -100,13 +100,13 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("01:01")
+                Truth.assertThat(it.time).isEqualTo("1:01")
             }
 
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Retry)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("01:01")
+                Truth.assertThat(it.time).isEqualTo("1:01")
             }
         }
     }
@@ -127,7 +127,7 @@ class VoiceMessagePresenterTest {
             val initialState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("01:01")
+                Truth.assertThat(it.time).isEqualTo("1:01")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -135,13 +135,13 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("01:01")
+                Truth.assertThat(it.time).isEqualTo("1:01")
             }
 
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Retry)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("01:01")
+                Truth.assertThat(it.time).isEqualTo("1:01")
             }
         }
     }
@@ -159,7 +159,7 @@ class VoiceMessagePresenterTest {
             val initialState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("00:02")
+                Truth.assertThat(it.time).isEqualTo("0:02")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -167,7 +167,7 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
-                Truth.assertThat(it.time).isEqualTo("00:01")
+                Truth.assertThat(it.time).isEqualTo("0:01")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -175,7 +175,7 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
-                Truth.assertThat(it.time).isEqualTo("00:01")
+                Truth.assertThat(it.time).isEqualTo("0:01")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -183,7 +183,7 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(1.0f)
-                Truth.assertThat(it.time).isEqualTo("00:02")
+                Truth.assertThat(it.time).isEqualTo("0:02")
             }
         }
     }
@@ -205,7 +205,7 @@ class VoiceMessagePresenterTest {
             val initialState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("00:02")
+                Truth.assertThat(it.time).isEqualTo("0:02")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -213,13 +213,13 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("00:02")
+                Truth.assertThat(it.time).isEqualTo("0:02")
             }
 
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
-                Truth.assertThat(it.time).isEqualTo("00:01")
+                Truth.assertThat(it.time).isEqualTo("0:01")
             }
         }
     }
@@ -241,7 +241,7 @@ class VoiceMessagePresenterTest {
             val initialState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Disabled)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("01:01")
+                Truth.assertThat(it.time).isEqualTo("1:01")
             }
         }
     }
@@ -260,7 +260,7 @@ class VoiceMessagePresenterTest {
             val initialState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("00:10")
+                Truth.assertThat(it.time).isEqualTo("0:10")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -268,7 +268,7 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(0.1f)
-                Truth.assertThat(it.time).isEqualTo("00:01")
+                Truth.assertThat(it.time).isEqualTo("0:01")
             }
 
             initialState.eventSink(VoiceMessageEvents.Seek(0.5f))
@@ -276,7 +276,7 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
-                Truth.assertThat(it.time).isEqualTo("00:05")
+                Truth.assertThat(it.time).isEqualTo("0:05")
             }
         }
     }

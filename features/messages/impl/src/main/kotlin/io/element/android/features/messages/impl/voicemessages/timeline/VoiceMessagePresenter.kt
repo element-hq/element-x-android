@@ -40,7 +40,9 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.toFile
+import io.element.android.libraries.ui.utils.time.formatShort
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Module
 @ContributesTo(RoomScope::class)
@@ -95,7 +97,7 @@ class VoiceMessagePresenter @AssistedInject constructor(
         val time by remember {
             derivedStateOf {
                 val time = if (playerState.isMyMedia) playerState.currentPosition else content.duration.toMillis()
-                "%02d:%02d".format(time.msToMins(), time.msToSecs())
+                time.milliseconds.formatShort()
             }
         }
 
@@ -147,6 +149,3 @@ class VoiceMessagePresenter @AssistedInject constructor(
         )
     }
 }
-
-private fun Long.msToMins(): Long = this / 1000 / 60
-private fun Long.msToSecs(): Long = this / 1000 % 60

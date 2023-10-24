@@ -20,6 +20,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -34,10 +35,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageStateProvider
@@ -193,14 +195,42 @@ private fun Button(
     }
 }
 
+open class TimelineItemVoiceViewParametersProvider : PreviewParameterProvider<TimelineItemVoiceViewParameters> {
+    private val voiceMessageStateProvider = VoiceMessageStateProvider()
+    private val timelineItemVoiceContentProvider = TimelineItemVoiceContentProvider()
+    override val values: Sequence<TimelineItemVoiceViewParameters>
+        get() = voiceMessageStateProvider.values.zip(timelineItemVoiceContentProvider.values)
+            .map { TimelineItemVoiceViewParameters(it.first, it.second) }
+}
+
+data class TimelineItemVoiceViewParameters(
+    val state: VoiceMessageState,
+    val content: TimelineItemVoiceContent,
+)
+
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemVoiceViewPreview(
-    @PreviewParameter(VoiceMessageStateProvider::class) state: VoiceMessageState,
+    @PreviewParameter(TimelineItemVoiceViewParametersProvider::class) timelineItemVoiceViewParameters: TimelineItemVoiceViewParameters,
 ) = ElementPreview {
     TimelineItemVoiceView(
-        state = state,
-        content = aTimelineItemVoiceContent(),
+        state = timelineItemVoiceViewParameters.state,
+        content = timelineItemVoiceViewParameters.content,
         extraPadding = noExtraPadding,
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemVoiceViewUnifiedPreview() = ElementPreview {
+    val timelineItemVoiceViewParametersProvider = TimelineItemVoiceViewParametersProvider()
+    Column {
+        timelineItemVoiceViewParametersProvider.values.forEach {
+            TimelineItemVoiceView(
+                state = it.state,
+                content = it.content,
+                extraPadding = noExtraPadding,
+            )
+        }
+    }
 }

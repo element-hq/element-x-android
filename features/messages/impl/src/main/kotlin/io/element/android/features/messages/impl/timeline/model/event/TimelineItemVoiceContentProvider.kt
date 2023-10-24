@@ -26,15 +26,24 @@ import java.time.Duration
 open class TimelineItemVoiceContentProvider : PreviewParameterProvider<TimelineItemVoiceContent> {
     override val values: Sequence<TimelineItemVoiceContent>
         get() = sequenceOf(
-            aTimelineItemVoiceContent(body = "A sound.mp3"),
-            aTimelineItemVoiceContent(body = "A bigger name sound.mp3"),
-            aTimelineItemVoiceContent(body = "An even bigger bigger bigger bigger bigger bigger bigger sound name which doesn't fit .mp3"),
+            aTimelineItemVoiceContent(
+                durationMs = 1,
+                waveform = listOf(),
+            ),
+            aTimelineItemVoiceContent(
+                durationMs = 10_000,
+                waveform = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
+            ),
+            aTimelineItemVoiceContent(
+                durationMs = 1_800_000, // 30 minutes
+                waveform = List(1024) { it },
+            ),
         )
 }
 
 fun aTimelineItemVoiceContent(
     eventId: String? = "\$anEventId",
-    body: String = "A sound.mp3",
+    body: String = "body doesn't really matter for a voice message",
     durationMs: Long = 61_000,
     contentUri: String = "mxc://matrix.org/1234567890abcdefg",
     mimeType: String = MimeTypes.Ogg,

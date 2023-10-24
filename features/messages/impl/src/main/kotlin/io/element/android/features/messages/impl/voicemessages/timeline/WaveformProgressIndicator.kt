@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.voicemessages.timeline
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +31,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun WaveformProgressIndicator(
@@ -63,10 +65,20 @@ fun WaveformProgressIndicator(
 @PreviewsDayNight
 @Composable
 internal fun WaveformProgressIndicatorPreview() = ElementPreview {
-    WaveformProgressIndicator(
-        progress = 0.5f,
-        amplitudes = persistentListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
-    )
+    Column {
+        WaveformProgressIndicator(
+            progress = 0.5f,
+            amplitudes = persistentListOf(),
+        )
+        WaveformProgressIndicator(
+            progress = 0.5f,
+            amplitudes = persistentListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
+        )
+        WaveformProgressIndicator(
+            progress = 0.5f,
+            amplitudes = List(1024) { it }.toPersistentList()
+        )
+    }
 }
 
 /**

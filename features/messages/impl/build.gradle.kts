@@ -52,6 +52,7 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.voicerecorder.api)
+    implementation(projects.libraries.uiUtils)
     implementation(projects.features.networkmonitor.api)
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
