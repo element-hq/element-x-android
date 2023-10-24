@@ -136,7 +136,8 @@ class RoomNotificationSettingsPresenterTests {
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         return RoomNotificationSettingsPresenter(
             room = room,
-            notificationSettingsService = notificationSettingsService
+            notificationSettingsService = notificationSettingsService,
+            showUserDefinedSettingStyle = false,
         )
     }
 }

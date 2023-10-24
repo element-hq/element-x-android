@@ -35,7 +35,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 class RoomNotificationSettingsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomNotificationSettingsPresenter,
+    presenterFactory: RoomNotificationSettingsPresenter.Factory,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
@@ -45,6 +45,7 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
 
     private val inputs = inputs<RoomNotificationSettingInput>()
 
+    private val presenter = presenterFactory.create(inputs.showUserDefinedSettingStyle)
     init {
         lifecycle.subscribe(
             onResume = {
@@ -56,18 +57,10 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        if(inputs.showUserDefinedSettingStyle) {
-            UserDefinedRoomNotificationSettingsView(
-                state = state,
-                modifier = modifier,
-                onBackPressed = this::navigateUp,
-            )
-        } else {
             RoomNotificationSettingsView(
                 state = state,
                 modifier = modifier,
                 onBackPressed = this::navigateUp,
             )
-        }
     }
 }

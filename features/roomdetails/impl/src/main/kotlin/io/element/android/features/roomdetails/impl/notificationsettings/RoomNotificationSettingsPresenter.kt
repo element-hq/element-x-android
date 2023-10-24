@@ -23,6 +23,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -36,13 +39,19 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-class RoomNotificationSettingsPresenter @Inject constructor(
+class RoomNotificationSettingsPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val notificationSettingsService: NotificationSettingsService,
+    @Assisted private val showUserDefinedSettingStyle: Boolean,
 ) : Presenter<RoomNotificationSettingsState> {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(showUserDefinedSettingStyle: Boolean): RoomNotificationSettingsPresenter
+    }
+
     @Composable
     override fun present(): RoomNotificationSettingsState {
         val defaultRoomNotificationMode: MutableState<RoomNotificationMode?> = rememberSaveable {
@@ -107,6 +116,7 @@ class RoomNotificationSettingsPresenter @Inject constructor(
         }
 
         return RoomNotificationSettingsState(
+            showUserDefinedSettingStyle = showUserDefinedSettingStyle,
             roomName = room.displayName,
             roomNotificationSettings = roomNotificationSettings.value,
             pendingRoomNotificationMode = pendingRoomNotificationMode.value,
