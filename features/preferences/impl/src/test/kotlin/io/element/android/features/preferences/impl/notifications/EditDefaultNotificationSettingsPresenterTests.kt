@@ -25,6 +25,7 @@ import io.element.android.features.preferences.impl.notifications.edit.EditDefau
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -87,6 +88,27 @@ class EditDefaultNotificationSettingsPresenterTests {
                 it.mode == RoomNotificationMode.ALL_MESSAGES
             }.last()
             Truth.assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
+        }
+    }
+
+    @Test
+    fun `present - edit default notification setting failed`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService()
+        val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService)
+        notificationSettingsService.givenSetDefaultNotificationModeError(A_THROWABLE)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(RoomNotificationMode.ALL_MESSAGES))
+            val errorState = consumeItemsUntilPredicate {
+                it.changeNotificationSettingAction.isFailure()
+            }.last()
+            Truth.assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
+            errorState.eventSink(EditDefaultNotificationSettingStateEvents.ClearError)
+            val clearErrorState = consumeItemsUntilPredicate {
+                it.changeNotificationSettingAction.isUninitialized()
+            }.last()
+            Truth.assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
         }
     }
 

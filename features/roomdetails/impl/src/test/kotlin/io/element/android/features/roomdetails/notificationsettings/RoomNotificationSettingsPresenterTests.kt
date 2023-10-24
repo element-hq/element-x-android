@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import kotlin.time.Duration.Companion.milliseconds
 
 class RoomNotificationSettingsPresenterTests {
     @Test
@@ -76,7 +75,6 @@ class RoomNotificationSettingsPresenterTests {
         }
     }
 
-
     @Test
     fun `present - notification settings set custom failed`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
@@ -87,13 +85,20 @@ class RoomNotificationSettingsPresenterTests {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(false))
-            val states = consumeItemsUntilPredicate {
-                it.roomNotificationSettings.dataOrNull()?.isDefault == false
-            }
-            states.forEach {
-                Truth.assertThat(it.roomNotificationSettings.dataOrNull()?.isDefault).isTrue()
-                Truth.assertThat(it.pendingSetDefault).isNull()
-            }
+            val failedState = consumeItemsUntilPredicate {
+                it.setNotificationSettingAction.isFailure()
+            }.last()
+
+            Truth.assertThat(failedState.roomNotificationSettings.dataOrNull()?.isDefault).isTrue()
+            Truth.assertThat(failedState.pendingSetDefault).isNull()
+            Truth.assertThat(failedState.setNotificationSettingAction.isFailure()).isTrue()
+
+            failedState.eventSink(RoomNotificationSettingsEvents.ClearSetNotificationError)
+
+            val errorClearedState = consumeItemsUntilPredicate {
+                it.setNotificationSettingAction.isUninitialized()
+            }.last()
+            Truth.assertThat(errorClearedState.setNotificationSettingAction.isUninitialized()).isTrue()
         }
     }
 
@@ -122,7 +127,7 @@ class RoomNotificationSettingsPresenterTests {
             val initialState = awaitItem()
             initialState.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
             initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(true))
-            val defaultState = consumeItemsUntilPredicate(timeout = 2000.milliseconds) {
+            val defaultState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
             Truth.assertThat(defaultState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
@@ -130,6 +135,30 @@ class RoomNotificationSettingsPresenterTests {
         }
     }
 
+    @Test
+    fun `present - notification settings restore default failed`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService()
+        notificationSettingsService.givenRestoreDefaultNotificationModeError(A_THROWABLE)
+        val presenter = createRoomNotificationSettingsPresenter(notificationSettingsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
+            initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(true))
+            val failedState = consumeItemsUntilPredicate {
+                it.restoreDefaultAction.isFailure()
+            }.last()
+            Truth.assertThat(failedState.restoreDefaultAction.isFailure()).isTrue()
+            failedState.eventSink(RoomNotificationSettingsEvents.ClearRestoreDefaultError)
+
+            val errorClearedState = consumeItemsUntilPredicate {
+                it.restoreDefaultAction.isUninitialized()
+            }.last()
+            Truth.assertThat(errorClearedState.restoreDefaultAction.isUninitialized()).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
     private fun createRoomNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
     ): RoomNotificationSettingsPresenter{

@@ -24,10 +24,14 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
     override val values: Sequence<NotificationSettingsState>
         get() = sequenceOf(
             aNotificationSettingsState(),
+            aNotificationSettingsState(changeNotificationSettingAction = Async.Loading(Unit)),
+            aNotificationSettingsState(changeNotificationSettingAction = Async.Failure(Throwable("error"))),
         )
 }
 
-fun aNotificationSettingsState() = NotificationSettingsState(
+fun aNotificationSettingsState(
+    changeNotificationSettingAction: Async<Unit> = Async.Uninitialized,
+) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
         atRoomNotificationsEnabled = true,
         callNotificationsEnabled = true,
@@ -38,6 +42,6 @@ fun aNotificationSettingsState() = NotificationSettingsState(
         systemNotificationsEnabled = false,
         appNotificationsEnabled = true,
     ),
-    changeNotificationSettingAction = Async.Uninitialized,
+    changeNotificationSettingAction = changeNotificationSettingAction,
     eventSink = {}
 )

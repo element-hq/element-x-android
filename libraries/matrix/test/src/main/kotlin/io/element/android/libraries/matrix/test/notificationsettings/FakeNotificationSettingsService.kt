@@ -43,6 +43,9 @@ class FakeNotificationSettingsService(
     private var callNotificationsEnabled = false
     private var atRoomNotificationsEnabled = false
     private var setNotificationModeError: Throwable? = null
+    private var restoreDefaultNotificationModeError: Throwable? = null
+    private var setDefaultNotificationModeError: Throwable? = null
+    private var setAtRoomError: Throwable? = null
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _notificationSettingsStateFlow
 
@@ -72,6 +75,10 @@ class FakeNotificationSettingsService(
     }
 
     override suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit> {
+        val error = setDefaultNotificationModeError
+        if (error != null) {
+            return Result.failure(error)
+        }
         if (isOneToOne) {
             if (isEncrypted) {
                 defaultEncryptedOneToOneRoomNotificationMode = mode
@@ -102,6 +109,10 @@ class FakeNotificationSettingsService(
     }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> {
+        val error = restoreDefaultNotificationModeError
+        if (error != null) {
+            return Result.failure(error)
+        }
         roomNotificationModeIsDefault = true
         roomNotificationMode = defaultEncryptedGroupRoomNotificationMode
         _notificationSettingsStateFlow.emit(Unit)
@@ -121,6 +132,10 @@ class FakeNotificationSettingsService(
     }
 
     override suspend fun setRoomMentionEnabled(enabled: Boolean): Result<Unit> {
+        val error = setAtRoomError
+        if (error != null) {
+            return Result.failure(error)
+        }
         atRoomNotificationsEnabled = enabled
         return Result.success(Unit)
     }
@@ -141,4 +156,17 @@ class FakeNotificationSettingsService(
     fun givenSetNotificationModeError(throwable: Throwable?) {
         setNotificationModeError = throwable
     }
+
+    fun givenRestoreDefaultNotificationModeError(throwable: Throwable?) {
+        restoreDefaultNotificationModeError = throwable
+    }
+
+    fun givenSetAtRoomError(throwable: Throwable?) {
+        setAtRoomError = throwable
+    }
+
+    fun givenSetDefaultNotificationModeError(throwable: Throwable?) {
+        setDefaultNotificationModeError = throwable
+    }
+
 }
