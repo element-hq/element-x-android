@@ -43,9 +43,9 @@ class FakeVoiceRecorder(
     private var deletedCount = 0
 
     override suspend fun startRecord() {
+        startedCount += 1
         val startedAt = timeSource.markNow()
         securityException?.let { throw it }
-        startedCount += 1
 
         if (curRecording != null) {
             error("Previous recording was not cleared")
@@ -61,9 +61,7 @@ class FakeVoiceRecorder(
     override suspend fun stopRecord(
         cancelled: Boolean
     ) {
-        if (_state.value is VoiceRecorderState.Recording) {
-            stoppedCount++
-        }
+        stoppedCount++
 
         if (cancelled) {
             deleteRecording()
@@ -78,9 +76,7 @@ class FakeVoiceRecorder(
     }
 
     override suspend fun deleteRecording() {
-        if (curRecording != null) {
-            deletedCount++
-        }
+        deletedCount++
         curRecording = null
 
         _state.emit(
@@ -89,7 +85,7 @@ class FakeVoiceRecorder(
     }
 
 
-    fun assertRecordings(
+    fun assertCalls(
         started: Int = 0,
         stopped: Int = 0,
         deleted: Int = 0,

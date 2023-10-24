@@ -74,7 +74,7 @@ class VoiceMessageComposerPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            voiceRecorder.assertRecordings(started = 0)
+            voiceRecorder.assertCalls(started = 0)
 
             testPauseAndDestroy(initialState)
         }
@@ -90,7 +90,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
-            voiceRecorder.assertRecordings(started = 1)
+            voiceRecorder.assertCalls(started = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -107,7 +107,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -124,7 +124,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Preview)
-            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 0)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
             testPauseAndDestroy(finalState)
         }
@@ -142,7 +142,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -162,7 +162,7 @@ class VoiceMessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(1)
-            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -185,7 +185,7 @@ class VoiceMessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(1)
-            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -210,7 +210,7 @@ class VoiceMessageComposerPresenterTest {
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Sending)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
             assertThat(analyticsService.trackedErrors).hasSize(0)
-            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 0)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
             testPauseAndDestroy(finalState)
         }
@@ -240,7 +240,7 @@ class VoiceMessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(1)
-            voiceRecorder.assertRecordings(started = 1, stopped = 1, deleted = 1)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -259,7 +259,7 @@ class VoiceMessageComposerPresenterTest {
             assertThat(initialState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
             assertThat(analyticsService.trackedErrors).hasSize(1)
-            voiceRecorder.assertRecordings(started = 0)
+            voiceRecorder.assertCalls(started = 0)
 
             testPauseAndDestroy(initialState)
         }
@@ -280,7 +280,7 @@ class VoiceMessageComposerPresenterTest {
             assertThat(analyticsService.trackedErrors).containsExactly(
                 VoiceMessageException.PermissionMissing(message = "Expected permission to record but none", cause = exception)
             )
-            voiceRecorder.assertRecordings(started = 0)
+            voiceRecorder.assertCalls(started = 1)
 
             testPauseAndDestroy(initialState)
         }
@@ -302,12 +302,14 @@ class VoiceMessageComposerPresenterTest {
             assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Idle)
 
             initialState.eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            voiceRecorder.assertCalls(stopped = 1)
+
             permissionsPresenter.setPermissionGranted()
 
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
-            voiceRecorder.assertRecordings(started = 1)
+            voiceRecorder.assertCalls(stopped = 1, started = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -341,7 +343,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
-            voiceRecorder.assertRecordings(started = 1)
+            voiceRecorder.assertCalls(started = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -378,7 +380,7 @@ class VoiceMessageComposerPresenterTest {
                 assertThat(it.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
                 assertThat(it.showPermissionRationaleDialog).isTrue()
             }
-            voiceRecorder.assertRecordings(started = 0)
+            voiceRecorder.assertCalls(started = 0)
 
             testPauseAndDestroy(finalState)
         }
