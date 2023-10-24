@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.voicemessages
+package io.element.android.features.messages.impl.voicemessages.composer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

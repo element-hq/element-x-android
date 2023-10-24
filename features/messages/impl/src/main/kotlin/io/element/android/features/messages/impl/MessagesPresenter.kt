@@ -55,7 +55,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerPresenter
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.PreferencesStore

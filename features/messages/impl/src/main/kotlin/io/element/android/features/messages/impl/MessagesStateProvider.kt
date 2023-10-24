@@ -25,7 +25,7 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.voicemessages.aVoiceMessageComposerState
+import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize

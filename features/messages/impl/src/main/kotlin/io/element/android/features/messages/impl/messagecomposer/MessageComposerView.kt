@@ -24,10 +24,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerEvents
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerState
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageComposerStateProvider
-import io.element.android.features.messages.impl.voicemessages.aVoiceMessageComposerState
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerStateProvider
+import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.textcomposer.model.Message
