@@ -18,11 +18,12 @@ package io.element.android.features.messages.impl.voicemessages
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
+import kotlin.time.Duration.Companion.seconds
 
 internal open class VoiceMessageComposerStateProvider : PreviewParameterProvider<VoiceMessageComposerState> {
     override val values: Sequence<VoiceMessageComposerState>
         get() = sequenceOf(
-            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(level = 0.5)),
+            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(duration = 61.seconds, level = 0.5)),
         )
 }
 

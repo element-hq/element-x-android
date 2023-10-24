@@ -80,6 +80,7 @@ import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun TextComposer(
@@ -181,7 +182,7 @@ fun TextComposer(
             VoiceMessageState.Sending ->
                 VoiceMessagePreview(isInteractive = false)
             is VoiceMessageState.Recording ->
-                VoiceMessageRecording(voiceMessageState.level)
+                VoiceMessageRecording(voiceMessageState.level, voiceMessageState.duration)
             VoiceMessageState.Idle -> {}
         }
     }
@@ -751,7 +752,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         enableVoiceMessages = true,
     )
     PreviewColumn(items = persistentListOf({
-        VoicePreview(voiceMessageState = VoiceMessageState.Recording(0.5))
+        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, 0.5))
     }, {
         VoicePreview(voiceMessageState = VoiceMessageState.Preview)
     }, {

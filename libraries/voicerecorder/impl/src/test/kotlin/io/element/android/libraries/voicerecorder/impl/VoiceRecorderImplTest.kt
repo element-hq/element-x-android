@@ -37,9 +37,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.BeforeClass
 import org.junit.Test
 import java.io.File
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TestTimeSource
 
 class VoiceRecorderImplTest {
     private val fakeFileSystem = FakeFileSystem()
+    private val timeSource = TestTimeSource()
 
     @Test
     fun `it emits the initial state`() = runTest {
@@ -56,9 +60,27 @@ class VoiceRecorderImplTest {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
             voiceRecorder.startRecord()
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.0))
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.0))
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.0))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.seconds, 1.0))
+            timeSource += 1.seconds
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds,0.0))
+            timeSource += 1.seconds
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(2.seconds, 1.0))
+        }
+    }
+
+    @Test
+    fun `when elapsed time reaches 30 minutes, it stops recording`() = runTest {
+        val voiceRecorder = createVoiceRecorder()
+        voiceRecorder.state.test {
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
+
+            voiceRecorder.startRecord()
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, 1.0))
+            timeSource += 29.minutes
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(29.minutes, 0.0))
+            timeSource += 1.minutes
+
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Finished(File(FILE_PATH), "audio/ogg"))
         }
     }
 
@@ -94,6 +116,7 @@ class VoiceRecorderImplTest {
         val fileConfig = VoiceRecorderModule.provideVoiceFileConfig()
         return VoiceRecorderImpl(
             dispatchers = testCoroutineDispatchers(),
+            timeSource = timeSource,
             audioReaderFactory = FakeAudioRecorderFactory(
                 audio = AUDIO,
             ),

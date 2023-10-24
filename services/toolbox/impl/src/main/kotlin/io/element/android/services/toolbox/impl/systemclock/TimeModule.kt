@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.textcomposer.model
+package io.element.android.services.toolbox.impl.systemclock
 
-import kotlin.time.Duration
+import com.squareup.anvil.annotations.ContributesTo
+import dagger.Module
+import dagger.Provides
+import io.element.android.libraries.di.AppScope
+import kotlin.time.TimeSource
 
-sealed class VoiceMessageState {
-    data object Idle: VoiceMessageState()
-
-    data object Preview: VoiceMessageState()
-    data object Sending: VoiceMessageState()
-    data class Recording(
-        val duration: Duration,
-        val level: Double,
-    ): VoiceMessageState()
+@Module
+@ContributesTo(AppScope::class)
+object TimeModule {
+    @Provides
+    fun timeSource(): TimeSource {
+        return TimeSource.Monotonic
+    }
 }

@@ -17,6 +17,7 @@
 package io.element.android.libraries.voicerecorder.api
 
 import java.io.File
+import kotlin.time.Duration
 
 sealed class VoiceRecorderState {
     /**
@@ -27,9 +28,10 @@ sealed class VoiceRecorderState {
     /**
      * The recorder is currently recording.
      *
+     * @property elapsedTime The elapsed time since the recording started.
      * @property level The current audio level of the recording as a fraction of 1.
      */
-    data class Recording(val level: Double) : VoiceRecorderState()
+    data class Recording(val elapsedTime: Duration, val level: Double) : VoiceRecorderState()
 
     /**
      * The recorder has finished recording.

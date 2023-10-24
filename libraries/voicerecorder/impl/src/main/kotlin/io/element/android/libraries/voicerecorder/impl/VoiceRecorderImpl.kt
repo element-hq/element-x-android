@@ -37,15 +37,19 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.TimeSource
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
 class VoiceRecorderImpl @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
+    private val timeSource: TimeSource,
     private val audioReaderFactory: AudioReader.Factory,
     private val encoder: Encoder,
     private val fileManager: VoiceFileManager,
@@ -74,16 +78,27 @@ class VoiceRecorderImpl @Inject constructor(
         val audioRecorder = audioReaderFactory.create(config, dispatchers).also { audioReader = it }
 
         recordingJob = voiceCoroutineScope.launch {
+            val startedAt = timeSource.markNow()
             audioRecorder.record { audio ->
+                yield()
+
+                val elapsedTime = startedAt.elapsedNow()
+
+                if (elapsedTime >= 30.minutes) {
+                    Timber.w("Voice message time limit reached")
+                    stopRecord(false)
+                    return@record
+                }
+
                 when (audio) {
                     is Audio.Data -> {
                         val audioLevel = audioLevelCalculator.calculateAudioLevel(audio.buffer)
-                        _state.emit(VoiceRecorderState.Recording(audioLevel))
+                        _state.emit(VoiceRecorderState.Recording(elapsedTime, audioLevel))
                         encoder.encode(audio.buffer, audio.readSize)
                     }
                     is Audio.Error -> {
                         Timber.e("Voice message error: code=${audio.audioRecordErrorCode}")
-                        _state.emit(VoiceRecorderState.Recording(0.0))
+                        _state.emit(VoiceRecorderState.Recording(elapsedTime, 0.0))
                     }
                 }
             }
