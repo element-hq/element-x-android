@@ -61,11 +61,11 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.mentions.MentionSuggestionsPickerView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
-import io.element.android.features.messages.impl.messagecomposer.RoomMemberSuggestion
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
@@ -89,7 +89,6 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -364,41 +363,22 @@ private fun MessagesViewContent(
             sheetContent = { subcomposing: Boolean ->
                 if (state.userHasPermissionToSendMessage) {
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth()
-                                .heightIn(max = 230.dp)
+                        MentionSuggestionsPickerView(
+                            modifier = Modifier.heightIn(max = 230.dp)
                                 // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
                                 .nestedScroll(object : NestedScrollConnection {
                                     override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
                                         return available
                                     }
                                 }),
-                            reverseLayout = true,
-                        ) {
-                            items(
-                                state.composerState.memberSuggestions,
-                                key = { suggestion ->
-                                    when (suggestion) {
-                                        is RoomMemberSuggestion.Room -> "@room"
-                                        is RoomMemberSuggestion.Member -> suggestion.roomMember.userId.value
-                                    }
-                                }
-                            ) {
-                                Column {
-                                    RoomMemberSuggestionView(
-                                        memberSuggestion = it,
-                                        roomId = state.roomId.value,
-                                        roomName = state.roomName.dataOrNull(),
-                                        roomAvatar = state.roomAvatar.dataOrNull(),
-                                        onSuggestionSelected = {
-                                           // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
-                                        },
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                    HorizontalDivider(modifier = Modifier.fillMaxWidth())
-                                }
+                            roomId = state.roomId,
+                            roomName = state.roomName.dataOrNull(),
+                            roomAvatarData = state.roomAvatar.dataOrNull(),
+                            memberSuggestions = state.composerState.memberSuggestions,
+                            onSuggestionSelected = {
+                                // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
                             }
-                        }
+                        )
                         MessageComposerView(
                             state = state.composerState,
                             voiceMessageState = state.voiceMessageComposerState,
@@ -417,62 +397,6 @@ private fun MessagesViewContent(
             sheetTonalElevation = 0.dp,
             sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
         )
-    }
-}
-
-@Composable
-private fun RoomMemberSuggestionView(
-    memberSuggestion: RoomMemberSuggestion,
-    roomId: String,
-    roomName: String?,
-    roomAvatar: AvatarData?,
-    onSuggestionSelected: (RoomMemberSuggestion) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(modifier = modifier.clickable { onSuggestionSelected(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        val id = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> "room"
-            is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.userId.value
-        }
-        val avatarSize = AvatarSize.TimelineRoom
-        val avatarData = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
-            is RoomMemberSuggestion.Member -> AvatarData(
-                memberSuggestion.roomMember.userId.value,
-                memberSuggestion.roomMember.displayName,
-                memberSuggestion.roomMember.avatarUrl,
-                avatarSize,
-            )
-        }
-        val title = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> roomName ?: "Room"
-            is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.displayName
-        }
-
-        val subtitle = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> "Notify the whole room"
-            is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.userId.value
-        }
-
-        Avatar(avatarData = avatarData, modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp))
-
-        Column(modifier = Modifier.fillMaxWidth().padding(end = 16.dp, top = 8.dp, bottom = 8.dp), ) {
-            title?.let {
-                Text(
-                    text = it,
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-            Text(
-                text = subtitle,
-                style = ElementTheme.typography.fontBodySmRegular,
-                color = ElementTheme.colors.textSecondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
     }
 }
 

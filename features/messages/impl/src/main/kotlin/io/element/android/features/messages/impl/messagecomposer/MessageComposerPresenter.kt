@@ -411,7 +411,7 @@ class MessageComposerPresenter @Inject constructor(
                                     .toMutableList()
 
                                 val shouldAddRoom = query.isEmpty() || "room".contains(query, ignoreCase = true)
-                                if (shouldAddRoom) {textstyle
+                                if (shouldAddRoom) {
                                     matchingMembers.add(0, RoomMemberSuggestion.Room)
                                 }
 
