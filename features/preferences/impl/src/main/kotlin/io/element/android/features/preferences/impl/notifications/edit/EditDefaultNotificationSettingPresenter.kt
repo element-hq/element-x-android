@@ -135,13 +135,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
         suspend {
             // On modern clients, we don't have different settings for encrypted and non-encrypted rooms (Legacy clients did).
             notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isOneToOne).getOrThrow()
-            val result = notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isOneToOne)
-
-            if (result.isFailure) {
-                result.exceptionOrNull()?.printStackTrace()
-            }
-
-            result.getOrThrow()
+            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isOneToOne).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 
