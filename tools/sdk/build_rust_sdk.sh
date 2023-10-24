@@ -64,7 +64,7 @@ printf "\nBuilding the SDK for aarch64-linux-android...\n\n"
 cd ../element-x-android
 mv ./libraries/rustsdk/sdk-android-debug.aar ./libraries/rustsdk/matrix-rust-sdk.aar
 mkdir -p ./libraries/rustsdk/sdks
-cp ./libraries/rustsdk/matrix-rust-sdk.aar ./libraries/rustsdk/matrix-rust-sdk-${date}.aar
+cp ./libraries/rustsdk/matrix-rust-sdk.aar ./libraries/rustsdk/sdks/matrix-rust-sdk-${date}.aar
 
 
 if [ ${buildApp} == "yes" ]; then

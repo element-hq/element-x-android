@@ -208,8 +208,12 @@ class FakeMatrixClient(
         findDmResult = result
     }
 
-    fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom) {
-        getRoomResults[roomId] = result
+    fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom?) {
+        if (result == null) {
+            getRoomResults.remove(roomId)
+        } else {
+            getRoomResults[roomId] = result
+        }
     }
 
     fun givenSearchUsersResult(searchTerm: String, result: Result<MatrixSearchUserResults>) {

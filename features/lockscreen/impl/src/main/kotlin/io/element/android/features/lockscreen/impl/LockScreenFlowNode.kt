@@ -27,8 +27,8 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.lockscreen.impl.auth.PinAuthenticationNode
-import io.element.android.features.lockscreen.impl.create.CreatePinNode
+import io.element.android.features.lockscreen.impl.setup.SetupPinNode
+import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -41,7 +41,7 @@ class LockScreenFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BackstackNode<LockScreenFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Auth,
+        initialElement = NavTarget.Unlock,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -50,19 +50,19 @@ class LockScreenFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Auth : NavTarget
+        data object Unlock : NavTarget
 
         @Parcelize
-        data object Create : NavTarget
+        data object Setup : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Auth -> {
-                createNode<PinAuthenticationNode>(buildContext)
+            NavTarget.Unlock -> {
+                createNode<PinUnlockNode>(buildContext)
             }
-            NavTarget.Create -> {
-                createNode<CreatePinNode>(buildContext)
+            NavTarget.Setup -> {
+                createNode<SetupPinNode>(buildContext)
             }
         }
     }

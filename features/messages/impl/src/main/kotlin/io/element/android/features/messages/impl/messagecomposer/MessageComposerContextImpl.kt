@@ -29,6 +29,6 @@ import javax.inject.Inject
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
 class MessageComposerContextImpl @Inject constructor() : MessageComposerContext {
-    override var composerMode: MessageComposerMode by mutableStateOf(MessageComposerMode.Normal(""))
+    override var composerMode: MessageComposerMode by mutableStateOf(MessageComposerMode.Normal)
         internal set
 }

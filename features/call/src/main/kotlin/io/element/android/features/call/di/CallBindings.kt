@@ -17,7 +17,7 @@
 package io.element.android.features.call.di
 
 import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.features.call.ElementCallActivity
+import io.element.android.features.call.ui.ElementCallActivity
 import io.element.android.libraries.di.AppScope
 
 @ContributesTo(AppScope::class)

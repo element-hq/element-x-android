@@ -29,5 +29,6 @@ sealed interface MediaUploadInfo {
     data class Image(override val file: File, val imageInfo: ImageInfo, val thumbnailFile: File) : MediaUploadInfo
     data class Video(override val file: File, val videoInfo: VideoInfo, val thumbnailFile: File) : MediaUploadInfo
     data class Audio(override val file: File, val audioInfo: AudioInfo) : MediaUploadInfo
+    data class VoiceMessage(override val file: File, val audioInfo: AudioInfo, val waveform: List<Int>) : MediaUploadInfo
     data class AnyFile(override val file: File, val fileInfo: FileInfo) : MediaUploadInfo
 }

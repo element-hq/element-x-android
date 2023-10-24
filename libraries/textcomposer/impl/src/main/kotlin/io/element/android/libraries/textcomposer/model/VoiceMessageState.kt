@@ -16,7 +16,15 @@
 
 package io.element.android.libraries.textcomposer.model
 
+import kotlin.time.Duration
+
 sealed class VoiceMessageState {
     data object Idle: VoiceMessageState()
-    data object Recording: VoiceMessageState()
+
+    data object Preview: VoiceMessageState()
+    data object Sending: VoiceMessageState()
+    data class Recording(
+        val duration: Duration,
+        val level: Double,
+    ): VoiceMessageState()
 }

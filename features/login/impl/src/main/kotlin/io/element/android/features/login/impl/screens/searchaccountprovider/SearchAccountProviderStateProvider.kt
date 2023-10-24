@@ -17,9 +17,9 @@
 package io.element.android.features.login.impl.screens.searchaccountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.changeserver.aChangeServerState
 import io.element.android.features.login.impl.resolver.HomeserverData
-import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 
 open class SearchAccountProviderStateProvider : PreviewParameterProvider<SearchAccountProviderState> {
@@ -50,7 +50,7 @@ fun aHomeserverDataList(): List<HomeserverData> {
 }
 
 fun aHomeserverData(
-    homeserverUrl: String = LoginConstants.MATRIX_ORG_URL,
+    homeserverUrl: String = AuthenticationConfig.MATRIX_ORG_URL,
     isWellknownValid: Boolean = true,
     supportSlidingSync: Boolean = true,
 ): HomeserverData {

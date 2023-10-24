@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -61,7 +62,7 @@ fun TimelineEncryptedHistoryBannerView(modifier: Modifier = Modifier) {
 @PreviewsDayNight
 @Composable
 internal fun TimelineEncryptedHistoryBannerViewPreview() {
-    ElementTheme {
+    ElementPreview {
         TimelineEncryptedHistoryBannerView()
     }
 }
