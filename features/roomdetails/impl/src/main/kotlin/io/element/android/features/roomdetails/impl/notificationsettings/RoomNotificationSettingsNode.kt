@@ -65,11 +65,11 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-            RoomNotificationSettingsView(
-                state = state,
-                modifier = modifier,
-                onShowGlobalNotifications = this::openGlobalNotificationSettings,
-                onBackPressed = this::navigateUp,
-            )
+        RoomNotificationSettingsView(
+            state = state,
+            modifier = modifier,
+            onShowGlobalNotifications = this::openGlobalNotificationSettings,
+            onBackPressed = this::navigateUp,
+        )
     }
 }
