@@ -197,7 +197,9 @@ class LoggedInFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        data object Settings : NavTarget
+        data class Settings(
+            val initialElement: PreferencesEntryPoint.InitialTarget = PreferencesEntryPoint.InitialTarget.Root
+        ) : NavTarget
 
         @Parcelize
         data object CreateRoom : NavTarget
@@ -227,7 +229,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onSettingsClicked() {
-                        backstack.push(NavTarget.Settings)
+                        backstack.push(NavTarget.Settings())
                     }
 
                     override fun onCreateRoomClicked() {
@@ -260,11 +262,15 @@ class LoggedInFlowNode @AssistedInject constructor(
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         coroutineScope.launch { attachRoom(roomId) }
                     }
+
+                    override fun onOpenGlobalNotificationSettings() {
+                        backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
+                    }
                 }
                 val inputs = RoomFlowNode.Inputs(roomId = navTarget.roomId, initialElement = navTarget.initialElement)
                 createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
-            NavTarget.Settings -> {
+            is NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
                     override fun onOpenBugReport() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
@@ -278,7 +284,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.Room(roomId, initialElement = RoomLoadedFlowNode.NavTarget.RoomNotificationSettings))
                     }
                 }
-                preferencesEntryPoint.nodeBuilder(this, buildContext)
+                val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
+                return preferencesEntryPoint.nodeBuilder(this, buildContext)
+                    .params(inputs)
                     .callback(callback)
                     .build()
             }

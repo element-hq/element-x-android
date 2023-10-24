@@ -37,5 +37,17 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
                 restoreDefaultAction = Async.Uninitialized,
                 eventSink = { },
             ),
+            RoomNotificationSettingsState(
+                roomName = "Room 1",
+                Async.Success(RoomNotificationSettings(
+                    mode = RoomNotificationMode.MUTE,
+                    isDefault = false)),
+                pendingRoomNotificationMode = null,
+                pendingSetDefault = null,
+                defaultRoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
+                setNotificationSettingAction = Async.Uninitialized,
+                restoreDefaultAction = Async.Uninitialized,
+                eventSink = { },
+            ),
         )
 }

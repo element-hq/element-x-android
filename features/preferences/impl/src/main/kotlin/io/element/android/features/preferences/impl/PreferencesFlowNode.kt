@@ -53,7 +53,7 @@ class PreferencesFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BackstackNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,

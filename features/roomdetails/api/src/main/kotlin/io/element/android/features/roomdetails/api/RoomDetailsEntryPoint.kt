@@ -38,7 +38,17 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
         data object RoomNotificationSettings : InitialTarget
     }
 
-    data class Inputs(val initialElement: InitialTarget) : NodeInputs
+    data class Params(val initialElement: InitialTarget) : NodeInputs
 
-    fun createNode(parentNode: Node, buildContext: BuildContext, inputs: Inputs, plugins: List<Plugin>): Node
+    interface Callback : Plugin {
+        fun onOpenGlobalNotificationSettings()
+    }
+
+    interface NodeBuilder {
+        fun params(params: Params): NodeBuilder
+        fun callback(callback: Callback): NodeBuilder
+        fun build(): Node
+    }
+
+    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 }

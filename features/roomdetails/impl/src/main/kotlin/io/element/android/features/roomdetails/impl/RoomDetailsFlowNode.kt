@@ -23,6 +23,7 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
@@ -47,7 +48,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BackstackNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Inputs>().first().initialElement.toNavTarget(),
+        initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -125,8 +126,13 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             }
 
             is NavTarget.RoomNotificationSettings -> {
-                val plugins = listOf(RoomNotificationSettingsNode.RoomNotificationSettingInput(navTarget.showUserDefinedSettingStyle))
-                createNode<RoomNotificationSettingsNode>(buildContext, plugins)
+                val input = RoomNotificationSettingsNode.RoomNotificationSettingInput(navTarget.showUserDefinedSettingStyle)
+                val callback = object : RoomNotificationSettingsNode.Callback {
+                    override fun openGlobalNotificationSettings() {
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenGlobalNotificationSettings() }
+                    }
+                }
+                createNode<RoomNotificationSettingsNode>(buildContext, listOf(input, callback))
             }
 
             is NavTarget.RoomMemberDetails -> {
