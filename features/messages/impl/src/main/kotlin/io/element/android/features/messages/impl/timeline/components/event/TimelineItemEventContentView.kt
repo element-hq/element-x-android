@@ -20,6 +20,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.di.rememberPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -32,6 +34,9 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
+import io.element.android.libraries.architecture.Presenter
 
 @Composable
 fun TimelineItemEventContentView(
@@ -44,6 +49,7 @@ fun TimelineItemEventContentView(
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val presenterFactories = LocalTimelineItemPresenterFactories.current
     when (content) {
         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
             content = content,
@@ -100,5 +106,14 @@ fun TimelineItemEventContentView(
             eventSink = eventSink,
             modifier = modifier,
         )
+        is TimelineItemVoiceContent -> {
+            val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(content)
+            TimelineItemVoiceView(
+                state = presenter.present(),
+                content = content,
+                extraPadding = extraPadding,
+                modifier = modifier
+            )
+        }
     }
 }
