@@ -63,14 +63,17 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
+import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 @SingleIn(RoomScope::class)
@@ -94,48 +97,6 @@ class MessageComposerPresenter @Inject constructor(
 
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
     private val suggestionsMemberResult = MutableStateFlow<ImmutableList<RoomMemberSuggestion>>(persistentListOf())
-
-    init {
-        suggestionSearchTrigger.combine(room.membersStateFlow) { suggestion, membersState ->
-            val members = membersState.roomMembers()
-            when {
-                members.isNullOrEmpty() || suggestion == null -> {
-                    // Hide suggestions
-                    suggestionsMemberResult.tryEmit(persistentListOf())
-                }
-                else -> {
-                    when (suggestion.type) {
-                        SuggestionType.Mention -> {
-                            val query = suggestion.text.lowercase()
-                            val matchingMembers: MutableList<RoomMemberSuggestion> = members.filter { member ->
-                                if (member.membership != RoomMembershipState.JOIN || currentSessionIdHolder.isCurrentSession(member.userId)) {
-                                    false
-                                } else {
-                                    member.displayName?.contains(query, ignoreCase = true) == true
-                                        || member.userId.value.contains(query, ignoreCase = true)
-                                }
-                            }
-                                .map {
-                                    RoomMemberSuggestion.Member(it)
-                                }
-                                .toMutableList()
-
-                            val shouldAddRoom = query.isEmpty() || "room".contains(query, ignoreCase = true)
-                            if (shouldAddRoom) {
-                                matchingMembers.add(0, RoomMemberSuggestion.Room)
-                            }
-
-                            suggestionsMemberResult.tryEmit(matchingMembers.toPersistentList())
-                        }
-                        else -> {
-                            // Hide suggestions
-                            suggestionsMemberResult.tryEmit(persistentListOf())
-                        }
-                    }
-                }
-            }
-        }.launchIn(appCoroutineScope) // TODO: use a CoroutineScope that gets cancelled when exiting the screen
-    }
 
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
@@ -210,6 +171,8 @@ class MessageComposerPresenter @Inject constructor(
                 pendingEvent = null
             }
         }
+
+        LaunchedEffect(Unit) { processComposerSuggestions() }
 
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
@@ -417,6 +380,51 @@ class MessageComposerPresenter @Inject constructor(
                 val snackbarMessage = SnackbarMessage(sendAttachmentError(cause))
                 snackbarDispatcher.post(snackbarMessage)
             }
+        }
+
+    @OptIn(FlowPreview::class)
+    private fun CoroutineScope.processComposerSuggestions() = launch {
+        suggestionSearchTrigger
+            .debounce(0.5.seconds)
+            .combine(room.membersStateFlow) { suggestion, membersState ->
+                val members = membersState.roomMembers()
+                when {
+                    members.isNullOrEmpty() || suggestion == null -> {
+                        // Hide suggestions
+                        suggestionsMemberResult.tryEmit(persistentListOf())
+                    }
+                    else -> {
+                        when (suggestion.type) {
+                            SuggestionType.Mention -> {
+                                val query = suggestion.text.lowercase()
+                                val matchingMembers: MutableList<RoomMemberSuggestion> = members.filter { member ->
+                                    if (member.membership != RoomMembershipState.JOIN || currentSessionIdHolder.isCurrentSession(member.userId)) {
+                                        false
+                                    } else {
+                                        member.displayName?.contains(query, ignoreCase = true) == true
+                                            || member.userId.value.contains(query, ignoreCase = true)
+                                    }
+                                }
+                                    .map {
+                                        RoomMemberSuggestion.Member(it)
+                                    }
+                                    .toMutableList()
+
+                                val shouldAddRoom = query.isEmpty() || "room".contains(query, ignoreCase = true)
+                                if (shouldAddRoom) {textstyle
+                                    matchingMembers.add(0, RoomMemberSuggestion.Room)
+                                }
+
+                                suggestionsMemberResult.tryEmit(matchingMembers.toPersistentList())
+                            }
+                            else -> {
+                                // Hide suggestions
+                                suggestionsMemberResult.tryEmit(persistentListOf())
+                            }
+                        }
+                    }
+                }
+            }.collect()
         }
 }
 

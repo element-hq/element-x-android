@@ -367,6 +367,7 @@ private fun MessagesViewContent(
                         LazyColumn(
                             modifier = Modifier.fillMaxWidth()
                                 .heightIn(max = 230.dp)
+                                // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
                                 .nestedScroll(object : NestedScrollConnection {
                                     override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
                                         return available
@@ -389,8 +390,8 @@ private fun MessagesViewContent(
                                         roomId = state.roomId.value,
                                         roomName = state.roomName.dataOrNull(),
                                         roomAvatar = state.roomAvatar.dataOrNull(),
-                                        onClick = { suggestion ->
-                                            // state.composerState.eventSink(MessageComposerEvents.MemberSuggestionClicked(suggestion))
+                                        onSuggestionSelected = {
+                                           // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     )
@@ -425,10 +426,10 @@ private fun RoomMemberSuggestionView(
     roomId: String,
     roomName: String?,
     roomAvatar: AvatarData?,
-    onClick: (RoomMemberSuggestion) -> Unit,
+    onSuggestionSelected: (RoomMemberSuggestion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier.clickable { onClick(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    Row(modifier = modifier.clickable { onSuggestionSelected(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         val id = when (memberSuggestion) {
             is RoomMemberSuggestion.Room -> "room"
             is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.userId.value
