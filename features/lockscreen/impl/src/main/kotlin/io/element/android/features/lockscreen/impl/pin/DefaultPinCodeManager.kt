@@ -23,6 +23,8 @@ import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.cryptography.api.SecretKeyProvider
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 

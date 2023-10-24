@@ -22,7 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
 import io.element.android.features.lockscreen.impl.pin.model.assertText
-import io.element.android.features.lockscreen.impl.state.DefaultLockScreenStateService
+import io.element.android.features.lockscreen.impl.DefaultLockScreenService
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -80,7 +80,7 @@ class PinUnlockPresenterTest {
         val featureFlagService = FakeFeatureFlagService().apply {
             setFeatureEnabled(FeatureFlags.PinUnlock, true)
         }
-        val lockScreenStateService = DefaultLockScreenStateService(featureFlagService)
+        val lockScreenStateService = DefaultLockScreenService(featureFlagService)
         return PinUnlockPresenter(
             lockScreenStateService,
             scope,

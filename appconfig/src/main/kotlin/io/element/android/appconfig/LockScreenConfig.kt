@@ -21,7 +21,7 @@ object LockScreenConfig {
     /**
      * Whether the PIN is mandatory or not.
      */
-    const val IS_PIN_MANDATORY: Boolean = false
+    const val IS_PIN_MANDATORY: Boolean = true
 
     /**
      * Some PINs are blacklisted.
@@ -37,4 +37,9 @@ object LockScreenConfig {
      * Number of attempts before the user is logged out.
      */
     const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
+
+    /**
+     * Time period before locking the app once backgrounded.
+     */
+    const val GRACE_PERIOD_IN_MILLIS = 90 * 1000L
 }

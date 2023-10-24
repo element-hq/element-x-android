@@ -18,9 +18,15 @@ package io.element.android.features.lockscreen.api
 
 import kotlinx.coroutines.flow.StateFlow
 
-interface LockScreenStateService {
-    val state: StateFlow<LockScreenState>
+interface LockScreenService {
+    /**
+     * The current lock state of the app.
+     */
+    val lockState: StateFlow<LockScreenLockState>
 
-    suspend fun entersForeground()
-    suspend fun entersBackground()
+    /**
+     * Check if setting up the lock screen is required.
+     * @return true if the lock screen is mandatory and not setup yet, false otherwise.
+     */
+    suspend fun isSetupRequired(): Boolean
 }

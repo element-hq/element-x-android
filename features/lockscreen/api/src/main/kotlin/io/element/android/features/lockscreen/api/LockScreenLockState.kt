@@ -16,7 +16,7 @@
 
 package io.element.android.features.lockscreen.api
 
-sealed interface LockScreenState {
-    data object Unlocked : LockScreenState
-    data object Locked : LockScreenState
+sealed interface LockScreenLockState {
+    data object Unlocked : LockScreenLockState
+    data object Locked : LockScreenLockState
 }

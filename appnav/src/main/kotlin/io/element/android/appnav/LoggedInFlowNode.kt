@@ -49,8 +49,8 @@ import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
-import io.element.android.features.lockscreen.api.LockScreenState
-import io.element.android.features.lockscreen.api.LockScreenStateService
+import io.element.android.features.lockscreen.api.LockScreenLockState
+import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -94,7 +94,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueState: FtueState,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
-    private val lockScreenStateService: LockScreenStateService,
+    private val lockScreenStateService: LockScreenService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
@@ -132,16 +132,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                 if (ftueState.shouldDisplayFlow.value) {
                     backstack.push(NavTarget.Ftue)
-                }
-            },
-            onResume = {
-                coroutineScope.launch {
-                    lockScreenStateService.entersForeground()
-                }
-            },
-            onPause = {
-                coroutineScope.launch {
-                    lockScreenStateService.entersBackground()
                 }
             },
             onStop = {
@@ -347,9 +337,9 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
-            val lockScreenState by lockScreenStateService.state.collectAsState()
+            val lockScreenState by lockScreenStateService.lockState.collectAsState()
             when (lockScreenState) {
-                LockScreenState.Unlocked -> {
+                LockScreenLockState.Unlocked -> {
                     Children(
                         navModel = backstack,
                         modifier = Modifier,
@@ -361,7 +351,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
                     }
                 }
-                LockScreenState.Locked -> {
+                LockScreenLockState.Locked -> {
                     MoveActivityToBackgroundBackHandler()
                     PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
                 }
