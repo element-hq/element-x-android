@@ -255,7 +255,7 @@ class MessageComposerPresenter @Inject constructor(
                     analyticsService.trackError(event.error)
                 }
                 is MessageComposerEvents.SuggestionReceived -> {
-                    suggestionSearchTrigger.tryEmit(event.suggestion)
+                    suggestionSearchTrigger.value = event.suggestion
                 }
             }
         }
@@ -391,7 +391,7 @@ class MessageComposerPresenter @Inject constructor(
                 when {
                     members.isNullOrEmpty() || suggestion == null -> {
                         // Hide suggestions
-                        suggestionsMemberResult.tryEmit(persistentListOf())
+                        suggestionsMemberResult.value = persistentListOf()
                     }
                     else -> {
                         when (suggestion.type) {
@@ -400,6 +400,8 @@ class MessageComposerPresenter @Inject constructor(
                                 val matchingMembers: MutableList<RoomMemberSuggestion> = members.filter { member ->
                                     if (member.membership != RoomMembershipState.JOIN || currentSessionIdHolder.isCurrentSession(member.userId)) {
                                         false
+                                    } else if (query.isEmpty()) {
+                                        true
                                     } else {
                                         member.displayName?.contains(query, ignoreCase = true) == true
                                             || member.userId.value.contains(query, ignoreCase = true)
@@ -415,11 +417,11 @@ class MessageComposerPresenter @Inject constructor(
                                     matchingMembers.add(0, RoomMemberSuggestion.Room)
                                 }
 
-                                suggestionsMemberResult.tryEmit(matchingMembers.toPersistentList())
+                                suggestionsMemberResult.value = matchingMembers.toPersistentList()
                             }
                             else -> {
                                 // Hide suggestions
-                                suggestionsMemberResult.tryEmit(persistentListOf())
+                                suggestionsMemberResult.value = persistentListOf()
                             }
                         }
                     }
