@@ -145,7 +145,13 @@ class FtueFlowNode @AssistedInject constructor(
                 analyticsEntryPoint.createNode(this, buildContext)
             }
             NavTarget.LockScreenSetup -> {
+                val callback = object : LockScreenEntryPoint.Callback {
+                    override fun onSetupCompleted() {
+                        lifecycleScope.launch { moveToNextStep() }
+                    }
+                }
                 lockScreenEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callback)
                     .target(LockScreenEntryPoint.Target.Setup)
                     .build()
             }

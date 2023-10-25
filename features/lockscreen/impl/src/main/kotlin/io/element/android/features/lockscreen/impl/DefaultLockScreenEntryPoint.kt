@@ -30,8 +30,15 @@ class DefaultLockScreenEntryPoint @Inject constructor() : LockScreenEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): LockScreenEntryPoint.NodeBuilder {
 
         var innerTarget: LockScreenEntryPoint.Target = LockScreenEntryPoint.Target.Unlock
+        val callbacks = mutableListOf<LockScreenEntryPoint.Callback>()
 
         return object : LockScreenEntryPoint.NodeBuilder {
+
+            override fun callback(callback: LockScreenEntryPoint.Callback): LockScreenEntryPoint.NodeBuilder {
+                callbacks += callback
+                return this
+            }
+
             override fun target(target: LockScreenEntryPoint.Target): LockScreenEntryPoint.NodeBuilder {
                 innerTarget = target
                 return this
@@ -45,7 +52,8 @@ class DefaultLockScreenEntryPoint @Inject constructor() : LockScreenEntryPoint {
                         LockScreenEntryPoint.Target.Settings -> LockScreenFlowNode.NavTarget.Settings
                     }
                 )
-                return parentNode.createNode<LockScreenFlowNode>(buildContext, listOf(inputs))
+                val plugins = listOf(inputs) + callbacks
+                return parentNode.createNode<LockScreenFlowNode>(buildContext, plugins)
             }
         }
     }

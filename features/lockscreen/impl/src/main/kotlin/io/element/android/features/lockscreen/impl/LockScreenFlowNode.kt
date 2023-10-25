@@ -20,13 +20,17 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsFlowNode
 import io.element.android.features.lockscreen.impl.setup.SetupPinNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
@@ -41,6 +45,7 @@ import kotlinx.parcelize.Parcelize
 class LockScreenFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val pinCodeManager: PinCodeManager,
 ) : BackstackNode<LockScreenFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialNavTarget,
@@ -63,6 +68,26 @@ class LockScreenFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object Settings : NavTarget
+    }
+
+    private val pinCodeManagerCallback = object : PinCodeManager.Callback {
+        override fun onPinCodeCreated() {
+            plugins<LockScreenEntryPoint.Callback>().forEach {
+                it.onSetupCompleted()
+            }
+        }
+    }
+
+    override fun onBuilt() {
+        super.onBuilt()
+        lifecycle.subscribe(
+            onCreate = {
+                pinCodeManager.addCallback(pinCodeManagerCallback)
+            },
+            onDestroy = {
+                pinCodeManager.removeCallback(pinCodeManagerCallback)
+            }
+        )
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
