@@ -32,7 +32,7 @@ import org.junit.Test
 
 class VoiceMessagePresenterTest {
 
-    private val fakeVoiceMessageCache = FakeVoiceMessageCache()
+    private val fakeVoiceMessageCache = FakeVoiceMessageMediaRepository()
 
     @Test
     fun `initial state has proper default values`() = runTest {
@@ -275,13 +275,13 @@ class VoiceMessagePresenterTest {
 }
 
 fun createVoiceMessagePresenter(
-    fakeVoiceMessageCache: FakeVoiceMessageCache,
+    fakeVoiceMessageCache: FakeVoiceMessageMediaRepository,
     content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
 ) = VoiceMessagePresenter(
     voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, body ->
         VoiceMessagePlayerImpl(
             mediaPlayer = FakeMediaPlayer(),
-            voiceMessageCacheFactory = { _, _, _ -> fakeVoiceMessageCache },
+            voiceMessageMediaRepositoryFactory = { _, _, _ -> fakeVoiceMessageCache },
             eventId = eventId,
             mediaSource = mediaSource,
             mimeType = mimeType,

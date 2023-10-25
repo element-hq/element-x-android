@@ -59,10 +59,12 @@ interface VoiceMessagePlayer {
     val state: Flow<State>
 
     /**
-     *      * Start playing from the beginning acquiring control of the
-     *      * underlying [MediaPlayer].
+     * Starts playing from the beginning
+     * acquiring control of the underlying [MediaPlayer].
+     * If already in control of the underlying [MediaPlayer], starts playing from the
+     * current position.
      *
-     * Start playing from the current position.
+     * Will transparently fetche the remote media file if needed (hence why it's a suspend method).
      */
     suspend fun play(): Result<Unit>
 
@@ -104,7 +106,7 @@ interface VoiceMessagePlayer {
  */
 class VoiceMessagePlayerImpl(
     private val mediaPlayer: MediaPlayer,
-    voiceMessageCacheFactory: VoiceMessageCache.Factory,
+    voiceMessageMediaRepositoryFactory: VoiceMessageMediaRepository.Factory,
     private val eventId: EventId?,
     mediaSource: MediaSource,
     mimeType: String?,
@@ -114,7 +116,7 @@ class VoiceMessagePlayerImpl(
     @ContributesBinding(RoomScope::class) // Scoped types can't use @AssistedInject.
     class Factory @Inject constructor(
         private val mediaPlayer: MediaPlayer,
-        private val voiceMessageCacheFactory: VoiceMessageCache.Factory,
+        private val voiceMessageMediaRepositoryFactory: VoiceMessageMediaRepository.Factory,
     ) : VoiceMessagePlayer.Factory {
         override fun create(
             eventId: EventId?,
@@ -124,7 +126,7 @@ class VoiceMessagePlayerImpl(
         ): VoiceMessagePlayerImpl {
             return VoiceMessagePlayerImpl(
                 mediaPlayer = mediaPlayer,
-                voiceMessageCacheFactory = voiceMessageCacheFactory,
+                voiceMessageMediaRepositoryFactory = voiceMessageMediaRepositoryFactory,
                 eventId = eventId,
                 mediaSource = mediaSource,
                 mimeType = mimeType,
@@ -133,7 +135,7 @@ class VoiceMessagePlayerImpl(
         }
     }
 
-    private val voiceMessageCache = voiceMessageCacheFactory.create(
+    private val voiceMessageCache = voiceMessageMediaRepositoryFactory.create(
         mediaSource = mediaSource,
         mimeType = mimeType,
         body = body

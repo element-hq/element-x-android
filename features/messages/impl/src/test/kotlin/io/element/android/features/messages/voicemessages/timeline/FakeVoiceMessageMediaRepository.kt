@@ -16,14 +16,14 @@
 
 package io.element.android.features.messages.voicemessages.timeline
 
-import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageCache
+import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageMediaRepository
 import io.element.android.tests.testutils.simulateLongTask
 import java.io.File
 
 /**
- * A fake implementation of [VoiceMessageCache] for testing purposes.
+ * A fake implementation of [VoiceMessageMediaRepository] for testing purposes.
  */
-class FakeVoiceMessageCache : VoiceMessageCache {
+class FakeVoiceMessageMediaRepository : VoiceMessageMediaRepository {
 
     private var _getMediaFile: Result<File> = Result.success(File(""))
 

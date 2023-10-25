@@ -17,13 +17,13 @@
 package io.element.android.features.messages.voicemessages.timeline
 
 import com.google.common.truth.Truth
-import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageCacheImpl
+import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageMediaRepositoryImpl
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 
-class VoiceMessageCacheTest {
+class VoiceMessageMediaRepositoryTest {
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
@@ -34,7 +34,7 @@ class VoiceMessageCacheTest {
         val file = File("$rootPath/myFile.txt").apply { createNewFile() }
         val cacheDir = File("$rootPath/cacheDir").apply { if (!exists()) mkdirs() }
         val mxcUri = "mxc://matrix.org/1234567890abcdefg"
-        val cache = VoiceMessageCacheImpl(cacheDir, mxcUri)
+        val cache = VoiceMessageMediaRepositoryImpl(cacheDir, mxcUri)
 
         Truth.assertThat(cache.downloadToCache(file))
             .isTrue()
@@ -47,7 +47,7 @@ class VoiceMessageCacheTest {
         val rootPath = temporaryFolder.root.path
         val cacheDir = File("$rootPath/cacheDir")
         val mxcUri = "mxc://matrix.org/1234567890abcdefg"
-        val cache = VoiceMessageCacheImpl(cacheDir, mxcUri)
+        val cache = VoiceMessageMediaRepositoryImpl(cacheDir, mxcUri)
 
         Truth.assertThat(cache.cachedFilePath)
             .isEqualTo("$rootPath/cacheDir/temp/voice/matrix.org/1234567890abcdefg")
@@ -62,7 +62,7 @@ class VoiceMessageCacheTest {
             parentFile?.mkdirs()
             createNewFile()
         }
-        val cache = VoiceMessageCacheImpl(cacheDir, mxcUri)
+        val cache = VoiceMessageMediaRepositoryImpl(cacheDir, mxcUri)
 
         Truth.assertThat(cache.isInCache())
             .isTrue()
@@ -73,7 +73,7 @@ class VoiceMessageCacheTest {
         val rootPath = temporaryFolder.root.path
         val cacheDir = File("$rootPath/cacheDir")
         val mxcUri = "mxc://matrix.org/1234567890abcdefg"
-        val cache = VoiceMessageCacheImpl(cacheDir, mxcUri)
+        val cache = VoiceMessageMediaRepositoryImpl(cacheDir, mxcUri)
 
         Truth.assertThat(cache.isInCache())
             .isFalse()
@@ -83,7 +83,7 @@ class VoiceMessageCacheTest {
     fun `isInVoiceCache() throws IllegalStateException on bogus mxc uri`() {
         val cacheDir = File("")
         val mxcUri = "bogus"
-        val cache = VoiceMessageCacheImpl(cacheDir, mxcUri)
+        val cache = VoiceMessageMediaRepositoryImpl(cacheDir, mxcUri)
 
         cache.isInCache()
     }

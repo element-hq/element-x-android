@@ -28,16 +28,16 @@ import io.element.android.libraries.matrix.api.media.toFile
 import java.io.File
 
 /**
- * Manages the local disk cache for a voice message.
+ * Fetches the media file for a voice message.
  */
-interface VoiceMessageCache {
+interface VoiceMessageMediaRepository {
 
     /**
-     * Factory for [VoiceMessageCache].
+     * Factory for [VoiceMessageMediaRepository].
      */
     fun interface Factory {
         /**
-         * Creates a [VoiceMessageCache] for the given Matrix Content (mxc://) URI.
+         * Creates a [VoiceMessageMediaRepository] for the given Matrix Content (mxc://) URI.
          *
          * @param mxcUri the Matrix Content (mxc://) URI of the voice message.
          */
@@ -45,7 +45,7 @@ interface VoiceMessageCache {
             mediaSource: MediaSource,
             mimeType: String?,
             body: String?,
-        ): VoiceMessageCache
+        ): VoiceMessageMediaRepository
     }
 
     /**
@@ -60,29 +60,28 @@ interface VoiceMessageCache {
 }
 
 /**
- * Default implementation of [VoiceMessageCache].
- *
- * NB: All methods will throw an [IllegalStateException] if the mxcUri is invalid.
+ * Default implementation of [VoiceMessageMediaRepository] that serves the remote
+ * media files through a local disk cache.
  *
  * @param cacheDir the application's cache directory.
  * @param mxcUri the Matrix Content (mxc://) URI of the voice message.
  */
-class VoiceMessageCacheImpl @AssistedInject constructor(
+class VoiceMessageMediaRepositoryImpl @AssistedInject constructor(
     @CacheDirectory private val cacheDir: File,
     private val matrixMediaLoader: MatrixMediaLoader,
     @Assisted private val mediaSource: MediaSource,
     @Assisted("mimeType") private val mimeType: String?,
     @Assisted("body") private val body: String?,
-) : VoiceMessageCache {
+) : VoiceMessageMediaRepository {
 
     @ContributesBinding(RoomScope::class)
     @AssistedFactory
-    fun interface Factory : VoiceMessageCache.Factory {
+    fun interface Factory : VoiceMessageMediaRepository.Factory {
         override fun create(
             mediaSource: MediaSource,
             @Assisted("mimeType") mimeType: String?,
             @Assisted("body") body: String?,
-        ): VoiceMessageCacheImpl
+        ): VoiceMessageMediaRepositoryImpl
     }
 
     override suspend fun getMediaFile(): Result<File> = if (!isInCache()) {
