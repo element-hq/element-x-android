@@ -18,10 +18,6 @@ package io.element.android.features.lockscreen.impl.pin.storage
 
 interface PinCodeStore : EncryptedPinCodeStorage {
 
-    interface Listener {
-        fun onPinSetUpChange(isConfigured: Boolean)
-    }
-
     /**
      * Returns the remaining PIN code attempts. When this reaches 0 the PIN code access won't be available for some time.
      */
@@ -29,24 +25,13 @@ interface PinCodeStore : EncryptedPinCodeStorage {
 
     /**
      * Should decrement the number of remaining PIN code attempts.
-     * @return The remaining attempts.
      */
-    suspend fun onWrongPin(): Int
+    suspend fun onWrongPin()
 
     /**
      * Resets the counter of attempts for PIN code and biometric access.
      */
     suspend fun resetCounter()
-
-    /**
-     * Adds a listener to be notified when the PIN code us created or removed.
-     */
-    fun addListener(listener: Listener)
-
-    /**
-     * Removes a listener to be notified when the PIN code us created or removed.
-     */
-    fun removeListener(listener: Listener)
 }
 
 

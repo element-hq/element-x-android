@@ -27,20 +27,12 @@ class InMemoryPinCodeStore : PinCodeStore {
         return remainingAttempts
     }
 
-    override suspend fun onWrongPin(): Int {
-        return remainingAttempts--
+    override suspend fun onWrongPin() {
+        remainingAttempts--
     }
 
     override suspend fun resetCounter() {
         remainingAttempts = DEFAULT_REMAINING_ATTEMPTS
-    }
-
-    override fun addListener(listener: PinCodeStore.Listener) {
-        // no-op
-    }
-
-    override fun removeListener(listener: PinCodeStore.Listener) {
-        // no-op
     }
 
     override suspend fun getEncryptedCode(): String? {
