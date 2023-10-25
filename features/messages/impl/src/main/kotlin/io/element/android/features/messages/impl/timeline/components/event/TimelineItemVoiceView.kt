@@ -44,6 +44,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageStateProvider
+import io.element.android.features.messages.impl.voicemessages.timeline.Waveform
+import io.element.android.features.messages.impl.voicemessages.timeline.WaveformPlaybackView
 import io.element.android.features.messages.impl.voicemessages.timeline.WaveformProgressIndicator
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -92,14 +94,23 @@ fun TimelineItemVoiceView(
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.width(8.dp))
-        WaveformProgressIndicator(
+        WaveformPlaybackView(
+            showCursor = state.button == VoiceMessageState.Button.Pause,
+            playbackProgress = state.progress,
+            waveform = Waveform(data = content.waveform),
             modifier = Modifier
                 .height(34.dp)
                 .weight(1f),
-            progress = state.progress,
-            amplitudes = content.waveform,
-            onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) }
+            onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) },
         )
+//        WaveformProgressIndicator(
+//            modifier = Modifier
+//                .height(34.dp)
+//                .weight(1f),
+//            progress = state.progress,
+//            amplitudes = content.waveform,
+//            onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) }
+//        )
         Spacer(Modifier.width(extraPadding.getDpSize()))
     }
 }

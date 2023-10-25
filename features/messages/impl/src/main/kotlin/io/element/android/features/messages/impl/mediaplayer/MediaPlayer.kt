@@ -174,6 +174,9 @@ class MediaPlayerImpl @Inject constructor(
 
     override fun seekTo(positionMs: Long) {
         player.seekTo(positionMs)
+        _state.update {
+            it.copy(currentPosition = player.currentPosition)
+        }
     }
 
     override fun close() {

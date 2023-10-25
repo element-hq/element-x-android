@@ -35,7 +35,13 @@ open class VoiceMessageStateProvider : PreviewParameterProvider<VoiceMessageStat
             ),
             VoiceMessageState(
                 VoiceMessageState.Button.Play,
-                progress = 1f,
+                progress = 1.0f,
+                time = "00:00",
+                eventSink = {}
+            ),
+            VoiceMessageState(
+                VoiceMessageState.Button.Pause,
+                progress = 0.5f,
                 time = "00:00",
                 eventSink = {}
             ),
