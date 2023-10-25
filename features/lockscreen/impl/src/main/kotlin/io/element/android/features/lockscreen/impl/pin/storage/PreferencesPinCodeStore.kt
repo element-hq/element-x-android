@@ -38,6 +38,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 @ContributesBinding(AppScope::class)
 class PreferencesPinCodeStore @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val lockScreenConfig: LockScreenConfig,
 ) : PinCodeStore {
 
     private val pinCodeKey = stringPreferencesKey("encoded_pin_code")
@@ -59,7 +60,7 @@ class PreferencesPinCodeStore @Inject constructor(
 
     override suspend fun resetCounter() {
         context.dataStore.edit { preferences ->
-            preferences[remainingAttemptsKey] = LockScreenConfig.MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT
+            preferences[remainingAttemptsKey] = lockScreenConfig.maxPinCodeAttemptsBeforeLogout
         }
     }
 
@@ -87,5 +88,5 @@ class PreferencesPinCodeStore @Inject constructor(
         }.first()
     }
 
-    private fun Preferences.getRemainingPinCodeAttemptsNumber() = this[remainingAttemptsKey] ?: LockScreenConfig.MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT
+    private fun Preferences.getRemainingPinCodeAttemptsNumber() = this[remainingAttemptsKey] ?: lockScreenConfig.maxPinCodeAttemptsBeforeLogout
 }

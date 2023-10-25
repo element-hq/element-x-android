@@ -33,6 +33,7 @@ import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class SetupPinPresenter @Inject constructor(
+    private val lockScreenConfig: LockScreenConfig,
     private val pinValidator: PinValidator,
     private val buildMeta: BuildMeta,
     private val pinCodeManager: PinCodeManager,
@@ -41,10 +42,10 @@ class SetupPinPresenter @Inject constructor(
     @Composable
     override fun present(): SetupPinState {
         var choosePinEntry by remember {
-            mutableStateOf(PinEntry.createEmpty(LockScreenConfig.PIN_SIZE))
+            mutableStateOf(PinEntry.createEmpty(lockScreenConfig.pinSize))
         }
         var confirmPinEntry by remember {
-            mutableStateOf(PinEntry.createEmpty(LockScreenConfig.PIN_SIZE))
+            mutableStateOf(PinEntry.createEmpty(lockScreenConfig.pinSize))
         }
         var isConfirmationStep by remember {
             mutableStateOf(false)

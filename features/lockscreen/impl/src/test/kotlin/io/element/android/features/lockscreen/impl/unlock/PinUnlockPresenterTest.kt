@@ -21,7 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
-import io.element.android.features.lockscreen.impl.pin.createPinCodeManager
+import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
@@ -147,7 +147,7 @@ class PinUnlockPresenterTest {
         scope: CoroutineScope,
         callback: PinCodeManager.Callback = object : PinCodeManager.Callback {},
     ): PinUnlockPresenter {
-        val pinCodeManager = createPinCodeManager().apply {
+        val pinCodeManager = aPinCodeManager().apply {
             addCallback(callback)
             createPinCode(completePin)
         }

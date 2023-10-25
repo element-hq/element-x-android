@@ -16,30 +16,52 @@
 
 package io.element.android.appconfig
 
-object LockScreenConfig {
+import com.squareup.anvil.annotations.ContributesTo
+import dagger.Module
+import dagger.Provides
+import io.element.android.libraries.di.AppScope
 
+/**
+ * Configuration for the lock screen feature.
+ */
+data class LockScreenConfig(
     /**
      * Whether the PIN is mandatory or not.
      */
-    const val IS_PIN_MANDATORY: Boolean = false
+    val isPinMandatory: Boolean,
 
     /**
      * Some PINs are blacklisted.
      */
-    val PIN_BLACKLIST = setOf("0000", "1234")
+    val pinBlacklist: Set<String>,
 
     /**
      * The size of the PIN.
      */
-    const val PIN_SIZE = 4
+    val pinSize: Int,
 
     /**
      * Number of attempts before the user is logged out.
      */
-    const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
+    val maxPinCodeAttemptsBeforeLogout: Int,
 
     /**
      * Time period before locking the app once backgrounded.
      */
-    const val GRACE_PERIOD_IN_MILLIS = 90 * 1000L
+    val gracePeriodInMillis: Long
+)
+
+@ContributesTo(AppScope::class)
+@Module
+object LockScreenConfigModule {
+
+    @Provides
+    fun providesLockScreenConfig(): LockScreenConfig = LockScreenConfig(
+        isPinMandatory = false,
+        pinBlacklist = setOf("0000", "1234"),
+        pinSize = 4,
+        maxPinCodeAttemptsBeforeLogout = 3,
+        gracePeriodInMillis = 90_000L
+    )
+
 }

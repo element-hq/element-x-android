@@ -54,7 +54,7 @@ fun LockScreenSettingsView(
                     title = stringResource(id = R.string.screen_app_lock_settings_remove_pin),
                     tintColor = ElementTheme.colors.textCriticalPrimary,
                     onClick = {
-                        state.eventSink(LockScreenSettingsEvents.RemovePin)
+                        state.eventSink(LockScreenSettingsEvents.OnRemovePin)
                     }
                 )
             }

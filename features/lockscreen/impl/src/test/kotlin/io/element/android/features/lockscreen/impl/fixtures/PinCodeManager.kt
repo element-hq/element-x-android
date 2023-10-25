@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.pin
+package io.element.android.features.lockscreen.impl.fixtures
 
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManager
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.storage.InMemoryPinCodeStore
+import io.element.android.features.lockscreen.impl.pin.storage.PinCodeStore
+import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.impl.AESEncryptionDecryptionService
 import io.element.android.libraries.cryptography.test.SimpleSecretKeyProvider
 
-internal fun createPinCodeManager(): PinCodeManager {
-    val pinCodeStore = InMemoryPinCodeStore()
-    val secretKeyProvider = SimpleSecretKeyProvider()
-    val encryptionDecryptionService = AESEncryptionDecryptionService()
+internal fun aPinCodeManager(
+    pinCodeStore: PinCodeStore = InMemoryPinCodeStore(),
+    secretKeyProvider: SimpleSecretKeyProvider = SimpleSecretKeyProvider(),
+    encryptionDecryptionService: EncryptionDecryptionService = AESEncryptionDecryptionService(),
+): PinCodeManager {
     return DefaultPinCodeManager(secretKeyProvider, encryptionDecryptionService, pinCodeStore)
 }

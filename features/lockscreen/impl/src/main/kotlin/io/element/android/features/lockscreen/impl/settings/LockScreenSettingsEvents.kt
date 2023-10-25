@@ -17,7 +17,7 @@
 package io.element.android.features.lockscreen.impl.settings
 
 sealed interface LockScreenSettingsEvents {
-    data object RemovePin : LockScreenSettingsEvents
+    data object OnRemovePin : LockScreenSettingsEvents
     data object ConfirmRemovePin : LockScreenSettingsEvents
     data object CancelRemovePin : LockScreenSettingsEvents
     data object ToggleBiometric : LockScreenSettingsEvents

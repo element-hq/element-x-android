@@ -39,6 +39,7 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultLockScreenService @Inject constructor(
+    private val lockScreenConfig: LockScreenConfig,
     private val featureFlagService: FeatureFlagService,
     private val pinCodeManager: PinCodeManager,
     private val coroutineScope: CoroutineScope,
@@ -91,14 +92,14 @@ class DefaultLockScreenService @Inject constructor(
                 if (isInForeground) {
                     lockJob?.cancel()
                 } else {
-                    lockJob = lockIfNeeded(delayInMillis = LockScreenConfig.GRACE_PERIOD_IN_MILLIS)
+                    lockJob = lockIfNeeded(delayInMillis = lockScreenConfig.gracePeriodInMillis)
                 }
             }
         }
     }
 
     override suspend fun isSetupRequired(): Boolean {
-        return LockScreenConfig.IS_PIN_MANDATORY
+        return lockScreenConfig.isPinMandatory
             && featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)
             && !pinCodeManager.isPinCodeAvailable()
     }

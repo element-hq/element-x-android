@@ -20,8 +20,10 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.fixtures.aLockScreenConfig
+import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
-import io.element.android.features.lockscreen.impl.pin.createPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
@@ -108,9 +110,19 @@ class SetupPinPresenterTest {
         }
     }
 
-    private fun createSetupPinPresenter(callback: PinCodeManager.Callback): SetupPinPresenter {
-        val pinCodeManager = createPinCodeManager()
+    private fun createSetupPinPresenter(
+        callback: PinCodeManager.Callback,
+        lockScreenConfig: LockScreenConfig = aLockScreenConfig(
+            pinBlacklist = setOf(blacklistedPin)
+        ),
+    ): SetupPinPresenter {
+        val pinCodeManager = aPinCodeManager()
         pinCodeManager.addCallback(callback)
-        return SetupPinPresenter(PinValidator(setOf(blacklistedPin)), aBuildMeta(), pinCodeManager)
+        return SetupPinPresenter(
+            lockScreenConfig = lockScreenConfig,
+            pinValidator = PinValidator(lockScreenConfig),
+            buildMeta = aBuildMeta(),
+            pinCodeManager = pinCodeManager
+        )
     }
 }

@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LockScreenSettingsPresenter @Inject constructor(
+    private val lockScreenConfig: LockScreenConfig,
     private val pinCodeManager: PinCodeManager,
     private val coroutineScope: CoroutineScope,
 ) : Presenter<LockScreenSettingsState> {
@@ -50,7 +51,7 @@ class LockScreenSettingsPresenter @Inject constructor(
             mutableStateOf(false)
         }
         LaunchedEffect(triggerComputation) {
-            showRemovePinOption = !LockScreenConfig.IS_PIN_MANDATORY && pinCodeManager.isPinCodeAvailable()
+            showRemovePinOption = !lockScreenConfig.isPinMandatory && pinCodeManager.isPinCodeAvailable()
         }
 
         fun handleEvents(event: LockScreenSettingsEvents) {
@@ -58,12 +59,14 @@ class LockScreenSettingsPresenter @Inject constructor(
                 LockScreenSettingsEvents.CancelRemovePin -> showRemovePinConfirmation = false
                 LockScreenSettingsEvents.ConfirmRemovePin -> {
                     coroutineScope.launch {
-                        showRemovePinConfirmation = false
-                        pinCodeManager.deletePinCode()
-                        triggerComputation++
+                        if (showRemovePinConfirmation) {
+                            showRemovePinConfirmation = false
+                            pinCodeManager.deletePinCode()
+                            triggerComputation++
+                        }
                     }
                 }
-                LockScreenSettingsEvents.RemovePin -> showRemovePinConfirmation = true
+                LockScreenSettingsEvents.OnRemovePin -> showRemovePinConfirmation = true
                 LockScreenSettingsEvents.ToggleBiometric -> {
                     //TODO branch biometric logic
                 }
@@ -77,5 +80,4 @@ class LockScreenSettingsPresenter @Inject constructor(
             eventSink = ::handleEvents
         )
     }
-
 }
