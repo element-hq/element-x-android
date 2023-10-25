@@ -25,9 +25,9 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SessionScope
 
-@ContributesNode(AppScope::class)
+@ContributesNode(SessionScope::class)
 class LockScreenSettingsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

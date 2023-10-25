@@ -18,6 +18,7 @@ package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,10 +30,16 @@ import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.matrix.api.MatrixClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PinUnlockPresenter @Inject constructor(
     private val pinCodeManager: PinCodeManager,
+    private val matrixClient: MatrixClient,
+    private val coroutineScope: CoroutineScope,
 ) : Presenter<PinUnlockState> {
 
     @Composable
@@ -49,6 +56,10 @@ class PinUnlockPresenter @Inject constructor(
         }
         var showSignOutPrompt by rememberSaveable {
             mutableStateOf(false)
+        }
+
+        val signOutAction = remember {
+            mutableStateOf<Async<String?>>(Async.Uninitialized)
         }
 
         LaunchedEffect(pinEntry) {
@@ -73,6 +84,13 @@ class PinUnlockPresenter @Inject constructor(
                 }
                 PinUnlockEvents.OnForgetPin -> showSignOutPrompt = true
                 PinUnlockEvents.ClearSignOutPrompt -> showSignOutPrompt = false
+                PinUnlockEvents.SignOut -> {
+                    showSignOutPrompt = false
+                    coroutineScope.signOut(signOutAction)
+                }
+                PinUnlockEvents.OnUseBiometric -> {
+                    //TODO
+                }
             }
         }
         return PinUnlockState(
@@ -80,8 +98,15 @@ class PinUnlockPresenter @Inject constructor(
             showWrongPinTitle = showWrongPinTitle,
             remainingAttempts = remainingAttempts,
             showSignOutPrompt = showSignOutPrompt,
+            signOutAction = signOutAction.value,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.signOut(signOutAction: MutableState<Async<String?>>) = launch {
+        suspend {
+            matrixClient.logout()
+        }.runCatchingUpdatingState(signOutAction)
     }
 
     private fun PinEntry.process(pinKeypadModel: PinKeypadModel): PinEntry {

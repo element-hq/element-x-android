@@ -28,6 +28,7 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
             aPinUnlockState(showWrongPinTitle = true),
             aPinUnlockState(showSignOutPrompt = true),
             aPinUnlockState(showSignOutPrompt = true, remainingAttempts = 0),
+            aPinUnlockState(signOutAction = Async.Loading()),
         )
 }
 
@@ -36,10 +37,12 @@ fun aPinUnlockState(
     remainingAttempts: Int = 3,
     showWrongPinTitle: Boolean = false,
     showSignOutPrompt: Boolean = false,
+    signOutAction: Async<String?> = Async.Uninitialized,
 ) = PinUnlockState(
     pinEntry = pinEntry,
     showWrongPinTitle = showWrongPinTitle,
     remainingAttempts = Async.Success(remainingAttempts),
     showSignOutPrompt = showSignOutPrompt,
+    signOutAction = signOutAction,
     eventSink = {}
 )

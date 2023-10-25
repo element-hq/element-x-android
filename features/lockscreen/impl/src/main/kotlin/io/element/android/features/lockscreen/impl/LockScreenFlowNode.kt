@@ -34,10 +34,10 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(AppScope::class)
+@ContributesNode(SessionScope::class)
 class LockScreenFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

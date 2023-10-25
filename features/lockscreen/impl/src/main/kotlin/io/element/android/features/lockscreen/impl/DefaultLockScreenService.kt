@@ -56,6 +56,10 @@ class DefaultLockScreenService @Inject constructor(
             override fun onPinCodeVerified() {
                 _lockScreenState.value = LockScreenLockState.Unlocked
             }
+
+            override fun onPinCodeRemoved() {
+                _lockScreenState.value = LockScreenLockState.Unlocked
+            }
         })
         coroutineScope.lockIfNeeded()
         observeAppForegroundState()

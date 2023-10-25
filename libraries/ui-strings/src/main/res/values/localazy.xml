@@ -51,7 +51,7 @@
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
   <string name="action_ok">"OK"</string>
-  <string name="action_open_settings">"Open settings"</string>
+  <string name="action_open_settings">"Settings"</string>
   <string name="action_open_with">"Open with"</string>
   <string name="action_quick_reply">"Quick reply"</string>
   <string name="action_quote">"Quote"</string>
@@ -145,6 +145,7 @@
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Settings"</string>
   <string name="common_shared_location">"Shared location"</string>
+  <string name="common_signing_out">"Signing out"</string>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
@@ -167,8 +168,11 @@
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
+  <string name="common_waiting_for_decryption_key">"Waiting for decryption key"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
+  <string name="confirm_recovery_key_banner_message">"Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup."</string>
+  <string name="confirm_recovery_key_banner_title">"Confirm your recovery key"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Warning"</string>
   <string name="emoji_picker_category_activity">"Activities"</string>
@@ -268,6 +272,8 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Enter…"</string>
   <string name="screen_recovery_key_confirm_success">"Recovery key confirmed"</string>
   <string name="screen_recovery_key_confirm_title">"Confirm your recovery key"</string>
+  <string name="screen_recovery_key_copied_to_clipboard">"Copied recovery key"</string>
+  <string name="screen_recovery_key_generating_key">"Generating…"</string>
   <string name="screen_recovery_key_save_action">"Save recovery key"</string>
   <string name="screen_recovery_key_save_description">"Write down your recovery key somewhere safe or save it in a password manager."</string>
   <string name="screen_recovery_key_save_key_description">"Tap to copy recovery key"</string>

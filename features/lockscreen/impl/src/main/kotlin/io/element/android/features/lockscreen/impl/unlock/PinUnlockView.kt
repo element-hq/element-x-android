@@ -48,6 +48,8 @@ import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypad
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -79,7 +81,13 @@ fun PinUnlockView(
             }
             val footer = @Composable {
                 PinUnlockFooter(
-                    modifier = Modifier.padding(top = 24.dp)
+                    modifier = Modifier.padding(top = 24.dp),
+                    onUseBiometric = {
+                        state.eventSink(PinUnlockEvents.OnUseBiometric)
+                    },
+                    onForgotPin = {
+                        state.eventSink(PinUnlockEvents.OnForgetPin)
+                    },
                 )
             }
             val content = @Composable { constraints: BoxWithConstraintsScope ->
@@ -107,23 +115,42 @@ fun PinUnlockView(
                     modifier = commonModifier,
                 )
             }
-            if (state.showSignOutPrompt) {
-                if (state.isSignOutPromptCancellable) {
-                    ConfirmationDialog(
-                        title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
-                        content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
-                        onSubmitClicked = {},
-                        onDismiss = {},
-                    )
-                } else {
-                    ErrorDialog(
-                        title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
-                        content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
-                        onDismiss = {},
-                    )
-                }
-            }
         }
+        if (state.showSignOutPrompt) {
+            SignOutPrompt(
+                isCancellable = state.isSignOutPromptCancellable,
+                onSignOut = { state.eventSink(PinUnlockEvents.SignOut) },
+                onDismiss = { state.eventSink(PinUnlockEvents.ClearSignOutPrompt) },
+            )
+        }
+        if (state.signOutAction is Async.Loading) {
+            ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
+        }
+    }
+}
+
+@Composable
+private fun SignOutPrompt(
+    isCancellable: Boolean,
+    onSignOut: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (isCancellable) {
+        ConfirmationDialog(
+            title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
+            content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
+            onSubmitClicked = onSignOut,
+            onDismiss = onDismiss,
+            modifier = modifier,
+        )
+    } else {
+        ErrorDialog(
+            title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
+            content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
+            onDismiss = onSignOut,
+            modifier = modifier,
+        )
     }
 }
 
@@ -255,11 +282,13 @@ private fun PinUnlockHeader(
 
 @Composable
 private fun PinUnlockFooter(
+    onUseBiometric: ()->Unit,
+    onForgotPin: ()->Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-        TextButton(text = "Use biometric", onClick = { })
-        TextButton(text = stringResource(id = R.string.screen_app_lock_forgot_pin), onClick = { })
+        TextButton(text = "Use biometric", onClick = onUseBiometric)
+        TextButton(text = stringResource(id = R.string.screen_app_lock_forgot_pin), onClick = onForgotPin)
     }
 }
 
