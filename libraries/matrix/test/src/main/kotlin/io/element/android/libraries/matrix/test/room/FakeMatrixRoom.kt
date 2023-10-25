@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -46,6 +47,8 @@ import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
@@ -142,6 +145,9 @@ class FakeMatrixRoom(
         private set
 
     private var leaveRoomError: Throwable? = null
+
+    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1, extraBufferCapacity = 1)
+    override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
@@ -496,6 +502,10 @@ class FakeMatrixRoom(
 
     fun givenGetWidgetDriverResult(result: Result<MatrixWidgetDriver>) {
         getWidgetDriverResult = result
+    }
+
+    fun givenRoomInfo(roomInfo: MatrixRoomInfo) {
+        _roomInfoFlow.tryEmit(roomInfo)
     }
 }
 

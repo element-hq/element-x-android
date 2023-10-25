@@ -63,6 +63,9 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     attachmentsState = AttachmentsState.Sending.Uploading(0.33f)
                 ),
             ),
+            aMessagesState().copy(
+                isCallOngoing = true,
+            )
         )
 }
 
@@ -102,6 +105,7 @@ fun aMessagesState() = MessagesState(
     enableTextFormatting = true,
     enableVoiceMessages = true,
     enableInRoomCalls = true,
+    isCallOngoing = false,
     appName = "Element",
     eventSink = {}
 )

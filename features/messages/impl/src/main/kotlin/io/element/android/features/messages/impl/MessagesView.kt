@@ -21,17 +21,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -94,6 +98,7 @@ import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
+import androidx.compose.material3.Button as Material3Button
 
 @Composable
 fun MessagesView(
@@ -174,6 +179,7 @@ fun MessagesView(
                     inRoomCallsEnabled = state.enableInRoomCalls,
                     onBackPressed = onBackPressed,
                     onRoomDetailsClicked = onRoomDetailsClicked,
+                    isCallOngoing = state.isCallOngoing,
                     onJoinCallClicked = onJoinCallClicked,
                 )
             }
@@ -375,6 +381,7 @@ private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
     inRoomCallsEnabled: Boolean,
+    isCallOngoing: Boolean,
     modifier: Modifier = Modifier,
     onRoomDetailsClicked: () -> Unit = {},
     onJoinCallClicked: () -> Unit = {},
@@ -402,13 +409,46 @@ private fun MessagesViewTopBar(
         },
         actions = {
             if (inRoomCallsEnabled) {
-                IconButton(onClick = onJoinCallClicked) {
-                    Icon(CommonDrawables.ic_compound_video_call, contentDescription = null) // TODO add proper content description once we have the state
+                if (isCallOngoing) {
+                    JoinCallMenuItem(onJoinCallClicked = onJoinCallClicked)
+                } else {
+                    IconButton(onClick = onJoinCallClicked) {
+                        Icon(CommonDrawables.ic_compound_video_call, contentDescription = null) // TODO add proper content description once we have the state
+                    }
                 }
             }
+            Spacer(Modifier.width(8.dp))
         },
         windowInsets = WindowInsets(0.dp)
     )
+}
+
+@Composable
+private fun JoinCallMenuItem(
+    modifier: Modifier = Modifier,
+    onJoinCallClicked: () -> Unit,
+) {
+    Material3Button(
+        onClick = onJoinCallClicked,
+        colors = ButtonDefaults.buttonColors(
+            contentColor = ElementTheme.colors.bgCanvasDefault,
+            containerColor = ElementTheme.colors.iconAccentTertiary
+        ),
+        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
+        modifier = modifier.heightIn(min = 36.dp),
+    ) {
+        Icon(
+            modifier = Modifier.size(20.dp),
+            resourceId = CommonDrawables.ic_compound_video_call,
+            contentDescription = stringResource(CommonStrings.action_join)
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = stringResource(CommonStrings.action_join),
+            style = ElementTheme.typography.fontBodyMdMedium
+        )
+        Spacer(Modifier.width(8.dp))
+    }
 }
 
 @Composable
