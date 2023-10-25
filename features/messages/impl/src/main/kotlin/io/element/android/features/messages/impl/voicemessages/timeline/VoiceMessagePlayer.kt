@@ -20,6 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.messages.impl.mediaplayer.MediaPlayer
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -44,7 +45,12 @@ interface VoiceMessagePlayer {
          *        player is returned.
          * @param mediaPath The path to the voice message's media file.
          */
-        fun create(eventId: EventId?, mediaPath: String): VoiceMessagePlayer
+        fun create(
+            eventId: EventId?,
+            mediaSource: MediaSource,
+            mimeType: String?,
+            body: String?,
+        ): VoiceMessagePlayer
     }
 
     /**
@@ -53,15 +59,12 @@ interface VoiceMessagePlayer {
     val state: Flow<State>
 
     /**
-     * Start playing from the beginning acquiring control of the
-     * underlying [MediaPlayer].
-     */
-    fun acquireControlAndPlay()
-
-    /**
+     *      * Start playing from the beginning acquiring control of the
+     *      * underlying [MediaPlayer].
+     *
      * Start playing from the current position.
      */
-    fun play()
+    suspend fun play(): Result<Unit>
 
     /**
      * Pause playback.
@@ -101,22 +104,40 @@ interface VoiceMessagePlayer {
  */
 class VoiceMessagePlayerImpl(
     private val mediaPlayer: MediaPlayer,
+    voiceMessageCacheFactory: VoiceMessageCache.Factory,
     private val eventId: EventId?,
-    private val mediaPath: String,
+    mediaSource: MediaSource,
+    mimeType: String?,
+    body: String?,
 ) : VoiceMessagePlayer {
 
     @ContributesBinding(RoomScope::class) // Scoped types can't use @AssistedInject.
     class Factory @Inject constructor(
         private val mediaPlayer: MediaPlayer,
+        private val voiceMessageCacheFactory: VoiceMessageCache.Factory,
     ) : VoiceMessagePlayer.Factory {
-        override fun create(eventId: EventId?, mediaPath: String): VoiceMessagePlayerImpl {
+        override fun create(
+            eventId: EventId?,
+            mediaSource: MediaSource,
+            mimeType: String?,
+            body: String?,
+        ): VoiceMessagePlayerImpl {
             return VoiceMessagePlayerImpl(
                 mediaPlayer = mediaPlayer,
+                voiceMessageCacheFactory = voiceMessageCacheFactory,
                 eventId = eventId,
-                mediaPath = mediaPath,
+                mediaSource = mediaSource,
+                mimeType = mimeType,
+                body = body,
             )
         }
     }
+
+    private val voiceMessageCache = voiceMessageCacheFactory.create(
+        mediaSource = mediaSource,
+        mimeType = mimeType,
+        body = body
+    )
 
     override val state: Flow<VoiceMessagePlayer.State> = mediaPlayer.state.map { state ->
         VoiceMessagePlayer.State(
@@ -126,19 +147,20 @@ class VoiceMessagePlayerImpl(
         )
     }.distinctUntilChanged()
 
-    override fun acquireControlAndPlay() {
-        eventId?.let { eventId ->
+    override suspend fun play(): Result<Unit> = if (inControl()) {
+        mediaPlayer.play()
+        Result.success(Unit)
+    } else {
+        if (eventId != null) {
+            val r = voiceMessageCache.getMediaFile()
             mediaPlayer.acquireControlAndPlay(
-                uri = mediaPath,
+                uri = r.getOrThrow().path,
                 mediaId = eventId.value,
                 mimeType = "audio/ogg" // Files in the voice cache have no extension so we need to set the mime type manually.
             )
-        }
-    }
-
-    override fun play() {
-        ifInControl {
-            mediaPlayer.play()
+            Result.success(Unit)
+        } else {
+            Result.failure(IllegalStateException("Cannot play a voice message with no eventId"))
         }
     }
 
@@ -157,6 +179,8 @@ class VoiceMessagePlayerImpl(
     private fun String?.isMyTrack(): Boolean = if (eventId == null) false else this == eventId.value
 
     private inline fun ifInControl(block: () -> Unit) {
-        if (mediaPlayer.state.value.mediaId.isMyTrack()) block()
+        if (inControl()) block()
     }
+
+    private fun inControl(): Boolean = mediaPlayer.state.value.mediaId.isMyTrack()
 }

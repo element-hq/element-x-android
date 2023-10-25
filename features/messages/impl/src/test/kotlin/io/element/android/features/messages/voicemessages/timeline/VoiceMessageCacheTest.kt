@@ -36,7 +36,7 @@ class VoiceMessageCacheTest {
         val mxcUri = "mxc://matrix.org/1234567890abcdefg"
         val cache = VoiceMessageCacheImpl(cacheDir, mxcUri)
 
-        Truth.assertThat(cache.moveToCache(file))
+        Truth.assertThat(cache.downloadToCache(file))
             .isTrue()
         Truth.assertThat(File("$rootPath/cacheDir/temp/voice/matrix.org/1234567890abcdefg").exists())
             .isTrue()
@@ -49,7 +49,7 @@ class VoiceMessageCacheTest {
         val mxcUri = "mxc://matrix.org/1234567890abcdefg"
         val cache = VoiceMessageCacheImpl(cacheDir, mxcUri)
 
-        Truth.assertThat(cache.cachePath)
+        Truth.assertThat(cache.cachedFilePath)
             .isEqualTo("$rootPath/cacheDir/temp/voice/matrix.org/1234567890abcdefg")
     }
 

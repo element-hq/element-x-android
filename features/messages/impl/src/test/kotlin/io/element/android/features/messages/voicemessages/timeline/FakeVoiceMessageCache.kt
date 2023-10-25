@@ -28,12 +28,12 @@ class FakeVoiceMessageCache : VoiceMessageCache {
     private var _isInCache: Boolean = false
     private var _moveToCache: Boolean = false
 
-    override val cachePath: String
+    override val cachedFilePath: String
         get() = _cachePath
 
     override fun isInCache(): Boolean = _isInCache
 
-    override fun moveToCache(file: File): Boolean = _moveToCache
+    override fun downloadToCache(file: File): Boolean = _moveToCache
 
     fun givenCachePath(cachePath: String) {
         _cachePath = cachePath

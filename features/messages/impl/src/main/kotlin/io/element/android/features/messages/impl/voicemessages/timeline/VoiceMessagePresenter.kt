@@ -37,9 +37,6 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.media.MediaFile
-import io.element.android.libraries.matrix.api.media.toFile
 import io.element.android.libraries.ui.utils.time.formatShort
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
@@ -54,9 +51,7 @@ interface VoiceMessagePresenterModule {
 }
 
 class VoiceMessagePresenter @AssistedInject constructor(
-    private val mediaLoader: MatrixMediaLoader,
     voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
-    voiceMessageCacheFactory: VoiceMessageCache.Factory,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
 
@@ -65,11 +60,11 @@ class VoiceMessagePresenter @AssistedInject constructor(
         override fun create(content: TimelineItemVoiceContent): VoiceMessagePresenter
     }
 
-    private val voiceCache = voiceMessageCacheFactory.create(mxcUri = content.mediaSource.url)
-
     private val player = voiceMessagePlayerFactory.create(
         eventId = content.eventId,
-        mediaPath = voiceCache.cachePath
+        mediaSource = content.mediaSource,
+        mimeType = content.mimeType,
+        body = content.body,
     )
 
     @Composable
@@ -78,15 +73,15 @@ class VoiceMessagePresenter @AssistedInject constructor(
         val scope = rememberCoroutineScope()
 
         val playerState by player.state.collectAsState(VoiceMessagePlayer.State(isPlaying = false, isMyMedia = false, currentPosition = 0L))
-        val mediaFile = remember { mutableStateOf<Async<MediaFile>>(Async.Uninitialized) }
+        val play = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
 
         val button by remember {
             derivedStateOf {
                 when {
                     content.eventId == null -> VoiceMessageState.Button.Disabled
                     playerState.isPlaying -> VoiceMessageState.Button.Pause
-                    mediaFile.value is Async.Loading -> VoiceMessageState.Button.Downloading
-                    mediaFile.value is Async.Failure -> VoiceMessageState.Button.Retry
+                    play.value is Async.Loading -> VoiceMessageState.Button.Downloading
+                    play.value is Async.Failure -> VoiceMessageState.Button.Retry
                     else -> VoiceMessageState.Button.Play
                 }
             }
@@ -101,38 +96,13 @@ class VoiceMessagePresenter @AssistedInject constructor(
             }
         }
 
-        suspend fun downloadCacheAndPlay() {
-            mediaFile.runUpdatingState {
-                mediaLoader.downloadMediaFile(
-                    source = content.mediaSource,
-                    mimeType = content.mimeType,
-                    body = content.body,
-                ).mapCatching {
-                    if (voiceCache.moveToCache(it.toFile())) {
-                        player.acquireControlAndPlay()
-                        it
-                    } else {
-                        error("Failed to move file to cache.")
-                    }
-                }
-            }
-        }
-
         fun eventSink(event: VoiceMessageEvents) {
             when (event) {
                 is VoiceMessageEvents.PlayPause -> {
-                    if (playerState.isMyMedia) {
-                        if (playerState.isPlaying) {
-                            player.pause()
-                        } else {
-                            player.play()
-                        }
+                    if (playerState.isPlaying) {
+                        player.pause()
                     } else {
-                        if (voiceCache.isInCache()) {
-                            player.acquireControlAndPlay()
-                        } else {
-                            scope.launch { downloadCacheAndPlay() }
-                        }
+                        scope.launch { play.runUpdatingState { player.play() } }
                     }
                 }
                 is VoiceMessageEvents.Seek -> {
