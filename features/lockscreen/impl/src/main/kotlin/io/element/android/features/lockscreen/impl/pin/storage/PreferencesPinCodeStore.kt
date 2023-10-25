@@ -45,13 +45,13 @@ class PreferencesPinCodeStore @Inject constructor(
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return context.dataStore.data.map { preferences ->
-            preferences[remainingAttemptsKey] ?: 0
+            preferences.getRemainingPinCodeAttemptsNumber()
         }.first()
     }
 
     override suspend fun onWrongPin() {
         context.dataStore.edit { preferences ->
-            val current = preferences[remainingAttemptsKey] ?: 0
+            val current = preferences.getRemainingPinCodeAttemptsNumber()
             val remaining = (current - 1).coerceAtLeast(0)
             preferences[remainingAttemptsKey] = remaining
         }
@@ -86,4 +86,6 @@ class PreferencesPinCodeStore @Inject constructor(
             preferences[pinCodeKey] != null
         }.first()
     }
+
+    private fun Preferences.getRemainingPinCodeAttemptsNumber() = this[remainingAttemptsKey] ?: LockScreenConfig.MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT
 }
