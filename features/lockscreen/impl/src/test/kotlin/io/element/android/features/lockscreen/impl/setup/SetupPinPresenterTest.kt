@@ -20,12 +20,15 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
+import io.element.android.features.lockscreen.impl.pin.createPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
 import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -38,8 +41,13 @@ class SetupPinPresenterTest {
 
     @Test
     fun `present - complete flow`() = runTest {
-
-        val presenter = createSetupPinPresenter()
+        val pinCodeCreated = CompletableDeferred<Unit>()
+        val callback = object : PinCodeManager.Callback {
+            override fun onPinCodeCreated() {
+                pinCodeCreated.complete(Unit)
+            }
+        }
+        val presenter = createSetupPinPresenter(callback)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -96,10 +104,13 @@ class SetupPinPresenterTest {
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertText(completePin)
             }
+            pinCodeCreated.await()
         }
     }
 
-    private fun createSetupPinPresenter(): SetupPinPresenter {
-        return SetupPinPresenter(PinValidator(setOf(blacklistedPin)), aBuildMeta())
+    private fun createSetupPinPresenter(callback: PinCodeManager.Callback): SetupPinPresenter {
+        val pinCodeManager = createPinCodeManager()
+        pinCodeManager.addCallback(callback)
+        return SetupPinPresenter(PinValidator(setOf(blacklistedPin)), aBuildMeta(), pinCodeManager)
     }
 }

@@ -57,7 +57,6 @@ class PinUnlockPresenter @Inject constructor(
         var showSignOutPrompt by rememberSaveable {
             mutableStateOf(false)
         }
-
         val signOutAction = remember {
             mutableStateOf<Async<String?>>(Async.Uninitialized)
         }
@@ -92,8 +91,10 @@ class PinUnlockPresenter @Inject constructor(
                 PinUnlockEvents.OnForgetPin -> showSignOutPrompt = true
                 PinUnlockEvents.ClearSignOutPrompt -> showSignOutPrompt = false
                 PinUnlockEvents.SignOut -> {
-                    showSignOutPrompt = false
-                    coroutineScope.signOut(signOutAction)
+                    if (showSignOutPrompt) {
+                        showSignOutPrompt = false
+                        coroutineScope.signOut(signOutAction)
+                    }
                 }
                 PinUnlockEvents.OnUseBiometric -> {
                     //TODO
