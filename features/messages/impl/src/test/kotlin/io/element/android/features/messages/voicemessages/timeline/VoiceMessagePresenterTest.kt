@@ -22,23 +22,21 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
-import io.element.android.features.messages.mediaplayer.FakeMediaPlayer
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessagePlayerImpl
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessagePresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
-import io.element.android.libraries.matrix.test.media.FakeMediaLoader
+import io.element.android.features.messages.mediaplayer.FakeMediaPlayer
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class VoiceMessagePresenterTest {
 
-    private val fakeMediaLoader = FakeMediaLoader()
-    private val fakeVoiceCache = FakeVoiceMessageCache()
+    private val fakeVoiceMessageCache = FakeVoiceMessageCache()
 
     @Test
     fun `initial state has proper default values`() = runTest {
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache)
+        val presenter = createVoiceMessagePresenter(fakeVoiceMessageCache)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -52,11 +50,11 @@ class VoiceMessagePresenterTest {
 
     @Test
     fun `pressing play with file in cache plays`() = runTest {
-        fakeVoiceCache.apply {
+        fakeVoiceMessageCache.apply {
             givenIsInCache(true)
         }
         val content = aTimelineItemVoiceContent(durationMs = 2_000)
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+        val presenter = createVoiceMessagePresenter(fakeVoiceMessageCache, content)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -78,14 +76,11 @@ class VoiceMessagePresenterTest {
 
     @Test
     fun `pressing play with file not in cache downloads it but fails`() = runTest {
-        fakeMediaLoader.apply {
-            shouldFail = true
-        }
-        fakeVoiceCache.apply {
+        fakeVoiceMessageCache.apply {
             givenIsInCache(false)
             givenMoveToCache(true)
         }
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache)
+        val presenter = createVoiceMessagePresenter(fakeVoiceMessageCache)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -116,11 +111,11 @@ class VoiceMessagePresenterTest {
         fakeMediaLoader.apply {
             shouldFail = false
         }
-        fakeVoiceCache.apply {
+        fakeVoiceMessageCache.apply {
             givenIsInCache(false)
             givenMoveToCache(false)
         }
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache)
+        val presenter = createVoiceMessagePresenter(fakeVoiceMessageCache)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -148,11 +143,11 @@ class VoiceMessagePresenterTest {
 
     @Test
     fun `acquire control then play then play and pause while having control`() = runTest {
-        fakeVoiceCache.apply {
+        fakeVoiceMessageCache.apply {
             givenIsInCache(true)
         }
         val content = aTimelineItemVoiceContent(durationMs = 2_000)
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+        val presenter = createVoiceMessagePresenter(fakeVoiceMessageCache, content)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -193,12 +188,12 @@ class VoiceMessagePresenterTest {
         fakeMediaLoader.apply {
             shouldFail = false
         }
-        fakeVoiceCache.apply {
+        fakeVoiceMessageCache.apply {
             givenIsInCache(false)
             givenMoveToCache(true)
         }
         val content = aTimelineItemVoiceContent(durationMs = 2_000)
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+        val presenter = createVoiceMessagePresenter(fakeVoiceMessageCache, content)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -226,15 +221,12 @@ class VoiceMessagePresenterTest {
 
     @Test
     fun `content with null eventId shows disabled button`() = runTest {
-        fakeMediaLoader.apply {
-            shouldFail = false
-        }
-        fakeVoiceCache.apply {
+        fakeVoiceMessageCache.apply {
             givenIsInCache(false)
             givenMoveToCache(true)
         }
         val content = aTimelineItemVoiceContent(eventId = null)
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+        val presenter = createVoiceMessagePresenter(fakeVoiceMessageCache, content)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -248,12 +240,12 @@ class VoiceMessagePresenterTest {
 
     @Test
     fun `seeking seeks`() = runTest {
-        fakeVoiceCache.apply {
+        fakeVoiceMessageCache.apply {
             givenIsInCache(true)
         }
         val content = aTimelineItemVoiceContent(durationMs = 10_000)
 
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+        val presenter = createVoiceMessagePresenter(fakeVoiceMessageCache, content)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -283,12 +275,18 @@ class VoiceMessagePresenterTest {
 }
 
 fun createVoiceMessagePresenter(
-    fakeMediaLoader: FakeMediaLoader,
-    voiceCacheFake: FakeVoiceMessageCache,
+    fakeVoiceMessageCache: FakeVoiceMessageCache,
     content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
 ) = VoiceMessagePresenter(
-    mediaLoader = fakeMediaLoader,
-    voiceMessagePlayerFactory = { eventId, mediaPath -> VoiceMessagePlayerImpl(FakeMediaPlayer(), eventId, mediaPath) },
-    voiceMessageCacheFactory = { voiceCacheFake },
+    voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, body ->
+        VoiceMessagePlayerImpl(
+            mediaPlayer = FakeMediaPlayer(),
+            voiceMessageCacheFactory = { _, _, _ -> fakeVoiceMessageCache },
+            eventId = eventId,
+            mediaSource = mediaSource,
+            mimeType = mimeType,
+            body = body
+        )
+    },
     content = content,
 )

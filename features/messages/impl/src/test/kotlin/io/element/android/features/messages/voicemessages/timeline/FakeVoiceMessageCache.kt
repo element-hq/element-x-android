@@ -17,6 +17,7 @@
 package io.element.android.features.messages.voicemessages.timeline
 
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageCache
+import io.element.android.tests.testutils.simulateLongTask
 import java.io.File
 
 /**
@@ -24,26 +25,13 @@ import java.io.File
  */
 class FakeVoiceMessageCache : VoiceMessageCache {
 
-    private var _cachePath: String = ""
-    private var _isInCache: Boolean = false
-    private var _moveToCache: Boolean = false
+    private var _getMediaFile: Result<File> = Result.success(File(""))
 
-    override val cachedFilePath: String
-        get() = _cachePath
-
-    override fun isInCache(): Boolean = _isInCache
-
-    override fun downloadToCache(file: File): Boolean = _moveToCache
-
-    fun givenCachePath(cachePath: String) {
-        _cachePath = cachePath
+    fun givenGetMediaFile(result: Result<File>) {
+        _getMediaFile = result
     }
 
-    fun givenIsInCache(isInCache: Boolean) {
-        _isInCache = isInCache
-    }
-
-    fun givenMoveToCache(moveToCache: Boolean) {
-        _moveToCache = moveToCache
+    override suspend fun getMediaFile(): Result<File> = simulateLongTask {
+        _getMediaFile
     }
 }
