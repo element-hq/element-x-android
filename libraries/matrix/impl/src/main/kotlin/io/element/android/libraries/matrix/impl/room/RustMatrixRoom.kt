@@ -65,6 +65,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.Room
@@ -78,6 +79,7 @@ import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 
@@ -99,6 +101,10 @@ class RustMatrixRoom(
     override val roomId = RoomId(innerRoom.id())
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
+        launch {
+            val initial = innerRoom.roomInfo().use(matrixRoomInfoMapper::map)
+            channel.trySend(initial)
+        }
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
                 channel.trySend(matrixRoomInfoMapper.map(roomInfo))
