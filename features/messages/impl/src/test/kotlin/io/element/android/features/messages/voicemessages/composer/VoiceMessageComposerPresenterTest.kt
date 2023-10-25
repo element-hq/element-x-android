@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package io.element.android.features.messages.voicemessages
+package io.element.android.features.messages.voicemessages.composer
 
 import android.Manifest
 import androidx.lifecycle.Lifecycle
@@ -29,6 +29,8 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
+import io.element.android.features.messages.mediaplayer.FakeMediaPlayer
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -37,6 +39,7 @@ import io.element.android.libraries.permissions.api.aPermissionsState
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -123,7 +126,63 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
 
             val finalState = awaitItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Preview)
+            assertThat(finalState.voiceMessageState).isEqualTo(aPreviewState())
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
+    fun `present - play recording before it is ready`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            val finalState = awaitItem().apply {
+                this.eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
+            }
+
+            // Nothing should happen
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Recording(RECORDING_DURATION, 0.2))
+            voiceRecorder.assertCalls(started = 1, stopped = 0, deleted = 0)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
+    fun `present - play recording`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
+            val finalState = awaitItem().also {
+                assertThat(it.voiceMessageState).isEqualTo(aPreviewState(isPlaying = true))
+            }
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
+    fun `present - pause recording`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
+            awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Pause))
+            val finalState = awaitItem().also {
+                assertThat(it.voiceMessageState).isEqualTo(aPreviewState(isPlaying = false))
+            }
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
             testPauseAndDestroy(finalState)
@@ -202,7 +261,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
             awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(VoiceMessageState.Preview)
+                assertThat(voiceMessageState).isEqualTo(aPreviewState())
                 eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             }
 
@@ -232,7 +291,7 @@ class VoiceMessageComposerPresenterTest {
             assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Sending)
 
             ensureAllEventsConsumed()
-            assertThat(previewState.voiceMessageState).isEqualTo(VoiceMessageState.Preview)
+            assertThat(previewState.voiceMessageState).isEqualTo(aPreviewState())
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
 
             mediaPreProcessor.givenAudioResult()
@@ -393,16 +452,23 @@ class VoiceMessageComposerPresenterTest {
             VoiceMessageComposerEvents.LifecycleEvent(event = Lifecycle.Event.ON_PAUSE)
         )
 
-        val onPauseState = when (mostRecentState.voiceMessageState) {
+        val onPauseState = when (val vmState = mostRecentState.voiceMessageState) {
             VoiceMessageState.Idle,
-            VoiceMessageState.Preview,
             VoiceMessageState.Sending -> {
                 mostRecentState
             }
             is VoiceMessageState.Recording -> {
-                awaitItem().also {
-                    assertThat(it.voiceMessageState).isEqualTo(VoiceMessageState.Preview)
+                // If recorder was active, it stops
+                awaitItem().apply {
+                    assertThat(voiceMessageState).isEqualTo(aPreviewState())
                 }
+            }
+            is VoiceMessageState.Preview -> when(vmState.isPlaying) {
+                // If the preview was playing, it pauses
+                true -> awaitItem().apply {
+                    assertThat(voiceMessageState).isEqualTo(aPreviewState())
+                }
+                false -> mostRecentState
             }
         }
 
@@ -415,7 +481,7 @@ class VoiceMessageComposerPresenterTest {
             VoiceMessageState.Sending ->
                 ensureAllEventsConsumed()
             is VoiceMessageState.Recording,
-            VoiceMessageState.Preview ->
+            is VoiceMessageState.Preview ->
                 assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Idle)
         }
     }
@@ -428,6 +494,7 @@ class VoiceMessageComposerPresenterTest {
             voiceRecorder,
             analyticsService,
             mediaSender,
+            player = VoiceMessageComposerPlayer(FakeMediaPlayer()),
             FakePermissionsPresenterFactory(permissionsPresenter),
         )
     }
@@ -445,4 +512,11 @@ class VoiceMessageComposerPresenterTest {
             initialState = initialPermissionState
         )
     }
+
+    private fun aPreviewState(
+        isPlaying: Boolean = false
+    ) = VoiceMessageState.Preview(
+        isPlaying = isPlaying
+    )
+
 }

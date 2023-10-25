@@ -33,6 +33,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.TextComposer
 import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import kotlinx.coroutines.launch
 
 @Composable
@@ -83,6 +84,10 @@ internal fun MessageComposerView(
         voiceMessageState.eventSink(VoiceMessageComposerEvents.DeleteVoiceMessage)
     }
 
+    val onVoicePlayerEvent = { event: VoiceMessagePlayerEvent ->
+        voiceMessageState.eventSink(VoiceMessageComposerEvents.PlayerEvent(event))
+    }
+
     TextComposer(
         modifier = modifier,
         state = state.richTextEditorState,
@@ -98,6 +103,7 @@ internal fun MessageComposerView(
         enableTextFormatting = enableTextFormatting,
         enableVoiceMessages = enableVoiceMessages,
         onVoiceRecordButtonEvent = onVoiceRecordButtonEvent,
+        onVoicePlayerEvent = onVoicePlayerEvent,
         onSendVoiceMessage = onSendVoiceMessage,
         onDeleteVoiceMessage = onDeleteVoiceMessage,
         onError = ::onError,

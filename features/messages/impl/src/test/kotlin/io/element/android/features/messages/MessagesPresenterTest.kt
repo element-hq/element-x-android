@@ -40,8 +40,10 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
+import io.element.android.features.messages.mediaplayer.FakeMediaPlayer
 import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
@@ -629,6 +631,7 @@ class MessagesPresenterTest {
             FakeVoiceRecorder(),
             analyticsService,
             mediaSender,
+            player = VoiceMessageComposerPlayer(FakeMediaPlayer()),
             permissionsPresenterFactory,
         )
         val timelinePresenter = TimelinePresenter(

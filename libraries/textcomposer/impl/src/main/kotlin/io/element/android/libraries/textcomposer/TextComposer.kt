@@ -74,6 +74,7 @@ import io.element.android.libraries.textcomposer.components.textInputRoundedCorn
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -99,6 +100,7 @@ fun TextComposer(
     onAddAttachment: () -> Unit = {},
     onDismissTextFormatting: () -> Unit = {},
     onVoiceRecordButtonEvent: (PressEvent) -> Unit = {},
+    onVoicePlayerEvent: (VoiceMessagePlayerEvent) -> Unit = {},
     onSendVoiceMessage: () -> Unit = {},
     onDeleteVoiceMessage: () -> Unit = {},
     onError: (Throwable) -> Unit = {},
@@ -106,6 +108,14 @@ fun TextComposer(
     val onSendClicked = {
         val html = if (enableTextFormatting) state.messageHtml else null
         onSendMessage(Message(html = html, markdown = state.messageMarkdown))
+    }
+
+    val onPlayVoiceMessageClicked = {
+        onVoicePlayerEvent(VoiceMessagePlayerEvent.Play)
+    }
+
+    val onPauseVoiceMessageClicked = {
+        onVoicePlayerEvent(VoiceMessagePlayerEvent.Pause)
     }
 
     val layoutModifier = modifier
@@ -179,10 +189,20 @@ fun TextComposer(
 
     val voiceRecording = @Composable {
         when (voiceMessageState) {
-            VoiceMessageState.Preview ->
-                VoiceMessagePreview(isInteractive = true)
+            is VoiceMessageState.Preview ->
+                VoiceMessagePreview(
+                    isInteractive = true,
+                    isPlaying = voiceMessageState.isPlaying,
+                    onPlayClick = onPlayVoiceMessageClicked,
+                    onPauseClick = onPauseVoiceMessageClicked
+                )
             VoiceMessageState.Sending ->
-                VoiceMessagePreview(isInteractive = false)
+                VoiceMessagePreview(
+                    isInteractive = false,
+                    isPlaying = false,
+                    onPlayClick = onPlayVoiceMessageClicked,
+                    onPauseClick = onPauseVoiceMessageClicked
+                )
             is VoiceMessageState.Recording ->
                 VoiceMessageRecording(voiceMessageState.level, voiceMessageState.duration)
             VoiceMessageState.Idle -> {}
@@ -191,7 +211,7 @@ fun TextComposer(
 
     val voiceDeleteButton = @Composable {
         val enabled = when (voiceMessageState) {
-            VoiceMessageState.Preview -> true
+            is VoiceMessageState.Preview -> true
             VoiceMessageState.Sending,
             is VoiceMessageState.Recording,
             VoiceMessageState.Idle -> false
@@ -780,7 +800,9 @@ internal fun TextComposerVoicePreview() = ElementPreview {
     PreviewColumn(items = persistentListOf({
         VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, 0.5))
     }, {
-        VoicePreview(voiceMessageState = VoiceMessageState.Preview)
+        VoicePreview(voiceMessageState = VoiceMessageState.Preview(isPlaying = false))
+    }, {
+        VoicePreview(voiceMessageState = VoiceMessageState.Preview(isPlaying = true))
     }, {
         VoicePreview(voiceMessageState = VoiceMessageState.Sending)
     }))
