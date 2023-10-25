@@ -43,11 +43,11 @@ const val DAY_MODE_NAME = "D"
  * NB: Content should be wrapped into [ElementPreview] to apply proper theming.
  */
 @Preview(
-    name = DAY_MODE_NAME,
+    group = DAY_MODE_NAME,
     fontScale = 1f,
 )
 @Preview(
-    name = NIGHT_MODE_NAME,
+    group = NIGHT_MODE_NAME,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1f,
 )
