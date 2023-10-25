@@ -20,7 +20,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -58,16 +59,17 @@ fun PinEntryTextField(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PinEntryRow(
     pinEntry: PinEntry,
     isSecured: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         for (digit in pinEntry.digits) {
             PinDigitView(digit = digit, isSecured = isSecured)
@@ -98,7 +100,7 @@ private fun PinDigitView(
 
         ) {
         if (digit is PinDigit.Filled) {
-            val text = if(isSecured) {
+            val text = if (isSecured) {
                 "•"
             } else {
                 digit.value.toString()

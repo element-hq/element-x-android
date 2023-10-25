@@ -21,7 +21,7 @@ object LockScreenConfig {
     /**
      * Whether the PIN is mandatory or not.
      */
-    const val IS_PIN_MANDATORY: Boolean = true
+    const val IS_PIN_MANDATORY: Boolean = false
 
     /**
      * Some PINs are blacklisted.

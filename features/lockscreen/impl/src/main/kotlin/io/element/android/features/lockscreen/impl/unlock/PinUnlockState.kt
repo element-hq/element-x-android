@@ -20,7 +20,7 @@ import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.libraries.architecture.Async
 
 data class PinUnlockState(
-    val pinEntry: PinEntry,
+    val pinEntry: Async<PinEntry>,
     val showWrongPinTitle: Boolean,
     val remainingAttempts: Async<Int>,
     val showSignOutPrompt: Boolean,

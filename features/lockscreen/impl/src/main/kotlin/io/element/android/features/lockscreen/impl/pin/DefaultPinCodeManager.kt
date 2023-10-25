@@ -23,8 +23,6 @@ import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.cryptography.api.SecretKeyProvider
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
-import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 
@@ -50,6 +48,13 @@ class DefaultPinCodeManager @Inject constructor(
 
     override suspend fun isPinCodeAvailable(): Boolean {
         return pinCodeStore.hasPinCode()
+    }
+
+    override suspend fun getPinCodeSize(): Int {
+        val encryptedPinCode = pinCodeStore.getEncryptedCode() ?: return 0
+        val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
+        val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
+        return decryptedPinCode.size
     }
 
     override suspend fun createPinCode(pinCode: String) {

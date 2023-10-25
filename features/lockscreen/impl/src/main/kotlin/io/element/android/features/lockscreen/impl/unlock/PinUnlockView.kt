@@ -258,7 +258,7 @@ private fun PinUnlockHeader(
             if (state.showWrongPinTitle) {
                 pluralStringResource(id = R.plurals.screen_app_lock_subtitle_wrong_pin, count = remainingAttempts, remainingAttempts)
             } else {
-                stringResource(id = R.string.screen_app_lock_subtitle)
+                pluralStringResource(id = R.plurals.screen_app_lock_subtitle, count = remainingAttempts, remainingAttempts)
             }
         } else {
             ""
@@ -276,14 +276,16 @@ private fun PinUnlockHeader(
             color = subtitleColor,
         )
         Spacer(Modifier.height(24.dp))
-        PinDotsRow(state.pinEntry)
+        if (state.pinEntry is Async.Success) {
+            PinDotsRow(state.pinEntry.data)
+        }
     }
 }
 
 @Composable
 private fun PinUnlockFooter(
-    onUseBiometric: ()->Unit,
-    onForgotPin: ()->Unit,
+    onUseBiometric: () -> Unit,
+    onForgotPin: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {

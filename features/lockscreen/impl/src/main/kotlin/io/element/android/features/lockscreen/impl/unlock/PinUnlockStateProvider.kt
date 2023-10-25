@@ -39,7 +39,7 @@ fun aPinUnlockState(
     showSignOutPrompt: Boolean = false,
     signOutAction: Async<String?> = Async.Uninitialized,
 ) = PinUnlockState(
-    pinEntry = pinEntry,
+    pinEntry = Async.Success(pinEntry),
     showWrongPinTitle = showWrongPinTitle,
     remainingAttempts = Async.Success(remainingAttempts),
     showSignOutPrompt = showSignOutPrompt,

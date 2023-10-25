@@ -58,6 +58,11 @@ interface PinCodeManager {
     suspend fun isPinCodeAvailable(): Boolean
 
     /**
+     * @return the size of the saved pin code.
+     */
+    suspend fun getPinCodeSize(): Int
+
+    /**
      * Creates a new encrypted pin code.
      * @param pinCode the clear pin code to create
      */
