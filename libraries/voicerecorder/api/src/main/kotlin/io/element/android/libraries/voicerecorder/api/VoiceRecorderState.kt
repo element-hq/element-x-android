@@ -38,9 +38,11 @@ sealed class VoiceRecorderState {
      *
      * @property file The recorded file.
      * @property mimeType The mime type of the file.
+     * @property waveform The waveform of the recording.
      */
     data class Finished(
         val file: File,
         val mimeType: String,
+        val waveform: List<Float>,
     ) : VoiceRecorderState()
 }
