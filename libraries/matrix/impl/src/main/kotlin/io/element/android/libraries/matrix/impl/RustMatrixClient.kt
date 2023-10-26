@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.impl.notification.RustNotificationSer
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
+import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
@@ -201,7 +202,8 @@ class RustMatrixClient constructor(
                 systemClock = clock,
                 roomContentForwarder = roomContentForwarder,
                 sessionData = sessionStore.getSession(sessionId.value)!!,
-                roomSyncSubscriber = roomSyncSubscriber
+                roomSyncSubscriber = roomSyncSubscriber,
+                matrixRoomInfoMapper = MatrixRoomInfoMapper(),
             )
         }
     }

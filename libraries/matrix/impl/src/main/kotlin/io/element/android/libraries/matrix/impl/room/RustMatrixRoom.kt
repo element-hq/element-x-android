@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -50,6 +51,7 @@ import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.libraries.sessionstorage.api.SessionData
@@ -59,12 +61,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomInfo
+import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
@@ -73,6 +79,7 @@ import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 
@@ -88,9 +95,22 @@ class RustMatrixRoom(
     private val roomContentForwarder: RoomContentForwarder,
     private val sessionData: SessionData,
     private val roomSyncSubscriber: RoomSyncSubscriber,
+    private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
 ) : MatrixRoom {
 
     override val roomId = RoomId(innerRoom.id())
+
+    override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
+        launch {
+            val initial = innerRoom.roomInfo().use(matrixRoomInfoMapper::map)
+            channel.trySend(initial)
+        }
+        innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
+            override fun call(roomInfo: RoomInfo) {
+                channel.trySend(matrixRoomInfoMapper.map(roomInfo))
+            }
+        })
+    }
 
     // Create a dispatcher for all room methods...
     private val roomDispatcher = coroutineDispatchers.io.limitedParallelism(32)

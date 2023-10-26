@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -74,6 +75,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
@@ -113,6 +115,7 @@ class MessagesPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): MessagesState {
+        val roomInfo by room.roomInfoFlow.collectAsState(null)
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
@@ -125,14 +128,13 @@ class MessagesPresenter @AssistedInject constructor(
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToRedact by room.canRedactAsState(updateKey = syncUpdateFlow.value)
-        var roomName: Async<String> by remember { mutableStateOf(Async.Uninitialized) }
-        var roomAvatar: Async<AvatarData> by remember { mutableStateOf(Async.Uninitialized) }
-        LaunchedEffect(syncUpdateFlow.value) {
-            withContext(dispatchers.io) {
-                roomName = Async.Success(room.displayName)
-                roomAvatar = Async.Success(room.avatarData())
-            }
+        val roomName: Async<String> by remember {
+            derivedStateOf { roomInfo?.name?.let { Async.Success(it) } ?: Async.Uninitialized }
         }
+        val roomAvatar: Async<AvatarData> by remember {
+            derivedStateOf { roomInfo?.avatarData()?.let { Async.Success(it) } ?: Async.Uninitialized }
+        }
+
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
         }
@@ -207,14 +209,15 @@ class MessagesPresenter @AssistedInject constructor(
             enableVoiceMessages = enableVoiceMessages,
             enableInRoomCalls = enableInRoomCalls,
             appName = buildMeta.applicationName,
+            isCallOngoing = roomInfo?.hasRoomCall ?: false,
             eventSink = { handleEvents(it) }
         )
     }
 
-    private fun MatrixRoom.avatarData(): AvatarData {
+    private fun MatrixRoomInfo.avatarData(): AvatarData {
         return AvatarData(
-            id = roomId.value,
-            name = displayName,
+            id = id,
+            name = name,
             url = avatarUrl,
             size = AvatarSize.TimelineRoom
         )

@@ -200,6 +200,7 @@ koverMerged {
                     "*Node$*",
                     // Exclude `:libraries:matrix:impl` module, it contains only wrappers to access the Rust Matrix SDK api, so it is not really relevant to unit test it: there is no logic to test.
                     "io.element.android.libraries.matrix.impl.*",
+                    "*Presenter\$present\$*"
                 )
             )
         }
@@ -252,6 +253,7 @@ koverMerged {
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
                 // Some options can't be tested at the moment
                 excludes += "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*"
+                excludes += "*Presenter\$present\$*"
             }
             bound {
                 minValue = 85

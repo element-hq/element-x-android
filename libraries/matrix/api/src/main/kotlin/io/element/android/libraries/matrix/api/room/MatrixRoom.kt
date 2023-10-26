@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
 import java.io.File
@@ -50,6 +51,8 @@ interface MatrixRoom : Closeable {
     val isPublic: Boolean
     val activeMemberCount: Long
     val joinedMemberCount: Long
+
+    val roomInfoFlow: Flow<MatrixRoomInfo>
 
     /**
      * A one-to-one is a room with exactly 2 members.
