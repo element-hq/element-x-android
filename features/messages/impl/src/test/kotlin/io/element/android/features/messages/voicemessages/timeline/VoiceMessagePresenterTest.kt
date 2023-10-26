@@ -22,23 +22,19 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
-import io.element.android.features.messages.mediaplayer.FakeMediaPlayer
+import io.element.android.features.messages.impl.voicemessages.timeline.DefaultVoiceMessagePlayer
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
-import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessagePlayerImpl
+import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageMediaRepo
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessagePresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
-import io.element.android.libraries.matrix.test.media.FakeMediaLoader
+import io.element.android.features.messages.mediaplayer.FakeMediaPlayer
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class VoiceMessagePresenterTest {
-
-    private val fakeMediaLoader = FakeMediaLoader()
-    private val fakeVoiceCache = FakeVoiceMessageCache()
-
     @Test
     fun `initial state has proper default values`() = runTest {
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache)
+        val presenter = createVoiceMessagePresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -51,12 +47,10 @@ class VoiceMessagePresenterTest {
     }
 
     @Test
-    fun `pressing play with file in cache plays`() = runTest {
-        fakeVoiceCache.apply {
-            givenIsInCache(true)
-        }
-        val content = aTimelineItemVoiceContent(durationMs = 2_000)
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+    fun `pressing play downloads and plays`() = runTest {
+        val presenter = createVoiceMessagePresenter(
+            content = aTimelineItemVoiceContent(durationMs = 2_000),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -69,6 +63,11 @@ class VoiceMessagePresenterTest {
             initialState.eventSink(VoiceMessageEvents.PlayPause)
 
             awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
+                Truth.assertThat(it.progress).isEqualTo(0f)
+                Truth.assertThat(it.time).isEqualTo("0:02")
+            }
+            awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
                 Truth.assertThat(it.time).isEqualTo("0:01")
@@ -77,22 +76,18 @@ class VoiceMessagePresenterTest {
     }
 
     @Test
-    fun `pressing play with file not in cache downloads it but fails`() = runTest {
-        fakeMediaLoader.apply {
-            shouldFail = true
-        }
-        fakeVoiceCache.apply {
-            givenIsInCache(false)
-            givenMoveToCache(true)
-        }
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache)
+    fun `pressing play downloads and fails`() = runTest {
+        val presenter = createVoiceMessagePresenter(
+            voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply { shouldFail = true },
+            content = aTimelineItemVoiceContent(durationMs = 2_000),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("1:01")
+                Truth.assertThat(it.time).isEqualTo("0:02")
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
@@ -100,59 +95,21 @@ class VoiceMessagePresenterTest {
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("1:01")
+                Truth.assertThat(it.time).isEqualTo("0:02")
             }
-
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Retry)
                 Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("1:01")
+                Truth.assertThat(it.time).isEqualTo("0:02")
             }
         }
     }
 
     @Test
-    fun `pressing play with file not in cache downloads it but then caching fails`() = runTest {
-        fakeMediaLoader.apply {
-            shouldFail = false
-        }
-        fakeVoiceCache.apply {
-            givenIsInCache(false)
-            givenMoveToCache(false)
-        }
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("1:01")
-            }
-
-            initialState.eventSink(VoiceMessageEvents.PlayPause)
-
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("1:01")
-            }
-
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Retry)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("1:01")
-            }
-        }
-    }
-
-    @Test
-    fun `acquire control then play then play and pause while having control`() = runTest {
-        fakeVoiceCache.apply {
-            givenIsInCache(true)
-        }
-        val content = aTimelineItemVoiceContent(durationMs = 2_000)
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+    fun `pressing pause while playing pauses`() = runTest {
+        val presenter = createVoiceMessagePresenter(
+            content = aTimelineItemVoiceContent(durationMs = 2_000),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -163,61 +120,17 @@ class VoiceMessagePresenterTest {
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
+            skipItems(1) // skip downloading state
 
-            awaitItem().also {
+            val playingState = awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
                 Truth.assertThat(it.time).isEqualTo("0:01")
             }
 
-            initialState.eventSink(VoiceMessageEvents.PlayPause)
-
+            playingState.eventSink(VoiceMessageEvents.PlayPause)
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
-                Truth.assertThat(it.progress).isEqualTo(0.5f)
-                Truth.assertThat(it.time).isEqualTo("0:01")
-            }
-
-            initialState.eventSink(VoiceMessageEvents.PlayPause)
-
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
-                Truth.assertThat(it.progress).isEqualTo(1.0f)
-                Truth.assertThat(it.time).isEqualTo("0:02")
-            }
-        }
-    }
-
-    @Test
-    fun `pressing play with file not in cache downloads it successfully`() = runTest {
-        fakeMediaLoader.apply {
-            shouldFail = false
-        }
-        fakeVoiceCache.apply {
-            givenIsInCache(false)
-            givenMoveToCache(true)
-        }
-        val content = aTimelineItemVoiceContent(durationMs = 2_000)
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("0:02")
-            }
-
-            initialState.eventSink(VoiceMessageEvents.PlayPause)
-
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("0:02")
-            }
-
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
                 Truth.assertThat(it.time).isEqualTo("0:01")
             }
@@ -226,15 +139,9 @@ class VoiceMessagePresenterTest {
 
     @Test
     fun `content with null eventId shows disabled button`() = runTest {
-        fakeMediaLoader.apply {
-            shouldFail = false
-        }
-        fakeVoiceCache.apply {
-            givenIsInCache(false)
-            givenMoveToCache(true)
-        }
-        val content = aTimelineItemVoiceContent(eventId = null)
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+        val presenter = createVoiceMessagePresenter(
+            content = aTimelineItemVoiceContent(eventId = null),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -248,12 +155,9 @@ class VoiceMessagePresenterTest {
 
     @Test
     fun `seeking seeks`() = runTest {
-        fakeVoiceCache.apply {
-            givenIsInCache(true)
-        }
-        val content = aTimelineItemVoiceContent(durationMs = 10_000)
-
-        val presenter = createVoiceMessagePresenter(fakeMediaLoader, fakeVoiceCache, content)
+        val presenter = createVoiceMessagePresenter(
+            content = aTimelineItemVoiceContent(durationMs = 10_000),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -264,6 +168,8 @@ class VoiceMessagePresenterTest {
             }
 
             initialState.eventSink(VoiceMessageEvents.PlayPause)
+
+            skipItems(1) // skip downloading state
 
             awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Pause)
@@ -283,12 +189,18 @@ class VoiceMessagePresenterTest {
 }
 
 fun createVoiceMessagePresenter(
-    fakeMediaLoader: FakeMediaLoader,
-    voiceCacheFake: FakeVoiceMessageCache,
+    voiceMessageMediaRepo: VoiceMessageMediaRepo = FakeVoiceMessageMediaRepo(),
     content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
 ) = VoiceMessagePresenter(
-    mediaLoader = fakeMediaLoader,
-    voiceMessagePlayerFactory = { eventId, mediaPath -> VoiceMessagePlayerImpl(FakeMediaPlayer(), eventId, mediaPath) },
-    voiceMessageCacheFactory = { voiceCacheFake },
+    voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, body ->
+        DefaultVoiceMessagePlayer(
+            mediaPlayer = FakeMediaPlayer(),
+            voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
+            eventId = eventId,
+            mediaSource = mediaSource,
+            mimeType = mimeType,
+            body = body
+        )
+    },
     content = content,
 )
