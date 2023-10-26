@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.textcomposer.model
+package io.element.android.libraries.designsystem.components.media
 
 import kotlinx.collections.immutable.ImmutableList
-import kotlin.time.Duration
+import kotlinx.collections.immutable.toPersistentList
+import kotlin.random.Random
 
-sealed class VoiceMessageState {
-    data object Idle: VoiceMessageState()
-
-    data class Preview(
-        val isSending: Boolean,
-        val isPlaying: Boolean,
-        val waveform: ImmutableList<Float>,
-    ): VoiceMessageState()
-
-    data class Recording(
-        val duration: Duration,
-        val level: Float,
-    ): VoiceMessageState()
+object FakeWaveformFactory {
+    private val random = Random(seed = 2)
+    /**
+     * Generate a waveform for testing purposes.
+     *
+     * The waveform is a list of floats between 0 and 1.
+     *
+     * @param length The length of the waveform.
+     */
+    fun createFakeWaveform(length: Int = 1000): ImmutableList<Float> =
+        List(length) { random.nextFloat() }
+            .toPersistentList()
 }

@@ -20,10 +20,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -31,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.media.FakeWaveformFactory.createFakeWaveform
+import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.applyScaleUp
@@ -39,14 +44,18 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.textcomposer.R
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun VoiceMessagePreview(
     isInteractive: Boolean,
     isPlaying: Boolean,
+    waveform: ImmutableList<Float>,
     modifier: Modifier = Modifier,
+    playbackProgress: Float = 0f,
     onPlayClick: () -> Unit = {},
-    onPauseClick: () -> Unit = {}
+    onPauseClick: () -> Unit = {},
+    onSeek: (Float) -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -72,7 +81,22 @@ internal fun VoiceMessagePreview(
                 enabled = isInteractive
             )
         }
-        // TODO Add recording preview UI
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        // TODO Add timer UI
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        WaveformPlaybackView(
+            modifier = Modifier
+                .weight(1f)
+                .height(26.dp.applyScaleUp()),
+            playbackProgress = playbackProgress,
+            showCursor = isInteractive,
+            waveform = waveform,
+            onSeek = onSeek,
+        )
     }
 }
 
@@ -119,8 +143,8 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        VoiceMessagePreview(isInteractive = true, isPlaying = true)
-        VoiceMessagePreview(isInteractive = true, isPlaying = false)
-        VoiceMessagePreview(isInteractive = false, isPlaying = false)
+        VoiceMessagePreview(isInteractive = true, isPlaying = true, waveform = createFakeWaveform())
+        VoiceMessagePreview(isInteractive = true, isPlaying = false, waveform = createFakeWaveform())
+        VoiceMessagePreview(isInteractive = false, isPlaying = false, waveform = createFakeWaveform())
     }
 }
