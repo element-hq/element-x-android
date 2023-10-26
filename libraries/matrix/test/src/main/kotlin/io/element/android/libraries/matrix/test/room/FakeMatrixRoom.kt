@@ -29,17 +29,23 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
@@ -146,7 +152,7 @@ class FakeMatrixRoom(
 
     private var leaveRoomError: Throwable? = null
 
-    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1, extraBufferCapacity = 1)
+    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableStateFlow(aRoomInfo())
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
@@ -532,4 +538,50 @@ data class SendPollResponseInvocation(
 data class EndPollInvocation(
     val pollStartId: EventId,
     val text: String,
+)
+
+fun aRoomInfo(
+    id: String = A_ROOM_ID.value,
+    name: String? = A_ROOM_NAME,
+    topic: String? = "A topic",
+    avatarUrl: String? = AN_AVATAR_URL,
+    isDirect: Boolean = false,
+    isPublic: Boolean = true,
+    isSpace: Boolean = false,
+    isTombstoned: Boolean = false,
+    canonicalAlias: String? = null,
+    alternativeAliases: List<String> = emptyList(),
+    currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
+    latestEvent: EventTimelineItem? = null,
+    inviter: RoomMember? = null,
+    activeMembersCount: Long = 1,
+    invitedMembersCount: Long = 0,
+    joinedMembersCount: Long = 1,
+    highlightCount: Long = 0,
+    notificationCount: Long = 0,
+    userDefinedNotificationMode: RoomNotificationMode? = null,
+    hasRoomCall: Boolean = false,
+    activeRoomCallParticipants: List<String> = emptyList()
+) = MatrixRoomInfo(
+    id = id,
+    name = name,
+    topic = topic,
+    avatarUrl = avatarUrl,
+    isDirect = isDirect,
+    isPublic = isPublic,
+    isSpace = isSpace,
+    isTombstoned = isTombstoned,
+    canonicalAlias = canonicalAlias,
+    alternativeAliases = alternativeAliases,
+    currentUserMembership = currentUserMembership,
+    latestEvent = latestEvent,
+    inviter = inviter,
+    activeMembersCount = activeMembersCount,
+    invitedMembersCount = invitedMembersCount,
+    joinedMembersCount = joinedMembersCount,
+    highlightCount = highlightCount,
+    notificationCount = notificationCount,
+    userDefinedNotificationMode = userDefinedNotificationMode,
+    hasRoomCall = hasRoomCall,
+    activeRoomCallParticipants = activeRoomCallParticipants
 )

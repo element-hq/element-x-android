@@ -68,6 +68,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -106,7 +107,8 @@ class MessagesPresenterTest {
             val initialState = consumeItemsUntilTimeout().last()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
             assertThat(initialState.roomName).isEqualTo(Async.Success(""))
-            assertThat(initialState.roomAvatar).isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", size = AvatarSize.TimelineRoom)))
+            assertThat(initialState.roomAvatar)
+                .isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
             assertThat(initialState.userHasPermissionToSendMessage).isTrue()
             assertThat(initialState.userHasPermissionToRedact).isFalse()
             assertThat(initialState.hasNetworkConnection).isTrue()
@@ -603,7 +605,9 @@ class MessagesPresenterTest {
 
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        matrixRoom: MatrixRoom = FakeMatrixRoom(),
+        matrixRoom: MatrixRoom = FakeMatrixRoom().apply {
+            givenRoomInfo(aRoomInfo(id = roomId.value, name = ""))
+        },
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
