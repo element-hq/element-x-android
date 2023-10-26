@@ -27,7 +27,7 @@ data class TimelineItemVoiceContent(
     val duration: Duration,
     val mediaSource: MediaSource,
     val mimeType: String,
-    val waveform: ImmutableList<Int>,
+    val waveform: ImmutableList<Float>,
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemAudioContent"
 }
