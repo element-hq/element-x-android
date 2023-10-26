@@ -93,7 +93,7 @@ class DefaultFtueState @Inject constructor(
             { shouldAskNotificationPermissions() },
             { needsAnalyticsOptIn() },
             { shouldDisplayLockscreenSetup() },
-        ).any { it -> it() }
+        ).any { it() }
     }
 
     private fun shouldDisplayMigrationScreen(): Boolean {

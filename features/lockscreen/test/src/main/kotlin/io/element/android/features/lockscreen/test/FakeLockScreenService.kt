@@ -21,7 +21,7 @@ import io.element.android.features.lockscreen.api.LockScreenService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FakeLockScreenService() : LockScreenService {
+class FakeLockScreenService : LockScreenService {
 
     private var isSetupRequired: Boolean = false
     private val _lockState: MutableStateFlow<LockScreenLockState> = MutableStateFlow(LockScreenLockState.Locked)

@@ -30,6 +30,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsFlowNode
 import io.element.android.features.lockscreen.impl.setup.SetupPinNode
@@ -70,7 +71,7 @@ class LockScreenFlowNode @AssistedInject constructor(
         data object Settings : NavTarget
     }
 
-    private val pinCodeManagerCallback = object : PinCodeManager.Callback {
+    private val pinCodeManagerCallback = object : DefaultPinCodeManagerCallback() {
         override fun onPinCodeCreated() {
             plugins<LockScreenEntryPoint.Callback>().forEach {
                 it.onSetupCompleted()

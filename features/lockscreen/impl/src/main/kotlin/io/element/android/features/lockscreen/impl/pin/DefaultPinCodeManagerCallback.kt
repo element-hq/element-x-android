@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.unlock
+package io.element.android.features.lockscreen.impl.pin
 
-import io.element.android.features.lockscreen.impl.pin.model.PinEntry
-import io.element.android.libraries.architecture.Async
+open class DefaultPinCodeManagerCallback : PinCodeManager.Callback {
+    override fun onPinCodeVerified() = Unit
 
-data class PinUnlockState(
-    val pinEntry: Async<PinEntry>,
-    val showWrongPinTitle: Boolean,
-    val remainingAttempts: Async<Int>,
-    val showSignOutPrompt: Boolean,
-    val signOutAction: Async<String?>,
-    val eventSink: (PinUnlockEvents) -> Unit
-) {
-    val isSignOutPromptCancellable = when (remainingAttempts) {
-        is Async.Success -> remainingAttempts.data > 0
-        else -> true
-    }
+    override fun onPinCodeCreated() = Unit
+
+    override fun onPinCodeRemoved() = Unit
 }

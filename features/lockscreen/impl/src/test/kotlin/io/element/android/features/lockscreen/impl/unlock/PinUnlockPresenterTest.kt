@@ -20,8 +20,9 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
@@ -42,7 +43,7 @@ class PinUnlockPresenterTest {
     @Test
     fun `present - success verify flow`() = runTest {
         val pinCodeVerified = CompletableDeferred<Unit>()
-        val callback = object : PinCodeManager.Callback {
+        val callback = object : DefaultPinCodeManagerCallback() {
             override fun onPinCodeCreated() {
                 pinCodeVerified.complete(Unit)
             }
@@ -82,7 +83,7 @@ class PinUnlockPresenterTest {
     @Test
     fun `present - failure verify flow`() = runTest {
         val pinCodeVerified = CompletableDeferred<Unit>()
-        val callback = object : PinCodeManager.Callback {
+        val callback = object : DefaultPinCodeManagerCallback() {
             override fun onPinCodeCreated() {
                 pinCodeVerified.complete(Unit)
             }
@@ -145,7 +146,7 @@ class PinUnlockPresenterTest {
 
     private suspend fun createPinUnlockPresenter(
         scope: CoroutineScope,
-        callback: PinCodeManager.Callback = object : PinCodeManager.Callback {},
+        callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
     ): PinUnlockPresenter {
         val pinCodeManager = aPinCodeManager().apply {
             addCallback(callback)

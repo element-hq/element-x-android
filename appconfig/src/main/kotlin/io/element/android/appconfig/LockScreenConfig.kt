@@ -63,5 +63,4 @@ object LockScreenConfigModule {
         maxPinCodeAttemptsBeforeLogout = 3,
         gracePeriodInMillis = 90_000L
     )
-
 }

@@ -29,17 +29,17 @@ interface PinCodeManager {
         /**
          * Called when the pin code is verified.
          */
-        fun onPinCodeVerified() = Unit
+        fun onPinCodeVerified()
 
         /**
          * Called when the pin code is created.
          */
-        fun onPinCodeCreated() = Unit
+        fun onPinCodeCreated()
 
         /**
          * Called when the pin code is removed.
          */
-        fun onPinCodeRemoved() = Unit
+        fun onPinCodeRemoved()
     }
 
     /**

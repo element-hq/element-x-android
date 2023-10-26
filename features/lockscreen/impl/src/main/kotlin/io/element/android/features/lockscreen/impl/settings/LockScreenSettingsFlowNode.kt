@@ -32,6 +32,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.setup.SetupPinNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
@@ -70,7 +71,7 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
         data object Settings : NavTarget
     }
 
-    private val pinCodeManagerCallback = object : PinCodeManager.Callback {
+    private val pinCodeManagerCallback = object : DefaultPinCodeManagerCallback() {
         override fun onPinCodeVerified() {
             backstack.newRoot(NavTarget.Settings)
         }

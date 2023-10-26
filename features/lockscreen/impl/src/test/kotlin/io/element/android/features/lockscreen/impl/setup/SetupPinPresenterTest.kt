@@ -23,6 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.impl.fixtures.aLockScreenConfig
 import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
 import io.element.android.features.lockscreen.impl.pin.model.assertText
@@ -45,7 +46,7 @@ class SetupPinPresenterTest {
     @Test
     fun `present - complete flow`() = runTest {
         val pinCodeCreated = CompletableDeferred<Unit>()
-        val callback = object : PinCodeManager.Callback {
+        val callback = object : DefaultPinCodeManagerCallback() {
             override fun onPinCodeCreated() {
                 pinCodeCreated.complete(Unit)
             }

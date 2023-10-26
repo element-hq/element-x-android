@@ -34,6 +34,7 @@
   <string name="action_edit">"Edit"</string>
   <string name="action_enable">"Enable"</string>
   <string name="action_end_poll">"End poll"</string>
+  <string name="action_enter_pin">"Enter PIN"</string>
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
   <string name="action_invite">"Invite"</string>

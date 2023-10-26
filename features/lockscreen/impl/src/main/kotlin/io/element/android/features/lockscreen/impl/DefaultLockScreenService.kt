@@ -20,6 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
@@ -53,7 +54,7 @@ class DefaultLockScreenService @Inject constructor(
     private var lockJob: Job? = null
 
     init {
-        pinCodeManager.addCallback(object : PinCodeManager.Callback {
+        pinCodeManager.addCallback(object : DefaultPinCodeManagerCallback() {
             override fun onPinCodeVerified() {
                 _lockScreenState.value = LockScreenLockState.Unlocked
             }

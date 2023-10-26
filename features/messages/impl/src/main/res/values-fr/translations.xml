@@ -29,7 +29,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Échec de la restauration du mode par défaut, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Échec de la configuration du mode, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Tous les messages"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Dans ce salon, prévenez-moi pour"</string>
   <string name="screen_room_reactions_show_less">"Afficher moins"</string>
   <string name="screen_room_reactions_show_more">"Afficher plus"</string>
@@ -38,4 +37,5 @@
   <string name="screen_room_timeline_add_reaction">"Ajouter un émoji"</string>
   <string name="screen_room_timeline_less_reactions">"Afficher moins"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
 </resources>
