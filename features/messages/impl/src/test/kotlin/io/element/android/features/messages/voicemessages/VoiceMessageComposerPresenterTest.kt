@@ -63,7 +63,7 @@ class VoiceMessageComposerPresenterTest {
 
     companion object {
         private val RECORDING_DURATION = 1.seconds
-        private val RECORDING_STATE = VoiceMessageState.Recording(RECORDING_DURATION, 0.2)
+        private val RECORDING_STATE = VoiceMessageState.Recording(RECORDING_DURATION, 0.2f)
     }
 
     @Test

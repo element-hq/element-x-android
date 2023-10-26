@@ -19,8 +19,8 @@ package io.element.android.libraries.voicerecorder.test
 import io.element.android.libraries.voicerecorder.impl.audio.AudioLevelCalculator
 import kotlin.math.abs
 
-class FakeAudioLevelCalculator: AudioLevelCalculator {
-    override fun calculateAudioLevel(buffer: ShortArray): Double {
-        return buffer.map { abs(it.toDouble()) }.average() / Short.MAX_VALUE
+class FakeAudioLevelCalculator : AudioLevelCalculator {
+    override fun calculateAudioLevel(buffer: ShortArray): Float {
+        return buffer.map { abs(it.toFloat()) }.average().toFloat() / Short.MAX_VALUE
     }
 }
