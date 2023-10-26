@@ -20,8 +20,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -118,10 +120,19 @@ private fun PinDigitView(
 @Composable
 internal fun PinEntryTextFieldPreview() {
     ElementPreview {
-        PinEntryTextField(
-            pinEntry = PinEntry.createEmpty(4).fillWith("12"),
-            isSecured = true,
-            onValueChange = {},
-        )
+        val pinEntry = PinEntry.createEmpty(4).fillWith("12")
+        Column {
+            PinEntryTextField(
+                pinEntry = pinEntry,
+                isSecured = true,
+                onValueChange = {},
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            PinEntryTextField(
+                pinEntry = pinEntry,
+                isSecured = false,
+                onValueChange = {},
+            )
+        }
     }
 }
