@@ -30,6 +30,7 @@ import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
 import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -77,7 +78,9 @@ class SetupPinPresenterTest {
                 assertThat(state.setupPinFailure).isNull()
                 state.eventSink(SetupPinEvents.OnPinEntryChanged(completePin))
             }
-            awaitLastSequentialItem().also { state ->
+            consumeItemsUntilPredicate {
+                it.isConfirmationStep
+            }.last().also { state ->
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.isConfirmationStep).isTrue()
@@ -96,7 +99,9 @@ class SetupPinPresenterTest {
                 assertThat(state.setupPinFailure).isNull()
                 state.eventSink(SetupPinEvents.OnPinEntryChanged(completePin))
             }
-            awaitLastSequentialItem().also { state ->
+            consumeItemsUntilPredicate {
+                it.isConfirmationStep
+            }.last().also { state ->
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.isConfirmationStep).isTrue()
