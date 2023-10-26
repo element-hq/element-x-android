@@ -45,39 +45,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.theme.ElementTheme
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlin.math.max
-import kotlin.math.roundToInt
 
-data class Waveform (
-    val data: ImmutableList<Int>
-) {
-    companion object {
-        private val dataRange = 0..1024
-    }
-
-    fun normalisedData(maxSamplesCount: Int): ImmutableList<Float> {
-        if(maxSamplesCount <= 0) {
-            return persistentListOf()
-        }
-
-        // Filter the data to keep only the expected number of samples
-        val result = if (data.size > maxSamplesCount) {
-            (0..<maxSamplesCount)
-                .map { index ->
-                    val targetIndex = (index.toDouble() * (data.count().toDouble() / maxSamplesCount.toDouble())).roundToInt()
-                    data[targetIndex]
-                }
-        } else {
-            data
-        }
-
-        // Normalize the sample in the allowed range
-        return result.map { it.toFloat() / dataRange.last.toFloat() }.toPersistentList()
-    }
-}
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -94,7 +65,7 @@ fun WaveformPlaybackView(
     linePadding: Dp = 2.dp,
     minimumGraphAmplitude: Float = 2F,
 ) {
-    var seekProgress = remember { mutableStateOf<Float?>(null) }
+    val seekProgress = remember { mutableStateOf<Float?>(null) }
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
     var canvasSizePx by remember { mutableStateOf(Size(0f, 0f)) }
     val progress by remember(playbackProgress, seekProgress.value) {
@@ -105,7 +76,7 @@ fun WaveformPlaybackView(
     val progressAnimated = animateFloatAsState(targetValue = progress, label = "progressAnimation")
     val amplitudeDisplayCount by remember(canvasSize) {
         derivedStateOf {
-            ((canvasSize.width.value) / (lineWidth.value + linePadding.value)).toInt()
+            (canvasSize.width.value / (lineWidth.value + linePadding.value)).toInt()
         }
     }
     val normalizedWaveformData by remember(amplitudeDisplayCount) {
@@ -124,13 +95,13 @@ fun WaveformPlaybackView(
                     MotionEvent.ACTION_DOWN -> {
                         if (it.x in 0F..canvasSizePx.width) {
                             requestDisallowInterceptTouchEvent.invoke(true)
-                            seekProgress.value = (it.x / canvasSizePx.width)
+                            seekProgress.value = it.x / canvasSizePx.width
                             true
                         } else false
                     }
                     MotionEvent.ACTION_MOVE -> {
                         if (it.x in 0F..canvasSizePx.width) {
-                            seekProgress.value = (it.x / canvasSizePx.width)
+                            seekProgress.value = it.x / canvasSizePx.width
                         }
                         true
                     }
@@ -155,7 +126,7 @@ fun WaveformPlaybackView(
                 brush = brush,
                 topLeft = Offset(
                     x = index * (linePadding + lineWidth).toPx(),
-                    y = centerY - (drawingAmplitude / 2)
+                    y = centerY - drawingAmplitude / 2
                 ),
                 size = Size(
                     width = lineWidth.toPx(),
@@ -168,7 +139,7 @@ fun WaveformPlaybackView(
         drawRect(
             brush = progressBrush,
             size = Size(
-                width = (progressAnimated.value) * canvasSize.width.toPx(),
+                width = progressAnimated.value * canvasSize.width.toPx(),
                 height = canvasSize.height.toPx()
             ),
             blendMode = BlendMode.SrcAtop
@@ -178,7 +149,7 @@ fun WaveformPlaybackView(
                 brush = cursorBrush,
                 topLeft = Offset(
                     x = progressAnimated.value * canvasSize.width.toPx(),
-                    y = centerY - ((canvasSize.height.toPx() - 2) / 2)
+                    y = centerY - (canvasSize.height.toPx() - 2) / 2
                 ),
                 size = Size(
                     width = lineWidth.toPx(),

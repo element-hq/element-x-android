@@ -46,7 +46,6 @@ import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageStateProvider
 import io.element.android.features.messages.impl.voicemessages.timeline.Waveform
 import io.element.android.features.messages.impl.voicemessages.timeline.WaveformPlaybackView
-import io.element.android.features.messages.impl.voicemessages.timeline.WaveformProgressIndicator
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
