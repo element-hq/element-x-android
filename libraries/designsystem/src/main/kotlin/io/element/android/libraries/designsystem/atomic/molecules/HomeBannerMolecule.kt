@@ -46,7 +46,7 @@ fun DialogLikeBannerMolecule(
     title: String,
     content: String,
     onSubmitClicked: () -> Unit,
-    onDismissClicked: () -> Unit,
+    onDismissClicked: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
@@ -68,11 +68,13 @@ fun DialogLikeBannerMolecule(
                         color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Start,
                     )
-                    Icon(
-                        modifier = Modifier.clickable(onClick = onDismissClicked),
-                        resourceId = CommonDrawables.ic_compound_close,
-                        contentDescription = stringResource(CommonStrings.action_close)
-                    )
+                    if (onDismissClicked != null) {
+                        Icon(
+                            modifier = Modifier.clickable(onClick = onDismissClicked),
+                            resourceId = CommonDrawables.ic_compound_close,
+                            contentDescription = stringResource(CommonStrings.action_close)
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
