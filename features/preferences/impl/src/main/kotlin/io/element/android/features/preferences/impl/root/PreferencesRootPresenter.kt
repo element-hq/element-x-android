@@ -68,6 +68,10 @@ class PreferencesRootPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             showNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
         }
+        val showLockScreenSettings = remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            showLockScreenSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)
+        }
 
         // We should display the 'complete verification' option if the current session can be verified
         val showCompleteVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
@@ -95,6 +99,7 @@ class PreferencesRootPresenter @Inject constructor(
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             showNotificationSettings = showNotificationSettings.value,
+            showLockScreenSettings = showLockScreenSettings.value,
             snackbarMessage = snackbarMessage,
         )
     }

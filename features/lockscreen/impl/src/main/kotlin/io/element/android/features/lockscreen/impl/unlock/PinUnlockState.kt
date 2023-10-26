@@ -17,13 +17,18 @@
 package io.element.android.features.lockscreen.impl.unlock
 
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
+import io.element.android.libraries.architecture.Async
 
 data class PinUnlockState(
-    val pinEntry: PinEntry,
+    val pinEntry: Async<PinEntry>,
     val showWrongPinTitle: Boolean,
-    val remainingAttempts: Int,
+    val remainingAttempts: Async<Int>,
     val showSignOutPrompt: Boolean,
+    val signOutAction: Async<String?>,
     val eventSink: (PinUnlockEvents) -> Unit
 ) {
-    val isSignOutPromptCancellable = remainingAttempts > 0
+    val isSignOutPromptCancellable = when (remainingAttempts) {
+        is Async.Success -> remainingAttempts.data > 0
+        else -> true
+    }
 }

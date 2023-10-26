@@ -32,7 +32,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(projects.anvilannotations)
     implementation(projects.libraries.di)
-    implementation(projects.libraries.cryptography.api)
+    api(projects.libraries.cryptography.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)

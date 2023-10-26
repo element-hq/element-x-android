@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.features.analytics.api)
     implementation(projects.services.analytics.api)
+    implementation(projects.features.lockscreen.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.permissions.noop)
     implementation(projects.services.toolbox.api)
@@ -57,6 +58,7 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.libraries.permissions.impl)
     testImplementation(projects.libraries.permissions.test)
+    testImplementation(projects.features.lockscreen.test)
     testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)

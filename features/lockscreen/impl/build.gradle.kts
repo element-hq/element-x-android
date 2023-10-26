@@ -43,6 +43,9 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.cryptography.api)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.sessionStorage.api)
+    implementation(projects.services.appnavstate.api)
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -54,4 +57,6 @@ dependencies {
     testImplementation(projects.libraries.cryptography.test)
     testImplementation(projects.libraries.cryptography.impl)
     testImplementation(projects.libraries.featureflag.test)
+    implementation(projects.libraries.sessionStorage.test)
+    implementation(projects.services.appnavstate.test)
 }

@@ -20,7 +20,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -30,7 +33,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
@@ -42,34 +44,37 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun PinEntryTextField(
     pinEntry: PinEntry,
+    isSecured: Boolean,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BasicTextField(
         modifier = modifier,
-        value = TextFieldValue(pinEntry.toText()),
+        value = pinEntry.toText(),
         onValueChange = {
-            onValueChange(it.text)
+            onValueChange(it)
         },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         decorationBox = {
-            PinEntryRow(pinEntry = pinEntry)
+            PinEntryRow(pinEntry = pinEntry, isSecured = isSecured)
         }
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PinEntryRow(
     pinEntry: PinEntry,
+    isSecured: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         for (digit in pinEntry.digits) {
-            PinDigitView(digit = digit)
+            PinDigitView(digit = digit, isSecured = isSecured)
         }
     }
 }
@@ -77,6 +82,7 @@ private fun PinEntryRow(
 @Composable
 private fun PinDigitView(
     digit: PinDigit,
+    isSecured: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val shape = RoundedCornerShape(8.dp)
@@ -96,8 +102,13 @@ private fun PinDigitView(
 
         ) {
         if (digit is PinDigit.Filled) {
+            val text = if (isSecured) {
+                "•"
+            } else {
+                digit.value.toString()
+            }
             Text(
-                text = digit.toText(),
+                text = text,
                 style = ElementTheme.typography.fontHeadingMdBold
             )
         }
@@ -109,9 +120,19 @@ private fun PinDigitView(
 @Composable
 internal fun PinEntryTextFieldPreview() {
     ElementPreview {
-        PinEntryTextField(
-            pinEntry = PinEntry.createEmpty(4).fillWith("12"),
-            onValueChange = {},
-        )
+        val pinEntry = PinEntry.createEmpty(4).fillWith("12")
+        Column {
+            PinEntryTextField(
+                pinEntry = pinEntry,
+                isSecured = true,
+                onValueChange = {},
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            PinEntryTextField(
+                pinEntry = pinEntry,
+                isSecured = false,
+                onValueChange = {},
+            )
+        }
     }
 }

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.api
+plugins {
+    id("io.element.android-library")
+}
 
-import kotlinx.coroutines.flow.StateFlow
+android {
+    namespace = "io.element.android.features.lockscreen.test"
+}
 
-interface LockScreenStateService {
-    val state: StateFlow<LockScreenState>
-
-    suspend fun entersForeground()
-    suspend fun entersBackground()
-    suspend fun unlock()
+dependencies {
+    implementation(libs.coroutines.core)
+    api(projects.features.lockscreen.api)
 }

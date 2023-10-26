@@ -21,10 +21,46 @@ package io.element.android.features.lockscreen.impl.pin
  * Implementation should take care of encrypting the pin code and storing it.
  */
 interface PinCodeManager {
+
+    /**
+     * Callbacks for pin code management events.
+     */
+    interface Callback {
+        /**
+         * Called when the pin code is verified.
+         */
+        fun onPinCodeVerified()
+
+        /**
+         * Called when the pin code is created.
+         */
+        fun onPinCodeCreated()
+
+        /**
+         * Called when the pin code is removed.
+         */
+        fun onPinCodeRemoved()
+    }
+
+    /**
+     * Register a callback to be notified of pin code management events.
+     */
+    fun addCallback(callback: Callback)
+
+    /**
+     * Unregister callback to be notified of pin code management events.
+     */
+    fun removeCallback(callback: Callback)
+
     /**
      * @return true if a pin code is available.
      */
     suspend fun isPinCodeAvailable(): Boolean
+
+    /**
+     * @return the size of the saved pin code.
+     */
+    suspend fun getPinCodeSize(): Int
 
     /**
      * Creates a new encrypted pin code.
@@ -46,16 +82,4 @@ interface PinCodeManager {
      * @return the number of remaining attempts before the pin code is blocked.
      */
     suspend fun getRemainingPinCodeAttemptsNumber(): Int
-
-    /**
-     * Should be called when the pin code is incorrect.
-     * Will decrement the remaining attempts number.
-     * @return the number of remaining attempts before the pin code is blocked.
-     */
-    suspend fun onWrongPin(): Int
-
-    /**
-     * Resets the counter of attempts for PIN code.
-     */
-    suspend fun resetCounter()
 }

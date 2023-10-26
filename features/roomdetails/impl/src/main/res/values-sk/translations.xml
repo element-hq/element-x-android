@@ -36,7 +36,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Nepodarilo sa obnoviť predvolený režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nepodarilo sa nastaviť režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všetky správy"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V tejto miestnosti ma upozorniť na"</string>
   <string name="screen_dm_details_block_alert_action">"Zablokovať"</string>
   <string name="screen_dm_details_block_alert_description">"Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať."</string>
@@ -47,4 +46,5 @@
   <string name="screen_room_details_leave_room_title">"Opustiť miestnosť"</string>
   <string name="screen_room_details_security_title">"Bezpečnosť"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
 </resources>

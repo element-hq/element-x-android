@@ -20,13 +20,17 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
+import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
-import io.element.android.features.lockscreen.impl.state.DefaultLockScreenStateService
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -37,16 +41,27 @@ class PinUnlockPresenterTest {
     private val completePin = "1235"
 
     @Test
-    fun `present - complete flow`() = runTest {
-        val presenter = createPinUnlockPresenter(this)
+    fun `present - success verify flow`() = runTest {
+        val pinCodeVerified = CompletableDeferred<Unit>()
+        val callback = object : DefaultPinCodeManagerCallback() {
+            override fun onPinCodeCreated() {
+                pinCodeVerified.complete(Unit)
+            }
+        }
+        val presenter = createPinUnlockPresenter(this, callback)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitItem().also { state ->
-                state.pinEntry.assertEmpty()
+                assertThat(state.pinEntry).isInstanceOf(Async.Uninitialized::class.java)
                 assertThat(state.showWrongPinTitle).isFalse()
                 assertThat(state.showSignOutPrompt).isFalse()
-                assertThat(state.remainingAttempts).isEqualTo(3)
+                assertThat(state.signOutAction).isInstanceOf(Async.Uninitialized::class.java)
+                assertThat(state.remainingAttempts).isInstanceOf(Async.Uninitialized::class.java)
+            }
+            consumeItemsUntilPredicate {
+                it.pinEntry is Async.Success && it.remainingAttempts is Async.Success
+            }.last().also { state ->
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
             }
@@ -55,9 +70,55 @@ class PinUnlockPresenterTest {
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Back))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Empty))
+                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
+                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('5')))
             }
             awaitLastSequentialItem().also { state ->
-                state.pinEntry.assertText(halfCompletePin)
+                state.pinEntry.assertText(completePin)
+            }
+            pinCodeVerified.await()
+        }
+    }
+
+    @Test
+    fun `present - failure verify flow`() = runTest {
+        val pinCodeVerified = CompletableDeferred<Unit>()
+        val callback = object : DefaultPinCodeManagerCallback() {
+            override fun onPinCodeCreated() {
+                pinCodeVerified.complete(Unit)
+            }
+        }
+        val presenter = createPinUnlockPresenter(this, callback)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = consumeItemsUntilPredicate {
+                it.pinEntry is Async.Success && it.remainingAttempts is Async.Success
+            }.last()
+            val numberOfAttempts = initialState.remainingAttempts.dataOrNull() ?: 0
+            repeat(numberOfAttempts) {
+                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
+                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
+                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
+                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('4')))
+            }
+            awaitLastSequentialItem().also { state ->
+                assertThat(state.remainingAttempts.dataOrNull()).isEqualTo(0)
+                assertThat(state.showSignOutPrompt).isEqualTo(true)
+                assertThat(state.isSignOutPromptCancellable).isEqualTo(false)
+            }
+        }
+    }
+
+    @Test
+    fun `present - forgot pin flow`() = runTest {
+        val presenter = createPinUnlockPresenter(this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            consumeItemsUntilPredicate {
+                it.pinEntry is Async.Success && it.remainingAttempts is Async.Success
+            }.last().also { state ->
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
             awaitLastSequentialItem().also { state ->
@@ -67,22 +128,33 @@ class PinUnlockPresenterTest {
             }
             awaitLastSequentialItem().also { state ->
                 assertThat(state.showSignOutPrompt).isEqualTo(false)
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('5')))
+                state.eventSink(PinUnlockEvents.OnForgetPin)
             }
             awaitLastSequentialItem().also { state ->
-                state.pinEntry.assertText(completePin)
+                assertThat(state.showSignOutPrompt).isEqualTo(true)
+                state.eventSink(PinUnlockEvents.SignOut)
+            }
+            consumeItemsUntilPredicate { state ->
+                state.signOutAction is Async.Success
             }
         }
     }
 
-    private suspend fun createPinUnlockPresenter(scope: CoroutineScope): PinUnlockPresenter {
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.PinUnlock, true)
+    private fun Async<PinEntry>.assertText(text: String) {
+        dataOrNull()?.assertText(text)
+    }
+
+    private suspend fun createPinUnlockPresenter(
+        scope: CoroutineScope,
+        callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
+    ): PinUnlockPresenter {
+        val pinCodeManager = aPinCodeManager().apply {
+            addCallback(callback)
+            createPinCode(completePin)
         }
-        val lockScreenStateService = DefaultLockScreenStateService(featureFlagService)
         return PinUnlockPresenter(
-            lockScreenStateService,
+            pinCodeManager,
+            FakeMatrixClient(),
             scope,
         )
     }

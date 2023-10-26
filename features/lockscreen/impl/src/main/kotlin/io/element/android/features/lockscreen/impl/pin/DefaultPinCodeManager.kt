@@ -22,25 +22,46 @@ import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.cryptography.api.SecretKeyProvider
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
+import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 
-private const val SECRET_KEY_ALIAS = "SECRET_KEY_ALIAS_PIN_CODE"
+private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_PIN_CODE"
 
 @ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
 class DefaultPinCodeManager @Inject constructor(
     private val secretKeyProvider: SecretKeyProvider,
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val pinCodeStore: PinCodeStore,
 ) : PinCodeManager {
 
+    private val callbacks = CopyOnWriteArrayList<PinCodeManager.Callback>()
+
+    override fun addCallback(callback: PinCodeManager.Callback) {
+        callbacks.add(callback)
+    }
+
+    override fun removeCallback(callback: PinCodeManager.Callback) {
+        callbacks.remove(callback)
+    }
+
     override suspend fun isPinCodeAvailable(): Boolean {
         return pinCodeStore.hasPinCode()
+    }
+
+    override suspend fun getPinCodeSize(): Int {
+        val encryptedPinCode = pinCodeStore.getEncryptedCode() ?: return 0
+        val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
+        val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
+        return decryptedPinCode.size
     }
 
     override suspend fun createPinCode(pinCode: String) {
         val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
         val encryptedPinCode = encryptionDecryptionService.encrypt(secretKey, pinCode.toByteArray()).toBase64()
         pinCodeStore.saveEncryptedPinCode(encryptedPinCode)
+        callbacks.forEach { it.onPinCodeCreated() }
     }
 
     override suspend fun verifyPinCode(pinCode: String): Boolean {
@@ -48,7 +69,17 @@ class DefaultPinCodeManager @Inject constructor(
         return try {
             val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
             val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
-            decryptedPinCode.contentEquals(pinCode.toByteArray())
+            val pinCodeToCheck = pinCode.toByteArray()
+            decryptedPinCode.contentEquals(pinCodeToCheck).also { isPinCodeCorrect ->
+                if (isPinCodeCorrect) {
+                    pinCodeStore.resetCounter()
+                    callbacks.forEach { callback ->
+                        callback.onPinCodeVerified()
+                    }
+                } else {
+                    pinCodeStore.onWrongPin()
+                }
+            }
         } catch (failure: Throwable) {
             false
         }
@@ -56,17 +87,11 @@ class DefaultPinCodeManager @Inject constructor(
 
     override suspend fun deletePinCode() {
         pinCodeStore.deleteEncryptedPinCode()
+        pinCodeStore.resetCounter()
+        callbacks.forEach { it.onPinCodeRemoved() }
     }
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return pinCodeStore.getRemainingPinCodeAttemptsNumber()
-    }
-
-    override suspend fun onWrongPin(): Int {
-        return pinCodeStore.onWrongPin()
-    }
-
-    override suspend fun resetCounter() {
-        pinCodeStore.resetCounter()
     }
 }

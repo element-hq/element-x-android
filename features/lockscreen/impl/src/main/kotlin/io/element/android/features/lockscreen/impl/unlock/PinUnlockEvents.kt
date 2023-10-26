@@ -22,4 +22,6 @@ sealed interface PinUnlockEvents {
     data class OnPinKeypadPressed(val pinKeypadModel: PinKeypadModel) : PinUnlockEvents
     data object OnForgetPin : PinUnlockEvents
     data object ClearSignOutPrompt : PinUnlockEvents
+    data object SignOut : PinUnlockEvents
+    data object OnUseBiometric : PinUnlockEvents
 }

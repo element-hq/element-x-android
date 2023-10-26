@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.api
+package io.element.android.features.lockscreen.impl.pin
 
-sealed interface LockScreenState {
-    data object Unlocked : LockScreenState
-    data object Locked : LockScreenState
+open class DefaultPinCodeManagerCallback : PinCodeManager.Callback {
+    override fun onPinCodeVerified() = Unit
+
+    override fun onPinCodeCreated() = Unit
+
+    override fun onPinCodeRemoved() = Unit
 }

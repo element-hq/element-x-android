@@ -201,6 +201,7 @@ dependencies {
     implementation(projects.features.call)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
+    implementation(projects.appconfig)
     anvil(projects.anvilcodegen)
 
     implementation(libs.appyx.core)

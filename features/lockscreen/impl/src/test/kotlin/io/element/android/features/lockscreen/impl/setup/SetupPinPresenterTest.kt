@@ -20,12 +20,19 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.fixtures.aLockScreenConfig
+import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
 import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -38,8 +45,13 @@ class SetupPinPresenterTest {
 
     @Test
     fun `present - complete flow`() = runTest {
-
-        val presenter = createSetupPinPresenter()
+        val pinCodeCreated = CompletableDeferred<Unit>()
+        val callback = object : DefaultPinCodeManagerCallback() {
+            override fun onPinCodeCreated() {
+                pinCodeCreated.complete(Unit)
+            }
+        }
+        val presenter = createSetupPinPresenter(callback)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -67,7 +79,9 @@ class SetupPinPresenterTest {
                 assertThat(state.setupPinFailure).isNull()
                 state.eventSink(SetupPinEvents.OnPinEntryChanged(completePin))
             }
-            awaitLastSequentialItem().also { state ->
+            consumeItemsUntilPredicate {
+                it.isConfirmationStep
+            }.last().also { state ->
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.isConfirmationStep).isTrue()
@@ -86,7 +100,9 @@ class SetupPinPresenterTest {
                 assertThat(state.setupPinFailure).isNull()
                 state.eventSink(SetupPinEvents.OnPinEntryChanged(completePin))
             }
-            awaitLastSequentialItem().also { state ->
+            consumeItemsUntilPredicate {
+                it.isConfirmationStep
+            }.last().also { state ->
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.isConfirmationStep).isTrue()
@@ -96,10 +112,23 @@ class SetupPinPresenterTest {
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertText(completePin)
             }
+            pinCodeCreated.await()
         }
     }
 
-    private fun createSetupPinPresenter(): SetupPinPresenter {
-        return SetupPinPresenter(PinValidator(setOf(blacklistedPin)), aBuildMeta())
+    private fun createSetupPinPresenter(
+        callback: PinCodeManager.Callback,
+        lockScreenConfig: LockScreenConfig = aLockScreenConfig(
+            pinBlacklist = setOf(blacklistedPin)
+        ),
+    ): SetupPinPresenter {
+        val pinCodeManager = aPinCodeManager()
+        pinCodeManager.addCallback(callback)
+        return SetupPinPresenter(
+            lockScreenConfig = lockScreenConfig,
+            pinValidator = PinValidator(lockScreenConfig),
+            buildMeta = aBuildMeta(),
+            pinCodeManager = pinCodeManager
+        )
     }
 }

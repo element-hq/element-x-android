@@ -20,33 +20,45 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
+import io.element.android.features.lockscreen.impl.pin.PinCodeManager
+import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsFlowNode
 import io.element.android.features.lockscreen.impl.setup.SetupPinNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(AppScope::class)
+@ContributesNode(SessionScope::class)
 class LockScreenFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val pinCodeManager: PinCodeManager,
 ) : BackstackNode<LockScreenFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Unlock,
+        initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialNavTarget,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
     plugins = plugins,
 ) {
+
+    data class Inputs(
+        val initialNavTarget: NavTarget = NavTarget.Unlock,
+    ) : NodeInputs
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -54,6 +66,29 @@ class LockScreenFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object Setup : NavTarget
+
+        @Parcelize
+        data object Settings : NavTarget
+    }
+
+    private val pinCodeManagerCallback = object : DefaultPinCodeManagerCallback() {
+        override fun onPinCodeCreated() {
+            plugins<LockScreenEntryPoint.Callback>().forEach {
+                it.onSetupCompleted()
+            }
+        }
+    }
+
+    override fun onBuilt() {
+        super.onBuilt()
+        lifecycle.subscribe(
+            onCreate = {
+                pinCodeManager.addCallback(pinCodeManagerCallback)
+            },
+            onDestroy = {
+                pinCodeManager.removeCallback(pinCodeManagerCallback)
+            }
+        )
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -63,6 +98,9 @@ class LockScreenFlowNode @AssistedInject constructor(
             }
             NavTarget.Setup -> {
                 createNode<SetupPinNode>(buildContext)
+            }
+            NavTarget.Settings -> {
+                createNode<LockScreenSettingsFlowNode>(buildContext)
             }
         }
     }
