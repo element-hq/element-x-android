@@ -98,7 +98,7 @@ class VoiceRecorderImpl @Inject constructor(
                     }
                     is Audio.Error -> {
                         Timber.e("Voice message error: code=${audio.audioRecordErrorCode}")
-                        _state.emit(VoiceRecorderState.Recording(elapsedTime, 0.0))
+                        _state.emit(VoiceRecorderState.Recording(elapsedTime, 0.0f))
                     }
                 }
             }

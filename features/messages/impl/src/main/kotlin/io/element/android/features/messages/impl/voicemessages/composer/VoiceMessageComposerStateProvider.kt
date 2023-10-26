@@ -23,7 +23,7 @@ import kotlin.time.Duration.Companion.seconds
 internal open class VoiceMessageComposerStateProvider : PreviewParameterProvider<VoiceMessageComposerState> {
     override val values: Sequence<VoiceMessageComposerState>
         get() = sequenceOf(
-            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(duration = 61.seconds, level = 0.5)),
+            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(duration = 61.seconds, level = 0.5f)),
         )
 }
 

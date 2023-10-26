@@ -25,6 +25,6 @@ sealed class VoiceMessageState {
     data object Sending: VoiceMessageState()
     data class Recording(
         val duration: Duration,
-        val level: Double,
+        val level: Float,
     ): VoiceMessageState()
 }

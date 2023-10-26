@@ -29,7 +29,7 @@ import kotlin.time.TestTimeSource
 class FakeVoiceRecorder(
     private val timeSource: TestTimeSource = TestTimeSource(),
     private val recordingDuration: Duration = 0.seconds,
-    private val levels: List<Double> = listOf(0.1, 0.2)
+    private val levels: List<Float> = listOf(0.1f, 0.2f)
 ) : VoiceRecorder {
     private val _state = MutableStateFlow<VoiceRecorderState>(VoiceRecorderState.Idle)
     override val state: StateFlow<VoiceRecorderState> = _state
