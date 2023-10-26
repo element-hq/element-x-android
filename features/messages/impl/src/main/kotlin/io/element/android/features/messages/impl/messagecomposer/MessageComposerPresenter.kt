@@ -172,7 +172,11 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        LaunchedEffect(Unit) { processComposerSuggestions() }
+        LaunchedEffect(Unit) {
+            if (featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)) {
+                processComposerSuggestions()
+            }
+        }
 
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
