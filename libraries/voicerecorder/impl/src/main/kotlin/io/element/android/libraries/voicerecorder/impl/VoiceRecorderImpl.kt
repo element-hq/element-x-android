@@ -30,6 +30,7 @@ import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
 import io.element.android.libraries.voicerecorder.impl.audio.AudioLevelCalculator
 import io.element.android.libraries.voicerecorder.impl.audio.AudioReader
 import io.element.android.libraries.voicerecorder.impl.audio.Encoder
+import io.element.android.libraries.voicerecorder.impl.audio.resample
 import io.element.android.libraries.voicerecorder.impl.file.VoiceFileConfig
 import io.element.android.libraries.voicerecorder.impl.file.VoiceFileManager
 import kotlinx.coroutines.CoroutineScope
@@ -65,6 +66,7 @@ class VoiceRecorderImpl @Inject constructor(
     private var outputFile: File? = null
     private var audioReader: AudioReader? = null
     private var recordingJob: Job? = null
+    private val levels: MutableList<Float> = mutableListOf()
 
     private val _state = MutableStateFlow<VoiceRecorderState>(VoiceRecorderState.Idle)
     override val state: StateFlow<VoiceRecorderState> = _state
@@ -74,6 +76,7 @@ class VoiceRecorderImpl @Inject constructor(
         Timber.i("Voice recorder started recording")
         outputFile = fileManager.createFile()
             .also(encoder::init)
+        levels.clear()
 
         val audioRecorder = audioReaderFactory.create(config, dispatchers).also { audioReader = it }
 
@@ -94,6 +97,7 @@ class VoiceRecorderImpl @Inject constructor(
                     is Audio.Data -> {
                         val audioLevel = audioLevelCalculator.calculateAudioLevel(audio.buffer)
                         _state.emit(VoiceRecorderState.Recording(elapsedTime, audioLevel))
+                        levels.add(audioLevel)
                         encoder.encode(audio.buffer, audio.readSize)
                     }
                     is Audio.Error -> {
@@ -124,12 +128,17 @@ class VoiceRecorderImpl @Inject constructor(
 
         if (cancelled) {
             deleteRecording()
+            levels.clear()
         }
 
         _state.emit(
             when (val file = outputFile) {
                 null -> VoiceRecorderState.Idle
-                else -> VoiceRecorderState.Finished(file, fileConfig.mimeType)
+                else -> VoiceRecorderState.Finished(
+                    file = file,
+                    mimeType = fileConfig.mimeType,
+                    waveform = levels.resample(100),
+                )
             }
         )
     }

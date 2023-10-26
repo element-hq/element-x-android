@@ -148,6 +148,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
             appCoroutineScope.sendMessage(
                 file = finishedState.file,
                 mimeType = finishedState.mimeType,
+                waveform = finishedState.waveform,
             ).invokeOnCompletion {
                 isSending = false
             }
@@ -207,12 +208,14 @@ class VoiceMessageComposerPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.sendMessage(
-        file: File, mimeType: String,
+        file: File,
+        mimeType: String,
+        waveform: List<Float>
     ) = launch {
         val result = mediaSender.sendVoiceMessage(
             uri = file.toUri(),
             mimeType = mimeType,
-            waveForm = emptyList(), // TODO generate waveform
+            waveForm = waveform.toMSC3246range(),
         )
 
         if (result.isFailure) {
@@ -223,3 +226,8 @@ class VoiceMessageComposerPresenter @Inject constructor(
         voiceRecorder.deleteRecording()
     }
 }
+
+/**
+ * Resizes the given [0;1] float list to [0;1024] int list as per unstable MSC3246 spec.
+ */
+private fun List<Float>.toMSC3246range(): List<Int> = map { (it * 1024).toInt() }
