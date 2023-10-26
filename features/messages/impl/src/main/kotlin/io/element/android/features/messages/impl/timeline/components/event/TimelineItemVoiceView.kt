@@ -94,14 +94,6 @@ fun TimelineItemVoiceView(
                 .weight(1f),
             onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) },
         )
-//        WaveformProgressIndicator(
-//            modifier = Modifier
-//                .height(34.dp)
-//                .weight(1f),
-//            progress = state.progress,
-//            amplitudes = content.waveform,
-//            onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) }
-//        )
         Spacer(Modifier.width(extraPadding.getDpSize()))
     }
 }
