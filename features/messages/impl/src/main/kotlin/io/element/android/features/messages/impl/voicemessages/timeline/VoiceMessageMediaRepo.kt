@@ -29,59 +29,58 @@ import java.io.File
 
 /**
  * Fetches the media file for a voice message.
+ *
+ * Media is downloaded from the rust sdk and stored in the application's cache directory.
+ * Media files are indexed by their Matrix Content (mxc://) URI and considered immutable.
+ * Whenever a given mxc is found in the cache, it is returned immediately.
  */
-interface VoiceMessageMediaRepository {
+interface VoiceMessageMediaRepo {
 
     /**
-     * Factory for [VoiceMessageMediaRepository].
+     * Factory for [VoiceMessageMediaRepo].
      */
     fun interface Factory {
         /**
-         * Creates a [VoiceMessageMediaRepository] for the given Matrix Content (mxc://) URI.
+         * Creates a [VoiceMessageMediaRepo].
          *
-         * @param mxcUri the Matrix Content (mxc://) URI of the voice message.
+         * @param mediaSource the media source of the voice message.
+         * @param mimeType the mime type of the voice message.
+         * @param body the body of the voice message.
          */
         fun create(
             mediaSource: MediaSource,
             mimeType: String?,
             body: String?,
-        ): VoiceMessageMediaRepository
+        ): VoiceMessageMediaRepo
     }
 
     /**
-     * Returns the voice message file.
+     * Returns the voice message media file.
      *
      * In case of a cache hit the file is returned immediately.
      * In case of a cache miss the file is downloaded and then returned.
      *
-     * @return the voice message file from the cache directory.
+     * @return A [Result] holding either the media [File] from the cache directory or an [Exception].
      */
     suspend fun getMediaFile(): Result<File>
 }
 
-/**
- * Default implementation of [VoiceMessageMediaRepository] that serves the remote
- * media files through a local disk cache.
- *
- * @param cacheDir the application's cache directory.
- * @param mxcUri the Matrix Content (mxc://) URI of the voice message.
- */
-class VoiceMessageMediaRepositoryImpl @AssistedInject constructor(
+class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
     @CacheDirectory private val cacheDir: File,
     private val matrixMediaLoader: MatrixMediaLoader,
     @Assisted private val mediaSource: MediaSource,
     @Assisted("mimeType") private val mimeType: String?,
     @Assisted("body") private val body: String?,
-) : VoiceMessageMediaRepository {
+) : VoiceMessageMediaRepo {
 
     @ContributesBinding(RoomScope::class)
     @AssistedFactory
-    fun interface Factory : VoiceMessageMediaRepository.Factory {
+    fun interface Factory : VoiceMessageMediaRepo.Factory {
         override fun create(
             mediaSource: MediaSource,
             @Assisted("mimeType") mimeType: String?,
             @Assisted("body") body: String?,
-        ): VoiceMessageMediaRepositoryImpl
+        ): DefaultVoiceMessageMediaRepo
     }
 
     override suspend fun getMediaFile(): Result<File> = if (!isInCache()) {
@@ -91,8 +90,8 @@ class VoiceMessageMediaRepositoryImpl @AssistedInject constructor(
             body = body,
         ).mapCatching {
             val dest = cachedFilePath.apply { parentFile?.mkdirs() }
-            // TODO: By not closing the MediaFile we're leaking the rust file handle here.
-            // Not that big of a deal but better to avoid it.
+            // TODO By not closing the MediaFile we're leaking the rust file handle here.
+            // Not that big of a deal but better to avoid it someday.
             if (it.toFile().renameTo(dest)) {
                 dest
             } else {

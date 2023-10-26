@@ -38,12 +38,13 @@ interface VoiceMessagePlayer {
          *
          * NB: Different voice messages can use the same content uri (e.g. in case of
          * a forward of a voice message),
-         * therefore the media uri is not enough to uniquely identify a voice message.
-         * This is why we must provide the eventId as well.
+         * therefore the mxc:// uri in [mediaSource] is not enough to uniquely identify
+         * a voice message. This is why we must provide the eventId as well.
          *
-         * @param eventId The id of the voice message event. If null, a dummy
-         *        player is returned.
-         * @param mediaPath The path to the voice message's media file.
+         * @param eventId The eventId of the voice message event.
+         * @param mediaSource The media source of the voice message.
+         * @param mimeType The mime type of the voice message.
+         * @param body The body of the voice message.
          */
         fun create(
             eventId: EventId?,
@@ -64,7 +65,7 @@ interface VoiceMessagePlayer {
      * If already in control of the underlying [MediaPlayer], starts playing from the
      * current position.
      *
-     * Will transparently fetche the remote media file if needed (hence why it's a suspend method).
+     * Will suspend whilst the media file is being downloaded.
      */
     suspend fun play(): Result<Unit>
 
@@ -97,16 +98,13 @@ interface VoiceMessagePlayer {
 }
 
 /**
- * An implementation of [VoiceMessagePlayer] which is backed by a [MediaPlayer]
- * usually shared among different [VoiceMessagePlayer] instances.
- *
- * @param mediaPlayer The [MediaPlayer] to use.
- * @param eventId The id of the voice message event. If null, the player will behave as no-op.
- * @param mediaPath The path to the voice message's media file.
+ * An implementation of [VoiceMessagePlayer] which is backed by a
+ * [VoiceMessageMediaRepo] to fetch and cache the media file and
+ * which uses a global [MediaPlayer] instance to play the media.
  */
-class VoiceMessagePlayerImpl(
+class DefaultVoiceMessagePlayer(
     private val mediaPlayer: MediaPlayer,
-    voiceMessageMediaRepositoryFactory: VoiceMessageMediaRepository.Factory,
+    voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
     private val eventId: EventId?,
     mediaSource: MediaSource,
     mimeType: String?,
@@ -116,26 +114,24 @@ class VoiceMessagePlayerImpl(
     @ContributesBinding(RoomScope::class) // Scoped types can't use @AssistedInject.
     class Factory @Inject constructor(
         private val mediaPlayer: MediaPlayer,
-        private val voiceMessageMediaRepositoryFactory: VoiceMessageMediaRepository.Factory,
+        private val voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
     ) : VoiceMessagePlayer.Factory {
         override fun create(
             eventId: EventId?,
             mediaSource: MediaSource,
             mimeType: String?,
             body: String?,
-        ): VoiceMessagePlayerImpl {
-            return VoiceMessagePlayerImpl(
-                mediaPlayer = mediaPlayer,
-                voiceMessageMediaRepositoryFactory = voiceMessageMediaRepositoryFactory,
-                eventId = eventId,
-                mediaSource = mediaSource,
-                mimeType = mimeType,
-                body = body,
-            )
-        }
+        ): DefaultVoiceMessagePlayer = DefaultVoiceMessagePlayer(
+            mediaPlayer = mediaPlayer,
+            voiceMessageMediaRepoFactory = voiceMessageMediaRepoFactory,
+            eventId = eventId,
+            mediaSource = mediaSource,
+            mimeType = mimeType,
+            body = body,
+        )
     }
 
-    private val voiceMessageCache = voiceMessageMediaRepositoryFactory.create(
+    private val repo = voiceMessageMediaRepoFactory.create(
         mediaSource = mediaSource,
         mimeType = mimeType,
         body = body
@@ -154,13 +150,13 @@ class VoiceMessagePlayerImpl(
         Result.success(Unit)
     } else {
         if (eventId != null) {
-            val r = voiceMessageCache.getMediaFile()
-            mediaPlayer.acquireControlAndPlay(
-                uri = r.getOrThrow().path,
-                mediaId = eventId.value,
-                mimeType = "audio/ogg" // Files in the voice cache have no extension so we need to set the mime type manually.
-            )
-            Result.success(Unit)
+            repo.getMediaFile().mapCatching { mediaFile ->
+                mediaPlayer.acquireControlAndPlay(
+                    uri = mediaFile.path,
+                    mediaId = eventId.value,
+                    mimeType = "audio/ogg" // Files in the voice cache have no extension so we need to set the mime type manually.
+                )
+            }
         } else {
             Result.failure(IllegalStateException("Cannot play a voice message with no eventId"))
         }

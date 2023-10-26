@@ -16,22 +16,22 @@
 
 package io.element.android.features.messages.voicemessages.timeline
 
-import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageMediaRepository
+import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageMediaRepo
 import io.element.android.tests.testutils.simulateLongTask
 import java.io.File
 
 /**
- * A fake implementation of [VoiceMessageMediaRepository] for testing purposes.
+ * A fake implementation of [VoiceMessageMediaRepo] for testing purposes.
  */
-class FakeVoiceMessageMediaRepository : VoiceMessageMediaRepository {
+class FakeVoiceMessageMediaRepo : VoiceMessageMediaRepo {
 
-    private var _getMediaFile: Result<File> = Result.success(File(""))
-
-    fun givenGetMediaFile(result: Result<File>) {
-        _getMediaFile = result
-    }
+    var shouldFail = false
 
     override suspend fun getMediaFile(): Result<File> = simulateLongTask {
-        _getMediaFile
+        if (shouldFail) {
+            Result.failure(IllegalStateException("Failed to get media file"))
+        } else {
+            Result.success(File(""))
+        }
     }
 }

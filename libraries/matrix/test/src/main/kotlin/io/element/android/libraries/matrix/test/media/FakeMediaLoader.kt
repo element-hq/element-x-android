@@ -24,6 +24,7 @@ import io.element.android.tests.testutils.simulateLongTask
 class FakeMediaLoader : MatrixMediaLoader {
 
     var shouldFail = false
+    var path: String = ""
 
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> = simulateLongTask {
         if (shouldFail) {
@@ -45,7 +46,7 @@ class FakeMediaLoader : MatrixMediaLoader {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
-            Result.success(FakeMediaFile(""))
+            Result.success(FakeMediaFile(path))
         }
     }
 }
