@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.voicemessages.timeline
+package io.element.android.libraries.designsystem.components.media
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
