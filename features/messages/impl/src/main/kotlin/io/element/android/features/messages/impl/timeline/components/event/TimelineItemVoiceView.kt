@@ -44,7 +44,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageStateProvider
-import io.element.android.libraries.designsystem.components.media.Waveform
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -88,7 +87,7 @@ fun TimelineItemVoiceView(
         WaveformPlaybackView(
             showCursor = state.button == VoiceMessageState.Button.Pause,
             playbackProgress = state.progress,
-            waveform = Waveform(data = content.waveform),
+            waveform = content.waveform,
             modifier = Modifier
                 .height(34.dp)
                 .weight(1f),

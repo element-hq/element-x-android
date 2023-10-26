@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
+import io.element.android.features.messages.impl.voicemessages.fromMSC3246range
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -117,7 +118,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
-                    waveform = messageType.details?.waveform?.toImmutableList() ?: persistentListOf(),
+                    waveform = messageType.details?.waveform?.fromMSC3246range()?.toImmutableList() ?: persistentListOf(),
                 )
                 else -> TimelineItemAudioContent(
                     body = messageType.body,
