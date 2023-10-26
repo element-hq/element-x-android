@@ -20,6 +20,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -379,7 +380,7 @@ private fun ButtonCombinationPreview(
 }
 
 @Composable
-private fun ButtonMatrixPreview(
+private fun ColumnScope.ButtonMatrixPreview(
     style: ButtonStyle,
     size: ButtonSize,
     destructive: Boolean,
