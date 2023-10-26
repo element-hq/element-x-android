@@ -21,6 +21,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -165,18 +166,21 @@ fun WaveformPlaybackView(
 @PreviewsDayNight
 @Composable
 internal fun WaveformPlaybackViewPreview() = ElementPreview {
-    Column {
+    Column{
         WaveformPlaybackView(
+            modifier = Modifier.height(34.dp),
             showCursor = false,
             playbackProgress = 0.5f,
             waveform =  Waveform(persistentListOf()),
         )
         WaveformPlaybackView(
+            modifier = Modifier.height(34.dp),
             showCursor = false,
             playbackProgress = 0.5f,
             waveform =  Waveform(persistentListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)),
         )
         WaveformPlaybackView(
+            modifier = Modifier.height(34.dp),
             showCursor = true,
             playbackProgress = 0.5f,
             waveform =  Waveform(List(1024) { it }.toPersistentList()),
