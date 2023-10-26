@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.textcomposer.model
 
+import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
 
 sealed class VoiceMessageState {
@@ -27,6 +28,6 @@ sealed class VoiceMessageState {
     data object Sending: VoiceMessageState()
     data class Recording(
         val duration: Duration,
-        val level: Float,
+        val levels: ImmutableList<Float>,
     ): VoiceMessageState()
 }

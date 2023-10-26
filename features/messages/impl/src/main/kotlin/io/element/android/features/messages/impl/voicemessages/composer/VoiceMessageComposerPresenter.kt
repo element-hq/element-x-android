@@ -40,6 +40,7 @@ import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -172,7 +173,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
             voiceMessageState = when (val state = recorderState) {
                 is VoiceRecorderState.Recording -> VoiceMessageState.Recording(
                     duration = state.elapsedTime,
-                    level = state.level
+                    levels = state.levels.toPersistentList()
                 )
                 is VoiceRecorderState.Finished -> if (isSending) {
                     VoiceMessageState.Sending

@@ -48,7 +48,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlin.math.max
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
 @OptIn(ExperimentalComposeUiApi::class)
@@ -64,7 +63,6 @@ fun WaveformPlaybackView(
     cursorBrush: Brush  = SolidColor(ElementTheme.colors.iconAccentTertiary),
     lineWidth: Dp = 2.dp,
     linePadding: Dp = 2.dp,
-    minimumGraphAmplitude: Float = 2F,
 ) {
     val seekProgress = remember { mutableStateOf<Float?>(null) }
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
@@ -121,22 +119,13 @@ fun WaveformPlaybackView(
         canvasSizePx = size
         val centerY = canvasSize.height.toPx() / 2
         val cornerRadius = lineWidth / 2
-        normalizedWaveformData.forEachIndexed { index, amplitude ->
-            val drawingAmplitude = max(minimumGraphAmplitude, amplitude * (canvasSize.height.toPx() - 2))
-            drawRoundRect(
-                brush = brush,
-                topLeft = Offset(
-                    x = index * (linePadding + lineWidth).toPx(),
-                    y = centerY - drawingAmplitude / 2
-                ),
-                size = Size(
-                    width = lineWidth.toPx(),
-                    height = drawingAmplitude
-                ),
-                cornerRadius = CornerRadius(cornerRadius.toPx(), cornerRadius.toPx()),
-                style = Fill
-            )
-        }
+        drawWaveform(
+            waveformData = normalizedWaveformData,
+            canvasSize = canvasSize,
+            brush = brush,
+            lineWidth = lineWidth,
+            linePadding = linePadding
+        )
         drawRect(
             brush = progressBrush,
             size = Size(

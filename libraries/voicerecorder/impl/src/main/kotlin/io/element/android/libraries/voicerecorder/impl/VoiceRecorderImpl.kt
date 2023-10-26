@@ -96,13 +96,13 @@ class VoiceRecorderImpl @Inject constructor(
                 when (audio) {
                     is Audio.Data -> {
                         val audioLevel = audioLevelCalculator.calculateAudioLevel(audio.buffer)
-                        _state.emit(VoiceRecorderState.Recording(elapsedTime, audioLevel))
                         levels.add(audioLevel)
+                        _state.emit(VoiceRecorderState.Recording(elapsedTime, levels))
                         encoder.encode(audio.buffer, audio.readSize)
                     }
                     is Audio.Error -> {
                         Timber.e("Voice message error: code=${audio.audioRecordErrorCode}")
-                        _state.emit(VoiceRecorderState.Recording(elapsedTime, 0.0f))
+                        _state.emit(VoiceRecorderState.Recording(elapsedTime, listOf()))
                     }
                 }
             }
