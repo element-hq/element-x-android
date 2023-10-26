@@ -23,10 +23,12 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
@@ -35,6 +37,7 @@ import javax.inject.Inject
 
 class RustSessionVerificationService @Inject constructor(
     private val syncService: RustSyncService,
+    private val sessionCoroutineScope: CoroutineScope,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
 
     var verificationController: SessionVerificationControllerInterface? = null
@@ -44,7 +47,7 @@ class RustSessionVerificationService @Inject constructor(
             // If status was 'Unknown', move it to either 'Verified' or 'NotVerified'
             if (value != null) {
                 value.setDelegate(this)
-                updateVerificationStatus(value.isVerified())
+                sessionCoroutineScope.launch { updateVerificationStatus(value.isVerified()) }
             }
         }
 

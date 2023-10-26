@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.applyScaleUp
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -64,9 +65,11 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
 import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
 import io.element.android.libraries.textcomposer.components.RecordButton
-import io.element.android.libraries.textcomposer.components.RecordingProgress
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
+import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButton
+import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
+import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -78,6 +81,7 @@ import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun TextComposer(
@@ -95,6 +99,8 @@ fun TextComposer(
     onAddAttachment: () -> Unit = {},
     onDismissTextFormatting: () -> Unit = {},
     onVoiceRecordButtonEvent: (PressEvent) -> Unit = {},
+    onSendVoiceMessage: () -> Unit = {},
+    onDeleteVoiceMessage: () -> Unit = {},
     onError: (Throwable) -> Unit = {},
 ) {
     val onSendClicked = {
@@ -137,24 +143,60 @@ fun TextComposer(
             composerMode = composerMode,
         )
     }
-    val recordButton = @Composable {
+    val recordVoiceButton = @Composable {
         RecordButton(
             onPressStart = { onVoiceRecordButtonEvent(PressEvent.PressStart) },
             onLongPressEnd = { onVoiceRecordButtonEvent(PressEvent.LongPressEnd) },
             onTap = { onVoiceRecordButtonEvent(PressEvent.Tapped) },
         )
     }
+    val sendVoiceButton = @Composable {
+        SendButton(
+            canSendMessage = voiceMessageState is VoiceMessageState.Preview,
+            onClick = { onSendVoiceMessage() },
+            composerMode = composerMode,
+        )
+    }
+    val uploadVoiceProgress = @Composable {
+        CircularProgressIndicator(
+            modifier = Modifier.size(24.dp),
+        )
+    }
 
     val textFormattingOptions = @Composable { TextFormatting(state = state) }
 
-    val sendOrRecordButton = if (canSendMessage || !enableVoiceMessages) {
-        sendButton
-    } else {
-        recordButton
+    val sendOrRecordButton = when {
+        enableVoiceMessages && !canSendMessage ->
+            when (voiceMessageState) {
+                VoiceMessageState.Idle,
+                is VoiceMessageState.Recording -> recordVoiceButton
+                is VoiceMessageState.Preview -> sendVoiceButton
+                is VoiceMessageState.Sending -> uploadVoiceProgress
+            }
+        else ->
+            sendButton
     }
 
-    val recordingProgress = @Composable {
-        RecordingProgress()
+    val voiceRecording = @Composable {
+        when (voiceMessageState) {
+            VoiceMessageState.Preview ->
+                VoiceMessagePreview(isInteractive = true)
+            VoiceMessageState.Sending ->
+                VoiceMessagePreview(isInteractive = false)
+            is VoiceMessageState.Recording ->
+                VoiceMessageRecording(voiceMessageState.level, voiceMessageState.duration)
+            VoiceMessageState.Idle -> {}
+        }
+    }
+
+    val voiceDeleteButton = @Composable {
+        val enabled = when (voiceMessageState) {
+            VoiceMessageState.Preview -> true
+            VoiceMessageState.Sending,
+            is VoiceMessageState.Recording,
+            VoiceMessageState.Idle -> false
+        }
+        VoiceMessageDeleteButton(enabled = enabled, onClick = onDeleteVoiceMessage)
     }
 
     if (showTextFormatting) {
@@ -170,11 +212,13 @@ fun TextComposer(
     } else {
         StandardLayout(
             voiceMessageState = voiceMessageState,
+            enableVoiceMessages = enableVoiceMessages,
             modifier = layoutModifier,
             composerOptionsButton = composerOptionsButton,
             textInput = textInput,
             endButton = sendOrRecordButton,
-            recordingProgress = recordingProgress,
+            voiceRecording = voiceRecording,
+            voiceDeleteButton = voiceDeleteButton,
         )
     }
 
@@ -190,9 +234,11 @@ fun TextComposer(
 @Composable
 private fun StandardLayout(
     voiceMessageState: VoiceMessageState,
+    enableVoiceMessages: Boolean,
     textInput: @Composable () -> Unit,
     composerOptionsButton: @Composable () -> Unit,
-    recordingProgress: @Composable () -> Unit,
+    voiceRecording: @Composable () -> Unit,
+    voiceDeleteButton: @Composable () -> Unit,
     endButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -200,13 +246,25 @@ private fun StandardLayout(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom,
     ) {
-        if (voiceMessageState is VoiceMessageState.Recording) {
+        if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
+            if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Sending) {
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
+                        .size(48.dp.applyScaleUp()),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    voiceDeleteButton()
+                }
+            } else {
+                Spacer(modifier = Modifier.width(16.dp))
+            }
             Box(
                 modifier = Modifier
-                    .padding(start = 16.dp, bottom = 8.dp, top = 8.dp)
+                    .padding(bottom = 8.dp, top = 8.dp)
                     .weight(1f)
             ) {
-                recordingProgress()
+                voiceRecording()
             }
         } else {
             Box(
@@ -226,6 +284,8 @@ private fun StandardLayout(
         Box(
             Modifier
                 .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                .size(48.dp.applyScaleUp()),
+            contentAlignment = Alignment.Center,
         ) {
             endButton()
         }
@@ -700,6 +760,30 @@ internal fun TextComposerReplyPreview() = ElementPreview {
         )
     })
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerVoicePreview() = ElementPreview {
+    @Composable
+    fun VoicePreview(
+        voiceMessageState: VoiceMessageState
+    ) = TextComposer(
+        RichTextEditorState("", initialFocus = true),
+        voiceMessageState = voiceMessageState,
+        onSendMessage = {},
+        composerMode = MessageComposerMode.Normal,
+        onResetComposerMode = {},
+        enableTextFormatting = true,
+        enableVoiceMessages = true,
+    )
+    PreviewColumn(items = persistentListOf({
+        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, 0.5))
+    }, {
+        VoicePreview(voiceMessageState = VoiceMessageState.Preview)
+    }, {
+        VoicePreview(voiceMessageState = VoiceMessageState.Sending)
+    }))
 }
 
 @Composable

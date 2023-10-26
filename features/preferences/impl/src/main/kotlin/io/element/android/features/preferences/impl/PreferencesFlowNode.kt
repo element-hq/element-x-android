@@ -44,6 +44,7 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.parcelize.Parcelize
 
@@ -54,7 +55,7 @@ class PreferencesFlowNode @AssistedInject constructor(
     private val lockScreenEntryPoint: LockScreenEntryPoint,
 ) : BackstackNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -161,8 +162,13 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
             }
             is NavTarget.EditDefaultNotificationSetting -> {
+                val callback = object : EditDefaultNotificationSettingNode.Callback {
+                    override fun openRoomNotificationSettings(roomId: RoomId) {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenRoomNotificationSettings(roomId) }
+                    }
+                }
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
-                createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input))
+                createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input, callback))
             }
             NavTarget.AdvancedSettings -> {
                 createNode<AdvancedSettingsNode>(buildContext)

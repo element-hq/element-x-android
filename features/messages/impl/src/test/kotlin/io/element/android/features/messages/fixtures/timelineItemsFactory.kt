@@ -49,7 +49,11 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
         dispatchers = testCoroutineDispatchers(),
         eventItemFactory = TimelineItemEventFactory(
             contentFactory = TimelineItemContentFactory(
-                messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter(), FileExtensionExtractorWithoutValidation()),
+                messageFactory = TimelineItemContentMessageFactory(
+                    fileSizeFormatter = FakeFileSizeFormatter(),
+                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
+                    featureFlagService = FakeFeatureFlagService(),
+                ),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
                 pollFactory = TimelineItemContentPollFactory(matrixClient, FakeFeatureFlagService()),

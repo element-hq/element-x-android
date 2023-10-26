@@ -31,10 +31,11 @@ open class PermissionsStateProvider : PreviewParameterProvider<PermissionsState>
 
 fun aPermissionsState(
     showDialog: Boolean,
-    permission: String = Manifest.permission.POST_NOTIFICATIONS
+    permission: String = Manifest.permission.POST_NOTIFICATIONS,
+    permissionGranted: Boolean = false,
 ) = PermissionsState(
     permission = permission,
-    permissionGranted = false,
+    permissionGranted = permissionGranted,
     shouldShowRationale = false,
     showDialog = showDialog,
     permissionAlreadyAsked = false,

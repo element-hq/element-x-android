@@ -17,18 +17,38 @@
 package io.element.android.features.roomdetails.impl.notificationsettings
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<RoomNotificationSettingsState> {
     override val values: Sequence<RoomNotificationSettingsState>
         get() = sequenceOf(
-            RoomNotificationSettingsState(
-                RoomNotificationSettings(
-                    mode = RoomNotificationMode.MUTE,
-                    isDefault = true),
-                RoomNotificationMode.ALL_MESSAGES,
-                eventSink = { },
-            ),
+            aRoomNotificationSettingsState(),
+            aRoomNotificationSettingsState(isDefault = false),
+            aRoomNotificationSettingsState(setNotificationSettingAction = Async.Loading(Unit)),
+            aRoomNotificationSettingsState(setNotificationSettingAction = Async.Failure(Throwable("error"))),
+            aRoomNotificationSettingsState(restoreDefaultAction = Async.Loading(Unit)),
+            aRoomNotificationSettingsState(restoreDefaultAction = Async.Failure(Throwable("error"))),
         )
+
+    private fun aRoomNotificationSettingsState(
+        isDefault: Boolean = true,
+        setNotificationSettingAction: Async<Unit> = Async.Uninitialized,
+        restoreDefaultAction: Async<Unit> = Async.Uninitialized,
+    ): RoomNotificationSettingsState {
+        return RoomNotificationSettingsState(
+            showUserDefinedSettingStyle = false,
+            roomName = "Room 1",
+            Async.Success(RoomNotificationSettings(
+                mode = RoomNotificationMode.MUTE,
+                isDefault = isDefault)),
+            pendingRoomNotificationMode = null,
+            pendingSetDefault = null,
+            defaultRoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
+            setNotificationSettingAction = setNotificationSettingAction,
+            restoreDefaultAction = restoreDefaultAction,
+            eventSink = { },
+        )
+    }
 }

@@ -71,14 +71,22 @@ class RoomFlowNodeTest {
 
         var nodeId: String? = null
 
-        override fun createNode(
-            parentNode: Node,
-            buildContext: BuildContext,
-            inputs: RoomDetailsEntryPoint.Inputs,
-            plugins: List<Plugin>
-        ): Node {
-            return node(buildContext) {}.also {
-                nodeId = it.id
+        override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDetailsEntryPoint.NodeBuilder {
+            return object : RoomDetailsEntryPoint.NodeBuilder {
+
+                override fun params(params: RoomDetailsEntryPoint.Params): RoomDetailsEntryPoint.NodeBuilder {
+                    return this
+                }
+
+                override fun callback(callback: RoomDetailsEntryPoint.Callback): RoomDetailsEntryPoint.NodeBuilder {
+                    return this
+                }
+
+                override fun build(): Node {
+                    return  node(buildContext) {}.also {
+                        nodeId = it.id
+                    }
+                }
             }
         }
     }

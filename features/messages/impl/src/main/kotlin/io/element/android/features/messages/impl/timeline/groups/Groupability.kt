@@ -30,6 +30,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -58,6 +59,7 @@ internal fun TimelineItem.Event.canBeGrouped(): Boolean {
         is TimelineItemAudioContent,
         is TimelineItemLocationContent,
         is TimelineItemPollContent,
+        is TimelineItemVoiceContent,
         TimelineItemRedactedContent,
         TimelineItemUnknownContent -> false
         is TimelineItemProfileChangeContent,

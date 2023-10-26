@@ -22,10 +22,13 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
 
@@ -33,10 +36,24 @@ import io.element.android.services.analytics.api.AnalyticsService
 class RoomNotificationSettingsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomNotificationSettingsPresenter,
+    presenterFactory: RoomNotificationSettingsPresenter.Factory,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
+    data class RoomNotificationSettingInput(
+        val showUserDefinedSettingStyle: Boolean
+    ) : NodeInputs
+    interface Callback : Plugin {
+        fun openGlobalNotificationSettings()
+    }
+    private val inputs = inputs<RoomNotificationSettingInput>()
+    private val callbacks = plugins<Callback>()
+
+    private fun openGlobalNotificationSettings() {
+        callbacks.forEach { it.openGlobalNotificationSettings() }
+    }
+
+    private val presenter = presenterFactory.create(inputs.showUserDefinedSettingStyle)
     init {
         lifecycle.subscribe(
             onResume = {
@@ -51,6 +68,7 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
         RoomNotificationSettingsView(
             state = state,
             modifier = modifier,
+            onShowGlobalNotifications = this::openGlobalNotificationSettings,
             onBackPressed = this::navigateUp,
         )
     }

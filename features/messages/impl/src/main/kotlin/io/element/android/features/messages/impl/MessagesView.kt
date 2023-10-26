@@ -63,6 +63,8 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
@@ -83,6 +85,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
@@ -106,6 +109,10 @@ fun MessagesView(
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
+
+    OnLifecycleEvent { _, event ->
+        state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
+    }
 
     AttachmentStateView(
         state = state.composerState.attachmentsState,
@@ -305,6 +312,18 @@ private fun MessagesViewContent(
             onCreatePollClicked = onCreatePollClicked,
             enableTextFormatting = state.enableTextFormatting,
         )
+
+        if (state.enableVoiceMessages && state.voiceMessageComposerState.showPermissionRationaleDialog) {
+            VoiceMessagePermissionRationaleDialog(
+                onContinue = {
+                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.AcceptPermissionRationale)
+                },
+                onDismiss = {
+                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissPermissionsRationale)
+                },
+                appName = state.appName
+            )
+        }
 
         ExpandableBottomSheetScaffold(
             sheetDragHandle = if (state.composerState.showTextFormatting) {

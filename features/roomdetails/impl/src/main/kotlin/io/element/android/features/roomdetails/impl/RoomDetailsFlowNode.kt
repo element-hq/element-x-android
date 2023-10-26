@@ -23,6 +23,7 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
@@ -47,7 +48,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BackstackNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Inputs>().first().initialElement.toNavTarget(),
+        initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -68,7 +69,13 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         data object InviteMembers : NavTarget
 
         @Parcelize
-        data object RoomNotificationSettings : NavTarget
+        data class RoomNotificationSettings(
+            /**
+             * When presented from outsite the context of the room, the rooms settings UI is different.
+             * Figma designs: https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?type=design&node-id=5199-198932&mode=design&t=fTTvpuxYFjewYQOe-0
+             */
+            val showUserDefinedSettingStyle: Boolean
+        ) : NavTarget
 
         @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
@@ -91,7 +98,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     }
 
                     override fun openRoomNotificationSettings() {
-                        backstack.push(NavTarget.RoomNotificationSettings)
+                        backstack.push(NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = false))
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -118,8 +125,14 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 createNode<RoomInviteMembersNode>(buildContext)
             }
 
-            NavTarget.RoomNotificationSettings -> {
-                createNode<RoomNotificationSettingsNode>(buildContext)
+            is NavTarget.RoomNotificationSettings -> {
+                val input = RoomNotificationSettingsNode.RoomNotificationSettingInput(navTarget.showUserDefinedSettingStyle)
+                val callback = object : RoomNotificationSettingsNode.Callback {
+                    override fun openGlobalNotificationSettings() {
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenGlobalNotificationSettings() }
+                    }
+                }
+                createNode<RoomNotificationSettingsNode>(buildContext, listOf(input, callback))
             }
 
             is NavTarget.RoomMemberDetails -> {

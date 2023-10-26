@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.features.preferences.api.store.PreferencesStore
@@ -127,6 +128,23 @@ class ActionListPresenter @Inject constructor(
                             add(TimelineItemAction.ReportContent)
                         }
                         if (isMineOrCanRedact) {
+                            add(TimelineItemAction.Redact)
+                        }
+                    }
+                }
+                is TimelineItemVoiceContent -> {
+                    buildList {
+                        if (timelineItem.isRemote) {
+                            add(TimelineItemAction.Reply)
+                            add(TimelineItemAction.Forward)
+                        }
+                        if (isDeveloperModeEnabled) {
+                            add(TimelineItemAction.ViewSource)
+                        }
+                        if (!timelineItem.isMine) {
+                            add(TimelineItemAction.ReportContent)
+                        }
+                        if (timelineItem.isMine || userCanRedact) {
                             add(TimelineItemAction.Redact)
                         }
                     }
