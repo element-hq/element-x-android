@@ -413,7 +413,7 @@ private fun MessagesViewTopBar(
                     JoinCallMenuItem(onJoinCallClicked = onJoinCallClicked)
                 } else {
                     IconButton(onClick = onJoinCallClicked) {
-                        Icon(CommonDrawables.ic_compound_video_call, contentDescription = null) // TODO add proper content description once we have the state
+                        Icon(CommonDrawables.ic_compound_video_call, contentDescription = stringResource(CommonStrings.a11y_start_call))
                     }
                 }
             }
@@ -440,7 +440,7 @@ private fun JoinCallMenuItem(
         Icon(
             modifier = Modifier.size(20.dp),
             resourceId = CommonDrawables.ic_compound_video_call,
-            contentDescription = stringResource(CommonStrings.action_join)
+            contentDescription = null
         )
         Spacer(Modifier.width(8.dp))
         Text(
