@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.voicemessages.composer
 import android.Manifest
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,7 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
@@ -50,6 +52,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
     private val voiceRecorder: VoiceRecorder,
     private val analyticsService: AnalyticsService,
     private val mediaSender: MediaSender,
+    private val player: VoiceMessageComposerPlayer,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<VoiceMessageComposerState> {
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)
@@ -61,11 +64,14 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         val permissionState = permissionsPresenter.present()
         var isSending by remember { mutableStateOf(false) }
+        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotPlaying)
+        val isPlaying by remember(playerState.isPlaying) { derivedStateOf { playerState.isPlaying } }
 
         val onLifecycleEvent = { event: Lifecycle.Event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     appCoroutineScope.finishRecording()
+                    player.pause()
                 }
                 Lifecycle.Event.ON_DESTROY -> {
                     appCoroutineScope.cancelRecording()
@@ -96,6 +102,25 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 PressEvent.Tapped -> {
                     Timber.v("Voice message record button tapped")
                     localCoroutineScope.cancelRecording()
+                }
+            }
+        }
+        val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
+            when (event) {
+                VoiceMessagePlayerEvent.Play ->
+                    when (val recording = recorderState) {
+                        is VoiceRecorderState.Finished ->
+                            player.play(
+                                mediaPath = recording.file.path,
+                                mimeType = recording.mimeType,
+                            )
+                        else -> Timber.e("Voice message player event received but no file to play")
+                    }
+                VoiceMessagePlayerEvent.Pause -> {
+                    player.pause()
+                }
+                is VoiceMessagePlayerEvent.Seek -> {
+                    // TODO implement seeking
                 }
             }
         }
@@ -131,6 +156,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
         val handleEvents: (VoiceMessageComposerEvents) -> Unit = { event ->
             when (event) {
                 is VoiceMessageComposerEvents.RecordButtonEvent -> onRecordButtonPress(event)
+                is VoiceMessageComposerEvents.PlayerEvent -> onPlayerEvent(event.playerEvent)
                 is VoiceMessageComposerEvents.SendVoiceMessage -> localCoroutineScope.launch {
                     onSendButtonPress()
                 }
@@ -150,7 +176,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 is VoiceRecorderState.Finished -> if (isSending) {
                     VoiceMessageState.Sending
                 } else {
-                    VoiceMessageState.Preview
+                    VoiceMessageState.Preview(isPlaying = isPlaying)
                 }
                 else -> VoiceMessageState.Idle
             },

@@ -16,17 +16,11 @@
 
 package io.element.android.libraries.textcomposer.model
 
-import kotlin.time.Duration
+sealed class VoiceMessagePlayerEvent {
+    data object Play: VoiceMessagePlayerEvent()
+    data object Pause: VoiceMessagePlayerEvent()
 
-sealed class VoiceMessageState {
-    data object Idle: VoiceMessageState()
-
-    data class Preview(
-        val isPlaying: Boolean,
-    ): VoiceMessageState()
-    data object Sending: VoiceMessageState()
-    data class Recording(
-        val duration: Duration,
-        val level: Float,
-    ): VoiceMessageState()
+    data class Seek(
+        val position: Float
+    ): VoiceMessagePlayerEvent()
 }

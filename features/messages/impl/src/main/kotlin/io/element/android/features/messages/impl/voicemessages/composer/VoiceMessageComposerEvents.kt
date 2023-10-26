@@ -18,10 +18,14 @@ package io.element.android.features.messages.impl.voicemessages.composer
 
 import androidx.lifecycle.Lifecycle
 import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 
 sealed interface VoiceMessageComposerEvents {
     data class RecordButtonEvent(
         val pressEvent: PressEvent
+    ): VoiceMessageComposerEvents
+    data class PlayerEvent(
+        val playerEvent: VoiceMessagePlayerEvent,
     ): VoiceMessageComposerEvents
     data object SendVoiceMessage: VoiceMessageComposerEvents
     data object DeleteVoiceMessage: VoiceMessageComposerEvents

@@ -145,7 +145,7 @@ class VoiceMessagePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem().also {
+            awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Disabled)
                 Truth.assertThat(it.progress).isEqualTo(0f)
                 Truth.assertThat(it.time).isEqualTo("1:01")
