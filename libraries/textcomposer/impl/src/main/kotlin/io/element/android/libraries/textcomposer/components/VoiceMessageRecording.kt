@@ -42,7 +42,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable
 internal fun VoiceMessageRecording(
-    level: Double,
+    level: Float,
     duration: Duration,
     modifier: Modifier = Modifier,
 ) {
@@ -79,7 +79,7 @@ internal fun VoiceMessageRecording(
 
 @Composable
 private fun DebugAudioLevel(
-    level: Double,
+    level: Float,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -89,7 +89,7 @@ private fun DebugAudioLevel(
         Box(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .fillMaxWidth(level.toFloat())
+                .fillMaxWidth(level)
                 .background(ElementTheme.colors.iconQuaternary, shape = MaterialTheme.shapes.small)
                 .fillMaxHeight()
         )
@@ -108,5 +108,5 @@ private fun RedRecordingDot(
 @PreviewsDayNight
 @Composable
 internal fun VoiceMessageRecordingPreview() = ElementPreview {
-    VoiceMessageRecording(0.5, 0.seconds)
+    VoiceMessageRecording(0.5f, 0.seconds)
 }

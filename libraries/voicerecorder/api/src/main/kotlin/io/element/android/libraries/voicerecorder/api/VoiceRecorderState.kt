@@ -31,7 +31,7 @@ sealed class VoiceRecorderState {
      * @property elapsedTime The elapsed time since the recording started.
      * @property level The current audio level of the recording as a fraction of 1.
      */
-    data class Recording(val elapsedTime: Duration, val level: Double) : VoiceRecorderState()
+    data class Recording(val elapsedTime: Duration, val level: Float) : VoiceRecorderState()
 
     /**
      * The recorder has finished recording.

@@ -29,7 +29,7 @@ class DecibelAudioLevelCalculator @Inject constructor() : AudioLevelCalculator {
         private const val REFERENCE_DB = 50.0 // Reference dB for normal conversation
     }
 
-    override fun calculateAudioLevel(buffer: ShortArray): Double {
+    override fun calculateAudioLevel(buffer: ShortArray): Float {
         val rms = buffer.rootMeanSquare()
 
         // Convert to decibels and clip
@@ -37,7 +37,7 @@ class DecibelAudioLevelCalculator @Inject constructor() : AudioLevelCalculator {
         val clipped = min(db, REFERENCE_DB)
 
         // Scale to the range [0.0, 1.0]
-        return clipped / REFERENCE_DB
+        return (clipped / REFERENCE_DB).toFloat()
     }
 
     private fun ShortArray.rootMeanSquare(): Double {

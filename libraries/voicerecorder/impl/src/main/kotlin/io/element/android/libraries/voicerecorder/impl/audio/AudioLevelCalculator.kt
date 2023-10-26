@@ -24,5 +24,5 @@ interface AudioLevelCalculator {
      *
      * @return A value between 0 and 1.
      */
-    fun calculateAudioLevel(buffer: ShortArray): Double
+    fun calculateAudioLevel(buffer: ShortArray): Float
 }

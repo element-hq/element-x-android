@@ -66,7 +66,7 @@ class VoiceMessageComposerPresenterTest {
 
     companion object {
         private val RECORDING_DURATION = 1.seconds
-        private val RECORDING_STATE = VoiceMessageState.Recording(RECORDING_DURATION, 0.2)
+        private val RECORDING_STATE = VoiceMessageState.Recording(RECORDING_DURATION, 0.2f)
     }
 
     @Test
@@ -145,7 +145,7 @@ class VoiceMessageComposerPresenterTest {
             }
 
             // Nothing should happen
-            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Recording(RECORDING_DURATION, 0.2))
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Recording(RECORDING_DURATION, 0.2f))
             voiceRecorder.assertCalls(started = 1, stopped = 0, deleted = 0)
 
             testPauseAndDestroy(finalState)
