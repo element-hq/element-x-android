@@ -69,26 +69,18 @@ fun TimelineItemVoiceView(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-                .background(ElementTheme.materialColors.background),
-            contentAlignment = Alignment.Center,
-        ) {
-            when (state.button) {
-                VoiceMessageState.Button.Play -> PlayButton(onClick = ::playPause)
-                VoiceMessageState.Button.Pause -> PauseButton(onClick = ::playPause)
-                VoiceMessageState.Button.Downloading -> ProgressButton()
-                VoiceMessageState.Button.Retry -> RetryButton(onClick = ::playPause)
-                VoiceMessageState.Button.Disabled -> DisabledPlayButton()
-            }
+        when (state.button) {
+            VoiceMessageState.Button.Play -> PlayButton(onClick = ::playPause)
+            VoiceMessageState.Button.Pause -> PauseButton(onClick = ::playPause)
+            VoiceMessageState.Button.Downloading -> ProgressButton()
+            VoiceMessageState.Button.Retry -> RetryButton(onClick = ::playPause)
+            VoiceMessageState.Button.Disabled -> DisabledPlayButton()
         }
         Spacer(Modifier.width(8.dp))
         Text(
             text = state.time,
             color = ElementTheme.materialColors.secondary,
-            style = ElementTheme.typography.fontBodySmRegular,
+            style = ElementTheme.typography.fontBodySmMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -153,9 +145,9 @@ private fun ProgressButton() {
         CircularProgressIndicator(
             modifier = Modifier
                 .padding(2.dp)
-                .size(12.dp),
-            color = ElementTheme.materialColors.primary,
-            strokeWidth = 1.6.dp,
+                .size(16.dp),
+            color = ElementTheme.colors.iconSecondary,
+            strokeWidth = 2.dp,
         )
     }
 }
@@ -181,9 +173,8 @@ private fun IconButton(
         Icon(
             painter = painterResource(id = drawableRes),
             contentDescription = contentDescription,
-            tint = ElementTheme.materialColors.primary,
-            modifier = Modifier
-                .size(16.dp),
+            tint = ElementTheme.colors.iconSecondary,
+            modifier = Modifier.size(24.dp),
         )
     }
 }
@@ -195,7 +186,7 @@ private fun Button(
 ) {
     Box(
         modifier = Modifier
-            .size(32.dp)
+            .size(36.dp)
             .clip(CircleShape)
             .background(ElementTheme.materialColors.background)
             .let {
@@ -211,8 +202,14 @@ open class TimelineItemVoiceViewParametersProvider : PreviewParameterProvider<Ti
     private val voiceMessageStateProvider = VoiceMessageStateProvider()
     private val timelineItemVoiceContentProvider = TimelineItemVoiceContentProvider()
     override val values: Sequence<TimelineItemVoiceViewParameters>
-        get() = voiceMessageStateProvider.values.zip(timelineItemVoiceContentProvider.values)
-            .map { TimelineItemVoiceViewParameters(it.first, it.second) }
+        get() = timelineItemVoiceContentProvider.values.flatMap { content ->
+            voiceMessageStateProvider.values.map { state ->
+                TimelineItemVoiceViewParameters(
+                    state = state,
+                    content = content,
+                )
+            }
+        }
 }
 
 data class TimelineItemVoiceViewParameters(

@@ -24,13 +24,13 @@ open class VoiceMessageStateProvider : PreviewParameterProvider<VoiceMessageStat
             VoiceMessageState(
                 VoiceMessageState.Button.Downloading,
                 progress = 0f,
-                time = "00:00",
+                time = "0:00",
                 eventSink = {},
             ),
             VoiceMessageState(
                 VoiceMessageState.Button.Retry,
                 progress = 0.5f,
-                time = "00:00",
+                time = "0:01",
                 eventSink = {}
             ),
             VoiceMessageState(
@@ -41,20 +41,20 @@ open class VoiceMessageStateProvider : PreviewParameterProvider<VoiceMessageStat
             ),
             VoiceMessageState(
                 VoiceMessageState.Button.Pause,
-                progress = 0.5f,
-                time = "00:00",
+                progress = 1f,
+                time = "1:00",
                 eventSink = {}
             ),
             VoiceMessageState(
                 VoiceMessageState.Button.Pause,
                 progress = 0.2f,
-                time = "00:00",
+                time = "10:00",
                 eventSink = {}
             ),
             VoiceMessageState(
                 VoiceMessageState.Button.Disabled,
                 progress = 0.2f,
-                time = "00:00",
+                time = "30:00",
                 eventSink = {}
             ),
         )
