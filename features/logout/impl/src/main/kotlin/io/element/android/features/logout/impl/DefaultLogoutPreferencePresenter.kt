@@ -58,7 +58,7 @@ class DefaultLogoutPreferencePresenter @Inject constructor(private val matrixCli
 
     private fun CoroutineScope.logout(logoutAction: MutableState<Async<String?>>) = launch {
         suspend {
-            matrixClient.logout()
+            matrixClient.logout(false /* TODO */)
         }.runCatchingUpdatingState(logoutAction)
     }
 }
