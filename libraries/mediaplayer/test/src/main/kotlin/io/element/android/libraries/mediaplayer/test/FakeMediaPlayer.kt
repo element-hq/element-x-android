@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.mediaplayer
+package io.element.android.libraries.mediaplayer.test
 
-import io.element.android.features.messages.impl.mediaplayer.MediaPlayer
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.mediaplayer
+package io.element.android.libraries.mediaplayer.impl
 
 import android.content.Context
 import androidx.media3.common.MediaItem

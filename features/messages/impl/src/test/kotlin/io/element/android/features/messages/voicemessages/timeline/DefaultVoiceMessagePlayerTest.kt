@@ -18,10 +18,10 @@ package io.element.android.features.messages.voicemessages.timeline
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth
-import io.element.android.features.messages.impl.mediaplayer.MediaPlayer
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.features.messages.impl.voicemessages.timeline.DefaultVoiceMessagePlayer
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageMediaRepo
-import io.element.android.features.messages.mediaplayer.FakeMediaPlayer
+import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.AN_EVENT_ID

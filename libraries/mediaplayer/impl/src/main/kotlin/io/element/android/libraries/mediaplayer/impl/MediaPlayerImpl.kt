@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.mediaplayer
+package io.element.android.libraries.mediaplayer.impl
 
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,64 +32,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-/**
- * A media player for Element X.
- */
-interface MediaPlayer : AutoCloseable {
-
-    /**
-     * The current state of the player.
-     */
-    val state: StateFlow<State>
-
-    /**
-     * Acquires control of the player and starts playing the given media.
-     */
-    fun acquireControlAndPlay(
-        uri: String,
-        mediaId: String,
-        mimeType: String,
-    )
-
-    /**
-     * Plays the current media.
-     */
-    fun play()
-
-    /**
-     * Pauses the current media.
-     */
-    fun pause()
-
-    /**
-     * Seeks the current media to the given position.
-     */
-    fun seekTo(positionMs: Long)
-
-    /**
-     * Releases any resources associated with this player.
-     */
-    override fun close()
-
-    data class State(
-        /**
-         * Whether the player is currently playing.
-         */
-        val isPlaying: Boolean,
-        /**
-         * The id of the media which is currently playing.
-         *
-         * NB: This is usually the string representation of the [EventId] of the event
-         * which contains the media.
-         */
-        val mediaId: String?,
-        /**
-         * The current position of the player.
-         */
-        val currentPosition: Long,
-    )
-}
 
 /**
  * Default implementation of [MediaPlayer] backed by a [SimplePlayer].
