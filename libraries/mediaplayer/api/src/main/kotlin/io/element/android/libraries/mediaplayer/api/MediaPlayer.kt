@@ -32,7 +32,7 @@ interface MediaPlayer : AutoCloseable {
     /**
      * Acquires control of the player and starts playing the given media.
      */
-    fun acquireControlAndPlay(
+    fun setMedia(
         uri: String,
         mediaId: String,
         mimeType: String,

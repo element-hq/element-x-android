@@ -57,11 +57,12 @@ class VoiceMessageComposerPlayer @Inject constructor(
             mediaPlayer.play()
         } else {
             lastPlayedMediaPath = mediaPath
-            mediaPlayer.acquireControlAndPlay(
+            mediaPlayer.setMedia(
                 uri = mediaPath,
                 mediaId = mediaPath,
                 mimeType = mimeType,
             )
+            mediaPlayer.play()
         }
     }
 

@@ -80,7 +80,7 @@ class MediaPlayerImpl @Inject constructor(
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
-    override fun acquireControlAndPlay(uri: String, mediaId: String, mimeType: String) {
+    override fun setMedia(uri: String, mediaId: String, mimeType: String) {
         player.clearMediaItems()
         player.setMediaItem(
             MediaItem.Builder()
@@ -90,7 +90,6 @@ class MediaPlayerImpl @Inject constructor(
                 .build()
         )
         player.prepare()
-        player.play()
     }
 
     override fun play() {

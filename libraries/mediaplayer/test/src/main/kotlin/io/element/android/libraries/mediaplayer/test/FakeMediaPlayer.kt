@@ -35,13 +35,12 @@ class FakeMediaPlayer : MediaPlayer {
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
-    override fun acquireControlAndPlay(uri: String, mediaId: String, mimeType: String) {
+    override fun setMedia(uri: String, mediaId: String, mimeType: String) {
         _state.update {
             it.copy(
-                isPlaying = true,
+                isPlaying = false,
                 mediaId = mediaId,
-                currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
-                duration = FAKE_TOTAL_DURATION_MS,
+                currentPosition = 0,
             )
         }
     }
