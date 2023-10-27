@@ -135,8 +135,8 @@ data class NotificationEventQueue constructor(
         )
     }
 
-    fun clearEvent(eventId: EventId) {
-        queue.removeAll { it.eventId == eventId }
+    fun clearEvent(sessionId: SessionId, eventId: EventId) {
+        queue.removeAll { it.sessionId == sessionId && it.eventId == eventId }
     }
 
     fun clearMembershipNotificationForSession(sessionId: SessionId) {
