@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
@@ -62,7 +63,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                 ),
                 anActionListState().copy(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent(content = aTimelineItemVideoContent()).copy(
+                        event = aTimelineItemEvent(content = aTimelineItemFileContent()).copy(
                             reactionsState = reactionsState
                         ),
                         actions = aTimelineItemActionList(),
