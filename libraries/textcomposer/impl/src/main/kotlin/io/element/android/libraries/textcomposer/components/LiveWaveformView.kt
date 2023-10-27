@@ -58,27 +58,29 @@ fun LiveWaveformView(
 ) {
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
 
+    var parentWidth by remember { mutableIntStateOf(0) }
+
     val waveformWidth by remember(levels, lineWidth, linePadding) {
         derivedStateOf {
             levels.size * (lineWidth.value + linePadding.value)
         }
     }
-    var width by remember { mutableIntStateOf(0) }
+
 
     Box(contentAlignment = Alignment.CenterEnd,
         modifier = modifier
             .fillMaxWidth()
             .height(waveFormHeight)
-            .onSizeChanged { width = it.width }
+            .onSizeChanged { parentWidth = it.width }
     ) {
         Canvas(
             modifier = Modifier
-                .width(canvasSize.width)
+                .width(Dp(waveformWidth))
                 .graphicsLayer(alpha = DEFAULT_GRAPHICS_LAYER_ALPHA)
                 .then(modifier)
         ) {
-            canvasSize = DpSize(Dp(min(waveformWidth, width.toFloat())), size.height.toDp())
-            val countThatFitsWidth = (width.toFloat() / (lineWidth.toPx() + linePadding.toPx())).toInt()
+            canvasSize = DpSize(Dp(min(waveformWidth, parentWidth.toFloat())), size.height.toDp())
+            val countThatFitsWidth = (parentWidth.toFloat() / (lineWidth.toPx() + linePadding.toPx())).toInt()
             drawWaveform(
                 waveformData = levels.takeLast(countThatFitsWidth).toPersistentList(),
                 canvasSize = canvasSize,
@@ -96,7 +98,7 @@ internal fun LiveWaveformViewPreview() = ElementPreview {
     Column {
 
         LiveWaveformView(
-            levels = List(100) { it.toFloat() / 200 }.toPersistentList(),
+            levels = List(100) { it.toFloat() / 100 }.toPersistentList(),
             modifier = Modifier.height(34.dp),
         )
         LiveWaveformView(

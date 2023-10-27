@@ -817,7 +817,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         enableVoiceMessages = true,
     )
     PreviewColumn(items = persistentListOf({
-        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, List(100) { it.toFloat() / 200 }.toPersistentList()))
+        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, List(100) { it.toFloat() / 100 }.toPersistentList()))
     }, {
         VoicePreview(voiceMessageState = VoiceMessageState.Preview(isPlaying = false))
     }, {

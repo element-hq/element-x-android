@@ -37,6 +37,6 @@ internal fun aVoiceMessageComposerState(
     eventSink = {},
 )
 
-internal var aWaveformLevels = List(100) { it.toFloat() / 200 }.toPersistentList()
+internal var aWaveformLevels = List(100) { it.toFloat() / 100 }.toPersistentList()
 
 

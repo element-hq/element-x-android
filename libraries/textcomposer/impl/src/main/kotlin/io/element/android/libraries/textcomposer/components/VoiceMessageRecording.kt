@@ -92,5 +92,5 @@ private fun RedRecordingDot(
 @PreviewsDayNight
 @Composable
 internal fun VoiceMessageRecordingPreview() = ElementPreview {
-    VoiceMessageRecording(List(100) { it.toFloat() / 200 }.toPersistentList(), 0.seconds)
+    VoiceMessageRecording(List(100) { it.toFloat() / 100 }.toPersistentList(), 0.seconds)
 }
