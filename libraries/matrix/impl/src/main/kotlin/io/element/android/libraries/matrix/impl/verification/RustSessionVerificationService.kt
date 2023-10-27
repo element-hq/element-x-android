@@ -33,9 +33,8 @@ import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
 import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
-import javax.inject.Inject
 
-class RustSessionVerificationService @Inject constructor(
+class RustSessionVerificationService(
     private val syncService: RustSyncService,
     private val sessionCoroutineScope: CoroutineScope,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {

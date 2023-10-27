@@ -21,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -48,6 +49,11 @@ object SessionMatrixModule {
     @Provides
     fun providesRoomListService(matrixClient: MatrixClient): RoomListService {
         return matrixClient.roomListService
+    }
+
+    @Provides
+    fun providesEncryptionService(matrixClient: MatrixClient): EncryptionService {
+        return matrixClient.encryptionService()
     }
 
     @Provides
