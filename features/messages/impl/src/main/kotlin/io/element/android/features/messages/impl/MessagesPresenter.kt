@@ -332,7 +332,7 @@ class MessagesPresenter @AssistedInject constructor(
                 type = AttachmentThumbnailType.Audio,
             )
             is TimelineItemVoiceContent -> AttachmentThumbnailInfo(
-                textContent = targetEvent.content.body,
+                textContent = textContent,
                 type = AttachmentThumbnailType.Voice,
             )
             is TimelineItemLocationContent -> AttachmentThumbnailInfo(

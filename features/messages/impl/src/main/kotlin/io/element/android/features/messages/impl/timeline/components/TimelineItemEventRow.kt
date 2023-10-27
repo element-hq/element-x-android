@@ -618,7 +618,6 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
             type = AttachmentThumbnailType.Audio,
         )
         is VoiceMessageType -> AttachmentThumbnailInfo(
-            textContent = messageContent.body,
             type = AttachmentThumbnailType.Voice,
         )
         else -> null
@@ -630,6 +629,7 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
     val messageContent = inReplyTo.content as? MessageContent ?: return ""
     return when (messageContent.type) {
         is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
+        is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
         else -> messageContent.body
     }
 }
