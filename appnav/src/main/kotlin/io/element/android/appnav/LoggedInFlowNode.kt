@@ -55,6 +55,7 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
+import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -87,6 +88,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val secureBackupEntryPoint: SecureBackupEntryPoint,
     private val inviteListEntryPoint: InviteListEntryPoint,
     private val ftueEntryPoint: FtueEntryPoint,
     private val coroutineScope: CoroutineScope,
@@ -198,6 +200,9 @@ class LoggedInFlowNode @AssistedInject constructor(
         data object VerifySession : NavTarget
 
         @Parcelize
+        data object SecureBackup : NavTarget
+
+        @Parcelize
         data object InviteList : NavTarget
 
         @Parcelize
@@ -272,6 +277,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.VerifySession)
                     }
 
+                    override fun onSecureBackupClicked() {
+                        backstack.push(NavTarget.SecureBackup)
+                    }
+
                     override fun onOpenRoomNotificationSettings(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId, initialElement = RoomLoadedFlowNode.NavTarget.RoomNotificationSettings))
                     }
@@ -296,6 +305,9 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.VerifySession -> {
                 verifySessionEntryPoint.createNode(this, buildContext)
+            }
+            NavTarget.SecureBackup -> {
+                secureBackupEntryPoint.createNode(this, buildContext)
             }
             NavTarget.InviteList -> {
                 val callback = object : InviteListEntryPoint.Callback {

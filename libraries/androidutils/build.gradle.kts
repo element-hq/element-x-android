@@ -40,5 +40,5 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.security.crypto)
-    implementation(libs.androidx.browser)
+    api(libs.androidx.browser)
 }

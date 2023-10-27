@@ -245,6 +245,7 @@
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
+  <string name="screen_room_mentions_at_room_title">"Для всех"</string>
   <string name="screen_analytics_settings_help_us_improve">"Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы."</string>
   <string name="screen_analytics_settings_read_terms">"Вы можете ознакомиться со всеми нашими условиями %1$s."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"здесь"</string>

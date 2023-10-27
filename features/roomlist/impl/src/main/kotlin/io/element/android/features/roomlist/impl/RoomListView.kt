@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
+import io.element.android.features.roomlist.impl.components.ConfirmRecoveryKeyBanner
 import io.element.android.features.roomlist.impl.components.RequestVerificationHeader
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
@@ -172,6 +173,7 @@ private fun RoomListContent(
         topBar = {
             RoomListTopBar(
                 matrixUser = state.matrixUser,
+                showAvatarIndicator = state.showAvatarIndicator,
                 areSearchResultsDisplayed = state.displaySearchResults,
                 onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
                 onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
@@ -193,6 +195,13 @@ private fun RoomListContent(
                         RequestVerificationHeader(
                             onVerifyClicked = onVerifyClicked,
                             onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                        )
+                    }
+                } else if (state.displayRecoveryKeyPrompt) {
+                    item {
+                        ConfirmRecoveryKeyBanner(
+                            onContinueClicked = onOpenSettings,
+                            onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
                         )
                     }
                 }
