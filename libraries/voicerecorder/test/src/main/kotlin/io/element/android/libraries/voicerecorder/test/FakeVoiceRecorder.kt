@@ -42,6 +42,7 @@ class FakeVoiceRecorder(
     private var stoppedCount = 0
     private var deletedCount = 0
 
+    var waveform: List<Float> = listOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f)
     override suspend fun startRecord() {
         startedCount += 1
         val startedAt = timeSource.markNow()
@@ -73,7 +74,7 @@ class FakeVoiceRecorder(
                 else -> VoiceRecorderState.Finished(
                     file = curRecording!!,
                     mimeType = "audio/ogg",
-                    waveform = listOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f),
+                    waveform = waveform,
                 )
             }
         )

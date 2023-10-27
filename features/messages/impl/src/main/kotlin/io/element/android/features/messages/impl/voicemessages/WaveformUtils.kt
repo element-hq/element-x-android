@@ -20,4 +20,9 @@ package io.element.android.features.messages.impl.voicemessages
  * Resizes the given [0;1024] int list as per unstable MSC3246 spec
  * to a [0;1] range float list to be used for waveform rendering.
  */
-fun List<Int>.fromMSC3246range(): List<Float> = map { it / 1024f }
+internal fun List<Int>.fromMSC3246range(): List<Float> = map { it / 1024f }
+
+/**
+ * Resizes the given [0;1] float list to [0;1024] int list as per unstable MSC3246 spec.
+ */
+internal fun List<Float>.toMSC3246range(): List<Int> = map { (it * 1024).toInt() }
