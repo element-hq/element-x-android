@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
+import io.element.android.features.messages.impl.voicemessages.toMSC3246range
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
@@ -41,6 +42,8 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -67,6 +70,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
         var isSending by remember { mutableStateOf(false) }
         val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotPlaying)
         val isPlaying by remember(playerState.isPlaying) { derivedStateOf { playerState.isPlaying } }
+        val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
 
         val onLifecycleEvent = { event: Lifecycle.Event ->
             when (event) {
@@ -175,11 +179,11 @@ class VoiceMessageComposerPresenter @Inject constructor(
                     duration = state.elapsedTime,
                     levels = state.levels.toPersistentList()
                 )
-                is VoiceRecorderState.Finished -> if (isSending) {
-                    VoiceMessageState.Sending
-                } else {
-                    VoiceMessageState.Preview(isPlaying = isPlaying)
-                }
+                is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
+                    isSending = isSending,
+                    isPlaying = isPlaying,
+                    waveform = waveform,
+                )
                 else -> VoiceMessageState.Idle
             },
             showPermissionRationaleDialog = permissionState.showDialog,
@@ -228,7 +232,8 @@ class VoiceMessageComposerPresenter @Inject constructor(
     }
 }
 
-/**
- * Resizes the given [0;1] float list to [0;1024] int list as per unstable MSC3246 spec.
- */
-private fun List<Float>.toMSC3246range(): List<Int> = map { (it * 1024).toInt() }
+private fun VoiceRecorderState.finishedWaveform(): ImmutableList<Float> =
+    (this as? VoiceRecorderState.Finished)
+        ?.waveform
+        .orEmpty()
+        .toImmutableList()

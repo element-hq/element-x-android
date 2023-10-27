@@ -25,11 +25,11 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -45,6 +45,7 @@ import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -217,7 +218,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
             awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
-            assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Sending)
+            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState(isSending = true))
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
@@ -240,7 +241,7 @@ class VoiceMessageComposerPresenterTest {
                 eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
                 eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             }
-            assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Sending)
+            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState(isSending = true))
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
@@ -267,7 +268,7 @@ class VoiceMessageComposerPresenterTest {
             }
 
             val finalState = awaitItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Sending)
+            assertThat(finalState.voiceMessageState).isEqualTo(aPreviewState(isSending = true))
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
             assertThat(analyticsService.trackedErrors).hasSize(0)
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
@@ -289,7 +290,7 @@ class VoiceMessageComposerPresenterTest {
             val previewState = awaitItem()
 
             previewState.eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
-            assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Sending)
+            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState(isSending = true))
 
             ensureAllEventsConsumed()
             assertThat(previewState.voiceMessageState).isEqualTo(aPreviewState())
@@ -453,18 +454,15 @@ class VoiceMessageComposerPresenterTest {
             VoiceMessageComposerEvents.LifecycleEvent(event = Lifecycle.Event.ON_PAUSE)
         )
 
-        val onPauseState = when (val vmState = mostRecentState.voiceMessageState) {
-            VoiceMessageState.Idle,
-            VoiceMessageState.Sending -> {
-                mostRecentState
-            }
+        val onPauseState = when (val state = mostRecentState.voiceMessageState) {
+            VoiceMessageState.Idle -> mostRecentState
             is VoiceMessageState.Recording -> {
                 // If recorder was active, it stops
                 awaitItem().apply {
                     assertThat(voiceMessageState).isEqualTo(aPreviewState())
                 }
             }
-            is VoiceMessageState.Preview -> when(vmState.isPlaying) {
+            is VoiceMessageState.Preview -> when (state.isPlaying) {
                 // If the preview was playing, it pauses
                 true -> awaitItem().apply {
                     assertThat(voiceMessageState).isEqualTo(aPreviewState())
@@ -477,13 +475,15 @@ class VoiceMessageComposerPresenterTest {
             VoiceMessageComposerEvents.LifecycleEvent(event = Lifecycle.Event.ON_DESTROY)
         )
 
-        when (onPauseState.voiceMessageState) {
-            VoiceMessageState.Idle,
-            VoiceMessageState.Sending ->
+        when (val state = onPauseState.voiceMessageState) {
+            VoiceMessageState.Idle ->
                 ensureAllEventsConsumed()
-            is VoiceMessageState.Recording,
-            is VoiceMessageState.Preview ->
+            is VoiceMessageState.Recording ->
                 assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Idle)
+            is VoiceMessageState.Preview -> when (state.isSending) {
+                true -> ensureAllEventsConsumed()
+                false -> assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Idle)
+            }
         }
     }
 
@@ -515,9 +515,12 @@ class VoiceMessageComposerPresenterTest {
     }
 
     private fun aPreviewState(
-        isPlaying: Boolean = false
+        isPlaying: Boolean = false,
+        isSending: Boolean = false,
+        waveform: List<Float> = voiceRecorder.waveform,
     ) = VoiceMessageState.Preview(
-        isPlaying = isPlaying
+        isPlaying = isPlaying,
+        isSending = isSending,
+        waveform = waveform.toImmutableList(),
     )
-
 }

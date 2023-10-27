@@ -53,6 +53,21 @@ import kotlin.math.roundToInt
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
 
+/**
+ * A view that displays a waveform and a cursor to indicate the current playback progress.
+ *
+ * @param playbackProgress The current playback progress, between 0 and 1.
+ * @param showCursor Whether to show the cursor or not.
+ * @param waveform The waveform to display. Use [FakeWaveformFactory] to generate a fake waveform.
+ * @param modifier The modifier to be applied to the view.
+ * @param onSeek Callback when the user seeks the waveform. Called with a value between 0 and 1.
+ * @param brush The brush to use to draw the waveform.
+ * @param progressBrush The brush to use to draw the progress.
+ * @param cursorBrush The brush to use to draw the cursor.
+ * @param lineWidth The width of the waveform lines.
+ * @param linePadding The padding between waveform lines.
+ * @param minimumGraphAmplitude The minimum amplitude to display, regardless of waveform data.
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WaveformPlaybackView(
@@ -76,7 +91,7 @@ fun WaveformPlaybackView(
         }
     }
     val progressAnimated = animateFloatAsState(targetValue = progress, label = "progressAnimation")
-    val amplitudeDisplayCount by remember(canvasSize) {
+    val amplitudeDisplayCount by remember(canvasSize, lineWidth, linePadding) {
         derivedStateOf {
             (canvasSize.width.value / (lineWidth.value + linePadding.value)).toInt()
         }
