@@ -52,8 +52,8 @@ import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -190,19 +190,22 @@ private fun RoomListContent(
                     .nestedScroll(nestedScrollConnection),
                 state = lazyListState,
             ) {
-                if (state.displayVerificationPrompt) {
-                    item {
-                        RequestVerificationHeader(
-                            onVerifyClicked = onVerifyClicked,
-                            onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                        )
+                when {
+                    state.displayVerificationPrompt -> {
+                        item {
+                            RequestVerificationHeader(
+                                onVerifyClicked = onVerifyClicked,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                            )
+                        }
                     }
-                } else if (state.displayRecoveryKeyPrompt) {
-                    item {
-                        ConfirmRecoveryKeyBanner(
-                            onContinueClicked = onOpenSettings,
-                            onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
-                        )
+                    state.displayRecoveryKeyPrompt -> {
+                        item {
+                            ConfirmRecoveryKeyBanner(
+                                onContinueClicked = onOpenSettings,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                            )
+                        }
                     }
                 }
 
