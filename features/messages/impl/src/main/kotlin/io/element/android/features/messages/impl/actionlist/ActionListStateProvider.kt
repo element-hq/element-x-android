@@ -21,7 +21,6 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAudioContent
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
