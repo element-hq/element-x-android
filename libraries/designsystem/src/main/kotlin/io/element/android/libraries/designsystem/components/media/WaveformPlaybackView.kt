@@ -46,21 +46,24 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlin.math.roundToInt
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WaveformPlaybackView(
     playbackProgress: Float,
     showCursor: Boolean,
-    waveform: Waveform,
+    waveform: ImmutableList<Float>,
     modifier: Modifier = Modifier,
     onSeek: (progress: Float) -> Unit = {},
     brush: Brush = SolidColor(ElementTheme.colors.iconQuaternary),
-    progressBrush: Brush  = SolidColor(ElementTheme.colors.iconSecondary),
-    cursorBrush: Brush  = SolidColor(ElementTheme.colors.iconAccentTertiary),
+    progressBrush: Brush = SolidColor(ElementTheme.colors.iconSecondary),
+    cursorBrush: Brush = SolidColor(ElementTheme.colors.iconAccentTertiary),
     lineWidth: Dp = 2.dp,
     linePadding: Dp = 2.dp,
 ) {
@@ -134,7 +137,7 @@ fun WaveformPlaybackView(
             ),
             blendMode = BlendMode.SrcAtop
         )
-        if(showCursor || seekProgress.value != null) {
+        if (showCursor || seekProgress.value != null) {
             drawRoundRect(
                 brush = cursorBrush,
                 topLeft = Offset(
@@ -155,24 +158,43 @@ fun WaveformPlaybackView(
 @PreviewsDayNight
 @Composable
 internal fun WaveformPlaybackViewPreview() = ElementPreview {
-    Column{
+    Column {
         WaveformPlaybackView(
             modifier = Modifier.height(34.dp),
             showCursor = false,
             playbackProgress = 0.5f,
-            waveform =  Waveform(persistentListOf()),
+            waveform = persistentListOf(),
         )
         WaveformPlaybackView(
             modifier = Modifier.height(34.dp),
             showCursor = false,
             playbackProgress = 0.5f,
-            waveform =  Waveform(persistentListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)),
+            waveform = persistentListOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f),
         )
         WaveformPlaybackView(
             modifier = Modifier.height(34.dp),
             showCursor = true,
             playbackProgress = 0.5f,
-            waveform =  Waveform(List(1024) { it }.toPersistentList()),
+            waveform = List(1024) { it / 1024f }.toPersistentList(),
         )
     }
+}
+
+private fun ImmutableList<Float>.normalisedData(maxSamplesCount: Int): ImmutableList<Float> {
+    if (maxSamplesCount <= 0) {
+        return persistentListOf()
+    }
+
+    // Filter the data to keep only the expected number of samples
+    val result = if (this.size > maxSamplesCount) {
+        (0..<maxSamplesCount)
+            .map { index ->
+                val targetIndex = (index.toDouble() * (this.count().toDouble() / maxSamplesCount.toDouble())).roundToInt()
+                this[targetIndex]
+            }
+    } else {
+        this
+    }
+
+    return result.toPersistentList()
 }
