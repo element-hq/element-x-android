@@ -29,6 +29,11 @@ class FakeMediaPlayer : MediaPlayer {
     private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L, 0L))
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
+    
+    companion object {
+        private const val defaultDurationMs = 10000L
+        private const val staticPlayedMs = 1000L
+    }
 
     override fun acquireControl(uri: String, mediaId: String, mimeType: String) {
         _state.update {
@@ -36,7 +41,7 @@ class FakeMediaPlayer : MediaPlayer {
                 isPlaying = false,
                 mediaId = mediaId,
                 currentPosition = it.currentPosition,
-                duration = 10000L,
+                duration = defaultDurationMs,
             )
         }
     }
@@ -45,8 +50,8 @@ class FakeMediaPlayer : MediaPlayer {
             it.copy(
                 isPlaying = true,
                 mediaId = mediaId,
-                currentPosition = it.currentPosition + 1000L,
-                duration = 10000L,
+                currentPosition = it.currentPosition + staticPlayedMs,
+                duration = defaultDurationMs,
             )
         }
     }
@@ -55,7 +60,7 @@ class FakeMediaPlayer : MediaPlayer {
         _state.update {
             it.copy(
                 isPlaying = true,
-                currentPosition = it.currentPosition + 1000L,
+                currentPosition = it.currentPosition + staticPlayedMs,
             )
         }
     }

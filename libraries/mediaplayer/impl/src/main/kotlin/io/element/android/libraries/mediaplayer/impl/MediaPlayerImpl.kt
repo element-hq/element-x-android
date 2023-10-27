@@ -18,6 +18,7 @@ package io.element.android.libraries.mediaplayer.impl
 
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.Tracks
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
@@ -64,6 +65,15 @@ class MediaPlayerImpl @Inject constructor(
                     currentPosition = player.currentPosition,
                     duration = player.duration,
                     mediaId = mediaItem?.mediaId,
+                )
+            }
+        }
+
+        override fun onTracksChanged(tracks: Tracks) {
+            _state.update {
+                it.copy(
+                    currentPosition = player.currentPosition,
+                    duration = player.duration,
                 )
             }
         }
@@ -135,7 +145,10 @@ class MediaPlayerImpl @Inject constructor(
             if (!_state.value.isPlaying) return
             delay(100)
             _state.update {
-                it.copy(currentPosition = player.currentPosition)
+                it.copy(
+                    currentPosition = player.currentPosition,
+                    duration = player.duration,
+                )
             }
         }
     }

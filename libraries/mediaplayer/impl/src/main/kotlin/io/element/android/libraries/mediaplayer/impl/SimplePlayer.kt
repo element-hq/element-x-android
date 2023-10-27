@@ -19,6 +19,7 @@ package io.element.android.libraries.mediaplayer.impl
 import android.content.Context
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.Tracks
 import androidx.media3.exoplayer.ExoPlayer
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
@@ -45,6 +46,7 @@ interface SimplePlayer {
     interface Listener {
         fun onIsPlayingChanged(isPlaying: Boolean)
         fun onMediaItemTransition(mediaItem: MediaItem?)
+        fun onTracksChanged(tracks: Tracks)
     }
 }
 
@@ -67,6 +69,7 @@ class SimplePlayerImpl(
         p.addListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) = listener.onIsPlayingChanged(isPlaying)
             override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) = listener.onMediaItemTransition(mediaItem)
+            override fun onTracksChanged(tracks: Tracks) = listener.onTracksChanged(tracks)
         })
     }
     override val duration: Long

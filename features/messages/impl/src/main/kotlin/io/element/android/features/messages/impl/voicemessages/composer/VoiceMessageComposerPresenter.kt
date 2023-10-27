@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.voicemessages.composer
 
 import android.Manifest
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -69,6 +70,15 @@ class VoiceMessageComposerPresenter @Inject constructor(
         val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotPlaying)
         val isPlaying by remember(playerState.isPlaying) { derivedStateOf { playerState.isPlaying } }
         val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
+
+        LaunchedEffect(recorderState) {
+            val recording = recorderState as? VoiceRecorderState.Finished ?: return@LaunchedEffect
+
+            player.setMedia(
+                mediaPath = recording.file.path,
+                mimeType = recording.mimeType,
+            )
+        }
 
         val onLifecycleEvent = { event: Lifecycle.Event ->
             when (event) {
