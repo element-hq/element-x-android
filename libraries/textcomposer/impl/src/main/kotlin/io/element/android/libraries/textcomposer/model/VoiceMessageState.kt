@@ -30,6 +30,6 @@ sealed class VoiceMessageState {
 
     data class Recording(
         val duration: Duration,
-        val level: Float,
+        val levels: ImmutableList<Float>,
     ): VoiceMessageState()
 }

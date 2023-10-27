@@ -20,7 +20,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -37,12 +36,14 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.utils.time.formatShort
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
 internal fun VoiceMessageRecording(
-    level: Float,
+    levels: ImmutableList<Float>,
     duration: Duration,
     modifier: Modifier = Modifier,
 ) {
@@ -70,28 +71,11 @@ internal fun VoiceMessageRecording(
 
         Spacer(Modifier.size(20.dp))
 
-        // TODO Replace with waveform UI
-        DebugAudioLevel(
-            modifier = Modifier.weight(1f), level = level
-        )
-    }
-}
-
-@Composable
-private fun DebugAudioLevel(
-    level: Float,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .height(26.dp)
-    ) {
-        Box(
+        LiveWaveformView(
             modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .fillMaxWidth(level)
-                .background(ElementTheme.colors.iconQuaternary, shape = MaterialTheme.shapes.small)
-                .fillMaxHeight()
+                .height(26.dp)
+                .weight(1f),
+            levels = levels
         )
     }
 }
@@ -108,5 +92,5 @@ private fun RedRecordingDot(
 @PreviewsDayNight
 @Composable
 internal fun VoiceMessageRecordingPreview() = ElementPreview {
-    VoiceMessageRecording(0.5f, 0.seconds)
+    VoiceMessageRecording(List(100) { it.toFloat() / 100 }.toPersistentList(), 0.seconds)
 }

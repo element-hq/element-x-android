@@ -18,12 +18,13 @@ package io.element.android.features.messages.impl.voicemessages.composer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.time.Duration.Companion.seconds
 
 internal open class VoiceMessageComposerStateProvider : PreviewParameterProvider<VoiceMessageComposerState> {
     override val values: Sequence<VoiceMessageComposerState>
         get() = sequenceOf(
-            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(duration = 61.seconds, level = 0.5f)),
+            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(duration = 61.seconds, levels = aWaveformLevels)),
         )
 }
 
@@ -35,3 +36,7 @@ internal fun aVoiceMessageComposerState(
     showPermissionRationaleDialog = showPermissionRationaleDialog,
     eventSink = {},
 )
+
+internal var aWaveformLevels = List(100) { it.toFloat() / 100 }.toPersistentList()
+
+

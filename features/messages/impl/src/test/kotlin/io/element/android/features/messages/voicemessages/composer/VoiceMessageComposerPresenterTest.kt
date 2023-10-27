@@ -44,6 +44,7 @@ import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -67,7 +68,7 @@ class VoiceMessageComposerPresenterTest {
 
     companion object {
         private val RECORDING_DURATION = 1.seconds
-        private val RECORDING_STATE = VoiceMessageState.Recording(RECORDING_DURATION, 0.2f)
+        private val RECORDING_STATE = VoiceMessageState.Recording(RECORDING_DURATION, listOf(0.1f, 0.2f).toPersistentList())
     }
 
     @Test
@@ -146,7 +147,7 @@ class VoiceMessageComposerPresenterTest {
             }
 
             // Nothing should happen
-            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Recording(RECORDING_DURATION, 0.2f))
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Recording(RECORDING_DURATION, RECORDING_STATE.levels))
             voiceRecorder.assertCalls(started = 1, stopped = 0, deleted = 0)
 
             testPauseAndDestroy(finalState)
