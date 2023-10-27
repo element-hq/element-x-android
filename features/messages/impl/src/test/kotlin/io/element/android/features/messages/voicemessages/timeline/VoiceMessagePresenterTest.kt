@@ -27,7 +27,7 @@ import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageMediaRepo
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessagePresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
-import io.element.android.features.messages.mediaplayer.FakeMediaPlayer
+import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 

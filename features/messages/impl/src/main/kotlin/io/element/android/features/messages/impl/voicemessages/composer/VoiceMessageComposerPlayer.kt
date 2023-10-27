@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.voicemessages.composer
 
-import io.element.android.features.messages.impl.mediaplayer.MediaPlayer
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
