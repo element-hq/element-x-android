@@ -46,6 +46,7 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.media.toMSC3246range
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
@@ -499,13 +500,13 @@ class RustMatrixRoom(
     override suspend fun sendVoiceMessage(
         file: File,
         audioInfo: AudioInfo,
-        waveform: List<Int>,
+        waveform: List<Float>,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
         innerRoom.sendVoiceMessage(
             url = file.path,
             audioInfo = audioInfo.map(),
-            waveform = waveform.map { it.toUShort() },
+            waveform = waveform.toMSC3246range(),
             progressWatcher = progressCallback?.toProgressWatcher(),
         )
     }
