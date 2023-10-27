@@ -297,9 +297,7 @@ class MessageComposerPresenter @Inject constructor(
             attachmentsState = attachmentsState.value,
             memberSuggestions = memberSuggestions.toPersistentList(),
             eventSink = { handleEvents(it) }
-        ).also {
-            println(it)
-        }
+        )
     }
 
     private fun CoroutineScope.sendMessage(

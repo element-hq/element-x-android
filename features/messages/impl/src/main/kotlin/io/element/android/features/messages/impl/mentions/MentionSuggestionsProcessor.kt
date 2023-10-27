@@ -25,10 +25,22 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
 
+/**
+ * This class is responsible for processing mention suggestions when `@`, `/` or `#` are type in the composer.
+ */
 object MentionSuggestionsProcessor {
 
+    // We don't want to retrieve thousands of members
     private const val MAX_BATCH_ITEMS = 100
 
+    /**
+     *  Process the mention suggestions.
+     *  @param suggestion The current suggestion input
+     *  @param roomMembersState The room members state, it contains the current users in the room
+     *  @param currentUserId The current user id
+     *  @param canSendRoomMention Should return true if the current user can send room mentions
+     *  @return The list of mentions to display
+     */
     suspend fun process(
         suggestion: Suggestion?,
         roomMembersState: MatrixRoomMembersState,
