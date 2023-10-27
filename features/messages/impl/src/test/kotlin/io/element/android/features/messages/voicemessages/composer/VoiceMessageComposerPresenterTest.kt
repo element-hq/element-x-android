@@ -210,6 +210,28 @@ class VoiceMessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - delete while playing`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
+            awaitItem().eventSink(VoiceMessageComposerEvents.DeleteVoiceMessage)
+            awaitItem().apply {
+                assertThat(voiceMessageState).isEqualTo(aPreviewState(isPlaying = false))
+            }
+
+            val finalState = awaitItem()
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
     fun `present - send recording`() = runTest {
         val presenter = createVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
