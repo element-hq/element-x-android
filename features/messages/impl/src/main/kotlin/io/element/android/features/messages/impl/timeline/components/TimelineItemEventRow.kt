@@ -100,6 +100,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -612,18 +613,14 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
             textContent = messageContent.body,
             type = AttachmentThumbnailType.Location,
         )
-        is AudioMessageType -> {
-            when (type.isVoiceMessage) {
-                true -> AttachmentThumbnailInfo(
-                    textContent = messageContent.body,
-                    type = AttachmentThumbnailType.Voice,
-                )
-                false -> AttachmentThumbnailInfo(
-                    textContent = messageContent.body,
-                    type = AttachmentThumbnailType.Audio,
-                )
-            }
-        }
+        is AudioMessageType -> AttachmentThumbnailInfo(
+            textContent = messageContent.body,
+            type = AttachmentThumbnailType.Audio,
+        )
+        is VoiceMessageType -> AttachmentThumbnailInfo(
+            textContent = messageContent.body,
+            type = AttachmentThumbnailType.Voice,
+        )
         else -> null
     }
 }

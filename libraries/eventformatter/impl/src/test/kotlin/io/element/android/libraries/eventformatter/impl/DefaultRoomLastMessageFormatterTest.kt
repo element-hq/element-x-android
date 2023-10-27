@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aPollContent
@@ -162,8 +163,8 @@ class DefaultRoomLastMessageFormatterTest {
         val sharedContentMessagesTypes = arrayOf(
             TextMessageType(body, null),
             VideoMessageType(body, MediaSource("url"), null),
-            AudioMessageType(body, MediaSource("url"), null, null, false),
-            AudioMessageType(body, MediaSource("url"), null, null, true),
+            AudioMessageType(body, MediaSource("url"), null),
+            VoiceMessageType(body, MediaSource("url"), null, null),
             ImageMessageType(body, MediaSource("url"), null),
             FileMessageType(body, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null),
@@ -199,12 +200,8 @@ class DefaultRoomLastMessageFormatterTest {
         for ((type, result) in resultsInDm) {
             val expectedResult = when (type) {
                 is VideoMessageType -> "Video"
-                is AudioMessageType -> {
-                    when (type.isVoiceMessage) {
-                        true -> "Voice message"
-                        false -> "Audio"
-                    }
-                }
+                is AudioMessageType -> "Audio"
+                is VoiceMessageType -> "Voice message"
                 is ImageMessageType -> "Image"
                 is FileMessageType -> "File"
                 is LocationMessageType -> "Shared location"
@@ -222,12 +219,8 @@ class DefaultRoomLastMessageFormatterTest {
             val string = result.toString()
             val expectedResult = when (type) {
                 is VideoMessageType -> "$senderName: Video"
-                is AudioMessageType -> {
-                    when (type.isVoiceMessage) {
-                        true -> "$senderName: Voice message"
-                        false -> "$senderName: Audio"
-                    }
-                }
+                is AudioMessageType -> "$senderName: Audio"
+                is VoiceMessageType -> "$senderName: Voice message"
                 is ImageMessageType -> "$senderName: Image"
                 is FileMessageType -> "$senderName: File"
                 is LocationMessageType -> "$senderName: Shared location"
@@ -239,12 +232,8 @@ class DefaultRoomLastMessageFormatterTest {
             }
             val shouldCreateAnnotatedString = when (type) {
                 is VideoMessageType -> true
-                is AudioMessageType -> {
-                    when (type.isVoiceMessage) {
-                        true -> true
-                        false -> true
-                    }
-                }
+                is AudioMessageType -> true
+                is VoiceMessageType -> true
                 is ImageMessageType -> true
                 is FileMessageType -> true
                 is LocationMessageType -> false

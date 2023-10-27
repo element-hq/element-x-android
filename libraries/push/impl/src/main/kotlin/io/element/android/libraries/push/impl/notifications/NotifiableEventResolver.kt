@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -210,6 +211,7 @@ class NotifiableEventResolver @Inject constructor(
     ): String {
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.body
+            is VoiceMessageType -> messageType.body
             is EmoteMessageType -> "* $senderDisplayName ${messageType.body}"
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
