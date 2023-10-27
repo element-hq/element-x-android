@@ -149,6 +149,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 return@lambda
             }
             isSending = true
+            player.pause()
             appCoroutineScope.sendMessage(
                 file = finishedState.file,
                 mimeType = finishedState.mimeType,
