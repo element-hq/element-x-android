@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
-import io.element.android.features.messages.impl.voicemessages.toMSC3246range
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
@@ -219,7 +218,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
         val result = mediaSender.sendVoiceMessage(
             uri = file.toUri(),
             mimeType = mimeType,
-            waveForm = waveform.toMSC3246range(),
+            waveForm = waveform,
         )
 
         if (result.isFailure) {
