@@ -135,8 +135,14 @@ data class NotificationEventQueue constructor(
         )
     }
 
-    fun clearEvent(eventId: EventId) {
-        queue.removeAll { it.eventId == eventId }
+    fun clearEvent(sessionId: SessionId, eventId: EventId) {
+        val isFallback = queue.firstOrNull { it.sessionId == sessionId && it.eventId == eventId } is FallbackNotifiableEvent
+        if (isFallback) {
+            Timber.d("Removing all the fallbacks")
+            queue.removeAll { it.sessionId == sessionId && it is FallbackNotifiableEvent }
+        } else {
+            queue.removeAll { it.sessionId == sessionId && it.eventId == eventId }
+        }
     }
 
     fun clearMembershipNotificationForSession(sessionId: SessionId) {
