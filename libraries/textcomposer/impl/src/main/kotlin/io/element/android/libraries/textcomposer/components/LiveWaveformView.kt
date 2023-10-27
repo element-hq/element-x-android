@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import java.lang.Float.min
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
 private val waveFormHeight = 26.dp
@@ -57,7 +58,7 @@ fun LiveWaveformView(
 ) {
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
 
-    val canvasWidth by remember(levels, lineWidth, linePadding) {
+    val waveformWidth by remember(levels, lineWidth, linePadding) {
         derivedStateOf {
             levels.size * (lineWidth.value + linePadding.value)
         }
@@ -72,11 +73,11 @@ fun LiveWaveformView(
     ) {
         Canvas(
             modifier = Modifier
-                .width(Dp(canvasWidth))
+                .width(canvasSize.width)
                 .graphicsLayer(alpha = DEFAULT_GRAPHICS_LAYER_ALPHA)
                 .then(modifier)
         ) {
-            canvasSize = DpSize(Dp(canvasWidth), size.height.toDp())
+            canvasSize = DpSize(Dp(min(waveformWidth, width.toFloat())), size.height.toDp())
             val countThatFitsWidth = (width.toFloat() / (lineWidth.toPx() + linePadding.toPx())).toInt()
             drawWaveform(
                 waveformData = levels.takeLast(countThatFitsWidth).toPersistentList(),

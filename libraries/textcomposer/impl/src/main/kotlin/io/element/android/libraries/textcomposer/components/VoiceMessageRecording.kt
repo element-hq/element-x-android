@@ -73,7 +73,7 @@ internal fun VoiceMessageRecording(
 
         LiveWaveformView(
             modifier = Modifier
-                .height(34.dp)
+                .height(26.dp)
                 .weight(1f),
             levels = levels
         )
