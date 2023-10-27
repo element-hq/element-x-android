@@ -28,11 +28,12 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerStateProvider
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.textcomposer.model.Message
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.TextComposer
+import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import kotlinx.coroutines.launch
 
@@ -59,6 +60,10 @@ internal fun MessageComposerView(
 
     fun onDismissTextFormatting() {
         state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = false))
+    }
+
+    fun onSuggestionReceived(suggestion: Suggestion?) {
+        state.eventSink(MessageComposerEvents.SuggestionReceived(suggestion))
     }
 
     fun onError(error: Throwable) {
@@ -106,6 +111,7 @@ internal fun MessageComposerView(
         onVoicePlayerEvent = onVoicePlayerEvent,
         onSendVoiceMessage = onSendVoiceMessage,
         onDeleteVoiceMessage = onDeleteVoiceMessage,
+        onSuggestionReceived = ::onSuggestionReceived,
         onError = ::onError,
     )
 }

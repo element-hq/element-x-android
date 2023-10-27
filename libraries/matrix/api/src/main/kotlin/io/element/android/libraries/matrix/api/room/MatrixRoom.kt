@@ -130,6 +130,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean>
 
+    suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean>
+
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
     suspend fun removeAvatar(): Result<Unit>

@@ -43,7 +43,11 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -55,6 +59,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.mentions.MentionSuggestionsPickerView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -338,7 +343,11 @@ private fun MessagesViewContent(
                 @Composable {}
             },
             sheetSwipeEnabled = state.composerState.showTextFormatting,
-            sheetShape = if (state.composerState.showTextFormatting) MaterialTheme.shapes.large else RectangleShape,
+            sheetShape = if (state.composerState.showTextFormatting || state.composerState.memberSuggestions.isNotEmpty()) {
+                MaterialTheme.shapes.large
+            } else {
+                RectangleShape
+            },
             content = { paddingValues ->
                 TimelineView(
                     modifier = Modifier.padding(paddingValues),
@@ -354,24 +363,53 @@ private fun MessagesViewContent(
                 )
             },
             sheetContent = { subcomposing: Boolean ->
-                if (state.userHasPermissionToSendMessage) {
-                    MessageComposerView(
-                        state = state.composerState,
-                        voiceMessageState = state.voiceMessageComposerState,
-                        subcomposing = subcomposing,
-                        enableTextFormatting = state.enableTextFormatting,
-                        enableVoiceMessages = state.enableVoiceMessages,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
-                } else {
-                    CantSendMessageBanner()
-                }
+                MessagesViewComposerBottomSheetContents(
+                    subcomposing = subcomposing,
+                    state = state,
+                )
             },
-            sheetContentKey = state.composerState.richTextEditorState.lineCount,
+            sheetContentKey = state.composerState.richTextEditorState.lineCount + state.composerState.memberSuggestions.size,
             sheetTonalElevation = 0.dp,
-            sheetShadowElevation = 0.dp,
+            sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
         )
+    }
+}
+
+@Composable
+private fun MessagesViewComposerBottomSheetContents(
+    subcomposing: Boolean,
+    state: MessagesState,
+    modifier: Modifier = Modifier,
+) {
+    if (state.userHasPermissionToSendMessage) {
+        Column(modifier = modifier.fillMaxWidth()) {
+            MentionSuggestionsPickerView(
+                modifier = Modifier.heightIn(max = 230.dp)
+                    // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
+                    .nestedScroll(object : NestedScrollConnection {
+                        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                            return available
+                        }
+                    }),
+                roomId = state.roomId,
+                roomName = state.roomName.dataOrNull(),
+                roomAvatarData = state.roomAvatar.dataOrNull(),
+                memberSuggestions = state.composerState.memberSuggestions,
+                onSuggestionSelected = {
+                    // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
+                }
+            )
+            MessageComposerView(
+                state = state.composerState,
+                voiceMessageState = state.voiceMessageComposerState,
+                subcomposing = subcomposing,
+                enableTextFormatting = state.enableTextFormatting,
+                enableVoiceMessages = state.enableVoiceMessages,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    } else {
+        CantSendMessageBanner(modifier = modifier)
     }
 }
 

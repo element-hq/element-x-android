@@ -33,6 +33,7 @@ data class MessageComposerState(
     val canShareLocation: Boolean,
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
+    val memberSuggestions: ImmutableList<RoomMemberSuggestion>,
     val eventSink: (MessageComposerEvents) -> Unit,
 ) {
     val hasFocus: Boolean = richTextEditorState.hasFocus

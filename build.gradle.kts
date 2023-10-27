@@ -200,7 +200,9 @@ koverMerged {
                     "*Node$*",
                     // Exclude `:libraries:matrix:impl` module, it contains only wrappers to access the Rust Matrix SDK api, so it is not really relevant to unit test it: there is no logic to test.
                     "io.element.android.libraries.matrix.impl.*",
-                    "*Presenter\$present\$*"
+                    "*Presenter\$present\$*",
+                    // Forked from compose
+                    "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
                 )
             )
         }

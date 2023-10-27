@@ -57,6 +57,7 @@ fun PreferenceText(
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
+    showIconBadge: Boolean = false,
     tintColor: Color? = null,
     onClick: () -> Unit = {},
 ) {
@@ -73,6 +74,7 @@ fun PreferenceText(
         PreferenceIcon(
             icon = icon,
             iconResourceId = iconResourceId,
+            showIconBadge = showIconBadge,
             enabled = enabled,
             isVisible = showIconAreaIfNoIcon,
             tintColor = tintColor ?: enabled.toSecondaryEnabledColor(),
