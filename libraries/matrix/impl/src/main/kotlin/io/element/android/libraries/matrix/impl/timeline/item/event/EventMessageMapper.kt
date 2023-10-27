@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
 import org.matrix.rustcomponents.sdk.Message
 import org.matrix.rustcomponents.sdk.MessageType
@@ -77,13 +78,23 @@ class EventMessageMapper {
 
     fun mapMessageType(type: RustMessageType?) = when (type) {
         is RustMessageType.Audio -> {
-            AudioMessageType(
-                body = type.content.body,
-                source = type.content.source.map(),
-                info = type.content.info?.map(),
-                details = type.content.audio?.map(),
-                isVoiceMessage = type.content.voice != null,
-            )
+            when (type.content.voice) {
+                null -> {
+                    AudioMessageType(
+                        body = type.content.body,
+                        source = type.content.source.map(),
+                        info = type.content.info?.map(),
+                    )
+                }
+                else -> {
+                    VoiceMessageType(
+                        body = type.content.body,
+                        source = type.content.source.map(),
+                        info = type.content.info?.map(),
+                        details = type.content.audio?.map(),
+                    )
+                }
+            }
         }
         is RustMessageType.File -> {
             FileMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
