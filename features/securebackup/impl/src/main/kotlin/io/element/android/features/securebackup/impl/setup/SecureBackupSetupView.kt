@@ -192,6 +192,7 @@ private fun Content(
         state = state,
         onClick = onClick,
         onChange = null,
+        onSubmit = null,
     )
 }
 

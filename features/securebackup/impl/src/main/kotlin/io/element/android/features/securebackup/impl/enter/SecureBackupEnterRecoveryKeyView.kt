@@ -75,6 +75,9 @@ fun SecureBackupEnterRecoveryKeyView(
             state = state,
             onChange = {
                 state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange(it))
+            },
+            onSubmit = {
+                state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvents.Submit)
             })
     }
 }
@@ -112,13 +115,15 @@ private fun BottomMenu(
 @Composable
 private fun Content(
     state: SecureBackupEnterRecoveryKeyState,
-    onChange: ((String) -> Unit)?,
+    onChange: (String) -> Unit,
+    onSubmit: () -> Unit,
 ) {
     RecoveryKeyView(
         modifier = Modifier.padding(top = 52.dp),
         state = state.recoveryKeyViewState,
         onClick = null,
         onChange = onChange,
+        onSubmit = onSubmit,
     )
 }
 

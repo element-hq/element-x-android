@@ -25,12 +25,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -52,6 +55,7 @@ internal fun RecoveryKeyView(
     state: RecoveryKeyViewState,
     onClick: (() -> Unit)?,
     onChange: ((String) -> Unit)?,
+    onSubmit: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -63,7 +67,7 @@ internal fun RecoveryKeyView(
             modifier = Modifier.padding(start = 16.dp),
             style = ElementTheme.typography.fontBodyMdRegular,
         )
-        RecoveryKeyContent(state, onClick, onChange)
+        RecoveryKeyContent(state, onClick, onChange, onSubmit)
         RecoveryKeyFooter(state)
     }
 }
@@ -73,11 +77,12 @@ private fun RecoveryKeyContent(
     state: RecoveryKeyViewState,
     onClick: (() -> Unit)?,
     onChange: ((String) -> Unit)?,
+    onSubmit: (() -> Unit)?,
 ) {
     when (state.recoveryKeyUserStory) {
         RecoveryKeyUserStory.Setup,
         RecoveryKeyUserStory.Change -> RecoveryKeyStaticContent(state, onClick)
-        RecoveryKeyUserStory.Enter -> RecoveryKeyFormContent(state, onChange)
+        RecoveryKeyUserStory.Enter -> RecoveryKeyFormContent(state, onChange, onSubmit)
     }
 }
 
@@ -143,8 +148,13 @@ private fun RecoveryKeyStaticContent(
 }
 
 @Composable
-private fun RecoveryKeyFormContent(state: RecoveryKeyViewState, onChange: ((String) -> Unit)?) {
+private fun RecoveryKeyFormContent(
+    state: RecoveryKeyViewState,
+    onChange: ((String) -> Unit)?,
+    onSubmit: (() -> Unit)?,
+) {
     onChange ?: error("onChange should not be null")
+    onSubmit ?: error("onSubmit should not be null")
     val recoveryKeyVisualTransformation = remember {
         RecoveryKeyVisualTransformation()
     }
@@ -155,6 +165,12 @@ private fun RecoveryKeyFormContent(state: RecoveryKeyViewState, onChange: ((Stri
         onValueChange = onChange,
         enabled = state.inProgress.not(),
         visualTransformation = recoveryKeyVisualTransformation,
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done,
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { onSubmit() }
+        ),
         label = { Text(text = stringResource(id = R.string.screen_recovery_key_confirm_key_placeholder)) }
     )
 }
@@ -217,5 +233,6 @@ internal fun RecoveryKeyViewPreview(
         state = state,
         onClick = {},
         onChange = {},
+        onSubmit = {},
     )
 }
