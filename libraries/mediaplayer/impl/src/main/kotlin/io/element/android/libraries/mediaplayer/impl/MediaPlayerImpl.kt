@@ -47,7 +47,7 @@ class MediaPlayerImpl @Inject constructor(
             _state.update {
                 it.copy(
                     currentPosition = player.currentPosition,
-                    duration = duration ?: 0L,
+                    duration = player.duration.coerceAtLeast(0),
                     isPlaying = isPlaying,
                 )
             }
@@ -62,7 +62,7 @@ class MediaPlayerImpl @Inject constructor(
             _state.update {
                 it.copy(
                     currentPosition = player.currentPosition,
-                    duration = duration ?: 0L,
+                    duration = player.duration.coerceAtLeast(0),
                     mediaId = mediaItem?.mediaId,
                 )
             }
@@ -79,10 +79,6 @@ class MediaPlayerImpl @Inject constructor(
     private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L, 0L))
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
-
-    // The underlying player returns negative status codes which we map to null
-    private val duration: Long?
-        get() = player.duration.takeIf { it > 0 }
 
     override fun acquireControlAndPlay(uri: String, mediaId: String, mimeType: String) {
         player.clearMediaItems()
