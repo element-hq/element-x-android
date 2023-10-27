@@ -128,7 +128,11 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 sp.getString(CommonStrings.common_file)
             }
             is AudioMessageType -> {
-                sp.getString(CommonStrings.common_audio)
+                if (messageType.isVoiceMessage) {
+                    sp.getString(CommonStrings.common_voice_message)
+                } else {
+                    sp.getString(CommonStrings.common_audio)
+                }
             }
             is OtherMessageType -> {
                 messageType.body
