@@ -318,7 +318,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                     )
                 )
             }
-            content = { ContentForBody(event.content.body) }
+            content = { ContentForBody(textContent) }
         }
     }
     Row(modifier = modifier) {
