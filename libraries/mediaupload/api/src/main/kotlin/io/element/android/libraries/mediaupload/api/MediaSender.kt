@@ -55,7 +55,7 @@ class MediaSender @Inject constructor(
     suspend fun sendVoiceMessage(
         uri: Uri,
         mimeType: String,
-        waveForm: List<Int>,
+        waveForm: List<Float>,
         progressCallback: ProgressCallback? = null
     ): Result<Unit> {
         return preProcessor

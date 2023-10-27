@@ -48,8 +48,13 @@ data class AudioMessageType(
     val body: String,
     val source: MediaSource,
     val info: AudioInfo?,
+) : MessageType
+
+data class VoiceMessageType(
+    val body: String,
+    val source: MediaSource,
+    val info: AudioInfo?,
     val details: AudioDetails?,
-    val isVoiceMessage: Boolean,
 ) : MessageType
 
 data class VideoMessageType(
