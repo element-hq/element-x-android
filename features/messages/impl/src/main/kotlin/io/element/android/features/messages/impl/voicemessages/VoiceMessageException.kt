@@ -23,4 +23,7 @@ internal sealed class VoiceMessageException : Exception() {
     data class PermissionMissing(
         override val message: String?, override val cause: Throwable?
     ) : VoiceMessageException()
+    data class PlayMessageError(
+        override val message: String?, override val cause: Throwable?
+    ) : VoiceMessageException()
 }

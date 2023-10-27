@@ -22,12 +22,15 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.features.messages.impl.voicemessages.timeline.DefaultVoiceMessagePlayer
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageMediaRepo
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessagePresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -77,8 +80,10 @@ class VoiceMessagePresenterTest {
 
     @Test
     fun `pressing play downloads and fails`() = runTest {
+        val analyticsService = FakeAnalyticsService()
         val presenter = createVoiceMessagePresenter(
             voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply { shouldFail = true },
+            analyticsService = analyticsService,
             content = aTimelineItemVoiceContent(durationMs = 2_000),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -101,6 +106,9 @@ class VoiceMessagePresenterTest {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Retry)
                 Truth.assertThat(it.progress).isEqualTo(0f)
                 Truth.assertThat(it.time).isEqualTo("0:02")
+            }
+            analyticsService.trackedErrors.first().also {
+                Truth.assertThat(it).isInstanceOf(VoiceMessageException.PlayMessageError::class.java)
             }
         }
     }
@@ -190,6 +198,7 @@ class VoiceMessagePresenterTest {
 
 fun createVoiceMessagePresenter(
     voiceMessageMediaRepo: VoiceMessageMediaRepo = FakeVoiceMessageMediaRepo(),
+    analyticsService: AnalyticsService = FakeAnalyticsService(),
     content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
 ) = VoiceMessagePresenter(
     voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, body ->
@@ -202,5 +211,6 @@ fun createVoiceMessagePresenter(
             body = body
         )
     },
+    analyticsService = analyticsService,
     content = content,
 )
