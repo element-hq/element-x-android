@@ -32,6 +32,7 @@ import io.element.android.libraries.di.RoomScope
 interface SimplePlayer {
     fun addListener(listener: Listener)
     val currentPosition: Long
+    val duration: Long
     val playbackState: Int
     fun clearMediaItems()
     fun setMediaItem(mediaItem: MediaItem)
@@ -73,6 +74,8 @@ class SimplePlayerImpl(
         get() = p.currentPosition
     override val playbackState: Int
         get() = p.playbackState
+    override val duration: Long
+        get() = p.duration
 
     override fun clearMediaItems() = p.clearMediaItems()
 

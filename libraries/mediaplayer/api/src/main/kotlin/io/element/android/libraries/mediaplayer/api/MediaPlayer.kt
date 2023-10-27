@@ -74,5 +74,9 @@ interface MediaPlayer : AutoCloseable {
          * The current position of the player.
          */
         val currentPosition: Long,
+        /**
+         * The duration of the player content, if it exists.
+         */
+        val duration: Long,
     )
 }

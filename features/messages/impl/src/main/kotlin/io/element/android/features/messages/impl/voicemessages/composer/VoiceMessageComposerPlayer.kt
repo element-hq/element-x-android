@@ -41,7 +41,8 @@ class VoiceMessageComposerPlayer @Inject constructor(
 
         State(
             isPlaying = state.isPlaying,
-            currentPosition = state.currentPosition
+            currentPosition = state.currentPosition,
+            duration = state.duration,
         )
     }.distinctUntilChanged()
 
@@ -82,12 +83,23 @@ class VoiceMessageComposerPlayer @Inject constructor(
          * The elapsed time of this player in milliseconds.
          */
         val currentPosition: Long,
+        /**
+         * The duration of this player in milliseconds.
+         */
+        val duration: Long,
     ) {
         companion object {
             val NotPlaying = State(
                 isPlaying = false,
                 currentPosition = 0L,
+                duration = 0L,
             )
         }
+
+        /**
+         * The progress of this player between 0 and 1.
+         */
+        val progress: Float =
+            if (duration <= currentPosition) 0f else currentPosition.toFloat() / duration.toFloat()
     }
 }
