@@ -589,7 +589,6 @@ private fun ReplyToContent(
     }
 }
 
-@Composable
 private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): AttachmentThumbnailInfo? {
     val messageContent = inReplyTo.content as? MessageContent ?: return null
     return when (val type = messageContent.type) {
@@ -619,7 +618,6 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
             type = AttachmentThumbnailType.Audio,
         )
         is VoiceMessageType -> AttachmentThumbnailInfo(
-            textContent = stringResource(CommonStrings.common_voice_message),
             type = AttachmentThumbnailType.Voice,
         )
         else -> null
