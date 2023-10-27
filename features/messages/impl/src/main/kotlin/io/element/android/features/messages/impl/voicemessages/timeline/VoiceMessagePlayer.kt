@@ -17,7 +17,7 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.messages.impl.mediaplayer.MediaPlayer
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource

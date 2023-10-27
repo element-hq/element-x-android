@@ -52,6 +52,7 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.voicerecorder.api)
+    implementation(projects.libraries.mediaplayer.api)
     implementation(projects.libraries.uiUtils)
     implementation(projects.features.networkmonitor.api)
     implementation(projects.services.analytics.api)
@@ -83,6 +84,7 @@ dependencies {
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.textcomposer.test)
     testImplementation(projects.libraries.voicerecorder.test)
+    testImplementation(projects.libraries.mediaplayer.test)
     testImplementation(libs.test.mockk)
 
     ksp(libs.showkase.processor)
