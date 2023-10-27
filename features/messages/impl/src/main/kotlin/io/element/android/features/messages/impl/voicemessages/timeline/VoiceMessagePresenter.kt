@@ -33,11 +33,13 @@ import dagger.multibindings.IntoMap
 import io.element.android.features.messages.impl.timeline.di.TimelineItemEventContentKey
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.utils.time.formatShort
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -52,6 +54,7 @@ interface VoiceMessagePresenterModule {
 
 class VoiceMessagePresenter @AssistedInject constructor(
     voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
+    private val analyticsService: AnalyticsService,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
 
@@ -102,7 +105,18 @@ class VoiceMessagePresenter @AssistedInject constructor(
                     if (playerState.isPlaying) {
                         player.pause()
                     } else {
-                        scope.launch { play.runUpdatingState { player.play() } }
+                        scope.launch {
+                            play.runUpdatingState(
+                                errorTransform = {
+                                    analyticsService.trackError(
+                                        VoiceMessageException.PlayMessageError("Error while trying to play voice message", it)
+                                    )
+                                    it
+                                },
+                            ) {
+                                player.play()
+                            }
+                        }
                     }
                 }
                 is VoiceMessageEvents.Seek -> {
