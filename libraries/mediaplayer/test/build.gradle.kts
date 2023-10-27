@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
-    `kotlin-dsl`
-    `kotlin-dsl-precompiled-script-plugins`
+    id("io.element.android-library")
 }
 
-repositories {
-    mavenCentral()
-    google()
+android {
+    namespace = "io.element.android.libraries.mediaplayer.test"
 }
 
 dependencies {
-    implementation(libs.android.gradle.plugin)
-    implementation(libs.kotlin.gradle.plugin)
-    implementation(platform(libs.google.firebase.bom))
-    // FIXME: using the bom ^, it should not be necessary to provide the version v...
-    implementation("com.google.firebase:firebase-appdistribution-gradle:4.0.1")
-    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+    api(projects.libraries.mediaplayer.api)
+    implementation(projects.tests.testutils)
+
+    implementation(libs.coroutines.test)
+    implementation(libs.test.truth)
 }
