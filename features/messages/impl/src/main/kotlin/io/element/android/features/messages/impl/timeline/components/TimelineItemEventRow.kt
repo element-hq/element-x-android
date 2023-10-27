@@ -612,10 +612,18 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
             textContent = messageContent.body,
             type = AttachmentThumbnailType.Location,
         )
-        is AudioMessageType -> AttachmentThumbnailInfo(
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Audio,
-        )
+        is AudioMessageType -> {
+            when (type.isVoiceMessage) {
+                true -> AttachmentThumbnailInfo(
+                    textContent = messageContent.body,
+                    type = AttachmentThumbnailType.Voice,
+                )
+                false -> AttachmentThumbnailInfo(
+                    textContent = messageContent.body,
+                    type = AttachmentThumbnailType.Audio,
+                )
+            }
+        }
         else -> null
     }
 }

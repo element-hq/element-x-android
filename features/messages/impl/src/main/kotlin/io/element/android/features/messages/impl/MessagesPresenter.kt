@@ -331,11 +331,14 @@ class MessagesPresenter @AssistedInject constructor(
                 textContent = targetEvent.content.body,
                 type = AttachmentThumbnailType.Audio,
             )
+            is TimelineItemVoiceContent -> AttachmentThumbnailInfo(
+                textContent = targetEvent.content.body,
+                type = AttachmentThumbnailType.Voice,
+            )
             is TimelineItemLocationContent -> AttachmentThumbnailInfo(
                 type = AttachmentThumbnailType.Location,
             )
             is TimelineItemPollContent, // TODO Polls: handle reply to
-            is TimelineItemVoiceContent, // TODO Voice messages: handle reply to
             is TimelineItemTextBasedContent,
             is TimelineItemRedactedContent,
             is TimelineItemStateContent,

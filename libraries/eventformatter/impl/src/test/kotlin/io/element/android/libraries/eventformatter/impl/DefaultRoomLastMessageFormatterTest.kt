@@ -163,6 +163,7 @@ class DefaultRoomLastMessageFormatterTest {
             TextMessageType(body, null),
             VideoMessageType(body, MediaSource("url"), null),
             AudioMessageType(body, MediaSource("url"), null, null, false),
+            AudioMessageType(body, MediaSource("url"), null, null, true),
             ImageMessageType(body, MediaSource("url"), null),
             FileMessageType(body, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null),
@@ -198,7 +199,12 @@ class DefaultRoomLastMessageFormatterTest {
         for ((type, result) in resultsInDm) {
             val expectedResult = when (type) {
                 is VideoMessageType -> "Video"
-                is AudioMessageType -> "Audio"
+                is AudioMessageType -> {
+                    when (type.isVoiceMessage) {
+                        true -> "Voice message"
+                        false -> "Audio"
+                    }
+                }
                 is ImageMessageType -> "Image"
                 is FileMessageType -> "File"
                 is LocationMessageType -> "Shared location"
@@ -216,7 +222,12 @@ class DefaultRoomLastMessageFormatterTest {
             val string = result.toString()
             val expectedResult = when (type) {
                 is VideoMessageType -> "$senderName: Video"
-                is AudioMessageType -> "$senderName: Audio"
+                is AudioMessageType -> {
+                    when (type.isVoiceMessage) {
+                        true -> "$senderName: Voice message"
+                        false -> "$senderName: Audio"
+                    }
+                }
                 is ImageMessageType -> "$senderName: Image"
                 is FileMessageType -> "$senderName: File"
                 is LocationMessageType -> "$senderName: Shared location"
@@ -228,7 +239,12 @@ class DefaultRoomLastMessageFormatterTest {
             }
             val shouldCreateAnnotatedString = when (type) {
                 is VideoMessageType -> true
-                is AudioMessageType -> true
+                is AudioMessageType -> {
+                    when (type.isVoiceMessage) {
+                        true -> true
+                        false -> true
+                    }
+                }
                 is ImageMessageType -> true
                 is FileMessageType -> true
                 is LocationMessageType -> false

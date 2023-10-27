@@ -75,6 +75,12 @@ fun AttachmentThumbnail(
                         contentDescription = info.textContent,
                     )
                 }
+                AttachmentThumbnailType.Voice -> {
+                    Icon(
+                        resourceId = CommonDrawables.ic_voice_attachment,
+                        contentDescription = info.textContent,
+                    )
+                }
                 AttachmentThumbnailType.File -> {
                     Icon(
                         resourceId = CommonDrawables.ic_september_attachment,
@@ -95,7 +101,7 @@ fun AttachmentThumbnail(
 
 @Parcelize
 enum class AttachmentThumbnailType : Parcelable {
-    Image, Video, File, Audio, Location
+    Image, Video, File, Audio, Location, Voice
 }
 
 @Parcelize
