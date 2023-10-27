@@ -16,6 +16,11 @@
 
 package io.element.android.libraries.textcomposer.components
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -28,8 +33,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -83,11 +90,24 @@ internal fun VoiceMessageRecording(
 @Composable
 private fun RedRecordingDot(
     modifier: Modifier = Modifier,
-) = Box(
-    modifier = modifier
-        .size(8.dp)
-        .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)
-)
+) {
+    val infiniteTransition = rememberInfiniteTransition("RedRecordingDot")
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0f,
+        animationSpec = InfiniteRepeatableSpec(
+            animation = TweenSpec(durationMillis = 1_000),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "RedRecordingDotAlpha",
+    )
+    Box(
+        modifier = modifier
+            .size(8.dp)
+            .alpha(alpha)
+            .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)
+    )
+}
 
 @PreviewsDayNight
 @Composable
