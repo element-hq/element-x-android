@@ -29,9 +29,9 @@ class FakeMediaPlayer : MediaPlayer {
     private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L, 0L))
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
-    
+
     companion object {
-        private const val defaultDurationMs = 10000L
+        private const val defaultDurationMs = 10_000L
         private const val staticPlayedMs = 1000L
     }
 
