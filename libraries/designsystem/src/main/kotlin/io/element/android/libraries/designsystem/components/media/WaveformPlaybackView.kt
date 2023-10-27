@@ -66,7 +66,6 @@ private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
  * @param cursorBrush The brush to use to draw the cursor.
  * @param lineWidth The width of the waveform lines.
  * @param linePadding The padding between waveform lines.
- * @param minimumGraphAmplitude The minimum amplitude to display, regardless of waveform data.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
