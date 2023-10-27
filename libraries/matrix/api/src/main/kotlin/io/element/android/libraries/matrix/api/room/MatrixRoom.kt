@@ -195,7 +195,7 @@ interface MatrixRoom : Closeable {
     suspend fun sendVoiceMessage(
         file: File,
         audioInfo: AudioInfo,
-        waveform: List<Int>,
+        waveform: List<Float>,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
