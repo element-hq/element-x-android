@@ -38,6 +38,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -59,6 +60,8 @@ import io.element.android.features.messages.impl.timeline.components.TimelineIte
 import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
+import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
@@ -333,15 +336,19 @@ internal fun TimelineViewPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
 ) = ElementPreview {
     val timelineItems = aTimelineItemList(content)
-    TimelineView(
-        state = aTimelineState(timelineItems),
-        onMessageClicked = {},
-        onTimestampClicked = {},
-        onUserDataClicked = {},
-        onMessageLongClicked = {},
-        onReactionClicked = { _, _ -> },
-        onReactionLongClicked = { _, _ -> },
-        onMoreReactionsClicked = {},
-        onSwipeToReply = {},
-    )
+    CompositionLocalProvider(
+        LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
+    ) {
+        TimelineView(
+            state = aTimelineState(timelineItems),
+            onMessageClicked = {},
+            onTimestampClicked = {},
+            onUserDataClicked = {},
+            onMessageLongClicked = {},
+            onReactionClicked = { _, _ -> },
+            onReactionLongClicked = { _, _ -> },
+            onMoreReactionsClicked = {},
+            onSwipeToReply = {},
+        )
+    }
 }

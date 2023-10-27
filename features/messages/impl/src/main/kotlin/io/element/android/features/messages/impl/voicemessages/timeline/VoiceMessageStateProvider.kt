@@ -21,35 +21,41 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 open class VoiceMessageStateProvider : PreviewParameterProvider<VoiceMessageState> {
     override val values: Sequence<VoiceMessageState>
         get() = sequenceOf(
-            VoiceMessageState(
+            aVoiceMessageState(
                 VoiceMessageState.Button.Downloading,
                 progress = 0f,
                 time = "0:00",
-                eventSink = {},
             ),
-            VoiceMessageState(
+            aVoiceMessageState(
                 VoiceMessageState.Button.Retry,
                 progress = 0.5f,
                 time = "0:01",
-                eventSink = {}
             ),
-            VoiceMessageState(
+            aVoiceMessageState(
                 VoiceMessageState.Button.Play,
                 progress = 1f,
                 time = "1:00",
-                eventSink = {}
             ),
-            VoiceMessageState(
+            aVoiceMessageState(
                 VoiceMessageState.Button.Pause,
                 progress = 0.2f,
                 time = "10:00",
-                eventSink = {}
             ),
-            VoiceMessageState(
+            aVoiceMessageState(
                 VoiceMessageState.Button.Disabled,
                 progress = 0.2f,
                 time = "30:00",
-                eventSink = {}
             ),
         )
 }
+
+fun aVoiceMessageState(
+    button: VoiceMessageState.Button = VoiceMessageState.Button.Play,
+    progress: Float = 0f,
+    time: String = "1:00",
+) = VoiceMessageState(
+    button = button,
+    progress = progress,
+    time = time,
+    eventSink = {},
+)
