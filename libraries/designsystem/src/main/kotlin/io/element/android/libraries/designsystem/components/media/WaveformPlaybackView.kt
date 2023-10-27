@@ -60,6 +60,7 @@ private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
  * @param showCursor Whether to show the cursor or not.
  * @param waveform The waveform to display. Use [FakeWaveformFactory] to generate a fake waveform.
  * @param modifier The modifier to be applied to the view.
+ * @param seekEnabled Whether the user can seek the waveform or not.
  * @param onSeek Callback when the user seeks the waveform. Called with a value between 0 and 1.
  * @param brush The brush to use to draw the waveform.
  * @param progressBrush The brush to use to draw the progress.
@@ -74,6 +75,7 @@ fun WaveformPlaybackView(
     showCursor: Boolean,
     waveform: ImmutableList<Float>,
     modifier: Modifier = Modifier,
+    seekEnabled: Boolean = true,
     onSeek: (progress: Float) -> Unit = {},
     brush: Brush = SolidColor(ElementTheme.colors.iconQuaternary),
     progressBrush: Brush = SolidColor(ElementTheme.colors.iconSecondary),
@@ -106,28 +108,32 @@ fun WaveformPlaybackView(
         modifier = Modifier
             .fillMaxWidth()
             .graphicsLayer(alpha = DEFAULT_GRAPHICS_LAYER_ALPHA)
-            .pointerInteropFilter(requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent) {
-                return@pointerInteropFilter when (it.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        if (it.x in 0F..canvasSizePx.width) {
-                            requestDisallowInterceptTouchEvent.invoke(true)
-                            seekProgress.value = it.x / canvasSizePx.width
-                            true
-                        } else false
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        if (it.x in 0F..canvasSizePx.width) {
-                            seekProgress.value = it.x / canvasSizePx.width
+            .let {
+                if (!seekEnabled) return@let it
+
+                it.pointerInteropFilter(requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent) { e ->
+                    return@pointerInteropFilter when (e.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            if (e.x in 0F..canvasSizePx.width) {
+                                requestDisallowInterceptTouchEvent.invoke(true)
+                                seekProgress.value = e.x / canvasSizePx.width
+                                true
+                            } else false
                         }
-                        true
+                        MotionEvent.ACTION_MOVE -> {
+                            if (e.x in 0F..canvasSizePx.width) {
+                                seekProgress.value = e.x / canvasSizePx.width
+                            }
+                            true
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            requestDisallowInterceptTouchEvent.invoke(false)
+                            seekProgress.value?.let(onSeek)
+                            seekProgress.value = null
+                            true
+                        }
+                        else -> false
                     }
-                    MotionEvent.ACTION_UP -> {
-                        requestDisallowInterceptTouchEvent.invoke(false)
-                        seekProgress.value?.let(onSeek)
-                        seekProgress.value = null
-                        true
-                    }
-                    else -> false
                 }
             }
             .then(modifier)

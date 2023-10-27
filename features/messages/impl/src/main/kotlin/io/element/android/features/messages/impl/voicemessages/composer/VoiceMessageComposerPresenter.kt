@@ -185,6 +185,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
                     isSending = isSending,
                     isPlaying = isPlaying,
+                    playbackProgress = playerState.progress,
                     waveform = waveform,
                 )
                 else -> VoiceMessageState.Idle

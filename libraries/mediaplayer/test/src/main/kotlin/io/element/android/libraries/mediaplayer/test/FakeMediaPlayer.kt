@@ -26,7 +26,12 @@ import kotlinx.coroutines.flow.update
  * Fake implementation of [MediaPlayer] for testing purposes.
  */
 class FakeMediaPlayer : MediaPlayer {
-    private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L))
+    companion object {
+        private const val FAKE_TOTAL_DURATION_MS = 10_000L
+        private const val FAKE_PLAYED_DURATION_MS = 1000L
+    }
+
+    private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L, 0L))
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
@@ -35,7 +40,8 @@ class FakeMediaPlayer : MediaPlayer {
             it.copy(
                 isPlaying = true,
                 mediaId = mediaId,
-                currentPosition = it.currentPosition + 1000L,
+                currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
+                duration = FAKE_TOTAL_DURATION_MS,
             )
         }
     }
@@ -44,7 +50,8 @@ class FakeMediaPlayer : MediaPlayer {
         _state.update {
             it.copy(
                 isPlaying = true,
-                currentPosition = it.currentPosition + 1000L,
+                currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
+                duration = FAKE_TOTAL_DURATION_MS,
             )
         }
     }

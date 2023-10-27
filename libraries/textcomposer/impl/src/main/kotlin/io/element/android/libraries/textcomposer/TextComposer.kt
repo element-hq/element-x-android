@@ -76,8 +76,8 @@ import io.element.android.libraries.textcomposer.components.textInputRoundedCorn
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.PressEvent
-import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -86,8 +86,8 @@ import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlin.time.Duration.Companion.seconds
 import uniffi.wysiwyg_composer.MenuAction
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun TextComposer(
@@ -194,7 +194,7 @@ fun TextComposer(
             when (voiceMessageState) {
                 VoiceMessageState.Idle,
                 is VoiceMessageState.Recording -> recordVoiceButton
-                is VoiceMessageState.Preview -> when(voiceMessageState.isSending) {
+                is VoiceMessageState.Preview -> when (voiceMessageState.isSending) {
                     true -> uploadVoiceProgress
                     false -> sendVoiceButton
                 }
@@ -210,6 +210,7 @@ fun TextComposer(
                     isInteractive = !voiceMessageState.isSending,
                     isPlaying = voiceMessageState.isPlaying,
                     waveform = voiceMessageState.waveform,
+                    playbackProgress = voiceMessageState.playbackProgress,
                     onPlayClick = onPlayVoiceMessageClicked,
                     onPauseClick = onPauseVoiceMessageClicked,
                     onSeek = onSeekVoiceMessage,
@@ -221,7 +222,7 @@ fun TextComposer(
     }
 
     val voiceDeleteButton = @Composable {
-        if(voiceMessageState is VoiceMessageState.Preview) {
+        if (voiceMessageState is VoiceMessageState.Preview) {
             VoiceMessageDeleteButton(enabled = !voiceMessageState.isSending, onClick = onDeleteVoiceMessage)
         }
     }
@@ -817,11 +818,32 @@ internal fun TextComposerVoicePreview() = ElementPreview {
     PreviewColumn(items = persistentListOf({
         VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, List(100) { it.toFloat() / 100 }.toPersistentList()))
     }, {
-        VoicePreview(voiceMessageState = VoiceMessageState.Preview(isSending = false, isPlaying = false, waveform = createFakeWaveform()))
+        VoicePreview(
+            voiceMessageState = VoiceMessageState.Preview(
+                isSending = false,
+                isPlaying = false,
+                waveform = createFakeWaveform(),
+                playbackProgress = 0.0f
+            )
+        )
     }, {
-        VoicePreview(voiceMessageState = VoiceMessageState.Preview(isSending = false, isPlaying = true, waveform = createFakeWaveform()))
+        VoicePreview(
+            voiceMessageState = VoiceMessageState.Preview(
+                isSending = false,
+                isPlaying = true,
+                waveform = createFakeWaveform(),
+                playbackProgress = 0.2f
+            )
+        )
     }, {
-        VoicePreview(voiceMessageState = VoiceMessageState.Preview(isSending = true, isPlaying = false, waveform = createFakeWaveform()))
+        VoicePreview(
+            voiceMessageState = VoiceMessageState.Preview(
+                isSending = true,
+                isPlaying = false,
+                waveform = createFakeWaveform(),
+                playbackProgress = 0.0f
+            )
+        )
     }))
 }
 

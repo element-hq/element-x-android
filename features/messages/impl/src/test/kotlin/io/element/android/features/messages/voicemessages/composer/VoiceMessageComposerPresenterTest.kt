@@ -164,7 +164,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             val finalState = awaitItem().also {
-                assertThat(it.voiceMessageState).isEqualTo(aPreviewState(isPlaying = true))
+                assertThat(it.voiceMessageState).isEqualTo(aPreviewState(isPlaying = true, playbackProgress = 0.1f))
             }
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
@@ -183,7 +183,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Pause))
             val finalState = awaitItem().also {
-                assertThat(it.voiceMessageState).isEqualTo(aPreviewState(isPlaying = false))
+                assertThat(it.voiceMessageState).isEqualTo(aPreviewState(isPlaying = false, playbackProgress = 0.1f))
             }
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
@@ -220,7 +220,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvents.DeleteVoiceMessage)
             awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(isPlaying = false))
+                assertThat(voiceMessageState).isEqualTo(aPreviewState(isPlaying = false, playbackProgress = 0.1f))
             }
 
             val finalState = awaitItem()
@@ -262,7 +262,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState(
-                isSending = true, isPlaying = false,
+                isSending = true, isPlaying = false, playbackProgress = 0.1f
             ))
 
             val finalState = awaitItem()
@@ -510,7 +510,7 @@ class VoiceMessageComposerPresenterTest {
             is VoiceMessageState.Preview -> when (state.isPlaying) {
                 // If the preview was playing, it pauses
                 true -> awaitItem().apply {
-                    assertThat(voiceMessageState).isEqualTo(aPreviewState())
+                    assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.1f))
                 }
                 false -> mostRecentState
             }
@@ -561,10 +561,12 @@ class VoiceMessageComposerPresenterTest {
 
     private fun aPreviewState(
         isPlaying: Boolean = false,
+        playbackProgress: Float = 0f,
         isSending: Boolean = false,
         waveform: List<Float> = voiceRecorder.waveform,
     ) = VoiceMessageState.Preview(
         isPlaying = isPlaying,
+        playbackProgress = playbackProgress,
         isSending = isSending,
         waveform = waveform.toImmutableList(),
     )
