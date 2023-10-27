@@ -83,6 +83,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:network"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:eventformatter:impl"))
+    implementation(project(":libraries:indicator:impl"))
     implementation(project(":libraries:permissions:impl"))
     implementation(project(":libraries:push:impl"))
     implementation(project(":libraries:push:impl"))

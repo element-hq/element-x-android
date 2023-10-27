@@ -31,7 +31,6 @@ import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTa
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.theme.ElementTheme
-import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class PreferencesRootNode @AssistedInject constructor(
@@ -43,6 +42,7 @@ class PreferencesRootNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun onOpenBugReport()
         fun onVerifyClicked()
+        fun onSecureBackupClicked()
         fun onOpenAnalytics()
         fun onOpenAbout()
         fun onOpenDeveloperSettings()
@@ -50,6 +50,7 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenLockScreenSettings()
         fun onOpenAdvancedSettings()
         fun onOpenUserProfile(matrixUser: MatrixUser)
+        fun onSignOutClicked()
     }
 
     private fun onOpenBugReport() {
@@ -58,6 +59,10 @@ class PreferencesRootNode @AssistedInject constructor(
 
     private fun onVerifyClicked() {
         plugins<Callback>().forEach { it.onVerifyClicked() }
+    }
+
+    private fun onSecureBackupClicked() {
+        plugins<Callback>().forEach { it.onSecureBackupClicked() }
     }
 
     private fun onOpenDeveloperSettings() {
@@ -102,6 +107,10 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenUserProfile(matrixUser) }
     }
 
+    private fun onSignOutClicked() {
+        plugins<Callback>().forEach { it.onSignOutClicked() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -115,20 +124,14 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenAnalytics = this::onOpenAnalytics,
             onOpenAbout = this::onOpenAbout,
             onVerifyClicked = this::onVerifyClicked,
+            onSecureBackupClicked = this::onSecureBackupClicked,
             onOpenDeveloperSettings = this::onOpenDeveloperSettings,
             onOpenAdvancedSettings = this::onOpenAdvancedSettings,
-            onSuccessLogout = { onSuccessLogout(activity, it) },
             onManageAccountClicked = { onManageAccountClicked(activity, it, isDark) },
             onOpenNotificationSettings = this::onOpenNotificationSettings,
             onOpenLockScreenSettings = this::onOpenLockScreenSettings,
             onOpenUserProfile = this::onOpenUserProfile,
+            onSignOutClicked = this::onSignOutClicked,
         )
-    }
-
-    private fun onSuccessLogout(activity: Activity, url: String?) {
-        Timber.d("Success logout with result url: $url")
-        url?.let {
-            activity.openUrlInChromeCustomTab(null, false, it)
-        }
     }
 }

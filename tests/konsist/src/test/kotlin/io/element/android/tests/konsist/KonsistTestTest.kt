@@ -40,7 +40,9 @@ class KonsistTestTest {
             .functions()
             .withReturnType { it.name.endsWith("Presenter") }
             .withoutOverrideModifier()
-            .assertTrue { functionDeclaration ->
+            .assertTrue(
+                additionalMessage = "The function can also be named 'createPresenter'. To please Konsist in this case, just remove the return type."
+            ) { functionDeclaration ->
                 functionDeclaration.name == "create${functionDeclaration.returnType?.name}"
             }
     }

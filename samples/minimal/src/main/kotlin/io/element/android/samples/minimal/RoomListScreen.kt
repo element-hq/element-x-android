@@ -36,6 +36,7 @@ import io.element.android.libraries.eventformatter.impl.DefaultRoomLastMessageFo
 import io.element.android.libraries.eventformatter.impl.ProfileChangeContentFormatter
 import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFormatter
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
+import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -59,6 +60,7 @@ class RoomListScreen(
     private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
     private val sessionVerificationService = matrixClient.sessionVerificationService()
+    private val encryptionService = matrixClient.encryptionService()
     private val stringProvider = AndroidStringProvider(context.resources)
     private val presenter = RoomListPresenter(
         client = matrixClient,
@@ -80,6 +82,11 @@ class RoomListScreen(
             coroutineDispatchers = coroutineDispatchers,
             notificationSettingsService = matrixClient.notificationSettingsService(),
             appScope = Singleton.appScope
+        ),
+        encryptionService = encryptionService,
+        indicatorService = DefaultIndicatorService(
+            sessionVerificationService = sessionVerificationService,
+            encryptionService = encryptionService,
         )
     )
 
