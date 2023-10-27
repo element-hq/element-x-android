@@ -53,8 +53,8 @@ class FakeVoiceRecorder(
         curRecording = File("file.ogg")
 
         timeSource += recordingDuration
-        levels.forEach {
-            _state.emit(VoiceRecorderState.Recording(startedAt.elapsedNow(), it))
+        for(i in 1..levels.size) {
+            _state.emit(VoiceRecorderState.Recording(startedAt.elapsedNow(), levels.take(i)))
         }
     }
 
