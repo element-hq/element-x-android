@@ -108,22 +108,25 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 }
             }
         }
-        val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
+        val onPlayerEvent = lambda@{ event: VoiceMessagePlayerEvent ->
+            val recording = recorderState as? VoiceRecorderState.Finished
+            if (recording == null) {
+                val e = VoiceMessageException.StateException("Voice message player event received but no file to play")
+                Timber.e(e)
+                analyticsService.trackError(e)
+                return@lambda
+            }
+
             when (event) {
                 VoiceMessagePlayerEvent.Play ->
-                    when (val recording = recorderState) {
-                        is VoiceRecorderState.Finished ->
-                            player.play(
-                                mediaPath = recording.file.path,
-                                mimeType = recording.mimeType,
-                            )
-                        else -> Timber.e("Voice message player event received but no file to play")
-                    }
-                VoiceMessagePlayerEvent.Pause -> {
+                    player.play(
+                        mediaPath = recording.file.path,
+                        mimeType = recording.mimeType,
+                    )
+                VoiceMessagePlayerEvent.Pause ->
                     player.pause()
-                }
                 is VoiceMessagePlayerEvent.Seek -> {
-                    // TODO implement seeking
+                    player.seekTo(event.position)
                 }
             }
         }
@@ -148,6 +151,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 return@lambda
             }
             isSending = true
+            player.pause()
             appCoroutineScope.sendMessage(
                 file = finishedState.file,
                 mimeType = finishedState.mimeType,
@@ -164,7 +168,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 is VoiceMessageComposerEvents.SendVoiceMessage -> localCoroutineScope.launch {
                     onSendButtonPress()
                 }
-                VoiceMessageComposerEvents.DeleteVoiceMessage -> localCoroutineScope.deleteRecording()
+                VoiceMessageComposerEvents.DeleteVoiceMessage -> {
+                    player.pause()
+                    localCoroutineScope.deleteRecording()
+                }
                 VoiceMessageComposerEvents.DismissPermissionsRationale -> onDismissPermissionsRationale()
                 VoiceMessageComposerEvents.AcceptPermissionRationale -> onAcceptPermissionsRationale()
                 is VoiceMessageComposerEvents.LifecycleEvent -> onLifecycleEvent(event.event)
@@ -180,6 +187,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
                     isSending = isSending,
                     isPlaying = isPlaying,
+                    playbackProgress = playerState.curPositionPercent,
                     waveform = waveform,
                 )
                 else -> VoiceMessageState.Idle

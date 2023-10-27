@@ -47,6 +47,7 @@ class MediaPlayerImpl @Inject constructor(
             _state.update {
                 it.copy(
                     currentPosition = player.currentPosition,
+                    duration = player.duration,
                     isPlaying = isPlaying,
                 )
             }
@@ -61,6 +62,7 @@ class MediaPlayerImpl @Inject constructor(
             _state.update {
                 it.copy(
                     currentPosition = player.currentPosition,
+                    duration = player.duration,
                     mediaId = mediaItem?.mediaId,
                 )
             }
@@ -74,11 +76,11 @@ class MediaPlayerImpl @Inject constructor(
     private val scope = CoroutineScope(Job() + Dispatchers.Main)
     private var job: Job? = null
 
-    private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L))
+    private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L, 0L))
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
-    override fun acquireControlAndPlay(uri: String, mediaId: String, mimeType: String) {
+    override fun acquireControl(uri: String, mediaId: String, mimeType: String) {
         player.clearMediaItems()
         player.setMediaItem(
             MediaItem.Builder()
@@ -88,6 +90,9 @@ class MediaPlayerImpl @Inject constructor(
                 .build()
         )
         player.prepare()
+    }
+    override fun acquireControlAndPlay(uri: String, mediaId: String, mimeType: String) {
+        acquireControl(uri, mediaId, mimeType)
         player.play()
     }
 

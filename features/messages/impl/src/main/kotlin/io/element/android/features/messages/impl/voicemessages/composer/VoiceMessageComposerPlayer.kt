@@ -30,18 +30,20 @@ import javax.inject.Inject
 class VoiceMessageComposerPlayer @Inject constructor(
     private val mediaPlayer: MediaPlayer,
 ) {
-    private var lastPlayedMediaPath: String? = null
-    private val curPlayingMediaId
+    private var lastSetMedia: Media? = null
+    private val playerMediaPath
         get() = mediaPlayer.state.value.mediaId
 
     val state: Flow<State> = mediaPlayer.state.map { state ->
-        if (lastPlayedMediaPath == null || lastPlayedMediaPath != state.mediaId) {
+        val media = lastSetMedia
+        if (media == null || media.path != state.mediaId) {
             return@map State.NotPlaying
         }
 
         State(
             isPlaying = state.isPlaying,
-            currentPosition = state.currentPosition
+            curPositionMs = state.currentPosition,
+            durationMs = state.duration,
         )
     }.distinctUntilChanged()
 
@@ -52,10 +54,10 @@ class VoiceMessageComposerPlayer @Inject constructor(
      * @param mimeType The mime type of the media file.
      */
     fun play(mediaPath: String, mimeType: String) {
-        if (mediaPath == curPlayingMediaId) {
+        if (mediaPath == playerMediaPath) {
             mediaPlayer.play()
         } else {
-            lastPlayedMediaPath = mediaPath
+            lastSetMedia = Media(mediaPath, mimeType)
             mediaPlayer.acquireControlAndPlay(
                 uri = mediaPath,
                 mediaId = mediaPath,
@@ -68,9 +70,34 @@ class VoiceMessageComposerPlayer @Inject constructor(
      * Pause playback.
      */
     fun pause() {
-        if (lastPlayedMediaPath == curPlayingMediaId) {
+        if (lastSetMedia?.path == playerMediaPath) {
             mediaPlayer.pause()
         }
+    }
+
+    /**
+     * Seek playback to a position.
+     *
+     * If the media is not loaded by this player
+     *
+     * @param
+     */
+    fun seekTo(positionPercent: Float) {
+        val media = lastSetMedia ?: return
+        if (media.path != playerMediaPath) return
+
+        val durationMs = mediaPlayer.state.value.duration
+        if (mediaPlayer.state.value.duration <= 0L) return
+
+        if (media.path != playerMediaPath) {
+            mediaPlayer.acquireControl(
+                uri = media.path,
+                mediaId = media.path,
+                mimeType = media.mimeType,
+            )
+        }
+
+        mediaPlayer.seekTo((positionPercent * durationMs).toLong())
     }
 
     data class State(
@@ -81,13 +108,29 @@ class VoiceMessageComposerPlayer @Inject constructor(
         /**
          * The elapsed time of this player in milliseconds.
          */
-        val currentPosition: Long,
+        val curPositionMs: Long,
+        /**
+         * The duration of this player in milliseconds.
+         */
+        val durationMs: Long,
     ) {
         companion object {
             val NotPlaying = State(
                 isPlaying = false,
-                currentPosition = 0L,
+                curPositionMs = 0L,
+                durationMs = 0L,
             )
+        }
+
+        val curPositionPercent = if (durationMs > 0 && durationMs >= curPositionMs) {
+            curPositionMs.toFloat() / durationMs.toFloat()
+        } else {
+            0f
         }
     }
 }
+
+private data class Media(
+    val path: String,
+    val mimeType: String,
+)

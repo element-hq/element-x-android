@@ -30,6 +30,15 @@ interface MediaPlayer : AutoCloseable {
     val state: StateFlow<State>
 
     /**
+     * Acquires control of the player with a given media.
+     */
+    fun acquireControl(
+        uri: String,
+        mediaId: String,
+        mimeType: String,
+    )
+
+    /**
      * Acquires control of the player and starts playing the given media.
      */
     fun acquireControlAndPlay(
@@ -74,5 +83,10 @@ interface MediaPlayer : AutoCloseable {
          * The current position of the player.
          */
         val currentPosition: Long,
+
+        /**
+         * The duration of the player content.
+         */
+        val duration: Long,
     )
 }

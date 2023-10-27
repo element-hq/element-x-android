@@ -17,6 +17,9 @@
 package io.element.android.features.messages.impl.voicemessages
 
 internal sealed class VoiceMessageException : Exception() {
+    data class StateException(
+        override val message: String?, override val cause: Throwable? = null
+    ) : VoiceMessageException()
     data class FileException(
         override val message: String?, override val cause: Throwable? = null
     ) : VoiceMessageException()

@@ -48,7 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.components.media.FakeWaveformFactory.createFakeWaveform
+import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.applyScaleUp
@@ -193,7 +193,7 @@ fun TextComposer(
             when (voiceMessageState) {
                 VoiceMessageState.Idle,
                 is VoiceMessageState.Recording -> recordVoiceButton
-                is VoiceMessageState.Preview -> when(voiceMessageState.isSending) {
+                is VoiceMessageState.Preview -> when (voiceMessageState.isSending) {
                     true -> uploadVoiceProgress
                     false -> sendVoiceButton
                 }
@@ -208,6 +208,7 @@ fun TextComposer(
                 VoiceMessagePreview(
                     isInteractive = !voiceMessageState.isSending,
                     isPlaying = voiceMessageState.isPlaying,
+                    playbackProgress = voiceMessageState.playbackProgress,
                     waveform = voiceMessageState.waveform,
                     onPlayClick = onPlayVoiceMessageClicked,
                     onPauseClick = onPauseVoiceMessageClicked,
@@ -220,7 +221,7 @@ fun TextComposer(
     }
 
     val voiceDeleteButton = @Composable {
-        if(voiceMessageState is VoiceMessageState.Preview) {
+        if (voiceMessageState is VoiceMessageState.Preview) {
             VoiceMessageDeleteButton(enabled = !voiceMessageState.isSending, onClick = onDeleteVoiceMessage)
         }
     }
@@ -816,11 +817,32 @@ internal fun TextComposerVoicePreview() = ElementPreview {
     PreviewColumn(items = persistentListOf({
         VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, 0.5f))
     }, {
-        VoicePreview(voiceMessageState = VoiceMessageState.Preview(isSending = false, isPlaying = false, waveform = createFakeWaveform()))
+        VoicePreview(
+            voiceMessageState = VoiceMessageState.Preview(
+                isSending = false,
+                isPlaying = false,
+                playbackProgress = 0f,
+                waveform = createFakeWaveform()
+            )
+        )
     }, {
-        VoicePreview(voiceMessageState = VoiceMessageState.Preview(isSending = false, isPlaying = true, waveform = createFakeWaveform()))
+        VoicePreview(
+            voiceMessageState = VoiceMessageState.Preview(
+                isSending = false,
+                isPlaying = true,
+                playbackProgress = 0.2f,
+                waveform = createFakeWaveform()
+            )
+        )
     }, {
-        VoicePreview(voiceMessageState = VoiceMessageState.Preview(isSending = true, isPlaying = false, waveform = createFakeWaveform()))
+        VoicePreview(
+            voiceMessageState = VoiceMessageState.Preview(
+                isSending = true,
+                isPlaying = false,
+                playbackProgress = 0.0f,
+                waveform = createFakeWaveform()
+            )
+        )
     }))
 }
 

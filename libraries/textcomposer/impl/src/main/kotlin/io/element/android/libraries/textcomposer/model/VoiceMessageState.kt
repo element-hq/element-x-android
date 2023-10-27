@@ -25,6 +25,7 @@ sealed class VoiceMessageState {
     data class Preview(
         val isSending: Boolean,
         val isPlaying: Boolean,
+        val playbackProgress: Float,
         val waveform: ImmutableList<Float>,
     ): VoiceMessageState()
 

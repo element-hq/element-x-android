@@ -191,6 +191,32 @@ class VoiceMessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - seek recording`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
+            awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.7f)))
+            awaitItem().also {
+                assertThat(it.voiceMessageState).isEqualTo(aPreviewState(isPlaying = true, playbackProgress = 0.7f))
+                it.eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Pause))
+            }
+
+            awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.2f)))
+
+            val finalState = awaitItem().also {
+                assertThat(it.voiceMessageState).isEqualTo(aPreviewState(isPlaying = false, playbackProgress = 0.2f))
+            }
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
     fun `present - delete recording`() = runTest {
         val presenter = createVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
@@ -516,10 +542,12 @@ class VoiceMessageComposerPresenterTest {
     private fun aPreviewState(
         isPlaying: Boolean = false,
         isSending: Boolean = false,
+        playbackProgress: Float = 0f,
         waveform: List<Float> = voiceRecorder.waveform,
     ) = VoiceMessageState.Preview(
         isPlaying = isPlaying,
         isSending = isSending,
         waveform = waveform.toImmutableList(),
+        playbackProgress = playbackProgress,
     )
 }
