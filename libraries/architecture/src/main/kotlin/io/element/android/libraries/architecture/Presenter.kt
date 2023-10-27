@@ -18,7 +18,7 @@ package io.element.android.libraries.architecture
 
 import androidx.compose.runtime.Composable
 
-interface Presenter<State> {
+fun interface Presenter<State> {
     @Composable
     fun present(): State
 }
