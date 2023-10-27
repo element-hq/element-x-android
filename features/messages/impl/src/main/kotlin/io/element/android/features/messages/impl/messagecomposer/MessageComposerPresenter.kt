@@ -22,8 +22,8 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,6 +35,7 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
+import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -45,8 +46,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -55,10 +54,8 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
-import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.wysiwyg.compose.RichTextEditorState
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
@@ -96,19 +93,22 @@ class MessageComposerPresenter @Inject constructor(
     private var pendingEvent: MessageComposerEvents? = null
 
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
-    private val suggestionsMemberResult = MutableStateFlow<ImmutableList<RoomMemberSuggestion>>(persistentListOf())
 
+    @OptIn(FlowPreview::class)
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
+        var isMentionsEnabled by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            isMentionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)
+        }
+
         val cameraPermissionState = cameraPermissionPresenter.present()
         val attachmentsState = remember {
             mutableStateOf<AttachmentsState>(AttachmentsState.None)
         }
-
-        val memberSuggestions by suggestionsMemberResult.collectAsState()
 
         val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -172,10 +172,32 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        LaunchedEffect(Unit) {
-            if (featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)) {
-                processComposerSuggestions()
+        val memberSuggestions = remember { mutableStateListOf<RoomMemberSuggestion>() }
+        LaunchedEffect(isMentionsEnabled) {
+            if (!isMentionsEnabled) return@LaunchedEffect
+            val currentUserId = currentSessionIdHolder.current
+
+            suspend fun canSendRoomMention(): Boolean {
+                val roomIsDm = room.isDirect && room.isOneToOne
+                val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
+                return !roomIsDm && userCanSendAtRoom
             }
+
+            suggestionSearchTrigger
+                .debounce(0.5.seconds)
+                .combine(room.membersStateFlow) { suggestion, roomMembersState ->
+                    memberSuggestions.clear()
+                    val result = MentionSuggestionsProcessor.process(
+                        suggestion = suggestion,
+                        roomMembersState = roomMembersState,
+                        currentUserId = currentUserId,
+                        canSendRoomMention = ::canSendRoomMention,
+                    )
+                    if (result.isNotEmpty()) {
+                        memberSuggestions.addAll(result)
+                    }
+                }
+                .collect()
         }
 
         fun handleEvents(event: MessageComposerEvents) {
@@ -273,9 +295,11 @@ class MessageComposerPresenter @Inject constructor(
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
-            memberSuggestions = memberSuggestions,
+            memberSuggestions = memberSuggestions.toPersistentList(),
             eventSink = { handleEvents(it) }
-        )
+        ).also {
+            println(it)
+        }
     }
 
     private fun CoroutineScope.sendMessage(
@@ -385,57 +409,9 @@ class MessageComposerPresenter @Inject constructor(
                 snackbarDispatcher.post(snackbarMessage)
             }
         }
-
-    @OptIn(FlowPreview::class)
-    private fun CoroutineScope.processComposerSuggestions() = launch {
-        suggestionSearchTrigger
-            .debounce(0.5.seconds)
-            .combine(room.membersStateFlow) { suggestion, membersState ->
-                val members = membersState.roomMembers()
-                when {
-                    members.isNullOrEmpty() || suggestion == null -> {
-                        // Hide suggestions
-                        suggestionsMemberResult.value = persistentListOf()
-                    }
-                    else -> {
-                        when (suggestion.type) {
-                            SuggestionType.Mention -> {
-                                val query = suggestion.text.lowercase()
-                                val matchingMembers: MutableList<RoomMemberSuggestion> = members.filter { member ->
-                                    if (member.membership != RoomMembershipState.JOIN || currentSessionIdHolder.isCurrentSession(member.userId)) {
-                                        false
-                                    } else if (query.isEmpty()) {
-                                        true
-                                    } else {
-                                        member.displayName?.contains(query, ignoreCase = true) == true
-                                            || member.userId.value.contains(query, ignoreCase = true)
-                                    }
-                                }
-                                    .map {
-                                        RoomMemberSuggestion.Member(it)
-                                    }
-                                    .toMutableList()
-
-                                val shouldAddRoom = query.isEmpty() || "room".contains(query, ignoreCase = true)
-                                if (shouldAddRoom) {
-                                    matchingMembers.add(0, RoomMemberSuggestion.Room)
-                                }
-
-                                suggestionsMemberResult.value = matchingMembers.toPersistentList()
-                            }
-                            else -> {
-                                // Hide suggestions
-                                suggestionsMemberResult.value = persistentListOf()
-                            }
-                        }
-                    }
-                }
-            }
-            .collect()
-        }
 }
 
 sealed interface RoomMemberSuggestion {
-    object Room : RoomMemberSuggestion
+    data object Room : RoomMemberSuggestion
     data class Member(val roomMember: RoomMember) : RoomMemberSuggestion
 }

@@ -365,42 +365,53 @@ private fun MessagesViewContent(
                 )
             },
             sheetContent = { subcomposing: Boolean ->
-                if (state.userHasPermissionToSendMessage) {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        MentionSuggestionsPickerView(
-                            modifier = Modifier.heightIn(max = 230.dp)
-                                // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
-                                .nestedScroll(object : NestedScrollConnection {
-                                    override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                                        return available
-                                    }
-                                }),
-                            roomId = state.roomId,
-                            roomName = state.roomName.dataOrNull(),
-                            roomAvatarData = state.roomAvatar.dataOrNull(),
-                            memberSuggestions = state.composerState.memberSuggestions,
-                            onSuggestionSelected = {
-                                // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
-                            }
-                        )
-                        MessageComposerView(
-                            state = state.composerState,
-                            voiceMessageState = state.voiceMessageComposerState,
-                            subcomposing = subcomposing,
-                            enableTextFormatting = state.enableTextFormatting,
-                            enableVoiceMessages = state.enableVoiceMessages,
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                        )
-                    }
-                } else {
-                    CantSendMessageBanner()
-                }
+                MessagesViewComposerBottomSheetContents(
+                    subcomposing = subcomposing,
+                    state = state,
+                )
             },
-            sheetContentKey = state.composerState.richTextEditorState.lineCount,
+            sheetContentKey = state.composerState.richTextEditorState.lineCount + state.composerState.memberSuggestions.size,
             sheetTonalElevation = 0.dp,
             sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
         )
+    }
+}
+
+@Composable
+private fun MessagesViewComposerBottomSheetContents(
+    subcomposing: Boolean,
+    state: MessagesState,
+    modifier: Modifier = Modifier,
+) {
+    if (state.userHasPermissionToSendMessage) {
+        Column(modifier = modifier.fillMaxWidth()) {
+            MentionSuggestionsPickerView(
+                modifier = Modifier.heightIn(max = 230.dp)
+                    // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
+                    .nestedScroll(object : NestedScrollConnection {
+                        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                            return available
+                        }
+                    }),
+                roomId = state.roomId,
+                roomName = state.roomName.dataOrNull(),
+                roomAvatarData = state.roomAvatar.dataOrNull(),
+                memberSuggestions = state.composerState.memberSuggestions,
+                onSuggestionSelected = {
+                    // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
+                }
+            )
+            MessageComposerView(
+                state = state.composerState,
+                voiceMessageState = state.voiceMessageComposerState,
+                subcomposing = subcomposing,
+                enableTextFormatting = state.enableTextFormatting,
+                enableVoiceMessages = state.enableVoiceMessages,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    } else {
+        CantSendMessageBanner(modifier = modifier)
     }
 }
 

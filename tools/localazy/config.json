@@ -112,6 +112,7 @@
       "name": ":features:messages:impl",
       "includeRegex": [
         "screen_room_.*",
+        "screen\\.room\\..*",
         "screen_dm_details_.*",
         "room_timeline_state_changes"
       ],

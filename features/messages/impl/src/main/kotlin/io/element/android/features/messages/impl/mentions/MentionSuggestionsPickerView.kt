@@ -27,8 +27,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.messagecomposer.RoomMemberSuggestion
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -56,7 +58,6 @@ fun MentionSuggestionsPickerView(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
-        reverseLayout = true,
     ) {
         items(
             memberSuggestions,
@@ -67,8 +68,8 @@ fun MentionSuggestionsPickerView(
                 }
             }
         ) {
-            Column {
-                RoomMemberSuggestionView(
+            Column(modifier = Modifier.fillParentMaxWidth()) {
+                RoomMemberSuggestionItemView(
                     memberSuggestion = it,
                     roomId = roomId.value,
                     roomName = roomName,
@@ -83,7 +84,7 @@ fun MentionSuggestionsPickerView(
 }
 
 @Composable
-private fun RoomMemberSuggestionView(
+private fun RoomMemberSuggestionItemView(
     memberSuggestion: RoomMemberSuggestion,
     roomId: String,
     roomName: String?,
@@ -103,12 +104,12 @@ private fun RoomMemberSuggestionView(
             )
         }
         val title = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> roomName ?: "Room" // TODO use actual strings once we have final designs
+            is RoomMemberSuggestion.Room -> stringResource(R.string.screen_room_mentions_at_room_title)
             is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.displayName
         }
 
         val subtitle = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> "Notify the whole room" // TODO use actual strings once we have final designs
+            is RoomMemberSuggestion.Room -> "@room"
             is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.userId.value
         }
 
@@ -143,36 +144,26 @@ private fun RoomMemberSuggestionView(
 @Composable
 internal fun MentionSuggestionsPickerView_Preview() {
     ElementPreview {
+        val roomMember = RoomMember(
+            userId = UserId("@alice:server.org"),
+            displayName = null,
+            avatarUrl = null,
+            membership = RoomMembershipState.JOIN,
+            isNameAmbiguous = false,
+            powerLevel = 0L,
+            normalizedPowerLevel = 0L,
+            isIgnored = false,
+        )
         MentionSuggestionsPickerView(
             roomId = RoomId("!room:matrix.org"),
             roomName = "Room",
             roomAvatarData = null,
             memberSuggestions = persistentListOf(
                 RoomMemberSuggestion.Room,
-                RoomMemberSuggestion.Member(aRoomMember()),
-                RoomMemberSuggestion.Member(aRoomMember(userId = UserId("@bob:server.org"), displayName = "Bob")),
+                RoomMemberSuggestion.Member(roomMember),
+                RoomMemberSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
             ),
             onSuggestionSelected = {}
         )
     }
 }
-
-fun aRoomMember(
-    userId: UserId = UserId("@alice:server.org"),
-    displayName: String? = null,
-    avatarUrl: String? = null,
-    membership: RoomMembershipState = RoomMembershipState.JOIN,
-    isNameAmbiguous: Boolean = false,
-    powerLevel: Long = 0L,
-    normalizedPowerLevel: Long = 0L,
-    isIgnored: Boolean = false,
-) = RoomMember(
-    userId = userId,
-    displayName = displayName,
-    avatarUrl = avatarUrl,
-    membership = membership,
-    isNameAmbiguous = isNameAmbiguous,
-    powerLevel = powerLevel,
-    normalizedPowerLevel = normalizedPowerLevel,
-    isIgnored = isIgnored,
-)

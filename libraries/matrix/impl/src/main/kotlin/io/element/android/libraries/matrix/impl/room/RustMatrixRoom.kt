@@ -349,6 +349,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserTriggerRoomNotification(userId.value)
+        }
+    }
+
     override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file, thumbnailFile)) {
             innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())

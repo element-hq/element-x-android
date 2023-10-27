@@ -726,38 +726,95 @@ class MessageComposerPresenterTest {
         val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
-        val room = FakeMatrixRoom().apply {
+        val room = FakeMatrixRoom(
+            isDirect = false,
+            isOneToOne = false,
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(
                 immutableListOf(currentUser, invitedUser, bob, david),
             ))
+            givenCanTriggerRoomNotification(Result.success(true))
         }
-        val presenter = createPresenter(this, room)
+        val flagsService = FakeFeatureFlagService(
+            mapOf(
+                FeatureFlags.Mentions.key to true,
+            )
+        )
+        val presenter = createPresenter(this, room, featureFlagService = flagsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
 
-            // An empty query returns the room and joined members that are not the current user
+            // A null suggestion (no suggestion was received) returns nothing
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(null))
+            assertThat(awaitItem().memberSuggestions).isEmpty()
+
+            // An empty suggestion returns the room and joined members that are not the current user
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             assertThat(awaitItem().memberSuggestions)
                 .containsExactly(RoomMemberSuggestion.Room, RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
 
-            // A query containing a part of "room" will also return the room mention
+            // A suggestion containing a part of "room" will also return the room mention
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "roo")))
             assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Room)
 
-            // A non-empty query will return those joined members whose user id matches it
+            // A non-empty suggestion will return those joined members whose user id matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "bob")))
             assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Member(bob))
 
-            // A non-empty query will return those joined members whose display name matches it
+            // A non-empty suggestion will return those joined members whose display name matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "dave")))
             assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Member(david))
 
             // If the suggestion isn't a mention, no suggestions are returned
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Command, "")))
             assertThat(awaitItem().memberSuggestions).isEmpty()
+
+            // If user has no permission to send `@room` mentions, `RoomMemberSuggestion.Room` is not returned
+            room.givenCanTriggerRoomNotification(Result.success(false))
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            assertThat(awaitItem().memberSuggestions)
+                .containsExactly(RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
+
+            // If room is a DM, `RoomMemberSuggestion.Room` is not returned
+            room.givenCanTriggerRoomNotification(Result.success(true))
+            room.isDirect
+        }
+    }
+
+    @Test
+    fun `present - room member mention suggestions in a DM`() = runTest {
+        val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
+        val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
+        val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
+        val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
+        val room = FakeMatrixRoom(
+            isDirect = true,
+            isOneToOne = true,
+        ).apply {
+            givenRoomMembersState(MatrixRoomMembersState.Ready(
+                immutableListOf(currentUser, invitedUser, bob, david),
+            ))
+            givenCanTriggerRoomNotification(Result.success(true))
+        }
+        val flagsService = FakeFeatureFlagService(
+            mapOf(
+                FeatureFlags.Mentions.key to true,
+            )
+        )
+        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+
+            // An empty suggestion returns the joined members that are not the current user, but not the room
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            assertThat(awaitItem().memberSuggestions)
+                .containsExactly(RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
         }
     }
 
