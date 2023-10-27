@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.securebackup.impl
+package io.element.android.appconfig
 
-// TODO Move to appconfig module when it will be available
 object SecureBackupConfig {
     const val LearnMoreUrl: String = "https://element.io/help#encryption5"
 }
