@@ -21,7 +21,6 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlin.random.Random
 
 object FakeWaveformFactory {
-    private val random = Random(seed = 2)
     /**
      * Generate a waveform for testing purposes.
      *
@@ -29,7 +28,9 @@ object FakeWaveformFactory {
      *
      * @param length The length of the waveform.
      */
-    fun createFakeWaveform(length: Int = 1000): ImmutableList<Float> =
-        List(length) { random.nextFloat() }
+    fun createFakeWaveform(length: Int = 1000): ImmutableList<Float> {
+        val random = Random(seed = 2)
+        return List(length) { random.nextFloat() }
             .toPersistentList()
+    }
 }
