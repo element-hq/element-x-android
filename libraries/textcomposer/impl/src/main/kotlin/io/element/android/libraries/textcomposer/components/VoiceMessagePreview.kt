@@ -129,12 +129,14 @@ private fun PlayerButton(
 private fun PauseIcon() = Icon(
     resourceId = R.drawable.ic_pause,
     contentDescription = stringResource(id = CommonStrings.a11y_pause),
+    tint = ElementTheme.colors.iconSecondary,
 )
 
 @Composable
 private fun PlayIcon() = Icon(
     resourceId = R.drawable.ic_play,
     contentDescription = stringResource(id = CommonStrings.a11y_play),
+    tint = ElementTheme.colors.iconSecondary,
 )
 
 @PreviewsDayNight
