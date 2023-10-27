@@ -220,7 +220,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvents.DeleteVoiceMessage)
             awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(isPlaying = false))
+                assertThat(voiceMessageState).isEqualTo(aPreviewState(isPlaying = false, playbackProgress = 0.1f))
             }
 
             val finalState = awaitItem()
@@ -262,7 +262,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState(
-                isSending = true, isPlaying = false,
+                isSending = true, isPlaying = false, playbackProgress = 0.1f
             ))
 
             val finalState = awaitItem()
