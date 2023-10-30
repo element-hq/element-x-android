@@ -43,7 +43,7 @@ fun SetupBiometricView(
     modifier: Modifier = Modifier,
 ) {
     BackHandler(true) {
-        state.eventSink(SetupBiometricEvents.Skip)
+        state.eventSink(SetupBiometricEvents.UsePin)
     }
     HeaderFooterPage(
         modifier = modifier.padding(top = 80.dp),
@@ -52,8 +52,8 @@ fun SetupBiometricView(
         },
         footer = {
             SetupBiometricFooter(
-                onAllowClicked = { state.eventSink(SetupBiometricEvents.Allow) },
-                onSkipClicked = { state.eventSink(SetupBiometricEvents.Skip) }
+                onAllowClicked = { state.eventSink(SetupBiometricEvents.AllowBiometric) },
+                onSkipClicked = { state.eventSink(SetupBiometricEvents.UsePin) }
             )
         },
     )

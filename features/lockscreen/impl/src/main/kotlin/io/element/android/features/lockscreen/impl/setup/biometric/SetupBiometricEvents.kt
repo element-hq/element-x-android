@@ -17,6 +17,6 @@
 package io.element.android.features.lockscreen.impl.setup.biometric
 
 sealed interface SetupBiometricEvents {
-    data object Allow : SetupBiometricEvents
-    data object Skip : SetupBiometricEvents
+    data object AllowBiometric : SetupBiometricEvents
+    data object UsePin : SetupBiometricEvents
 }
