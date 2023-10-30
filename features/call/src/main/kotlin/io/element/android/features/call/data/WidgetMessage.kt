@@ -26,7 +26,7 @@ data class WidgetMessage(
     @SerialName("widgetId") val widgetId: String,
     @SerialName("requestId") val requestId: String,
     @SerialName("action") val action: Action,
-    @SerialName("data") val data: JsonElement?,
+    @SerialName("data") val data: JsonElement? = null,
 ) {
 
     @Serializable

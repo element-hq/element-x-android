@@ -19,9 +19,12 @@ package io.element.android.features.call.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -62,7 +65,6 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private val isInWidgetMode = callType is CallType.RoomCall
     private val userAgent = userAgentProvider.provide()
-    private var joinedCall = false
 
     @Composable
     override fun present(): CallScreenState {
@@ -70,6 +72,7 @@ class CallScreenPresenter @AssistedInject constructor(
         val urlState = remember { mutableStateOf<Async<String>>(Async.Uninitialized) }
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
+        var isJoinedCall by rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             loadUrl(callType, urlState, callWidgetDriver)
@@ -94,7 +97,6 @@ class CallScreenPresenter @AssistedInject constructor(
                     .onEach {
                         // Relay message to Widget Driver
                         callWidgetDriver.value?.send(it)
-                        println(it)
 
                         val parsedMessage = parseMessage(it)
                         if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget) {
@@ -104,7 +106,7 @@ class CallScreenPresenter @AssistedInject constructor(
                                 // This event is received when a member joins the call, the first one will be the current one
                                 val type = parsedMessage.data?.jsonObject?.get("type")?.jsonPrimitive?.contentOrNull
                                 if (type == "org.matrix.msc3401.call.member") {
-                                    joinedCall = true
+                                    isJoinedCall = true
                                 }
                             }
                         }
@@ -118,7 +120,7 @@ class CallScreenPresenter @AssistedInject constructor(
                 is CallScreeEvents.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
                     val interceptor = messageInterceptor.value
-                    if (widgetId != null && interceptor != null && joinedCall) {
+                    if (widgetId != null && interceptor != null && isJoinedCall) {
                         // If the call was joined, we need to hang up first. Then the UI will be dismissed automatically.
                         sendHangupMessage(widgetId, interceptor)
                     } else {
