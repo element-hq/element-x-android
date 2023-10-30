@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.setup.validation
+package io.element.android.features.lockscreen.impl.setup.pin.validation
 
 import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry

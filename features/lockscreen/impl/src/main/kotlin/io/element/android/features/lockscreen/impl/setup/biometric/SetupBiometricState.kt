@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.setup.validation
+package io.element.android.features.lockscreen.impl.setup.biometric
 
-sealed interface SetupPinFailure {
-    data object PinBlacklisted : SetupPinFailure
-    data object PinsDontMatch : SetupPinFailure
-}
+data class SetupBiometricState(
+    val isBiometricSetupDone: Boolean,
+    val eventSink: (SetupBiometricEvents) -> Unit
+)

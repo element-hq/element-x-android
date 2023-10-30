@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package io.element.android.features.lockscreen.impl.setup
+package io.element.android.features.lockscreen.impl.setup.pin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.components.PinEntryTextField
-import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
+import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPinFailure
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog

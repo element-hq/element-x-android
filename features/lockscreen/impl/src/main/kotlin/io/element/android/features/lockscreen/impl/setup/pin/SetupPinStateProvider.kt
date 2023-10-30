@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.setup
+package io.element.android.features.lockscreen.impl.setup.pin
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
-import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
+import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPinFailure
 
 open class SetupPinStateProvider : PreviewParameterProvider<SetupPinState> {
     override val values: Sequence<SetupPinState>
