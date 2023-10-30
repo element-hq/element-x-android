@@ -37,7 +37,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.NotificationSettings -> true
                 FeatureFlags.VoiceMessages -> true
                 FeatureFlags.PinUnlock -> false
-                FeatureFlags.InRoomCalls -> false
+                FeatureFlags.InRoomCalls -> true
                 FeatureFlags.Mentions -> false
             }
         } else {
