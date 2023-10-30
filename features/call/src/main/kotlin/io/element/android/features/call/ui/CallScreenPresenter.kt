@@ -19,9 +19,12 @@ package io.element.android.features.call.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -41,6 +44,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.util.UUID
 
 class CallScreenPresenter @AssistedInject constructor(
@@ -66,6 +72,7 @@ class CallScreenPresenter @AssistedInject constructor(
         val urlState = remember { mutableStateOf<Async<String>>(Async.Uninitialized) }
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
+        var isJoinedCall by rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             loadUrl(callType, urlState, callWidgetDriver)
@@ -92,8 +99,16 @@ class CallScreenPresenter @AssistedInject constructor(
                         callWidgetDriver.value?.send(it)
 
                         val parsedMessage = parseMessage(it)
-                        if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget && parsedMessage.action == WidgetMessage.Action.HangUp) {
-                            close(callWidgetDriver.value, navigator)
+                        if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget) {
+                            if (parsedMessage.action == WidgetMessage.Action.HangUp) {
+                                close(callWidgetDriver.value, navigator)
+                            } else if (parsedMessage.action == WidgetMessage.Action.SendEvent) {
+                                // This event is received when a member joins the call, the first one will be the current one
+                                val type = parsedMessage.data?.jsonObject?.get("type")?.jsonPrimitive?.contentOrNull
+                                if (type == "org.matrix.msc3401.call.member") {
+                                    isJoinedCall = true
+                                }
+                            }
                         }
                     }
                     .launchIn(this)
@@ -105,11 +120,13 @@ class CallScreenPresenter @AssistedInject constructor(
                 is CallScreeEvents.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
                     val interceptor = messageInterceptor.value
-                    if (widgetId != null && interceptor != null) {
+                    if (widgetId != null && interceptor != null && isJoinedCall) {
+                        // If the call was joined, we need to hang up first. Then the UI will be dismissed automatically.
                         sendHangupMessage(widgetId, interceptor)
-                    }
-                    coroutineScope.launch {
-                        close(callWidgetDriver.value, navigator)
+                    } else {
+                        coroutineScope.launch {
+                            close(callWidgetDriver.value, navigator)
+                        }
                     }
                 }
                 is CallScreeEvents.SetupMessageChannels -> {
@@ -159,6 +176,7 @@ class CallScreenPresenter @AssistedInject constructor(
             widgetId = widgetId,
             requestId = "widgetapi-${clock.epochMillis()}",
             action = WidgetMessage.Action.HangUp,
+            data = null,
         )
         messageInterceptor.sendMessage(WidgetMessageSerializer.serialize(message))
     }

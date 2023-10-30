@@ -111,12 +111,8 @@ private fun CallWebView(
             modifier = modifier,
             factory = { context ->
                 WebView(context).apply {
-                    setup(userAgent, onPermissionsRequested)
-                    if (url is Async.Success) {
-                        loadUrl(url.data)
-                    }
-
                     onWebViewCreated(this)
+                    setup(userAgent, onPermissionsRequested)
                 }
             },
             update = { webView ->
