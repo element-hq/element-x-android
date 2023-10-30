@@ -97,7 +97,7 @@ private fun RecordButtonView(
 ) {
     IconButton(
         modifier = modifier
-            .size(48.dp),
+            .size(48.dp.applyScaleUp()),
         onClick = {},
     ) {
         Icon(
