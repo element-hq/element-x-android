@@ -22,7 +22,10 @@ import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackupStateListener
 import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
@@ -50,7 +53,6 @@ internal class RustEncryptionService(
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(service.backupState().let(backupStateMapper::map))
     override val recoveryStateStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(service.recoveryState().let(recoveryStateMapper::map))
     override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Unknown)
-    override val backupUploadStateStateFlow: MutableStateFlow<BackupUploadState> = MutableStateFlow(BackupUploadState.Unknown)
 
     fun start() {
         service.backupStateListener(object : BackupStateListener {
@@ -94,16 +96,19 @@ internal class RustEncryptionService(
         }
     }
 
-    override suspend fun waitForBackupUploadSteadyState(
-    ): Result<Unit> = withContext(dispatchers.io) {
-        runCatching {
+    override fun waitForBackupUploadSteadyState(): Flow<BackupUploadState> {
+        return callbackFlow {
             service.waitForBackupUploadSteadyState(
                 progressListener = object : BackupSteadyStateListener {
                     override fun onUpdate(status: RustBackupUploadState) {
-                        backupUploadStateStateFlow.value = backupUploadStateMapper.map(status)
+                        trySend(backupUploadStateMapper.map(status))
+                        if (status == RustBackupUploadState.Done) {
+                            close()
+                        }
                     }
                 }
             )
+            awaitClose {}
         }
     }
 
