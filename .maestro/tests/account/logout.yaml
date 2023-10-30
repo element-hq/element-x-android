@@ -10,5 +10,5 @@ appId: ${APP_ID}
 # Ensure cancel cancels
 - tapOn: "Cancel"
 - tapOn: "Sign out"
-- tapOn: "Sign out"
+- tapOn: "Sign out anyway"
 - runFlow: ../assertions/assertInitDisplayed.yaml
