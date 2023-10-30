@@ -27,9 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.FragmentActivity
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
@@ -94,6 +96,8 @@ class DefaultBiometricUnlockManager @Inject constructor(
                 isBiometricAllowed && canUseBiometricAuth
             }
         }
+        val promptTitle = stringResource(id = R.string.screen_app_lock_biometric_unlock_title_android)
+        val promptNegative = stringResource(id = R.string.screen_app_lock_use_pin_android)
         val activity = LocalContext.current.findFragmentActivity()!!
         return remember(isAvailable) {
             if (isAvailable) {
@@ -103,8 +107,8 @@ class DefaultBiometricUnlockManager @Inject constructor(
                     else -> 0
                 }
                 val promptInfo = BiometricPrompt.PromptInfo.Builder().apply {
-                    setTitle("Unlock with biometric")
-                    setNegativeButtonText("Use pin code")
+                    setTitle(promptTitle)
+                    setNegativeButtonText(promptNegative)
                     setAllowedAuthenticators(authenticators)
                 }.build()
                 DefaultBiometricUnlock(

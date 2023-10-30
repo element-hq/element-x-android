@@ -77,7 +77,6 @@ class LockScreenSetupFlowNode @AssistedInject constructor(
         override fun onPinCodeCreated() {
             backstack.newRoot(NavTarget.Biometric)
         }
-        
     }
 
     init {

@@ -26,8 +26,10 @@ import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.lockscreen.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -59,10 +61,11 @@ fun SetupBiometricView(
 
 @Composable
 private fun SetupBiometricHeader(modifier: Modifier = Modifier) {
+    val biometricAuth = stringResource(id = R.string.screen_app_lock_biometric_authentication)
     IconTitleSubtitleMolecule(
         iconImageVector = Icons.Default.Fingerprint,
-        title = "Allow biometric unlock",
-        subTitle = "Save yourself some time and use biometric authentication to unlock the app each time",
+        title = stringResource(id = R.string.screen_app_lock_settings_enable_biometric_unlock),
+        subTitle = stringResource(id = R.string.screen_app_lock_setup_biometric_unlock_subtitle, biometricAuth),
         modifier = modifier
     )
 }
@@ -78,8 +81,15 @@ private fun SetupBiometricFooter(
         verticalArrangement = spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(text = "Allow biometric unlock", onClick = onAllowClicked)
-        TextButton(text = "I'd rather use PIN", onClick = onSkipClicked)
+        val biometricAuth = stringResource(id = R.string.screen_app_lock_biometric_authentication)
+        Button(
+            text = stringResource(id = R.string.screen_app_lock_setup_biometric_unlock_allow_title, biometricAuth),
+            onClick = onAllowClicked
+        )
+        TextButton(
+            text = stringResource(id = R.string.screen_app_lock_setup_biometric_unlock_skip),
+            onClick = onSkipClicked
+        )
     }
 }
 

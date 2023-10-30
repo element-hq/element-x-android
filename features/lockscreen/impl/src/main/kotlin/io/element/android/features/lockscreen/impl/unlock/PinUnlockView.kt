@@ -298,7 +298,7 @@ private fun PinUnlockFooter(
 ) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         if (showBiometricUnlock) {
-            TextButton(text = "Use biometric", onClick = onUseBiometric)
+            TextButton(text = stringResource(id = R.string.screen_app_lock_use_biometric_android), onClick = onUseBiometric)
         }
         TextButton(text = stringResource(id = R.string.screen_app_lock_forgot_pin), onClick = onForgotPin)
     }
