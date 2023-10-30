@@ -11,6 +11,7 @@
   <string name="a11y_poll_end">"Ukončená anketa"</string>
   <string name="a11y_send_files">"Odoslať súbory"</string>
   <string name="a11y_show_password">"Zobraziť heslo"</string>
+  <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
   <string name="a11y_voice_message_record">"Nahrávanie hlasovej správy. Nahrávanie spustíte dvojitým ťuknutím a podržaním. Uvoľnením nahrávanie ukončíte."</string>
   <string name="action_accept">"Prijať"</string>
@@ -34,6 +35,7 @@
   <string name="action_edit">"Upraviť"</string>
   <string name="action_enable">"Povoliť"</string>
   <string name="action_end_poll">"Ukončiť anketu"</string>
+  <string name="action_enter_pin">"Zadajte PIN"</string>
   <string name="action_forgot_password">"Zabudnuté heslo?"</string>
   <string name="action_forward">"Preposlať"</string>
   <string name="action_invite">"Pozvať"</string>
@@ -134,6 +136,7 @@
   <string name="common_report_a_bug">"Nahlásiť chybu"</string>
   <string name="common_report_submitted">"Nahlásenie bolo odoslané"</string>
   <string name="common_rich_text_editor">"Rozšírený textový editor"</string>
+  <string name="common_room">"Miestnosť"</string>
   <string name="common_room_name">"Názov miestnosti"</string>
   <string name="common_room_name_placeholder">"napr. názov vášho projektu"</string>
   <string name="common_screen_lock">"Zámok obrazovky"</string>
@@ -145,6 +148,7 @@
   <string name="common_server_url">"URL adresa servera"</string>
   <string name="common_settings">"Nastavenia"</string>
   <string name="common_shared_location">"Zdieľaná poloha"</string>
+  <string name="common_signing_out">"Odhlasovanie"</string>
   <string name="common_starting_chat">"Spustenie konverzácie…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspech"</string>
@@ -262,7 +266,6 @@ Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</stri
   <string name="test_language_identifier">"sk"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
-  <string name="screen_room_mentions_at_room_title">"Všetci"</string>
   <string name="screen_analytics_settings_help_us_improve">"Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy."</string>
   <string name="screen_analytics_settings_read_terms">"Môžete si prečítať všetky naše podmienky %1$s."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"tu"</string>

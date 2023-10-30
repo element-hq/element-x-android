@@ -245,7 +245,6 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
-  <string name="screen_room_mentions_at_room_title">"Všichni"</string>
   <string name="screen_analytics_settings_help_us_improve">"Sdílejte anonymní údaje o používání, které nám pomohou identifikovat problémy."</string>
   <string name="screen_analytics_settings_read_terms">"Můžete si přečíst všechny naše podmínky %1$s."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"zde"</string>

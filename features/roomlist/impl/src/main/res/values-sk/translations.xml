@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Vaša záloha konverzácie nie je momentálne synchronizovaná. Na zachovanie prístupu k zálohe konverzácie musíte potvrdiť svoj kľúč na obnovu."</string>
+  <string name="confirm_recovery_key_banner_title">"Potvrďte svoj kľúč na obnovenie"</string>
   <string name="screen_roomlist_a11y_create_message">"Vytvorte novú konverzáciu alebo miestnosť"</string>
   <string name="screen_roomlist_empty_message">"Začnite tým, že niekomu pošlete správu."</string>
   <string name="screen_roomlist_empty_title">"Zatiaľ žiadne konverzácie."</string>
