@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -114,10 +115,14 @@ private fun PlayerButton(
 ) {
     IconButton(
         onClick = onClick,
-        enabled = enabled,
         modifier = modifier
             .background(color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape)
-            .size(30.dp.applyScaleUp())
+            .size(30.dp.applyScaleUp()),
+        enabled = enabled,
+        colors = IconButtonDefaults.iconButtonColors(
+            contentColor = ElementTheme.colors.iconSecondary,
+            disabledContentColor = ElementTheme.colors.iconDisabled,
+        ),
     ) {
         when (type) {
             PlayerButtonType.Play -> PlayIcon()
@@ -130,14 +135,12 @@ private fun PlayerButton(
 private fun PauseIcon() = Icon(
     resourceId = R.drawable.ic_pause,
     contentDescription = stringResource(id = CommonStrings.a11y_pause),
-    tint = ElementTheme.colors.iconSecondary,
 )
 
 @Composable
 private fun PlayIcon() = Icon(
     resourceId = R.drawable.ic_play,
     contentDescription = stringResource(id = CommonStrings.a11y_play),
-    tint = ElementTheme.colors.iconSecondary,
 )
 
 @PreviewsDayNight

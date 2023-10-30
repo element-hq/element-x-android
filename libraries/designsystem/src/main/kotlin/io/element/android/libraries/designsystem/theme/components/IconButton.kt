@@ -19,6 +19,7 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
@@ -38,13 +39,13 @@ fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    colors: IconButtonColors = IconButtonDefaults.iconButtonColors(
+        contentColor = LocalContentColor.current,
+        disabledContentColor = ElementTheme.colors.iconDisabled,
+    ),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit
 ) {
-    val colors = IconButtonDefaults.iconButtonColors(
-        contentColor = LocalContentColor.current,
-        disabledContentColor = ElementTheme.colors.iconDisabled,
-    )
     androidx.compose.material3.IconButton(
         onClick = onClick,
         modifier = modifier,
