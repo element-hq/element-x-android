@@ -59,7 +59,7 @@ enum class FeatureFlags(
         key = "feature.elementcall",
         title = "Element call in rooms",
         description = "Allow user to start or join a call in a room",
-        defaultValue = false,
+        defaultValue = true,
     ),
     Mentions(
         key = "feature.mentions",
