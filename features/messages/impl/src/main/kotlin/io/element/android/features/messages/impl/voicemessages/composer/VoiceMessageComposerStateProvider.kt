@@ -30,10 +30,12 @@ internal open class VoiceMessageComposerStateProvider : PreviewParameterProvider
 
 internal fun aVoiceMessageComposerState(
     voiceMessageState: VoiceMessageState = VoiceMessageState.Idle,
+    keepScreenOn: Boolean = false,
     showPermissionRationaleDialog: Boolean = false,
 ) = VoiceMessageComposerState(
     voiceMessageState = voiceMessageState,
     showPermissionRationaleDialog = showPermissionRationaleDialog,
+    keepScreenOn = keepScreenOn,
     eventSink = {},
 )
 

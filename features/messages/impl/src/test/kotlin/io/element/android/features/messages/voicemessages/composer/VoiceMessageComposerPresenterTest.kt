@@ -102,6 +102,30 @@ class VoiceMessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - recording keeps screen on`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().apply {
+                eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+                assertThat(keepScreenOn).isFalse()
+            }
+
+            awaitItem().apply {
+                assertThat(keepScreenOn).isTrue()
+                eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            }
+
+            val finalState = awaitItem().apply {
+                assertThat(keepScreenOn).isFalse()
+            }
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
     fun `present - abort recording`() = runTest {
         val presenter = createVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {

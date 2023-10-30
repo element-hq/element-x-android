@@ -64,6 +64,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
     override fun present(): VoiceMessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
         val recorderState by voiceRecorder.state.collectAsState(initial = VoiceRecorderState.Idle)
+        val keepScreenOn by remember { derivedStateOf { recorderState is VoiceRecorderState.Recording } }
 
         val permissionState = permissionsPresenter.present()
         var isSending by remember { mutableStateOf(false) }
@@ -191,6 +192,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 else -> VoiceMessageState.Idle
             },
             showPermissionRationaleDialog = permissionState.showDialog,
+            keepScreenOn = keepScreenOn,
             eventSink = handleEvents,
         )
     }
