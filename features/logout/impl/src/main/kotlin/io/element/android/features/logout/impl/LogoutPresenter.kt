@@ -29,6 +29,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -46,13 +47,15 @@ class LogoutPresenter @Inject constructor(
             mutableStateOf(Async.Uninitialized)
         }
 
-        val backupUploadState by encryptionService.backupUploadStateStateFlow.collectAsState()
+        val backupUploadState: BackupUploadState by remember {
+            encryptionService.waitForBackupUploadSteadyState()
+        }
+            .collectAsState(initial = BackupUploadState.Unknown)
 
         var showLogoutDialog by remember { mutableStateOf(false) }
         var isLastSession by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             isLastSession = encryptionService.isLastDevice().getOrNull() ?: false
-            encryptionService.waitForBackupUploadSteadyState()
         }
 
         fun handleEvents(event: LogoutEvents) {

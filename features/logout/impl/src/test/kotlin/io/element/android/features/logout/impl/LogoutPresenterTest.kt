@@ -28,6 +28,8 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -73,6 +75,15 @@ class LogoutPresenterTest {
     @Test
     fun `present - initial state - backing up`() = runTest {
         val encryptionService = FakeEncryptionService()
+        encryptionService.givenWaitForBackupUploadSteadyStateFlow(
+            flow {
+                emit(BackupUploadState.Waiting)
+                delay(1)
+                emit(BackupUploadState.Uploading(backedUpCount = 1, totalCount = 2))
+                delay(1)
+                emit(BackupUploadState.Done)
+            }
+        )
         val presenter = createLogoutPresenter(
             encryptionService = encryptionService
         )
@@ -84,10 +95,10 @@ class LogoutPresenterTest {
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
             assertThat(initialState.showConfirmationDialog).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(Async.Uninitialized)
-            encryptionService.emitBackupUploadState(BackupUploadState.Uploading(backedUpCount = 1, totalCount = 2))
-            val state = awaitItem()
-            assertThat(state.backupUploadState).isEqualTo(BackupUploadState.Uploading(backedUpCount = 1, totalCount = 2))
-            encryptionService.emitBackupUploadState(BackupUploadState.Done)
+            val waitingState = awaitItem()
+            assertThat(waitingState.backupUploadState).isEqualTo(BackupUploadState.Waiting)
+            val uploadingState = awaitItem()
+            assertThat(uploadingState.backupUploadState).isEqualTo(BackupUploadState.Uploading(backedUpCount = 1, totalCount = 2))
             val doneState = awaitItem()
             assertThat(doneState.backupUploadState).isEqualTo(BackupUploadState.Done)
         }

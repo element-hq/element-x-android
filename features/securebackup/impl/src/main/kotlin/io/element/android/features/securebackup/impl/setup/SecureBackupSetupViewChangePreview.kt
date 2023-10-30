@@ -33,5 +33,6 @@ internal fun SecureBackupSetupViewChangePreview(
             recoveryKeyViewState = state.recoveryKeyViewState.copy(recoveryKeyUserStory = RecoveryKeyUserStory.Change),
         ),
         onDone = {},
+        onBackClicked = {},
     )
 }

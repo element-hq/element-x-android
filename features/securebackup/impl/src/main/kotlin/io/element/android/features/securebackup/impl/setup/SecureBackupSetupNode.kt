@@ -60,6 +60,7 @@ class SecureBackupSetupNode @AssistedInject constructor(
                 coroutineScope.postSuccessSnackbar()
                 navigateUp()
             },
+            onBackClicked = ::navigateUp,
             modifier = modifier,
         )
     }

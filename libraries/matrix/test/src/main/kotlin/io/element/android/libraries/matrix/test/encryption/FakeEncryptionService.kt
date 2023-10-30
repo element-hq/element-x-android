@@ -22,14 +22,16 @@ import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeEncryptionService : EncryptionService {
     private var disableRecoveryFailure: Exception? = null
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.UNKNOWN)
     override val recoveryStateStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(RecoveryState.UNKNOWN)
     override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Unknown)
-    override val backupUploadStateStateFlow: MutableStateFlow<BackupUploadState> = MutableStateFlow(BackupUploadState.Unknown)
+    private var waitForBackupUploadSteadyStateFlow: Flow<BackupUploadState> = flowOf()
 
     private var fixRecoveryIssuesFailure: Exception? = null
 
@@ -73,12 +75,12 @@ class FakeEncryptionService : EncryptionService {
         return Result.success(Unit)
     }
 
-    override suspend fun waitForBackupUploadSteadyState(): Result<Unit> {
-        return Result.success(Unit)
+    fun givenWaitForBackupUploadSteadyStateFlow(flow: Flow<BackupUploadState>) {
+        waitForBackupUploadSteadyStateFlow = flow
     }
 
-    suspend fun emitBackupUploadState(state: BackupUploadState) {
-        backupUploadStateStateFlow.emit(state)
+    override fun waitForBackupUploadSteadyState(): Flow<BackupUploadState> {
+        return waitForBackupUploadSteadyStateFlow
     }
 
     suspend fun emitBackupState(state: BackupState) {

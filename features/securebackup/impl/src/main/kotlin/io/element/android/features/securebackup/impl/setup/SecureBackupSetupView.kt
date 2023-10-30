@@ -16,8 +16,10 @@
 
 package io.element.android.features.securebackup.impl.setup
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,24 +34,42 @@ import io.element.android.libraries.androidutils.system.startSharePlainTextInten
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecureBackupSetupView(
     state: SecureBackupSetupState,
     onDone: () -> Unit,
+    onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val canGoBack = state.canGoBack()
+    BackHandler(enabled = canGoBack) {
+        onBackClicked()
+    }
     HeaderFooterPage(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    if (canGoBack) {
+                        BackButton(onClick = onBackClicked)
+                    }
+                },
+                title = {},
+            )
+        },
         header = {
             HeaderContent(state = state)
         },
@@ -109,6 +129,10 @@ fun SecureBackupSetupView(
     }
 }
 
+private fun SecureBackupSetupState.canGoBack(): Boolean {
+    return recoveryKeyViewState.formattedRecoveryKey == null
+}
+
 @Composable
 private fun HeaderContent(
     state: SecureBackupSetupState,
@@ -136,7 +160,7 @@ private fun HeaderContent(
             stringResource(id = R.string.screen_recovery_key_save_description)
     }
     IconTitleSubtitleMolecule(
-        modifier = modifier.padding(top = 60.dp),
+        modifier = modifier.padding(top = 0.dp),
         iconResourceId = CommonDrawables.ic_key,
         title = title,
         subTitle = subTitle,
@@ -192,6 +216,7 @@ private fun Content(
         state = state,
         onClick = onClick,
         onChange = null,
+        onSubmit = null,
     )
 }
 
@@ -203,5 +228,6 @@ internal fun SecureBackupSetupViewPreview(
     SecureBackupSetupView(
         state = state,
         onDone = {},
+        onBackClicked = {},
     )
 }

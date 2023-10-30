@@ -18,6 +18,7 @@ package io.element.android.features.securebackup.impl.enable
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -29,16 +30,20 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecureBackupEnableView(
     state: SecureBackupEnableState,
     onDone: () -> Unit,
+    onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(state.enableAction) {
@@ -48,6 +53,12 @@ fun SecureBackupEnableView(
     }
     HeaderFooterPage(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                navigationIcon = { BackButton(onClick = onBackClicked) },
+                title = {},
+            )
+        },
         header = {
             HeaderContent()
         },
@@ -68,7 +79,7 @@ private fun HeaderContent(
     modifier: Modifier = Modifier,
 ) {
     IconTitleSubtitleMolecule(
-        modifier = modifier.padding(top = 60.dp),
+        modifier = modifier.padding(top = 0.dp),
         iconResourceId = CommonDrawables.ic_key,
         title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
         subTitle = null,
@@ -99,5 +110,6 @@ internal fun SecureBackupEnableViewPreview(
     SecureBackupEnableView(
         state = state,
         onDone = {},
+        onBackClicked = {},
     )
 }

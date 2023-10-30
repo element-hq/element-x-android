@@ -16,12 +16,12 @@
 
 package io.element.android.libraries.matrix.api.encryption
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface EncryptionService {
     val backupStateStateFlow: StateFlow<BackupState>
     val recoveryStateStateFlow: StateFlow<RecoveryState>
-    val backupUploadStateStateFlow: StateFlow<BackupUploadState>
     val enableRecoveryProgressStateFlow: StateFlow<EnableRecoveryProgress>
 
     suspend fun enableBackups(): Result<Unit>
@@ -46,7 +46,7 @@ interface EncryptionService {
     suspend fun fixRecoveryIssues(recoveryKey: String): Result<Unit>
 
     /**
-     * Observe [backupUploadStateStateFlow] to get progress.
+     * Wait for backup upload steady state.
      */
-    suspend fun waitForBackupUploadSteadyState(): Result<Unit>
+    fun waitForBackupUploadSteadyState(): Flow<BackupUploadState>
 }

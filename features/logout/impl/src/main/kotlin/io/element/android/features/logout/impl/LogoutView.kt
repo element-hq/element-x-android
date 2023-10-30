@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -39,16 +41,19 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LogoutView(
     state: LogoutState,
     onChangeRecoveryKeyClicked: () -> Unit,
+    onBackClicked: () -> Unit,
     onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -56,6 +61,12 @@ fun LogoutView(
 
     HeaderFooterPage(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                navigationIcon = { BackButton(onClick = onBackClicked) },
+                title = {},
+            )
+        },
         header = {
             HeaderContent(state = state)
         },
@@ -134,7 +145,7 @@ private fun HeaderContent(
         else -> null
     }
 
-    val paddingTop = 60.dp
+    val paddingTop = 0.dp
     IconTitleSubtitleMolecule(
         modifier = modifier.padding(top = paddingTop),
         iconResourceId = CommonDrawables.ic_key,
@@ -219,6 +230,7 @@ internal fun LogoutViewPreview(
     LogoutView(
         state,
         onChangeRecoveryKeyClicked = {},
-        onSuccessLogout = {}
+        onSuccessLogout = {},
+        onBackClicked = {},
     )
 }
