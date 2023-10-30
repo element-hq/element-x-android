@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.media.drawWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -71,7 +70,7 @@ fun LiveWaveformView(
     Box(contentAlignment = Alignment.CenterEnd,
         modifier = modifier
             .fillMaxWidth()
-            .height(waveFormHeight.applyScaleUp())
+            .height(waveFormHeight)
             .onSizeChanged { parentWidth = it.width }
     ) {
         Canvas(

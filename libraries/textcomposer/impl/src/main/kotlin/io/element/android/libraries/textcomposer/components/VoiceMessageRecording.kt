@@ -40,7 +40,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.utils.time.formatShort
@@ -63,7 +62,7 @@ internal fun VoiceMessageRecording(
                 shape = MaterialTheme.shapes.medium,
             )
             .padding(start = 12.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-            .heightIn(26.dp.applyScaleUp()),
+            .heightIn(26.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RedRecordingDot()
@@ -81,7 +80,7 @@ internal fun VoiceMessageRecording(
 
         LiveWaveformView(
             modifier = Modifier
-                .height(26.dp.applyScaleUp())
+                .height(26.dp)
                 .weight(1f),
             levels = levels
         )
@@ -104,7 +103,7 @@ private fun RedRecordingDot(
     )
     Box(
         modifier = modifier
-            .size(8.dp.applyScaleUp())
+            .size(8.dp)
             .alpha(alpha)
             .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)
     )

@@ -34,7 +34,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.iconSuccessPrimaryBackground
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -68,21 +67,21 @@ internal fun FormattingOption(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(
                     bounded = false,
-                    radius = 20.dp.applyScaleUp(),
+                    radius = 20.dp,
                 ),
             )
-            .size(48.dp.applyScaleUp())
+            .size(48.dp)
     ) {
         Box(
             modifier = Modifier
-                .size(36.dp.applyScaleUp())
+                .size(36.dp)
                 .align(Alignment.Center)
-                .background(backgroundColor, shape = RoundedCornerShape(8.dp.applyScaleUp()))
+                .background(backgroundColor, shape = RoundedCornerShape(8.dp))
         ) {
             Icon(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(20.dp.applyScaleUp()),
+                    .size(20.dp),
                 imageVector = imageVector,
                 contentDescription = contentDescription,
                 tint = foregroundColor,
