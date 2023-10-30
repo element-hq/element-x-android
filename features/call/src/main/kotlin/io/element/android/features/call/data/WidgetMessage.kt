@@ -18,6 +18,7 @@ package io.element.android.features.call.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class WidgetMessage(
@@ -25,6 +26,7 @@ data class WidgetMessage(
     @SerialName("widgetId") val widgetId: String,
     @SerialName("requestId") val requestId: String,
     @SerialName("action") val action: Action,
+    @SerialName("data") val data: JsonElement?,
 ) {
 
     @Serializable
@@ -38,6 +40,8 @@ data class WidgetMessage(
     @Serializable
     enum class Action {
         @SerialName("im.vector.hangup")
-        HangUp
+        HangUp,
+        @SerialName("send_event")
+        SendEvent,
     }
 }

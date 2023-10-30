@@ -41,6 +41,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.util.UUID
 
 class CallScreenPresenter @AssistedInject constructor(
@@ -59,6 +62,7 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private val isInWidgetMode = callType is CallType.RoomCall
     private val userAgent = userAgentProvider.provide()
+    private var joinedCall = false
 
     @Composable
     override fun present(): CallScreenState {
@@ -90,10 +94,19 @@ class CallScreenPresenter @AssistedInject constructor(
                     .onEach {
                         // Relay message to Widget Driver
                         callWidgetDriver.value?.send(it)
+                        println(it)
 
                         val parsedMessage = parseMessage(it)
-                        if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget && parsedMessage.action == WidgetMessage.Action.HangUp) {
-                            close(callWidgetDriver.value, navigator)
+                        if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget) {
+                            if (parsedMessage.action == WidgetMessage.Action.HangUp) {
+                                close(callWidgetDriver.value, navigator)
+                            } else if (parsedMessage.action == WidgetMessage.Action.SendEvent) {
+                                // This event is received when a member joins the call, the first one will be the current one
+                                val type = parsedMessage.data?.jsonObject?.get("type")?.jsonPrimitive?.contentOrNull
+                                if (type == "org.matrix.msc3401.call.member") {
+                                    joinedCall = true
+                                }
+                            }
                         }
                     }
                     .launchIn(this)
@@ -105,11 +118,13 @@ class CallScreenPresenter @AssistedInject constructor(
                 is CallScreeEvents.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
                     val interceptor = messageInterceptor.value
-                    if (widgetId != null && interceptor != null) {
+                    if (widgetId != null && interceptor != null && joinedCall) {
+                        // If the call was joined, we need to hang up first. Then the UI will be dismissed automatically.
                         sendHangupMessage(widgetId, interceptor)
-                    }
-                    coroutineScope.launch {
-                        close(callWidgetDriver.value, navigator)
+                    } else {
+                        coroutineScope.launch {
+                            close(callWidgetDriver.value, navigator)
+                        }
                     }
                 }
                 is CallScreeEvents.SetupMessageChannels -> {
@@ -159,6 +174,7 @@ class CallScreenPresenter @AssistedInject constructor(
             widgetId = widgetId,
             requestId = "widgetapi-${clock.epochMillis()}",
             action = WidgetMessage.Action.HangUp,
+            data = null,
         )
         messageInterceptor.sendMessage(WidgetMessageSerializer.serialize(message))
     }
