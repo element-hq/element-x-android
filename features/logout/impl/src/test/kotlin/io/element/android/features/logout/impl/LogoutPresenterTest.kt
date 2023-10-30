@@ -92,11 +92,13 @@ class LogoutPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.isLastSession).isFalse()
-            assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Waiting)
+            assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
             assertThat(initialState.showConfirmationDialog).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(Async.Uninitialized)
-            val state = awaitItem()
-            assertThat(state.backupUploadState).isEqualTo(BackupUploadState.Uploading(backedUpCount = 1, totalCount = 2))
+            val waitingState = awaitItem()
+            assertThat(waitingState.backupUploadState).isEqualTo(BackupUploadState.Waiting)
+            val uploadingState = awaitItem()
+            assertThat(uploadingState.backupUploadState).isEqualTo(BackupUploadState.Uploading(backedUpCount = 1, totalCount = 2))
             val doneState = awaitItem()
             assertThat(doneState.backupUploadState).isEqualTo(BackupUploadState.Done)
         }
