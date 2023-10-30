@@ -82,6 +82,7 @@ fun PinUnlockView(
             val footer = @Composable {
                 PinUnlockFooter(
                     modifier = Modifier.padding(top = 24.dp),
+                    showBiometricUnlock = state.showBiometricUnlock,
                     onUseBiometric = {
                         state.eventSink(PinUnlockEvents.OnUseBiometric)
                     },
@@ -125,6 +126,12 @@ fun PinUnlockView(
         }
         if (state.signOutAction is Async.Loading) {
             ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
+        }
+        if (state.showBiometricUnlockError) {
+            ErrorDialog(
+                content = state.biometricUnlockErrorMessage ?: "",
+                onDismiss = { state.eventSink(PinUnlockEvents.ClearBiometricError) }
+            )
         }
     }
 }
@@ -284,12 +291,15 @@ private fun PinUnlockHeader(
 
 @Composable
 private fun PinUnlockFooter(
+    showBiometricUnlock: Boolean,
     onUseBiometric: () -> Unit,
     onForgotPin: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-        TextButton(text = "Use biometric", onClick = onUseBiometric)
+        if (showBiometricUnlock) {
+            TextButton(text = "Use biometric", onClick = onUseBiometric)
+        }
         TextButton(text = stringResource(id = R.string.screen_app_lock_forgot_pin), onClick = onForgotPin)
     }
 }

@@ -59,7 +59,13 @@ fun LockScreenSettingsView(
                 )
             }
             PreferenceDivider()
-            PreferenceSwitch(title = stringResource(id = R.string.screen_app_lock_settings_enable_biometric_unlock), isChecked = state.isBiometricEnabled)
+            PreferenceSwitch(
+                title = stringResource(id = R.string.screen_app_lock_settings_enable_biometric_unlock),
+                isChecked = state.isBiometricEnabled,
+                onCheckedChange = {
+                    state.eventSink(LockScreenSettingsEvents.ToggleBiometricAllowed)
+                }
+            )
         }
     }
     if (state.showRemovePinConfirmation) {

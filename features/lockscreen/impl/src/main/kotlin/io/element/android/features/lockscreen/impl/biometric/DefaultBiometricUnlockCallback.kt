@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.settings
+package io.element.android.features.lockscreen.impl.biometric
 
-sealed interface LockScreenSettingsEvents {
-    data object OnRemovePin : LockScreenSettingsEvents
-    data object ConfirmRemovePin : LockScreenSettingsEvents
-    data object CancelRemovePin : LockScreenSettingsEvents
-    data object ToggleBiometricAllowed : LockScreenSettingsEvents
+open class DefaultBiometricUnlockCallback : BiometricUnlock.Callback {
+    override fun onBiometricSetupError() = Unit
+    override fun onBiometricUnlockSuccess() = Unit
+    override fun onBiometricUnlockFailed(error: Exception?) = Unit
 }

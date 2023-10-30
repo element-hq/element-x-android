@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.settings
+package io.element.android.features.lockscreen.impl.biometric
 
-sealed interface LockScreenSettingsEvents {
-    data object OnRemovePin : LockScreenSettingsEvents
-    data object ConfirmRemovePin : LockScreenSettingsEvents
-    data object CancelRemovePin : LockScreenSettingsEvents
-    data object ToggleBiometricAllowed : LockScreenSettingsEvents
+import androidx.compose.runtime.Composable
+
+interface BiometricUnlockManager {
+
+    fun addCallback(callback: BiometricUnlock.Callback)
+    fun removeCallback(callback: BiometricUnlock.Callback)
+
+    @Composable
+    fun rememberBiometricUnlock(): BiometricUnlock
 }

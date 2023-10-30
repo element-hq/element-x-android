@@ -18,6 +18,7 @@ package io.element.android.features.lockscreen.impl.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
+import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -33,6 +35,7 @@ import javax.inject.Inject
 class LockScreenSettingsPresenter @Inject constructor(
     private val lockScreenConfig: LockScreenConfig,
     private val pinCodeManager: PinCodeManager,
+    private val lockScreenStore: LockScreenStore,
     private val coroutineScope: CoroutineScope,
 ) : Presenter<LockScreenSettingsState> {
 
@@ -44,9 +47,7 @@ class LockScreenSettingsPresenter @Inject constructor(
         var showRemovePinOption by remember {
             mutableStateOf(false)
         }
-        var isBiometricEnabled by remember {
-            mutableStateOf(false)
-        }
+        val isBiometricEnabled by lockScreenStore.isBiometricUnlockAllowed().collectAsState(initial = false)
         var showRemovePinConfirmation by remember {
             mutableStateOf(false)
         }
@@ -67,8 +68,10 @@ class LockScreenSettingsPresenter @Inject constructor(
                     }
                 }
                 LockScreenSettingsEvents.OnRemovePin -> showRemovePinConfirmation = true
-                LockScreenSettingsEvents.ToggleBiometric -> {
-                    //TODO branch biometric logic
+                LockScreenSettingsEvents.ToggleBiometricAllowed -> {
+                    coroutineScope.launch {
+                        lockScreenStore.setIsBiometricUnlockAllowed(!isBiometricEnabled)
+                    }
                 }
             }
         }
