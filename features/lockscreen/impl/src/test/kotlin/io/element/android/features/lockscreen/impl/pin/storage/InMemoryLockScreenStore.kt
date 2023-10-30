@@ -16,12 +16,19 @@
 
 package io.element.android.features.lockscreen.impl.pin.storage
 
+import androidx.compose.runtime.MutableState
+import io.element.android.features.lockscreen.impl.storage.LockScreenStore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+
 private const val DEFAULT_REMAINING_ATTEMPTS = 3
 
-class InMemoryPinCodeStore : PinCodeStore {
+class InMemoryLockScreenStore : LockScreenStore {
 
     private var pinCode: String? = null
     private var remainingAttempts: Int = DEFAULT_REMAINING_ATTEMPTS
+    private var isBiometricUnlockAllowed = MutableStateFlow(false)
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return remainingAttempts
@@ -49,5 +56,13 @@ class InMemoryPinCodeStore : PinCodeStore {
 
     override suspend fun hasPinCode(): Boolean {
         return pinCode != null
+    }
+
+    override fun isBiometricUnlockAllowed(): Flow<Boolean> {
+        return isBiometricUnlockAllowed
+    }
+
+    override suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean) {
+        isBiometricUnlockAllowed.value = isAllowed
     }
 }

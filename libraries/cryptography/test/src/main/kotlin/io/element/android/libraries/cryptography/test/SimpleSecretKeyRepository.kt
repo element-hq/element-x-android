@@ -17,18 +17,22 @@
 package io.element.android.libraries.cryptography.test
 
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
-import io.element.android.libraries.cryptography.api.SecretKeyProvider
+import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-class SimpleSecretKeyProvider : SecretKeyProvider {
+class SimpleSecretKeyRepository : SecretKeyRepository {
 
     private var secretKeyForAlias = HashMap<String, SecretKey>()
 
-    override fun getOrCreateKey(alias: String): SecretKey {
+    override fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey {
         return secretKeyForAlias.getOrPut(alias) {
             generateKey()
         }
+    }
+
+    override fun deleteKey(alias: String) {
+        secretKeyForAlias.remove(alias)
     }
 
     private fun generateKey(): SecretKey {

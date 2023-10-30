@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.pin.storage
+package io.element.android.features.lockscreen.impl.storage
 
-interface PinCodeStore : EncryptedPinCodeStorage {
+import kotlinx.coroutines.flow.Flow
+
+interface LockScreenStore : EncryptedPinCodeStorage {
 
     /**
      * Returns the remaining PIN code attempts. When this reaches 0 the PIN code access won't be available for some time.
@@ -32,6 +34,14 @@ interface PinCodeStore : EncryptedPinCodeStorage {
      * Resets the counter of attempts for PIN code and biometric access.
      */
     suspend fun resetCounter()
+
+    /**
+     * Returns whether the biometric unlock is allowed or not.
+     */
+    fun isBiometricUnlockAllowed(): Flow<Boolean>
+
+    /**
+     * Sets whether the biometric unlock is allowed or not.
+     */
+    suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean)
 }
-
-

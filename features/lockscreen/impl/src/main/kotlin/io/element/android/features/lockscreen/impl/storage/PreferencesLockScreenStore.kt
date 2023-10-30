@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.pin.storage
+package io.element.android.features.lockscreen.impl.storage
 
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -28,6 +29,7 @@ import io.element.android.appconfig.LockScreenConfig
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -36,13 +38,14 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class PreferencesPinCodeStore @Inject constructor(
+class PreferencesLockScreenStore @Inject constructor(
     @ApplicationContext private val context: Context,
     private val lockScreenConfig: LockScreenConfig,
-) : PinCodeStore {
+) : LockScreenStore {
 
     private val pinCodeKey = stringPreferencesKey("encoded_pin_code")
     private val remainingAttemptsKey = intPreferencesKey("remaining_pin_code_attempts")
+    private val biometricUnlockKey = booleanPreferencesKey("biometric_unlock_enabled")
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return context.dataStore.data.map { preferences ->
@@ -86,6 +89,18 @@ class PreferencesPinCodeStore @Inject constructor(
         return context.dataStore.data.map { preferences ->
             preferences[pinCodeKey] != null
         }.first()
+    }
+
+    override fun isBiometricUnlockAllowed(): Flow<Boolean> {
+        return context.dataStore.data.map { preferences ->
+            preferences[biometricUnlockKey] ?: false
+        }
+    }
+
+    override suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[biometricUnlockKey] = isAllowed
+        }
     }
 
     private fun Preferences.getRemainingPinCodeAttemptsNumber() = this[remainingAttemptsKey] ?: lockScreenConfig.maxPinCodeAttemptsBeforeLogout

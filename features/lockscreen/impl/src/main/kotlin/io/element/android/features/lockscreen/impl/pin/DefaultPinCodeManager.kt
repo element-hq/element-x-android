@@ -17,10 +17,10 @@
 package io.element.android.features.lockscreen.impl.pin
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.lockscreen.impl.pin.storage.PinCodeStore
+import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
-import io.element.android.libraries.cryptography.api.SecretKeyProvider
+import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import java.util.concurrent.CopyOnWriteArrayList
@@ -31,9 +31,9 @@ private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_PIN_CODE"
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class DefaultPinCodeManager @Inject constructor(
-    private val secretKeyProvider: SecretKeyProvider,
+    private val secretKeyRepository: SecretKeyRepository,
     private val encryptionDecryptionService: EncryptionDecryptionService,
-    private val pinCodeStore: PinCodeStore,
+    private val lockScreenStore: LockScreenStore,
 ) : PinCodeManager {
 
     private val callbacks = CopyOnWriteArrayList<PinCodeManager.Callback>()
@@ -47,37 +47,37 @@ class DefaultPinCodeManager @Inject constructor(
     }
 
     override suspend fun isPinCodeAvailable(): Boolean {
-        return pinCodeStore.hasPinCode()
+        return lockScreenStore.hasPinCode()
     }
 
     override suspend fun getPinCodeSize(): Int {
-        val encryptedPinCode = pinCodeStore.getEncryptedCode() ?: return 0
-        val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
+        val encryptedPinCode = lockScreenStore.getEncryptedCode() ?: return 0
+        val secretKey = secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, false)
         val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
         return decryptedPinCode.size
     }
 
     override suspend fun createPinCode(pinCode: String) {
-        val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
+        val secretKey = secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, false)
         val encryptedPinCode = encryptionDecryptionService.encrypt(secretKey, pinCode.toByteArray()).toBase64()
-        pinCodeStore.saveEncryptedPinCode(encryptedPinCode)
+        lockScreenStore.saveEncryptedPinCode(encryptedPinCode)
         callbacks.forEach { it.onPinCodeCreated() }
     }
 
     override suspend fun verifyPinCode(pinCode: String): Boolean {
-        val encryptedPinCode = pinCodeStore.getEncryptedCode() ?: return false
+        val encryptedPinCode = lockScreenStore.getEncryptedCode() ?: return false
         return try {
-            val secretKey = secretKeyProvider.getOrCreateKey(SECRET_KEY_ALIAS)
+            val secretKey = secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, false)
             val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
             val pinCodeToCheck = pinCode.toByteArray()
             decryptedPinCode.contentEquals(pinCodeToCheck).also { isPinCodeCorrect ->
                 if (isPinCodeCorrect) {
-                    pinCodeStore.resetCounter()
+                    lockScreenStore.resetCounter()
                     callbacks.forEach { callback ->
                         callback.onPinCodeVerified()
                     }
                 } else {
-                    pinCodeStore.onWrongPin()
+                    lockScreenStore.onWrongPin()
                 }
             }
         } catch (failure: Throwable) {
@@ -86,12 +86,12 @@ class DefaultPinCodeManager @Inject constructor(
     }
 
     override suspend fun deletePinCode() {
-        pinCodeStore.deleteEncryptedPinCode()
-        pinCodeStore.resetCounter()
+        lockScreenStore.deleteEncryptedPinCode()
+        lockScreenStore.resetCounter()
         callbacks.forEach { it.onPinCodeRemoved() }
     }
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
-        return pinCodeStore.getRemainingPinCodeAttemptsNumber()
+        return lockScreenStore.getRemainingPinCodeAttemptsNumber()
     }
 }

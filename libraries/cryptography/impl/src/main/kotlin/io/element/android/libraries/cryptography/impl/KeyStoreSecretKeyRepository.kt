@@ -21,7 +21,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
-import io.element.android.libraries.cryptography.api.SecretKeyProvider
+import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import io.element.android.libraries.di.AppScope
 import java.security.KeyStore
 import javax.crypto.KeyGenerator
@@ -31,15 +31,15 @@ import javax.inject.Inject
 private const val ANDROID_KEYSTORE = "AndroidKeyStore"
 
 /**
- * Default implementation of [SecretKeyProvider] that uses the Android Keystore to store the keys.
+ * Default implementation of [SecretKeyRepository] that uses the Android Keystore to store the keys.
  * The generated key uses AES algorithm, with a key size of 128 bits, and the GCM block mode.
  */
 @ContributesBinding(AppScope::class)
-class KeyStoreSecretKeyProvider @Inject constructor() : SecretKeyProvider {
+class KeyStoreSecretKeyRepository @Inject constructor() : SecretKeyRepository {
 
     // False positive lint issue
     @SuppressLint("WrongConstant")
-    override fun getOrCreateKey(alias: String): SecretKey {
+    override fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey {
         val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply {
             load(null)
         }
@@ -54,11 +54,19 @@ class KeyStoreSecretKeyProvider @Inject constructor() : SecretKeyProvider {
                 .setBlockModes(AESEncryptionSpecs.BLOCK_MODE)
                 .setEncryptionPaddings(AESEncryptionSpecs.PADDINGS)
                 .setKeySize(AESEncryptionSpecs.KEY_SIZE)
+                .setUserAuthenticationRequired(requiresUserAuthentication)
                 .build()
             generator.init(keyGenSpec)
             generator.generateKey()
         } else {
             secretKeyEntry
         }
+    }
+
+    override fun deleteKey(alias: String) {
+        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply {
+            load(null)
+        }
+        keyStore.deleteEntry(alias)
     }
 }

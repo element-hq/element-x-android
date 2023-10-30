@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.pin.storage
+package io.element.android.features.lockscreen.impl.storage
 
 /**
  * Should be implemented by any class that provides access to the encrypted PIN code.
