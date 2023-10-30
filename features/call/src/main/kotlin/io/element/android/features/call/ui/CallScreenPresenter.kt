@@ -17,6 +17,7 @@
 package io.element.android.features.call.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.appnav.di.MatrixClientsHolder
 import io.element.android.features.call.CallType
 import io.element.android.features.call.data.WidgetMessage
 import io.element.android.features.call.utils.CallWidgetProvider
@@ -37,10 +39,13 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -56,6 +61,8 @@ class CallScreenPresenter @AssistedInject constructor(
     private val userAgentProvider: UserAgentProvider,
     private val clock: SystemClock,
     private val dispatchers: CoroutineDispatchers,
+    private val matrixClientsHolder: MatrixClientsHolder,
+    private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
 
     @AssistedFactory
@@ -73,6 +80,27 @@ class CallScreenPresenter @AssistedInject constructor(
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
         var isJoinedCall by rememberSaveable { mutableStateOf(false) }
+
+        // We need to restart the Matrix client to get the needed call events
+        DisposableEffect(Unit) {
+            var client: MatrixClient? = null
+            if (callType is CallType.RoomCall) {
+                client = matrixClientsHolder.getOrNull(callType.sessionId)
+                coroutineScope.launch {
+                    client?.syncService()?.syncState
+                        ?.onEach { state ->
+                            if (state == SyncState.Idle) {
+                                client.syncService().startSync()
+                            }
+                        }?.collect()
+                }
+            }
+            onDispose {
+                appCoroutineScope.launch {
+                    client?.syncService()?.stopSync()
+                }
+            }
+        }
 
         LaunchedEffect(Unit) {
             loadUrl(callType, urlState, callWidgetDriver)
