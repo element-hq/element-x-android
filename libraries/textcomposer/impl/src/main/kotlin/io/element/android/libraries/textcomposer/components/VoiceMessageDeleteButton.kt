@@ -39,7 +39,7 @@ fun VoiceMessageDeleteButton(
 ) {
     IconButton(
         modifier = modifier
-            .size(48.dp),
+            .size(48.dp.applyScaleUp()),
         enabled = enabled,
         onClick = onClick,
     ) {

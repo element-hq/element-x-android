@@ -136,7 +136,7 @@ fun TextComposer(
         @Composable {
             ComposerOptionsButton(
                 modifier = Modifier
-                    .size(48.dp),
+                    .size(48.dp.applyScaleUp()),
                 onClick = onAddAttachment
             )
         }
@@ -183,7 +183,7 @@ fun TextComposer(
     }
     val uploadVoiceProgress = @Composable {
         CircularProgressIndicator(
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(24.dp.applyScaleUp()),
         )
     }
 
@@ -429,7 +429,7 @@ private fun TextInput(
                 // This prevents it gaining focus and mutating the state.
                 registerStateUpdates = !subcomposing,
                 modifier = Modifier
-                    .padding(top = 6.dp, bottom = 6.dp)
+                    .padding(top = 6.dp.applyScaleUp(), bottom = 6.dp.applyScaleUp())
                     .fillMaxWidth(),
                 style = ElementRichTextEditorStyle.create(
                     hasFocus = state.hasFocus

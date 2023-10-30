@@ -66,7 +66,7 @@ internal fun VoiceMessagePreview(
                 shape = MaterialTheme.shapes.medium,
             )
             .padding(start = 8.dp, end = 20.dp, top = 6.dp, bottom = 6.dp)
-            .heightIn(26.dp),
+            .heightIn(26.dp.applyScaleUp()),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (isPlaying) {
@@ -135,12 +135,14 @@ private fun PlayerButton(
 private fun PauseIcon() = Icon(
     resourceId = R.drawable.ic_pause,
     contentDescription = stringResource(id = CommonStrings.a11y_pause),
+    modifier = Modifier.size(20.dp.applyScaleUp()),
 )
 
 @Composable
 private fun PlayIcon() = Icon(
     resourceId = R.drawable.ic_play,
     contentDescription = stringResource(id = CommonStrings.a11y_play),
+    modifier = Modifier.size(20.dp.applyScaleUp()),
 )
 
 @PreviewsDayNight

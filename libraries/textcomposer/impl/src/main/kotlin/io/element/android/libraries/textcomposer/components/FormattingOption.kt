@@ -68,7 +68,7 @@ internal fun FormattingOption(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(
                     bounded = false,
-                    radius = 20.dp,
+                    radius = 20.dp.applyScaleUp(),
                 ),
             )
             .size(48.dp.applyScaleUp())
@@ -80,7 +80,9 @@ internal fun FormattingOption(
                 .background(backgroundColor, shape = RoundedCornerShape(8.dp.applyScaleUp()))
         ) {
             Icon(
-                modifier = Modifier.align(Alignment.Center),
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(20.dp.applyScaleUp()),
                 imageVector = imageVector,
                 contentDescription = contentDescription,
                 tint = foregroundColor,
