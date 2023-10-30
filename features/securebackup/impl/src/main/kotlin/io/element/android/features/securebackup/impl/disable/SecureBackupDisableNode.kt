@@ -40,6 +40,7 @@ class SecureBackupDisableNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onDone = ::navigateUp,
+            onBackClicked = ::navigateUp,
         )
     }
 }

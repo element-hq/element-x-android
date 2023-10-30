@@ -58,6 +58,7 @@ class LogoutNode @AssistedInject constructor(
             state = state,
             onChangeRecoveryKeyClicked = ::onChangeRecoveryKeyClicked,
             onSuccessLogout = { onSuccessLogout(activity, it) },
+            onBackClicked = ::navigateUp,
             modifier = modifier,
         )
     }
