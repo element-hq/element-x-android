@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model.virtual
+package io.element.android.features.messages.impl.timeline.session
 
-data object TimelineItemReadMarkerModel : TimelineItemVirtualModel {
-    override val type: String = "TimelineItemReadMarkerModel"
-}
+data class SessionState(
+    val isSessionVerified: Boolean,
+    val isKeyBackupEnabled: Boolean,
+)

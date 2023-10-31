@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
+import io.element.android.features.messages.impl.timeline.session.aSessionState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
@@ -46,6 +47,10 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     highlightedEventId = null,
     userHasPermissionToSendMessage = true,
     hasNewItems = false,
+    sessionState = aSessionState(
+        isSessionVerified = true,
+        isKeyBackupEnabled = true,
+    ),
     eventSink = {},
 )
 
