@@ -161,7 +161,8 @@ private fun BackupUploadState.isBackingUp(): Boolean {
         BackupUploadState.Waiting,
         is BackupUploadState.Uploading,
         is BackupUploadState.CheckingIfUploadNeeded -> true
-        BackupUploadState.Done -> false
+        BackupUploadState.Done,
+        BackupUploadState.Error -> false
     }
 }
 
