@@ -211,7 +211,7 @@ class NotifiableEventResolver @Inject constructor(
     ): String {
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.body
-            is VoiceMessageType -> messageType.body
+            is VoiceMessageType -> stringProvider.getString(CommonStrings.common_voice_message)
             is EmoteMessageType -> "* $senderDisplayName ${messageType.body}"
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
