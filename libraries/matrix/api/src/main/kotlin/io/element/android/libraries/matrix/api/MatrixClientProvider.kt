@@ -25,4 +25,11 @@ interface MatrixClientProvider {
      * Most of the time you want to use injected constructor instead of retrieving a MatrixClient with this provider.
      */
     suspend fun getOrRestore(sessionId: SessionId): Result<MatrixClient>
+
+    /**
+     * Can be used to retrieve an existing [MatrixClient] with the given [SessionId].
+     * @param sessionId the [SessionId] of the [MatrixClient] to retrieve.
+     * @return the [MatrixClient] if it exists.
+     */
+    fun getOrNull(sessionId: SessionId): MatrixClient?
 }

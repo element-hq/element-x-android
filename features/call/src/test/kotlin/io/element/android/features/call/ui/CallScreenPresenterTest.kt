@@ -25,14 +25,21 @@ import io.element.android.features.call.utils.FakeCallWidgetProvider
 import io.element.android.features.call.utils.FakeWidgetMessageInterceptor
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runCurrent
@@ -95,7 +102,7 @@ class CallScreenPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(CallScreeEvents.SetupMessageChannels(messageInterceptor))
+            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
 
             // And incoming message from the Widget Driver is passed to the WebView
             widgetDriver.givenIncomingMessage("A message")
@@ -125,9 +132,9 @@ class CallScreenPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(CallScreeEvents.SetupMessageChannels(messageInterceptor))
+            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
 
-            initialState.eventSink(CallScreeEvents.Hangup)
+            initialState.eventSink(CallScreenEvents.Hangup)
 
             // Let background coroutines run
             runCurrent()
@@ -155,7 +162,7 @@ class CallScreenPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(CallScreeEvents.SetupMessageChannels(messageInterceptor))
+            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
 
             messageInterceptor.givenInterceptedMessage("""{"action":"im.vector.hangup","api":"fromWidget","widgetId":"1","requestId":"1"}""")
 
@@ -169,12 +176,64 @@ class CallScreenPresenterTest {
         }
     }
 
+    @Test
+    fun `present - automatically starts the Matrix client sync when on RoomCall`() = runTest {
+        val navigator = FakeCallScreenNavigator()
+        val widgetDriver = FakeWidgetDriver()
+        val matrixClient = FakeMatrixClient()
+        val presenter = createCallScreenPresenter(
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            widgetDriver = widgetDriver,
+            navigator = navigator,
+            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+           consumeItemsUntilTimeout()
+
+            assertThat(matrixClient.syncService().syncState.value).isEqualTo(SyncState.Running)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - automatically stops the Matrix client sync on dispose`() = runTest {
+        val navigator = FakeCallScreenNavigator()
+        val widgetDriver = FakeWidgetDriver()
+        val matrixClient = FakeMatrixClient()
+        val presenter = createCallScreenPresenter(
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            widgetDriver = widgetDriver,
+            navigator = navigator,
+            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
+        )
+        val hasRun = Mutex(true)
+        val job = launch {
+            moleculeFlow(RecompositionMode.Immediate) {
+                presenter.present()
+            }.collect {
+                hasRun.unlock()
+            }
+        }
+
+        hasRun.lock()
+
+        job.cancelAndJoin()
+
+        assertThat(matrixClient.syncService().syncState.value).isEqualTo(SyncState.Terminated)
+    }
+
     private fun TestScope.createCallScreenPresenter(
         callType: CallType,
         navigator: CallScreenNavigator = FakeCallScreenNavigator(),
         widgetDriver: FakeWidgetDriver = FakeWidgetDriver(),
         widgetProvider: FakeCallWidgetProvider = FakeCallWidgetProvider(widgetDriver),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+        matrixClientsProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
     ): CallScreenPresenter {
         val userAgentProvider = object : UserAgentProvider {
             override fun provide(): String {
@@ -189,6 +248,8 @@ class CallScreenPresenterTest {
             userAgentProvider,
             clock,
             dispatchers,
+            matrixClientsProvider,
+            this,
         )
     }
 }
