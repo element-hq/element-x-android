@@ -16,31 +16,13 @@
 
 package io.element.android.features.roomlist.impl.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Surface
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 @Composable
 internal fun RequestVerificationHeader(
@@ -48,50 +30,20 @@ internal fun RequestVerificationHeader(
     onDismissClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Surface(
-            Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
-            color = MaterialTheme.colorScheme.surfaceVariant
-        ) {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                Row {
-                    Text(
-                        stringResource(R.string.session_verification_banner_title),
-                        modifier = Modifier.weight(1f),
-                        style = ElementTheme.typography.fontBodyLgMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Start,
-                    )
-                    Icon(
-                        modifier = Modifier.clickable(onClick = onDismissClicked),
-                        resourceId = CommonDrawables.ic_compound_close,
-                        contentDescription = stringResource(CommonStrings.action_close)
-                    )
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    stringResource(R.string.session_verification_banner_message),
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Button(
-                    text = stringResource(CommonStrings.action_continue),
-                    size = ButtonSize.Medium,
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onVerifyClicked,
-                )
-            }
-        }
-    }
+    DialogLikeBannerMolecule(
+        modifier = modifier,
+        title = stringResource(R.string.session_verification_banner_title),
+        content = stringResource(R.string.session_verification_banner_message),
+        onSubmitClicked = onVerifyClicked,
+        onDismissClicked = onDismissClicked,
+    )
 }
 
 @PreviewsDayNight
 @Composable
 internal fun RequestVerificationHeaderPreview() = ElementPreview {
-    RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
+    RequestVerificationHeader(
+        onVerifyClicked = {},
+        onDismissClicked = {},
+    )
 }

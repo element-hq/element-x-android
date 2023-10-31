@@ -161,7 +161,7 @@ class PinUnlockPresenter @Inject constructor(
 
     private fun CoroutineScope.signOut(signOutAction: MutableState<Async<String?>>) = launch {
         suspend {
-            matrixClient.logout()
+            matrixClient.logout(ignoreSdkError = true)
         }.runCatchingUpdatingState(signOutAction)
     }
 }

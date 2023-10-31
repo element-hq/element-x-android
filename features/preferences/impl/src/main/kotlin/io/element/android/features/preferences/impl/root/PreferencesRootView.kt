@@ -29,10 +29,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
+import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
@@ -51,6 +50,7 @@ fun PreferencesRootView(
     state: PreferencesRootState,
     onBackPressed: () -> Unit,
     onVerifyClicked: () -> Unit,
+    onSecureBackupClicked: () -> Unit,
     onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
@@ -58,9 +58,9 @@ fun PreferencesRootView(
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onOpenAdvancedSettings: () -> Unit,
-    onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     onOpenNotificationSettings: () -> Unit,
     onOpenUserProfile: (MatrixUser) -> Unit,
+    onSignOutClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -84,6 +84,16 @@ fun PreferencesRootView(
                 icon = Icons.Outlined.VerifiedUser,
                 onClick = onVerifyClicked,
             )
+        }
+        if (state.showSecureBackup) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.common_chat_backup),
+                iconResourceId = CommonDrawables.ic_key_filled,
+                showEndBadge = state.showSecureBackupBadge,
+                onClick = onSecureBackupClicked,
+            )
+        }
+        if (state.showCompleteVerification || state.showSecureBackup) {
             HorizontalDivider()
         }
         if (state.accountManagementUrl != null) {
@@ -143,9 +153,10 @@ fun PreferencesRootView(
             DeveloperPreferencesView(onOpenDeveloperSettings)
         }
         HorizontalDivider()
-        LogoutPreferenceView(
-            state = state.logoutState,
-            onSuccessLogout = onSuccessLogout,
+        PreferenceText(
+            title = stringResource(id = CommonStrings.action_signout),
+            iconResourceId = CommonDrawables.ic_compound_leave,
+            onClick = onSignOutClicked,
         )
         Text(
             modifier = Modifier
@@ -189,10 +200,11 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenAdvancedSettings = {},
         onOpenAbout = {},
         onVerifyClicked = {},
-        onSuccessLogout = {},
+        onSecureBackupClicked = {},
         onManageAccountClicked = {},
         onOpenNotificationSettings = {},
         onOpenLockScreenSettings = {},
         onOpenUserProfile = {},
+        onSignOutClicked = {},
     )
 }

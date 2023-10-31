@@ -30,6 +30,7 @@ import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
 import io.element.android.libraries.voicerecorder.impl.audio.AudioLevelCalculator
 import io.element.android.libraries.voicerecorder.impl.audio.AudioReader
 import io.element.android.libraries.voicerecorder.impl.audio.Encoder
+import io.element.android.libraries.voicerecorder.impl.audio.resample
 import io.element.android.libraries.voicerecorder.impl.file.VoiceFileConfig
 import io.element.android.libraries.voicerecorder.impl.file.VoiceFileManager
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +38,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
 import timber.log.Timber
 import java.io.File
@@ -65,6 +68,8 @@ class VoiceRecorderImpl @Inject constructor(
     private var outputFile: File? = null
     private var audioReader: AudioReader? = null
     private var recordingJob: Job? = null
+    private val levels: MutableList<Float> = mutableListOf()
+    private val lock = Mutex()
 
     private val _state = MutableStateFlow<VoiceRecorderState>(VoiceRecorderState.Idle)
     override val state: StateFlow<VoiceRecorderState> = _state
@@ -74,6 +79,10 @@ class VoiceRecorderImpl @Inject constructor(
         Timber.i("Voice recorder started recording")
         outputFile = fileManager.createFile()
             .also(encoder::init)
+
+        lock.withLock {
+            levels.clear()
+        }
 
         val audioRecorder = audioReaderFactory.create(config, dispatchers).also { audioReader = it }
 
@@ -93,12 +102,16 @@ class VoiceRecorderImpl @Inject constructor(
                 when (audio) {
                     is Audio.Data -> {
                         val audioLevel = audioLevelCalculator.calculateAudioLevel(audio.buffer)
-                        _state.emit(VoiceRecorderState.Recording(elapsedTime, audioLevel))
+
+                        lock.withLock{
+                            levels.add(audioLevel)
+                            _state.emit(VoiceRecorderState.Recording(elapsedTime, levels.toList()))
+                        }
                         encoder.encode(audio.buffer, audio.readSize)
                     }
                     is Audio.Error -> {
                         Timber.e("Voice message error: code=${audio.audioRecordErrorCode}")
-                        _state.emit(VoiceRecorderState.Recording(elapsedTime, 0.0f))
+                        _state.emit(VoiceRecorderState.Recording(elapsedTime, listOf()))
                     }
                 }
             }
@@ -122,16 +135,24 @@ class VoiceRecorderImpl @Inject constructor(
         audioReader = null
         encoder.release()
 
-        if (cancelled) {
-            deleteRecording()
-        }
 
-        _state.emit(
-            when (val file = outputFile) {
-                null -> VoiceRecorderState.Idle
-                else -> VoiceRecorderState.Finished(file, fileConfig.mimeType)
+        lock.withLock {
+            if (cancelled) {
+                deleteRecording()
+                levels.clear()
             }
-        )
+
+            _state.emit(
+                when (val file = outputFile) {
+                    null -> VoiceRecorderState.Idle
+                    else -> VoiceRecorderState.Finished(
+                        file = file,
+                        mimeType = fileConfig.mimeType,
+                        waveform = levels.resample(100),
+                    )
+                }
+            )
+        }
     }
 
     /**

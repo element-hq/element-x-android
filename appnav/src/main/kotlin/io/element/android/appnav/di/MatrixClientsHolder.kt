@@ -92,7 +92,7 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
                 sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
             }
             .onFailure {
-                Timber.e("Fail to restore session")
+                Timber.e(it, "Fail to restore session")
             }
     }
 }

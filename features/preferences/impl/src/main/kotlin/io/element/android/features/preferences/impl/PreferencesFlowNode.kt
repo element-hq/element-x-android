@@ -30,6 +30,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
@@ -53,6 +54,7 @@ class PreferencesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
+    private val logoutEntryPoint: LogoutEntryPoint,
 ) : BackstackNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -92,6 +94,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class UserProfile(val matrixUser: MatrixUser) : NavTarget
+
+        @Parcelize
+        data object SignOut : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -104,6 +109,10 @@ class PreferencesFlowNode @AssistedInject constructor(
 
                     override fun onVerifyClicked() {
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onVerifyClicked() }
+                    }
+
+                    override fun onSecureBackupClicked() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClicked() }
                     }
 
                     override fun onOpenAnalytics() {
@@ -132,6 +141,10 @@ class PreferencesFlowNode @AssistedInject constructor(
 
                     override fun onOpenUserProfile(matrixUser: MatrixUser) {
                         backstack.push(NavTarget.UserProfile(matrixUser))
+                    }
+
+                    override fun onSignOutClicked() {
+                        backstack.push(NavTarget.SignOut)
                     }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
@@ -180,6 +193,16 @@ class PreferencesFlowNode @AssistedInject constructor(
             NavTarget.LockScreenSettings -> {
                 lockScreenEntryPoint.nodeBuilder(this, buildContext)
                     .target(LockScreenEntryPoint.Target.Settings)
+                    .build()
+            }
+            NavTarget.SignOut -> {
+                val callBack: LogoutEntryPoint.Callback = object : LogoutEntryPoint.Callback {
+                    override fun onChangeRecoveryKeyClicked() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClicked() }
+                    }
+                }
+                logoutEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callBack)
                     .build()
             }
         }

@@ -31,7 +31,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.mediaplayer.MediaPlayer
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId

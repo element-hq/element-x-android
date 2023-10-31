@@ -36,7 +36,8 @@ class WebViewWidgetMessageInterceptor(
         const val LISTENER_NAME = "elementX"
     }
 
-    override val interceptedMessages = MutableSharedFlow<String>(replay = 1, extraBufferCapacity = 2)
+    // It's important to have extra capacity here to make sure we don't drop any messages
+    override val interceptedMessages = MutableSharedFlow<String>(extraBufferCapacity = 10)
 
     init {
         webView.webViewClient = object : WebViewClient() {

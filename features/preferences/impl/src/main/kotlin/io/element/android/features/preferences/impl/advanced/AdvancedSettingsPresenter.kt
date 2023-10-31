@@ -82,7 +82,7 @@ class AdvancedSettingsPresenter @Inject constructor(
                     validator = ::customElementCallUrlValidator,
                 )
             } else null,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 

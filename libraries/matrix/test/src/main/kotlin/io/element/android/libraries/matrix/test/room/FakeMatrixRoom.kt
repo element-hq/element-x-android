@@ -71,6 +71,7 @@ class FakeMatrixRoom(
     override val alternativeAliases: List<String> = emptyList(),
     override val isPublic: Boolean = true,
     override val isDirect: Boolean = false,
+    override val isOneToOne: Boolean = false,
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
@@ -106,6 +107,7 @@ class FakeMatrixRoom(
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
     private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
     private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
+    private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
 
     var sendMediaCount = 0
@@ -270,6 +272,10 @@ class FakeMatrixRoom(
         return canSendEventResults[type] ?: Result.failure(IllegalStateException("No fake answer"))
     }
 
+    override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
+        return canUserTriggerRoomNotificationResult
+    }
+
     override suspend fun sendImage(
         file: File,
         thumbnailFile: File,
@@ -381,7 +387,7 @@ class FakeMatrixRoom(
     override suspend fun sendVoiceMessage(
         file: File,
         audioInfo: AudioInfo,
-        waveform: List<Int>,
+        waveform: List<Float>,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
 
@@ -432,6 +438,10 @@ class FakeMatrixRoom(
 
     fun givenCanSendEventResult(type: MessageEventType, result: Result<Boolean>) {
         canSendEventResults[type] = result
+    }
+
+    fun givenCanTriggerRoomNotification(result: Result<Boolean>) {
+        canUserTriggerRoomNotificationResult = result
     }
 
     fun givenIgnoreResult(result: Result<Unit>) {

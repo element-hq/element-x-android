@@ -50,6 +50,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
@@ -129,6 +130,9 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is AudioMessageType -> {
                 sp.getString(CommonStrings.common_audio)
+            }
+            is VoiceMessageType -> {
+                sp.getString(CommonStrings.common_voice_message)
             }
             is OtherMessageType -> {
                 messageType.body

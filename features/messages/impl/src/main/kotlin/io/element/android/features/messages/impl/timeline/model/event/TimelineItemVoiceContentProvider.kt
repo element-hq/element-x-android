@@ -32,11 +32,11 @@ open class TimelineItemVoiceContentProvider : PreviewParameterProvider<TimelineI
             ),
             aTimelineItemVoiceContent(
                 durationMs = 10_000,
-                waveform = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
+                waveform = listOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f),
             ),
             aTimelineItemVoiceContent(
                 durationMs = 1_800_000, // 30 minutes
-                waveform = List(1024) { it },
+                waveform = List(1024) { it / 1024f },
             ),
         )
 }
@@ -47,7 +47,7 @@ fun aTimelineItemVoiceContent(
     durationMs: Long = 61_000,
     contentUri: String = "mxc://matrix.org/1234567890abcdefg",
     mimeType: String = MimeTypes.Ogg,
-    waveform: List<Int> = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0),
+    waveform: List<Float> = listOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f),
 ) = TimelineItemVoiceContent(
     eventId = eventId?.let { EventId(it) },
     body = body,

@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.voicemessages.composer
 import android.Manifest
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,10 +35,14 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -50,6 +55,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
     private val voiceRecorder: VoiceRecorder,
     private val analyticsService: AnalyticsService,
     private val mediaSender: MediaSender,
+    private val player: VoiceMessageComposerPlayer,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<VoiceMessageComposerState> {
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)
@@ -58,14 +64,19 @@ class VoiceMessageComposerPresenter @Inject constructor(
     override fun present(): VoiceMessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
         val recorderState by voiceRecorder.state.collectAsState(initial = VoiceRecorderState.Idle)
+        val keepScreenOn by remember { derivedStateOf { recorderState is VoiceRecorderState.Recording } }
 
         val permissionState = permissionsPresenter.present()
         var isSending by remember { mutableStateOf(false) }
+        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotPlaying)
+        val isPlaying by remember(playerState.isPlaying) { derivedStateOf { playerState.isPlaying } }
+        val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
 
         val onLifecycleEvent = { event: Lifecycle.Event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     appCoroutineScope.finishRecording()
+                    player.pause()
                 }
                 Lifecycle.Event.ON_DESTROY -> {
                     appCoroutineScope.cancelRecording()
@@ -99,6 +110,25 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 }
             }
         }
+        val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
+            when (event) {
+                VoiceMessagePlayerEvent.Play ->
+                    when (val recording = recorderState) {
+                        is VoiceRecorderState.Finished ->
+                            player.play(
+                                mediaPath = recording.file.path,
+                                mimeType = recording.mimeType,
+                            )
+                        else -> Timber.e("Voice message player event received but no file to play")
+                    }
+                VoiceMessagePlayerEvent.Pause -> {
+                    player.pause()
+                }
+                is VoiceMessagePlayerEvent.Seek -> {
+                    // TODO implement seeking
+                }
+            }
+        }
 
         val onAcceptPermissionsRationale = {
             permissionState.eventSink(PermissionsEvents.OpenSystemSettingAndCloseDialog)
@@ -120,9 +150,11 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 return@lambda
             }
             isSending = true
+            player.pause()
             appCoroutineScope.sendMessage(
                 file = finishedState.file,
                 mimeType = finishedState.mimeType,
+                waveform = finishedState.waveform,
             ).invokeOnCompletion {
                 isSending = false
             }
@@ -131,10 +163,14 @@ class VoiceMessageComposerPresenter @Inject constructor(
         val handleEvents: (VoiceMessageComposerEvents) -> Unit = { event ->
             when (event) {
                 is VoiceMessageComposerEvents.RecordButtonEvent -> onRecordButtonPress(event)
+                is VoiceMessageComposerEvents.PlayerEvent -> onPlayerEvent(event.playerEvent)
                 is VoiceMessageComposerEvents.SendVoiceMessage -> localCoroutineScope.launch {
                     onSendButtonPress()
                 }
-                VoiceMessageComposerEvents.DeleteVoiceMessage -> localCoroutineScope.deleteRecording()
+                VoiceMessageComposerEvents.DeleteVoiceMessage -> {
+                    player.pause()
+                    localCoroutineScope.deleteRecording()
+                }
                 VoiceMessageComposerEvents.DismissPermissionsRationale -> onDismissPermissionsRationale()
                 VoiceMessageComposerEvents.AcceptPermissionRationale -> onAcceptPermissionsRationale()
                 is VoiceMessageComposerEvents.LifecycleEvent -> onLifecycleEvent(event.event)
@@ -145,16 +181,18 @@ class VoiceMessageComposerPresenter @Inject constructor(
             voiceMessageState = when (val state = recorderState) {
                 is VoiceRecorderState.Recording -> VoiceMessageState.Recording(
                     duration = state.elapsedTime,
-                    level = state.level
+                    levels = state.levels.toPersistentList()
                 )
-                is VoiceRecorderState.Finished -> if (isSending) {
-                    VoiceMessageState.Sending
-                } else {
-                    VoiceMessageState.Preview
-                }
+                is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
+                    isSending = isSending,
+                    isPlaying = isPlaying,
+                    playbackProgress = playerState.progress,
+                    waveform = waveform,
+                )
                 else -> VoiceMessageState.Idle
             },
             showPermissionRationaleDialog = permissionState.showDialog,
+            keepScreenOn = keepScreenOn,
             eventSink = handleEvents,
         )
     }
@@ -181,12 +219,14 @@ class VoiceMessageComposerPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.sendMessage(
-        file: File, mimeType: String,
+        file: File,
+        mimeType: String,
+        waveform: List<Float>
     ) = launch {
         val result = mediaSender.sendVoiceMessage(
             uri = file.toUri(),
             mimeType = mimeType,
-            waveForm = emptyList(), // TODO generate waveform
+            waveForm = waveform,
         )
 
         if (result.isFailure) {
@@ -197,3 +237,9 @@ class VoiceMessageComposerPresenter @Inject constructor(
         voiceRecorder.deleteRecording()
     }
 }
+
+private fun VoiceRecorderState.finishedWaveform(): ImmutableList<Float> =
+    (this as? VoiceRecorderState.Finished)
+        ?.waveform
+        .orEmpty()
+        .toImmutableList()

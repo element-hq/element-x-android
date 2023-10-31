@@ -21,10 +21,26 @@ import org.matrix.rustcomponents.sdk.UnstableAudioDetailsContent as RustAudioDet
 
 fun RustAudioDetails.map(): AudioDetails = AudioDetails(
     duration = duration,
-    waveform = waveform.map { it.toInt() },
+    waveform = waveform.fromMSC3246range(),
 )
 
 fun AudioDetails.map(): RustAudioDetails = RustAudioDetails(
     duration = duration,
-    waveform = waveform.map { it.toUShort() }
+    waveform = waveform.toMSC3246range()
 )
+
+/**
+ * Resizes the given [0;1024] int list as per unstable MSC3246 spec
+ * to a [0;1] float list to be used for waveform rendering.
+ *
+ * https://github.com/matrix-org/matrix-spec-proposals/blob/travis/msc/audio-waveform/proposals/3246-audio-waveform.md
+ */
+internal fun List<UShort>.fromMSC3246range(): List<Float> = map { it.toInt() / 1024f }
+
+/**
+ * Resizes the given [0;1] float list as per unstable MSC3246 spec
+ * to a [0;1024] int list to be used for waveform rendering.
+ *
+ * https://github.com/matrix-org/matrix-spec-proposals/blob/travis/msc/audio-waveform/proposals/3246-audio-waveform.md
+ */
+internal fun List<Float>.toMSC3246range(): List<UShort> = map { (it * 1024).toInt().toUShort() }

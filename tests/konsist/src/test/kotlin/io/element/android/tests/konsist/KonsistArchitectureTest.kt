@@ -35,6 +35,7 @@ class KonsistArchitectureTest {
             .withNameEndingWith("State")
             .withoutName(
                 "CameraPositionState",
+                "CustomSheetState",
             )
             .constructors
             .parameters

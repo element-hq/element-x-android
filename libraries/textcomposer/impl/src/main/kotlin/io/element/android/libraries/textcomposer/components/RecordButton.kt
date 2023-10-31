@@ -21,8 +21,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -47,12 +49,26 @@ internal fun RecordButton(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pressState = rememberPressState()
+    val hapticFeedback = LocalHapticFeedback.current
+
+    val performHapticFeedback = {
+        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+    }
 
     PressStateEffects(
         pressState = pressState.value,
-        onPressStart = onPressStart,
-        onLongPressEnd = onLongPressEnd,
-        onTap = onTap,
+        onPressStart = {
+            onPressStart()
+            performHapticFeedback()
+        },
+        onLongPressEnd = {
+            onLongPressEnd()
+            performHapticFeedback()
+        },
+        onTap = {
+            onTap()
+            performHapticFeedback()
+        },
     )
 
     RecordButtonView(
@@ -81,7 +97,7 @@ private fun RecordButtonView(
 ) {
     IconButton(
         modifier = modifier
-            .size(48.dp),
+            .size(48.dp.applyScaleUp()),
         onClick = {},
     ) {
         Icon(
