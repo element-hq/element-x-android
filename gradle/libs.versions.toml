@@ -34,7 +34,7 @@ accompanist = "0.32.0"
 test_core = "1.5.0"
 
 #other
-coil = "2.4.0"
+coil = "2.5.0"
 datetime = "0.4.1"
 serialization_json = "1.6.0"
 showkase = "1.0.0-beta18"
