@@ -20,6 +20,7 @@ import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 
 sealed interface PinUnlockEvents {
     data class OnPinKeypadPressed(val pinKeypadModel: PinKeypadModel) : PinUnlockEvents
+    data class OnPinEntryChanged(val entryAsText: String) : PinUnlockEvents
     data object OnForgetPin : PinUnlockEvents
     data object ClearSignOutPrompt : PinUnlockEvents
     data object SignOut : PinUnlockEvents

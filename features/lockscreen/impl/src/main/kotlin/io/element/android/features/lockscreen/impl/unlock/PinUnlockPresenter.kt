@@ -116,6 +116,9 @@ class PinUnlockPresenter @Inject constructor(
                 PinUnlockEvents.ClearBiometricError -> {
                     biometricUnlockResult = null
                 }
+                is PinUnlockEvents.OnPinEntryChanged -> {
+                    pinEntryState.value = pinEntry.process(event.entryAsText)
+                }
             }
         }
         return PinUnlockState(
@@ -153,6 +156,16 @@ class PinUnlockPresenter @Inject constructor(
                     is PinKeypadModel.Number -> data.addDigit(pinKeypadModel.number)
                     PinKeypadModel.Empty -> data
                 }
+                Async.Success(pinEntry)
+            }
+            else -> this
+        }
+    }
+
+    private fun Async<PinEntry>.process(pinEntryAsText: String): Async<PinEntry> {
+        return when (this) {
+            is Async.Success -> {
+                val pinEntry = data.fillWith(pinEntryAsText)
                 Async.Success(pinEntry)
             }
             else -> this
