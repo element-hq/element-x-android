@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.setup
+package io.element.android.features.lockscreen.impl.setup.pin
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,8 +25,8 @@ import androidx.compose.runtime.setValue
 import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
-import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
-import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
+import io.element.android.features.lockscreen.impl.setup.pin.validation.PinValidator
+import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPinFailure
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.coroutines.delay

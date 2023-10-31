@@ -17,6 +17,7 @@
 package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.libraries.architecture.Async
 
@@ -27,6 +28,7 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
             aPinUnlockState(pinEntry = PinEntry.createEmpty(4).fillWith("12")),
             aPinUnlockState(showWrongPinTitle = true),
             aPinUnlockState(showSignOutPrompt = true),
+            aPinUnlockState(showBiometricUnlock = false),
             aPinUnlockState(showSignOutPrompt = true, remainingAttempts = 0),
             aPinUnlockState(signOutAction = Async.Loading()),
         )
@@ -37,12 +39,16 @@ fun aPinUnlockState(
     remainingAttempts: Int = 3,
     showWrongPinTitle: Boolean = false,
     showSignOutPrompt: Boolean = false,
+    showBiometricUnlock: Boolean = true,
+    biometricUnlockResult: BiometricUnlock.AuthenticationResult? = null,
     signOutAction: Async<String?> = Async.Uninitialized,
 ) = PinUnlockState(
     pinEntry = Async.Success(pinEntry),
     showWrongPinTitle = showWrongPinTitle,
     remainingAttempts = Async.Success(remainingAttempts),
     showSignOutPrompt = showSignOutPrompt,
+    showBiometricUnlock = showBiometricUnlock,
     signOutAction = signOutAction,
+    biometricUnlockResult = biometricUnlockResult,
     eventSink = {}
 )

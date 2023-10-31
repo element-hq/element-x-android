@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.setup
+package io.element.android.features.lockscreen.impl.biometric
 
-sealed interface SetupPinEvents {
-    data class OnPinEntryChanged(val entryAsText: String) : SetupPinEvents
-    data object ClearFailure : SetupPinEvents
+open class DefaultBiometricUnlockCallback : BiometricUnlock.Callback {
+    override fun onBiometricSetupError() = Unit
+    override fun onBiometricUnlockSuccess() = Unit
+    override fun onBiometricUnlockFailed(error: Exception?) = Unit
 }

@@ -24,4 +24,5 @@ sealed interface PinUnlockEvents {
     data object ClearSignOutPrompt : PinUnlockEvents
     data object SignOut : PinUnlockEvents
     data object OnUseBiometric : PinUnlockEvents
+    data object ClearBiometricError : PinUnlockEvents
 }

@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.pin.storage
+package io.element.android.features.lockscreen.impl.setup.pin
 
-interface PinCodeStore : EncryptedPinCodeStorage {
+import io.element.android.features.lockscreen.impl.pin.model.PinEntry
+import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPinFailure
 
-    /**
-     * Returns the remaining PIN code attempts. When this reaches 0 the PIN code access won't be available for some time.
-     */
-    suspend fun getRemainingPinCodeAttemptsNumber(): Int
-
-    /**
-     * Should decrement the number of remaining PIN code attempts.
-     */
-    suspend fun onWrongPin()
-
-    /**
-     * Resets the counter of attempts for PIN code and biometric access.
-     */
-    suspend fun resetCounter()
+data class SetupPinState(
+    val choosePinEntry: PinEntry,
+    val confirmPinEntry: PinEntry,
+    val isConfirmationStep: Boolean,
+    val setupPinFailure: SetupPinFailure?,
+    val appName: String,
+    val eventSink: (SetupPinEvents) -> Unit
+) {
+    val activePinEntry = if (isConfirmationStep) {
+        confirmPinEntry
+    } else {
+        choosePinEntry
+    }
 }
-
-

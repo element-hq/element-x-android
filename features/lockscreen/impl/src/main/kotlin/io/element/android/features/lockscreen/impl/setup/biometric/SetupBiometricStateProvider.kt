@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.settings
+package io.element.android.features.lockscreen.impl.setup.biometric
 
-sealed interface LockScreenSettingsEvents {
-    data object OnRemovePin : LockScreenSettingsEvents
-    data object ConfirmRemovePin : LockScreenSettingsEvents
-    data object CancelRemovePin : LockScreenSettingsEvents
-    data object ToggleBiometricAllowed : LockScreenSettingsEvents
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+open class SetupBiometricStateProvider : PreviewParameterProvider<SetupBiometricState> {
+    override val values: Sequence<SetupBiometricState>
+        get() = sequenceOf(
+            aSetupBiometricState(),
+        )
 }
+
+fun aSetupBiometricState(
+    isBiometricSetupDone: Boolean = false,
+) = SetupBiometricState(
+    isBiometricSetupDone = isBiometricSetupDone,
+    eventSink = {}
+)

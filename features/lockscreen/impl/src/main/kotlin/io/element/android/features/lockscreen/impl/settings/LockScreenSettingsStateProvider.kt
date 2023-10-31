@@ -31,9 +31,11 @@ fun aLockScreenSettingsState(
     isLockMandatory: Boolean = false,
     isBiometricEnabled: Boolean = false,
     showRemovePinConfirmation: Boolean = false,
+    showToggleBiometric: Boolean = true,
 ) = LockScreenSettingsState(
     showRemovePinOption = isLockMandatory,
     isBiometricEnabled = isBiometricEnabled,
     showRemovePinConfirmation = showRemovePinConfirmation,
+    showToggleBiometric = showToggleBiometric,
     eventSink = {}
 )

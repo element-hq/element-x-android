@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.setup
+package io.element.android.features.lockscreen.impl.setup.pin
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -27,8 +27,8 @@ import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCall
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.assertEmpty
 import io.element.android.features.lockscreen.impl.pin.model.assertText
-import io.element.android.features.lockscreen.impl.setup.validation.PinValidator
-import io.element.android.features.lockscreen.impl.setup.validation.SetupPinFailure
+import io.element.android.features.lockscreen.impl.setup.pin.validation.PinValidator
+import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPinFailure
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
