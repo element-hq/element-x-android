@@ -117,7 +117,7 @@ internal class RustEncryptionService(
                 } else {
                     trySend(BackupUploadState.Error)
                 }
-                close(it)
+                close()
             }
             awaitClose {}
         }
