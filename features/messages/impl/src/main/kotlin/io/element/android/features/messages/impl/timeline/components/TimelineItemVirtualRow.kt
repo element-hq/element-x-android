@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineEncryptedHistoryBannerView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -28,12 +29,13 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 @Composable
 fun TimelineItemVirtualRow(
     virtual: TimelineItem.Virtual,
+    sessionState: SessionState,
     modifier: Modifier = Modifier
 ) {
     when (virtual.model) {
         is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model, modifier)
         TimelineItemReadMarkerModel -> return
-        is TimelineItemEncryptedHistoryBannerVirtualModel -> TimelineEncryptedHistoryBannerView(modifier)
+        is TimelineItemEncryptedHistoryBannerVirtualModel -> TimelineEncryptedHistoryBannerView(sessionState, modifier)
     }
 }
 

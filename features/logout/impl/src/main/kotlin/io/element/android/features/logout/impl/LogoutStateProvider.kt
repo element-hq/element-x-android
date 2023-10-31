@@ -19,6 +19,7 @@ package io.element.android.features.logout.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
+import io.element.android.libraries.matrix.api.encryption.SteadyStateException
 
 open class LogoutStateProvider : PreviewParameterProvider<LogoutState> {
     override val values: Sequence<LogoutState>
@@ -30,6 +31,7 @@ open class LogoutStateProvider : PreviewParameterProvider<LogoutState> {
             aLogoutState(showConfirmationDialog = true),
             aLogoutState(logoutAction = Async.Loading()),
             aLogoutState(logoutAction = Async.Failure(Exception("Failed to logout"))),
+            aLogoutState(backupUploadState = BackupUploadState.SteadyException(SteadyStateException.Connection("No network"))),
         )
 }
 

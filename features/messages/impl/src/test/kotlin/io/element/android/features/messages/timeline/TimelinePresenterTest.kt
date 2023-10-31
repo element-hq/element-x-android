@@ -24,6 +24,7 @@ import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
@@ -35,10 +36,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -67,6 +70,7 @@ class TimelinePresenterTest {
             assertThat(initialState.timelineItems).isEmpty()
             val loadedNoTimelineState = awaitItem()
             assertThat(loadedNoTimelineState.timelineItems).isEmpty()
+            assertThat(loadedNoTimelineState.sessionState).isEqualTo(SessionState(isSessionVerified = false, isKeyBackupEnabled = false))
         }
     }
 
@@ -228,8 +232,8 @@ class TimelinePresenterTest {
                     senders = listOf(alice, charlie)
                 ),
                 EventReaction(
-                key = "👍",
-                senders = listOf(alice, bob)
+                    key = "👍",
+                    senders = listOf(alice, bob)
                 ),
                 EventReaction(
                     key = "🐶",
@@ -316,6 +320,8 @@ class TimelinePresenterTest {
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
             analyticsService = FakeAnalyticsService(),
+            encryptionService = FakeEncryptionService(),
+            verificationService = FakeSessionVerificationService(),
         )
     }
 
@@ -329,6 +335,8 @@ class TimelinePresenterTest {
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
             analyticsService = analyticsService,
+            encryptionService = FakeEncryptionService(),
+            verificationService = FakeSessionVerificationService(),
         )
     }
 }
