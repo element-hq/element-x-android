@@ -17,7 +17,6 @@
 package io.element.android.features.call.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -29,7 +28,6 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.appnav.di.MatrixClientsHolder
 import io.element.android.features.call.CallType
 import io.element.android.features.call.data.WidgetMessage
 import io.element.android.features.call.utils.CallWidgetProvider
@@ -40,12 +38,11 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -58,11 +55,10 @@ class CallScreenPresenter @AssistedInject constructor(
     @Assisted private val callType: CallType,
     @Assisted private val navigator: CallScreenNavigator,
     private val callWidgetProvider: CallWidgetProvider,
-    private val userAgentProvider: UserAgentProvider,
+    userAgentProvider: UserAgentProvider,
     private val clock: SystemClock,
     private val dispatchers: CoroutineDispatchers,
-    private val matrixClientsHolder: MatrixClientsHolder,
-    private val appCoroutineScope: CoroutineScope,
+    private val matrixClientsProvider: MatrixClientProvider,
 ) : Presenter<CallScreenState> {
 
     @AssistedFactory
@@ -79,31 +75,15 @@ class CallScreenPresenter @AssistedInject constructor(
         val urlState = remember { mutableStateOf<Async<String>>(Async.Uninitialized) }
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
+        var matrixClient by remember { mutableStateOf<MatrixClient?>(null) }
         var isJoinedCall by rememberSaveable { mutableStateOf(false) }
-
-        // We need to restart the Matrix client to get the needed call events
-        DisposableEffect(Unit) {
-            var client: MatrixClient? = null
-            if (callType is CallType.RoomCall) {
-                client = matrixClientsHolder.getOrNull(callType.sessionId)
-                coroutineScope.launch {
-                    client?.syncService()?.syncState
-                        ?.onEach { state ->
-                            if (state == SyncState.Idle) {
-                                client.syncService().startSync()
-                            }
-                        }?.collect()
-                }
-            }
-            onDispose {
-                appCoroutineScope.launch {
-                    client?.syncService()?.stopSync()
-                }
-            }
-        }
 
         LaunchedEffect(Unit) {
             loadUrl(callType, urlState, callWidgetDriver)
+
+            matrixClient = (callType as? CallType.RoomCall)?.sessionId?.let {
+                matrixClientsProvider.getOrNull(it)
+            }
         }
 
         callWidgetDriver.value?.let { driver ->
@@ -143,22 +123,29 @@ class CallScreenPresenter @AssistedInject constructor(
             }
         }
 
-        fun handleEvents(event: CallScreeEvents) {
+        fun handleEvents(event: CallScreenEvents) {
             when (event) {
-                is CallScreeEvents.Hangup -> {
+                is CallScreenEvents.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
                     val interceptor = messageInterceptor.value
                     if (widgetId != null && interceptor != null && isJoinedCall) {
                         // If the call was joined, we need to hang up first. Then the UI will be dismissed automatically.
                         sendHangupMessage(widgetId, interceptor)
+                        isJoinedCall = false
                     } else {
                         coroutineScope.launch {
                             close(callWidgetDriver.value, navigator)
                         }
                     }
                 }
-                is CallScreeEvents.SetupMessageChannels -> {
+                is CallScreenEvents.SetupMessageChannels -> {
                     messageInterceptor.value = event.widgetMessageInterceptor
+                }
+                is CallScreenEvents.StartSync -> coroutineScope.launch {
+                    matrixClient?.syncService()?.startSync()
+                }
+                is CallScreenEvents.StopSync ->  coroutineScope.launch {
+                    matrixClient?.syncService()?.stopSync()
                 }
             }
         }
