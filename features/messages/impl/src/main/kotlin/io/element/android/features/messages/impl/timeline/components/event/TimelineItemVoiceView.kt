@@ -29,6 +29,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -42,6 +43,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageStateProvider
+import io.element.android.libraries.androidutils.accessibility.isScreenReaderEnabled
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -86,6 +88,7 @@ fun TimelineItemVoiceView(
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.width(8.dp))
+        val context = LocalContext.current
         WaveformPlaybackView(
             showCursor = state.button == VoiceMessageState.Button.Pause,
             playbackProgress = state.progress,
@@ -93,6 +96,7 @@ fun TimelineItemVoiceView(
             modifier = Modifier
                 .height(34.dp)
                 .weight(1f),
+            seekEnabled = !context.isScreenReaderEnabled(),
             onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) },
         )
         Spacer(Modifier.width(extraPadding.getDpSize()))
