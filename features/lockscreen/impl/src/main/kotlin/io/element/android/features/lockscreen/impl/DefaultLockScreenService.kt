@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -106,7 +107,7 @@ class DefaultLockScreenService @Inject constructor(
                 if (isInForeground) {
                     lockJob?.cancel()
                 } else {
-                    lockJob = lockIfNeeded(delayInMillis = lockScreenConfig.gracePeriodInMillis)
+                    lockJob = lockIfNeeded(gracePeriod = lockScreenConfig.gracePeriod)
                 }
             }
         }
@@ -118,9 +119,9 @@ class DefaultLockScreenService @Inject constructor(
             && !pinCodeManager.isPinCodeAvailable()
     }
 
-    private fun CoroutineScope.lockIfNeeded(delayInMillis: Long = 0L) = launch {
+    private fun CoroutineScope.lockIfNeeded(gracePeriod: Duration = Duration.ZERO) = launch {
         if (featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock) && pinCodeManager.isPinCodeAvailable()) {
-            delay(delayInMillis)
+            delay(gracePeriod)
             _lockScreenState.value = LockScreenLockState.Locked
         }
     }

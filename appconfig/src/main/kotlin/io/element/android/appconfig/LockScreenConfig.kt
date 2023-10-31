@@ -20,6 +20,8 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.di.AppScope
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Configuration for the lock screen feature.
@@ -48,7 +50,7 @@ data class LockScreenConfig(
     /**
      * Time period before locking the app once backgrounded.
      */
-    val gracePeriodInMillis: Long,
+    val gracePeriod: Duration,
 
     /**
      * Authentication with strong methods (fingerprint, some face/iris unlock implementations) is supported.
@@ -70,7 +72,7 @@ object LockScreenConfigModule {
         pinBlacklist = setOf("0000", "1234"),
         pinSize = 4,
         maxPinCodeAttemptsBeforeLogout = 3,
-        gracePeriodInMillis = 90_000L,
+        gracePeriod = 90.seconds,
         isStrongBiometricsEnabled = true,
         isWeakBiometricsEnabled = true,
     )

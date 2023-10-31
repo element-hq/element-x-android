@@ -17,13 +17,15 @@
 package io.element.android.features.lockscreen.impl.fixtures
 
 import io.element.android.appconfig.LockScreenConfig
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 internal fun aLockScreenConfig(
     isPinMandatory: Boolean = false,
     pinBlacklist: Set<String> = emptySet(),
     pinSize: Int = 4,
     maxPinCodeAttemptsBeforeLogout: Int = 3,
-    gracePeriodInMillis: Long = 5 * 60 * 1000L,
+    gracePeriod: Duration = 3.seconds,
     isStrongBiometricsEnabled: Boolean = true,
     isWeakBiometricsEnabled: Boolean = true,
 ): LockScreenConfig {
@@ -32,7 +34,7 @@ internal fun aLockScreenConfig(
         pinBlacklist = pinBlacklist,
         pinSize = pinSize,
         maxPinCodeAttemptsBeforeLogout = maxPinCodeAttemptsBeforeLogout,
-        gracePeriodInMillis = gracePeriodInMillis,
+        gracePeriod = gracePeriod,
         isStrongBiometricsEnabled = isStrongBiometricsEnabled,
         isWeakBiometricsEnabled = isWeakBiometricsEnabled,
     )

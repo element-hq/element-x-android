@@ -44,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
@@ -58,6 +59,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -66,6 +68,12 @@ fun PinUnlockView(
     state: PinUnlockState,
     modifier: Modifier = Modifier,
 ) {
+    OnLifecycleEvent { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(PinUnlockEvents.OnUseBiometric)
+            else -> Unit
+        }
+    }
     Surface(modifier) {
         BoxWithConstraints {
             val commonModifier = Modifier
