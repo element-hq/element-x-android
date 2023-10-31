@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
 import io.element.android.features.call.R
 import io.element.android.features.call.utils.WebViewWidgetMessageInterceptor
 import io.element.android.libraries.architecture.Async
@@ -44,7 +43,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 
 typealias RequestPermissionCallback = (Array<String>) -> Unit
 
@@ -93,17 +91,6 @@ internal fun CallScreenView(
                 state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
             }
         )
-
-        // We need to restart the Matrix client to get the needed call events
-        if (state.isInWidgetMode) {
-            OnLifecycleEvent { _, event ->
-                when (event) {
-                    Lifecycle.Event.ON_START -> state.eventSink(CallScreenEvents.StartSync)
-                    Lifecycle.Event.ON_STOP -> state.eventSink(CallScreenEvents.StopSync)
-                    else -> Unit
-                }
-            }
-        }
     }
 }
 

@@ -17,6 +17,7 @@
 package io.element.android.features.call.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -37,12 +38,13 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -59,6 +61,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val clock: SystemClock,
     private val dispatchers: CoroutineDispatchers,
     private val matrixClientsProvider: MatrixClientProvider,
+    private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
 
     @AssistedFactory
@@ -75,16 +78,13 @@ class CallScreenPresenter @AssistedInject constructor(
         val urlState = remember { mutableStateOf<Async<String>>(Async.Uninitialized) }
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
-        var matrixClient by remember { mutableStateOf<MatrixClient?>(null) }
         var isJoinedCall by rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             loadUrl(callType, urlState, callWidgetDriver)
-
-            matrixClient = (callType as? CallType.RoomCall)?.sessionId?.let {
-                matrixClientsProvider.getOrNull(it)
-            }
         }
+
+        HandleMatrixClientSyncState()
 
         callWidgetDriver.value?.let { driver ->
             LaunchedEffect(Unit) {
@@ -141,12 +141,6 @@ class CallScreenPresenter @AssistedInject constructor(
                 is CallScreenEvents.SetupMessageChannels -> {
                     messageInterceptor.value = event.widgetMessageInterceptor
                 }
-                is CallScreenEvents.StartSync -> coroutineScope.launch {
-                    matrixClient?.syncService()?.startSync()
-                }
-                is CallScreenEvents.StopSync ->  coroutineScope.launch {
-                    matrixClient?.syncService()?.stopSync()
-                }
             }
         }
 
@@ -176,6 +170,36 @@ class CallScreenPresenter @AssistedInject constructor(
                     ).getOrThrow()
                     callWidgetDriver.value = driver
                     url
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun HandleMatrixClientSyncState() {
+        val coroutineScope = rememberCoroutineScope()
+        DisposableEffect(Unit) {
+            val client = (callType as? CallType.RoomCall)?.sessionId?.let {
+                matrixClientsProvider.getOrNull(it)
+            } ?: return@DisposableEffect onDispose { }
+
+            coroutineScope.launch {
+                client.syncService().syncState
+                    .onEach { state ->
+                        if (state != SyncState.Running) {
+                            client.syncService().startSync()
+                        }
+                    }
+                    .collect()
+            }
+            onDispose {
+                // We can't use the local coroutine scope here because it will be disposed before this effect
+                appCoroutineScope.launch {
+                    client.syncService().run {
+                        if (syncState.value == SyncState.Running) {
+                            stopSync()
+                        }
+                    }
                 }
             }
         }

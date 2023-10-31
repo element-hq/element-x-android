@@ -19,8 +19,6 @@ package io.element.android.features.call.ui
 import io.element.android.features.call.utils.WidgetMessageInterceptor
 
 sealed interface CallScreenEvents {
-    data object StartSync : CallScreenEvents
-    data object StopSync : CallScreenEvents
     data object Hangup : CallScreenEvents
     data class SetupMessageChannels(val widgetMessageInterceptor: WidgetMessageInterceptor) : CallScreenEvents
 }
