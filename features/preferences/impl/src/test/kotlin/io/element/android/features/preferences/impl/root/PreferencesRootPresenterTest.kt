@@ -56,6 +56,7 @@ class PreferencesRootPresenterTest {
             DefaultIndicatorService(
                 sessionVerificationService = sessionVerificationService,
                 encryptionService = FakeEncryptionService(),
+                featureFlagService = FakeFeatureFlagService(),
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {

@@ -35,6 +35,8 @@ import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -44,6 +46,7 @@ import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
@@ -57,6 +60,7 @@ class RoomListPresenter @Inject constructor(
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val roomListDataSource: RoomListDataSource,
     private val encryptionService: EncryptionService,
+    private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
 ) : Presenter<RoomListState> {
 
@@ -84,10 +88,14 @@ class RoomListPresenter @Inject constructor(
             derivedStateOf { canVerifySession && !verificationPromptDismissed }
         }
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
+        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
+            .collectAsState(initial = runBlocking { featureFlagService.isFeatureEnabled(FeatureFlags.SecureStorage) })
         var recoveryKeyPromptDismissed by rememberSaveable { mutableStateOf(false) }
         val displayRecoveryKeyPrompt by remember {
             derivedStateOf {
-                recoveryState == RecoveryState.INCOMPLETE && !recoveryKeyPromptDismissed
+                secureStorageFlag &&
+                    recoveryState == RecoveryState.INCOMPLETE &&
+                    !recoveryKeyPromptDismissed
             }
         }
 

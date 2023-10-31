@@ -66,5 +66,11 @@ enum class FeatureFlags(
         title = "Mentions",
         description = "Type `@` to get mention suggestions and insert them",
         defaultValue = false,
+    ),
+    SecureStorage(
+        key = "feature.securestorage",
+        title = "Chat backup",
+        description = "Allow access to backup and restore chat history settings",
+        defaultValue = false,
     )
 }
