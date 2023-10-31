@@ -113,7 +113,8 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Unlock -> {
-                createNode<PinUnlockNode>(buildContext)
+                val inputs = PinUnlockNode.Inputs(isInAppUnlock = true)
+                createNode<PinUnlockNode>(buildContext, plugins = listOf(inputs))
             }
             NavTarget.Setup -> {
                 val callback = object : LockScreenSetupFlowNode.Callback {
