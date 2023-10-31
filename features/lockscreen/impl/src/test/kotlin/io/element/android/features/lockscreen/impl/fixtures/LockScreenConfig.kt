@@ -23,13 +23,17 @@ internal fun aLockScreenConfig(
     pinBlacklist: Set<String> = emptySet(),
     pinSize: Int = 4,
     maxPinCodeAttemptsBeforeLogout: Int = 3,
-    gracePeriodInMillis: Long = 5 * 60 * 1000L
+    gracePeriodInMillis: Long = 5 * 60 * 1000L,
+    isStrongBiometricsEnabled: Boolean = true,
+    isWeakBiometricsEnabled: Boolean = true,
 ): LockScreenConfig {
     return LockScreenConfig(
         isPinMandatory = isPinMandatory,
         pinBlacklist = pinBlacklist,
         pinSize = pinSize,
         maxPinCodeAttemptsBeforeLogout = maxPinCodeAttemptsBeforeLogout,
-        gracePeriodInMillis = gracePeriodInMillis
+        gracePeriodInMillis = gracePeriodInMillis,
+        isStrongBiometricsEnabled = isStrongBiometricsEnabled,
+        isWeakBiometricsEnabled = isWeakBiometricsEnabled,
     )
 }
