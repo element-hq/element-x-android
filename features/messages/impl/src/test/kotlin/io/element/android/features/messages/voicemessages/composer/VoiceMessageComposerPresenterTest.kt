@@ -31,7 +31,7 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
-import io.element.android.features.messages.test.MessageComposerContextFake
+import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_NAME
@@ -71,7 +71,7 @@ class VoiceMessageComposerPresenterTest {
     private val matrixRoom = FakeMatrixRoom()
     private val mediaPreProcessor = FakeMediaPreProcessor().apply { givenAudioResult() }
     private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom)
-    private val messageComposerContext = MessageComposerContextFake()
+    private val messageComposerContext = FakeMessageComposerContext()
 
     companion object {
         private val RECORDING_DURATION = 1.seconds
