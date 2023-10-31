@@ -39,7 +39,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class PreferencesRootPresenter @Inject constructor(
@@ -80,7 +79,7 @@ class PreferencesRootPresenter @Inject constructor(
         val showSecureBackupIndicator by indicatorService.showSettingChatBackupIndicator()
 
         val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
-            .collectAsState(initial = runBlocking { featureFlagService.isFeatureEnabled(FeatureFlags.SecureStorage) })
+            .collectAsState(initial = null)
 
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
@@ -98,7 +97,7 @@ class PreferencesRootPresenter @Inject constructor(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
             showCompleteVerification = showCompleteVerification,
-            showSecureBackup = !showCompleteVerification && secureStorageFlag,
+            showSecureBackup = !showCompleteVerification && secureStorageFlag == true,
             showSecureBackupBadge = showSecureBackupIndicator,
             accountManagementUrl = accountManagementUrl.value,
             devicesManagementUrl = devicesManagementUrl.value,

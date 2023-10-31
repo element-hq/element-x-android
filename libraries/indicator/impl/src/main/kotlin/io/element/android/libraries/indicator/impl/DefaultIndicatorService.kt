@@ -31,7 +31,6 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
@@ -56,7 +55,7 @@ class DefaultIndicatorService @Inject constructor(
     @Composable
     override fun showSettingChatBackupIndicator(): State<Boolean> {
         val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
-            .collectAsState(initial = runBlocking { featureFlagService.isFeatureEnabled(FeatureFlags.SecureStorage) })
+            .collectAsState(initial = null)
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
 
@@ -69,7 +68,7 @@ class DefaultIndicatorService @Inject constructor(
                     RecoveryState.DISABLED,
                     RecoveryState.INCOMPLETE,
                 )
-                secureStorageFlag && (showForBackup || showForRecovery)
+                secureStorageFlag == true && (showForBackup || showForRecovery)
             }
         }
     }

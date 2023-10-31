@@ -46,7 +46,6 @@ import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
@@ -89,11 +88,11 @@ class RoomListPresenter @Inject constructor(
         }
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
-            .collectAsState(initial = runBlocking { featureFlagService.isFeatureEnabled(FeatureFlags.SecureStorage) })
+            .collectAsState(initial = null)
         var recoveryKeyPromptDismissed by rememberSaveable { mutableStateOf(false) }
         val displayRecoveryKeyPrompt by remember {
             derivedStateOf {
-                secureStorageFlag &&
+                secureStorageFlag == true &&
                     recoveryState == RecoveryState.INCOMPLETE &&
                     !recoveryKeyPromptDismissed
             }
