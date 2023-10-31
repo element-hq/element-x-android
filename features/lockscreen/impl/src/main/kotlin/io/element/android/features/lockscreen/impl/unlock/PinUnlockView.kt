@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.foundation.background
@@ -29,6 +30,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -37,18 +39,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.R
+import io.element.android.features.lockscreen.impl.components.PinEntryTextField
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypad
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -64,59 +72,11 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun PinUnlockView(
     state: PinUnlockState,
+    isInAppUnlock: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Surface(modifier) {
-        BoxWithConstraints {
-            val commonModifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .padding(all = 20.dp)
-
-            val header = @Composable {
-                PinUnlockHeader(
-                    state = state,
-                    modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)
-                )
-            }
-            val footer = @Composable {
-                PinUnlockFooter(
-                    modifier = Modifier.padding(top = 24.dp),
-                    showBiometricUnlock = state.showBiometricUnlock,
-                    onUseBiometric = {
-                        state.eventSink(PinUnlockEvents.OnUseBiometric)
-                    },
-                    onForgotPin = {
-                        state.eventSink(PinUnlockEvents.OnForgetPin)
-                    },
-                )
-            }
-            val content = @Composable { constraints: BoxWithConstraintsScope ->
-                PinKeypad(
-                    onClick = {
-                        state.eventSink(PinUnlockEvents.OnPinKeypadPressed(it))
-                    },
-                    maxWidth = constraints.maxWidth,
-                    maxHeight = constraints.maxHeight,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                )
-            }
-            if (maxHeight < 600.dp) {
-                PinUnlockCompactView(
-                    header = header,
-                    footer = footer,
-                    content = content,
-                    modifier = commonModifier,
-                )
-            } else {
-                PinUnlockExpandedView(
-                    header = header,
-                    footer = footer,
-                    content = content,
-                    modifier = commonModifier,
-                )
-            }
-        }
+        PinUnlockPage(state = state, isInAppUnlock = isInAppUnlock)
         if (state.showSignOutPrompt) {
             SignOutPrompt(
                 isCancellable = state.isSignOutPromptCancellable,
@@ -131,6 +91,86 @@ fun PinUnlockView(
             ErrorDialog(
                 content = state.biometricUnlockErrorMessage ?: "",
                 onDismiss = { state.eventSink(PinUnlockEvents.ClearBiometricError) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun PinUnlockPage(
+    state: PinUnlockState,
+    isInAppUnlock: Boolean,
+    modifier: Modifier = Modifier
+) {
+    BoxWithConstraints {
+        val commonModifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding()
+            .padding(all = 20.dp)
+
+        val header = @Composable {
+            PinUnlockHeader(
+                state = state,
+                isInAppUnlock = isInAppUnlock,
+                modifier = Modifier.padding(top = 60.dp)
+            )
+        }
+        val footer = @Composable {
+            PinUnlockFooter(
+                modifier = Modifier.padding(top = 24.dp),
+                showBiometricUnlock = state.showBiometricUnlock,
+                onUseBiometric = {
+                    state.eventSink(PinUnlockEvents.OnUseBiometric)
+                },
+                onForgotPin = {
+                    state.eventSink(PinUnlockEvents.OnForgetPin)
+                },
+            )
+        }
+        val content = @Composable { constraints: BoxWithConstraintsScope ->
+            if (isInAppUnlock) {
+                val pinEntry = state.pinEntry.dataOrNull()
+                if (pinEntry != null) {
+                    val focusRequester = remember { FocusRequester() }
+                    LaunchedEffect(Unit) {
+                        focusRequester.requestFocus()
+                    }
+                    PinEntryTextField(
+                        pinEntry = pinEntry,
+                        isSecured = true,
+                        onValueChange = {
+                            state.eventSink(PinUnlockEvents.OnPinEntryChanged(it))
+                        },
+                        modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .fillMaxWidth()
+                    )
+                }
+            } else {
+                PinKeypad(
+                    onClick = {
+                        state.eventSink(PinUnlockEvents.OnPinKeypadPressed(it))
+                    },
+                    maxWidth = constraints.maxWidth,
+                    maxHeight = constraints.maxHeight,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                )
+            }
+        }
+        if (maxHeight < 600.dp) {
+            PinUnlockCompactView(
+                header = header,
+                footer = footer,
+                content = content,
+                modifier = commonModifier,
+            )
+        } else {
+            PinUnlockExpandedView(
+                header = header,
+                footer = footer,
+                content = content,
+                modifier = commonModifier,
             )
         }
     }
@@ -240,16 +280,21 @@ private fun PinDot(
 @Composable
 private fun PinUnlockHeader(
     state: PinUnlockState,
+    isInAppUnlock: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(
-            modifier = Modifier
-                .size(32.dp),
-            tint = ElementTheme.colors.iconPrimary,
-            imageVector = Icons.Filled.Lock,
-            contentDescription = "",
-        )
+        if (isInAppUnlock) {
+            RoundedIconAtom(imageVector = Icons.Filled.Lock)
+        } else {
+            Icon(
+                modifier = Modifier
+                    .size(32.dp),
+                tint = ElementTheme.colors.iconPrimary,
+                imageVector = Icons.Filled.Lock,
+                contentDescription = "",
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(id = CommonStrings.common_enter_your_pin),
@@ -282,8 +327,8 @@ private fun PinUnlockHeader(
             style = ElementTheme.typography.fontBodyMdRegular,
             color = subtitleColor,
         )
-        Spacer(Modifier.height(24.dp))
-        if (state.pinEntry is Async.Success) {
+        if (!isInAppUnlock && state.pinEntry is Async.Success) {
+            Spacer(Modifier.height(24.dp))
             PinDotsRow(state.pinEntry.data)
         }
     }
@@ -306,10 +351,22 @@ private fun PinUnlockFooter(
 
 @Composable
 @PreviewsDayNight
-internal fun PinUnlockViewPreview(@PreviewParameter(PinUnlockStateProvider::class) state: PinUnlockState) {
+internal fun PinUnlockInAppViewPreview(@PreviewParameter(PinUnlockStateProvider::class) state: PinUnlockState) {
     ElementPreview {
         PinUnlockView(
             state = state,
+            isInAppUnlock = true,
+        )
+    }
+}
+
+@Composable
+@PreviewsDayNight
+internal fun PinUnlockDefaultViewPreview(@PreviewParameter(PinUnlockStateProvider::class) state: PinUnlockState) {
+    ElementPreview {
+        PinUnlockView(
+            state = state,
+            isInAppUnlock = false,
         )
     }
 }
