@@ -22,5 +22,5 @@ data class CallScreenState(
     val urlState: Async<String>,
     val userAgent: String,
     val isInWidgetMode: Boolean,
-    val eventSink: (CallScreeEvents) -> Unit,
+    val eventSink: (CallScreenEvents) -> Unit,
 )

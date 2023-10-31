@@ -17,6 +17,7 @@
 package io.element.android.features.call.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -37,10 +38,13 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -53,9 +57,11 @@ class CallScreenPresenter @AssistedInject constructor(
     @Assisted private val callType: CallType,
     @Assisted private val navigator: CallScreenNavigator,
     private val callWidgetProvider: CallWidgetProvider,
-    private val userAgentProvider: UserAgentProvider,
+    userAgentProvider: UserAgentProvider,
     private val clock: SystemClock,
     private val dispatchers: CoroutineDispatchers,
+    private val matrixClientsProvider: MatrixClientProvider,
+    private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
 
     @AssistedFactory
@@ -77,6 +83,8 @@ class CallScreenPresenter @AssistedInject constructor(
         LaunchedEffect(Unit) {
             loadUrl(callType, urlState, callWidgetDriver)
         }
+
+        HandleMatrixClientSyncState()
 
         callWidgetDriver.value?.let { driver ->
             LaunchedEffect(Unit) {
@@ -115,21 +123,22 @@ class CallScreenPresenter @AssistedInject constructor(
             }
         }
 
-        fun handleEvents(event: CallScreeEvents) {
+        fun handleEvents(event: CallScreenEvents) {
             when (event) {
-                is CallScreeEvents.Hangup -> {
+                is CallScreenEvents.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
                     val interceptor = messageInterceptor.value
                     if (widgetId != null && interceptor != null && isJoinedCall) {
                         // If the call was joined, we need to hang up first. Then the UI will be dismissed automatically.
                         sendHangupMessage(widgetId, interceptor)
+                        isJoinedCall = false
                     } else {
                         coroutineScope.launch {
                             close(callWidgetDriver.value, navigator)
                         }
                     }
                 }
-                is CallScreeEvents.SetupMessageChannels -> {
+                is CallScreenEvents.SetupMessageChannels -> {
                     messageInterceptor.value = event.widgetMessageInterceptor
                 }
             }
@@ -161,6 +170,36 @@ class CallScreenPresenter @AssistedInject constructor(
                     ).getOrThrow()
                     callWidgetDriver.value = driver
                     url
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun HandleMatrixClientSyncState() {
+        val coroutineScope = rememberCoroutineScope()
+        DisposableEffect(Unit) {
+            val client = (callType as? CallType.RoomCall)?.sessionId?.let {
+                matrixClientsProvider.getOrNull(it)
+            } ?: return@DisposableEffect onDispose { }
+
+            coroutineScope.launch {
+                client.syncService().syncState
+                    .onEach { state ->
+                        if (state != SyncState.Running) {
+                            client.syncService().startSync()
+                        }
+                    }
+                    .collect()
+            }
+            onDispose {
+                // We can't use the local coroutine scope here because it will be disposed before this effect
+                appCoroutineScope.launch {
+                    client.syncService().run {
+                        if (syncState.value == SyncState.Running) {
+                            stopSync()
+                        }
+                    }
                 }
             }
         }

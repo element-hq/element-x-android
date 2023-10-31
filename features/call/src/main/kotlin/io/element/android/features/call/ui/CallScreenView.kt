@@ -65,14 +65,14 @@ internal fun CallScreenView(
                 navigationIcon = {
                     BackButton(
                         resourceId = CommonDrawables.ic_compound_close,
-                        onClick = { state.eventSink(CallScreeEvents.Hangup) }
+                        onClick = { state.eventSink(CallScreenEvents.Hangup) }
                     )
                 }
             )
         }
     ) { padding ->
         BackHandler {
-            state.eventSink(CallScreeEvents.Hangup)
+            state.eventSink(CallScreenEvents.Hangup)
         }
         CallWebView(
             modifier = Modifier
@@ -88,7 +88,7 @@ internal fun CallScreenView(
             },
             onWebViewCreated = { webView ->
                 val interceptor = WebViewWidgetMessageInterceptor(webView)
-                state.eventSink(CallScreeEvents.SetupMessageChannels(interceptor))
+                state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
             }
         )
     }

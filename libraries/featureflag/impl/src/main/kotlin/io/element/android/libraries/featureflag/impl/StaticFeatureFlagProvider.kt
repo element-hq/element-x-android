@@ -18,6 +18,8 @@ package io.element.android.libraries.featureflag.impl
 
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 /**
@@ -29,9 +31,9 @@ class StaticFeatureFlagProvider @Inject constructor() :
 
     override val priority = LOW_PRIORITY
 
-    override suspend fun isFeatureEnabled(feature: Feature): Boolean {
-        return if (feature is FeatureFlags) {
-            when(feature) {
+    override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
+        val isFeatureEnabled = if (feature is FeatureFlags) {
+            when (feature) {
                 FeatureFlags.LocationSharing -> true
                 FeatureFlags.Polls -> true
                 FeatureFlags.NotificationSettings -> true
@@ -43,6 +45,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
         } else {
             false
         }
+        return flowOf(isFeatureEnabled)
     }
 
     override fun hasFeature(feature: Feature) = true
