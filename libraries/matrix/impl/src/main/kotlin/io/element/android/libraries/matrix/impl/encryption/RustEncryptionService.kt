@@ -37,6 +37,7 @@ import org.matrix.rustcomponents.sdk.BackupState as RustBackupState
 import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecoveryProgress
 import org.matrix.rustcomponents.sdk.RecoveryState as RustRecoveryState
+import org.matrix.rustcomponents.sdk.SteadyStateException as RustSteadyStateException
 
 internal class RustEncryptionService(
     client: Client,
@@ -49,6 +50,7 @@ internal class RustEncryptionService(
     private val recoveryStateMapper = RecoveryStateMapper()
     private val enableRecoveryProgressMapper = EnableRecoveryProgressMapper()
     private val backupUploadStateMapper = BackupUploadStateMapper()
+    private val steadyStateExceptionMapper = SteadyStateExceptionMapper()
 
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(service.backupState().let(backupStateMapper::map))
     override val recoveryStateStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(service.recoveryState().let(recoveryStateMapper::map))
@@ -98,16 +100,25 @@ internal class RustEncryptionService(
 
     override fun waitForBackupUploadSteadyState(): Flow<BackupUploadState> {
         return callbackFlow {
-            service.waitForBackupUploadSteadyState(
-                progressListener = object : BackupSteadyStateListener {
-                    override fun onUpdate(status: RustBackupUploadState) {
-                        trySend(backupUploadStateMapper.map(status))
-                        if (status == RustBackupUploadState.Done) {
-                            close()
+            runCatching {
+                service.waitForBackupUploadSteadyState(
+                    progressListener = object : BackupSteadyStateListener {
+                        override fun onUpdate(status: RustBackupUploadState) {
+                            trySend(backupUploadStateMapper.map(status))
+                            if (status == RustBackupUploadState.Done) {
+                                close()
+                            }
                         }
                     }
+                )
+            }.onFailure {
+                if (it is RustSteadyStateException) {
+                    trySend(BackupUploadState.SteadyException(steadyStateExceptionMapper.map(it)))
+                } else {
+                    trySend(BackupUploadState.Error)
                 }
-            )
+                close(it)
+            }
             awaitClose {}
         }
     }

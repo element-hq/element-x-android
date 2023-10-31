@@ -45,6 +45,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
+import io.element.android.libraries.matrix.api.encryption.SteadyStateException
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -128,7 +129,6 @@ fun LogoutView(
     }
 }
 
-// TODO i18n
 @Composable
 private fun HeaderContent(
     state: LogoutState,
@@ -137,9 +137,11 @@ private fun HeaderContent(
     val title = when {
         state.backupUploadState.isBackingUp() -> stringResource(id = R.string.screen_signout_key_backup_ongoing_title)
         state.isLastSession -> stringResource(id = R.string.screen_signout_key_backup_disabled_title)
-        else -> "Sign out of Element" // TODO
+        else -> stringResource(CommonStrings.action_signout)
     }
     val subtitle = when {
+        (state.backupUploadState as? BackupUploadState.SteadyException)?.exception is SteadyStateException.Connection ->
+            stringResource(id = R.string.screen_signout_key_backup_offline_subtitle)
         state.backupUploadState.isBackingUp() -> stringResource(id = R.string.screen_signout_key_backup_ongoing_subtitle)
         state.isLastSession -> stringResource(id = R.string.screen_signout_key_backup_disabled_subtitle)
         else -> null
@@ -151,7 +153,6 @@ private fun HeaderContent(
         iconResourceId = CommonDrawables.ic_key,
         title = title,
         subTitle = subtitle,
-        // iconComposable = iconComposable,
     )
 }
 
@@ -160,7 +161,8 @@ private fun BackupUploadState.isBackingUp(): Boolean {
         BackupUploadState.Unknown,
         BackupUploadState.Waiting,
         is BackupUploadState.Uploading,
-        is BackupUploadState.CheckingIfUploadNeeded -> true
+        is BackupUploadState.CheckingIfUploadNeeded,
+        is BackupUploadState.SteadyException -> true
         BackupUploadState.Done,
         BackupUploadState.Error -> false
     }
