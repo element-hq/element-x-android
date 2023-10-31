@@ -44,6 +44,7 @@ class AdvancedSettingsPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             assertThat(initialState.isRichTextEditorEnabled).isFalse()
+            assertThat(initialState.customElementCallBaseUrlState).isNull()
         }
     }
 
@@ -99,9 +100,7 @@ class AdvancedSettingsPresenterTest {
     @Test
     fun `present - custom element call base url`() = runTest {
         val store = InMemoryPreferencesStore()
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.InRoomCalls, true)
-        }
+        val featureFlagService = FakeFeatureFlagService(initialState = hashMapOf(FeatureFlags.InRoomCalls.key to true))
         val presenter = AdvancedSettingsPresenter(store, featureFlagService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -113,9 +112,9 @@ class AdvancedSettingsPresenterTest {
             assertThat(initialState.customElementCallBaseUrlState).isNotNull()
             assertThat(initialState.customElementCallBaseUrlState?.baseUrl).isNull()
 
-            initialState.eventSink(AdvancedSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.dev"))
+            initialState.eventSink(AdvancedSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.ahoy"))
             val updatedItem = awaitItem()
-            assertThat(updatedItem.customElementCallBaseUrlState?.baseUrl).isEqualTo("https://call.element.dev")
+            assertThat(updatedItem.customElementCallBaseUrlState?.baseUrl).isEqualTo("https://call.element.ahoy")
         }
     }
 

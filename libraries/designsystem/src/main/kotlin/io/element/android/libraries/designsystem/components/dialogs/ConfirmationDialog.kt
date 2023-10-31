@@ -38,6 +38,7 @@ fun ConfirmationDialog(
     title: String? = null,
     submitText: String = stringResource(id = CommonStrings.action_ok),
     cancelText: String = stringResource(id = CommonStrings.action_cancel),
+    destructiveSubmit: Boolean = false,
     thirdButtonText: String? = null,
     onCancelClicked: () -> Unit = onDismiss,
     onThirdButtonClicked: () -> Unit = {},
@@ -49,6 +50,7 @@ fun ConfirmationDialog(
             submitText = submitText,
             cancelText = cancelText,
             thirdButtonText = thirdButtonText,
+            destructiveSubmit = destructiveSubmit,
             onSubmitClicked = onSubmitClicked,
             onCancelClicked = onCancelClicked,
             onThirdButtonClicked = onThirdButtonClicked,
@@ -67,6 +69,7 @@ private fun ConfirmationDialogContent(
     title: String? = null,
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
+    destructiveSubmit: Boolean = false,
     icon: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
@@ -79,6 +82,7 @@ private fun ConfirmationDialogContent(
         onCancelClicked = onCancelClicked,
         thirdButtonText = thirdButtonText,
         onThirdButtonClicked = onThirdButtonClicked,
+        destructiveSubmit = destructiveSubmit,
         icon = icon,
     )
 }

@@ -5,6 +5,7 @@
     <item quantity="few">"%1$d zmeny miestnosti"</item>
     <item quantity="other">"%1$d zmien miestnosti"</item>
   </plurals>
+  <string name="screen_room_mentions_at_room_subtitle">"Informovať celú miestnosť"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Odfotiť"</string>
   <string name="screen_room_attachment_source_camera_video">"Nahrať video"</string>
@@ -39,6 +40,7 @@
   <string name="screen_room_timeline_add_reaction">"Pridať emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Zobraziť menej"</string>
   <string name="screen_room_voice_message_tooltip">"Podržaním nahrajte"</string>
+  <string name="screen_room_mentions_at_room_title">"Všetci"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
 </resources>

@@ -60,11 +60,11 @@ class VoiceRecorderImplTest {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
             voiceRecorder.startRecord()
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.seconds, 1.0f))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.seconds, listOf(1.0f)))
             timeSource += 1.seconds
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds,0.0f))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds, listOf()))
             timeSource += 1.seconds
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(2.seconds, 1.0f))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(2.seconds, listOf(1.0f, 1.0f)))
         }
     }
 
@@ -75,12 +75,18 @@ class VoiceRecorderImplTest {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
             voiceRecorder.startRecord()
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, 1.0f))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, listOf(1.0f)))
             timeSource += 29.minutes
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(29.minutes, 0.0f))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(29.minutes, listOf()))
             timeSource += 1.minutes
 
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Finished(File(FILE_PATH), "audio/ogg"))
+            assertThat(awaitItem()).isEqualTo(
+                VoiceRecorderState.Finished(
+                    file = File(FILE_PATH),
+                    mimeType = "audio/ogg",
+                    waveform = List(100) { 1f },
+                )
+            )
         }
     }
 
@@ -93,7 +99,13 @@ class VoiceRecorderImplTest {
             voiceRecorder.startRecord()
             skipItems(3)
             voiceRecorder.stopRecord()
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Finished(File(FILE_PATH), "audio/ogg"))
+            assertThat(awaitItem()).isEqualTo(
+                VoiceRecorderState.Finished(
+                    file = File(FILE_PATH),
+                    mimeType = "audio/ogg",
+                    waveform = List(100) { 1f },
+                )
+            )
             assertThat(fakeFileSystem.files[File(FILE_PATH)]).isEqualTo(ENCODED_DATA)
         }
     }

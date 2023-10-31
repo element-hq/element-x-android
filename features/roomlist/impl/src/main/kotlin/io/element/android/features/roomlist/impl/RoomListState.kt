@@ -27,10 +27,12 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 data class RoomListState(
     val matrixUser: MatrixUser?,
+    val showAvatarIndicator: Boolean,
     val roomList: ImmutableList<RoomListRoomSummary>,
     val filter: String?,
     val filteredRoomList: ImmutableList<RoomListRoomSummary>,
     val displayVerificationPrompt: Boolean,
+    val displayRecoveryKeyPrompt: Boolean,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val invitesState: InvitesState,

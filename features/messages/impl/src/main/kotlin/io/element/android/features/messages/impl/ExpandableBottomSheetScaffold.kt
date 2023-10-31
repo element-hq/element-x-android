@@ -20,12 +20,8 @@ package io.element.android.features.messages.impl
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -42,6 +38,10 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
+import io.element.android.libraries.designsystem.theme.components.bottomsheet.CustomSheetState
+import io.element.android.libraries.designsystem.theme.components.bottomsheet.rememberBottomSheetScaffoldState
+import io.element.android.libraries.designsystem.theme.components.bottomsheet.rememberStandardBottomSheetState
 import kotlin.math.roundToInt
 
 /**
@@ -58,6 +58,7 @@ import kotlin.math.roundToInt
  * @param modifier The modifier for the layout.
  * @param sheetContentKey The key for the sheet content. If the key changes, the sheet will be remeasured.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ExpandableBottomSheetScaffold(
     content: @Composable (padding: PaddingValues) -> Unit,
@@ -139,7 +140,7 @@ internal fun ExpandableBottomSheetScaffold(
                         modifier = Modifier.fillMaxHeight(),
                         measurePolicy = { measurables, constraints ->
                             val constraintHeight = constraints.maxHeight
-                            val offset = scaffoldState.bottomSheetState.getOffset() ?: 0
+                            val offset = scaffoldState.bottomSheetState.getIntOffset() ?: 0
                             val height = Integer.max(0, constraintHeight - offset)
                             val top = measurables[0].measure(
                                 constraints.copy(
@@ -163,7 +164,7 @@ internal fun ExpandableBottomSheetScaffold(
         })
 }
 
-private fun SheetState.getOffset(): Int? = try {
+private fun CustomSheetState.getIntOffset(): Int? = try {
     requireOffset().roundToInt()
 } catch (e: IllegalStateException) {
     null

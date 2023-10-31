@@ -16,11 +16,15 @@
 
 package io.element.android.libraries.textcomposer.components
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -29,20 +33,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.utils.time.formatShort
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
 internal fun VoiceMessageRecording(
-    level: Float,
+    levels: ImmutableList<Float>,
     duration: Duration,
     modifier: Modifier = Modifier,
 ) {
@@ -54,7 +63,7 @@ internal fun VoiceMessageRecording(
                 shape = MaterialTheme.shapes.medium,
             )
             .padding(start = 12.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-            .heightIn(26.dp),
+            .heightIn(26.dp.applyScaleUp()),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RedRecordingDot()
@@ -70,28 +79,11 @@ internal fun VoiceMessageRecording(
 
         Spacer(Modifier.size(20.dp))
 
-        // TODO Replace with waveform UI
-        DebugAudioLevel(
-            modifier = Modifier.weight(1f), level = level
-        )
-    }
-}
-
-@Composable
-private fun DebugAudioLevel(
-    level: Float,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .height(26.dp)
-    ) {
-        Box(
+        LiveWaveformView(
             modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .fillMaxWidth(level)
-                .background(ElementTheme.colors.iconQuaternary, shape = MaterialTheme.shapes.small)
-                .fillMaxHeight()
+                .height(26.dp.applyScaleUp())
+                .weight(1f),
+            levels = levels
         )
     }
 }
@@ -99,14 +91,27 @@ private fun DebugAudioLevel(
 @Composable
 private fun RedRecordingDot(
     modifier: Modifier = Modifier,
-) = Box(
-    modifier = modifier
-        .size(8.dp)
-        .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)
-)
+) {
+    val infiniteTransition = rememberInfiniteTransition("RedRecordingDot")
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0f,
+        animationSpec = InfiniteRepeatableSpec(
+            animation = TweenSpec(durationMillis = 1_000),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "RedRecordingDotAlpha",
+    )
+    Box(
+        modifier = modifier
+            .size(8.dp.applyScaleUp())
+            .alpha(alpha)
+            .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)
+    )
+}
 
 @PreviewsDayNight
 @Composable
 internal fun VoiceMessageRecordingPreview() = ElementPreview {
-    VoiceMessageRecording(0.5f, 0.seconds)
+    VoiceMessageRecording(List(100) { it.toFloat() / 100 }.toPersistentList(), 0.seconds)
 }

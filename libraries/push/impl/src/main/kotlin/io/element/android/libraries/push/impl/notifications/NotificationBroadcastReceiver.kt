@@ -56,7 +56,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = false)
             }
             actionIds.dismissEvent -> if (eventId != null) {
-                defaultNotificationDrawerManager.clearEvent(eventId, doRender = false)
+                defaultNotificationDrawerManager.clearEvent(sessionId, eventId, doRender = false)
             }
             actionIds.markRoomRead -> if (roomId != null) {
                 defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = true)

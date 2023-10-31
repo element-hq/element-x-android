@@ -16,10 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,12 +25,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -44,12 +42,12 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageStateProvider
-import io.element.android.features.messages.impl.voicemessages.timeline.Waveform
-import io.element.android.features.messages.impl.voicemessages.timeline.WaveformPlaybackView
+import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -65,8 +63,11 @@ fun TimelineItemVoiceView(
         state.eventSink(VoiceMessageEvents.PlayPause)
     }
 
+    val a11y = stringResource(CommonStrings.common_voice_message)
     Row(
-        modifier = modifier,
+        modifier = modifier.semantics {
+            contentDescription = a11y
+        },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         when (state.button) {
@@ -74,7 +75,7 @@ fun TimelineItemVoiceView(
             VoiceMessageState.Button.Pause -> PauseButton(onClick = ::playPause)
             VoiceMessageState.Button.Downloading -> ProgressButton()
             VoiceMessageState.Button.Retry -> RetryButton(onClick = ::playPause)
-            VoiceMessageState.Button.Disabled -> DisabledPlayButton()
+            VoiceMessageState.Button.Disabled -> PlayButton(onClick = {}, enabled = false)
         }
         Spacer(Modifier.width(8.dp))
         Text(
@@ -88,7 +89,7 @@ fun TimelineItemVoiceView(
         WaveformPlaybackView(
             showCursor = state.button == VoiceMessageState.Button.Pause,
             playbackProgress = state.progress,
-            waveform = Waveform(data = content.waveform),
+            waveform = content.waveform,
             modifier = Modifier
                 .height(34.dp)
                 .weight(1f),
@@ -100,40 +101,54 @@ fun TimelineItemVoiceView(
 
 @Composable
 private fun PlayButton(
-    onClick: (() -> Unit)
+    onClick: () -> Unit,
+    enabled: Boolean = true,
 ) {
-    IconButton(
-        drawableRes = R.drawable.play,
-        contentDescription = stringResource(id = CommonStrings.a11y_play),
-        onClick = onClick
-    )
+    CustomIconButton(
+        onClick = onClick,
+        enabled = enabled,
+    ) {
+        Icon(
+            resourceId = R.drawable.play,
+            contentDescription = stringResource(id = CommonStrings.a11y_play),
+        )
+    }
 }
 
 @Composable
 private fun PauseButton(
-    onClick: (() -> Unit)
+    onClick: () -> Unit,
 ) {
-    IconButton(
-        drawableRes = R.drawable.pause,
-        contentDescription = stringResource(id = CommonStrings.a11y_play),
-        onClick = onClick
-    )
+    CustomIconButton(
+        onClick = onClick,
+    ) {
+        Icon(
+            resourceId = R.drawable.pause,
+            contentDescription = stringResource(id = CommonStrings.a11y_play),
+        )
+    }
 }
 
 @Composable
 private fun RetryButton(
-    onClick: (() -> Unit)
+    onClick: () -> Unit,
 ) {
-    IconButton(
-        drawableRes = R.drawable.retry,
-        contentDescription = stringResource(id = CommonStrings.action_retry),
-        onClick = onClick
-    )
+    CustomIconButton(
+        onClick = onClick,
+    ) {
+        Icon(
+            resourceId = R.drawable.retry,
+            contentDescription = stringResource(id = CommonStrings.action_retry),
+        )
+    }
 }
 
 @Composable
 private fun ProgressButton() {
-    Button {
+    CustomIconButton(
+        onClick = {},
+        enabled = false,
+    ) {
         CircularProgressIndicator(
             modifier = Modifier
                 .padding(2.dp)
@@ -145,49 +160,23 @@ private fun ProgressButton() {
 }
 
 @Composable
-private fun DisabledPlayButton() {
-    IconButton(
-        drawableRes = R.drawable.play,
-        contentDescription = null,
-        onClick = null,
-    )
-}
-
-@Composable
-private fun IconButton(
-    @DrawableRes drawableRes: Int,
-    contentDescription: String?,
-    onClick: (() -> Unit)?,
-) {
-    Button(
-        onClick = onClick,
-    ) {
-        Icon(
-            painter = painterResource(id = drawableRes),
-            contentDescription = contentDescription,
-            tint = ElementTheme.colors.iconSecondary,
-            modifier = Modifier.size(24.dp),
-        )
-    }
-}
-
-@Composable
-private fun Button(
-    onClick: (() -> Unit)? = null,
+private fun CustomIconButton(
+    onClick: () -> Unit,
+    enabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    Box(
+    IconButton(
+        onClick = onClick,
         modifier = Modifier
-            .size(36.dp)
-            .clip(CircleShape)
-            .background(ElementTheme.materialColors.background)
-            .let {
-                if (onClick != null) it.clickable(onClick = onClick) else it
-            },
-        contentAlignment = Alignment.Center,
-    ) {
-        content()
-    }
+            .background(color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape)
+            .size(36.dp),
+        enabled = enabled,
+        colors = IconButtonDefaults.iconButtonColors(
+            contentColor = ElementTheme.colors.iconSecondary,
+            disabledContentColor = ElementTheme.colors.iconDisabled,
+        ),
+        content = content,
+    )
 }
 
 open class TimelineItemVoiceViewParametersProvider : PreviewParameterProvider<TimelineItemVoiceViewParameters> {

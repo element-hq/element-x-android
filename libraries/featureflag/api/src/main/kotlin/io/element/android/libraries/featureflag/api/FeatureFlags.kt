@@ -47,7 +47,7 @@ enum class FeatureFlags(
         key = "feature.voicemessages",
         title = "Voice messages",
         description = "Send and receive voice messages",
-        defaultValue = false,
+        defaultValue = true,
     ),
     PinUnlock(
         key = "feature.pinunlock",
@@ -59,6 +59,12 @@ enum class FeatureFlags(
         key = "feature.elementcall",
         title = "Element call in rooms",
         description = "Allow user to start or join a call in a room",
+        defaultValue = true,
+    ),
+    Mentions(
+        key = "feature.mentions",
+        title = "Mentions",
+        description = "Type `@` to get mention suggestions and insert them",
         defaultValue = false,
     )
 }

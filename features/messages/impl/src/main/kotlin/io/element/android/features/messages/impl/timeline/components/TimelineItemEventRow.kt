@@ -100,6 +100,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -616,6 +617,9 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
             textContent = messageContent.body,
             type = AttachmentThumbnailType.Audio,
         )
+        is VoiceMessageType -> AttachmentThumbnailInfo(
+            type = AttachmentThumbnailType.Voice,
+        )
         else -> null
     }
 }
@@ -625,6 +629,7 @@ private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
     val messageContent = inReplyTo.content as? MessageContent ?: return ""
     return when (messageContent.type) {
         is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
+        is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
         else -> messageContent.body
     }
 }

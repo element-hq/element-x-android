@@ -123,6 +123,7 @@
   <string name="common_rich_text_editor">"格式化文字編輯器"</string>
   <string name="common_room_name">"聊天室名稱"</string>
   <string name="common_room_name_placeholder">"範例：您的計畫名稱"</string>
+  <string name="common_screen_lock">"螢幕鎖定"</string>
   <string name="common_search_results">"搜尋結果"</string>
   <string name="common_security">"安全性"</string>
   <string name="common_sending">"傳送中…"</string>

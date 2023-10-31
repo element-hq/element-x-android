@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"1 osoba"</item>
+    <item quantity="one">"%1$d osoba"</item>
     <item quantity="few">"%1$d osoby"</item>
     <item quantity="other">"%1$d osob"</item>
   </plurals>

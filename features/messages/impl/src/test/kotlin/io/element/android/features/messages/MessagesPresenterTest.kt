@@ -40,8 +40,10 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
+import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
@@ -61,11 +63,13 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -627,12 +631,14 @@ class MessagesPresenterTest {
             messageComposerContext = MessageComposerContextImpl(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
             permissionsPresenterFactory = permissionsPresenterFactory,
+            currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
         )
         val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
             this,
             FakeVoiceRecorder(),
             analyticsService,
             mediaSender,
+            player = VoiceMessageComposerPlayer(FakeMediaPlayer()),
             permissionsPresenterFactory,
         )
         val timelinePresenter = TimelinePresenter(

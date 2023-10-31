@@ -72,3 +72,5 @@ const val A_FAILURE_REASON = "There has been a failure"
 
 val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)
+
+const val A_RECOVERY_KEY = "1234 5678"

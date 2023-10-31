@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="other">"Máte 3 pokusy na odomknutie"</item>
-  </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
     <item quantity="one">"Nesprávny PIN kód. Máte ešte %1$d pokus"</item>
     <item quantity="few">"Nesprávny PIN kód. Máte ešte %1$d pokusy"</item>

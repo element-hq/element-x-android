@@ -31,6 +31,6 @@ class FakeFeatureFlagService(
     }
 
     override suspend fun isFeatureEnabled(feature: Feature): Boolean {
-        return enabledFeatures[feature.key] ?: feature.defaultValue
+        return enabledFeatures[feature.key] ?: false
     }
 }

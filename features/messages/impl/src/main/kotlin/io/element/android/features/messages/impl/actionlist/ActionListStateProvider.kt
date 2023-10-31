@@ -20,11 +20,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -62,6 +64,22 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                 anActionListState().copy(
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(content = aTimelineItemFileContent()).copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    )
+                ),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent(content = aTimelineItemAudioContent()).copy(
+                            reactionsState = reactionsState
+                        ),
+                        actions = aTimelineItemActionList(),
+                    )
+                ),
+                anActionListState().copy(
+                    target = ActionListState.Target.Success(
+                        event = aTimelineItemEvent(content = aTimelineItemVoiceContent()).copy(
                             reactionsState = reactionsState
                         ),
                         actions = aTimelineItemActionList(),

@@ -124,6 +124,7 @@ class NotificationRenderer @Inject constructor(
                 }
             }
 
+            /*
             fallbackNotifications.forEach { wrapper ->
                 when (wrapper) {
                     is OneShotNotification.Removed -> {
@@ -142,6 +143,23 @@ class NotificationRenderer @Inject constructor(
                         )
                     }
                 }
+            }
+             */
+            val removedFallback = fallbackNotifications.filterIsInstance<OneShotNotification.Removed>()
+            val appendFallback = fallbackNotifications.filterIsInstance<OneShotNotification.Append>()
+            if (appendFallback.isEmpty() && removedFallback.isNotEmpty()) {
+                Timber.tag(loggerTag.value).d("Removing global fallback notification")
+                notificationDisplayer.cancelNotificationMessage(
+                    tag = "FALLBACK",
+                    id = notificationIdProvider.getFallbackNotificationId(currentUser.userId)
+                )
+            } else if (appendFallback.isNotEmpty()) {
+                Timber.tag(loggerTag.value).d("Showing fallback notification")
+                notificationDisplayer.showNotificationMessage(
+                    tag = "FALLBACK",
+                    id = notificationIdProvider.getFallbackNotificationId(currentUser.userId),
+                    notification = appendFallback.first().notification
+                )
             }
 
             // Update summary last to avoid briefly displaying it before other notifications

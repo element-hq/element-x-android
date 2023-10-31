@@ -20,9 +20,8 @@ interface AudioLevelCalculator {
     /**
      * Calculate the audio level of the audio buffer.
      *
-     * @param buffer The audio buffer containing raw audio data.
-     *
-     * @return A value between 0 and 1.
+     * @param buffer The audio buffer containing 16bit PCM audio data.
+     * @return A float value between 0 and 1 proportional to the audio level.
      */
     fun calculateAudioLevel(buffer: ShortArray): Float
 }

@@ -20,5 +20,5 @@ import java.time.Duration
 
 data class AudioDetails(
     val duration: Duration,
-    val waveform: List<Int>,
+    val waveform: List<Float>,
 )

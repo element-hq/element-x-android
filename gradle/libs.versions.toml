@@ -21,7 +21,7 @@ media3 = "1.1.1"
 browser = "1.6.0"
 
 # Compose
-compose_bom = "2023.10.00"
+compose_bom = "2023.10.01"
 composecompiler = "1.5.3"
 
 # Coroutines
@@ -34,7 +34,7 @@ accompanist = "0.32.0"
 test_core = "1.5.0"
 
 #other
-coil = "2.4.0"
+coil = "2.5.0"
 datetime = "0.4.1"
 serialization_json = "1.6.0"
 showkase = "1.0.0-beta18"
@@ -55,7 +55,7 @@ anvil = "2.4.8-1-8"
 autoservice = "1.1.1"
 
 # quality
-detekt = "1.23.1"
+detekt = "1.23.2"
 dependencygraph = "0.12"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
@@ -70,7 +70,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.4.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.5.0"
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -135,7 +135,7 @@ test_orchestrator = "androidx.test:orchestrator:1.4.2"
 test_turbine = "app.cash.turbine:turbine:1.0.0"
 test_truth = "com.google.truth:truth:1.1.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.14"
-test_robolectric = "org.robolectric:robolectric:4.10.3"
+test_robolectric = "org.robolectric:robolectric:4.11"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 
 # Others

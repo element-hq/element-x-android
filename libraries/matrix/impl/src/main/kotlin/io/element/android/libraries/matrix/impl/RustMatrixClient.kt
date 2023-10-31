@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -41,6 +42,7 @@ import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.encryption.RustEncryptionService
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
@@ -117,6 +119,7 @@ class RustMatrixClient constructor(
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
     private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
+    private val encryptionService = RustEncryptionService(client, dispatchers).apply { start() }
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -136,7 +139,7 @@ class RustMatrixClient constructor(
                         )
                         sessionStore.updateData(newData)
                     }
-                    doLogout(doRequest = false, removeSession = false)
+                    doLogout(doRequest = false, removeSession = false, ignoreSdkError = false)
                 }
             } else {
                 Timber.v("didReceiveAuthError -> already cleaning up")
@@ -319,6 +322,8 @@ class RustMatrixClient constructor(
 
     override fun notificationService(): NotificationService = notificationService
 
+    override fun encryptionService(): EncryptionService = encryptionService
+
     override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
 
     override fun close() {
@@ -331,6 +336,7 @@ class RustMatrixClient constructor(
         innerRoomListService.destroy()
         notificationClient.destroy()
         notificationProcessSetup.destroy()
+        encryptionService.destroy()
         client.destroy()
     }
 
@@ -344,16 +350,29 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout(): String? = doLogout(doRequest = true, removeSession = true)
+    override suspend fun logout(ignoreSdkError: Boolean): String? = doLogout(
+        doRequest = true,
+        removeSession = true,
+        ignoreSdkError = ignoreSdkError,
+    )
 
-    private suspend fun doLogout(doRequest: Boolean, removeSession: Boolean): String? {
+    private suspend fun doLogout(
+        doRequest: Boolean,
+        removeSession: Boolean,
+        ignoreSdkError: Boolean,
+    ): String? {
         var result: String? = null
         withContext(sessionDispatcher) {
             if (doRequest) {
                 try {
                     result = client.logout()
                 } catch (failure: Throwable) {
-                    Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+                    if (ignoreSdkError) {
+                        Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+                    } else {
+                        Timber.e(failure, "Fail to call logout on HS.")
+                        throw failure
+                    }
                 }
             }
             close()
