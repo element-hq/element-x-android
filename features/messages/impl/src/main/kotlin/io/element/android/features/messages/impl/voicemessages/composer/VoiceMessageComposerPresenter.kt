@@ -27,6 +27,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
@@ -56,6 +58,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val mediaSender: MediaSender,
     private val player: VoiceMessageComposerPlayer,
+    private val messageComposerContext: MessageComposerContext,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<VoiceMessageComposerState> {
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)
@@ -151,6 +154,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
             }
             isSending = true
             player.pause()
+            analyticsService.captureComposerEvent()
             appCoroutineScope.sendMessage(
                 file = finishedState.file,
                 mimeType = finishedState.mimeType,
@@ -236,6 +240,16 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         voiceRecorder.deleteRecording()
     }
+
+    private fun AnalyticsService.captureComposerEvent() =
+        analyticsService.capture(
+            Composer(
+                inThread = messageComposerContext.composerMode.inThread,
+                isEditing = messageComposerContext.composerMode.isEditing,
+                isReply = messageComposerContext.composerMode.isReply,
+                messageType = Composer.MessageType.Text, // FIXME use VoiceMessage type when available
+            )
+        )
 }
 
 private fun VoiceRecorderState.finishedWaveform(): ImmutableList<Float> =

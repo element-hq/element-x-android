@@ -25,11 +25,16 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
+import io.element.android.features.messages.test.MessageComposerContextFake
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -38,6 +43,7 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.aPermissionsState
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.PressEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
@@ -65,6 +71,7 @@ class VoiceMessageComposerPresenterTest {
     private val matrixRoom = FakeMatrixRoom()
     private val mediaPreProcessor = FakeMediaPreProcessor().apply { givenAudioResult() }
     private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom)
+    private val messageComposerContext = MessageComposerContextFake()
 
     companion object {
         private val RECORDING_DURATION = 1.seconds
@@ -270,6 +277,35 @@ class VoiceMessageComposerPresenterTest {
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             assertThat(matrixRoom.sendMediaCount).isEqualTo(1)
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
+    fun `present - sending is tracked`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Send a normal voice message
+            messageComposerContext.composerMode = MessageComposerMode.Normal
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
+            skipItems(1) // Sending state
+
+            // Now reply with a voice message
+            messageComposerContext.composerMode = aReplyMode()
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
+            val finalState = awaitItem() // Sending state
+
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                aVoiceMessageComposerEvent(isReply = false),
+                aVoiceMessageComposerEvent(isReply = true)
+            )
 
             testPauseAndDestroy(finalState)
         }
@@ -565,6 +601,7 @@ class VoiceMessageComposerPresenterTest {
             analyticsService,
             mediaSender,
             player = VoiceMessageComposerPlayer(FakeMediaPlayer()),
+            messageComposerContext = messageComposerContext,
             FakePermissionsPresenterFactory(permissionsPresenter),
         )
     }
@@ -595,3 +632,15 @@ class VoiceMessageComposerPresenterTest {
         waveform = waveform.toImmutableList(),
     )
 }
+
+private fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, null, false, AN_EVENT_ID, A_MESSAGE)
+
+private fun aVoiceMessageComposerEvent(
+    isReply: Boolean = false
+) = Composer(
+    inThread = false,
+    isEditing = false,
+    isReply = isReply,
+    messageType = Composer.MessageType.Text, // FIXME use VoiceMessage type when available
+    startsThread = null
+)
