@@ -21,12 +21,12 @@ import androidx.compose.runtime.Composable
 interface BiometricUnlockManager {
 
     /**
-     * If the device is secured for example with a pin, pattern or password
+     * If the device is secured for example with a pin, pattern or password.
      */
     val isDeviceSecured: Boolean
 
     /**
-     * If the device has biometric hardware and if the user has enrolled at least one biometric
+     * If the device has biometric hardware and if the user has enrolled at least one biometric.
      */
     val hasAvailableAuthenticator: Boolean
 

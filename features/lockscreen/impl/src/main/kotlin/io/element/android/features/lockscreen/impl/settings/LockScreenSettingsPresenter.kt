@@ -60,7 +60,7 @@ class LockScreenSettingsPresenter @Inject constructor(
             showRemovePinOption = !lockScreenConfig.isPinMandatory && pinCodeManager.isPinCodeAvailable()
             showToggleBiometric = biometricUnlockManager.isDeviceSecured
         }
-        
+
         fun handleEvents(event: LockScreenSettingsEvents) {
             when (event) {
                 LockScreenSettingsEvents.CancelRemovePin -> showRemovePinConfirmation = false
