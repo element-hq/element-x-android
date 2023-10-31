@@ -17,10 +17,11 @@
 package io.element.android.libraries.featureflag.impl
 
 import io.element.android.libraries.featureflag.api.Feature
+import kotlinx.coroutines.flow.Flow
 
 interface FeatureFlagProvider {
     val priority: Int
-    suspend fun isFeatureEnabled(feature: Feature): Boolean
+    fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean>
     fun hasFeature(feature: Feature): Boolean
 }
 

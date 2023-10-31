@@ -24,6 +24,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -41,10 +42,10 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitLastSequentialItem()
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             assertThat(initialState.isRichTextEditorEnabled).isFalse()
-            assertThat(initialState.customElementCallBaseUrlState).isNull()
+            assertThat(initialState.customElementCallBaseUrlState?.baseUrl).isNull()
         }
     }
 
@@ -56,7 +57,7 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitLastSequentialItem()
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             initialState.eventSink.invoke(AdvancedSettingsEvents.SetDeveloperModeEnabled(true))
             assertThat(awaitItem().isDeveloperModeEnabled).isTrue()
@@ -73,7 +74,7 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitLastSequentialItem()
             assertThat(initialState.isRichTextEditorEnabled).isFalse()
             initialState.eventSink.invoke(AdvancedSettingsEvents.SetRichTextEditorEnabled(true))
             assertThat(awaitItem().isRichTextEditorEnabled).isTrue()
@@ -92,7 +93,7 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitLastSequentialItem()
             assertThat(initialState.customElementCallBaseUrlState).isNull()
         }
     }
@@ -105,10 +106,7 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            // Initial state has a default `false` feature flag value, so the state will still be null
-            skipItems(1)
-
-            val initialState = awaitItem()
+            val initialState = awaitLastSequentialItem()
             assertThat(initialState.customElementCallBaseUrlState).isNotNull()
             assertThat(initialState.customElementCallBaseUrlState?.baseUrl).isNull()
 
@@ -128,10 +126,7 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            // Initial state has a default `false` feature flag value, so the state will still be null
-            skipItems(1)
-
-            val urlValidator = awaitItem().customElementCallBaseUrlState!!.validator
+            val urlValidator = awaitLastSequentialItem().customElementCallBaseUrlState!!.validator
             assertThat(urlValidator("")).isTrue() // We allow empty string to clear the value and use the default one
             assertThat(urlValidator("test")).isFalse()
             assertThat(urlValidator("http://")).isFalse()

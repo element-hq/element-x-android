@@ -23,5 +23,6 @@ android {
 
     dependencies {
         api(projects.libraries.featureflag.api)
+        implementation(libs.coroutines.core)
     }
 }
