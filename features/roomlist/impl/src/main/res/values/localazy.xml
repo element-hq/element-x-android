@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup."</string>
+  <string name="confirm_recovery_key_banner_title">"Confirm your recovery key"</string>
   <string name="screen_roomlist_a11y_create_message">"Create a new conversation or room"</string>
   <string name="screen_roomlist_empty_message">"Get started by messaging someone."</string>
   <string name="screen_roomlist_empty_title">"No chats yet."</string>
   <string name="screen_roomlist_main_space_title">"All Chats"</string>
-  <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards."</string>
+  <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify with another device to access your encrypted messages."</string>
   <string name="session_verification_banner_title">"Verify it’s you"</string>
 </resources>

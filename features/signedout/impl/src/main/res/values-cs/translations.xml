@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Změnili jste heslo v jiné relaci"</string>
+  <string name="screen_signed_out_reason_2">"Odstranili jste relaci z jiné relace"</string>
+  <string name="screen_signed_out_reason_3">"Správce vašeho serveru zrušil váš přístup"</string>
+  <string name="screen_signed_out_subtitle">"Je možné, že jste byli odhlášeni z některého z níže uvedených důvodů. Chcete-li pokračovat v používání %s, přihlaste se znovu."</string>
+  <string name="screen_signed_out_title">"Jste odhlášeni"</string>
+</resources>

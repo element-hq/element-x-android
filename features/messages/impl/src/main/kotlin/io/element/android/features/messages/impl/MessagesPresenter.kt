@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,7 +55,9 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.PreferencesStore
@@ -62,20 +65,24 @@ import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -84,6 +91,7 @@ import timber.log.Timber
 class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
+    private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
@@ -95,7 +103,9 @@ class MessagesPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
     private val preferencesStore: PreferencesStore,
+    private val featureFlagsService: FeatureFlagService,
     @Assisted private val navigator: MessagesNavigator,
+    private val buildMeta: BuildMeta,
 ) : Presenter<MessagesState> {
 
     @AssistedFactory
@@ -105,8 +115,10 @@ class MessagesPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): MessagesState {
+        val roomInfo by room.roomInfoFlow.collectAsState(null)
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
+        val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
@@ -116,14 +128,13 @@ class MessagesPresenter @AssistedInject constructor(
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToRedact by room.canRedactAsState(updateKey = syncUpdateFlow.value)
-        var roomName: Async<String> by remember { mutableStateOf(Async.Uninitialized) }
-        var roomAvatar: Async<AvatarData> by remember { mutableStateOf(Async.Uninitialized) }
-        LaunchedEffect(syncUpdateFlow.value) {
-            withContext(dispatchers.io) {
-                roomName = Async.Success(room.displayName)
-                roomAvatar = Async.Success(room.avatarData())
-            }
+        val roomName: Async<String> by remember {
+            derivedStateOf { roomInfo?.name?.let { Async.Success(it) } ?: Async.Uninitialized }
         }
+        val roomAvatar: Async<AvatarData> by remember {
+            derivedStateOf { roomInfo?.avatarData()?.let { Async.Success(it) } ?: Async.Uninitialized }
+        }
+
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
         }
@@ -144,6 +155,13 @@ class MessagesPresenter @AssistedInject constructor(
         }
 
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
+
+        var enableVoiceMessages by remember { mutableStateOf(false) }
+        var enableInRoomCalls by remember { mutableStateOf(false) }
+        LaunchedEffect(featureFlagsService) {
+            enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
+            enableInRoomCalls = featureFlagsService.isFeatureEnabled(FeatureFlags.InRoomCalls)
+        }
 
         fun handleEvents(event: MessagesEvents) {
             when (event) {
@@ -177,6 +195,7 @@ class MessagesPresenter @AssistedInject constructor(
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             userHasPermissionToRedact = userHasPermissionToRedact,
             composerState = composerState,
+            voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
             actionListState = actionListState,
             customReactionState = customReactionState,
@@ -187,14 +206,18 @@ class MessagesPresenter @AssistedInject constructor(
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
             enableTextFormatting = enableTextFormatting,
+            enableVoiceMessages = enableVoiceMessages,
+            enableInRoomCalls = enableInRoomCalls,
+            appName = buildMeta.applicationName,
+            isCallOngoing = roomInfo?.hasRoomCall ?: false,
             eventSink = { handleEvents(it) }
         )
     }
 
-    private fun MatrixRoom.avatarData(): AvatarData {
+    private fun MatrixRoomInfo.avatarData(): AvatarData {
         return AvatarData(
-            id = roomId.value,
-            name = displayName,
+            id = id,
+            name = name,
             url = avatarUrl,
             size = AvatarSize.TimelineRoom
         )
@@ -307,6 +330,10 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemAudioContent -> AttachmentThumbnailInfo(
                 textContent = targetEvent.content.body,
                 type = AttachmentThumbnailType.Audio,
+            )
+            is TimelineItemVoiceContent -> AttachmentThumbnailInfo(
+                textContent = textContent,
+                type = AttachmentThumbnailType.Voice,
             )
             is TimelineItemLocationContent -> AttachmentThumbnailInfo(
                 type = AttachmentThumbnailType.Location,

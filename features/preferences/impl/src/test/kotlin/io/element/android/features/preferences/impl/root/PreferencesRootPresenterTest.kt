@@ -20,15 +20,15 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -44,16 +44,20 @@ class PreferencesRootPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val matrixClient = FakeMatrixClient()
-        val logoutPresenter = DefaultLogoutPreferencePresenter(matrixClient)
+        val sessionVerificationService = FakeSessionVerificationService()
         val presenter = PreferencesRootPresenter(
-            logoutPresenter,
             matrixClient,
-            FakeSessionVerificationService(),
+            sessionVerificationService,
             FakeAnalyticsService(),
             BuildType.DEBUG,
             FakeVersionFormatter(),
             SnackbarDispatcher(),
-            FakeFeatureFlagService()
+            FakeFeatureFlagService(),
+            DefaultIndicatorService(
+                sessionVerificationService = sessionVerificationService,
+                encryptionService = FakeEncryptionService(),
+                featureFlagService = FakeFeatureFlagService(),
+            ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -62,7 +66,6 @@ class PreferencesRootPresenterTest {
             assertThat(initialState.myUser).isNull()
             assertThat(initialState.version).isEqualTo("A Version")
             val loadedState = awaitItem()
-            assertThat(loadedState.logoutState.logoutAction).isEqualTo(Async.Uninitialized)
             assertThat(loadedState.myUser).isEqualTo(
                 MatrixUser(
                     userId = matrixClient.sessionId,

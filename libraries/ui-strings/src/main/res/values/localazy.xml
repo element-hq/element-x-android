@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_delete">"Delete"</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
+  <string name="a11y_pause">"Pause"</string>
+  <string name="a11y_pin_field">"PIN field"</string>
+  <string name="a11y_play">"Play"</string>
   <string name="a11y_poll">"Poll"</string>
   <string name="a11y_poll_end">"Ended poll"</string>
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_show_password">"Show password"</string>
+  <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_user_menu">"User menu"</string>
+  <string name="a11y_voice_message_record">"Record voice message. Double tap and hold to record. Release to end recording."</string>
   <string name="action_accept">"Accept"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
@@ -29,6 +35,7 @@
   <string name="action_edit">"Edit"</string>
   <string name="action_enable">"Enable"</string>
   <string name="action_end_poll">"End poll"</string>
+  <string name="action_enter_pin">"Enter PIN"</string>
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
   <string name="action_invite">"Invite"</string>
@@ -46,7 +53,7 @@
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
   <string name="action_ok">"OK"</string>
-  <string name="action_open_settings">"Open settings"</string>
+  <string name="action_open_settings">"Settings"</string>
   <string name="action_open_with">"Open with"</string>
   <string name="action_quick_reply">"Quick reply"</string>
   <string name="action_quote">"Quote"</string>
@@ -65,12 +72,15 @@
   <string name="action_share">"Share"</string>
   <string name="action_share_link">"Share link"</string>
   <string name="action_sign_in_again">"Sign in again"</string>
+  <string name="action_signout">"Sign out"</string>
+  <string name="action_signout_anyway">"Sign out anyway"</string>
   <string name="action_skip">"Skip"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
   <string name="action_start_verification">"Start verification"</string>
   <string name="action_static_map_load">"Tap to load map"</string>
   <string name="action_take_photo">"Take photo"</string>
+  <string name="action_try_again">"Try again"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="action_edit_poll">"Edit poll"</string>
@@ -80,6 +90,7 @@
   <string name="common_analytics">"Analytics"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Bubbles"</string>
+  <string name="common_chat_backup">"Chat backup"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
   <string name="common_current_user_left_room">"Left room"</string>
@@ -89,7 +100,9 @@
   <string name="common_editing">"Editing"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Encryption enabled"</string>
+  <string name="common_enter_your_pin">"Enter your PIN"</string>
   <string name="common_error">"Error"</string>
+  <string name="common_everyone">"Everyone"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_saved_on_disk_android">"File saved to Downloads"</string>
   <string name="common_forward_message">"Forward message"</string>
@@ -117,23 +130,25 @@
   <string name="common_privacy_policy">"Privacy policy"</string>
   <string name="common_reaction">"Reaction"</string>
   <string name="common_reactions">"Reactions"</string>
+  <string name="common_recovery_key">"Recovery key"</string>
   <string name="common_refreshing">"Refreshing…"</string>
   <string name="common_replying_to">"Replying to %1$s"</string>
   <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
+  <string name="common_room">"Room"</string>
   <string name="common_room_name">"Room name"</string>
   <string name="common_room_name_placeholder">"e.g. your project name"</string>
+  <string name="common_screen_lock">"Screen lock"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
   <string name="common_search_results">"Search results"</string>
-  <string name="common_secure_backup">"Secure backup"</string>
   <string name="common_security">"Security"</string>
-  <string name="common_select_your_server">"Select your server"</string>
   <string name="common_sending">"Sending…"</string>
   <string name="common_server_not_supported">"Server not supported"</string>
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Settings"</string>
   <string name="common_shared_location">"Shared location"</string>
+  <string name="common_signing_out">"Signing out"</string>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
@@ -147,6 +162,7 @@
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
   <string name="common_unable_to_invite_message">"Invites couldn\'t be sent to one or more users."</string>
   <string name="common_unable_to_invite_title">"Unable to send invite(s)"</string>
+  <string name="common_unlock">"Unlock"</string>
   <string name="common_unmute">"Unmute"</string>
   <string name="common_unsupported_event">"Unsupported event"</string>
   <string name="common_username">"Username"</string>
@@ -155,6 +171,7 @@
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
+  <string name="common_waiting_for_decryption_key">"Waiting for decryption key"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
@@ -171,8 +188,10 @@
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
   <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
+  <string name="error_failed_uploading_voice_message">"Failed to upload your voice message."</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
@@ -181,6 +200,10 @@
   <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you won\'t be able to rejoin without an invite."</string>
   <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d digit entered"</item>
+    <item quantity="other">"%1$d digits entered"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
     <item quantity="other">"%1$d members"</item>
@@ -190,12 +213,12 @@
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="rageshake_dialog_content">"You seem to be shaking the phone in frustration. Would you like to open the bug report screen?"</string>
   <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
   <string name="report_content_hint">"Reason for reporting this content"</string>
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Notify the whole room"</string>
   <string name="screen_analytics_settings_share_data">"Share analytics data"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
@@ -226,7 +249,6 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
-  <string name="screen_settings_oidc_account">"Account and devices"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
@@ -236,12 +258,12 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_view_location_title">"Location"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
-  <string name="settings_title_general">"General"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
+  <string name="screen_room_mentions_at_room_title">"Everyone"</string>
   <string name="screen_analytics_settings_help_us_improve">"Share anonymous usage data to help us identify issues."</string>
   <string name="screen_analytics_settings_read_terms">"You can read all our terms %1$s."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"here"</string>

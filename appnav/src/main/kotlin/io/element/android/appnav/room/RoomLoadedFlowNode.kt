@@ -75,6 +75,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onForwardedToSingleRoom(roomId: RoomId)
+        fun onOpenGlobalNotificationSettings()
     }
 
     data class Inputs(
@@ -128,6 +129,18 @@ class RoomLoadedFlowNode @AssistedInject constructor(
             }
     }
 
+    private fun createRoomDetailsNode(buildContext: BuildContext, initialTarget: RoomDetailsEntryPoint.InitialTarget): Node {
+        val callback = object : RoomDetailsEntryPoint.Callback {
+            override fun onOpenGlobalNotificationSettings() {
+                callbacks.forEach { it.onOpenGlobalNotificationSettings() }
+            }
+        }
+        return roomDetailsEntryPoint.nodeBuilder(this, buildContext)
+            .params(RoomDetailsEntryPoint.Params(initialTarget))
+            .callback(callback)
+            .build()
+    }
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Messages -> {
@@ -147,12 +160,13 @@ class RoomLoadedFlowNode @AssistedInject constructor(
                 messagesEntryPoint.createNode(this, buildContext, callback)
             }
             NavTarget.RoomDetails -> {
-                val inputs = RoomDetailsEntryPoint.Inputs(RoomDetailsEntryPoint.InitialTarget.RoomDetails)
-                roomDetailsEntryPoint.createNode(this, buildContext, inputs, emptyList())
+                createRoomDetailsNode(buildContext, RoomDetailsEntryPoint.InitialTarget.RoomDetails)
             }
             is NavTarget.RoomMemberDetails -> {
-                val inputs = RoomDetailsEntryPoint.Inputs(RoomDetailsEntryPoint.InitialTarget.RoomMemberDetails(navTarget.userId))
-                roomDetailsEntryPoint.createNode(this, buildContext, inputs, emptyList())
+                createRoomDetailsNode(buildContext, RoomDetailsEntryPoint.InitialTarget.RoomMemberDetails(navTarget.userId))
+            }
+            NavTarget.RoomNotificationSettings -> {
+                createRoomDetailsNode(buildContext, RoomDetailsEntryPoint.InitialTarget.RoomNotificationSettings)
             }
         }
     }
@@ -166,6 +180,9 @@ class RoomLoadedFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class RoomMemberDetails(val userId: UserId) : NavTarget
+
+        @Parcelize
+        data object RoomNotificationSettings : NavTarget
     }
 
     @Composable

@@ -28,11 +28,14 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
 import org.matrix.rustcomponents.sdk.Message
+import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.ProfileDetails
 import org.matrix.rustcomponents.sdk.RepliedToEventDetails
 import org.matrix.rustcomponents.sdk.use
@@ -75,7 +78,23 @@ class EventMessageMapper {
 
     fun mapMessageType(type: RustMessageType?) = when (type) {
         is RustMessageType.Audio -> {
-            AudioMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
+            when (type.content.voice) {
+                null -> {
+                    AudioMessageType(
+                        body = type.content.body,
+                        source = type.content.source.map(),
+                        info = type.content.info?.map(),
+                    )
+                }
+                else -> {
+                    VoiceMessageType(
+                        body = type.content.body,
+                        source = type.content.source.map(),
+                        info = type.content.info?.map(),
+                        details = type.content.audio?.map(),
+                    )
+                }
+            }
         }
         is RustMessageType.File -> {
             FileMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
@@ -97,6 +116,9 @@ class EventMessageMapper {
         }
         is RustMessageType.Location -> {
             LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
+        }
+        is MessageType.Other -> {
+            OtherMessageType(type.msgtype, type.body)
         }
         null -> UnknownMessageType
     }

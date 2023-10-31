@@ -4,6 +4,7 @@
     <item quantity="one">"%1$d room change"</item>
     <item quantity="other">"%1$d room changes"</item>
   </plurals>
+  <string name="screen_room_mentions_at_room_subtitle">"Notify the whole room"</string>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Record video"</string>
@@ -12,7 +13,8 @@
   <string name="screen_room_attachment_source_location">"Location"</string>
   <string name="screen_room_attachment_source_poll">"Poll"</string>
   <string name="screen_room_attachment_text_formatting">"Text Formatting"</string>
-  <string name="screen_room_encrypted_history_banner">"Message history is currently unavailable in this room"</string>
+  <string name="screen_room_encrypted_history_banner">"Message history is currently unavailable."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Message history is unavailable in this room. Verify this device to see your message history."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_invite_again_alert_message">"Would you like to invite them back?"</string>
   <string name="screen_room_invite_again_alert_title">"You are alone in this chat"</string>
@@ -29,7 +31,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Failed restoring the default mode, please try again."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Failed setting the mode, please try again."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_room_reactions_show_less">"Show less"</string>
   <string name="screen_room_reactions_show_more">"Show more"</string>
@@ -37,6 +38,8 @@
   <string name="screen_room_retry_send_menu_title">"Your message failed to send"</string>
   <string name="screen_room_timeline_add_reaction">"Add emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Show less"</string>
+  <string name="screen_room_voice_message_tooltip">"Hold to record"</string>
+  <string name="screen_room_mentions_at_room_title">"Everyone"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
-  <string name="screen_room_retry_send_menu_remove_action">"Remove"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
 </resources>

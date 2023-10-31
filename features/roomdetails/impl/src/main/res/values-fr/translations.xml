@@ -35,7 +35,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Échec de la restauration du mode par défaut, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Échec de la configuration du mode, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Tous les messages"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Dans ce salon, prévenez-moi pour"</string>
   <string name="screen_dm_details_block_alert_action">"Bloquer"</string>
   <string name="screen_dm_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment."</string>
@@ -44,7 +43,7 @@
   <string name="screen_dm_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
   <string name="screen_dm_details_unblock_user">"Débloquer l’utilisateur"</string>
   <string name="screen_room_details_leave_room_title">"Quitter le salon"</string>
-  <string name="screen_room_details_people_title">"Personnes"</string>
   <string name="screen_room_details_security_title">"Sécurité"</string>
   <string name="screen_room_details_topic_title">"Sujet"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
 </resources>

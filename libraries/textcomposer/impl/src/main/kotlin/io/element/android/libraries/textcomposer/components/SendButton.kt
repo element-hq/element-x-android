@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -93,7 +93,7 @@ internal fun SendButton(
 @PreviewsDayNight
 @Composable
 internal fun SendButtonPreview() = ElementPreview {
-    val normalMode = MessageComposerMode.Normal("")
+    val normalMode = MessageComposerMode.Normal
     val editMode = MessageComposerMode.Edit(null, "", null)
     Row {
         SendButton(canSendMessage = true, onClick = {}, composerMode = normalMode)

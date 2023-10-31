@@ -66,6 +66,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -307,6 +308,18 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
             }
             content = { ContentForBody(event.content.body) }
         }
+        is TimelineItemVoiceContent -> {
+            icon = {
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.Voice,
+                    )
+                )
+            }
+            content = { ContentForBody(textContent) }
+        }
     }
     Row(modifier = modifier) {
         icon()
@@ -348,7 +361,7 @@ private fun EmojiReactionsRow(
     ) {
         // TODO use most recently used emojis here when available from the Rust SDK
         val defaultEmojis = sequenceOf(
-            "👍", "👎", "🔥", "❤️", "👏"
+            "👍️", "👎️", "🔥", "❤️", "👏"
         )
         for (emoji in defaultEmojis) {
             val isHighlighted = highlightedEmojis.contains(emoji)

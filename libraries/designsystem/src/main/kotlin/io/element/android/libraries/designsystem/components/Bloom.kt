@@ -537,7 +537,7 @@ internal fun BloomPreview() {
     }
 }
 
-class InitialsColorStateProvider : PreviewParameterProvider<Int> {
+class InitialsColorIntProvider : PreviewParameterProvider<Int> {
     override val values: Sequence<Int>
         get() = sequenceOf(0, 1, 2, 3, 4, 5, 6, 7)
 }
@@ -545,7 +545,7 @@ class InitialsColorStateProvider : PreviewParameterProvider<Int> {
 @PreviewsDayNight
 @Composable
 @ShowkaseComposable(group = PreviewGroup.Bloom)
-internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorStateProvider::class) color: Int) {
+internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorIntProvider::class) color: Int) {
     ElementPreview {
         val avatarColors = AvatarColorsProvider.provide("$color", ElementTheme.isLightTheme)
         val bitmap = initialsBitmap(text = "F", backgroundColor = avatarColors.background, textColor = avatarColors.foreground)

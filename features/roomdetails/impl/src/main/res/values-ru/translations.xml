@@ -36,7 +36,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Не удалось восстановить режим по умолчанию, попробуйте еще раз."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Не удалось настроить режим, попробуйте еще раз."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Все сообщения"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомить меня о"</string>
   <string name="screen_dm_details_block_alert_action">"Заблокировать"</string>
   <string name="screen_dm_details_block_alert_description">"Заблокированные пользователи не смогут отправлять вам сообщения, а все их сообщения будут скрыты. Вы можете разблокировать их в любое время."</string>
@@ -45,7 +44,7 @@
   <string name="screen_dm_details_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
   <string name="screen_dm_details_unblock_user">"Разблокировать пользователя"</string>
   <string name="screen_room_details_leave_room_title">"Покинуть комнату"</string>
-  <string name="screen_room_details_people_title">"Пользователи"</string>
   <string name="screen_room_details_security_title">"Безопасность"</string>
   <string name="screen_room_details_topic_title">"Тема"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
 </resources>

@@ -17,16 +17,25 @@
 package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import kotlinx.coroutines.launch
+import java.net.URL
 import javax.inject.Inject
 
 class AdvancedSettingsPresenter @Inject constructor(
     private val preferencesStore: PreferencesStore,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<AdvancedSettingsState> {
 
     @Composable
@@ -38,6 +47,14 @@ class AdvancedSettingsPresenter @Inject constructor(
         val isDeveloperModeEnabled by preferencesStore
             .isDeveloperModeEnabledFlow()
             .collectAsState(initial = false)
+        val customElementCallBaseUrl by preferencesStore
+            .getCustomElementCallBaseUrlFlow()
+            .collectAsState(initial = null)
+
+        var canDisplayElementCallSettings by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            canDisplayElementCallSettings = featureFlagService.isFeatureEnabled(FeatureFlags.InRoomCalls)
+        }
 
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
@@ -47,13 +64,34 @@ class AdvancedSettingsPresenter @Inject constructor(
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
                     preferencesStore.setDeveloperModeEnabled(event.enabled)
                 }
+                is AdvancedSettingsEvents.SetCustomElementCallBaseUrl -> localCoroutineScope.launch {
+                    // If the URL is either empty or the default one, we want to save 'null' to remove the custom URL
+                    val urlToSave = event.baseUrl.takeIf { !it.isNullOrEmpty() && it != ElementCallConfig.DEFAULT_BASE_URL }
+                    preferencesStore.setCustomElementCallBaseUrl(urlToSave)
+                }
             }
         }
 
         return AdvancedSettingsState(
             isRichTextEditorEnabled = isRichTextEditorEnabled,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
-            eventSink = ::handleEvents
+            customElementCallBaseUrlState = if (canDisplayElementCallSettings) {
+                CustomElementCallBaseUrlState(
+                    baseUrl = customElementCallBaseUrl,
+                    defaultUrl = ElementCallConfig.DEFAULT_BASE_URL,
+                    validator = ::customElementCallUrlValidator,
+                )
+            } else null,
+            eventSink = { handleEvents(it) }
         )
+    }
+
+    private fun customElementCallUrlValidator(url: String?): Boolean {
+        return runCatching {
+            if (url.isNullOrEmpty()) return@runCatching
+            val parsedUrl = URL(url)
+            if (parsedUrl.protocol !in listOf("http", "https")) error("Incorrect protocol")
+            if (parsedUrl.host.isNullOrBlank()) error("Missing host")
+        }.isSuccess
     }
 }

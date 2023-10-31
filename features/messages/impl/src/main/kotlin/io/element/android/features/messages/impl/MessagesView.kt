@@ -21,24 +21,33 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -50,6 +59,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.mentions.MentionSuggestionsPickerView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -62,6 +72,8 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
@@ -75,10 +87,15 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
@@ -87,6 +104,7 @@ import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
+import androidx.compose.material3.Button as Material3Button
 
 @Composable
 fun MessagesView(
@@ -98,9 +116,16 @@ fun MessagesView(
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
+
+    OnLifecycleEvent { _, event ->
+        state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
+    }
+
+    KeepScreenOn(state.voiceMessageComposerState.keepScreenOn)
 
     AttachmentStateView(
         state = state.composerState.attachmentsState,
@@ -159,8 +184,11 @@ fun MessagesView(
                 MessagesViewTopBar(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
+                    inRoomCallsEnabled = state.enableInRoomCalls,
                     onBackPressed = onBackPressed,
                     onRoomDetailsClicked = onRoomDetailsClicked,
+                    isCallOngoing = state.isCallOngoing,
+                    onJoinCallClicked = onJoinCallClicked,
                 )
             }
         },
@@ -222,6 +250,14 @@ fun MessagesView(
     ReinviteDialog(
         state = state
     )
+
+    // Since the textfield is now based on an Android view, this is no longer done automatically.
+    // We need to hide the keyboard automatically when navigating out of this screen.
+    DisposableEffect(Unit) {
+        onDispose {
+            localView.hideKeyboard()
+        }
+    }
 }
 
 @Composable
@@ -291,6 +327,18 @@ private fun MessagesViewContent(
             enableTextFormatting = state.enableTextFormatting,
         )
 
+        if (state.enableVoiceMessages && state.voiceMessageComposerState.showPermissionRationaleDialog) {
+            VoiceMessagePermissionRationaleDialog(
+                onContinue = {
+                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.AcceptPermissionRationale)
+                },
+                onDismiss = {
+                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissPermissionsRationale)
+                },
+                appName = state.appName
+            )
+        }
+
         ExpandableBottomSheetScaffold(
             sheetDragHandle = if (state.composerState.showTextFormatting) {
                 @Composable { BottomSheetDragHandle() }
@@ -298,7 +346,11 @@ private fun MessagesViewContent(
                 @Composable {}
             },
             sheetSwipeEnabled = state.composerState.showTextFormatting,
-            sheetShape = if (state.composerState.showTextFormatting) MaterialTheme.shapes.large else RectangleShape,
+            sheetShape = if (state.composerState.showTextFormatting || state.composerState.memberSuggestions.isNotEmpty()) {
+                MaterialTheme.shapes.large
+            } else {
+                RectangleShape
+            },
             content = { paddingValues ->
                 TimelineView(
                     modifier = Modifier.padding(paddingValues),
@@ -314,22 +366,53 @@ private fun MessagesViewContent(
                 )
             },
             sheetContent = { subcomposing: Boolean ->
-                if (state.userHasPermissionToSendMessage) {
-                    MessageComposerView(
-                        state = state.composerState,
-                        subcomposing = subcomposing,
-                        enableTextFormatting = state.enableTextFormatting,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
-                } else {
-                    CantSendMessageBanner()
-                }
+                MessagesViewComposerBottomSheetContents(
+                    subcomposing = subcomposing,
+                    state = state,
+                )
             },
-            sheetContentKey = state.composerState.richTextEditorState.lineCount,
+            sheetContentKey = state.composerState.richTextEditorState.lineCount + state.composerState.memberSuggestions.size,
             sheetTonalElevation = 0.dp,
-            sheetShadowElevation = 0.dp,
+            sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
         )
+    }
+}
+
+@Composable
+private fun MessagesViewComposerBottomSheetContents(
+    subcomposing: Boolean,
+    state: MessagesState,
+    modifier: Modifier = Modifier,
+) {
+    if (state.userHasPermissionToSendMessage) {
+        Column(modifier = modifier.fillMaxWidth()) {
+            MentionSuggestionsPickerView(
+                modifier = Modifier.heightIn(max = 230.dp)
+                    // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
+                    .nestedScroll(object : NestedScrollConnection {
+                        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                            return available
+                        }
+                    }),
+                roomId = state.roomId,
+                roomName = state.roomName.dataOrNull(),
+                roomAvatarData = state.roomAvatar.dataOrNull(),
+                memberSuggestions = state.composerState.memberSuggestions,
+                onSuggestionSelected = {
+                    // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
+                }
+            )
+            MessageComposerView(
+                state = state.composerState,
+                voiceMessageState = state.voiceMessageComposerState,
+                subcomposing = subcomposing,
+                enableTextFormatting = state.enableTextFormatting,
+                enableVoiceMessages = state.enableVoiceMessages,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    } else {
+        CantSendMessageBanner(modifier = modifier)
     }
 }
 
@@ -338,8 +421,11 @@ private fun MessagesViewContent(
 private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
+    inRoomCallsEnabled: Boolean,
+    isCallOngoing: Boolean,
     modifier: Modifier = Modifier,
     onRoomDetailsClicked: () -> Unit = {},
+    onJoinCallClicked: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
@@ -362,8 +448,48 @@ private fun MessagesViewTopBar(
                 )
             }
         },
+        actions = {
+            if (inRoomCallsEnabled) {
+                if (isCallOngoing) {
+                    JoinCallMenuItem(onJoinCallClicked = onJoinCallClicked)
+                } else {
+                    IconButton(onClick = onJoinCallClicked) {
+                        Icon(CommonDrawables.ic_compound_video_call, contentDescription = stringResource(CommonStrings.a11y_start_call))
+                    }
+                }
+            }
+            Spacer(Modifier.width(8.dp))
+        },
         windowInsets = WindowInsets(0.dp)
     )
+}
+
+@Composable
+private fun JoinCallMenuItem(
+    modifier: Modifier = Modifier,
+    onJoinCallClicked: () -> Unit,
+) {
+    Material3Button(
+        onClick = onJoinCallClicked,
+        colors = ButtonDefaults.buttonColors(
+            contentColor = ElementTheme.colors.bgCanvasDefault,
+            containerColor = ElementTheme.colors.iconAccentTertiary
+        ),
+        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
+        modifier = modifier.heightIn(min = 36.dp),
+    ) {
+        Icon(
+            modifier = Modifier.size(20.dp),
+            resourceId = CommonDrawables.ic_compound_video_call,
+            contentDescription = null
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = stringResource(CommonStrings.action_join),
+            style = ElementTheme.typography.fontBodyMdMedium
+        )
+        Spacer(Modifier.width(8.dp))
+    }
 }
 
 @Composable
@@ -421,5 +547,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onUserDataClicked = {},
         onSendLocationClicked = {},
         onCreatePollClicked = {},
+        onJoinCallClicked = {},
     )
 }

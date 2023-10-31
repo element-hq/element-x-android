@@ -29,7 +29,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Fehler beim Wiederherstellen des Standardmodus. Bitte versuche es erneut."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Fehler beim Einstellen des Modus. Bitte versuche es erneut."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Alle Nachrichten"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Benachrichtige mich in diesem Raum bei"</string>
   <string name="screen_room_reactions_show_less">"Weniger anzeigen"</string>
   <string name="screen_room_reactions_show_more">"Mehr anzeigen"</string>
@@ -38,5 +37,5 @@
   <string name="screen_room_timeline_add_reaction">"Emoji hinzufügen"</string>
   <string name="screen_room_timeline_less_reactions">"Weniger anzeigen"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
-  <string name="screen_room_retry_send_menu_remove_action">"Entfernen"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
 </resources>

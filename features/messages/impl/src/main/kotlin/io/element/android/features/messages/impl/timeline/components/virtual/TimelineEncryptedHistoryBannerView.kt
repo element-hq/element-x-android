@@ -16,26 +16,35 @@
 
 package io.element.android.features.messages.impl.timeline.components.virtual
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
+import io.element.android.features.messages.impl.timeline.session.SessionState
+import io.element.android.features.messages.impl.timeline.session.SessionStateProvider
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
 @Composable
-fun TimelineEncryptedHistoryBannerView(modifier: Modifier = Modifier) {
+fun TimelineEncryptedHistoryBannerView(
+    sessionState: SessionState,
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp)
@@ -43,25 +52,35 @@ fun TimelineEncryptedHistoryBannerView(modifier: Modifier = Modifier) {
             .border(1.dp, ElementTheme.colors.borderInfoSubtle, MaterialTheme.shapes.small)
             .background(ElementTheme.colors.bgInfoSubtle)
             .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Icon(
+            modifier = Modifier.size(20.dp),
             resourceId = CommonDrawables.ic_compound_info,
             contentDescription = "Info",
             tint = ElementTheme.colors.iconInfoPrimary
         )
         Text(
-            text = stringResource(R.string.screen_room_encrypted_history_banner),
+            text = stringResource(sessionState.toStringResId()),
             style = ElementTheme.typography.fontBodyMdMedium,
             color = ElementTheme.colors.textInfoPrimary
         )
     }
 }
 
+@StringRes
+private fun SessionState.toStringResId(): Int {
+    return when {
+        isSessionVerified.not() -> R.string.screen_room_encrypted_history_banner_unverified
+        isKeyBackupEnabled.not() -> R.string.screen_room_encrypted_history_banner
+        else -> R.string.screen_room_encrypted_history_banner // TODO strings need to be updated
+    }
+}
+
 @PreviewsDayNight
 @Composable
-internal fun TimelineEncryptedHistoryBannerViewPreview() {
-    ElementTheme {
-        TimelineEncryptedHistoryBannerView()
-    }
+internal fun TimelineEncryptedHistoryBannerViewPreview(
+    @PreviewParameter(SessionStateProvider::class) sessionState: SessionState,
+) = ElementPreview {
+    TimelineEncryptedHistoryBannerView(sessionState = sessionState)
 }

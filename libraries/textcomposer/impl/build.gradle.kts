@@ -32,9 +32,14 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
+    implementation(projects.libraries.uiUtils)
 
     implementation(libs.matrix.richtexteditor)
     api(libs.matrix.richtexteditor.compose)
 
     ksp(libs.showkase.processor)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.coroutines.test)
 }

@@ -43,9 +43,11 @@ val A_USER_ID_10 = UserId("@walter:server.org")
 val A_SESSION_ID: SessionId = A_USER_ID
 val A_SESSION_ID_2: SessionId = A_USER_ID_2
 val A_SPACE_ID = SpaceId("!aSpaceId:domain")
+val A_SPACE_ID_2 = SpaceId("!aSpaceId2:domain")
 val A_ROOM_ID = RoomId("!aRoomId:domain")
 val A_ROOM_ID_2 = RoomId("!aRoomId2:domain")
 val A_THREAD_ID = ThreadId("\$aThreadId")
+val A_THREAD_ID_2 = ThreadId("\$aThreadId2")
 val AN_EVENT_ID = EventId("\$anEventId")
 val AN_EVENT_ID_2 = EventId("\$anEventId2")
 val A_TRANSACTION_ID = TransactionId("aTransactionId")
@@ -70,3 +72,5 @@ const val A_FAILURE_REASON = "There has been a failure"
 
 val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)
+
+const val A_RECOVERY_KEY = "1234 5678"

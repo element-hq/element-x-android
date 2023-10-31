@@ -4,6 +4,7 @@
     <item quantity="one">"%1$d changement dans le salon"</item>
     <item quantity="other">"%1$d changements dans le salon"</item>
   </plurals>
+  <string name="screen_room_mentions_at_room_subtitle">"Notifier tout le salon"</string>
   <string name="screen_room_attachment_source_camera">"Appareil photo"</string>
   <string name="screen_room_attachment_source_camera_photo">"Prendre une photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Enregistrer une vidéo"</string>
@@ -13,8 +14,9 @@
   <string name="screen_room_attachment_source_poll">"Sondage"</string>
   <string name="screen_room_attachment_text_formatting">"Formatage du texte"</string>
   <string name="screen_room_encrypted_history_banner">"L’historique des messages n’est actuellement pas disponible dans ce salon"</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"L’historique de la discussion n’est pas disponible. Vérifiez cette session pour accéder à l’historique."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
-  <string name="screen_room_invite_again_alert_message">"Souaitez-vous inviter l\'ancien membre à revenir ?"</string>
+  <string name="screen_room_invite_again_alert_message">"Souhaitez-vous inviter l’ancien membre à revenir ?"</string>
   <string name="screen_room_invite_again_alert_title">"Vous êtes seul dans ce salon"</string>
   <string name="screen_room_message_copied">"Message copié"</string>
   <string name="screen_room_no_permission_to_post">"Vous n’êtes pas autorisé à publier dans ce salon"</string>
@@ -29,7 +31,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Échec de la restauration du mode par défaut, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Échec de la configuration du mode, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Tous les messages"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Dans ce salon, prévenez-moi pour"</string>
   <string name="screen_room_reactions_show_less">"Afficher moins"</string>
   <string name="screen_room_reactions_show_more">"Afficher plus"</string>
@@ -37,6 +38,8 @@
   <string name="screen_room_retry_send_menu_title">"Votre message n’a pas pu être envoyé"</string>
   <string name="screen_room_timeline_add_reaction">"Ajouter un émoji"</string>
   <string name="screen_room_timeline_less_reactions">"Afficher moins"</string>
+  <string name="screen_room_voice_message_tooltip">"Maintenir pour enregistrer"</string>
+  <string name="screen_room_mentions_at_room_title">"Tout le monde"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
-  <string name="screen_room_retry_send_menu_remove_action">"Supprimer"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"1 osoba"</item>
+    <item quantity="one">"%1$d osoba"</item>
     <item quantity="few">"%1$d osoby"</item>
     <item quantity="other">"%1$d osob"</item>
   </plurals>
@@ -36,7 +36,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Obnovení výchozího režimu se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nastavení režimu se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všechny zprávy"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V této místnosti mě upozornit na"</string>
   <string name="screen_dm_details_block_alert_action">"Zablokovat"</string>
   <string name="screen_dm_details_block_alert_description">"Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat."</string>
@@ -45,7 +44,7 @@
   <string name="screen_dm_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
   <string name="screen_dm_details_unblock_user">"Odblokovat uživatele"</string>
   <string name="screen_room_details_leave_room_title">"Opustit místnost"</string>
-  <string name="screen_room_details_people_title">"Lidé"</string>
   <string name="screen_room_details_security_title">"Zabezpečení"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
 </resources>

@@ -5,6 +5,7 @@
     <item quantity="few">"%1$d zmeny miestnosti"</item>
     <item quantity="other">"%1$d zmien miestnosti"</item>
   </plurals>
+  <string name="screen_room_mentions_at_room_subtitle">"Informovať celú miestnosť"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Odfotiť"</string>
   <string name="screen_room_attachment_source_camera_video">"Nahrať video"</string>
@@ -14,6 +15,7 @@
   <string name="screen_room_attachment_source_poll">"Anketa"</string>
   <string name="screen_room_attachment_text_formatting">"Formátovanie textu"</string>
   <string name="screen_room_encrypted_history_banner">"História správ v tejto miestnosti nie je momentálne k dispozícii"</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"História správ nie je v tejto miestnosti k dispozícii. Ak chcete zobraziť históriu správ, overte toto zariadenie."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
   <string name="screen_room_invite_again_alert_message">"Chceli by ste ich pozvať späť?"</string>
   <string name="screen_room_invite_again_alert_title">"V tomto rozhovore ste sami"</string>
@@ -30,7 +32,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Nepodarilo sa obnoviť predvolený režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nepodarilo sa nastaviť režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všetky správy"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V tejto miestnosti ma upozorniť na"</string>
   <string name="screen_room_reactions_show_less">"Zobraziť menej"</string>
   <string name="screen_room_reactions_show_more">"Zobraziť viac"</string>
@@ -38,6 +39,8 @@
   <string name="screen_room_retry_send_menu_title">"Vašu správu sa nepodarilo odoslať"</string>
   <string name="screen_room_timeline_add_reaction">"Pridať emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Zobraziť menej"</string>
+  <string name="screen_room_voice_message_tooltip">"Podržaním nahrajte"</string>
+  <string name="screen_room_mentions_at_room_title">"Všetci"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
-  <string name="screen_room_retry_send_menu_remove_action">"Odstrániť"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
 </resources>

@@ -16,19 +16,20 @@
 
 package io.element.android.features.preferences.impl.root
 
-import io.element.android.features.logout.api.aLogoutPreferenceState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.ui.strings.CommonStrings
 
 fun aPreferencesRootState() = PreferencesRootState(
-    logoutState = aLogoutPreferenceState(),
     myUser = null,
     version = "Version 1.1 (1)",
     showCompleteVerification = true,
+    showSecureBackup = true,
+    showSecureBackupBadge = true,
     accountManagementUrl = "aUrl",
     devicesManagementUrl = "anOtherUrl",
     showAnalyticsSettings = true,
     showDeveloperSettings = true,
     showNotificationSettings = true,
+    showLockScreenSettings = true,
     snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),
 )

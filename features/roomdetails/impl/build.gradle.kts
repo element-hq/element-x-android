@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.permissions.api)
+    implementation(projects.libraries.preferences.api)
     api(projects.features.roomdetails.api)
     api(projects.libraries.usersearch.api)
     api(projects.services.apperror.api)

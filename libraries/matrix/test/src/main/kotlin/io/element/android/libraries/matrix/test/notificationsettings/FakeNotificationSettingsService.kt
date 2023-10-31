@@ -20,12 +20,14 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NOTIFICATION_MODE
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 
 class FakeNotificationSettingsService(
     initialRoomMode: RoomNotificationMode = A_ROOM_NOTIFICATION_MODE,
+    initialRoomModeIsDefault: Boolean = true,
     initialGroupDefaultMode: RoomNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
     initialEncryptedGroupDefaultMode: RoomNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
     initialOneToOneDefaultMode: RoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
@@ -37,16 +39,21 @@ class FakeNotificationSettingsService(
     private var defaultOneToOneRoomNotificationMode: RoomNotificationMode = initialOneToOneDefaultMode
     private var defaultEncryptedOneToOneRoomNotificationMode: RoomNotificationMode = initialEncryptedOneToOneDefaultMode
     private var roomNotificationMode: RoomNotificationMode = initialRoomMode
+    private var roomNotificationModeIsDefault: Boolean = initialRoomModeIsDefault
     private var callNotificationsEnabled = false
     private var atRoomNotificationsEnabled = false
+    private var setNotificationModeError: Throwable? = null
+    private var restoreDefaultNotificationModeError: Throwable? = null
+    private var setDefaultNotificationModeError: Throwable? = null
+    private var setAtRoomError: Throwable? = null
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _notificationSettingsStateFlow
 
     override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> {
         return Result.success(
             RoomNotificationSettings(
-                mode = roomNotificationMode,
-                isDefault = roomNotificationMode == defaultEncryptedGroupRoomNotificationMode
+                mode = if(roomNotificationModeIsDefault) defaultEncryptedGroupRoomNotificationMode else roomNotificationMode,
+                isDefault = roomNotificationModeIsDefault
             )
         )
     }
@@ -68,6 +75,10 @@ class FakeNotificationSettingsService(
     }
 
     override suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit> {
+        val error = setDefaultNotificationModeError
+        if (error != null) {
+            return Result.failure(error)
+        }
         if (isOneToOne) {
             if (isEncrypted) {
                 defaultEncryptedOneToOneRoomNotificationMode = mode
@@ -86,12 +97,23 @@ class FakeNotificationSettingsService(
     }
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> {
-        roomNotificationMode = mode
-        _notificationSettingsStateFlow.emit(Unit)
-        return Result.success(Unit)
+        val error = setNotificationModeError
+        return if (error != null) {
+            Result.failure(error)
+        } else {
+            roomNotificationModeIsDefault = false
+            roomNotificationMode = mode
+            _notificationSettingsStateFlow.emit(Unit)
+            Result.success(Unit)
+        }
     }
 
     override suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit> {
+        val error = restoreDefaultNotificationModeError
+        if (error != null) {
+            return Result.failure(error)
+        }
+        roomNotificationModeIsDefault = true
         roomNotificationMode = defaultEncryptedGroupRoomNotificationMode
         _notificationSettingsStateFlow.emit(Unit)
         return Result.success(Unit)
@@ -110,6 +132,10 @@ class FakeNotificationSettingsService(
     }
 
     override suspend fun setRoomMentionEnabled(enabled: Boolean): Result<Unit> {
+        val error = setAtRoomError
+        if (error != null) {
+            return Result.failure(error)
+        }
         atRoomNotificationsEnabled = enabled
         return Result.success(Unit)
     }
@@ -122,4 +148,25 @@ class FakeNotificationSettingsService(
         callNotificationsEnabled = enabled
         return Result.success(Unit)
     }
+
+    override suspend fun getRoomsWithUserDefinedRules(): Result<List<String>> {
+        return Result.success(if (roomNotificationModeIsDefault) listOf() else listOf(A_ROOM_ID.value))
+    }
+
+    fun givenSetNotificationModeError(throwable: Throwable?) {
+        setNotificationModeError = throwable
+    }
+
+    fun givenRestoreDefaultNotificationModeError(throwable: Throwable?) {
+        restoreDefaultNotificationModeError = throwable
+    }
+
+    fun givenSetAtRoomError(throwable: Throwable?) {
+        setAtRoomError = throwable
+    }
+
+    fun givenSetDefaultNotificationModeError(throwable: Throwable?) {
+        setDefaultNotificationModeError = throwable
+    }
+
 }

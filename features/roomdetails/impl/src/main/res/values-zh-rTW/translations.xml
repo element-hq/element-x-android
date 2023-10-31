@@ -26,13 +26,12 @@
   <string name="screen_room_notification_settings_error_restoring_default">"無法重設為預設模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"無法設定模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"所有訊息"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
   <string name="screen_dm_details_block_alert_action">"封鎖"</string>
   <string name="screen_dm_details_block_user">"封鎖使用者"</string>
   <string name="screen_dm_details_unblock_alert_action">"解除封鎖"</string>
   <string name="screen_dm_details_unblock_user">"解除封鎖使用者"</string>
   <string name="screen_room_details_leave_room_title">"離開聊天室"</string>
-  <string name="screen_room_details_people_title">"夥伴"</string>
   <string name="screen_room_details_security_title">"安全性"</string>
   <string name="screen_room_details_topic_title">"主題"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
 </resources>

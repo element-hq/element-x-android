@@ -18,21 +18,23 @@ package io.element.android.libraries.designsystem.atomic.pages
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 
 /**
  * @param modifier Classical modifier.
+ * @param topBar optional topBar.
  * @param header optional header.
  * @param footer optional footer.
  * @param content main content.
@@ -40,28 +42,34 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun HeaderFooterPage(
     modifier: Modifier = Modifier,
+    topBar: @Composable () -> Unit = {},
     header: @Composable () -> Unit = {},
     footer: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .padding(all = 20.dp),
-    ) {
-        // Header
-        header()
-        // Content
+    Scaffold(
+        modifier = modifier,
+        topBar = topBar,
+    ) { padding ->
         Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .padding(all = 20.dp),
         ) {
-            content()
+            // Header
+            header()
+            // Content
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) {
+                content()
+            }
+            // Footer
+            footer()
         }
-        // Footer
-        footer()
     }
 }
 

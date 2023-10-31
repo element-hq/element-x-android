@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_element_call_base_url">"Custom Element Call base URL"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Set a custom base URL for Element Call."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Invalid URL, please make sure you include the protocol (http/https) and the correct address."</string>
   <string name="screen_advanced_settings_developer_mode">"Developer mode"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Enable to have access to features and functionality for developers."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Disable the rich text editor to type Markdown manually."</string>

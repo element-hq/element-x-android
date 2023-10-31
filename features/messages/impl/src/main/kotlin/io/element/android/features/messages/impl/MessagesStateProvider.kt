@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.anActionListState
+import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
@@ -25,12 +26,14 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
 open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
@@ -46,6 +49,23 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 roomAvatar = Async.Uninitialized,
             ),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showTextFormatting = true)),
+            aMessagesState().copy(
+                enableVoiceMessages = true,
+                voiceMessageComposerState = aVoiceMessageComposerState(showPermissionRationaleDialog = true),
+            ),
+            aMessagesState().copy(
+                composerState = aMessageComposerState().copy(
+                    attachmentsState = AttachmentsState.Sending.Processing(persistentListOf())
+                ),
+            ),
+            aMessagesState().copy(
+                composerState = aMessageComposerState().copy(
+                    attachmentsState = AttachmentsState.Sending.Uploading(0.33f)
+                ),
+            ),
+            aMessagesState().copy(
+                isCallOngoing = true,
+            )
         )
 }
 
@@ -58,8 +78,9 @@ fun aMessagesState() = MessagesState(
     composerState = aMessageComposerState().copy(
         richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
         isFullScreen = false,
-        mode = MessageComposerMode.Normal("Hello"),
+        mode = MessageComposerMode.Normal,
     ),
+    voiceMessageComposerState = aVoiceMessageComposerState(),
     timelineState = aTimelineState().copy(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
     ),
@@ -82,5 +103,9 @@ fun aMessagesState() = MessagesState(
     inviteProgress = Async.Uninitialized,
     showReinvitePrompt = false,
     enableTextFormatting = true,
+    enableVoiceMessages = true,
+    enableInRoomCalls = true,
+    isCallOngoing = false,
+    appName = "Element",
     eventSink = {}
 )

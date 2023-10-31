@@ -37,7 +37,12 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.BackupState
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -48,6 +53,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
@@ -83,6 +89,32 @@ class RoomListPresenterTests {
             Truth.assertThat(withUserState.matrixUser!!.userId).isEqualTo(A_USER_ID)
             Truth.assertThat(withUserState.matrixUser!!.displayName).isEqualTo(A_USER_NAME)
             Truth.assertThat(withUserState.matrixUser!!.avatarUrl).isEqualTo(AN_AVATAR_URL)
+            Truth.assertThat(withUserState.showAvatarIndicator).isFalse()
+            scope.cancel()
+        }
+    }
+
+    @Test
+    fun `present - show avatar indicator`() = runTest {
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val encryptionService = FakeEncryptionService()
+        val sessionVerificationService = FakeSessionVerificationService()
+        val presenter = createRoomListPresenter(
+            encryptionService = encryptionService,
+            sessionVerificationService = sessionVerificationService,
+            coroutineScope = scope
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.showAvatarIndicator).isFalse()
+            sessionVerificationService.givenCanVerifySession(false)
+            Truth.assertThat(awaitItem().showAvatarIndicator).isFalse()
+            encryptionService.emitBackupState(BackupState.UNKNOWN)
+            val finalState = awaitItem()
+            Truth.assertThat(finalState.showAvatarIndicator).isTrue()
             scope.cancel()
         }
     }
@@ -131,7 +163,7 @@ class RoomListPresenterTests {
             roomListService = roomListService
         )
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(client =  matrixClient, coroutineScope = scope)
+        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -341,7 +373,7 @@ class RoomListPresenterTests {
             notificationSettingsService = notificationSettingsService
         )
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(client = matrixClient , coroutineScope = scope)
+        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -369,7 +401,8 @@ class RoomListPresenterTests {
             givenFormat(A_FORMATTED_DATE)
         },
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
-        coroutineScope: CoroutineScope = this,
+        encryptionService: EncryptionService = FakeEncryptionService(),
+        coroutineScope: CoroutineScope,
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,
@@ -384,7 +417,14 @@ class RoomListPresenterTests {
             coroutineDispatchers = testCoroutineDispatchers(),
             notificationSettingsService = client.notificationSettingsService(),
             appScope = coroutineScope
-        )
+        ),
+        encryptionService = encryptionService,
+        featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
+        indicatorService = DefaultIndicatorService(
+            sessionVerificationService = sessionVerificationService,
+            encryptionService = encryptionService,
+            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
+        ),
     )
 }
 

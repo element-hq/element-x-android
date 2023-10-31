@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.sync
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.CoroutineScope
@@ -26,33 +25,27 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.SyncServiceInterface
 import org.matrix.rustcomponents.sdk.SyncServiceState
 import timber.log.Timber
 
 class RustSyncService(
     private val innerSyncService: SyncServiceInterface,
-    private val dispatchers: CoroutineDispatchers,
     sessionCoroutineScope: CoroutineScope
 ) : SyncService {
 
-    override suspend fun startSync() = withContext(dispatchers.io) {
-        runCatching {
-            Timber.i("Start sync")
-            innerSyncService.startBlocking()
-        }.onFailure {
-            Timber.d("Start sync failed: $it")
-        }
+    override suspend fun startSync() = runCatching {
+        Timber.i("Start sync")
+        innerSyncService.start()
+    }.onFailure {
+        Timber.d("Start sync failed: $it")
     }
 
-    override suspend fun stopSync() = withContext(dispatchers.io){
-        runCatching {
-            Timber.i("Stop sync")
-            innerSyncService.stopBlocking()
-        }.onFailure {
-            Timber.d("Stop sync failed: $it")
-        }
+    override suspend fun stopSync() = runCatching {
+        Timber.i("Stop sync")
+        innerSyncService.stop()
+    }.onFailure {
+        Timber.d("Stop sync failed: $it")
     }
 
     override val syncState: StateFlow<SyncState> =

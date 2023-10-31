@@ -30,7 +30,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Не удалось восстановить режим по умолчанию, попробуйте еще раз."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Не удалось настроить режим, попробуйте еще раз."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Все сообщения"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомить меня о"</string>
   <string name="screen_room_reactions_show_less">"Показать меньше"</string>
   <string name="screen_room_reactions_show_more">"Показать больше"</string>
@@ -38,6 +37,8 @@
   <string name="screen_room_retry_send_menu_title">"Не удалось отправить ваше сообщение"</string>
   <string name="screen_room_timeline_add_reaction">"Добавить эмодзи"</string>
   <string name="screen_room_timeline_less_reactions">"Показать меньше"</string>
+  <string name="screen_room_voice_message_tooltip">"Удерживайте для записи"</string>
+  <string name="screen_room_mentions_at_room_title">"Для всех"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
-  <string name="screen_room_retry_send_menu_remove_action">"Удалить"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
 </resources>

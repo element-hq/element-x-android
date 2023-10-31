@@ -1,1 +1,3 @@
+-- Migrate DB from version 1
+
 ALTER TABLE SessionData ADD COLUMN loginTimestamp INTEGER;

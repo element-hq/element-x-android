@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.messages.impl.messagecomposer.RoomMemberSuggestion
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -42,13 +43,23 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID_3
+import io.element.android.libraries.matrix.test.A_USER_ID_4
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -58,8 +69,10 @@ import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
-import io.element.android.libraries.textcomposer.Message
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.Message
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.waitForPredicate
@@ -67,6 +80,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import okhttp3.internal.immutableListOf
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
@@ -99,7 +113,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.isFullScreen).isFalse()
             assertThat(initialState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal(""))
+            assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.attachmentsState).isEqualTo(AttachmentsState.None)
@@ -153,7 +167,10 @@ class MessageComposerPresenterTest {
             assertThat(state.mode).isEqualTo(mode)
             state = awaitItem()
             assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            backToNormalMode(state, skipCount = 1)
+            state = backToNormalMode(state, skipCount = 1)
+
+            // The message that was being edited is cleared
+            assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
         }
     }
 
@@ -171,6 +188,26 @@ class MessageComposerPresenterTest {
             assertThat(state.mode).isEqualTo(mode)
             assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
             backToNormalMode(state)
+        }
+    }
+
+    @Test
+    fun `present - cancel reply`() = runTest {
+        val presenter = createPresenter(this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            var state = awaitItem()
+            val mode = aReplyMode()
+            state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(mode)
+            state.richTextEditorState.setHtml(A_REPLY)
+            state = backToNormalMode(state)
+
+            // The message typed while replying is not cleared
+            assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_REPLY)
         }
     }
 
@@ -683,12 +720,110 @@ class MessageComposerPresenterTest {
         }
     }
 
-    private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0) {
+    @Test
+    fun `present - room member mention suggestions`() = runTest {
+        val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
+        val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
+        val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
+        val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
+        val room = FakeMatrixRoom(
+            isDirect = false,
+            isOneToOne = false,
+        ).apply {
+            givenRoomMembersState(MatrixRoomMembersState.Ready(
+                immutableListOf(currentUser, invitedUser, bob, david),
+            ))
+            givenCanTriggerRoomNotification(Result.success(true))
+        }
+        val flagsService = FakeFeatureFlagService(
+            mapOf(
+                FeatureFlags.Mentions.key to true,
+            )
+        )
+        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+
+            // A null suggestion (no suggestion was received) returns nothing
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(null))
+            assertThat(awaitItem().memberSuggestions).isEmpty()
+
+            // An empty suggestion returns the room and joined members that are not the current user
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            assertThat(awaitItem().memberSuggestions)
+                .containsExactly(RoomMemberSuggestion.Room, RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
+
+            // A suggestion containing a part of "room" will also return the room mention
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "roo")))
+            assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Room)
+
+            // A non-empty suggestion will return those joined members whose user id matches it
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "bob")))
+            assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Member(bob))
+
+            // A non-empty suggestion will return those joined members whose display name matches it
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "dave")))
+            assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Member(david))
+
+            // If the suggestion isn't a mention, no suggestions are returned
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Command, "")))
+            assertThat(awaitItem().memberSuggestions).isEmpty()
+
+            // If user has no permission to send `@room` mentions, `RoomMemberSuggestion.Room` is not returned
+            room.givenCanTriggerRoomNotification(Result.success(false))
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            assertThat(awaitItem().memberSuggestions)
+                .containsExactly(RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
+
+            // If room is a DM, `RoomMemberSuggestion.Room` is not returned
+            room.givenCanTriggerRoomNotification(Result.success(true))
+            room.isDirect
+        }
+    }
+
+    @Test
+    fun `present - room member mention suggestions in a DM`() = runTest {
+        val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
+        val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
+        val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
+        val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
+        val room = FakeMatrixRoom(
+            isDirect = true,
+            isOneToOne = true,
+        ).apply {
+            givenRoomMembersState(MatrixRoomMembersState.Ready(
+                immutableListOf(currentUser, invitedUser, bob, david),
+            ))
+            givenCanTriggerRoomNotification(Result.success(true))
+        }
+        val flagsService = FakeFeatureFlagService(
+            mapOf(
+                FeatureFlags.Mentions.key to true,
+            )
+        )
+        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+
+            // An empty suggestion returns the joined members that are not the current user, but not the room
+            initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            assertThat(awaitItem().memberSuggestions)
+                .containsExactly(RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
+        }
+    }
+
+    private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0): MessageComposerState {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)
         val normalState = awaitItem()
-        assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal(""))
-        assertThat(normalState.richTextEditorState.messageHtml).isEqualTo("")
+        assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal)
+        return normalState
     }
 
     private fun createPresenter(
@@ -710,6 +845,7 @@ class MessageComposerPresenterTest {
         analyticsService,
         MessageComposerContextImpl(),
         TestRichTextEditorStateFactory(),
+        currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
     )
 }

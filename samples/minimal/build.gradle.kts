@@ -57,6 +57,7 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.dateformatter.impl)
     implementation(projects.libraries.eventformatter.impl)
+    implementation(projects.libraries.indicator.impl)
     implementation(projects.features.invitelist.impl)
     implementation(projects.features.roomlist.impl)
     implementation(projects.features.leaveroom.impl)
@@ -65,5 +66,4 @@ dependencies {
     implementation(projects.services.toolbox.impl)
     implementation(projects.libraries.featureflag.impl)
     implementation(libs.coroutines.core)
-    coreLibraryDesugaring(libs.android.desugar)
 }

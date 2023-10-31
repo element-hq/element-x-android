@@ -17,7 +17,6 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
@@ -42,20 +41,25 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(invitesState = InvitesState.NewInvites),
             aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
             aRoomListState().copy(displaySearchResults = true),
-            aRoomListState().copy(contextMenu = RoomListState.ContextMenu.Shown(
-                roomId = RoomId("!aRoom:aDomain"), roomName = "A nice room name"
-            ))
+            aRoomListState().copy(
+                contextMenu = RoomListState.ContextMenu.Shown(
+                    roomId = RoomId("!aRoom:aDomain"), roomName = "A nice room name"
+                )
+            ),
+            aRoomListState().copy(displayRecoveryKeyPrompt = true),
         )
 }
 
 internal fun aRoomListState() = RoomListState(
     matrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
+    showAvatarIndicator = false,
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
     filteredRoomList = aRoomListRoomSummaryList(),
     hasNetworkConnection = true,
     snackbarMessage = null,
     displayVerificationPrompt = false,
+    displayRecoveryKeyPrompt = false,
     invitesState = InvitesState.NoInvites,
     displaySearchResults = false,
     contextMenu = RoomListState.ContextMenu.Hidden,

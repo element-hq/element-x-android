@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,6 +35,7 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
+import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -43,22 +45,32 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.textcomposer.Message
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.Message
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
+import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 @SingleIn(RoomScope::class)
@@ -73,16 +85,25 @@ class MessageComposerPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContextImpl,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
+    private val currentSessionIdHolder: CurrentSessionIdHolder,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<MessageComposerState> {
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
 
+    private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
+
+    @OptIn(FlowPreview::class)
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
+
+        var isMentionsEnabled by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            isMentionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)
+        }
 
         val cameraPermissionState = cameraPermissionPresenter.present()
         val attachmentsState = remember {
@@ -151,14 +172,44 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+        val memberSuggestions = remember { mutableStateListOf<RoomMemberSuggestion>() }
+        LaunchedEffect(isMentionsEnabled) {
+            if (!isMentionsEnabled) return@LaunchedEffect
+            val currentUserId = currentSessionIdHolder.current
+
+            suspend fun canSendRoomMention(): Boolean {
+                val roomIsDm = room.isDirect && room.isOneToOne
+                val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
+                return !roomIsDm && userCanSendAtRoom
+            }
+
+            suggestionSearchTrigger
+                .debounce(0.5.seconds)
+                .combine(room.membersStateFlow) { suggestion, roomMembersState ->
+                    memberSuggestions.clear()
+                    val result = MentionSuggestionsProcessor.process(
+                        suggestion = suggestion,
+                        roomMembersState = roomMembersState,
+                        currentUserId = currentUserId,
+                        canSendRoomMention = ::canSendRoomMention,
+                    )
+                    if (result.isNotEmpty()) {
+                        memberSuggestions.addAll(result)
+                    }
+                }
+                .collect()
+        }
+
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
-                    localCoroutineScope.launch {
-                        richTextEditorState.setHtml("")
+                    if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
+                        localCoroutineScope.launch {
+                            richTextEditorState.setHtml("")
+                        }
                     }
-                    messageComposerContext.composerMode = MessageComposerMode.Normal("")
+                    messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
                     message = event.message,
@@ -229,6 +280,9 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.Error -> {
                     analyticsService.trackError(event.error)
                 }
+                is MessageComposerEvents.SuggestionReceived -> {
+                    suggestionSearchTrigger.value = event.suggestion
+                }
             }
         }
 
@@ -241,6 +295,7 @@ class MessageComposerPresenter @Inject constructor(
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
+            memberSuggestions = memberSuggestions.toPersistentList(),
             eventSink = { handleEvents(it) }
         )
     }
@@ -253,7 +308,7 @@ class MessageComposerPresenter @Inject constructor(
         val capturedMode = messageComposerContext.composerMode
         // Reset composer right away
         richTextEditorState.setHtml("")
-        updateComposerMode(MessageComposerMode.Normal(""))
+        updateComposerMode(MessageComposerMode.Normal)
         when (capturedMode) {
             is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html)
             is MessageComposerMode.Edit -> {
@@ -352,4 +407,9 @@ class MessageComposerPresenter @Inject constructor(
                 snackbarDispatcher.post(snackbarMessage)
             }
         }
+}
+
+sealed interface RoomMemberSuggestion {
+    data object Room : RoomMemberSuggestion
+    data class Member(val roomMember: RoomMember) : RoomMemberSuggestion
 }

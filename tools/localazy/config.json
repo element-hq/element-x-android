@@ -14,7 +14,7 @@
       ]
     },
     {
-      "name": ":features:logout:api",
+      "name": ":features:logout:impl",
       "includeRegex": [
         "screen_signout_.*"
       ]
@@ -96,7 +96,8 @@
       "name": ":features:roomlist:impl",
       "includeRegex": [
         "screen_roomlist_.*",
-        "session_verification_banner_.*"
+        "session_verification_banner_.*",
+        "confirm_recovery_key_banner_.*"
       ]
     },
     {
@@ -112,6 +113,7 @@
       "name": ":features:messages:impl",
       "includeRegex": [
         "screen_room_.*",
+        "screen\\.room\\..*",
         "screen_dm_details_.*",
         "room_timeline_state_changes"
       ],
@@ -142,9 +144,18 @@
       ]
     },
     {
+      "name": ":features:securebackup:impl",
+      "includeRegex": [
+        "screen_chat_backup_.*",
+        "screen_key_backup_disable_.*",
+        "screen_recovery_key_.*"
+      ]
+    },
+    {
       "name": ":features:preferences:impl",
       "includeRegex": [
         "screen_advanced_settings_.*",
+        "screen\\.advanced_settings\\..*",
         "screen_edit_profile_.*"
       ]
     },
@@ -152,6 +163,13 @@
       "name": ":features:call",
       "includeRegex": [
         "call_.*"
+      ]
+    },
+    {
+      "name": ":features:lockscreen:impl",
+      "includeRegex": [
+        "screen_app_lock_.*",
+        "screen_signout_in_progress_dialog_content"
       ]
     }
   ]

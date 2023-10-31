@@ -17,7 +17,7 @@
 package io.element.android.libraries.matrix.api.permalink
 
 import android.net.Uri
-import io.element.android.libraries.matrix.api.config.MatrixConfiguration
+import io.element.android.appconfig.MatrixConfiguration
 
 /**
  * Mapping of an input URI to a matrix.to compliant URI.

@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_delete">"Supprimer"</string>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
+  <string name="a11y_pause">"Pause"</string>
+  <string name="a11y_pin_field">"Code PIN"</string>
+  <string name="a11y_play">"Lecture"</string>
   <string name="a11y_poll">"Sondage"</string>
   <string name="a11y_poll_end">"Sondage terminé"</string>
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
+  <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
+  <string name="a11y_voice_message_record">"Enregistrer un message vocal. Taper deux fois et maintenir pour enregistrer. Relâcher pour stopper l’enregistrement."</string>
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_to_timeline">"Ajouter à la discussion"</string>
   <string name="action_back">"Retour"</string>
@@ -29,6 +35,7 @@
   <string name="action_edit">"Modifier"</string>
   <string name="action_enable">"Activer"</string>
   <string name="action_end_poll">"Terminer le sondage"</string>
+  <string name="action_enter_pin">"Saisir le code PIN"</string>
   <string name="action_forgot_password">"Mot de passe oublié ?"</string>
   <string name="action_forward">"Transférer"</string>
   <string name="action_invite">"Inviter"</string>
@@ -64,12 +71,16 @@
   <string name="action_send_message">"Envoyer un message"</string>
   <string name="action_share">"Partager"</string>
   <string name="action_share_link">"Partager le lien"</string>
+  <string name="action_sign_in_again">"Se connecter à nouveau"</string>
+  <string name="action_signout">"Se déconnecter"</string>
+  <string name="action_signout_anyway">"Se déconnecter quand même"</string>
   <string name="action_skip">"Passer"</string>
   <string name="action_start">"Démarrer"</string>
   <string name="action_start_chat">"Démarrer une discussion"</string>
   <string name="action_start_verification">"Commencer la vérification"</string>
   <string name="action_static_map_load">"Cliquez pour charger la carte"</string>
   <string name="action_take_photo">"Prendre une photo"</string>
+  <string name="action_try_again">"Essayer à nouveau"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
   <string name="action_edit_poll">"Modifier le sondage"</string>
@@ -79,6 +90,7 @@
   <string name="common_analytics">"Statistiques d’utilisation"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Bulles"</string>
+  <string name="common_chat_backup">"Sauvegarde des discussions"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
   <string name="common_creating_room">"Création du salon…"</string>
   <string name="common_current_user_left_room">"Quitter le salon"</string>
@@ -88,7 +100,9 @@
   <string name="common_editing">"Édition"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Chiffrement activé"</string>
+  <string name="common_enter_your_pin">"Saisissez votre code PIN"</string>
   <string name="common_error">"Erreur"</string>
+  <string name="common_everyone">"Tout le monde"</string>
   <string name="common_file">"Fichier"</string>
   <string name="common_file_saved_on_disk_android">"Fichier enregistré dans Téléchargements"</string>
   <string name="common_forward_message">"Transférer le message"</string>
@@ -116,22 +130,25 @@
   <string name="common_privacy_policy">"Politique de confidentialité"</string>
   <string name="common_reaction">"Réaction"</string>
   <string name="common_reactions">"Réactions"</string>
+  <string name="common_recovery_key">"Clé de récupération"</string>
   <string name="common_refreshing">"Actualisation…"</string>
   <string name="common_replying_to">"En réponse à %1$s"</string>
   <string name="common_report_a_bug">"Signaler un problème"</string>
   <string name="common_report_submitted">"Rapport soumis"</string>
   <string name="common_rich_text_editor">"Éditeur de texte enrichi"</string>
+  <string name="common_room">"Salon"</string>
   <string name="common_room_name">"Nom du salon"</string>
   <string name="common_room_name_placeholder">"par exemple, le nom de votre projet"</string>
+  <string name="common_screen_lock">"Verrouillage d’écran"</string>
   <string name="common_search_for_someone">"Rechercher quelqu’un"</string>
   <string name="common_search_results">"Résultats de la recherche"</string>
   <string name="common_security">"Sécurité"</string>
-  <string name="common_select_your_server">"Sélectionnez votre serveur"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_server_not_supported">"Serveur non pris en charge"</string>
   <string name="common_server_url">"URL du serveur"</string>
   <string name="common_settings">"Paramètres"</string>
   <string name="common_shared_location">"Position partagée"</string>
+  <string name="common_signing_out">"Déconnexion"</string>
   <string name="common_starting_chat">"Création de la discussion…"</string>
   <string name="common_sticker">"Autocollant"</string>
   <string name="common_success">"Succès"</string>
@@ -145,13 +162,16 @@
   <string name="common_unable_to_decrypt">"Échec de déchiffrement"</string>
   <string name="common_unable_to_invite_message">"Les invitations n’ont pas pu être envoyées à un ou plusieurs utilisateurs."</string>
   <string name="common_unable_to_invite_title">"Impossible d’envoyer une ou plusieurs invitations"</string>
+  <string name="common_unlock">"Déverrouillage"</string>
   <string name="common_unmute">"Annuler la sourdine"</string>
   <string name="common_unsupported_event">"Événement non pris en charge"</string>
   <string name="common_username">"Nom d’utilisateur"</string>
   <string name="common_verification_cancelled">"Vérification annulée"</string>
   <string name="common_verification_complete">"Vérification terminée"</string>
   <string name="common_video">"Vidéo"</string>
+  <string name="common_voice_message">"Message vocal"</string>
   <string name="common_waiting">"En attente…"</string>
+  <string name="common_waiting_for_decryption_key">"En attente de la clé de déchiffrement"</string>
   <string name="common_poll_end_confirmation">"Êtes-vous sûr de vouloir mettre fin à ce sondage ?"</string>
   <string name="common_poll_summary">"Sondage : %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
@@ -168,8 +188,10 @@
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
   <string name="error_failed_locating_user">"%1$s n’a pas pu accéder à votre position. Veuillez réessayer ultérieurement."</string>
+  <string name="error_failed_uploading_voice_message">"Échec lors de l’envoi du message vocal."</string>
   <string name="error_missing_location_auth_android">"%1$s n’est pas autorisé à accéder à votre position. Vous pouvez activer l’accès dans les Paramètres."</string>
   <string name="error_missing_location_rationale_android">"%1$s n’est pas autorisé à accéder à votre position. Activez l’accès ci-dessous."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s n’a pas l’autorisation d’accéder au microphone. Autorisez l’accès pour enregistrer un message."</string>
   <string name="error_some_messages_have_not_been_sent">"Certains messages n’ont pas été envoyés"</string>
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
   <string name="invite_friends_rich_title">"🔐️ Rejoignez-moi sur %1$s"</string>
@@ -178,6 +200,10 @@
   <string name="leave_room_alert_private_subtitle">"Êtes-vous sûr de vouloir quitter ce salon ? Ce salon n’est pas public et vous ne pourrez pas le rejoindre sans invitation."</string>
   <string name="leave_room_alert_subtitle">"Êtes-vous sûr de vouloir quitter le salon ?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d chiffre saisi"</item>
+    <item quantity="other">"%1$d chiffres saisis"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membre"</item>
     <item quantity="other">"%1$d membres"</item>
@@ -187,7 +213,6 @@
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
-  <string name="rageshake_dialog_content">"Vous semblez secouer le téléphone avec frustration. Voulez-vous ouvrir le formulaire de rapport de problème ?"</string>
   <string name="report_content_explanation">"Ce message sera signalé à l’administrateur de votre serveur d’accueil. Il ne pourra lire aucun message chiffré."</string>
   <string name="report_content_hint">"Raison du signalement de ce contenu"</string>
   <string name="room_timeline_beginning_of_room">"Ceci est le début de %1$s."</string>
@@ -225,7 +250,6 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
   <string name="screen_report_content_block_user_hint">"Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur."</string>
-  <string name="screen_settings_oidc_account">"Compte et sessions"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>
@@ -235,7 +259,6 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_view_location_title">"Position"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Seuil de détection"</string>
-  <string name="settings_title_general">"Général"</string>
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="test_language_identifier">"Ang."</string>
   <string name="dialog_title_error">"Erreur"</string>

@@ -195,9 +195,9 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear the notifications for a single event.
      */
-    fun clearEvent(eventId: EventId, doRender: Boolean) {
+    fun clearEvent(sessionId: SessionId, eventId: EventId, doRender: Boolean) {
         updateEvents(doRender = doRender) {
-            it.clearEvent(eventId)
+            it.clearEvent(sessionId, eventId)
         }
     }
 

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_delete">"Smazat"</string>
   <string name="a11y_hide_password">"Skrýt heslo"</string>
   <string name="a11y_notifications_mentions_only">"Pouze zmínky"</string>
   <string name="a11y_notifications_muted">"Ztišeno"</string>
+  <string name="a11y_pause">"Pozastavit"</string>
+  <string name="a11y_play">"Přehrát"</string>
   <string name="a11y_poll">"Hlasování"</string>
   <string name="a11y_poll_end">"Hlasování ukončeno"</string>
   <string name="a11y_send_files">"Odeslat soubory"</string>
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
+  <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu. Dvojitě klepněte a podržte pro záznam. Uvolněním ukončíte nahrávání."</string>
   <string name="action_accept">"Přijmout"</string>
   <string name="action_add_to_timeline">"Přidat na časovou osu"</string>
   <string name="action_back">"Zpět"</string>
@@ -64,6 +68,7 @@
   <string name="action_send_message">"Odeslat zprávu"</string>
   <string name="action_share">"Sdílet"</string>
   <string name="action_share_link">"Sdílet odkaz"</string>
+  <string name="action_sign_in_again">"Přihlásit se znovu"</string>
   <string name="action_skip">"Přeskočit"</string>
   <string name="action_start">"Začít"</string>
   <string name="action_start_chat">"Zahájit chat"</string>
@@ -89,6 +94,7 @@
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Šifrování povoleno"</string>
   <string name="common_error">"Chyba"</string>
+  <string name="common_everyone">"Všichni"</string>
   <string name="common_file">"Soubor"</string>
   <string name="common_file_saved_on_disk_android">"Soubor byl uložen do složky Stažené soubory"</string>
   <string name="common_forward_message">"Přeposlat zprávu"</string>
@@ -125,9 +131,7 @@
   <string name="common_room_name_placeholder">"např. název vašeho projektu"</string>
   <string name="common_search_for_someone">"Hledat někoho"</string>
   <string name="common_search_results">"Výsledky hledání"</string>
-  <string name="common_secure_backup">"Zabezpečená záloha"</string>
   <string name="common_security">"Zabezpečení"</string>
-  <string name="common_select_your_server">"Vyberte svůj server"</string>
   <string name="common_sending">"Odesílání…"</string>
   <string name="common_server_not_supported">"Server není podporován"</string>
   <string name="common_server_url">"URL serveru"</string>
@@ -191,7 +195,6 @@
     <item quantity="other">"%d hlasů"</item>
   </plurals>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
-  <string name="rageshake_dialog_content">"Zdá se, že jste frustrovaně třásli telefonem. Chcete otevřít obrazovku pro nahlášení chyby?"</string>
   <string name="report_content_explanation">"Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy."</string>
   <string name="report_content_hint">"Důvod nahlášení tohoto obsahu"</string>
   <string name="room_timeline_beginning_of_room">"Toto je začátek %1$s."</string>
@@ -229,7 +232,6 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémová oznámení byla vypnuta"</string>
   <string name="screen_notification_settings_title">"Oznámení"</string>
   <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
-  <string name="screen_settings_oidc_account">"Účet a zařízení"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>
   <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>
@@ -239,7 +241,6 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_view_location_title">"Poloha"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Práh detekce"</string>
-  <string name="settings_title_general">"Obecné"</string>
   <string name="settings_version_number">"Verze: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Chyba"</string>

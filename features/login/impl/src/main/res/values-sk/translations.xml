@@ -14,10 +14,9 @@
   <string name="screen_change_account_provider_subtitle">"Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet."</string>
   <string name="screen_change_account_provider_title">"Zmeniť poskytovateľa účtu"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nemohli sme sa spojiť s týmto domovským serverom. Skontrolujte prosím, či ste zadali URL adresu domovského servera správne. Ak je adresa URL správna, kontaktujte svoj domovský server pre ďalšiu pomoc."</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Tento server momentálne nepodporuje kĺzavú synchronizáciu."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského servera"</string>
-  <string name="screen_change_server_form_notice">"Pripojiť sa môžete len k existujúcemu serveru, ktorý podporuje kĺzavú synchronizáciu. Váš správca domovského servera ju bude musieť nakonfigurovať. %1$s"</string>
   <string name="screen_change_server_subtitle">"Aká je adresa vášho servera?"</string>
+  <string name="screen_change_server_title">"Vyberte svoj server"</string>
   <string name="screen_login_error_deactivated_account">"Tento účet bol deaktivovaný."</string>
   <string name="screen_login_error_invalid_credentials">"Nesprávne používateľské meno a/alebo heslo"</string>
   <string name="screen_login_error_invalid_user_id">"Toto nie je platný identifikátor používateľa. Očakávaný formát: \'@pouzivatel:homeserver.sk\'"</string>
@@ -34,14 +33,8 @@
   <string name="screen_waitlist_message">"Momentálne je veľký dopyt po %1$s na %2$s. Vráťte sa do aplikácie za pár dní a skúste to znova.
 
 Ďakujeme za trpezlivosť!"</string>
-  <string name="screen_waitlist_message_success">"Vitajte v %1$s"</string>
   <string name="screen_waitlist_title">"Ste na čakanej listine!"</string>
   <string name="screen_waitlist_title_success">"Ste dnu!"</string>
-  <string name="screen_account_provider_continue">"Pokračovať"</string>
-  <string name="screen_change_server_submit">"Pokračovať"</string>
-  <string name="screen_change_server_title">"Vyberte svoj server"</string>
-  <string name="screen_login_password_hint">"Heslo"</string>
-  <string name="screen_login_submit">"Pokračovať"</string>
   <string name="screen_login_subtitle">"Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
-  <string name="screen_login_username_hint">"Používateľské meno"</string>
+  <string name="screen_waitlist_message_success">"Vitajte v %1$s!"</string>
 </resources>

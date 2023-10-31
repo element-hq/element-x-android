@@ -16,4 +16,7 @@
 
 package io.element.android.libraries.matrix.api.core
 
+/**
+ * The [UserId] of the currently logged in user.
+ */
 typealias SessionId = UserId

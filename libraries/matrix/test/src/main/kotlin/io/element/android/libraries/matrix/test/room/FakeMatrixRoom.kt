@@ -29,20 +29,32 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
@@ -59,6 +71,7 @@ class FakeMatrixRoom(
     override val alternativeAliases: List<String> = emptyList(),
     override val isPublic: Boolean = true,
     override val isDirect: Boolean = false,
+    override val isOneToOne: Boolean = false,
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
@@ -92,6 +105,9 @@ class FakeMatrixRoom(
     private var sendPollResponseResult = Result.success(Unit)
     private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
+    private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
+    private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
+    private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
 
     var sendMediaCount = 0
@@ -137,6 +153,9 @@ class FakeMatrixRoom(
         private set
 
     private var leaveRoomError: Throwable? = null
+
+    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableStateFlow(aRoomInfo())
+    override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
@@ -253,6 +272,10 @@ class FakeMatrixRoom(
         return canSendEventResults[type] ?: Result.failure(IllegalStateException("No fake answer"))
     }
 
+    override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
+        return canUserTriggerRoomNotificationResult
+    }
+
     override suspend fun sendImage(
         file: File,
         thumbnailFile: File,
@@ -361,6 +384,22 @@ class FakeMatrixRoom(
         return endPollResult
     }
 
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
+
+    override suspend fun generateWidgetWebViewUrl(
+        widgetSettings: MatrixWidgetSettings,
+        clientId: String,
+        languageTag: String?,
+        theme: String?,
+    ): Result<String> = generateWidgetWebViewUrlResult
+
+    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
+
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
     }
@@ -399,6 +438,10 @@ class FakeMatrixRoom(
 
     fun givenCanSendEventResult(type: MessageEventType, result: Result<Boolean>) {
         canSendEventResults[type] = result
+    }
+
+    fun givenCanTriggerRoomNotification(result: Result<Boolean>) {
+        canUserTriggerRoomNotificationResult = result
     }
 
     fun givenIgnoreResult(result: Result<Unit>) {
@@ -468,6 +511,18 @@ class FakeMatrixRoom(
     fun givenProgressCallbackValues(values: List<Pair<Long, Long>>) {
         progressCallbackValues = values
     }
+
+    fun givenGenerateWidgetWebViewUrlResult(result: Result<String>) {
+        generateWidgetWebViewUrlResult = result
+    }
+
+    fun givenGetWidgetDriverResult(result: Result<MatrixWidgetDriver>) {
+        getWidgetDriverResult = result
+    }
+
+    fun givenRoomInfo(roomInfo: MatrixRoomInfo) {
+        _roomInfoFlow.tryEmit(roomInfo)
+    }
 }
 
 data class SendLocationInvocation(
@@ -493,4 +548,50 @@ data class SendPollResponseInvocation(
 data class EndPollInvocation(
     val pollStartId: EventId,
     val text: String,
+)
+
+fun aRoomInfo(
+    id: String = A_ROOM_ID.value,
+    name: String? = A_ROOM_NAME,
+    topic: String? = "A topic",
+    avatarUrl: String? = AN_AVATAR_URL,
+    isDirect: Boolean = false,
+    isPublic: Boolean = true,
+    isSpace: Boolean = false,
+    isTombstoned: Boolean = false,
+    canonicalAlias: String? = null,
+    alternativeAliases: List<String> = emptyList(),
+    currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
+    latestEvent: EventTimelineItem? = null,
+    inviter: RoomMember? = null,
+    activeMembersCount: Long = 1,
+    invitedMembersCount: Long = 0,
+    joinedMembersCount: Long = 1,
+    highlightCount: Long = 0,
+    notificationCount: Long = 0,
+    userDefinedNotificationMode: RoomNotificationMode? = null,
+    hasRoomCall: Boolean = false,
+    activeRoomCallParticipants: List<String> = emptyList()
+) = MatrixRoomInfo(
+    id = id,
+    name = name,
+    topic = topic,
+    avatarUrl = avatarUrl,
+    isDirect = isDirect,
+    isPublic = isPublic,
+    isSpace = isSpace,
+    isTombstoned = isTombstoned,
+    canonicalAlias = canonicalAlias,
+    alternativeAliases = alternativeAliases,
+    currentUserMembership = currentUserMembership,
+    latestEvent = latestEvent,
+    inviter = inviter,
+    activeMembersCount = activeMembersCount,
+    invitedMembersCount = invitedMembersCount,
+    joinedMembersCount = joinedMembersCount,
+    highlightCount = highlightCount,
+    notificationCount = notificationCount,
+    userDefinedNotificationMode = userDefinedNotificationMode,
+    hasRoomCall = hasRoomCall,
+    activeRoomCallParticipants = activeRoomCallParticipants
 )

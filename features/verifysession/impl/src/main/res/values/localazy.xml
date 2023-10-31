@@ -14,6 +14,4 @@
   <string name="screen_session_verification_they_match">"They match"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Accept the request to start the verification process in your other session to continue."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Waiting to accept request"</string>
-  <string name="screen_session_verification_cancelled_title">"Verification cancelled"</string>
-  <string name="screen_session_verification_positive_button_ready">"Start"</string>
 </resources>

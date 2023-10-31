@@ -16,19 +16,20 @@
 
 package io.element.android.features.preferences.impl.root
 
-import io.element.android.features.logout.api.LogoutPreferenceState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class PreferencesRootState(
-    val logoutState: LogoutPreferenceState,
     val myUser: MatrixUser?,
     val version: String,
     val showCompleteVerification: Boolean,
+    val showSecureBackup: Boolean,
+    val showSecureBackupBadge: Boolean,
     val accountManagementUrl: String?,
     val devicesManagementUrl: String?,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
+    val showLockScreenSettings: Boolean,
     val showNotificationSettings: Boolean,
     val snackbarMessage: SnackbarMessage?,
 )

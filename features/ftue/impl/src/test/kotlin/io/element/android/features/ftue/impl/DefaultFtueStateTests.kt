@@ -23,6 +23,8 @@ import io.element.android.features.ftue.impl.migration.MigrationScreenStore
 import io.element.android.features.ftue.impl.state.DefaultFtueState
 import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.welcome.state.FakeWelcomeState
+import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -186,6 +188,7 @@ class DefaultFtueStateTests {
         migrationScreenStore: MigrationScreenStore = InMemoryMigrationScreenStore(),
         permissionStateProvider: FakePermissionStateProvider = FakePermissionStateProvider(permissionGranted = false),
         matrixClient: MatrixClient = FakeMatrixClient(),
+        lockScreenService: LockScreenService = FakeLockScreenService(),
         sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU, // First version where notification permission is required
     ) = DefaultFtueState(
         sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkIntVersion),
@@ -194,6 +197,7 @@ class DefaultFtueStateTests {
         welcomeScreenState = welcomeState,
         migrationScreenStore = migrationScreenStore,
         permissionStateProvider = permissionStateProvider,
+        lockScreenService = lockScreenService,
         matrixClient = matrixClient,
     )
 }

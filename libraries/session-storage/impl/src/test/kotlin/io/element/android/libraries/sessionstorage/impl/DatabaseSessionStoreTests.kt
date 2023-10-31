@@ -16,12 +16,15 @@
 
 package io.element.android.libraries.sessionstorage.impl
 
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.session.SessionData
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -44,6 +47,7 @@ class DatabaseSessionStoreTests {
         loginType = LoginType.UNKNOWN.name,
     )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         // Initialise in memory SQLite driver
@@ -51,7 +55,14 @@ class DatabaseSessionStoreTests {
         SessionDatabase.Schema.create(driver)
 
         database = SessionDatabase(driver)
-        databaseSessionStore = DatabaseSessionStore(database)
+        databaseSessionStore = DatabaseSessionStore(
+            database = database,
+            dispatchers = CoroutineDispatchers(
+                io = UnconfinedTestDispatcher(),
+                computation = UnconfinedTestDispatcher(),
+                main = UnconfinedTestDispatcher(),
+            )
+        )
     }
 
     @Test

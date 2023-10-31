@@ -16,10 +16,11 @@
 
 package io.element.android.libraries.sessionstorage.impl
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.squareup.anvil.annotations.ContributesBinding
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.sessionstorage.api.LoggedInState
@@ -34,12 +35,13 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DatabaseSessionStore @Inject constructor(
     private val database: SessionDatabase,
+    private val dispatchers: CoroutineDispatchers,
 ) : SessionStore {
 
     override fun isLoggedIn(): Flow<LoggedInState> {
         return database.sessionDataQueries.selectFirst()
             .asFlow()
-            .mapToOneOrNull()
+            .mapToOneOrNull(dispatchers.io)
             .map {
                 if (it == null) {
                     LoggedInState.NotLoggedIn
@@ -96,7 +98,7 @@ class DatabaseSessionStore @Inject constructor(
         Timber.w("Observing session list!")
         return database.sessionDataQueries.selectAll()
             .asFlow()
-            .mapToList()
+            .mapToList(dispatchers.io)
             .map { it.map { sessionData -> sessionData.toApiModel() } }
     }
 

@@ -30,6 +30,9 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
 import java.io.File
@@ -48,6 +51,8 @@ interface MatrixRoom : Closeable {
     val isPublic: Boolean
     val activeMemberCount: Long
     val joinedMemberCount: Long
+
+    val roomInfoFlow: Flow<MatrixRoomInfo>
 
     /**
      * A one-to-one is a room with exactly 2 members.
@@ -125,6 +130,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean>
 
+    suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean>
+
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
     suspend fun removeAvatar(): Result<Unit>
@@ -184,6 +191,35 @@ interface MatrixRoom : Closeable {
      * @param text Fallback text of the poll end event.
      */
     suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
+
+    suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler>
+
+    /**
+     * Generates a Widget url to display in a [android.webkit.WebView] given the provided parameters.
+     * @param widgetSettings The widget settings to use.
+     * @param clientId The client id to use. It should be unique per app install.
+     * @param languageTag The language tag to use. If null, the default language will be used.
+     * @param theme The theme to use. If null, the default theme will be used.
+     * @return The resulting url, or a failure.
+     */
+    suspend fun generateWidgetWebViewUrl(
+        widgetSettings: MatrixWidgetSettings,
+        clientId: String,
+        languageTag: String? = null,
+        theme: String? = null,
+    ): Result<String>
+
+    /**
+     * Get a [MatrixWidgetDriver] for the provided [widgetSettings].
+     * @param widgetSettings The widget settings to use.
+     * @return The resulting [MatrixWidgetDriver], or a failure.
+     */
+    fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
 
     override fun close() = destroy()
 }

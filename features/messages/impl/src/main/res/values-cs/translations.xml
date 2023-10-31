@@ -30,7 +30,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Obnovení výchozího režimu se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nastavení režimu se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všechny zprávy"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V této místnosti mě upozornit na"</string>
   <string name="screen_room_reactions_show_less">"Zobrazit méně"</string>
   <string name="screen_room_reactions_show_more">"Zobrazit více"</string>
@@ -38,6 +37,8 @@
   <string name="screen_room_retry_send_menu_title">"Vaši zprávu se nepodařilo odeslat"</string>
   <string name="screen_room_timeline_add_reaction">"Přidat emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Zobrazit méně"</string>
+  <string name="screen_room_voice_message_tooltip">"Držte pro nahrávání"</string>
+  <string name="screen_room_mentions_at_room_title">"Všichni"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
-  <string name="screen_room_retry_send_menu_remove_action">"Odstranit"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
 </resources>

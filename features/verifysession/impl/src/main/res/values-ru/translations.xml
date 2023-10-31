@@ -14,6 +14,4 @@
   <string name="screen_session_verification_they_match">"Они совпадают"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Для продолжения работы примите запрос на запуск процесса проверки в другом сеансе."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Ожидание принятия запроса"</string>
-  <string name="screen_session_verification_cancelled_title">"Проверка отменена"</string>
-  <string name="screen_session_verification_positive_button_ready">"Начать"</string>
 </resources>

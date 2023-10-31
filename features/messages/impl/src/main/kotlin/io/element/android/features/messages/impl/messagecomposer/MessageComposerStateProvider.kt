@@ -17,8 +17,10 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 open class MessageComposerStateProvider : PreviewParameterProvider<MessageComposerState> {
     override val values: Sequence<MessageComposerState>
@@ -30,12 +32,13 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 fun aMessageComposerState(
     composerState: RichTextEditorState = RichTextEditorState(""),
     isFullScreen: Boolean = false,
-    mode: MessageComposerMode = MessageComposerMode.Normal(content = ""),
+    mode: MessageComposerMode = MessageComposerMode.Normal,
     showTextFormatting: Boolean = false,
     showAttachmentSourcePicker: Boolean = false,
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
+    memberSuggestions: ImmutableList<RoomMemberSuggestion> = persistentListOf(),
 ) = MessageComposerState(
     richTextEditorState = composerState,
     isFullScreen = isFullScreen,
@@ -45,5 +48,6 @@ fun aMessageComposerState(
     canShareLocation = canShareLocation,
     canCreatePoll = canCreatePoll,
     attachmentsState = attachmentsState,
+    memberSuggestions = memberSuggestions,
     eventSink = {},
 )

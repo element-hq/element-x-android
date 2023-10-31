@@ -19,4 +19,5 @@ package io.element.android.features.preferences.impl.advanced
 sealed interface AdvancedSettingsEvents {
     data class SetRichTextEditorEnabled(val enabled: Boolean) : AdvancedSettingsEvents
     data class SetDeveloperModeEnabled(val enabled: Boolean) : AdvancedSettingsEvents
+    data class SetCustomElementCallBaseUrl(val baseUrl: String?) : AdvancedSettingsEvents
 }

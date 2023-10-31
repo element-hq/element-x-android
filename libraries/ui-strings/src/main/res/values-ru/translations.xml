@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_delete">"Удалить"</string>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
   <string name="a11y_notifications_muted">"Звук отключен"</string>
+  <string name="a11y_pause">"Приостановить"</string>
+  <string name="a11y_play">"Воспроизвести"</string>
   <string name="a11y_poll">"Опрос"</string>
   <string name="a11y_poll_end">"Опрос завершен"</string>
   <string name="a11y_send_files">"Отправить файлы"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
+  <string name="a11y_voice_message_record">"Запишите голосовое сообщение. Дважды нажмите и удерживайте, чтобы записать. Отпустите, чтобы закончить запись."</string>
   <string name="action_accept">"Разрешить"</string>
   <string name="action_add_to_timeline">"Добавить в хронологию"</string>
   <string name="action_back">"Назад"</string>
@@ -36,6 +40,7 @@
   <string name="action_invite_friends_to_app">"Пригласить друзей в %1$s"</string>
   <string name="action_invite_people_to_app">"Пригласите пользователей в %1$s"</string>
   <string name="action_invites_list">"Приглашения"</string>
+  <string name="action_join">"Присоединиться"</string>
   <string name="action_learn_more">"Подробнее"</string>
   <string name="action_leave">"Выйти"</string>
   <string name="action_leave_room">"Покинуть комнату"</string>
@@ -63,6 +68,7 @@
   <string name="action_send_message">"Отправить сообщение"</string>
   <string name="action_share">"Поделиться"</string>
   <string name="action_share_link">"Поделиться ссылкой"</string>
+  <string name="action_sign_in_again">"Повторите вход"</string>
   <string name="action_skip">"Пропустить"</string>
   <string name="action_start">"Начать"</string>
   <string name="action_start_chat">"Начать чат "</string>
@@ -71,6 +77,7 @@
   <string name="action_take_photo">"Сделать фото"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
+  <string name="action_edit_poll">"Редактировать опрос"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
   <string name="common_advanced_settings">"Дополнительные параметры"</string>
@@ -87,12 +94,14 @@
   <string name="common_emote">"%1$s%2$s"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
   <string name="common_error">"Ошибка"</string>
+  <string name="common_everyone">"Для всех"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_saved_on_disk_android">"Файл сохранен в «Загрузки»"</string>
   <string name="common_forward_message">"Переслать сообщение"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Изображения"</string>
   <string name="common_in_reply_to">"В ответ на %1$s"</string>
+  <string name="common_install_apk_android">"Установить APK"</string>
   <string name="common_invite_unknown_profile">"Идентификатор Matrix ID не найден, приглашение может быть не получено."</string>
   <string name="common_leaving_room">"Покинуть комнату"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
@@ -123,7 +132,6 @@
   <string name="common_search_for_someone">"Поиск человека"</string>
   <string name="common_search_results">"Результаты поиска"</string>
   <string name="common_security">"Безопасность"</string>
-  <string name="common_select_your_server">"Выберите свой сервер"</string>
   <string name="common_sending">"Отправка…"</string>
   <string name="common_server_not_supported">"Сервер не поддерживается"</string>
   <string name="common_server_url">"Адрес сервера"</string>
@@ -148,7 +156,9 @@
   <string name="common_verification_cancelled">"Проверка отменена"</string>
   <string name="common_verification_complete">"Проверка завершена"</string>
   <string name="common_video">"Видео"</string>
+  <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
+  <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
@@ -185,7 +195,6 @@
     <item quantity="many">"%d голосов"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake сообщит об ошибке"</string>
-  <string name="rageshake_dialog_content">"Кажется, вы трясли телефон. Хотите открыть экран отчета об ошибке?"</string>
   <string name="report_content_explanation">"Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения."</string>
   <string name="report_content_hint">"Причина, по которой вы пожаловались на этот контент"</string>
   <string name="room_timeline_beginning_of_room">"Это начало %1$s."</string>
@@ -223,7 +232,6 @@
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>
   <string name="screen_notification_settings_title">"Уведомления"</string>
   <string name="screen_report_content_block_user_hint">"Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя"</string>
-  <string name="screen_settings_oidc_account">"Учетная запись и устройства"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>
@@ -233,7 +241,6 @@
   <string name="screen_view_location_title">"Местоположение"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Порог обнаружения"</string>
-  <string name="settings_title_general">"Основные"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Ошибка"</string>

@@ -32,9 +32,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -209,6 +211,7 @@ class NotifiableEventResolver @Inject constructor(
     ): String {
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.body
+            is VoiceMessageType -> stringProvider.getString(CommonStrings.common_voice_message)
             is EmoteMessageType -> "* $senderDisplayName ${messageType.body}"
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
@@ -216,6 +219,7 @@ class NotifiableEventResolver @Inject constructor(
             is TextMessageType -> messageType.body
             is VideoMessageType -> messageType.body
             is LocationMessageType -> messageType.body
+            is OtherMessageType -> messageType.body
             is UnknownMessageType -> stringProvider.getString(CommonStrings.common_unsupported_event)
         }
     }

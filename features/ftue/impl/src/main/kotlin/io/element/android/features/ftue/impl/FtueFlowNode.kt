@@ -39,6 +39,7 @@ import io.element.android.features.ftue.impl.notifications.NotificationsOptInNod
 import io.element.android.features.ftue.impl.state.DefaultFtueState
 import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.welcome.WelcomeNode
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -60,11 +61,12 @@ class FtueFlowNode @AssistedInject constructor(
     private val ftueState: DefaultFtueState,
     private val analyticsEntryPoint: AnalyticsEntryPoint,
     private val analyticsService: AnalyticsService,
+    private val lockScreenEntryPoint: LockScreenEntryPoint,
 ) : BackstackNode<FtueFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
         savedStateMap = buildContext.savedStateMap,
-        backPressHandler = NoOpBackstackHandlerStrategy<NavTarget>(),
+        backPressHandler = NoOpBackstackHandlerStrategy(),
     ),
     buildContext = buildContext,
     plugins = plugins,
@@ -85,6 +87,9 @@ class FtueFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object AnalyticsOptIn : NavTarget
+
+        @Parcelize
+        data object LockScreenSetup : NavTarget
     }
 
     private val callback = plugins.filterIsInstance<FtueEntryPoint.Callback>().firstOrNull()
@@ -139,6 +144,17 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.AnalyticsOptIn -> {
                 analyticsEntryPoint.createNode(this, buildContext)
             }
+            NavTarget.LockScreenSetup -> {
+                val callback = object : LockScreenEntryPoint.Callback {
+                    override fun onSetupCompleted() {
+                        lifecycleScope.launch { moveToNextStep() }
+                    }
+                }
+                lockScreenEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .target(LockScreenEntryPoint.Target.Setup)
+                    .build()
+            }
         }
     }
 
@@ -155,6 +171,9 @@ class FtueFlowNode @AssistedInject constructor(
             }
             FtueStep.AnalyticsOptIn -> {
                 backstack.replace(NavTarget.AnalyticsOptIn)
+            }
+            FtueStep.LockscreenSetup -> {
+                backstack.newRoot(NavTarget.LockScreenSetup)
             }
             null -> callback?.onFtueFlowFinished()
         }

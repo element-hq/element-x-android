@@ -126,7 +126,6 @@
   <string name="common_search_for_someone">"Nach jemandem suchen"</string>
   <string name="common_search_results">"Suchergebnisse"</string>
   <string name="common_security">"Sicherheit"</string>
-  <string name="common_select_your_server">"Wähle deinen Server aus"</string>
   <string name="common_sending">"Wird gesendet…"</string>
   <string name="common_server_not_supported">"Server wird nicht unterstützt"</string>
   <string name="common_server_url">"Server-URL"</string>
@@ -187,7 +186,6 @@
     <item quantity="other">"%d Stimmen"</item>
   </plurals>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
-  <string name="rageshake_dialog_content">"Du scheinst das Telefon aus Frustration zu schütteln. Möchtest du den Bildschirm für den Fehlerbericht öffnen?"</string>
   <string name="report_content_explanation">"Diese Meldung wird an den Administrator deines Homeservers weitergeleitet. Dieser kann keine verschlüsselten Nachrichten lesen."</string>
   <string name="report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
   <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
@@ -221,7 +219,6 @@
   <string name="screen_notification_settings_system_notifications_turned_off">"Systembenachrichtigungen deaktiviert"</string>
   <string name="screen_notification_settings_title">"Benachrichtigungen"</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
-  <string name="screen_settings_oidc_account">"Konto und Geräte"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>
   <string name="screen_share_my_location_action">"Meinen Standort teilen"</string>
   <string name="screen_share_open_apple_maps">"In Apple Maps öffnen"</string>
@@ -231,7 +228,6 @@
   <string name="screen_view_location_title">"Standort"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>
-  <string name="settings_title_general">"Allgemein"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Fehler"</string>

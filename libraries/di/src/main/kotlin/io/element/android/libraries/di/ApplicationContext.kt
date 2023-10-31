@@ -18,4 +18,10 @@ package io.element.android.libraries.di
 
 import javax.inject.Qualifier
 
-@Qualifier annotation class ApplicationContext
+/**
+ * Qualifies a [Context] object that represents the application context.
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@MustBeDocumented
+@Qualifier
+annotation class ApplicationContext

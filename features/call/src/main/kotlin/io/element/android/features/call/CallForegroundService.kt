@@ -26,6 +26,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.PendingIntentCompat
 import androidx.core.graphics.drawable.IconCompat
+import io.element.android.features.call.ui.ElementCallActivity
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 class CallForegroundService : Service() {

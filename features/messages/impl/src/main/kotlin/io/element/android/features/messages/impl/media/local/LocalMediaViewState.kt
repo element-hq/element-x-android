@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 @Stable
 class LocalMediaViewState {
     var isReady: Boolean by mutableStateOf(false)
+    var isPlaying: Boolean by mutableStateOf(false)
 }
 
 @Composable

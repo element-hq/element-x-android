@@ -48,10 +48,14 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.lockscreen.api.LockScreenLockState
+import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
+import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -84,12 +88,15 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val secureBackupEntryPoint: SecureBackupEntryPoint,
     private val inviteListEntryPoint: InviteListEntryPoint,
     private val ftueEntryPoint: FtueEntryPoint,
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
     private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueState: FtueState,
+    private val lockScreenEntryPoint: LockScreenEntryPoint,
+    private val lockScreenStateService: LockScreenService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
@@ -98,7 +105,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         savedStateMap = buildContext.savedStateMap,
     ),
     permanentNavModel = PermanentNavModel(
-        NavTarget.Permanent,
+        navTargets = setOf(NavTarget.LoggedInPermanent, NavTarget.LockPermanent),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -130,8 +137,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                 }
             },
             onStop = {
-                //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                 coroutineScope.launch {
+                    //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                     syncService.stopSync()
                 }
             },
@@ -167,7 +174,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Permanent : NavTarget
+        data object LoggedInPermanent : NavTarget
+
+        @Parcelize
+        data object LockPermanent : NavTarget
 
         @Parcelize
         data object RoomList : NavTarget
@@ -179,13 +189,18 @@ class LoggedInFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        data object Settings : NavTarget
+        data class Settings(
+            val initialElement: PreferencesEntryPoint.InitialTarget = PreferencesEntryPoint.InitialTarget.Root
+        ) : NavTarget
 
         @Parcelize
         data object CreateRoom : NavTarget
 
         @Parcelize
         data object VerifySession : NavTarget
+
+        @Parcelize
+        data object SecureBackup : NavTarget
 
         @Parcelize
         data object InviteList : NavTarget
@@ -196,8 +211,13 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Permanent -> {
+            NavTarget.LoggedInPermanent -> {
                 createNode<LoggedInNode>(buildContext)
+            }
+            NavTarget.LockPermanent -> {
+                lockScreenEntryPoint.nodeBuilder(this, buildContext)
+                    .target(LockScreenEntryPoint.Target.Unlock)
+                    .build()
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
@@ -206,7 +226,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onSettingsClicked() {
-                        backstack.push(NavTarget.Settings)
+                        backstack.push(NavTarget.Settings())
                     }
 
                     override fun onCreateRoomClicked() {
@@ -239,11 +259,15 @@ class LoggedInFlowNode @AssistedInject constructor(
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         coroutineScope.launch { attachRoom(roomId) }
                     }
+
+                    override fun onOpenGlobalNotificationSettings() {
+                        backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
+                    }
                 }
                 val inputs = RoomFlowNode.Inputs(roomId = navTarget.roomId, initialElement = navTarget.initialElement)
                 createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
-            NavTarget.Settings -> {
+            is NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
                     override fun onOpenBugReport() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
@@ -252,8 +276,18 @@ class LoggedInFlowNode @AssistedInject constructor(
                     override fun onVerifyClicked() {
                         backstack.push(NavTarget.VerifySession)
                     }
+
+                    override fun onSecureBackupClicked() {
+                        backstack.push(NavTarget.SecureBackup)
+                    }
+
+                    override fun onOpenRoomNotificationSettings(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId, initialElement = RoomLoadedFlowNode.NavTarget.RoomNotificationSettings))
+                    }
                 }
-                preferencesEntryPoint.nodeBuilder(this, buildContext)
+                val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
+                return preferencesEntryPoint.nodeBuilder(this, buildContext)
+                    .params(inputs)
                     .callback(callback)
                     .build()
             }
@@ -271,6 +305,9 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.VerifySession -> {
                 verifySessionEntryPoint.createNode(this, buildContext)
+            }
+            NavTarget.SecureBackup -> {
+                secureBackupEntryPoint.createNode(this, buildContext)
             }
             NavTarget.InviteList -> {
                 val callback = object : InviteListEntryPoint.Callback {
@@ -324,17 +361,24 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
-            Children(
-                navModel = backstack,
-                modifier = Modifier,
-                // Animate navigation to settings and to a room
-                transitionHandler = rememberDefaultTransitionHandler(),
-            )
-
-            val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
-
-            if (!isFtueDisplayed) {
-                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.Permanent)
+            val lockScreenState by lockScreenStateService.lockState.collectAsState()
+            when (lockScreenState) {
+                LockScreenLockState.Unlocked -> {
+                    Children(
+                        navModel = backstack,
+                        modifier = Modifier,
+                        // Animate navigation to settings and to a room
+                        transitionHandler = rememberDefaultTransitionHandler(),
+                    )
+                    val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
+                    if (!isFtueDisplayed) {
+                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                    }
+                }
+                LockScreenLockState.Locked -> {
+                    MoveActivityToBackgroundBackHandler()
+                    PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
+                }
             }
         }
     }

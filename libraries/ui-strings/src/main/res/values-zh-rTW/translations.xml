@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_delete">"刪除"</string>
   <string name="a11y_hide_password">"隱藏密碼"</string>
   <string name="a11y_notifications_mentions_only">"僅限提及"</string>
   <string name="a11y_notifications_muted">"已關閉通知"</string>
+  <string name="a11y_pause">"暫停"</string>
+  <string name="a11y_play">"播放"</string>
   <string name="a11y_poll">"投票"</string>
   <string name="a11y_poll_end">"投票已結束"</string>
   <string name="a11y_send_files">"傳送檔案"</string>
@@ -22,6 +25,7 @@
   <string name="action_copy_link">"複製連結"</string>
   <string name="action_create">"建立"</string>
   <string name="action_create_a_room">"建立聊天室"</string>
+  <string name="action_decline">"拒絕"</string>
   <string name="action_disable">"停用"</string>
   <string name="action_done">"完成"</string>
   <string name="action_edit">"編輯"</string>
@@ -119,9 +123,9 @@
   <string name="common_rich_text_editor">"格式化文字編輯器"</string>
   <string name="common_room_name">"聊天室名稱"</string>
   <string name="common_room_name_placeholder">"範例：您的計畫名稱"</string>
+  <string name="common_screen_lock">"螢幕鎖定"</string>
   <string name="common_search_results">"搜尋結果"</string>
   <string name="common_security">"安全性"</string>
-  <string name="common_select_your_server">"選擇您的伺服器"</string>
   <string name="common_sending">"傳送中…"</string>
   <string name="common_server_not_supported">"伺服器不支援"</string>
   <string name="common_server_url">"伺服器 URL"</string>
@@ -190,7 +194,6 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系統設定"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"已關閉系統通知"</string>
   <string name="screen_notification_settings_title">"通知"</string>
-  <string name="screen_settings_oidc_account">"帳號與裝置"</string>
   <string name="screen_share_location_title">"分享位置"</string>
   <string name="screen_share_my_location_action">"分享我的位置"</string>
   <string name="screen_share_open_apple_maps">"在 Apple Maps 中開啟"</string>
@@ -198,7 +201,6 @@
   <string name="screen_share_open_osm_maps">"在開放街圖（OpenStreetMap） 中開啟"</string>
   <string name="screen_share_this_location_action">"分享這個位置"</string>
   <string name="screen_view_location_title">"位置"</string>
-  <string name="settings_title_general">"一般"</string>
   <string name="settings_version_number">"版本：%1$s（%2$s）"</string>
   <string name="test_language_identifier">"zh-tw"</string>
   <string name="dialog_title_error">"錯誤"</string>

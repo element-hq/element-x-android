@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Nesprávny PIN kód. Máte ešte %1$d pokus"</item>
+    <item quantity="few">"Nesprávny PIN kód. Máte ešte %1$d pokusy"</item>
+    <item quantity="other">"Nesprávny PIN kód. Máte ešte %1$d pokusov"</item>
+  </plurals>
+  <string name="screen_app_lock_biometric_authentication">"biometrické overenie"</string>
+  <string name="screen_app_lock_biometric_unlock">"biometrické odomknutie"</string>
+  <string name="screen_app_lock_forgot_pin">"Zabudli ste PIN?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Zmeniť PIN kód"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Povoliť biometrické odomknutie"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Odstrániť PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Ste si istí, že chcete odstrániť PIN?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Odstrániť PIN?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Povoliť %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Radšej použijem PIN"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Ušetrite si čas a použite zakaždým %1$s na odomknutie aplikácie"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Vyberte PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Potvrdiť PIN"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Z bezpečnostných dôvodov si nemôžete toto zvoliť ako svoj PIN kód."</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Vyberte iný PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"Uzamknite %1$s, aby ste zvýšili bezpečnosť svojich konverzácií.
+
+Vyberte si niečo zapamätateľné. Ak tento kód PIN zabudnete, budete z aplikácie odhlásení."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Zadajte prosím ten istý PIN dvakrát"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN kódy sa nezhodujú"</string>
+  <string name="screen_app_lock_signout_alert_message">"Ak chcete pokračovať, musíte sa znovu prihlásiť a vytvoriť nový PIN kód."</string>
+  <string name="screen_app_lock_signout_alert_title">"Prebieha odhlasovanie"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Prebieha odhlasovanie…"</string>
+</resources>

@@ -16,8 +16,15 @@
 
 package io.element.android.features.preferences.impl.advanced
 
-data class AdvancedSettingsState constructor(
+data class AdvancedSettingsState(
     val isRichTextEditorEnabled: Boolean,
     val isDeveloperModeEnabled: Boolean,
+    val customElementCallBaseUrlState: CustomElementCallBaseUrlState?,
     val eventSink: (AdvancedSettingsEvents) -> Unit
+)
+
+data class CustomElementCallBaseUrlState(
+    val baseUrl: String?,
+    val defaultUrl: String,
+    val validator: (String?) -> Boolean,
 )

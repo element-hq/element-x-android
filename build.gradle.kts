@@ -198,6 +198,11 @@ koverMerged {
                     // We do not cover Nodes (normally covered by maestro, but code coverage is not computed with maestro)
                     "*Node",
                     "*Node$*",
+                    // Exclude `:libraries:matrix:impl` module, it contains only wrappers to access the Rust Matrix SDK api, so it is not really relevant to unit test it: there is no logic to test.
+                    "io.element.android.libraries.matrix.impl.*",
+                    "*Presenter\$present\$*",
+                    // Forked from compose
+                    "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
                 )
             )
         }
@@ -250,6 +255,7 @@ koverMerged {
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
                 // Some options can't be tested at the moment
                 excludes += "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*"
+                excludes += "*Presenter\$present\$*"
             }
             bound {
                 minValue = 85

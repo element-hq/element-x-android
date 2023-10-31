@@ -24,13 +24,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -42,7 +42,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PreferencesRootPresenter @Inject constructor(
-    private val logoutPresenter: LogoutPreferencePresenter,
     private val matrixClient: MatrixClient,
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
@@ -50,6 +49,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val versionFormatter: VersionFormatter,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val featureFlagService: FeatureFlagService,
+    private val indicatorService: IndicatorService,
 ) : Presenter<PreferencesRootState> {
 
     @Composable
@@ -68,9 +68,18 @@ class PreferencesRootPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             showNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
         }
+        val showLockScreenSettings = remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            showLockScreenSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)
+        }
 
         // We should display the 'complete verification' option if the current session can be verified
         val showCompleteVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
+
+        val showSecureBackupIndicator by indicatorService.showSettingChatBackupIndicator()
+
+        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
+            .collectAsState(initial = null)
 
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
@@ -83,18 +92,19 @@ class PreferencesRootPresenter @Inject constructor(
             initAccountManagementUrl(accountManagementUrl, devicesManagementUrl)
         }
 
-        val logoutState = logoutPresenter.present()
         val showDeveloperSettings = buildType != BuildType.RELEASE
         return PreferencesRootState(
-            logoutState = logoutState,
             myUser = matrixUser.value,
             version = versionFormatter.get(),
             showCompleteVerification = showCompleteVerification,
+            showSecureBackup = !showCompleteVerification && secureStorageFlag == true,
+            showSecureBackupBadge = showSecureBackupIndicator,
             accountManagementUrl = accountManagementUrl.value,
             devicesManagementUrl = devicesManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             showNotificationSettings = showNotificationSettings.value,
+            showLockScreenSettings = showLockScreenSettings.value,
             snackbarMessage = snackbarMessage,
         )
     }

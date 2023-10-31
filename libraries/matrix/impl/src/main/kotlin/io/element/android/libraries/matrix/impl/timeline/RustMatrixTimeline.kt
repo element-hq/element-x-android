@@ -124,7 +124,7 @@ class RustMatrixTimeline(
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
         initLatch.await()
-        innerRoom.fetchMembersBlocking()
+        innerRoom.fetchMembers()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -194,8 +194,12 @@ class RustMatrixTimeline(
                 waitForToken = true,
             )
             innerRoom.paginateBackwards(paginationOptions)
-        }.onFailure {
-            Timber.d(it, "Fail to paginate for room ${matrixRoom.roomId}")
+        }.onFailure { error ->
+            if (error is TimelineException.CannotPaginate) {
+                Timber.d("Can't paginate backwards on room ${matrixRoom.roomId}, we're already at the start")
+            } else {
+                Timber.e(error, "Error paginating backwards on room ${matrixRoom.roomId}")
+            }
         }.onSuccess {
             Timber.v("Success back paginating for room ${matrixRoom.roomId}")
         }

@@ -17,8 +17,8 @@
 package io.element.android.features.messages.test
 
 import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 class MessageComposerContextFake(
-    override var composerMode: MessageComposerMode = MessageComposerMode.Normal(null)
+    override var composerMode: MessageComposerMode = MessageComposerMode.Normal
 ) : MessageComposerContext

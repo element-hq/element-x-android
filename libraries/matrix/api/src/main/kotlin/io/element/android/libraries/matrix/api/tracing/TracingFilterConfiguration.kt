@@ -28,6 +28,7 @@ data class TracingFilterConfiguration(
         Target.MATRIX_SDK_HTTP_CLIENT to LogLevel.DEBUG,
         Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.TRACE,
         Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.TRACE,
+        Target.MATRIX_SDK_UI_TIMELINE to LogLevel.TRACE,
     )
 
     fun getLogLevel(target: Target): LogLevel {

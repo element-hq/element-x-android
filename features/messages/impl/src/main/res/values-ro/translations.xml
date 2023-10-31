@@ -30,7 +30,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Nu s-a reușit restaurarea modului implicit, vă rugăm să încercați din nou."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nu s-a reușit setarea modului, vă rugăm să încercați din nou."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Toate mesajele"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"În această cameră, anunțați-mă pentru"</string>
   <string name="screen_room_reactions_show_less">"Afișați mai puțin"</string>
   <string name="screen_room_reactions_show_more">"Afișați mai mult"</string>
@@ -39,5 +38,5 @@
   <string name="screen_room_timeline_add_reaction">"Adăugați emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Afișați mai puțin"</string>
   <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
-  <string name="screen_room_retry_send_menu_remove_action">"Ștergeți"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
 </resources>

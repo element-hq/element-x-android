@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"1 osoba"</item>
-    <item quantity="few">"%1$d ľudia"</item>
-    <item quantity="other">"%1$d ľudí"</item>
-  </plurals>
   <string name="screen_room_details_add_topic_title">"Pridať tému"</string>
   <string name="screen_room_details_already_a_member">"Už ste členom"</string>
   <string name="screen_room_details_already_invited">"Už ste pozvaní"</string>
@@ -36,7 +31,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Nepodarilo sa obnoviť predvolený režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nepodarilo sa nastaviť režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všetky správy"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V tejto miestnosti ma upozorniť na"</string>
   <string name="screen_dm_details_block_alert_action">"Zablokovať"</string>
   <string name="screen_dm_details_block_alert_description">"Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať."</string>
@@ -45,7 +39,7 @@
   <string name="screen_dm_details_unblock_alert_description">"Všetky správy od nich budete môcť opäť vidieť."</string>
   <string name="screen_dm_details_unblock_user">"Odblokovať používateľa"</string>
   <string name="screen_room_details_leave_room_title">"Opustiť miestnosť"</string>
-  <string name="screen_room_details_people_title">"Ľudia"</string>
   <string name="screen_room_details_security_title">"Bezpečnosť"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
 </resources>

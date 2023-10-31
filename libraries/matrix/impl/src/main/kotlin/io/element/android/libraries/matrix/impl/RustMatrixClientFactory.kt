@@ -16,9 +16,8 @@
 
 package io.element.android.libraries.matrix.impl
 
-import android.content.Context
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -32,8 +31,8 @@ import java.io.File
 import javax.inject.Inject
 
 class RustMatrixClientFactory @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val baseDirectory: File,
+    @CacheDirectory private val cacheDirectory: File,
     private val appCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
@@ -53,7 +52,8 @@ class RustMatrixClientFactory @Inject constructor(
 
         client.restoreSession(sessionData.toSession())
 
-        val syncService = client.syncService().finishBlocking()
+        val syncService = client.syncService()
+            .finish()
 
         RustMatrixClient(
             client = client,
@@ -62,7 +62,7 @@ class RustMatrixClientFactory @Inject constructor(
             appCoroutineScope = appCoroutineScope,
             dispatchers = coroutineDispatchers,
             baseDirectory = baseDirectory,
-            baseCacheDirectory = context.cacheDir,
+            baseCacheDirectory = cacheDirectory,
             clock = clock,
         )
     }

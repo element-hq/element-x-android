@@ -35,7 +35,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Failed restoring the default mode, please try again."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Failed setting the mode, please try again."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_dm_details_block_alert_action">"Block"</string>
   <string name="screen_dm_details_block_alert_description">"Blocked users won\'t be able to send you messages and all their messages will be hidden. You can unblock them anytime."</string>
@@ -44,7 +43,7 @@
   <string name="screen_dm_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
   <string name="screen_dm_details_unblock_user">"Unblock user"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>
-  <string name="screen_room_details_people_title">"People"</string>
   <string name="screen_room_details_security_title">"Security"</string>
   <string name="screen_room_details_topic_title">"Topic"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
 </resources>

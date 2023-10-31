@@ -23,7 +23,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -50,6 +52,7 @@ class NotificationSettingsPresenter @Inject constructor(
         val systemNotificationsEnabled: MutableState<Boolean> = remember {
             mutableStateOf(systemNotificationsEnabledProvider.notificationsEnabled())
         }
+        val changeNotificationSettingAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
 
         val localCoroutineScope = rememberCoroutineScope()
         val appNotificationsEnabled = userPushStore
@@ -67,8 +70,12 @@ class NotificationSettingsPresenter @Inject constructor(
 
         fun handleEvents(event: NotificationSettingsEvents) {
             when (event) {
-                is NotificationSettingsEvents.SetAtRoomNotificationsEnabled -> localCoroutineScope.setAtRoomNotificationsEnabled(event.enabled)
-                is NotificationSettingsEvents.SetCallNotificationsEnabled -> localCoroutineScope.setCallNotificationsEnabled(event.enabled)
+                is NotificationSettingsEvents.SetAtRoomNotificationsEnabled -> {
+                    localCoroutineScope.setAtRoomNotificationsEnabled(event.enabled, changeNotificationSettingAction)
+                }
+                is NotificationSettingsEvents.SetCallNotificationsEnabled -> {
+                    localCoroutineScope.setCallNotificationsEnabled(event.enabled, changeNotificationSettingAction)
+                }
                 is NotificationSettingsEvents.SetNotificationsEnabled -> localCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
                 NotificationSettingsEvents.ClearConfigurationMismatchError -> {
                     matrixSettings.value = NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false)
@@ -77,6 +84,7 @@ class NotificationSettingsPresenter @Inject constructor(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled -> {
                     systemNotificationsEnabled.value = systemNotificationsEnabledProvider.notificationsEnabled()
                 }
+                NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = Async.Uninitialized
             }
         }
 
@@ -86,6 +94,7 @@ class NotificationSettingsPresenter @Inject constructor(
                 systemNotificationsEnabled = systemNotificationsEnabled.value,
                 appNotificationsEnabled = appNotificationsEnabled.value
             ),
+            changeNotificationSettingAction = changeNotificationSettingAction.value,
             eventSink = ::handleEvents
         )
     }
@@ -154,12 +163,16 @@ class NotificationSettingsPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.setAtRoomNotificationsEnabled(enabled: Boolean) = launch {
-        notificationSettingsService.setRoomMentionEnabled(enabled)
+    private fun CoroutineScope.setAtRoomNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+        suspend {
+            notificationSettingsService.setRoomMentionEnabled(enabled).getOrThrow()
+        }.runCatchingUpdatingState(action)
     }
 
-    private fun CoroutineScope.setCallNotificationsEnabled(enabled: Boolean) = launch {
-        notificationSettingsService.setCallEnabled(enabled)
+    private fun CoroutineScope.setCallNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+        suspend {
+            notificationSettingsService.setCallEnabled(enabled).getOrThrow()
+        }.runCatchingUpdatingState(action)
     }
 
     private fun CoroutineScope.setNotificationsEnabled(userPushStore: UserPushStore, enabled: Boolean) = launch {

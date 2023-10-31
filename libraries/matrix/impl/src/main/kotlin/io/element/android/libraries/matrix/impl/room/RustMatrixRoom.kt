@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -40,14 +41,20 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.media.toMSC3246range
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
+import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
+import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CancellationException
@@ -55,18 +62,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomInfo
+import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
+import org.matrix.rustcomponents.sdk.WidgetCapabilities
+import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 
@@ -82,9 +96,22 @@ class RustMatrixRoom(
     private val roomContentForwarder: RoomContentForwarder,
     private val sessionData: SessionData,
     private val roomSyncSubscriber: RoomSyncSubscriber,
+    private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
 ) : MatrixRoom {
 
     override val roomId = RoomId(innerRoom.id())
+
+    override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
+        launch {
+            val initial = innerRoom.roomInfo().use(matrixRoomInfoMapper::map)
+            channel.trySend(initial)
+        }
+        innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
+            override fun call(roomInfo: RoomInfo) {
+                channel.trySend(matrixRoomInfoMapper.map(roomInfo))
+            }
+        })
+    }
 
     // Create a dispatcher for all room methods...
     private val roomDispatcher = coroutineDispatchers.io.limitedParallelism(32)
@@ -174,7 +201,7 @@ class RustMatrixRoom(
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         var rustMembers: List<RoomMember>? = null
         try {
-            rustMembers = innerRoom.membersBlocking().use { membersIterator ->
+            rustMembers = innerRoom.members().use { membersIterator ->
                 buildList {
                     while (true) {
                         // Loading the whole membersIterator as a stop-gap measure.
@@ -299,27 +326,33 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun canUserInvite(userId: UserId): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.canUserInviteBlocking(userId.value)
+    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserInvite(userId.value)
         }
     }
 
-    override suspend fun canUserRedact(userId: UserId): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.canUserRedactBlocking(userId.value)
+    override suspend fun canUserRedact(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserRedact(userId.value)
         }
     }
 
-    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.canUserSendStateBlocking(userId.value, type.map())
+    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendState(userId.value, type.map())
         }
     }
 
-    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> = withContext(roomMembersDispatcher) {
-        runCatching {
-            innerRoom.canUserSendMessageBlocking(userId.value, type.map())
+    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendMessage(userId.value, type.map())
+        }
+    }
+
+    override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserTriggerRoomNotification(userId.value)
         }
     }
 
@@ -373,10 +406,9 @@ class RustMatrixRoom(
         }
     }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList(), null)
+            innerRoom.uploadAvatar(mimeType, data, null)
         }
     }
 
@@ -463,6 +495,41 @@ class RustMatrixRoom(
                 text = text,
             )
         }
+    }
+
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
+        innerRoom.sendVoiceMessage(
+            url = file.path,
+            audioInfo = audioInfo.map(),
+            waveform = waveform.toMSC3246range(),
+            progressWatcher = progressCallback?.toProgressWatcher(),
+        )
+    }
+
+    override suspend fun generateWidgetWebViewUrl(
+        widgetSettings: MatrixWidgetSettings,
+        clientId: String,
+        languageTag: String?,
+        theme: String?,
+    ) = runCatching {
+        widgetSettings.generateWidgetWebViewUrl(innerRoom, clientId, languageTag, theme)
+    }
+
+    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = runCatching {
+        RustWidgetDriver(
+            widgetSettings = widgetSettings,
+            room = innerRoom,
+            widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
+                override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
+                    return capabilities
+                }
+            },
+        )
     }
 
     private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {

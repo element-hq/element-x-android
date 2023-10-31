@@ -15,7 +15,6 @@
   <string name="screen_dm_details_unblock_alert_description">"Al desbloquear al usuario, podrás volver a ver todos sus mensajes."</string>
   <string name="screen_dm_details_unblock_user">"Desbloquear usuario"</string>
   <string name="screen_room_details_leave_room_title">"Salir de la sala"</string>
-  <string name="screen_room_details_people_title">"Personas"</string>
   <string name="screen_room_details_security_title">"Seguridad"</string>
   <string name="screen_room_details_topic_title">"Tema"</string>
 </resources>

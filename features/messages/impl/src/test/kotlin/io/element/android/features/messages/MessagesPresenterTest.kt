@@ -40,6 +40,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
@@ -60,20 +62,28 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
+import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -103,7 +113,8 @@ class MessagesPresenterTest {
             val initialState = consumeItemsUntilTimeout().last()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
             assertThat(initialState.roomName).isEqualTo(Async.Success(""))
-            assertThat(initialState.roomAvatar).isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", size = AvatarSize.TimelineRoom)))
+            assertThat(initialState.roomAvatar)
+                .isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
             assertThat(initialState.userHasPermissionToSendMessage).isTrue()
             assertThat(initialState.userHasPermissionToRedact).isFalse()
             assertThat(initialState.hasNetworkConnection).isTrue()
@@ -600,24 +611,37 @@ class MessagesPresenterTest {
 
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        matrixRoom: MatrixRoom = FakeMatrixRoom(),
+        matrixRoom: MatrixRoom = FakeMatrixRoom().apply {
+            givenRoomInfo(aRoomInfo(id = roomId.value, name = ""))
+        },
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
     ): MessagesPresenter {
+        val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
+        val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.NotificationSettings.key to true)),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
-            mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
+            mediaSender = mediaSender,
             snackbarDispatcher = SnackbarDispatcher(),
             analyticsService = analyticsService,
             messageComposerContext = MessageComposerContextImpl(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
-            permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
+            permissionsPresenterFactory = permissionsPresenterFactory,
+            currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
+        )
+        val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
+            this,
+            FakeVoiceRecorder(),
+            analyticsService,
+            mediaSender,
+            player = VoiceMessageComposerPlayer(FakeMediaPlayer()),
+            permissionsPresenterFactory,
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
@@ -625,6 +649,8 @@ class MessagesPresenterTest {
             dispatchers = coroutineDispatchers,
             appScope = this,
             analyticsService = analyticsService,
+            encryptionService = FakeEncryptionService(),
+            verificationService = FakeSessionVerificationService(),
         )
         val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
@@ -634,6 +660,7 @@ class MessagesPresenterTest {
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
+            voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenter = timelinePresenter,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
@@ -645,6 +672,8 @@ class MessagesPresenterTest {
             navigator = navigator,
             clipboardHelper = clipboardHelper,
             preferencesStore = preferencesStore,
+            featureFlagsService = FakeFeatureFlagService(),
+            buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
         )
     }
