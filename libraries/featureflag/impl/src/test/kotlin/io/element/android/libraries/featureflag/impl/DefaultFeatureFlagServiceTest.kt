@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.featureflag.impl
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import kotlinx.coroutines.test.runTest
@@ -26,8 +27,10 @@ class DefaultFeatureFlagServiceTest {
     @Test
     fun `given service without provider when feature is checked then it returns the default value`() = runTest {
         val featureFlagService = DefaultFeatureFlagService(emptySet())
-        val isFeatureEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
-        assertThat(isFeatureEnabled).isEqualTo(FeatureFlags.LocationSharing.defaultValue)
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.LocationSharing).test {
+            assertThat(awaitItem()).isEqualTo(FeatureFlags.LocationSharing.defaultValue)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -50,9 +53,11 @@ class DefaultFeatureFlagServiceTest {
         val featureFlagProvider = FakeMutableFeatureFlagProvider(0)
         val featureFlagService = DefaultFeatureFlagService(setOf(featureFlagProvider))
         featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, true)
-        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)).isEqualTo(true)
-        featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, false)
-        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)).isEqualTo(false)
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.LocationSharing).test {
+            assertThat(awaitItem()).isEqualTo(true)
+            featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, false)
+            assertThat(awaitItem()).isEqualTo(false)
+        }
     }
 
     @Test
@@ -62,6 +67,8 @@ class DefaultFeatureFlagServiceTest {
         val featureFlagService = DefaultFeatureFlagService(setOf(lowPriorityFeatureFlagProvider, highPriorityFeatureFlagProvider))
         lowPriorityFeatureFlagProvider.setFeatureEnabled(FeatureFlags.LocationSharing, false)
         highPriorityFeatureFlagProvider.setFeatureEnabled(FeatureFlags.LocationSharing, true)
-        assertThat(featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)).isEqualTo(true)
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.LocationSharing).test {
+            assertThat(awaitItem()).isEqualTo(true)
+        }
     }
 }

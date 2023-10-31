@@ -24,7 +24,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.featureflag.api.Feature
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -44,10 +45,10 @@ class PreferencesFeatureFlagProvider @Inject constructor(@ApplicationContext con
         }
     }
 
-    override suspend fun isFeatureEnabled(feature: Feature): Boolean {
+    override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
         return store.data.map { prefs ->
             prefs[booleanPreferencesKey(feature.key)] ?: feature.defaultValue
-        }.first()
+        }.distinctUntilChanged()
     }
 
     override fun hasFeature(feature: Feature): Boolean {
