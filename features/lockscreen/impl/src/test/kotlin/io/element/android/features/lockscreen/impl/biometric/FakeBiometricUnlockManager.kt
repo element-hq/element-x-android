@@ -20,6 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 
 class FakeBiometricUnlockManager : BiometricUnlockManager {
+
+    override var isDeviceSecured: Boolean = true
+    override var hasAvailableAuthenticator: Boolean = false
+
     override fun addCallback(callback: BiometricUnlock.Callback) {
         // no-op
     }

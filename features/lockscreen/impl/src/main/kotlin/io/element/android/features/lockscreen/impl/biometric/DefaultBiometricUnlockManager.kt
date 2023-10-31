@@ -16,6 +16,7 @@
 
 package io.element.android.features.lockscreen.impl.biometric
 
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.biometric.BiometricManager
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.LockScreenConfig
@@ -58,6 +60,7 @@ class DefaultBiometricUnlockManager @Inject constructor(
 
     private val callbacks = CopyOnWriteArrayList<BiometricUnlock.Callback>()
     private val biometricManager = BiometricManager.from(context)
+    private val keyguardManager: KeyguardManager = context.getSystemService()!!
 
     /**
      * Returns true if a weak biometric method (i.e.: some face or iris unlock implementations) can be used.
@@ -76,8 +79,11 @@ class DefaultBiometricUnlockManager @Inject constructor(
     /**
      * Returns true if any biometric method (weak or strong) can be used.
      */
-    private val canUseBiometricAuth: Boolean
+    override val hasAvailableAuthenticator: Boolean
         get() = canUseWeakBiometricAuth || canUseStrongBiometricAuth
+
+    override val isDeviceSecured: Boolean
+        get() = keyguardManager.isDeviceSecure
 
     private val internalCallback = object : DefaultBiometricUnlockCallback() {
         override fun onBiometricSetupError() {
@@ -94,7 +100,7 @@ class DefaultBiometricUnlockManager @Inject constructor(
         val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
         val isAvailable by remember(lifecycleState) {
             derivedStateOf {
-                isBiometricAllowed && canUseBiometricAuth
+                isBiometricAllowed && hasAvailableAuthenticator
             }
         }
         val promptTitle = stringResource(id = R.string.screen_app_lock_biometric_unlock_title_android)

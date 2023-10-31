@@ -23,26 +23,25 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import io.element.android.libraries.di.AppScope
+import timber.log.Timber
 import java.security.KeyStore
+import java.security.KeyStoreException
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.inject.Inject
-
-private const val ANDROID_KEYSTORE = "AndroidKeyStore"
 
 /**
  * Default implementation of [SecretKeyRepository] that uses the Android Keystore to store the keys.
  * The generated key uses AES algorithm, with a key size of 128 bits, and the GCM block mode.
  */
 @ContributesBinding(AppScope::class)
-class KeyStoreSecretKeyRepository @Inject constructor() : SecretKeyRepository {
+class KeyStoreSecretKeyRepository @Inject constructor(
+    private val keyStore: KeyStore,
+) : SecretKeyRepository {
 
     // False positive lint issue
     @SuppressLint("WrongConstant")
     override fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply {
-            load(null)
-        }
         val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
             ?.secretKey
         return if (secretKeyEntry == null) {
@@ -64,9 +63,10 @@ class KeyStoreSecretKeyRepository @Inject constructor() : SecretKeyRepository {
     }
 
     override fun deleteKey(alias: String) {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply {
-            load(null)
+        try {
+            keyStore.deleteEntry(alias)
+        } catch (e: KeyStoreException) {
+            Timber.e(e)
         }
-        keyStore.deleteEntry(alias)
     }
 }

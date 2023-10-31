@@ -25,6 +25,8 @@ import androidx.fragment.app.FragmentActivity
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import kotlinx.coroutines.CompletableDeferred
+import timber.log.Timber
+import java.security.InvalidKeyException
 import javax.crypto.Cipher
 
 interface BiometricUnlock {
@@ -69,8 +71,9 @@ class DefaultBiometricUnlock(
             val secretKey = ensureKey()
             val cipher = encryptionDecryptionService.createEncryptionCipher(secretKey)
             cryptoObject = CryptoObject(cipher)
-        } catch (e: KeyPermanentlyInvalidatedException) {
+        } catch (e: InvalidKeyException) {
             callbacks.forEach { it.onBiometricSetupError() }
+            Timber.e(e, "Invalid biometric key")
         }
     }
 

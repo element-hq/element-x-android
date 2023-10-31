@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.settings
+package io.element.android.libraries.cryptography.impl
 
-data class LockScreenSettingsState(
-    val showRemovePinOption: Boolean,
-    val isBiometricEnabled: Boolean,
-    val showRemovePinConfirmation: Boolean,
-    val showToggleBiometric: Boolean,
-    val eventSink: (LockScreenSettingsEvents) -> Unit
-)
+import com.squareup.anvil.annotations.ContributesTo
+import dagger.Module
+import dagger.Provides
+import io.element.android.libraries.di.AppScope
+import java.security.KeyStore
+
+internal const val ANDROID_KEYSTORE = "AndroidKeyStore"
+
+@ContributesTo(AppScope::class)
+@Module
+object CryptographyModule {
+
+    @Provides
+    fun providesAndroidKeyStore(): KeyStore {
+        return KeyStore.getInstance(ANDROID_KEYSTORE).apply {
+            load(null)
+        }
+    }
+}
