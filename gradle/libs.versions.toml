@@ -55,7 +55,7 @@ anvil = "2.4.8-1-8"
 autoservice = "1.1.1"
 
 # quality
-detekt = "1.23.1"
+detekt = "1.23.2"
 dependencygraph = "0.12"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
