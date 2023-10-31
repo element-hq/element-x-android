@@ -24,6 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -35,6 +37,7 @@ import javax.inject.Inject
 class DefaultIndicatorService @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
+    private val featureFlagService: FeatureFlagService,
 ) : IndicatorService {
 
     @Composable
@@ -51,6 +54,8 @@ class DefaultIndicatorService @Inject constructor(
 
     @Composable
     override fun showSettingChatBackupIndicator(): State<Boolean> {
+        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
+            .collectAsState(initial = null)
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
 
@@ -63,7 +68,7 @@ class DefaultIndicatorService @Inject constructor(
                     RecoveryState.DISABLED,
                     RecoveryState.INCOMPLETE,
                 )
-                showForBackup || showForRecovery
+                secureStorageFlag == true && (showForBackup || showForRecovery)
             }
         }
     }
