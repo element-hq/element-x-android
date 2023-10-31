@@ -63,13 +63,15 @@ class DefaultBiometricUnlockManager @Inject constructor(
      * Returns true if a weak biometric method (i.e.: some face or iris unlock implementations) can be used.
      */
     private val canUseWeakBiometricAuth: Boolean
-        get() = lockScreenConfig.isWeakBiometricsEnabled && biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
+        get() = lockScreenConfig.isWeakBiometricsEnabled
+            && biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
 
     /**
      * Returns true if a strong biometric method (i.e.: fingerprint, some face or iris unlock implementations) can be used.
      */
     private val canUseStrongBiometricAuth: Boolean
-        get() = lockScreenConfig.isStrongBiometricsEnabled && biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+        get() = lockScreenConfig.isStrongBiometricsEnabled
+            && biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
 
     /**
      * Returns true if any biometric method (weak or strong) can be used.
@@ -98,9 +100,9 @@ class DefaultBiometricUnlockManager @Inject constructor(
         }
         val promptTitle = stringResource(id = R.string.screen_app_lock_biometric_unlock_title_android)
         val promptNegative = stringResource(id = R.string.screen_app_lock_use_pin_android)
-        val activity = LocalContext.current.findFragmentActivity()!!
+        val activity = LocalContext.current.findFragmentActivity()
         return remember(isAvailable) {
-            if (isAvailable) {
+            if (isAvailable && activity != null) {
                 val authenticators = when {
                     canUseStrongBiometricAuth -> BiometricManager.Authenticators.BIOMETRIC_STRONG
                     canUseWeakBiometricAuth -> BiometricManager.Authenticators.BIOMETRIC_WEAK

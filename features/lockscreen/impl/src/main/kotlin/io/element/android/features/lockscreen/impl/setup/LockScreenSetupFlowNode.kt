@@ -30,7 +30,6 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.setup.biometric.SetupBiometricNode
@@ -46,7 +45,6 @@ class LockScreenSetupFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pinCodeManager: PinCodeManager,
-    private val biometricUnlockManager: BiometricUnlockManager,
 ) : BackstackNode<LockScreenSetupFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Pin,

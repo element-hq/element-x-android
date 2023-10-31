@@ -34,7 +34,6 @@ import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCall
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsFlowNode
 import io.element.android.features.lockscreen.impl.setup.LockScreenSetupFlowNode
-import io.element.android.features.lockscreen.impl.setup.pin.SetupPinNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs

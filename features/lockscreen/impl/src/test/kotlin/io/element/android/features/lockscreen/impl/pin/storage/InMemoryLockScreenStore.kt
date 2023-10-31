@@ -16,11 +16,9 @@
 
 package io.element.android.features.lockscreen.impl.pin.storage
 
-import androidx.compose.runtime.MutableState
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 
 private const val DEFAULT_REMAINING_ATTEMPTS = 3
 
