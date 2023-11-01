@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TooltipState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
@@ -36,6 +35,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.tooltip.ElementTooltipDefaults
 import io.element.android.libraries.designsystem.components.tooltip.PlainTooltip
 import io.element.android.libraries.designsystem.components.tooltip.TooltipBox
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -91,29 +91,26 @@ internal fun RecordButton(
         },
     )
     Box(modifier = modifier) {
-        RecordButtonView(
-            isPressed = pressState.value is PressState.Pressing,
-            modifier = Modifier
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val event = awaitPointerEvent()
-                            coroutineScope.launch {
-                                when (event.type) {
-                                    PointerEventType.Press -> pressState.press()
-                                    PointerEventType.Release -> pressState.release()
+        HoldToRecordTooltip(
+            tooltipState = tooltipState,
+            anchor = {
+                RecordButtonView(
+                    isPressed = pressState.value is PressState.Pressing,
+                    modifier = Modifier
+                        .pointerInput(Unit) {
+                            awaitPointerEventScope {
+                                while (true) {
+                                    val event = awaitPointerEvent()
+                                    coroutineScope.launch {
+                                        when (event.type) {
+                                            PointerEventType.Press -> pressState.press()
+                                            PointerEventType.Release -> pressState.release()
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                }
-        )
-        HoldToRecordTooltip(
-            modifier = Modifier.align(Alignment.CenterStart),
-            tooltipState = tooltipState,
-            anchor = {
-                // Don't anchor the tooltip box to the record button itself, as it will
-                // cause the tooltip to sit directly against the side of the screen.
+                )
             }
         )
     }
@@ -143,13 +140,13 @@ private fun RecordButtonView(
 }
 
 @Composable
-fun HoldToRecordTooltip(
+private fun HoldToRecordTooltip(
     tooltipState: TooltipState,
     modifier: Modifier = Modifier,
     anchor: @Composable () -> Unit,
 ) {
     TooltipBox(
-        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        positionProvider = ElementTooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = {
             PlainTooltip {
                 Text(

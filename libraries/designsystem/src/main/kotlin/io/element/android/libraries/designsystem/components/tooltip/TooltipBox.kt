@@ -32,10 +32,10 @@ fun TooltipBox(
     enableUserInput: Boolean = true,
     content: @Composable () -> Unit,
 ) = M3TooltipBox(
-    modifier = modifier,
+    positionProvider = positionProvider,
     tooltip = tooltip,
     state = state,
-    positionProvider = positionProvider,
+    modifier = modifier,
     focusable = focusable,
     enableUserInput = enableUserInput,
     content = content,
