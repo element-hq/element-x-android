@@ -48,6 +48,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @SingleIn(RoomScope::class)
 class VoiceMessageComposerPresenter @Inject constructor(
@@ -187,6 +188,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                     isSending = isSending,
                     isPlaying = isPlaying,
                     playbackProgress = playerState.progress,
+                    time = playerState.currentPosition.milliseconds,
                     waveform = waveform,
                 )
                 else -> VoiceMessageState.Idle

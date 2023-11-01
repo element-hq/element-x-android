@@ -211,6 +211,7 @@ fun TextComposer(
                     isPlaying = voiceMessageState.isPlaying,
                     waveform = voiceMessageState.waveform,
                     playbackProgress = voiceMessageState.playbackProgress,
+                    time = voiceMessageState.time,
                     onPlayClick = onPlayVoiceMessageClicked,
                     onPauseClick = onPauseVoiceMessageClicked,
                     onSeek = onSeekVoiceMessage,
@@ -823,6 +824,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 isSending = false,
                 isPlaying = false,
                 waveform = createFakeWaveform(),
+                time = 61.seconds,
                 playbackProgress = 0.0f
             )
         )
@@ -832,6 +834,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 isSending = false,
                 isPlaying = true,
                 waveform = createFakeWaveform(),
+                time = 2.seconds,
                 playbackProgress = 0.2f
             )
         )
@@ -841,6 +844,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 isSending = true,
                 isPlaying = false,
                 waveform = createFakeWaveform(),
+                time = 61.seconds,
                 playbackProgress = 0.0f
             )
         )
