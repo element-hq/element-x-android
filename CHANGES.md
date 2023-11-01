@@ -1,3 +1,28 @@
+Changes in Element X v0.3.0 (2023-10-31)
+========================================
+
+Features ✨
+----------
+ - Element Call: change the 'join call' button in a chat room when there's an active call. ([#1158](https://github.com/vector-im/element-x-android/issues/1158))
+ - Mentions: add mentions suggestion view in RTE ([#1452](https://github.com/vector-im/element-x-android/issues/1452))
+ - Record and send voice messages ([#1596](https://github.com/vector-im/element-x-android/issues/1596))
+ - Enable voice messages for all users ([#1669](https://github.com/vector-im/element-x-android/issues/1669))
+ - Receive and play a voice message ([#2084](https://github.com/vector-im/element-x-android/issues/2084))
+ - Enable Element Call integration in rooms by default, fix several issues when creating or joining calls.
+
+Bugfixes 🐛
+----------
+ - Group fallback notification to avoid having plenty of them displayed. ([#994](https://github.com/vector-im/element-x-android/issues/994))
+ - Hide keyboard when exiting the chat room screen. ([#1375](https://github.com/vector-im/element-x-android/issues/1375))
+ - Always register the pusher when application starts ([#1481](https://github.com/vector-im/element-x-android/issues/1481))
+ - Ensure screen does not turn off when playing a video ([#1519](https://github.com/vector-im/element-x-android/issues/1519))
+ - Fix issue where text is cleared when cancelling a reply ([#1617](https://github.com/vector-im/element-x-android/issues/1617))
+
+Other changes
+-------------
+ - Remove usage of blocking methods. ([#1563](https://github.com/vector-im/element-x-android/issues/1563))
+
+
 Changes in Element X v0.2.4 (2023-10-12)
 ========================================
 

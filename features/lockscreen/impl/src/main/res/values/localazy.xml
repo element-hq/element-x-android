@@ -10,6 +10,7 @@
   </plurals>
   <string name="screen_app_lock_biometric_authentication">"biometric authentication"</string>
   <string name="screen_app_lock_biometric_unlock">"biometric unlock"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Unlock with biometric"</string>
   <string name="screen_app_lock_forgot_pin">"Forgot PIN?"</string>
   <string name="screen_app_lock_settings_change_pin">"Change PIN code"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Allow biometric unlock"</string>
@@ -30,5 +31,7 @@ Choose something memorable. If you forget this PIN, you will be logged out of th
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs don\'t match"</string>
   <string name="screen_app_lock_signout_alert_message">"You’ll need to re-login and create a new PIN to proceed"</string>
   <string name="screen_app_lock_signout_alert_title">"You are being signed out"</string>
+  <string name="screen_app_lock_use_biometric_android">"Use biometric"</string>
+  <string name="screen_app_lock_use_pin_android">"Use PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Signing out…"</string>
 </resources>

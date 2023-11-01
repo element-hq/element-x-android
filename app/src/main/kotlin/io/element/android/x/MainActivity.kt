@@ -30,7 +30,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
-import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
+import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -42,7 +42,7 @@ import timber.log.Timber
 
 private val loggerTag = LoggerTag("MainActivity")
 
-class MainActivity : NodeComponentActivity() {
+class MainActivity : NodeActivity() {
 
     private lateinit var mainNode: MainNode
 

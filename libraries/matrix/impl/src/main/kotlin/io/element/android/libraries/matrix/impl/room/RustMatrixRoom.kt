@@ -528,7 +528,7 @@ class RustMatrixRoom(
                 override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
                     return capabilities
                 }
-           },
+            },
         )
     }
 

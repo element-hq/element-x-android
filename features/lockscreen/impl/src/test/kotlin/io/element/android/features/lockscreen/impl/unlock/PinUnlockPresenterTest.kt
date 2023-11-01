@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
+import io.element.android.features.lockscreen.impl.biometric.FakeBiometricUnlockManager
 import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
@@ -48,7 +50,7 @@ class PinUnlockPresenterTest {
                 pinCodeVerified.complete(Unit)
             }
         }
-        val presenter = createPinUnlockPresenter(this, callback)
+        val presenter = createPinUnlockPresenter(this, callback = callback)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -88,7 +90,7 @@ class PinUnlockPresenterTest {
                 pinCodeVerified.complete(Unit)
             }
         }
-        val presenter = createPinUnlockPresenter(this, callback)
+        val presenter = createPinUnlockPresenter(this, callback = callback)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -146,6 +148,7 @@ class PinUnlockPresenterTest {
 
     private suspend fun createPinUnlockPresenter(
         scope: CoroutineScope,
+        biometricUnlockManager: BiometricUnlockManager = FakeBiometricUnlockManager(),
         callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
     ): PinUnlockPresenter {
         val pinCodeManager = aPinCodeManager().apply {
@@ -153,9 +156,10 @@ class PinUnlockPresenterTest {
             createPinCode(completePin)
         }
         return PinUnlockPresenter(
-            pinCodeManager,
-            FakeMatrixClient(),
-            scope,
+            pinCodeManager = pinCodeManager,
+            biometricUnlockManager = biometricUnlockManager,
+            matrixClient = FakeMatrixClient(),
+            coroutineScope = scope,
         )
     }
 }

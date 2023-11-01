@@ -21,8 +21,10 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.biometric.FakeBiometricUnlockManager
 import io.element.android.features.lockscreen.impl.fixtures.aLockScreenConfig
 import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
+import io.element.android.features.lockscreen.impl.pin.storage.InMemoryLockScreenStore
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.CoroutineScope
@@ -67,13 +69,16 @@ class LockScreenSettingsPresenterTest {
         coroutineScope: CoroutineScope,
         lockScreenConfig: LockScreenConfig = aLockScreenConfig(),
     ): LockScreenSettingsPresenter {
-        val pinCodeManager = aPinCodeManager().apply {
+        val lockScreenStore = InMemoryLockScreenStore()
+        val pinCodeManager = aPinCodeManager(lockScreenStore = lockScreenStore).apply {
             createPinCode("1234")
         }
         return LockScreenSettingsPresenter(
+            lockScreenStore = lockScreenStore,
             pinCodeManager = pinCodeManager,
             coroutineScope = coroutineScope,
             lockScreenConfig = lockScreenConfig,
+            biometricUnlockManager = FakeBiometricUnlockManager(),
         )
     }
 }

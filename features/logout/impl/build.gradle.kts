@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
@@ -48,5 +49,6 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.tests.testutils)
 }

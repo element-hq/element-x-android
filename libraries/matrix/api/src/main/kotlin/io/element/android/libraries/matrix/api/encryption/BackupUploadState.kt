@@ -32,4 +32,8 @@ sealed interface BackupUploadState {
     ) : BackupUploadState
 
     data object Done : BackupUploadState
+
+    data object Error : BackupUploadState
+
+    data class SteadyException(val exception: SteadyStateException) : BackupUploadState
 }

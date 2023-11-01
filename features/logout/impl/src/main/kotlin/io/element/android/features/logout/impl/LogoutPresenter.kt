@@ -28,16 +28,21 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LogoutPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<LogoutState> {
 
     @Composable
@@ -47,8 +52,15 @@ class LogoutPresenter @Inject constructor(
             mutableStateOf(Async.Uninitialized)
         }
 
-        val backupUploadState: BackupUploadState by remember {
-            encryptionService.waitForBackupUploadSteadyState()
+        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
+            .collectAsState(initial = null)
+
+        val backupUploadState: BackupUploadState by remember(secureStorageFlag) {
+            when (secureStorageFlag) {
+                true -> encryptionService.waitForBackupUploadSteadyState()
+                false -> flowOf(BackupUploadState.Done)
+                else -> emptyFlow()
+            }
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 

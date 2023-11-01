@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,12 +31,17 @@ import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.encryption.BackupState
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
@@ -55,6 +61,8 @@ class TimelinePresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
+    private val verificationService: SessionVerificationService,
+    private val encryptionService: EncryptionService,
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline
@@ -76,6 +84,18 @@ class TimelinePresenter @Inject constructor(
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
         val hasNewItems = remember { mutableStateOf(false) }
+
+        val sessionVerifiedStatus by verificationService.sessionVerifiedStatus.collectAsState()
+        val keyBackupState by encryptionService.backupStateStateFlow.collectAsState()
+
+        val sessionState by remember {
+            derivedStateOf {
+                SessionState(
+                    isSessionVerified = sessionVerifiedStatus == SessionVerifiedStatus.Verified,
+                    isKeyBackupEnabled = keyBackupState == BackupState.ENABLED
+                )
+            }
+        }
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
@@ -131,6 +151,7 @@ class TimelinePresenter @Inject constructor(
             paginationState = paginationState,
             timelineItems = timelineItems,
             hasNewItems = hasNewItems.value,
+            sessionState = sessionState,
             eventSink = ::handleEvents
         )
     }

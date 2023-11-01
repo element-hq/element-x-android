@@ -36,6 +36,8 @@ class BackupUploadStateMapper {
                 )
             RustBackupUploadState.Waiting ->
                 BackupUploadState.Waiting
+            RustBackupUploadState.Error ->
+                BackupUploadState.Error
         }
     }
 }

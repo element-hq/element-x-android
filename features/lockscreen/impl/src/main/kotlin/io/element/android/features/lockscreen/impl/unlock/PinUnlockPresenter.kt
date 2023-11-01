@@ -24,6 +24,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
+import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
@@ -38,6 +40,7 @@ import javax.inject.Inject
 
 class PinUnlockPresenter @Inject constructor(
     private val pinCodeManager: PinCodeManager,
+    private val biometricUnlockManager: BiometricUnlockManager,
     private val matrixClient: MatrixClient,
     private val coroutineScope: CoroutineScope,
 ) : Presenter<PinUnlockState> {
@@ -60,12 +63,21 @@ class PinUnlockPresenter @Inject constructor(
         val signOutAction = remember {
             mutableStateOf<Async<String?>>(Async.Uninitialized)
         }
+        var biometricUnlockResult by remember {
+            mutableStateOf<BiometricUnlock.AuthenticationResult?>(null)
+        }
+
+        val biometricUnlock = biometricUnlockManager.rememberBiometricUnlock()
 
         LaunchedEffect(Unit) {
             suspend {
                 val pinCodeSize = pinCodeManager.getPinCodeSize()
                 PinEntry.createEmpty(pinCodeSize)
             }.runCatchingUpdatingState(pinEntryState)
+        }
+        LaunchedEffect(biometricUnlock) {
+            biometricUnlock.setup()
+            biometricUnlock.authenticate()
         }
 
         LaunchedEffect(pinEntry) {
@@ -97,7 +109,15 @@ class PinUnlockPresenter @Inject constructor(
                     }
                 }
                 PinUnlockEvents.OnUseBiometric -> {
-                    //TODO
+                    coroutineScope.launch {
+                        biometricUnlockResult = biometricUnlock.authenticate()
+                    }
+                }
+                PinUnlockEvents.ClearBiometricError -> {
+                    biometricUnlockResult = null
+                }
+                is PinUnlockEvents.OnPinEntryChanged -> {
+                    pinEntryState.value = pinEntry.process(event.entryAsText)
                 }
             }
         }
@@ -107,6 +127,8 @@ class PinUnlockPresenter @Inject constructor(
             remainingAttempts = remainingAttempts,
             showSignOutPrompt = showSignOutPrompt,
             signOutAction = signOutAction.value,
+            showBiometricUnlock = biometricUnlock.isActive,
+            biometricUnlockResult = biometricUnlockResult,
             eventSink = ::handleEvents
         )
     }
@@ -134,6 +156,16 @@ class PinUnlockPresenter @Inject constructor(
                     is PinKeypadModel.Number -> data.addDigit(pinKeypadModel.number)
                     PinKeypadModel.Empty -> data
                 }
+                Async.Success(pinEntry)
+            }
+            else -> this
+        }
+    }
+
+    private fun Async<PinEntry>.process(pinEntryAsText: String): Async<PinEntry> {
+        return when (this) {
+            is Async.Success -> {
+                val pinEntry = data.fillWith(pinEntryAsText)
                 Async.Success(pinEntry)
             }
             else -> this
