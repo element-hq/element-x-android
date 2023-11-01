@@ -34,6 +34,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.tooltip.ElementTooltipDefaults
 import io.element.android.libraries.designsystem.components.tooltip.PlainTooltip
@@ -93,6 +94,7 @@ internal fun RecordButton(
     Box(modifier = modifier) {
         HoldToRecordTooltip(
             tooltipState = tooltipState,
+            spacingBetweenTooltipAndAnchor = 0.dp, // Accounts for the 48.dp size of the record button
             anchor = {
                 RecordButtonView(
                     isPressed = pressState.value is PressState.Pressing,
@@ -142,11 +144,14 @@ private fun RecordButtonView(
 @Composable
 private fun HoldToRecordTooltip(
     tooltipState: TooltipState,
+    spacingBetweenTooltipAndAnchor: Dp,
     modifier: Modifier = Modifier,
     anchor: @Composable () -> Unit,
 ) {
     TooltipBox(
-        positionProvider = ElementTooltipDefaults.rememberPlainTooltipPositionProvider(),
+        positionProvider = ElementTooltipDefaults.rememberPlainTooltipPositionProvider(
+            spacingBetweenTooltipAndAnchor = spacingBetweenTooltipAndAnchor,
+        ),
         tooltip = {
             PlainTooltip {
                 Text(
