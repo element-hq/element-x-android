@@ -247,7 +247,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 inThread = messageComposerContext.composerMode.inThread,
                 isEditing = messageComposerContext.composerMode.isEditing,
                 isReply = messageComposerContext.composerMode.isReply,
-                messageType = Composer.MessageType.Text, // FIXME use VoiceMessage type when available
+                messageType = Composer.MessageType.VoiceMessage,
             )
         )
 }

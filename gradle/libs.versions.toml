@@ -170,7 +170,7 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
 sentry = "io.sentry:sentry-android:6.32.0"
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:e9cd9adaf18cec52ed851395eb84358b4f9b8d7f"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:aa14cbcdf81af2746d20a71779ec751f971e1d7f"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"

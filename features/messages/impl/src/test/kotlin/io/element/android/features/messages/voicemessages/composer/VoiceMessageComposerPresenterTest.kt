@@ -641,6 +641,6 @@ private fun aVoiceMessageComposerEvent(
     inThread = false,
     isEditing = false,
     isReply = isReply,
-    messageType = Composer.MessageType.Text, // FIXME use VoiceMessage type when available
+    messageType = Composer.MessageType.VoiceMessage,
     startsThread = null
 )
