@@ -32,18 +32,16 @@ import io.element.android.libraries.di.AppScope
 class NotificationsOptInNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenterFactory: NotificationsOptInPresenter.Factory,
+    presenterFactory: NotificationsOptInPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
-    interface Callback: NodeInputs {
+    interface Callback : NodeInputs {
         fun onNotificationsOptInFinished()
     }
 
     private val callback = inputs<Callback>()
 
-    private val presenter: NotificationsOptInPresenter by lazy {
-        presenterFactory.create(callback)
-    }
+    private val presenter: NotificationsOptInPresenter = presenterFactory.create(callback)
 
     @Composable
     override fun View(modifier: Modifier) {
