@@ -27,6 +27,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 import java.io.IOException
+import kotlin.io.path.exists
 
 class DefaultVoiceMessageMediaRepoTest {
 
@@ -43,11 +44,11 @@ class DefaultVoiceMessageMediaRepoTest {
             matrixMediaLoader = fakeMediaLoader,
         )
 
-        repo.getMediaFile().let { result ->
+        repo.getMediaPath().let { result ->
             Truth.assertThat(result.isSuccess).isTrue()
-            result.getOrThrow().let { file ->
-                Truth.assertThat(file.path).isEqualTo(temporaryFolder.cachedFilePath)
-                Truth.assertThat(file.exists()).isTrue()
+            result.getOrThrow().let { path ->
+                Truth.assertThat(path.toString()).isEqualTo(temporaryFolder.cachedFilePath)
+                Truth.assertThat(path.exists()).isTrue()
             }
         }
     }
@@ -62,7 +63,7 @@ class DefaultVoiceMessageMediaRepoTest {
             matrixMediaLoader = fakeMediaLoader,
         )
 
-        repo.getMediaFile().let { result ->
+        repo.getMediaPath().let { result ->
             Truth.assertThat(result.isFailure).isTrue()
             result.exceptionOrNull()?.let { exception ->
                 Truth.assertThat(exception).isInstanceOf(RuntimeException::class.java)
@@ -87,7 +88,7 @@ class DefaultVoiceMessageMediaRepoTest {
             matrixMediaLoader = fakeMediaLoader,
         )
 
-        repo.getMediaFile().let { result ->
+        repo.getMediaPath().let { result ->
             Truth.assertThat(result.isFailure).isTrue()
             result.exceptionOrNull()?.let { exception ->
                 Truth.assertThat(exception).apply {
@@ -109,11 +110,11 @@ class DefaultVoiceMessageMediaRepoTest {
             matrixMediaLoader = fakeMediaLoader,
         )
 
-        repo.getMediaFile().let { result ->
+        repo.getMediaPath().let { result ->
             Truth.assertThat(result.isSuccess).isTrue()
-            result.getOrThrow().let { file ->
-                Truth.assertThat(file.path).isEqualTo(temporaryFolder.cachedFilePath)
-                Truth.assertThat(file.exists()).isTrue()
+            result.getOrThrow().let { path ->
+                Truth.assertThat(path.toString()).isEqualTo(temporaryFolder.cachedFilePath)
+                Truth.assertThat(path.exists()).isTrue()
             }
         }
     }

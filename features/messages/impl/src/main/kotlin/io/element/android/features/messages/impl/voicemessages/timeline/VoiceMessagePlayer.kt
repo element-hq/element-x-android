@@ -17,10 +17,10 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -150,9 +150,9 @@ class DefaultVoiceMessagePlayer(
         Result.success(Unit)
     } else {
         if (eventId != null) {
-            repo.getMediaFile().mapCatching { mediaFile ->
+            repo.getMediaPath().mapCatching { path ->
                 mediaPlayer.acquireControlAndPlay(
-                    uri = mediaFile.path,
+                    uri = path.toString(),
                     mediaId = eventId.value,
                     mimeType = "audio/ogg" // Files in the voice cache have no extension so we need to set the mime type manually.
                 )

@@ -29,8 +29,8 @@ import java.io.IOException
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.createParentDirectories
-import kotlin.io.path.exists
 import kotlin.io.path.moveTo
+import kotlin.io.path.notExists
 
 /**
  * Fetches the media file for a voice message.
@@ -65,9 +65,9 @@ interface VoiceMessageMediaRepo {
      * In case of a cache hit the file is returned immediately.
      * In case of a cache miss the file is downloaded and then returned.
      *
-     * @return A [Result] holding either the media [File] from the cache directory or an [Exception].
+     * @return A [Result] holding either the media file [Path] from the cache directory or an [Exception].
      */
-    suspend fun getMediaFile(): Result<File>
+    suspend fun getMediaPath(): Result<Path>
 }
 
 class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
@@ -88,7 +88,9 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
         ): DefaultVoiceMessageMediaRepo
     }
 
-    override suspend fun getMediaFile(): Result<File> = if (!isInCache()) {
+    private val cache = Path("${cacheDir.path}/$CACHE_VOICE_SUBDIR/${mxcUri2FilePath(mediaSource.url)}")
+
+    override suspend fun getMediaPath(): Result<Path> = if (cache.notExists()) {
         matrixMediaLoader.downloadMediaFile(
             source = mediaSource,
             mimeType = mimeType,
@@ -98,21 +100,17 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
             // Not that big of a deal but better to avoid it someday.
             try {
                 Path(it.path()).moveTo(
-                    target = cachedFilePath.apply { createParentDirectories() },
+                    target = cache.createParentDirectories(),
                     overwrite = true
                 )
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 throw IOException("Failed to move file to cache.", e)
             }
-            cachedFilePath.toFile()
+            cache
         }
     } else {
-        Result.success(cachedFilePath.toFile())
+        Result.success(cache)
     }
-
-    private val cachedFilePath: Path = Path("${cacheDir.path}/$CACHE_VOICE_SUBDIR/${mxcUri2FilePath(mediaSource.url)}")
-
-    private fun isInCache(): Boolean = cachedFilePath.exists()
 }
 
 /**
