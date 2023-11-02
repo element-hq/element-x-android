@@ -382,8 +382,8 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
-                supportingContent = PreviewItems.text(),
+                headlineContent = headline(),
+                supportingContent = text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 style = style,
@@ -401,8 +401,8 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
-                supportingContent = PreviewItems.textSingleLine(),
+                headlineContent = headline(),
+                supportingContent = textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 style = style,
@@ -421,7 +421,7 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
+                headlineContent = headline(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 enabled = enabled,

@@ -37,7 +37,7 @@ import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.modifiers.blurCompat
 import io.element.android.libraries.designsystem.modifiers.blurredShapeShadow
 import io.element.android.libraries.designsystem.modifiers.canUseBlurMaskFilter
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.composeutils.annotations.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.theme.ElementTheme
 

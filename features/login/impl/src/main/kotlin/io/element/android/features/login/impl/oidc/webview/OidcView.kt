@@ -33,7 +33,7 @@ import io.element.android.features.login.impl.oidc.OidcUrlParser
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.composeutils.annotations.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 

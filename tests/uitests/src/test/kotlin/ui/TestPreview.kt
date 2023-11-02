@@ -19,7 +19,7 @@ package ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
-import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
+import io.element.android.libraries.composeutils.NIGHT_MODE_NAME
 
 interface TestPreview {
     @Composable
@@ -34,5 +34,5 @@ interface TestPreview {
  */
 fun TestPreview.isNightMode(): Boolean {
     // Dark mode previews have name "N" so their component name contains "- N"
-    return this.name.contains("- $NIGHT_MODE_NAME")
+    return this.name.contains("- ${io.element.android.libraries.composeutils.NIGHT_MODE_NAME}")
 }

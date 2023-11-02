@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.preview
+plugins {
+    id("io.element.android-compose-library")
+}
 
-import androidx.compose.ui.tooling.preview.Preview
-
-/**
- * Our Paparazzi tests will check components with non-null `heightDp` and use a custom rendering for them,
- * adding extra vertical space so long scrolling components can be displayed. This is a helper for that functionality.
- */
-@Preview(heightDp = 1000)
-annotation class PreviewWithLargeHeight
+android {
+    namespace = "io.element.android.libraries.composeutils"
+}

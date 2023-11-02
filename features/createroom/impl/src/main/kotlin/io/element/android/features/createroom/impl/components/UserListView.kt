@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.userlist.UserListEvents
 import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.features.createroom.impl.userlist.UserListStateProvider
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.composeutils.annotations.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList

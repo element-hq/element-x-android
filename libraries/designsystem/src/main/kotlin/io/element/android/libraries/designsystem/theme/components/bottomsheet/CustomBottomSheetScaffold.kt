@@ -191,8 +191,8 @@ private fun CustomBottomSheetScaffoldLayout(
 
             val snackbarOffsetX = (layoutWidth - snackbarPlaceable.width) / 2
             val snackbarOffsetY = when (sheetState.currentValue) {
-                SheetValue.PartiallyExpanded -> sheetOffsetY - snackbarPlaceable.height
-                SheetValue.Expanded, SheetValue.Hidden -> layoutHeight - snackbarPlaceable.height
+                PartiallyExpanded -> sheetOffsetY - snackbarPlaceable.height
+                Expanded, SheetValue.Hidden -> layoutHeight - snackbarPlaceable.height
             }
 
             // Placement order is important for elevation
@@ -253,9 +253,9 @@ private fun CustomStandardBottomSheet(
             .onSizeChanged { layoutSize ->
                 val newAnchors = calculateAnchors(layoutSize)
                 val newTarget = when (state.anchoredDraggableState.targetValue) {
-                    SheetValue.Hidden, SheetValue.PartiallyExpanded -> SheetValue.PartiallyExpanded
-                    SheetValue.Expanded -> {
-                        if (newAnchors.hasAnchorFor(SheetValue.Expanded)) SheetValue.Expanded else SheetValue.PartiallyExpanded
+                    SheetValue.Hidden, PartiallyExpanded -> PartiallyExpanded
+                    Expanded -> {
+                        if (newAnchors.hasAnchorFor(Expanded)) Expanded else PartiallyExpanded
                     }
                 }
                 state.anchoredDraggableState.updateAnchors(newAnchors, newTarget)
@@ -280,7 +280,7 @@ private fun CustomStandardBottomSheet(
                                 // Provides semantics to interact with the bottomsheet if there is more
                                 // than one anchor to swipe to and swiping is enabled.
                                 if (anchoredDraggableState.anchors.size > 1 && sheetSwipeEnabled) {
-                                    if (currentValue == SheetValue.PartiallyExpanded) {
+                                    if (currentValue == PartiallyExpanded) {
                                         expand(expandActionLabel) {
                                             scope.launch { expand() }; true
                                         }

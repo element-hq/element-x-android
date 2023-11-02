@@ -58,7 +58,7 @@ import io.element.android.features.messages.impl.timeline.components.event.Extra
 import io.element.android.features.messages.impl.timeline.components.event.getDpSize
 import io.element.android.features.messages.impl.timeline.components.event.noExtraPadding
 import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.composeutils.annotations.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Surface

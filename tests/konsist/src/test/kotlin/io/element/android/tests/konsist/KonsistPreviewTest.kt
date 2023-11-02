@@ -19,7 +19,7 @@ package io.element.android.tests.konsist
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
 import com.lemonappdev.konsist.api.verify.assertTrue
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.composeutils.annotations.PreviewsDayNight
 import org.junit.Test
 
 class KonsistPreviewTest {
@@ -28,7 +28,7 @@ class KonsistPreviewTest {
         Konsist
             .scopeFromProject()
             .functions()
-            .withAllAnnotationsOf(PreviewsDayNight::class)
+            .withAllAnnotationsOf(io.element.android.libraries.composeutils.PreviewsDayNight::class)
             .assertTrue {
                 it.hasNameEndingWith("Preview") &&
                     it.hasNameEndingWith("LightPreview").not() &&
@@ -41,7 +41,7 @@ class KonsistPreviewTest {
         Konsist
             .scopeFromProject()
             .functions()
-            .withAllAnnotationsOf(PreviewsDayNight::class)
+            .withAllAnnotationsOf(io.element.android.libraries.composeutils.PreviewsDayNight::class)
             .assertTrue {
                 it.text.contains("ElementPreview")
             }
@@ -52,7 +52,7 @@ class KonsistPreviewTest {
         Konsist
             .scopeFromProject()
             .functions()
-            .withAllAnnotationsOf(PreviewsDayNight::class)
+            .withAllAnnotationsOf(io.element.android.libraries.composeutils.PreviewsDayNight::class)
             .assertTrue {
                 it.hasInternalModifier
             }

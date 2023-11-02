@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import io.element.android.features.login.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.composeutils.annotations.PreviewsDayNight
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable

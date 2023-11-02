@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.preview
+package io.element.android.libraries.composeutils.annotations
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview
