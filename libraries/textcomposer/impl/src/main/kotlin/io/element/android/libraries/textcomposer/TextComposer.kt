@@ -85,7 +85,6 @@ import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import uniffi.wysiwyg_composer.MenuAction
 import kotlin.time.Duration.Companion.seconds
 
@@ -211,6 +210,7 @@ fun TextComposer(
                     isPlaying = voiceMessageState.isPlaying,
                     waveform = voiceMessageState.waveform,
                     playbackProgress = voiceMessageState.playbackProgress,
+                    time = voiceMessageState.time,
                     onPlayClick = onPlayVoiceMessageClicked,
                     onPauseClick = onPauseVoiceMessageClicked,
                     onSeek = onSeekVoiceMessage,
@@ -816,13 +816,14 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         enableVoiceMessages = true,
     )
     PreviewColumn(items = persistentListOf({
-        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, List(100) { it.toFloat() / 100 }.toPersistentList()))
+        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, createFakeWaveform()))
     }, {
         VoicePreview(
             voiceMessageState = VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = false,
                 waveform = createFakeWaveform(),
+                time = 0.seconds,
                 playbackProgress = 0.0f
             )
         )
@@ -832,6 +833,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 isSending = false,
                 isPlaying = true,
                 waveform = createFakeWaveform(),
+                time = 3.seconds,
                 playbackProgress = 0.2f
             )
         )
@@ -841,6 +843,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 isSending = true,
                 isPlaying = false,
                 waveform = createFakeWaveform(),
+                time = 61.seconds,
                 playbackProgress = 0.0f
             )
         )
