@@ -53,51 +53,51 @@ import kotlin.math.max
 @Composable
 internal fun SimpleAlertDialogContent(
     content: String,
-    cancelText: String,
-    onCancelClicked: () -> Unit,
+    submitText: String,
+    onSubmitClicked: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
     subtitle: @Composable (() -> Unit)? = null,
-    submitText: String? = null,
     destructiveSubmit: Boolean = false,
-    onSubmitClicked: () -> Unit = {},
+    cancelText: String? = null,
+    onCancelClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
     applyPaddingToContents: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
+        modifier = modifier,
+        icon = icon,
+        title = title,
+        subtitle = subtitle,
         content = {
             Text(
                 text = content,
                 style = ElementTheme.materialTypography.bodyMedium,
             )
         },
-        cancelText = cancelText,
-        onCancelClicked = onCancelClicked,
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
         submitText = submitText,
         destructiveSubmit = destructiveSubmit,
         onSubmitClicked = onSubmitClicked,
+        cancelText = cancelText,
+        onCancelClicked = onCancelClicked,
         thirdButtonText = thirdButtonText,
         onThirdButtonClicked = onThirdButtonClicked,
-        icon = icon,
         applyPaddingToContents = applyPaddingToContents,
     )
 }
 
 @Composable
 internal fun SimpleAlertDialogContent(
-    cancelText: String,
-    onCancelClicked: () -> Unit,
+    submitText: String,
+    onSubmitClicked: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
     subtitle: @Composable (() -> Unit)? = null,
-    submitText: String? = null,
     destructiveSubmit: Boolean = false,
-    onSubmitClicked: () -> Unit = {},
+    cancelText: String? = null,
+    onCancelClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
     applyPaddingToContents: Boolean = true,
@@ -121,16 +121,23 @@ internal fun SimpleAlertDialogContent(
                         onClick = onThirdButtonClicked,
                     )
                 }
-                TextButton(
-                    modifier = Modifier.testTag(
-                        if (submitText == null) TestTags.dialogPositive else TestTags.dialogNegative
-                    ),
-                    text = cancelText,
-                    size = ButtonSize.Medium,
-                    onClick = onCancelClicked,
-                )
-                if (submitText != null) {
+                if (cancelText != null) {
+                    TextButton(
+                        modifier = Modifier.testTag(TestTags.dialogNegative),
+                        text = cancelText,
+                        size = ButtonSize.Medium,
+                        onClick = onCancelClicked,
+                    )
                     Button(
+                        modifier = Modifier.testTag(TestTags.dialogPositive),
+                        text = submitText,
+                        enabled = enabled,
+                        size = ButtonSize.Medium,
+                        onClick = onSubmitClicked,
+                        destructive = destructiveSubmit,
+                    )
+                } else {
+                    TextButton(
                         modifier = Modifier.testTag(TestTags.dialogPositive),
                         text = submitText,
                         enabled = enabled,
@@ -438,8 +445,8 @@ internal fun DialogWithTitleIconAndOkButtonPreview() {
                 },
                 title = "Dialog Title",
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
-                cancelText = "OK",
-                onCancelClicked = {},
+                submitText = "OK",
+                onSubmitClicked = {},
             )
         }
     }
@@ -454,8 +461,8 @@ internal fun DialogWithTitleAndOkButtonPreview() {
             SimpleAlertDialogContent(
                 title = "Dialog Title",
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
-                cancelText = "OK",
-                onCancelClicked = {},
+                submitText = "OK",
+                onSubmitClicked = {},
             )
         }
     }
@@ -469,8 +476,8 @@ internal fun DialogWithOnlyMessageAndOkButtonPreview() {
         DialogPreview {
             SimpleAlertDialogContent(
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
-                cancelText = "OK",
-                onCancelClicked = {},
+                submitText = "OK",
+                onSubmitClicked = {},
             )
         }
     }
@@ -478,7 +485,6 @@ internal fun DialogWithOnlyMessageAndOkButtonPreview() {
 
 @Preview(group = PreviewGroup.Dialogs, name = "Dialog with destructive button")
 @Composable
-@Suppress("MaxLineLength")
 internal fun DialogWithDestructiveButtonPreview() {
     ElementThemedPreview(showBackground = false) {
         DialogPreview {
@@ -488,7 +494,24 @@ internal fun DialogWithDestructiveButtonPreview() {
                 cancelText = "Cancel",
                 submitText = "Delete",
                 destructiveSubmit = true,
-                onCancelClicked = {},
+                onSubmitClicked = {},
+            )
+        }
+    }
+}
+
+@Preview(group = PreviewGroup.Dialogs, name = "Dialog with third button")
+@Composable
+internal fun DialogWithThirdButtonPreview() {
+    ElementThemedPreview(showBackground = false) {
+        DialogPreview {
+            SimpleAlertDialogContent(
+                title = "Dialog Title",
+                content = "A dialog with a third button",
+                cancelText = "Cancel",
+                submitText = "Delete",
+                thirdButtonText = "Other",
+                onSubmitClicked = {},
             )
         }
     }
