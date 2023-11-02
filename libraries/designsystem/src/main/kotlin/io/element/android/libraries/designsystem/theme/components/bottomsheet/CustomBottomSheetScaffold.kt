@@ -35,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SheetValue.Expanded
+import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.material3.SheetValue.PartiallyExpanded
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -122,7 +123,7 @@ fun CustomBottomSheetScaffold(
                             Expanded at maxOf(layoutHeight - sheetHeight, 0).toFloat()
                         }
                         if (!scaffoldState.bottomSheetState.skipHiddenState) {
-                            SheetValue.Hidden at layoutHeight.toFloat()
+                            Hidden at layoutHeight.toFloat()
                         }
                     }
                 },
@@ -192,7 +193,7 @@ private fun CustomBottomSheetScaffoldLayout(
             val snackbarOffsetX = (layoutWidth - snackbarPlaceable.width) / 2
             val snackbarOffsetY = when (sheetState.currentValue) {
                 PartiallyExpanded -> sheetOffsetY - snackbarPlaceable.height
-                Expanded, SheetValue.Hidden -> layoutHeight - snackbarPlaceable.height
+                Expanded, Hidden -> layoutHeight - snackbarPlaceable.height
             }
 
             // Placement order is important for elevation
@@ -253,7 +254,7 @@ private fun CustomStandardBottomSheet(
             .onSizeChanged { layoutSize ->
                 val newAnchors = calculateAnchors(layoutSize)
                 val newTarget = when (state.anchoredDraggableState.targetValue) {
-                    SheetValue.Hidden, PartiallyExpanded -> PartiallyExpanded
+                    Hidden, PartiallyExpanded -> PartiallyExpanded
                     Expanded -> {
                         if (newAnchors.hasAnchorFor(Expanded)) Expanded else PartiallyExpanded
                     }
@@ -495,7 +496,7 @@ fun rememberStandardBottomSheetState(
 internal fun rememberSheetState(
     skipPartiallyExpanded: Boolean = false,
     confirmValueChange: (SheetValue) -> Boolean = { true },
-    initialValue: SheetValue = SheetValue.Hidden,
+    initialValue: SheetValue = Hidden,
     skipHiddenState: Boolean = false,
 ): CustomSheetState {
 
