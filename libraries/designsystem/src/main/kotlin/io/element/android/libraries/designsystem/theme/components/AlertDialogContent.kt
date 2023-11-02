@@ -67,23 +67,23 @@ internal fun SimpleAlertDialogContent(
     icon: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
+        modifier = modifier,
+        icon = icon,
+        title = title,
+        subtitle = subtitle,
         content = {
             Text(
                 text = content,
                 style = ElementTheme.materialTypography.bodyMedium,
             )
         },
-        cancelText = cancelText,
-        onCancelClicked = onCancelClicked,
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
         submitText = submitText,
         destructiveSubmit = destructiveSubmit,
         onSubmitClicked = onSubmitClicked,
+        cancelText = cancelText,
+        onCancelClicked = onCancelClicked,
         thirdButtonText = thirdButtonText,
         onThirdButtonClicked = onThirdButtonClicked,
-        icon = icon,
         applyPaddingToContents = applyPaddingToContents,
     )
 }
