@@ -28,7 +28,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsE
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenterFake
 import io.element.android.features.location.impl.common.permissions.PermissionsState
-import io.element.android.features.messages.test.MessageComposerContextFake
+import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -49,7 +49,7 @@ class SendLocationPresenterTest {
     private val permissionsPresenterFake = PermissionsPresenterFake()
     private val fakeMatrixRoom = FakeMatrixRoom()
     private val fakeAnalyticsService = FakeAnalyticsService()
-    private val messageComposerContextFake = MessageComposerContextFake()
+    private val fakeMessageComposerContext = FakeMessageComposerContext()
     private val fakeLocationActions = FakeLocationActions()
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
     private val sendLocationPresenter: SendLocationPresenter = SendLocationPresenter(
@@ -58,7 +58,7 @@ class SendLocationPresenterTest {
         },
         room = fakeMatrixRoom,
         analyticsService = fakeAnalyticsService,
-        messageComposerContext = messageComposerContextFake,
+        messageComposerContext = fakeMessageComposerContext,
         locationActions = fakeLocationActions,
         buildMeta = fakeBuildMeta,
     )
@@ -379,7 +379,7 @@ class SendLocationPresenterTest {
                 shouldShowRationale = false,
             )
         )
-        messageComposerContextFake.apply {
+        fakeMessageComposerContext.apply {
             composerMode = MessageComposerMode.Edit(
                 eventId = null, defaultContent = "", transactionId = null
             )
@@ -425,7 +425,7 @@ class SendLocationPresenterTest {
                 shouldShowRationale = false,
             )
         )
-        messageComposerContextFake.apply {
+        fakeMessageComposerContext.apply {
             composerMode = MessageComposerMode.Edit(
                 eventId = null, defaultContent = "", transactionId = null
             )
