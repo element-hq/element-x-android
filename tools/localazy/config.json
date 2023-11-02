@@ -53,7 +53,8 @@
     {
       "name": ":libraries:textcomposer:impl",
       "includeRegex": [
-        "rich_text_editor.*"
+        "rich_text_editor.*",
+        ".*voice_message_tooltip"
       ]
     },
     {
