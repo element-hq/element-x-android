@@ -35,7 +35,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Assemble debug APK
-        run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:assembleDebug $CI_GRADLE_ARG_PROPERTIES
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
