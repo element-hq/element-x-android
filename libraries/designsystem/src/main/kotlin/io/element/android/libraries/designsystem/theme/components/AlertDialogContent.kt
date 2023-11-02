@@ -485,7 +485,6 @@ internal fun DialogWithOnlyMessageAndOkButtonPreview() {
 
 @Preview(group = PreviewGroup.Dialogs, name = "Dialog with destructive button")
 @Composable
-@Suppress("MaxLineLength")
 internal fun DialogWithDestructiveButtonPreview() {
     ElementThemedPreview(showBackground = false) {
         DialogPreview {
@@ -495,6 +494,23 @@ internal fun DialogWithDestructiveButtonPreview() {
                 cancelText = "Cancel",
                 submitText = "Delete",
                 destructiveSubmit = true,
+                onSubmitClicked = {},
+            )
+        }
+    }
+}
+
+@Preview(group = PreviewGroup.Dialogs, name = "Dialog with third button")
+@Composable
+internal fun DialogWithThirdButtonPreview() {
+    ElementThemedPreview(showBackground = false) {
+        DialogPreview {
+            SimpleAlertDialogContent(
+                title = "Dialog Title",
+                content = "A dialog with a third button",
+                cancelText = "Cancel",
+                submitText = "Delete",
+                thirdButtonText = "Other",
                 onSubmitClicked = {},
             )
         }
