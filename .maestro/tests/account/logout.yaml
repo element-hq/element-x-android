@@ -6,9 +6,12 @@ appId: ${APP_ID}
 - takeScreenshot: build/maestro/900-SignOutScreen
 - back
 - tapOn: "Sign out"
-- tapOn: "Sign out"
+- tapOn:
+    id: "sign-out-submit"
 # Ensure cancel cancels
 - tapOn: "Cancel"
-- tapOn: "Sign out"
-- tapOn: "Sign out anyway"
+- tapOn:
+    id: "sign-out-submit"
+- tapOn:
+    id: "dialog-positive"
 - runFlow: ../assertions/assertInitDisplayed.yaml

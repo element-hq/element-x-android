@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
 import kotlin.math.max
 
@@ -113,18 +115,23 @@ internal fun SimpleAlertDialogContent(
                     // If there is a 3rd item it should be at the end of the dialog
                     // Having this 3rd action is discouraged, see https://m3.material.io/components/dialogs/guidelines#e13b68f5-e367-4275-ad6f-c552ee8e358f
                     TextButton(
+                        modifier = Modifier.testTag(TestTags.dialogNeutral),
                         text = thirdButtonText,
                         size = ButtonSize.Medium,
                         onClick = onThirdButtonClicked,
                     )
                 }
                 TextButton(
+                    modifier = Modifier.testTag(
+                        if (submitText == null) TestTags.dialogPositive else TestTags.dialogNegative
+                    ),
                     text = cancelText,
                     size = ButtonSize.Medium,
                     onClick = onCancelClicked,
                 )
                 if (submitText != null) {
                     Button(
+                        modifier = Modifier.testTag(TestTags.dialogPositive),
                         text = submitText,
                         enabled = enabled,
                         size = ButtonSize.Medium,

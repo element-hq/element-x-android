@@ -46,6 +46,8 @@ import io.element.android.libraries.designsystem.theme.progressIndicatorTrackCol
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.SteadyStateException
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -194,7 +196,9 @@ private fun BottomMenu(
             text = stringResource(id = signOutSubmitRes),
             showProgress = logoutAction is Async.Loading,
             destructive = true,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(TestTags.signOut),
             onClick = onLogoutClicked,
         )
     }
