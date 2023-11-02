@@ -135,7 +135,7 @@ test_orchestrator = "androidx.test:orchestrator:1.4.2"
 test_turbine = "app.cash.turbine:turbine:1.0.0"
 test_truth = "com.google.truth:truth:1.1.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.14"
-test_robolectric = "org.robolectric:robolectric:4.11"
+test_robolectric = "org.robolectric:robolectric:4.11.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 
 # Others
