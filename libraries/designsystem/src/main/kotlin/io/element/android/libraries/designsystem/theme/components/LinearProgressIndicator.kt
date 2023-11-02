@@ -31,7 +31,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun LinearProgressIndicator(
-    progress: Float,
+    progress: () -> Float,
     modifier: Modifier = Modifier,
     color: Color = ProgressIndicatorDefaults.linearColor,
     trackColor: Color = ProgressIndicatorDefaults.linearTrackColor,
@@ -57,7 +57,7 @@ fun LinearProgressIndicator(
         // Use a determinate progress indicator to improve the preview rendering
         androidx.compose.material3.LinearProgressIndicator(
             modifier = modifier,
-            progress = 0.75F,
+            progress = { 0.75F },
             color = color,
             trackColor = trackColor,
             strokeCap = strokeCap,
@@ -84,7 +84,7 @@ private fun ContentToPreview() {
         )
         // Fixed progress
         LinearProgressIndicator(
-            progress = 0.90F
+            progress = { 0.90F }
         )
     }
 }

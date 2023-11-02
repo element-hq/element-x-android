@@ -75,7 +75,7 @@ fun ProgressDialog(
                     }
                     is ProgressDialogType.Determinate -> {
                         CircularProgressIndicator(
-                            progress = type.progress,
+                            progress = { type.progress },
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
