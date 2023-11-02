@@ -10,6 +10,7 @@ appId: ${APP_ID}
     id: "sign-out-submit"
 # Ensure cancel cancels
 - tapOn: "Cancel"
+- tapOn:
+    id: "sign-out-submit"
 - tapOn: "Sign out"
-- tapOn: "Sign out anyway"
 - runFlow: ../assertions/assertInitDisplayed.yaml
