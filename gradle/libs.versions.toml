@@ -6,7 +6,7 @@
 android_gradle_plugin = "8.1.2"
 kotlin = "1.9.10"
 ksp = "1.9.10-1.0.13"
-molecule = "1.2.1"
+molecule = "1.3.0"
 
 # AndroidX
 core = "1.12.0"
@@ -14,7 +14,7 @@ datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
 recyclerview = "1.3.2"
-lifecycle = "2.6.2"
+lifecycle = "2.7.0-beta01"
 activity = "1.8.0"
 startup = "1.1.1"
 media3 = "1.1.1"
@@ -55,7 +55,7 @@ anvil = "2.4.8-1-8"
 autoservice = "1.1.1"
 
 # quality
-detekt = "1.23.2"
+detekt = "1.23.3"
 dependencygraph = "0.12"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
@@ -67,7 +67,7 @@ material = "1.9.0"
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
-android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
+android_desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
 google_firebase_bom = "com.google.firebase:firebase-bom:32.5.0"
@@ -90,6 +90,7 @@ androidx_splash = "androidx.core:core-splashscreen:1.0.1"
 androidx_security_crypto = "androidx.security:security-crypto:1.1.0-alpha06"
 androidx_media3_exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
+androidx_biometric = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -134,7 +135,7 @@ test_orchestrator = "androidx.test:orchestrator:1.4.2"
 test_turbine = "app.cash.turbine:turbine:1.0.0"
 test_truth = "com.google.truth:truth:1.1.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.14"
-test_robolectric = "org.robolectric:robolectric:4.11"
+test_robolectric = "org.robolectric:robolectric:4.11.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 
 # Others
@@ -149,7 +150,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.65"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.66"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -169,8 +170,8 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
-sentry = "io.sentry:sentry-android:6.32.0"
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:e9cd9adaf18cec52ed851395eb84358b4f9b8d7f"
+sentry = "io.sentry:sentry-android:6.33.0"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:aa14cbcdf81af2746d20a71779ec751f971e1d7f"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"

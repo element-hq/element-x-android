@@ -34,6 +34,11 @@ object TestTags {
     val loginContinue = TestTag("login-continue")
 
     /**
+     * Sign out screen.
+     */
+    val signOut = TestTag("sign-out-submit")
+
+    /**
      * Change server screen.
      */
     val changeServerServer = TestTag("change_server-server")
@@ -52,6 +57,13 @@ object TestTags {
      * RichTextEditor.
      */
     val richTextEditor = TestTag("rich_text_editor")
+
+    /**
+     * Dialogs.
+     */
+    val dialogPositive = TestTag("dialog-positive")
+    val dialogNegative = TestTag("dialog-negative")
+    val dialogNeutral = TestTag("dialog-neutral")
 }
 
 

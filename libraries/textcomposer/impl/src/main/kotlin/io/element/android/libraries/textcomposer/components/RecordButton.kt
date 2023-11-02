@@ -41,7 +41,6 @@ import io.element.android.libraries.designsystem.components.tooltip.PlainTooltip
 import io.element.android.libraries.designsystem.components.tooltip.TooltipBox
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -125,11 +124,11 @@ private fun RecordButtonView(
 ) {
     IconButton(
         modifier = modifier
-            .size(48.dp.applyScaleUp()),
+            .size(48.dp),
         onClick = {},
     ) {
         Icon(
-            modifier = Modifier.size(24.dp.applyScaleUp()),
+            modifier = Modifier.size(24.dp),
             resourceId = if (isPressed) {
                 CommonDrawables.ic_compound_mic_on_solid
             } else {

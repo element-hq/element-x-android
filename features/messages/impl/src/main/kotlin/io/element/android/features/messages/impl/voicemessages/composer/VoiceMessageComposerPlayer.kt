@@ -100,6 +100,10 @@ class VoiceMessageComposerPlayer @Inject constructor(
          * The progress of this player between 0 and 1.
          */
         val progress: Float =
-            if (duration <= currentPosition) 0f else currentPosition.toFloat() / duration.toFloat()
+            if (duration == 0L)
+                0f
+            else
+                (currentPosition.toFloat() / duration.toFloat())
+                    .coerceAtMost(1f) // Current position may exceed reported duration
     }
 }

@@ -33,7 +33,7 @@ import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsFlowNode
-import io.element.android.features.lockscreen.impl.setup.SetupPinNode
+import io.element.android.features.lockscreen.impl.setup.LockScreenSetupFlowNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -94,10 +94,11 @@ class LockScreenFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Unlock -> {
-                createNode<PinUnlockNode>(buildContext)
+                val inputs = PinUnlockNode.Inputs(isInAppUnlock = false)
+                createNode<PinUnlockNode>(buildContext, plugins = listOf(inputs))
             }
             NavTarget.Setup -> {
-                createNode<SetupPinNode>(buildContext)
+                createNode<LockScreenSetupFlowNode>(buildContext)
             }
             NavTarget.Settings -> {
                 createNode<LockScreenSettingsFlowNode>(buildContext)

@@ -20,8 +20,11 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
+import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnlockCallback
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
+import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -36,16 +39,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultLockScreenService @Inject constructor(
     private val lockScreenConfig: LockScreenConfig,
     private val featureFlagService: FeatureFlagService,
+    private val lockScreenStore: LockScreenStore,
     private val pinCodeManager: PinCodeManager,
     private val coroutineScope: CoroutineScope,
     private val sessionObserver: SessionObserver,
     private val appForegroundStateService: AppForegroundStateService,
+    private val biometricUnlockManager: BiometricUnlockManager,
 ) : LockScreenService {
 
     private val _lockScreenState = MutableStateFlow<LockScreenLockState>(LockScreenLockState.Unlocked)
@@ -61,6 +67,14 @@ class DefaultLockScreenService @Inject constructor(
 
             override fun onPinCodeRemoved() {
                 _lockScreenState.value = LockScreenLockState.Unlocked
+            }
+        })
+        biometricUnlockManager.addCallback(object : DefaultBiometricUnlockCallback() {
+            override fun onBiometricUnlockSuccess() {
+                _lockScreenState.value = LockScreenLockState.Unlocked
+                coroutineScope.launch {
+                    lockScreenStore.resetCounter()
+                }
             }
         })
         coroutineScope.lockIfNeeded()
@@ -93,7 +107,7 @@ class DefaultLockScreenService @Inject constructor(
                 if (isInForeground) {
                     lockJob?.cancel()
                 } else {
-                    lockJob = lockIfNeeded(delayInMillis = lockScreenConfig.gracePeriodInMillis)
+                    lockJob = lockIfNeeded(gracePeriod = lockScreenConfig.gracePeriod)
                 }
             }
         }
@@ -105,9 +119,9 @@ class DefaultLockScreenService @Inject constructor(
             && !pinCodeManager.isPinCodeAvailable()
     }
 
-    private fun CoroutineScope.lockIfNeeded(delayInMillis: Long = 0L) = launch {
+    private fun CoroutineScope.lockIfNeeded(gracePeriod: Duration = Duration.ZERO) = launch {
         if (featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock) && pinCodeManager.isPinCodeAvailable()) {
-            delay(delayInMillis)
+            delay(gracePeriod)
             _lockScreenState.value = LockScreenLockState.Locked
         }
     }

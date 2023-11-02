@@ -18,16 +18,16 @@ package io.element.android.features.lockscreen.impl.fixtures
 
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
-import io.element.android.features.lockscreen.impl.pin.storage.InMemoryPinCodeStore
-import io.element.android.features.lockscreen.impl.pin.storage.PinCodeStore
+import io.element.android.features.lockscreen.impl.pin.storage.InMemoryLockScreenStore
+import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.impl.AESEncryptionDecryptionService
-import io.element.android.libraries.cryptography.test.SimpleSecretKeyProvider
+import io.element.android.libraries.cryptography.test.SimpleSecretKeyRepository
 
 internal fun aPinCodeManager(
-    pinCodeStore: PinCodeStore = InMemoryPinCodeStore(),
-    secretKeyProvider: SimpleSecretKeyProvider = SimpleSecretKeyProvider(),
+    lockScreenStore: LockScreenStore = InMemoryLockScreenStore(),
+    secretKeyRepository: SimpleSecretKeyRepository = SimpleSecretKeyRepository(),
     encryptionDecryptionService: EncryptionDecryptionService = AESEncryptionDecryptionService(),
 ): PinCodeManager {
-    return DefaultPinCodeManager(secretKeyProvider, encryptionDecryptionService, pinCodeStore)
+    return DefaultPinCodeManager(secretKeyRepository, encryptionDecryptionService, lockScreenStore)
 }

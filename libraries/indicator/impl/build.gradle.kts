@@ -31,6 +31,7 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(libs.dagger)
     implementation(projects.libraries.di)
+    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.anvilannotations)
 
@@ -38,6 +39,7 @@ dependencies {
 
     api(projects.libraries.indicator.api)
 
+    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

@@ -17,18 +17,18 @@
 package io.element.android.features.lockscreen.impl.pin
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.lockscreen.impl.pin.storage.InMemoryPinCodeStore
+import io.element.android.features.lockscreen.impl.pin.storage.InMemoryLockScreenStore
 import io.element.android.libraries.cryptography.impl.AESEncryptionDecryptionService
-import io.element.android.libraries.cryptography.test.SimpleSecretKeyProvider
+import io.element.android.libraries.cryptography.test.SimpleSecretKeyRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultPinCodeManagerTest {
 
-    private val pinCodeStore = InMemoryPinCodeStore()
-    private val secretKeyProvider = SimpleSecretKeyProvider()
+    private val lockScreenStore = InMemoryLockScreenStore()
+    private val secretKeyRepository = SimpleSecretKeyRepository()
     private val encryptionDecryptionService = AESEncryptionDecryptionService()
-    private val pinCodeManager = DefaultPinCodeManager(secretKeyProvider, encryptionDecryptionService, pinCodeStore)
+    private val pinCodeManager = DefaultPinCodeManager(secretKeyRepository, encryptionDecryptionService, lockScreenStore)
 
     @Test
     fun `given a pin code when create and delete assert no pin code left`() = runTest {

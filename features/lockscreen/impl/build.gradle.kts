@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.services.appnavstate.api)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.biometric)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

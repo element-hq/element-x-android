@@ -32,9 +32,11 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
+import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnlockCallback
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
-import io.element.android.features.lockscreen.impl.setup.SetupPinNode
+import io.element.android.features.lockscreen.impl.setup.LockScreenSetupFlowNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -48,6 +50,7 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pinCodeManager: PinCodeManager,
+    private val biometricUnlockManager: BiometricUnlockManager,
 ) : BackstackNode<LockScreenSettingsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Unknown,
@@ -76,12 +79,14 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
             backstack.newRoot(NavTarget.Settings)
         }
 
-        override fun onPinCodeCreated() {
-            backstack.newRoot(NavTarget.Settings)
-        }
-
         override fun onPinCodeRemoved() {
             navigateUp()
+        }
+    }
+
+    private val biometricUnlockCallback = object : DefaultBiometricUnlockCallback() {
+        override fun onBiometricUnlockSuccess() {
+            backstack.newRoot(NavTarget.Settings)
         }
     }
 
@@ -96,9 +101,11 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 pinCodeManager.addCallback(pinCodeManagerCallback)
+                biometricUnlockManager.addCallback(biometricUnlockCallback)
             },
             onDestroy = {
                 pinCodeManager.removeCallback(pinCodeManagerCallback)
+                biometricUnlockManager.removeCallback(biometricUnlockCallback)
             }
         )
     }
@@ -106,10 +113,16 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Unlock -> {
-                createNode<PinUnlockNode>(buildContext)
+                val inputs = PinUnlockNode.Inputs(isInAppUnlock = true)
+                createNode<PinUnlockNode>(buildContext, plugins = listOf(inputs))
             }
             NavTarget.Setup -> {
-                createNode<SetupPinNode>(buildContext)
+                val callback = object : LockScreenSetupFlowNode.Callback {
+                    override fun onSetupDone() {
+                        backstack.newRoot(NavTarget.Settings)
+                    }
+                }
+                createNode<LockScreenSetupFlowNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.Settings -> {
                 val callback = object : LockScreenSettingsNode.Callback {

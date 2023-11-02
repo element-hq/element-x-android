@@ -67,6 +67,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
+import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.designsystem.animation.alphaAnimation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -133,6 +134,7 @@ fun TimelineView(
                     onReactionLongClick = onReactionLongClicked,
                     onMoreReactionsClick = onMoreReactionsClicked,
                     onTimestampClicked = onTimestampClicked,
+                    sessionState = state.sessionState,
                     eventSink = state.eventSink,
                     onSwipeToReply = onSwipeToReply,
                 )
@@ -162,6 +164,7 @@ private fun TimelineItemRow(
     timelineItem: TimelineItem,
     highlightedItem: String?,
     userHasPermissionToSendMessage: Boolean,
+    sessionState: SessionState,
     onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
@@ -178,6 +181,7 @@ private fun TimelineItemRow(
         is TimelineItem.Virtual -> {
             TimelineItemVirtualRow(
                 virtual = timelineItem,
+                sessionState = sessionState,
                 modifier = modifier,
             )
         }
@@ -234,6 +238,7 @@ private fun TimelineItemRow(
                             TimelineItemRow(
                                 timelineItem = subGroupEvent,
                                 highlightedItem = highlightedItem,
+                                sessionState = sessionState,
                                 userHasPermissionToSendMessage = false,
                                 onClick = onClick,
                                 onLongClick = onLongClick,
