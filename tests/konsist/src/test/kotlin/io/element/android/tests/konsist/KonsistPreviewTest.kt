@@ -28,7 +28,7 @@ class KonsistPreviewTest {
         Konsist
             .scopeFromProject()
             .functions()
-            .withAllAnnotationsOf(io.element.android.libraries.composeutils.PreviewsDayNight::class)
+            .withAllAnnotationsOf(PreviewsDayNight::class)
             .assertTrue {
                 it.hasNameEndingWith("Preview") &&
                     it.hasNameEndingWith("LightPreview").not() &&
@@ -41,7 +41,7 @@ class KonsistPreviewTest {
         Konsist
             .scopeFromProject()
             .functions()
-            .withAllAnnotationsOf(io.element.android.libraries.composeutils.PreviewsDayNight::class)
+            .withAllAnnotationsOf(PreviewsDayNight::class)
             .assertTrue {
                 it.text.contains("ElementPreview")
             }
@@ -52,7 +52,7 @@ class KonsistPreviewTest {
         Konsist
             .scopeFromProject()
             .functions()
-            .withAllAnnotationsOf(io.element.android.libraries.composeutils.PreviewsDayNight::class)
+            .withAllAnnotationsOf(PreviewsDayNight::class)
             .assertTrue {
                 it.hasInternalModifier
             }
