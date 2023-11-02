@@ -77,8 +77,8 @@ fun SingleSelectionDialog(
 private fun SingleSelectionDialogContent(
     options: ImmutableList<ListOption>,
     onOptionSelected: (Int) -> Unit,
-    onDismissRequest: () -> Unit,
     dismissButtonTitle: String,
+    onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
     initialSelection: Int? = null,
@@ -88,8 +88,8 @@ private fun SingleSelectionDialogContent(
         title = title,
         subtitle = subtitle,
         modifier = modifier,
-        cancelText = dismissButtonTitle,
-        onCancelClicked = onDismissRequest,
+        submitText = dismissButtonTitle,
+        onSubmitClicked = onDismissRequest,
         applyPaddingToContents = false,
     ) {
         LazyColumn {

@@ -53,14 +53,14 @@ import kotlin.math.max
 @Composable
 internal fun SimpleAlertDialogContent(
     content: String,
-    cancelText: String,
-    onCancelClicked: () -> Unit,
+    submitText: String,
+    onSubmitClicked: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
     subtitle: @Composable (() -> Unit)? = null,
-    submitText: String? = null,
     destructiveSubmit: Boolean = false,
-    onSubmitClicked: () -> Unit = {},
+    cancelText: String? = null,
+    onCancelClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
     applyPaddingToContents: Boolean = true,
@@ -90,14 +90,14 @@ internal fun SimpleAlertDialogContent(
 
 @Composable
 internal fun SimpleAlertDialogContent(
-    cancelText: String,
-    onCancelClicked: () -> Unit,
+    submitText: String,
+    onSubmitClicked: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
     subtitle: @Composable (() -> Unit)? = null,
-    submitText: String? = null,
     destructiveSubmit: Boolean = false,
-    onSubmitClicked: () -> Unit = {},
+    cancelText: String? = null,
+    onCancelClicked: () -> Unit = {},
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
     applyPaddingToContents: Boolean = true,
@@ -121,24 +121,22 @@ internal fun SimpleAlertDialogContent(
                         onClick = onThirdButtonClicked,
                     )
                 }
-                TextButton(
-                    modifier = Modifier.testTag(
-                        if (submitText == null) TestTags.dialogPositive else TestTags.dialogNegative
-                    ),
-                    text = cancelText,
-                    size = ButtonSize.Medium,
-                    onClick = onCancelClicked,
-                )
-                if (submitText != null) {
-                    Button(
-                        modifier = Modifier.testTag(TestTags.dialogPositive),
-                        text = submitText,
-                        enabled = enabled,
+                if (cancelText != null) {
+                    TextButton(
+                        modifier = Modifier.testTag(TestTags.dialogNegative),
+                        text = cancelText,
                         size = ButtonSize.Medium,
-                        onClick = onSubmitClicked,
-                        destructive = destructiveSubmit,
+                        onClick = onCancelClicked,
                     )
                 }
+                Button(
+                    modifier = Modifier.testTag(TestTags.dialogPositive),
+                    text = submitText,
+                    enabled = enabled,
+                    size = ButtonSize.Medium,
+                    onClick = onSubmitClicked,
+                    destructive = destructiveSubmit,
+                )
             }
         },
         modifier = modifier,
@@ -438,8 +436,8 @@ internal fun DialogWithTitleIconAndOkButtonPreview() {
                 },
                 title = "Dialog Title",
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
-                cancelText = "OK",
-                onCancelClicked = {},
+                submitText = "OK",
+                onSubmitClicked = {},
             )
         }
     }
@@ -454,8 +452,8 @@ internal fun DialogWithTitleAndOkButtonPreview() {
             SimpleAlertDialogContent(
                 title = "Dialog Title",
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
-                cancelText = "OK",
-                onCancelClicked = {},
+                submitText = "OK",
+                onSubmitClicked = {},
             )
         }
     }
@@ -469,8 +467,8 @@ internal fun DialogWithOnlyMessageAndOkButtonPreview() {
         DialogPreview {
             SimpleAlertDialogContent(
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
-                cancelText = "OK",
-                onCancelClicked = {},
+                submitText = "OK",
+                onSubmitClicked = {},
             )
         }
     }
@@ -488,7 +486,7 @@ internal fun DialogWithDestructiveButtonPreview() {
                 cancelText = "Cancel",
                 submitText = "Delete",
                 destructiveSubmit = true,
-                onCancelClicked = {},
+                onSubmitClicked = {},
             )
         }
     }

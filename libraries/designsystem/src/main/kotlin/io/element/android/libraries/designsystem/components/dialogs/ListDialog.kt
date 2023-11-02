@@ -38,8 +38,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListDialog(
-    onDismissRequest: () -> Unit,
     onSubmit: () -> Unit,
+    onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
     subtitle: String? = null,
