@@ -36,7 +36,7 @@ class VoiceMessageComposerPlayer @Inject constructor(
 
     val state: Flow<State> = mediaPlayer.state.map { state ->
         if (lastPlayedMediaPath == null || lastPlayedMediaPath != state.mediaId) {
-            return@map State.NotPlaying
+            return@map State.NotLoaded
         }
 
         State(
@@ -89,12 +89,14 @@ class VoiceMessageComposerPlayer @Inject constructor(
         val duration: Long,
     ) {
         companion object {
-            val NotPlaying = State(
+            val NotLoaded = State(
                 isPlaying = false,
                 currentPosition = 0L,
                 duration = 0L,
             )
         }
+
+        val isLoaded get() = this != NotLoaded
 
         /**
          * The progress of this player between 0 and 1.

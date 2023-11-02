@@ -45,6 +45,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.TimeSource
 
@@ -93,7 +94,7 @@ class VoiceRecorderImpl @Inject constructor(
 
                 val elapsedTime = startedAt.elapsedNow()
 
-                if (elapsedTime >= 30.minutes) {
+                if (elapsedTime > 30.minutes) {
                     Timber.w("Voice message time limit reached")
                     stopRecord(false)
                     return@record
@@ -145,11 +146,15 @@ class VoiceRecorderImpl @Inject constructor(
             _state.emit(
                 when (val file = outputFile) {
                     null -> VoiceRecorderState.Idle
-                    else -> VoiceRecorderState.Finished(
-                        file = file,
-                        mimeType = fileConfig.mimeType,
-                        waveform = levels.resample(100),
-                    )
+                    else -> {
+                        val duration = (state.value as? VoiceRecorderState.Recording)?.elapsedTime
+                        VoiceRecorderState.Finished(
+                            file = file,
+                            mimeType = fileConfig.mimeType,
+                            waveform = levels.resample(100),
+                            duration = duration ?: 0.milliseconds
+                        )
+                    }
                 }
             )
         }

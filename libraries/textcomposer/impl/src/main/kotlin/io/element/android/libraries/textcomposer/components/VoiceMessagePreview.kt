@@ -55,6 +55,7 @@ import kotlin.time.Duration.Companion.seconds
 internal fun VoiceMessagePreview(
     isInteractive: Boolean,
     isPlaying: Boolean,
+    showCursor: Boolean,
     waveform: ImmutableList<Float>,
     time: Duration,
     modifier: Modifier = Modifier,
@@ -105,7 +106,7 @@ internal fun VoiceMessagePreview(
                 .weight(1f)
                 .height(26.dp),
             playbackProgress = playbackProgress,
-            showCursor = isInteractive,
+            showCursor = showCursor,
             waveform = waveform,
             seekEnabled = false, // TODO enable seeking
             onSeek = onSeek,
@@ -162,8 +163,29 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        VoiceMessagePreview(isInteractive = true, isPlaying = true, time = 2.seconds, playbackProgress = 0.2f, waveform = createFakeWaveform())
-        VoiceMessagePreview(isInteractive = true, isPlaying = false, time = 0.seconds, playbackProgress = 0.0f, waveform = createFakeWaveform())
-        VoiceMessagePreview(isInteractive = false, isPlaying = false, time = 789.seconds, playbackProgress = 0.0f, waveform = createFakeWaveform())
+        VoiceMessagePreview(
+            isInteractive = true,
+            isPlaying = true,
+            time = 2.seconds,
+            playbackProgress = 0.2f,
+            showCursor = true,
+            waveform = createFakeWaveform()
+        )
+        VoiceMessagePreview(
+            isInteractive = true,
+            isPlaying = false,
+            time = 0.seconds,
+            playbackProgress = 0.0f,
+            showCursor = true,
+            waveform = createFakeWaveform()
+        )
+        VoiceMessagePreview(
+            isInteractive = false,
+            isPlaying = false,
+            time = 789.seconds,
+            playbackProgress = 0.0f,
+            showCursor = false,
+            waveform = createFakeWaveform()
+        )
     }
 }
