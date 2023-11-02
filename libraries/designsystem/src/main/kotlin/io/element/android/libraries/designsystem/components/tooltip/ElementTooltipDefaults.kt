@@ -31,7 +31,11 @@ import androidx.compose.ui.window.PopupPositionProvider
 
 object ElementTooltipDefaults {
     /**
-     * [PopupPositionProvider] designed for use with a [PlainTooltip].
+     * Creates a [PopupPositionProvider] that allows adding padding between the edge of the
+     * window and the tooltip.
+     *
+     * It is a wrapper around [TooltipDefaults.rememberPlainTooltipPositionProvider] and is
+     * designed for use with a [PlainTooltip].
      *
      * @param spacingBetweenTooltipAndAnchor the spacing between the tooltip and the anchor.
      * @param windowPadding the padding between the tooltip and the edge of the window.
