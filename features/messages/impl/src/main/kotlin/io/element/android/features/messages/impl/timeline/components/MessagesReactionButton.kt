@@ -44,8 +44,8 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -55,6 +55,7 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
+@Suppress("ModifierClickableOrder") // This is needed to display the right ripple shape
 fun MessagesReactionButton(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
