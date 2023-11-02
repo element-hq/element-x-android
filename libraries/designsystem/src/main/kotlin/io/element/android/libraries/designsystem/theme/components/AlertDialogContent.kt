@@ -128,15 +128,24 @@ internal fun SimpleAlertDialogContent(
                         size = ButtonSize.Medium,
                         onClick = onCancelClicked,
                     )
+                    Button(
+                        modifier = Modifier.testTag(TestTags.dialogPositive),
+                        text = submitText,
+                        enabled = enabled,
+                        size = ButtonSize.Medium,
+                        onClick = onSubmitClicked,
+                        destructive = destructiveSubmit,
+                    )
+                } else {
+                    TextButton(
+                        modifier = Modifier.testTag(TestTags.dialogPositive),
+                        text = submitText,
+                        enabled = enabled,
+                        size = ButtonSize.Medium,
+                        onClick = onSubmitClicked,
+                        destructive = destructiveSubmit,
+                    )
                 }
-                Button(
-                    modifier = Modifier.testTag(TestTags.dialogPositive),
-                    text = submitText,
-                    enabled = enabled,
-                    size = ButtonSize.Medium,
-                    onClick = onSubmitClicked,
-                    destructive = destructiveSubmit,
-                )
             }
         },
         modifier = modifier,
