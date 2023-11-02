@@ -817,14 +817,14 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         enableVoiceMessages = true,
     )
     PreviewColumn(items = persistentListOf({
-        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, List(100) { it.toFloat() / 100 }.toPersistentList()))
+        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, createFakeWaveform()))
     }, {
         VoicePreview(
             voiceMessageState = VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = false,
                 waveform = createFakeWaveform(),
-                time = 61.seconds,
+                time = 0.seconds,
                 playbackProgress = 0.0f
             )
         )
@@ -834,7 +834,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 isSending = false,
                 isPlaying = true,
                 waveform = createFakeWaveform(),
-                time = 2.seconds,
+                time = 3.seconds,
                 playbackProgress = 0.2f
             )
         )
