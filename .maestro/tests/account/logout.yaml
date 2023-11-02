@@ -12,5 +12,6 @@ appId: ${APP_ID}
 - tapOn: "Cancel"
 - tapOn:
     id: "sign-out-submit"
-- tapOn: "Sign out"
+- tapOn:
+    id: "dialog-positive"
 - runFlow: ../assertions/assertInitDisplayed.yaml
