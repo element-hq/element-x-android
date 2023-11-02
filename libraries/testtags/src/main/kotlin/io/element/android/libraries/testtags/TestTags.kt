@@ -34,6 +34,11 @@ object TestTags {
     val loginContinue = TestTag("login-continue")
 
     /**
+     * Sign out screen.
+     */
+    val signOut = TestTag("sign-out-submit")
+
+    /**
      * Change server screen.
      */
     val changeServerServer = TestTag("change_server-server")
