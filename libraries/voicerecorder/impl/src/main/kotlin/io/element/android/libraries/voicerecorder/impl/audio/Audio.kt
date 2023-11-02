@@ -16,13 +16,13 @@
 
 package io.element.android.libraries.voicerecorder.impl.audio
 
-sealed class Audio {
+sealed interface Audio {
     class Data(
         val readSize: Int,
         val buffer: ShortArray,
-    ) : Audio()
+    ) : Audio
 
     data class Error(
         val audioRecordErrorCode: Int
-    ) : Audio()
+    ) : Audio
 }

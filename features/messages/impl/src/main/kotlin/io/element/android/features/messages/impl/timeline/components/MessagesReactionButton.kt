@@ -103,11 +103,11 @@ fun MessagesReactionButton(
     }
 }
 
-sealed class MessagesReactionsButtonContent {
-    data class Text(val text: String) : MessagesReactionsButtonContent()
-    data class Icon(@DrawableRes val resourceId: Int) : MessagesReactionsButtonContent()
+sealed interface MessagesReactionsButtonContent {
+    data class Text(val text: String) : MessagesReactionsButtonContent
+    data class Icon(@DrawableRes val resourceId: Int) : MessagesReactionsButtonContent
 
-    data class Reaction(val reaction: AggregatedReaction) : MessagesReactionsButtonContent()
+    data class Reaction(val reaction: AggregatedReaction) : MessagesReactionsButtonContent
 
     val isHighlighted get() = this is Reaction && reaction.isHighlighted
 }

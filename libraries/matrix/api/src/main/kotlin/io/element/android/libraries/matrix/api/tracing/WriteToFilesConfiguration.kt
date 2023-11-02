@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.matrix.api.tracing
 
-sealed class WriteToFilesConfiguration {
-    data object Disabled : WriteToFilesConfiguration()
-    data class Enabled(val directory: String, val filenamePrefix: String) : WriteToFilesConfiguration()
+sealed interface WriteToFilesConfiguration {
+    data object Disabled : WriteToFilesConfiguration
+    data class Enabled(val directory: String, val filenamePrefix: String) : WriteToFilesConfiguration
 }

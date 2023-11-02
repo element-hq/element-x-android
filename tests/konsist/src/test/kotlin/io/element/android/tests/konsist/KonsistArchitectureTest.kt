@@ -21,7 +21,9 @@ import com.lemonappdev.konsist.api.ext.list.constructors
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withSealedModifier
 import com.lemonappdev.konsist.api.ext.list.parameters
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
+import com.lemonappdev.konsist.api.ext.list.withoutConstructors
 import com.lemonappdev.konsist.api.ext.list.withoutName
+import com.lemonappdev.konsist.api.ext.list.withoutParents
 import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.Test
@@ -54,5 +56,15 @@ class KonsistArchitectureTest {
             .withSealedModifier()
             .withNameEndingWith("Events")
             .assertEmpty(additionalMessage = "Events class MUST be sealed interface")
+    }
+
+    @Test
+    fun `Sealed class without constructor and without parent MUST be sealed interface`() {
+        Konsist.scopeFromProject()
+            .classes()
+            .withSealedModifier()
+            .withoutConstructors()
+            .withoutParents()
+            .assertEmpty(additionalMessage = "Sealed class without constructor MUST be sealed interface")
     }
 }
