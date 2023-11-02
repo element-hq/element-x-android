@@ -374,7 +374,9 @@ private fun MessageEventBubbleContent(
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
     eventSink: (TimelineEvents) -> Unit,
-    @SuppressLint("ModifierParameter") bubbleModifier: Modifier = Modifier, // need to rename this modifier to distinguish it from the following ones
+    @SuppressLint("ModifierParameter")
+    @Suppress("ModifierNaming")
+    bubbleModifier: Modifier = Modifier, // need to rename this modifier to prevent linter false positives
 ) {
 
     // Long clicks are not not automatically propagated from a `clickable`
