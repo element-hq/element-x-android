@@ -16,11 +16,16 @@
 
 package io.element.android.tests.konsist
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.constructors
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withSealedModifier
 import com.lemonappdev.konsist.api.ext.list.parameters
+import com.lemonappdev.konsist.api.ext.list.withAnnotationOf
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
+import com.lemonappdev.konsist.api.ext.list.withoutAnnotationOf
 import com.lemonappdev.konsist.api.ext.list.withoutConstructors
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.ext.list.withoutParents
@@ -66,5 +71,24 @@ class KonsistArchitectureTest {
             .withoutConstructors()
             .withoutParents()
             .assertEmpty(additionalMessage = "Sealed class without constructor MUST be sealed interface")
+    }
+
+    @Test
+    fun `Composable MUST not have sealed interface in parameter`() {
+        // List all sealed interface without Immutable nor Stable annotation in the project
+        val forbiddenInterfacesForComposableParameter = Konsist.scopeFromProject()
+            .interfaces()
+            .withSealedModifier()
+            .withoutAnnotationOf(Immutable::class, Stable::class)
+            .map { it.fullyQualifiedName }
+
+        Konsist.scopeFromProject()
+            .functions()
+            .withAnnotationOf(Composable::class)
+            .assertTrue(additionalMessage = "Consider adding the @Immutable or @Stable annotation to the sealed interface") {
+                it.parameters.all { param ->
+                    param.type.fullyQualifiedName !in forbiddenInterfacesForComposableParameter
+                }
+            }
     }
 }

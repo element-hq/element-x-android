@@ -16,6 +16,9 @@
 
 package io.element.android.services.apperror.api
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface AppErrorState {
     data object NoError : AppErrorState
 

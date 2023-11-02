@@ -16,9 +16,11 @@
 
 package io.element.android.libraries.textcomposer.model
 
+import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
 
+@Immutable
 sealed interface VoiceMessageState {
     data object Idle: VoiceMessageState
 

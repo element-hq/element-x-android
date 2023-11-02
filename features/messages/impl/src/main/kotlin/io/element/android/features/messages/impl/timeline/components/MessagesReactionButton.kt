@@ -32,6 +32,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -103,6 +104,7 @@ fun MessagesReactionButton(
     }
 }
 
+@Immutable
 sealed interface MessagesReactionsButtonContent {
     data class Text(val text: String) : MessagesReactionsButtonContent
     data class Icon(@DrawableRes val resourceId: Int) : MessagesReactionsButtonContent

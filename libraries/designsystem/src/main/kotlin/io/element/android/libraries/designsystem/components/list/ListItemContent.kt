@@ -19,6 +19,7 @@ package io.element.android.libraries.designsystem.components.list
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
@@ -34,6 +35,7 @@ import io.element.android.libraries.designsystem.theme.components.Text as TextCo
 /**
  * This is a helper to set default leading and trailing content for [ListItem]s.
  */
+@Immutable
 sealed interface ListItemContent {
     /**
      * Default Switch content for [ListItem].
