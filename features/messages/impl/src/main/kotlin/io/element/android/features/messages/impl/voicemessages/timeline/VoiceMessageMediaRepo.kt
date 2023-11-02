@@ -26,6 +26,8 @@ import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.toFile
 import java.io.File
+import java.io.IOException
+import java.nio.file.Files
 
 /**
  * Fetches the media file for a voice message.
@@ -92,11 +94,15 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
             val dest = cachedFilePath.apply { parentFile?.mkdirs() }
             // TODO By not closing the MediaFile we're leaking the rust file handle here.
             // Not that big of a deal but better to avoid it someday.
-            if (it.toFile().renameTo(dest)) {
-                dest
-            } else {
+            try {
+                Files.move(
+                    it.toFile().toPath(),
+                    dest.toPath(),
+                )
+            } catch (e: IOException) {
                 error("Failed to move file to cache.")
             }
+            dest
         }
     } else {
         Result.success(cachedFilePath)
