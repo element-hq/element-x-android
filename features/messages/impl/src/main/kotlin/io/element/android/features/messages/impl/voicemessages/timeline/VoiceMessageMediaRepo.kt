@@ -24,10 +24,13 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.media.toFile
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.exists
+import kotlin.io.path.moveTo
 
 /**
  * Fetches the media file for a voice message.
@@ -91,24 +94,23 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
             mimeType = mimeType,
             body = body,
         ).mapCatching {
-            val dest = cachedFilePath.apply { parentFile?.mkdirs() }
             // TODO By not closing the MediaFile we're leaking the rust file handle here.
             // Not that big of a deal but better to avoid it someday.
             try {
-                Files.move(
-                    it.toFile().toPath(),
-                    dest.toPath(),
+                Path(it.path()).moveTo(
+                    target = cachedFilePath.apply { createParentDirectories() },
+                    overwrite = true
                 )
-            } catch (e: IOException) {
-                error("Failed to move file to cache.")
+            } catch (e: Exception) {
+                throw IOException("Failed to move file to cache.", e)
             }
-            dest
+            cachedFilePath.toFile()
         }
     } else {
-        Result.success(cachedFilePath)
+        Result.success(cachedFilePath.toFile())
     }
 
-    private val cachedFilePath: File = File("${cacheDir.path}/$CACHE_VOICE_SUBDIR/${mxcUri2FilePath(mediaSource.url)}")
+    private val cachedFilePath: Path = Path("${cacheDir.path}/$CACHE_VOICE_SUBDIR/${mxcUri2FilePath(mediaSource.url)}")
 
     private fun isInCache(): Boolean = cachedFilePath.exists()
 }

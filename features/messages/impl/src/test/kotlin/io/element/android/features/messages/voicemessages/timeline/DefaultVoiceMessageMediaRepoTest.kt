@@ -26,6 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
+import java.io.IOException
 
 class DefaultVoiceMessageMediaRepoTest {
 
@@ -90,7 +91,7 @@ class DefaultVoiceMessageMediaRepoTest {
             Truth.assertThat(result.isFailure).isTrue()
             result.exceptionOrNull()?.let { exception ->
                 Truth.assertThat(exception).apply {
-                    isInstanceOf(IllegalStateException::class.java)
+                    isInstanceOf(IOException::class.java)
                     hasMessageThat().isEqualTo("Failed to move file to cache.")
                 }
             }
