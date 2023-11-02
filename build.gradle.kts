@@ -203,6 +203,8 @@ koverMerged {
                     "*Presenter\$present\$*",
                     // Forked from compose
                     "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
+                    // Annotations
+                    "io.element.android.libraries.composeutils.annotations.*",
                 )
             )
         }
@@ -243,6 +245,9 @@ koverMerged {
                 maxValue = 70
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+                overrideClassFilter {
+                    excludes += "io.element.android.libraries.composeutils.annotations.*"
+                }
             }
         }
         // Rule to ensure that coverage of Presenters is sufficient.
