@@ -40,7 +40,6 @@ import io.element.android.libraries.designsystem.components.media.WaveformPlayba
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -72,7 +71,7 @@ internal fun VoiceMessagePreview(
                 shape = MaterialTheme.shapes.medium,
             )
             .padding(start = 8.dp, end = 20.dp, top = 6.dp, bottom = 6.dp)
-            .heightIn(26.dp.applyScaleUp()),
+            .heightIn(26.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (isPlaying) {
@@ -104,7 +103,7 @@ internal fun VoiceMessagePreview(
         WaveformPlaybackView(
             modifier = Modifier
                 .weight(1f)
-                .height(26.dp.applyScaleUp()),
+                .height(26.dp),
             playbackProgress = playbackProgress,
             showCursor = isInteractive,
             waveform = waveform,
@@ -129,7 +128,7 @@ private fun PlayerButton(
         onClick = onClick,
         modifier = modifier
             .background(color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape)
-            .size(30.dp.applyScaleUp()),
+            .size(30.dp),
         enabled = enabled,
         colors = IconButtonDefaults.iconButtonColors(
             contentColor = ElementTheme.colors.iconSecondary,
@@ -147,14 +146,14 @@ private fun PlayerButton(
 private fun PauseIcon() = Icon(
     resourceId = R.drawable.ic_pause,
     contentDescription = stringResource(id = CommonStrings.a11y_pause),
-    modifier = Modifier.size(20.dp.applyScaleUp()),
+    modifier = Modifier.size(20.dp),
 )
 
 @Composable
 private fun PlayIcon() = Icon(
     resourceId = R.drawable.ic_play,
     contentDescription = stringResource(id = CommonStrings.a11y_play),
-    modifier = Modifier.size(20.dp.applyScaleUp()),
+    modifier = Modifier.size(20.dp),
 )
 
 @PreviewsDayNight

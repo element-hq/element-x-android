@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -37,11 +36,11 @@ internal fun DismissTextFormattingButton(
 ) {
     IconButton(
         modifier = modifier
-            .size(48.dp.applyScaleUp()),
+            .size(48.dp),
         onClick = onClick
     ) {
         Icon(
-            modifier = Modifier.size(30.dp.applyScaleUp()),
+            modifier = Modifier.size(30.dp),
             resourceId = CommonDrawables.ic_cancel,
             contentDescription = stringResource(CommonStrings.action_close),
             tint = ElementTheme.colors.iconPrimary,
