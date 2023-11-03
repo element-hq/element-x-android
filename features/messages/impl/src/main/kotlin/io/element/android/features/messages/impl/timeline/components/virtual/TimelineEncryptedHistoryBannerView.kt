@@ -79,7 +79,7 @@ private fun SessionState.toStringResId(): Int {
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineEncryptedHistoryBannerViewPreview(
+internal fun EncryptedHistoryBannerViewPreview(
     @PreviewParameter(SessionStateProvider::class) sessionState: SessionState,
 ) = ElementPreview {
     TimelineEncryptedHistoryBannerView(sessionState = sessionState)
