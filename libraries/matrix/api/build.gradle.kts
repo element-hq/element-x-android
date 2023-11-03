@@ -38,7 +38,6 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(libs.dagger)
     implementation(projects.libraries.core)
-    implementation("net.java.dev.jna:jna:5.13.0@aar")
     implementation(libs.serialization.json)
     api(projects.libraries.sessionStorage.api)
     implementation(libs.coroutines.core)
