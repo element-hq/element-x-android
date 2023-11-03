@@ -50,10 +50,10 @@ import io.element.android.libraries.theme.ElementTheme
 fun UserStoryFlowPage(
     canGoBack: Boolean,
     onBackClicked: () -> Unit,
-    title: String,
-    subTitle: String?,
     iconResourceId: Int?,
+    title: String,
     modifier: Modifier = Modifier,
+    subTitle: String? = null,
     content: @Composable () -> Unit = {},
     buttons: @Composable ColumnScope.() -> Unit = {},
 ) {
