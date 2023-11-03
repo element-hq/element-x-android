@@ -74,7 +74,7 @@ class KonsistArchitectureTest {
     }
 
     @Test
-    fun `Composable MUST not have sealed interface in parameter`() {
+    fun `Sealed interface used in Composable MUST be Immutable or Stable`() {
         // List all sealed interface without Immutable nor Stable annotation in the project
         val forbiddenInterfacesForComposableParameter = Konsist.scopeFromProject()
             .interfaces()
