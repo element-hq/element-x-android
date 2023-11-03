@@ -16,6 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface TimelineItemStateContent : TimelineItemEventContent {
     val body: String
 }

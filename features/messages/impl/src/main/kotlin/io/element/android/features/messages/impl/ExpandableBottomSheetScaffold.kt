@@ -170,9 +170,8 @@ private fun CustomSheetState.getIntOffset(): Int? = try {
     null
 }
 
-private sealed class Slot {
-    data class SheetContent(val key: Int?) : Slot()
-    data object DragHandle : Slot()
-    data object Scaffold : Slot()
+private sealed interface Slot {
+    data class SheetContent(val key: Int?) : Slot
+    data object DragHandle : Slot
+    data object Scaffold : Slot
 }
-

@@ -18,14 +18,16 @@ package io.element.android.libraries.designsystem.components.button
 
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.TextButton
 
 /**
- * A sealed class that represents the different visual styles that a button can have.
+ * A sealed interface that represents the different visual styles that a button can have.
  */
+@Immutable
 sealed interface ButtonVisuals {
 
     val action: () -> Unit

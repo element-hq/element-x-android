@@ -19,13 +19,13 @@ package io.element.android.libraries.textcomposer.utils
 /**
  * State of a press gesture.
  */
-internal sealed class PressState {
+internal sealed interface PressState {
     data class Idle(
         val lastPress: Pressing?
-    ) : PressState()
+    ) : PressState
 
-    sealed class Pressing : PressState()
-    data object Tapping : Pressing()
-    data object LongPressing : Pressing()
+    sealed interface Pressing : PressState
+    data object Tapping : Pressing
+    data object LongPressing : Pressing
 }
 

@@ -25,16 +25,16 @@ import kotlinx.coroutines.flow.StateFlow
  */
 interface RoomListService {
 
-    sealed class State {
-        data object Idle : State()
-        data object Running : State()
-        data object Error : State()
-        data object Terminated : State()
+    sealed interface State {
+        data object Idle : State
+        data object Running : State
+        data object Error : State
+        data object Terminated : State
     }
 
-    sealed class SyncIndicator {
-        data object Show : SyncIndicator()
-        data object Hide : SyncIndicator()
+    sealed interface SyncIndicator {
+        data object Show : SyncIndicator
+        data object Hide : SyncIndicator
     }
 
     /**
