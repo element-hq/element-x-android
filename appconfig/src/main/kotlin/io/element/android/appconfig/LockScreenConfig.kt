@@ -33,7 +33,7 @@ data class LockScreenConfig(
     val isPinMandatory: Boolean,
 
     /**
-     * Some PINs are blacklisted.
+     * Some PINs are forbidden.
      */
     val pinBlacklist: Set<String>,
 
@@ -56,6 +56,7 @@ data class LockScreenConfig(
      * Authentication with strong methods (fingerprint, some face/iris unlock implementations) is supported.
      */
     val isStrongBiometricsEnabled: Boolean,
+
     /**
      * Authentication with weak methods (most face/iris unlock implementations) is supported.
      */
@@ -72,7 +73,7 @@ object LockScreenConfigModule {
         pinBlacklist = setOf("0000", "1234"),
         pinSize = 4,
         maxPinCodeAttemptsBeforeLogout = 3,
-        gracePeriod = 90.seconds,
+        gracePeriod = 0.seconds,
         isStrongBiometricsEnabled = true,
         isWeakBiometricsEnabled = true,
     )
