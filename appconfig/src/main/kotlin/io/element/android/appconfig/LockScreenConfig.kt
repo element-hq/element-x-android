@@ -73,7 +73,7 @@ object LockScreenConfigModule {
         pinBlacklist = setOf("0000", "1234"),
         pinSize = 4,
         maxPinCodeAttemptsBeforeLogout = 3,
-        gracePeriod = 90.seconds,
+        gracePeriod = 0.seconds,
         isStrongBiometricsEnabled = true,
         isWeakBiometricsEnabled = true,
     )
