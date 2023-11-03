@@ -142,6 +142,7 @@ fun BugReportView(
                     text = stringResource(id = CommonStrings.action_send),
                     onClick = { eventSink(BugReportEvents.SendBugReport) },
                     enabled = state.submitEnabled,
+                    showProgress = state.sending.isLoading(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp, bottom = 16.dp)
@@ -151,6 +152,7 @@ fun BugReportView(
 
         AsyncView(
             async = state.sending,
+            showProgressDialog = false,
             onSuccess = {
                 eventSink(BugReportEvents.ResetAll)
                 onDone()
