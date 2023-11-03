@@ -31,7 +31,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun CircularProgressIndicator(
-    progress: Float,
+    progress: () -> Float,
     modifier: Modifier = Modifier,
     color: Color = ProgressIndicatorDefaults.circularColor,
     strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth
@@ -54,7 +54,7 @@ fun CircularProgressIndicator(
         // Use a determinate progress indicator to improve the preview rendering
         androidx.compose.material3.CircularProgressIndicator(
             modifier = modifier,
-            progress = 0.75F,
+            progress = { 0.75F },
             color = color,
             strokeWidth = strokeWidth,
         )
@@ -79,7 +79,7 @@ private fun ContentToPreview() {
         )
         // Fixed progress
         CircularProgressIndicator(
-            progress = 0.90F
+            progress = { 0.90F }
         )
     }
 }

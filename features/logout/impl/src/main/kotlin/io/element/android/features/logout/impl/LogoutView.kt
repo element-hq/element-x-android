@@ -217,7 +217,7 @@ private fun Content(
         ) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth(),
-                progress = state.backupUploadState.backedUpCount.toFloat() / state.backupUploadState.totalCount.toFloat(),
+                progress = { state.backupUploadState.backedUpCount.toFloat() / state.backupUploadState.totalCount.toFloat() },
                 trackColor = ElementTheme.colors.progressIndicatorTrackColor,
             )
             Text(

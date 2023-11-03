@@ -40,23 +40,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CreateRoomRootPresenter @Inject constructor(
-    private val presenterFactory: UserListPresenter.Factory,
-    private val userRepository: UserRepository,
-    private val userListDataStore: UserListDataStore,
+    presenterFactory: UserListPresenter.Factory,
+    userRepository: UserRepository,
+    userListDataStore: UserListDataStore,
     private val matrixClient: MatrixClient,
     private val analyticsService: AnalyticsService,
     private val buildMeta: BuildMeta,
 ) : Presenter<CreateRoomRootState> {
 
-    private val presenter by lazy {
-        presenterFactory.create(
-            UserListPresenterArgs(
-                selectionMode = SelectionMode.Single,
-            ),
-            userRepository,
-            userListDataStore,
-        )
-    }
+    private val presenter = presenterFactory.create(
+        UserListPresenterArgs(
+            selectionMode = SelectionMode.Single,
+        ),
+        userRepository,
+        userListDataStore,
+    )
 
     @Composable
     override fun present(): CreateRoomRootState {
