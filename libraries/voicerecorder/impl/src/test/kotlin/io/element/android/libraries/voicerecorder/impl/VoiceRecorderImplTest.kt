@@ -37,6 +37,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.BeforeClass
 import org.junit.Test
 import java.io.File
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
@@ -76,34 +77,38 @@ class VoiceRecorderImplTest {
 
             voiceRecorder.startRecord()
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, listOf(1.0f)))
-            timeSource += 29.minutes
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(29.minutes, listOf()))
-            timeSource += 1.minutes
+            timeSource += 30.minutes
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(30.minutes, listOf()))
+            timeSource += 1.milliseconds
 
             assertThat(awaitItem()).isEqualTo(
                 VoiceRecorderState.Finished(
                     file = File(FILE_PATH),
                     mimeType = "audio/ogg",
                     waveform = List(100) { 1f },
+                    duration = 30.minutes,
                 )
             )
         }
     }
 
     @Test
-    fun `when stopped, it provides a file`() = runTest {
+    fun `when stopped, it provides a file and duration`() = runTest {
         val voiceRecorder = createVoiceRecorder()
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
             voiceRecorder.startRecord()
-            skipItems(3)
+            skipItems(1)
+            timeSource += 5.seconds
+            skipItems(2)
             voiceRecorder.stopRecord()
             assertThat(awaitItem()).isEqualTo(
                 VoiceRecorderState.Finished(
                     file = File(FILE_PATH),
                     mimeType = "audio/ogg",
                     waveform = List(100) { 1f },
+                    duration = 5.seconds,
                 )
             )
             assertThat(fakeFileSystem.files[File(FILE_PATH)]).isEqualTo(ENCODED_DATA)

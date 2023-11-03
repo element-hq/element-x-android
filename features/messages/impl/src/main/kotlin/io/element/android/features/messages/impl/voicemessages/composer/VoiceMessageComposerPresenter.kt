@@ -42,14 +42,15 @@ import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @SingleIn(RoomScope::class)
@@ -72,8 +73,8 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         val permissionState = permissionsPresenter.present()
         var isSending by remember { mutableStateOf(false) }
-        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotPlaying)
-        val isPlaying by remember(playerState.isPlaying) { derivedStateOf { playerState.isPlaying } }
+        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotLoaded)
+        val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
         val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
 
         val onLifecycleEvent = { event: Lifecycle.Event ->
@@ -190,9 +191,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 )
                 is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
                     isSending = isSending,
-                    isPlaying = isPlaying,
+                    isPlaying = playerState.isPlaying,
+                    showCursor = playerState.isLoaded && !isSending,
                     playbackProgress = playerState.progress,
-                    time = playerState.currentPosition.milliseconds,
+                    time = playerTime,
                     waveform = waveform,
                 )
                 else -> VoiceMessageState.Idle
@@ -259,3 +261,20 @@ private fun VoiceRecorderState.finishedWaveform(): ImmutableList<Float> =
         ?.waveform
         .orEmpty()
         .toImmutableList()
+
+/**
+ * The time to display depending on the player state.
+ *
+ * Either the current position or total duration.
+ */
+private fun displayTime(
+    playerState: VoiceMessageComposerPlayer.State,
+    recording: VoiceRecorderState
+): Duration = when {
+    playerState.isLoaded ->
+        playerState.currentPosition.milliseconds
+    recording is VoiceRecorderState.Finished ->
+        recording.duration
+    else ->
+        0.milliseconds
+}
