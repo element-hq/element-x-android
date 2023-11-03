@@ -74,7 +74,6 @@ fun UserStoryFlowPage(
         },
         header = {
             IconTitleSubtitleMolecule(
-                modifier = modifier.padding(top = 0.dp),
                 iconResourceId = iconResourceId,
                 title = title,
                 subTitle = subTitle,
