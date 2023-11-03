@@ -93,12 +93,11 @@ fun CreateRoomRootView(
         }
     }
 
-    val errorMessage = stringResource(R.string.screen_start_chat_error_starting_chat)
     AsyncView(
         async = state.startDmAction,
         progressText = stringResource(CommonStrings.common_starting_chat),
         onSuccess = { onOpenDM(it) },
-        errorTransform = { errorMessage },
+        errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
         onRetry = {
             state.userListState.selectedUsers.firstOrNull()
                 ?.let { state.eventSink(CreateRoomRootEvents.StartDM(it)) }

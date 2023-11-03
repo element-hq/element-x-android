@@ -78,10 +78,9 @@ fun NotificationSettingsView(
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
             )
         }
-        val errorMessage = stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode)
         AsyncView(
             async = state.changeNotificationSettingAction,
-            errorTransform = { errorMessage },
+            errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
             onErrorDismiss = { state.eventSink(NotificationSettingsEvents.ClearNotificationChangeError) },
             onSuccess = {},
         )

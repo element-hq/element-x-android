@@ -63,12 +63,11 @@ fun ReportMessageView(
 ) {
     val focusManager = LocalFocusManager.current
     val isSending = state.result is Async.Loading
-    val errorMessage = stringResource(CommonStrings.error_unknown)
     AsyncView(
         async = state.result,
         showProgressDialog = false,
         onSuccess = { onBackClicked() },
-        errorTransform = { errorMessage },
+        errorMessage = { stringResource(CommonStrings.error_unknown) },
         onErrorDismiss = { state.eventSink(ReportMessageEvents.ClearError) }
     )
 

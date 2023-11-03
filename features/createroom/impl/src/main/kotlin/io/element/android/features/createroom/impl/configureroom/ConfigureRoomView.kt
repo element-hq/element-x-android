@@ -149,12 +149,11 @@ fun ConfigureRoomView(
         onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
     )
 
-    val errorMessage = stringResource(R.string.screen_create_room_error_creating_room)
     AsyncView(
         async = state.createRoomAction,
         progressText = stringResource(CommonStrings.common_creating_room),
         onSuccess = { onRoomCreated(it) },
-        errorTransform = { errorMessage },
+        errorMessage = {  stringResource(R.string.screen_create_room_error_creating_room) },
         onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
         onErrorDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
     )

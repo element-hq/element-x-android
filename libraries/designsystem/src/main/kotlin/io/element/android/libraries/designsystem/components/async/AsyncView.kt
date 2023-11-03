@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -30,7 +31,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 /**
  * Render an Async object.
  * - If Success, invoke the callback [onSuccess], only once.
- * - If Failure, display a dialog with the error, which can be transformed, using [errorTransform]. When
+ * - If Failure, display a dialog with the error, which can be transformed, using [errorMessage]. When
  * closed, [onErrorDismiss] will be invoked. If [onRetry] is not null, a retry button will be displayed.
  * - When loading, display a loading dialog, if [showProgressDialog] is true, with on optional [progressText].
  */
@@ -42,9 +43,11 @@ fun <T> AsyncView(
     modifier: Modifier = Modifier,
     showProgressDialog: Boolean = true,
     progressText: String? = null,
-    errorTransform: (Throwable) -> String = { it.message ?: it.toString() },
+    errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
+    errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
     onRetry: (() -> Unit)? = null,
 ) {
+
     when (async) {
         Async.Uninitialized -> Unit
         is Async.Loading -> {
@@ -59,13 +62,15 @@ fun <T> AsyncView(
             if (onRetry == null) {
                 ErrorDialog(
                     modifier = modifier,
-                    content = errorTransform(async.error),
+                    title = errorTitle(async.error),
+                    content = errorMessage(async.error),
                     onDismiss = onErrorDismiss
                 )
             } else {
                 RetryDialog(
                     modifier = modifier,
-                    content = errorTransform(async.error),
+                    title = errorTitle(async.error),
+                    content = errorMessage(async.error),
                     onDismiss = onErrorDismiss,
                     onRetry = onRetry,
                 )
