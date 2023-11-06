@@ -18,7 +18,6 @@ package io.element.android.libraries.designsystem.components.async
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -40,35 +39,49 @@ fun <T> AsyncView(
     async: Async<T>,
     onSuccess: (T) -> Unit,
     onErrorDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
     showProgressDialog: Boolean = true,
     progressText: String? = null,
     errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
     errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
     onRetry: (() -> Unit)? = null,
 ) {
+    AsyncView(
+        async = async,
+        onSuccess = onSuccess,
+        onErrorDismiss = onErrorDismiss,
+        progressDialog = {
+            if (showProgressDialog) {
+                AsyncViewDefaults.ProgressDialog(progressText)
+            }
+        },
+        errorTitle = errorTitle,
+        errorMessage = errorMessage,
+        onRetry = onRetry,
+    )
+}
 
+@Composable
+fun <T> AsyncView(
+    async: Async<T>,
+    onSuccess: (T) -> Unit,
+    onErrorDismiss: () -> Unit,
+    progressDialog: @Composable () -> Unit = { AsyncViewDefaults.ProgressDialog() },
+    errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
+    errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
+    onRetry: (() -> Unit)? = null,
+) {
     when (async) {
         Async.Uninitialized -> Unit
-        is Async.Loading -> {
-            if (showProgressDialog) {
-                ProgressDialog(
-                    modifier = modifier,
-                    text = progressText,
-                )
-            }
-        }
+        is Async.Loading -> progressDialog()
         is Async.Failure -> {
             if (onRetry == null) {
                 ErrorDialog(
-                    modifier = modifier,
                     title = errorTitle(async.error),
                     content = errorMessage(async.error),
                     onDismiss = onErrorDismiss
                 )
             } else {
                 RetryDialog(
-                    modifier = modifier,
                     title = errorTitle(async.error),
                     content = errorMessage(async.error),
                     onDismiss = onErrorDismiss,
@@ -81,6 +94,15 @@ fun <T> AsyncView(
                 onSuccess(async.data)
             }
         }
+    }
+}
+
+object AsyncViewDefaults {
+    @Composable
+    fun ProgressDialog(progressText: String? = null) {
+        ProgressDialog(
+            text = progressText,
+        )
     }
 }
 
