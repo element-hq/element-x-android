@@ -20,9 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
@@ -32,6 +33,8 @@ import dagger.assisted.AssistedInject
 import dagger.multibindings.IntoMap
 import io.element.android.features.messages.impl.timeline.di.TimelineItemEventContentKey
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
+import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterStates
+import io.element.android.features.messages.impl.timeline.di.rememberPresenterState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.libraries.architecture.Async
@@ -40,6 +43,7 @@ import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.utils.time.formatShort
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -52,9 +56,16 @@ interface VoiceMessagePresenterModule {
     fun bindVoiceMessagePresenterFactory(factory: VoiceMessagePresenter.Factory): TimelineItemPresenterFactory<*, *>
 }
 
+class VoiceMessagePresenterState {
+    val play = mutableStateOf<Async<Unit>>(Async.Uninitialized)
+    var progress by mutableFloatStateOf(0f)
+}
+
 class VoiceMessagePresenter @AssistedInject constructor(
     voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
     private val analyticsService: AnalyticsService,
+    private val timelineItemPresenterStates: TimelineItemPresenterStates,
+    private val scope: CoroutineScope,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
 
@@ -73,24 +84,30 @@ class VoiceMessagePresenter @AssistedInject constructor(
     @Composable
     override fun present(): VoiceMessageState {
 
-        val scope = rememberCoroutineScope()
-
         val playerState by player.state.collectAsState(VoiceMessagePlayer.State(isPlaying = false, isMyMedia = false, currentPosition = 0L))
-        val play = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
+        val state: VoiceMessagePresenterState = timelineItemPresenterStates.rememberPresenterState(eventId = content.eventId)
 
         val button by remember {
             derivedStateOf {
                 when {
                     content.eventId == null -> VoiceMessageState.Button.Disabled
                     playerState.isPlaying -> VoiceMessageState.Button.Pause
-                    play.value is Async.Loading -> VoiceMessageState.Button.Downloading
-                    play.value is Async.Failure -> VoiceMessageState.Button.Retry
+                    state.play.value is Async.Loading -> VoiceMessageState.Button.Downloading
+                    state.play.value is Async.Failure -> VoiceMessageState.Button.Retry
                     else -> VoiceMessageState.Button.Play
                 }
             }
         }
         val progress by remember {
-            derivedStateOf { if (playerState.isMyMedia) playerState.currentPosition / content.duration.toMillis().toFloat() else 0f }
+            derivedStateOf {
+                if (playerState.isMyMedia) {
+                    val progress = playerState.currentPosition / content.duration.toMillis().toFloat()
+                    state.progress = progress
+                    progress
+                } else {
+                    state.progress
+                }
+            }
         }
         val time by remember {
             derivedStateOf {
@@ -106,7 +123,7 @@ class VoiceMessagePresenter @AssistedInject constructor(
                         player.pause()
                     } else {
                         scope.launch {
-                            play.runUpdatingState(
+                            state.play.runUpdatingState(
                                 errorTransform = {
                                     analyticsService.trackError(
                                         VoiceMessageException.PlayMessageError("Error while trying to play voice message", it)

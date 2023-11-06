@@ -25,6 +25,8 @@ import dagger.multibindings.Multibinds
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.core.EventId
 import javax.inject.Inject
 
 /**
@@ -62,6 +64,17 @@ val LocalTimelineItemPresenterFactories = staticCompositionLocalOf {
 }
 
 /**
+ * Stores the presenter states for each event id.
+ *
+ * This is so TimelineItemPresenters can store their state in a place which is not
+ * affected by going in and out of the composition due to being inside a LazyColumn.
+ */
+@SingleIn(RoomScope::class)
+class TimelineItemPresenterStates @Inject constructor() {
+    val presenterStates: MutableMap<EventId, Any> = mutableMapOf()
+}
+
+/**
  * Creates and remembers a presenter for the given content.
  *
  * Will throw if the presenter is not found in the [TimelineItemPresenterFactory] map multi binding.
@@ -74,4 +87,23 @@ inline fun <reified C : TimelineItemEventContent, reified S : Any> TimelineItemP
         @Suppress("UNCHECKED_CAST")
         (it as TimelineItemPresenterFactory<C, S>).create(content)
     }
+}
+
+/**
+ * Remembers the presenter state for the given event id.
+ *
+ * The presenter state must be a compose-style state holder class with a no-arg constructor
+ * see: https://developer.android.com/jetpack/compose/state-hoisting#classes-as-state-owner
+ *
+ * If there's already a presenter state for the given event id, it will be returned.
+ *
+ * @param S the type of the presenter state.
+ * @param eventId the event id to remember the presenter state for. If null, no state will be remembered.
+ * @return The presenter state.
+ */
+@Composable
+inline fun <reified S : Any> TimelineItemPresenterStates.rememberPresenterState(
+    eventId: EventId?
+): S = remember(eventId) {
+    eventId?.let { presenterStates.getOrPut(eventId) { S::class.java.getConstructor().newInstance() } as S } ?: S::class.java.getConstructor().newInstance()
 }
