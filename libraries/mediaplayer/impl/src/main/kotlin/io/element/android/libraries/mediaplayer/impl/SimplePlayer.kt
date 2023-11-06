@@ -34,6 +34,7 @@ interface SimplePlayer {
     val currentPosition: Long
     val playbackState: Int
     val duration: Long
+    var playWhenReady: Boolean
     fun clearMediaItems()
     fun setMediaItem(mediaItem: MediaItem)
     fun getCurrentMediaItem(): MediaItem?
@@ -76,6 +77,10 @@ class SimplePlayerImpl(
         get() = p.playbackState
     override val duration: Long
         get() = p.duration
+
+    override var playWhenReady: Boolean
+        get() = p.playWhenReady
+        set(value) { p.playWhenReady = value }
 
     override fun clearMediaItems() = p.clearMediaItems()
 

@@ -151,10 +151,11 @@ class DefaultVoiceMessagePlayer(
     } else {
         if (eventId != null) {
             repo.getMediaFile().mapCatching { mediaFile ->
-                mediaPlayer.acquireControlAndPlay(
+                mediaPlayer.setMedia(
                     uri = mediaFile.path,
                     mediaId = eventId.value,
-                    mimeType = "audio/ogg" // Files in the voice cache have no extension so we need to set the mime type manually.
+                    mimeType = "audio/ogg", // Files in the voice cache have no extension so we need to set the mime type manually.
+                    playWhenReady = true,
                 )
             }
         } else {

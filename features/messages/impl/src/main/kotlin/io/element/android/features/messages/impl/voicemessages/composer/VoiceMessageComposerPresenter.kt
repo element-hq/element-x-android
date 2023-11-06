@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.voicemessages.composer
 
 import android.Manifest
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -77,6 +78,12 @@ class VoiceMessageComposerPresenter @Inject constructor(
         val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
         val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
 
+        LaunchedEffect(recorderState) {
+            val recording = recorderState as? VoiceRecorderState.Finished
+                ?: return@LaunchedEffect
+            player.setMedia(recording.file.path)
+        }
+
         val onLifecycleEvent = { event: Lifecycle.Event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
@@ -117,18 +124,8 @@ class VoiceMessageComposerPresenter @Inject constructor(
         }
         val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
             when (event) {
-                VoiceMessagePlayerEvent.Play ->
-                    when (val recording = recorderState) {
-                        is VoiceRecorderState.Finished ->
-                            player.play(
-                                mediaPath = recording.file.path,
-                                mimeType = recording.mimeType,
-                            )
-                        else -> Timber.e("Voice message player event received but no file to play")
-                    }
-                VoiceMessagePlayerEvent.Pause -> {
-                    player.pause()
-                }
+                VoiceMessagePlayerEvent.Play -> player.play()
+                VoiceMessagePlayerEvent.Pause -> player.pause()
                 is VoiceMessagePlayerEvent.Seek -> {
                     // TODO implement seeking
                 }
@@ -192,7 +189,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
                     isSending = isSending,
                     isPlaying = playerState.isPlaying,
-                    showCursor = playerState.isLoaded && !isSending,
+                    showCursor = !playerState.isStopped && !isSending,
                     playbackProgress = playerState.progress,
                     time = playerTime,
                     waveform = waveform,
@@ -246,7 +243,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
     }
 
     private fun AnalyticsService.captureComposerEvent() =
-        analyticsService.capture(
+        capture(
             Composer(
                 inThread = messageComposerContext.composerMode.inThread,
                 isEditing = messageComposerContext.composerMode.isEditing,
@@ -271,7 +268,7 @@ private fun displayTime(
     playerState: VoiceMessageComposerPlayer.State,
     recording: VoiceRecorderState
 ): Duration = when {
-    playerState.isLoaded ->
+    playerState.isLoaded && !playerState.isStopped ->
         playerState.currentPosition.milliseconds
     recording is VoiceRecorderState.Finished ->
         recording.duration

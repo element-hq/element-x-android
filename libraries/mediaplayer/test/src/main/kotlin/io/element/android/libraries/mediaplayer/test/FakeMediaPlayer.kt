@@ -31,25 +31,34 @@ class FakeMediaPlayer : MediaPlayer {
         private const val FAKE_PLAYED_DURATION_MS = 1000L
     }
 
-    private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L, 0L))
+    private val _state = MutableStateFlow(MediaPlayer.State(MediaPlayer.PlayState.Stopped, null, 0L, 0L))
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
-    override fun acquireControlAndPlay(uri: String, mediaId: String, mimeType: String) {
-        _state.update {
-            it.copy(
-                isPlaying = true,
-                mediaId = mediaId,
-                currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
-                duration = FAKE_TOTAL_DURATION_MS,
-            )
+    override fun setMedia(uri: String, mediaId: String, mimeType: String, playWhenReady: Boolean) {
+        if (playWhenReady) {
+            _state.update {
+                it.copy(
+                    playState = MediaPlayer.PlayState.Playing,
+                    mediaId = mediaId,
+                    currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
+                    duration = FAKE_TOTAL_DURATION_MS,
+                )
+            }
+        } else {
+            _state.update {
+                it.copy(
+                    playState = MediaPlayer.PlayState.Stopped,
+                    mediaId = mediaId,
+                )
+            }
         }
     }
 
     override fun play() {
         _state.update {
             it.copy(
-                isPlaying = true,
+                playState = MediaPlayer.PlayState.Playing,
                 currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
                 duration = FAKE_TOTAL_DURATION_MS,
             )
@@ -57,9 +66,12 @@ class FakeMediaPlayer : MediaPlayer {
     }
 
     override fun pause() {
+        if (!_state.value.isPlaying) {
+            return
+        }
         _state.update {
             it.copy(
-                isPlaying = false,
+                playState = MediaPlayer.PlayState.Paused,
             )
         }
     }

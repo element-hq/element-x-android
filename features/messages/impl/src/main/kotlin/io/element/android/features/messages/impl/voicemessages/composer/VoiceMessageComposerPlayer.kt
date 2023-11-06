@@ -20,6 +20,7 @@ import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -30,37 +31,60 @@ import javax.inject.Inject
 class VoiceMessageComposerPlayer @Inject constructor(
     private val mediaPlayer: MediaPlayer,
 ) {
-    private var lastPlayedMediaPath: String? = null
+    companion object {
+        const val MIME_TYPE = "audio/ogg"
+    }
+
+    private var mediaPath: String? = null
     private val curPlayingMediaId
         get() = mediaPlayer.state.value.mediaId
 
     val state: Flow<State> = mediaPlayer.state.map { state ->
-        if (lastPlayedMediaPath == null || lastPlayedMediaPath != state.mediaId) {
+        if (mediaPath == null || mediaPath != state.mediaId) {
             return@map State.NotLoaded
         }
 
         State(
-            isPlaying = state.isPlaying,
+            playState = state.playState,
             currentPosition = state.currentPosition,
             duration = state.duration,
         )
     }.distinctUntilChanged()
 
     /**
+     * Set the voice message to be played.
+     */
+    fun setMedia(mediaPath: String) {
+        this.mediaPath = mediaPath
+        mediaPlayer.setMedia(
+            uri = mediaPath,
+            mediaId = mediaPath,
+            mimeType = MIME_TYPE,
+            playWhenReady = false,
+        )
+    }
+
+    /**
      * Start playing from the current position.
      *
-     * @param mediaPath The path to the media to be played.
-     * @param mimeType The mime type of the media file.
+     * Call [setMedia] before calling this method.
      */
-    fun play(mediaPath: String, mimeType: String) {
+    fun play() {
+        val mediaPath = this.mediaPath
+
+        if (mediaPath == null) {
+            Timber.e("Set media before playing")
+            return
+        }
+
         if (mediaPath == curPlayingMediaId) {
             mediaPlayer.play()
         } else {
-            lastPlayedMediaPath = mediaPath
-            mediaPlayer.acquireControlAndPlay(
+            mediaPlayer.setMedia(
                 uri = mediaPath,
                 mediaId = mediaPath,
-                mimeType = mimeType,
+                mimeType = MIME_TYPE,
+                playWhenReady = true
             )
         }
     }
@@ -69,16 +93,16 @@ class VoiceMessageComposerPlayer @Inject constructor(
      * Pause playback.
      */
     fun pause() {
-        if (lastPlayedMediaPath == curPlayingMediaId) {
+        if (mediaPath == curPlayingMediaId) {
             mediaPlayer.pause()
         }
     }
 
     data class State(
         /**
-         * Whether this player is currently playing.
+         * Whether this player is currently playing, paused or stopped.
          */
-        val isPlaying: Boolean,
+        val playState: MediaPlayer.PlayState,
         /**
          * The elapsed time of this player in milliseconds.
          */
@@ -90,13 +114,17 @@ class VoiceMessageComposerPlayer @Inject constructor(
     ) {
         companion object {
             val NotLoaded = State(
-                isPlaying = false,
+                playState = MediaPlayer.PlayState.Stopped,
                 currentPosition = 0L,
                 duration = 0L,
             )
         }
 
         val isLoaded get() = this != NotLoaded
+
+        val isPlaying get() = this.playState == MediaPlayer.PlayState.Playing
+
+        val isStopped get() = this.playState == MediaPlayer.PlayState.Stopped
 
         /**
          * The progress of this player between 0 and 1.

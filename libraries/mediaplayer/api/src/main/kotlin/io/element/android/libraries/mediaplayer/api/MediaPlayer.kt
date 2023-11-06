@@ -30,12 +30,18 @@ interface MediaPlayer : AutoCloseable {
     val state: StateFlow<State>
 
     /**
-     * Acquires control of the player and starts playing the given media.
+     * Acquires control of the player with a given media file.
+     *
+     * @param uri the uri of the media.
+     * @param mediaId the unique id of the media.
+     * @param mimeType the mime type of the media.
+     * @param playWhenReady whether to start playing the given media.
      */
-    fun acquireControlAndPlay(
+    fun setMedia(
         uri: String,
         mediaId: String,
         mimeType: String,
+        playWhenReady: Boolean,
     )
 
     /**
@@ -62,7 +68,7 @@ interface MediaPlayer : AutoCloseable {
         /**
          * Whether the player is currently playing.
          */
-        val isPlaying: Boolean,
+        val playState: PlayState,
         /**
          * The id of the media which is currently playing.
          *
@@ -78,5 +84,13 @@ interface MediaPlayer : AutoCloseable {
          * The duration of the current content.
          */
         val duration: Long,
-    )
+    ) {
+        val isPlaying get() = playState == PlayState.Playing
+    }
+
+    enum class PlayState {
+        Playing,
+        Paused,
+        Stopped,
+    }
 }
