@@ -16,11 +16,13 @@
 
 package io.element.android.features.location.api
 
+import android.annotation.SuppressLint
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 private const val GEO_URI_REGEX = """geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitude>-?\d+(?:\.\d+)?)(?:;u=(?<uncertainty>\d+(?:\.\d+)?))?"""
 
+@SuppressLint("NewApi")
 @Parcelize
 data class Location(
     val lat: Double,
