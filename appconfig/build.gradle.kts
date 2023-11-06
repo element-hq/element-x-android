@@ -15,6 +15,7 @@
  */
 plugins {
     id("java-library")
+    id("com.android.lint")
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
