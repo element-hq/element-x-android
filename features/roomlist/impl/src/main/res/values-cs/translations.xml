@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Vaše záloha chatu není aktuálně synchronizována. Abyste si zachovali přístup k záloze chatu, musíte potvrdit klíč pro obnovení."</string>
+  <string name="confirm_recovery_key_banner_title">"Potvrďte klíč pro obnovení"</string>
   <string name="screen_roomlist_a11y_create_message">"Vytvořte novou konverzaci nebo místnost"</string>
   <string name="screen_roomlist_empty_message">"Začněte tím, že někomu pošnete zprávu."</string>
   <string name="screen_roomlist_empty_title">"Zatím žádné konverzace."</string>

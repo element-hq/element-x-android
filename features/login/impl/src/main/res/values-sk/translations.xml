@@ -14,7 +14,9 @@
   <string name="screen_change_account_provider_subtitle">"Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet."</string>
   <string name="screen_change_account_provider_title">"Zmeniť poskytovateľa účtu"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nemohli sme sa spojiť s týmto domovským serverom. Skontrolujte prosím, či ste zadali URL adresu domovského servera správne. Ak je adresa URL správna, kontaktujte svoj domovský server pre ďalšiu pomoc."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Tento server momentálne nepodporuje kĺzavú synchronizáciu."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského servera"</string>
+  <string name="screen_change_server_form_notice">"Môžete sa pripojiť iba k existujúcemu serveru, ktorý podporuje kĺzavú synchronizáciu. Správca domovského servera ju bude musieť nakonfigurovať. %1$s"</string>
   <string name="screen_change_server_subtitle">"Aká je adresa vášho servera?"</string>
   <string name="screen_change_server_title">"Vyberte svoj server"</string>
   <string name="screen_login_error_deactivated_account">"Tento účet bol deaktivovaný."</string>

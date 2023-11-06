@@ -21,4 +21,5 @@
   <string name="rich_text_editor_unindent">"Zrušit odsazení"</string>
   <string name="rich_text_editor_url_placeholder">"Odkaz"</string>
   <string name="rich_text_editor_a11y_add_attachment">"Přidat přílohu"</string>
+  <string name="screen_room_voice_message_tooltip">"Držte pro nahrávání"</string>
 </resources>
