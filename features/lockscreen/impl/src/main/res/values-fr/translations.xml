@@ -10,6 +10,7 @@
   </plurals>
   <string name="screen_app_lock_biometric_authentication">"Authentification biométrique"</string>
   <string name="screen_app_lock_biometric_unlock">"Déverrouillage biométrique"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Déverrouiller avec la biométrie"</string>
   <string name="screen_app_lock_forgot_pin">"Code PIN oublié?"</string>
   <string name="screen_app_lock_settings_change_pin">"Modifier le code PIN"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Autoriser le déverrouillage biométrique"</string>
@@ -28,5 +29,7 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Les codes PIN ne correspondent pas"</string>
   <string name="screen_app_lock_signout_alert_message">"Pour continuer, vous devrez vous connecter à nouveau et créer un nouveau code PIN."</string>
   <string name="screen_app_lock_signout_alert_title">"Vous êtes en train de vous déconnecter"</string>
+  <string name="screen_app_lock_use_biometric_android">"Utiliser la biométrie"</string>
+  <string name="screen_app_lock_use_pin_android">"Utiliser le code PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Déconnexion…"</string>
 </resources>

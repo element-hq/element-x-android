@@ -5,6 +5,7 @@
     <item quantity="few">"%1$d změny místnosti"</item>
     <item quantity="other">"%1$d změn místnosti"</item>
   </plurals>
+  <string name="screen_room_mentions_at_room_subtitle">"Informujte celou místnost"</string>
   <string name="screen_room_attachment_source_camera">"Fotoaparát"</string>
   <string name="screen_room_attachment_source_camera_photo">"Vyfotit"</string>
   <string name="screen_room_attachment_source_camera_video">"Natočit video"</string>
@@ -14,6 +15,7 @@
   <string name="screen_room_attachment_source_poll">"Hlasování"</string>
   <string name="screen_room_attachment_text_formatting">"Formátování textu"</string>
   <string name="screen_room_encrypted_history_banner">"Historie zpráv je momentálně v této místnosti nedostupná"</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Historie zpráv není v této místnosti k dispozici. Ověřte toto zařízení, abyste viděli historii zpráv."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
   <string name="screen_room_invite_again_alert_message">"Chtěli byste je pozvat zpět?"</string>
   <string name="screen_room_invite_again_alert_title">"V tomto chatu jste sami"</string>
