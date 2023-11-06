@@ -39,6 +39,7 @@ android {
         // Should not be there, but this is a POC
         implementation(libs.coil.compose)
         implementation(libs.vanniktech.blurhash)
+        implementation(projects.libraries.architecture)
         implementation(projects.libraries.testtags)
         implementation(projects.libraries.uiStrings)
 

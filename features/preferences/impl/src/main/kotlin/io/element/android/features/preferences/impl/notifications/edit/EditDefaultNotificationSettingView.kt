@@ -22,20 +22,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.designsystem.components.preferences.PreferencePage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -46,11 +44,10 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun EditDefaultNotificationSettingView(
     state: EditDefaultNotificationSettingState,
-    openRoomNotificationSettings:(roomId: RoomId) -> Unit,
+    openRoomNotificationSettings: (roomId: RoomId) -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     val title = if (state.isOneToOne) {
         CommonStrings.screen_notification_settings_direct_chats
     } else {
@@ -118,21 +115,15 @@ fun EditDefaultNotificationSettingView(
                 }
             }
         }
-        when (state.changeNotificationSettingAction) {
-            is Async.Loading -> {
-                ProgressDialog()
-            }
-            is Async.Failure -> {
-                ErrorDialog(
-                    title = stringResource(CommonStrings.dialog_title_error),
-                    content = stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode),
-                    onDismiss = { state.eventSink(EditDefaultNotificationSettingStateEvents.ClearError) },
-                )
-            }
-            else -> Unit
-        }
+        AsyncView(
+            async = state.changeNotificationSettingAction,
+            errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+            onErrorDismiss = { state.eventSink(EditDefaultNotificationSettingStateEvents.ClearError) },
+            onSuccess = {},
+        )
     }
 }
+
 @PreviewsDayNight
 @Composable
 internal fun EditDefaultNotificationSettingViewPreview(

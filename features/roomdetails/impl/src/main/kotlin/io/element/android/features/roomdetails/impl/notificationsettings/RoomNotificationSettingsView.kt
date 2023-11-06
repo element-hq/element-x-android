@@ -32,9 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orTrue
-import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -49,7 +48,6 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
-
 @Composable
 fun RoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
@@ -57,7 +55,7 @@ fun RoomNotificationSettingsView(
     onShowGlobalNotifications: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
-    if(state.showUserDefinedSettingStyle) {
+    if (state.showUserDefinedSettingStyle) {
         UserDefinedRoomNotificationSettingsView(
             state = state,
             modifier = modifier,
@@ -117,7 +115,7 @@ private fun RoomSpecificNotificationSettingsView(
                     ClickableText(
                         text = text,
                         onClick = {
-                           onShowGlobalNotifications()
+                            onShowGlobalNotifications()
                         },
                         modifier = Modifier
                             .padding(start = 16.dp, bottom = 16.dp, end = 16.dp),
@@ -127,7 +125,7 @@ private fun RoomSpecificNotificationSettingsView(
                                 textAlign = TextAlign.Center,
                             )
                     )
-                    if(state.defaultRoomNotificationMode != null){
+                    if (state.defaultRoomNotificationMode != null) {
                         val defaultModeTitle = when (state.defaultRoomNotificationMode) {
                             RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_room_notification_settings_mode_all_messages)
                             RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
@@ -150,29 +148,24 @@ private fun RoomSpecificNotificationSettingsView(
                         enabled = !state.displayIsDefault.orTrue(),
                         onOptionSelected = {
                             state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
-                        },)
+                        },
+                    )
                 }
             }
 
-            when (state.setNotificationSettingAction) {
-                is Async.Loading -> {
-                    ProgressDialog()
-                }
-                is Async.Failure -> {
-                    ShowChangeNotificationSettingError(state, RoomNotificationSettingsEvents.ClearSetNotificationError)
-                }
-                else -> Unit
-            }
+            AsyncView(
+                async = state.setNotificationSettingAction,
+                onSuccess = {},
+                errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+                onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearSetNotificationError) },
+            )
 
-            when (state.restoreDefaultAction) {
-                is Async.Loading -> {
-                    ProgressDialog()
-                }
-                is Async.Failure -> {
-                    ShowChangeNotificationSettingError(state, RoomNotificationSettingsEvents.ClearRestoreDefaultError)
-                }
-                else -> Unit
-            }
+            AsyncView(
+                async = state.restoreDefaultAction,
+                onSuccess = {},
+                errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+                onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearRestoreDefaultError) },
+            )
         }
     }
 }

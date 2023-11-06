@@ -55,6 +55,8 @@ class KonsistClassNameTest {
                 val providedType = it.text
                     .substringBefore(">")
                     .substringAfter("<")
+                    // Get the substring before the first '<' to remove the generic type
+                    .substringBefore("<")
                     .removeSuffix("?")
                     .replace(".", "")
                 it.name.endsWith("Provider") && it.name.contains(providedType)
