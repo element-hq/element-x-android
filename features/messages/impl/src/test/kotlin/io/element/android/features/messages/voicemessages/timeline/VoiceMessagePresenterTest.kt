@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMes
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -201,7 +202,7 @@ class VoiceMessagePresenterTest {
     }
 }
 
-fun createVoiceMessagePresenter(
+fun TestScope.createVoiceMessagePresenter(
     voiceMessageMediaRepo: VoiceMessageMediaRepo = FakeVoiceMessageMediaRepo(),
     analyticsService: AnalyticsService = FakeAnalyticsService(),
     content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
@@ -217,5 +218,6 @@ fun createVoiceMessagePresenter(
         )
     },
     analyticsService = analyticsService,
+    scope = this,
     content = content,
 )

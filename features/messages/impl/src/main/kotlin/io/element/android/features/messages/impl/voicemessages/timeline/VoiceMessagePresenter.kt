@@ -22,7 +22,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
@@ -40,6 +39,7 @@ import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.utils.time.formatShort
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -55,6 +55,7 @@ interface VoiceMessagePresenterModule {
 class VoiceMessagePresenter @AssistedInject constructor(
     voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
     private val analyticsService: AnalyticsService,
+    private val scope: CoroutineScope,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
 
@@ -70,13 +71,13 @@ class VoiceMessagePresenter @AssistedInject constructor(
         body = content.body,
     )
 
+    private val play = mutableStateOf<Async<Unit>>(Async.Uninitialized)
+    private var progressCache: Float = 0f
+
     @Composable
     override fun present(): VoiceMessageState {
 
-        val scope = rememberCoroutineScope()
-
         val playerState by player.state.collectAsState(VoiceMessagePlayer.State(isPlaying = false, isMyMedia = false, currentPosition = 0L))
-        val play = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
 
         val button by remember {
             derivedStateOf {
@@ -90,7 +91,12 @@ class VoiceMessagePresenter @AssistedInject constructor(
             }
         }
         val progress by remember {
-            derivedStateOf { if (playerState.isMyMedia) playerState.currentPosition / content.duration.toMillis().toFloat() else 0f }
+            derivedStateOf {
+                if (playerState.isMyMedia) {
+                    progressCache = playerState.currentPosition / content.duration.toMillis().toFloat()
+                }
+                progressCache
+            }
         }
         val time by remember {
             derivedStateOf {
