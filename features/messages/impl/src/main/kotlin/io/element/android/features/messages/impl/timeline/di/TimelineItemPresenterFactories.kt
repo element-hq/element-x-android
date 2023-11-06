@@ -52,7 +52,12 @@ interface TimelineItemPresenterFactoriesModule {
  */
 data class TimelineItemPresenterFactories @Inject constructor(
     val factories: @JvmSuppressWildcards Map<Class<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>,
-)
+) {
+    /**
+     * Caches the presenters created by [rememberPresenter] for each content.
+     */
+    val presenters: MutableMap<TimelineItemEventContent, Presenter<*>> = mutableMapOf()
+}
 
 /**
  * Provides a [TimelineItemPresenterFactories] to the composition.
@@ -70,8 +75,13 @@ val LocalTimelineItemPresenterFactories = staticCompositionLocalOf {
 inline fun <reified C : TimelineItemEventContent, reified S : Any> TimelineItemPresenterFactories.rememberPresenter(
     content: C
 ): Presenter<S> = remember(content) {
-    factories.getValue(C::class.java).let {
+    presenters[content]?.let {
         @Suppress("UNCHECKED_CAST")
-        (it as TimelineItemPresenterFactory<C, S>).create(content)
+        it as Presenter<S>
+    } ?: factories.getValue(C::class.java).let {
+        @Suppress("UNCHECKED_CAST")
+        (it as TimelineItemPresenterFactory<C, S>).create(content).apply {
+            presenters[content] = this
+        }
     }
 }
