@@ -46,7 +46,6 @@ fun SecureBackupEnableView(
     }
     FlowStepPage(
         modifier = modifier,
-        canGoBack = true,
         onBackClicked = onBackClicked,
         title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
         iconResourceId = CommonDrawables.ic_key,

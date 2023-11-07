@@ -56,7 +56,6 @@ fun SecureBackupDisableView(
     }
     FlowStepPage(
         modifier = modifier,
-        canGoBack = true,
         onBackClicked = onBackClicked,
         title = stringResource(id = R.string.screen_key_backup_disable_title),
         subTitle = stringResource(id = R.string.screen_key_backup_disable_description),

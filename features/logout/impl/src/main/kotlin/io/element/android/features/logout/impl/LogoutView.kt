@@ -58,7 +58,6 @@ fun LogoutView(
     val eventSink = state.eventSink
 
     FlowStepPage(
-        canGoBack = true,
         onBackClicked = onBackClicked,
         title = title(state),
         subTitle = subtitle(state),

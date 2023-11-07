@@ -48,8 +48,7 @@ fun SecureBackupSetupView(
 ) {
     FlowStepPage(
         modifier = modifier,
-        canGoBack = state.canGoBack(),
-        onBackClicked = onBackClicked,
+        onBackClicked = onBackClicked.takeIf { state.canGoBack() },
         title = title(state),
         subTitle = subtitle(state),
         iconResourceId = CommonDrawables.ic_key,

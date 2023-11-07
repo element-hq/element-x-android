@@ -50,7 +50,6 @@ fun SecureBackupEnterRecoveryKeyView(
 
     FlowStepPage(
         modifier = modifier,
-        canGoBack = true,
         onBackClicked = onBackClicked,
         iconResourceId = CommonDrawables.ic_key,
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
