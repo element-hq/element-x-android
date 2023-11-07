@@ -20,6 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import org.matrix.rustcomponents.sdk.EncryptionSystem
 import org.matrix.rustcomponents.sdk.VirtualElementCallWidgetOptions
 import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
 import javax.inject.Inject
@@ -38,7 +39,8 @@ class DefaultCallWidgetSettingsProvider @Inject constructor() : CallWidgetSettin
             skipLobby = true,
             confineToRoom = true,
             font = null,
-            analyticsId = null
+            analyticsId = null,
+            encryption = EncryptionSystem.PerParticipantKeys,
         )
         val rustWidgetSettings = newVirtualElementCallWidget(options)
         return MatrixWidgetSettings.fromRustWidgetSettings(rustWidgetSettings)
