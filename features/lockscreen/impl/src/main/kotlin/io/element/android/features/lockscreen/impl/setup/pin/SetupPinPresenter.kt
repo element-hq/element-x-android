@@ -85,7 +85,8 @@ class SetupPinPresenter @Inject constructor(
         fun handleEvents(event: SetupPinEvents) {
             when (event) {
                 is SetupPinEvents.OnPinEntryChanged -> {
-                    if (isConfirmationStep) {
+                    // Use the fromConfirmationStep flag from ui to avoid race condition.
+                    if (event.fromConfirmationStep) {
                         confirmPinEntry = confirmPinEntry.fillWith(event.entryAsText)
                     } else {
                         choosePinEntry = choosePinEntry.fillWith(event.entryAsText)
