@@ -16,6 +16,7 @@
 
 package io.element.android.features.lockscreen.impl.pin
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.pin.storage.InMemoryLockScreenStore
 import io.element.android.libraries.cryptography.impl.AESEncryptionDecryptionService
@@ -32,10 +33,13 @@ class DefaultPinCodeManagerTest {
 
     @Test
     fun `given a pin code when create and delete assert no pin code left`() = runTest {
-        pinCodeManager.createPinCode("1234")
-        assertThat(pinCodeManager.isPinCodeAvailable()).isTrue()
-        pinCodeManager.deletePinCode()
-        assertThat(pinCodeManager.isPinCodeAvailable()).isFalse()
+        pinCodeManager.hasPinCode().test {
+            assertThat(awaitItem()).isFalse()
+            pinCodeManager.createPinCode("1234")
+            assertThat(awaitItem()).isTrue()
+            pinCodeManager.deletePinCode()
+            assertThat(awaitItem()).isFalse()
+        }
     }
 
     @Test

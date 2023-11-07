@@ -23,6 +23,7 @@ import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 
@@ -46,7 +47,7 @@ class DefaultPinCodeManager @Inject constructor(
         callbacks.remove(callback)
     }
 
-    override suspend fun isPinCodeAvailable(): Boolean {
+    override fun hasPinCode(): Flow<Boolean> {
         return lockScreenStore.hasPinCode()
     }
 

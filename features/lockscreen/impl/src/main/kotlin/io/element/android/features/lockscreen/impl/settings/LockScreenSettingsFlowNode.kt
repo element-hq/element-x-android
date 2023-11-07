@@ -42,6 +42,7 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -90,9 +91,11 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
         }
     }
 
-    init {
+    override fun onBuilt() {
+        super.onBuilt()
         lifecycleScope.launch {
-            if (pinCodeManager.isPinCodeAvailable()) {
+            val hasPinCode = pinCodeManager.hasPinCode().first()
+            if (hasPinCode) {
                 backstack.newRoot(NavTarget.Unlock)
             } else {
                 backstack.newRoot(NavTarget.Setup)

@@ -17,6 +17,7 @@
 package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
@@ -27,4 +28,5 @@ interface AppBindings {
     fun snackbarDispatcher(): SnackbarDispatcher
     fun tracingService(): TracingService
     fun bugReporter(): BugReporter
+    fun lockScreenService(): LockScreenService
 }
