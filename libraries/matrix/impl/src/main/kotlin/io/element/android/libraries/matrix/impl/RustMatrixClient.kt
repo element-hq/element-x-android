@@ -58,6 +58,7 @@ import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -76,6 +77,7 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -177,8 +179,9 @@ class RustMatrixClient constructor(
 
     private val roomContentForwarder = RoomContentForwarder(innerRoomListService)
 
+    private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(clientDelegate)
+
     init {
-        client.setDelegate(clientDelegate)
         roomListService.state.onEach { state ->
             if (state == RoomListService.State.Running) {
                 setupVerificationControllerIfNeeded()
@@ -328,7 +331,7 @@ class RustMatrixClient constructor(
 
     override fun close() {
         sessionCoroutineScope.cancel()
-        client.setDelegate(null)
+        clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettings.setDelegate(null)
         notificationSettings.destroy()
         verificationService.destroy()
