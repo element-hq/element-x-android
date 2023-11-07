@@ -18,11 +18,11 @@ package io.element.android.features.securebackup.impl.disable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -31,10 +31,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -42,11 +39,9 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecureBackupDisableView(
     state: SecureBackupDisableState,
@@ -59,23 +54,16 @@ fun SecureBackupDisableView(
             onDone()
         }
     }
-    HeaderFooterPage(
+    FlowStepPage(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                navigationIcon = { BackButton(onClick = onBackClicked) },
-                title = {},
-            )
-        },
-        header = {
-            HeaderContent()
-        },
-        footer = {
-            BottomMenu(state = state)
-        }
-    ) {
-        Content(state = state)
-    }
+        onBackClicked = onBackClicked,
+        title = stringResource(id = R.string.screen_key_backup_disable_title),
+        subTitle = stringResource(id = R.string.screen_key_backup_disable_description),
+        iconResourceId = CommonDrawables.ic_key_off,
+        content = { Content(state = state) },
+        buttons = { Buttons(state = state) },
+    )
+
     if (state.showConfirmationDialog) {
         SecureBackupDisableConfirmationDialog(
             onConfirm = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup(force = true)) },
@@ -102,32 +90,16 @@ private fun SecureBackupDisableConfirmationDialog(onConfirm: () -> Unit, onDismi
 }
 
 @Composable
-private fun HeaderContent(
-    modifier: Modifier = Modifier,
-) {
-    IconTitleSubtitleMolecule(
-        modifier = modifier.padding(top = 0.dp),
-        iconResourceId = CommonDrawables.ic_key_off,
-        title = stringResource(id = R.string.screen_key_backup_disable_title),
-        subTitle = stringResource(id = R.string.screen_key_backup_disable_description),
-    )
-}
-
-@Composable
-private fun BottomMenu(
+private fun ColumnScope.Buttons(
     state: SecureBackupDisableState,
 ) {
-    ButtonColumnMolecule(
-        modifier = Modifier.padding(bottom = 20.dp)
-    ) {
-        Button(
-            text = stringResource(id = R.string.screen_chat_backup_key_backup_action_disable),
-            showProgress = state.disableAction.isLoading(),
-            destructive = true,
-            modifier = Modifier.fillMaxWidth(),
-            onClick = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup(force = false)) }
-        )
-    }
+    Button(
+        text = stringResource(id = R.string.screen_chat_backup_key_backup_action_disable),
+        showProgress = state.disableAction.isLoading(),
+        destructive = true,
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup(force = false)) }
+    )
 }
 
 @Composable

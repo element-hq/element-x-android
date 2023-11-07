@@ -17,19 +17,16 @@
 package io.element.android.features.lockscreen.impl.setup.biometric
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement.spacedBy
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.lockscreen.impl.R
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -76,10 +73,8 @@ private fun SetupBiometricFooter(
     onSkipClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    ButtonColumnMolecule(
+        modifier = modifier,
     ) {
         val biometricAuth = stringResource(id = R.string.screen_app_lock_biometric_authentication)
         Button(
