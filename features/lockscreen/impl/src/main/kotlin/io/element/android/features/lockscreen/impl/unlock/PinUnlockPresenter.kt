@@ -17,6 +17,7 @@
 package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -26,6 +27,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
+import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnlockCallback
+import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
@@ -36,6 +39,7 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class PinUnlockPresenter @Inject constructor(
@@ -66,9 +70,10 @@ class PinUnlockPresenter @Inject constructor(
         var biometricUnlockResult by remember {
             mutableStateOf<BiometricUnlock.AuthenticationResult?>(null)
         }
-
+        val isUnlocked = remember {
+            mutableStateOf(false)
+        }
         val biometricUnlock = biometricUnlockManager.rememberBiometricUnlock()
-
         LaunchedEffect(Unit) {
             suspend {
                 val pinCodeSize = pinCodeManager.getPinCodeSize()
@@ -94,7 +99,7 @@ class PinUnlockPresenter @Inject constructor(
                 showSignOutPrompt = true
             }
         }
-
+        IsUnlockedEffect(isUnlocked)
         fun handleEvents(event: PinUnlockEvents) {
             when (event) {
                 is PinUnlockEvents.OnPinKeypadPressed -> {
@@ -129,8 +134,31 @@ class PinUnlockPresenter @Inject constructor(
             signOutAction = signOutAction.value,
             showBiometricUnlock = biometricUnlock.isActive,
             biometricUnlockResult = biometricUnlockResult,
+            isUnlocked = isUnlocked.value,
             eventSink = ::handleEvents
         )
+    }
+
+    @Composable
+    private fun IsUnlockedEffect(isUnlocked: MutableState<Boolean>) {
+        DisposableEffect(Unit) {
+            val biometricUnlockCallback = object : DefaultBiometricUnlockCallback() {
+                override fun onBiometricUnlockSuccess() {
+                    isUnlocked.value = true
+                }
+            }
+            val pinCodeVerifiedCallback = object : DefaultPinCodeManagerCallback() {
+                override fun onPinCodeVerified() {
+                    isUnlocked.value = true
+                }
+            }
+            biometricUnlockManager.addCallback(biometricUnlockCallback)
+            pinCodeManager.addCallback(pinCodeVerifiedCallback)
+            onDispose {
+                biometricUnlockManager.removeCallback(biometricUnlockCallback)
+                pinCodeManager.removeCallback(pinCodeVerifiedCallback)
+            }
+        }
     }
 
     private fun Async<PinEntry>.isComplete(): Boolean {

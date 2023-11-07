@@ -146,7 +146,7 @@ class FtueFlowNode @AssistedInject constructor(
             }
             NavTarget.LockScreenSetup -> {
                 val callback = object : LockScreenEntryPoint.Callback {
-                    override fun onSetupCompleted() {
+                    override fun onSetupDone() {
                         lifecycleScope.launch { moveToNextStep() }
                     }
                 }

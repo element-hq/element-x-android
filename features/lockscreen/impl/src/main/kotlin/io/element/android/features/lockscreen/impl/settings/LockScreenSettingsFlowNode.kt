@@ -33,7 +33,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
-import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnlockCallback
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.setup.pin.SetupPinNode
@@ -76,21 +75,12 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
     }
 
     private val pinCodeManagerCallback = object : DefaultPinCodeManagerCallback() {
-        override fun onPinCodeVerified() {
-            backstack.newRoot(NavTarget.Settings)
-        }
 
         override fun onPinCodeRemoved() {
             navigateUp()
         }
 
         override fun onPinCodeCreated() {
-            backstack.newRoot(NavTarget.Settings)
-        }
-    }
-
-    private val biometricUnlockCallback = object : DefaultBiometricUnlockCallback() {
-        override fun onBiometricUnlockSuccess() {
             backstack.newRoot(NavTarget.Settings)
         }
     }
@@ -108,11 +98,9 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 pinCodeManager.addCallback(pinCodeManagerCallback)
-                biometricUnlockManager.addCallback(biometricUnlockCallback)
             },
             onDestroy = {
                 pinCodeManager.removeCallback(pinCodeManagerCallback)
-                biometricUnlockManager.removeCallback(biometricUnlockCallback)
             }
         )
     }
@@ -121,7 +109,12 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Unlock -> {
                 val inputs = PinUnlockNode.Inputs(isInAppUnlock = true)
-                createNode<PinUnlockNode>(buildContext, plugins = listOf(inputs))
+                val callback = object : PinUnlockNode.Callback {
+                    override fun onUnlock() {
+                        backstack.newRoot(NavTarget.Settings)
+                    }
+                }
+                createNode<PinUnlockNode>(buildContext, plugins = listOf(inputs, callback))
             }
             NavTarget.SetupPin -> {
                 createNode<SetupPinNode>(buildContext)
