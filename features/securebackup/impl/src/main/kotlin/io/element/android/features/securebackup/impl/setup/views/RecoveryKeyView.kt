@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -155,8 +156,10 @@ private fun RecoveryKeyFormContent(
 ) {
     onChange ?: error("onChange should not be null")
     onSubmit ?: error("onSubmit should not be null")
-    val recoveryKeyVisualTransformation = remember {
-        RecoveryKeyVisualTransformation()
+    val keyHasSpace = state.formattedRecoveryKey.orEmpty().contains(" ")
+    val recoveryKeyVisualTransformation = remember(keyHasSpace) {
+        // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
+        if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
     }
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
