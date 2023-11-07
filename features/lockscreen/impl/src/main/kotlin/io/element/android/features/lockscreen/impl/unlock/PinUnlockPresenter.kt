@@ -39,7 +39,6 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class PinUnlockPresenter @Inject constructor(
@@ -99,7 +98,11 @@ class PinUnlockPresenter @Inject constructor(
                 showSignOutPrompt = true
             }
         }
-        IsUnlockedEffect(isUnlocked)
+
+        OnUnlockEffect {
+            isUnlocked.value = true
+        }
+
         fun handleEvents(event: PinUnlockEvents) {
             when (event) {
                 is PinUnlockEvents.OnPinKeypadPressed -> {
@@ -140,16 +143,16 @@ class PinUnlockPresenter @Inject constructor(
     }
 
     @Composable
-    private fun IsUnlockedEffect(isUnlocked: MutableState<Boolean>) {
+    private fun OnUnlockEffect(onUnlock: () -> Unit) {
         DisposableEffect(Unit) {
             val biometricUnlockCallback = object : DefaultBiometricUnlockCallback() {
                 override fun onBiometricUnlockSuccess() {
-                    isUnlocked.value = true
+                    onUnlock()
                 }
             }
             val pinCodeVerifiedCallback = object : DefaultPinCodeManagerCallback() {
                 override fun onPinCodeVerified() {
-                    isUnlocked.value = true
+                    onUnlock()
                 }
             }
             biometricUnlockManager.addCallback(biometricUnlockCallback)
