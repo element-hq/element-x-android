@@ -47,7 +47,7 @@ internal val iconsCompound = listOf(
     R.drawable.ic_compound_files,
     R.drawable.ic_compound_filter,
     R.drawable.ic_compound_grid_view,
-    R.drawable.ic_compound_info,
+    R.drawable.ic_compound_info_solid,
     R.drawable.ic_compound_leave,
     R.drawable.ic_compound_link,
     R.drawable.ic_compound_lock,
@@ -116,7 +116,6 @@ internal val iconsSeptember = listOf(
 // This list and all the drawable it contains should be removed at some point.
 // All the icons should be defined in Compound.
 internal val iconsOther = listOf(
-    R.drawable.ic_developer_mode,
     R.drawable.ic_groups,
     R.drawable.ic_indent_decrease,
     R.drawable.ic_indent_increase,

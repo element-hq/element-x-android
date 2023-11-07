@@ -34,7 +34,7 @@ fun TimelineItemUnknownView(
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_unsupported_event),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
-        iconResourceId = CommonDrawables.ic_compound_info,
+        iconResourceId = CommonDrawables.ic_compound_info_solid,
         extraPadding = extraPadding,
         modifier = modifier
     )
