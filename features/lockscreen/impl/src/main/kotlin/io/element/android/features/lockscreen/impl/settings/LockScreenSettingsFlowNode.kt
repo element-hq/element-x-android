@@ -36,7 +36,7 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockMana
 import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnlockCallback
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
-import io.element.android.features.lockscreen.impl.setup.LockScreenSetupFlowNode
+import io.element.android.features.lockscreen.impl.setup.pin.SetupPinNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -69,7 +69,7 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
         data object Unlock : NavTarget
 
         @Parcelize
-        data object Setup : NavTarget
+        data object SetupPin : NavTarget
 
         @Parcelize
         data object Settings : NavTarget
@@ -82,6 +82,10 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
 
         override fun onPinCodeRemoved() {
             navigateUp()
+        }
+
+        override fun onPinCodeCreated() {
+            backstack.newRoot(NavTarget.Settings)
         }
     }
 
@@ -98,7 +102,7 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
             if (hasPinCode) {
                 backstack.newRoot(NavTarget.Unlock)
             } else {
-                backstack.newRoot(NavTarget.Setup)
+                backstack.newRoot(NavTarget.SetupPin)
             }
         }
         lifecycle.subscribe(
@@ -119,23 +123,19 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
                 val inputs = PinUnlockNode.Inputs(isInAppUnlock = true)
                 createNode<PinUnlockNode>(buildContext, plugins = listOf(inputs))
             }
-            NavTarget.Setup -> {
-                val callback = object : LockScreenSetupFlowNode.Callback {
-                    override fun onSetupDone() {
-                        backstack.newRoot(NavTarget.Settings)
-                    }
-                }
-                createNode<LockScreenSetupFlowNode>(buildContext, plugins = listOf(callback))
+            NavTarget.SetupPin -> {
+                createNode<SetupPinNode>(buildContext)
             }
             NavTarget.Settings -> {
                 val callback = object : LockScreenSettingsNode.Callback {
                     override fun onChangePinClicked() {
-                        backstack.push(NavTarget.Setup)
+                        backstack.push(NavTarget.SetupPin)
                     }
                 }
                 createNode<LockScreenSettingsNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.Unknown -> node(buildContext) { }
+
         }
     }
 

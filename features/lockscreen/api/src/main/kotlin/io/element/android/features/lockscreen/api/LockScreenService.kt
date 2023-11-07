@@ -63,5 +63,6 @@ fun LockScreenService.handleSecureFlag(activity: ComponentActivity) {
                     activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
                 }
             }
-        }.launchIn(activity.lifecycleScope)
+        }
+        .launchIn(activity.lifecycleScope)
 }
