@@ -47,7 +47,7 @@ import io.element.android.libraries.theme.ElementTheme
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserStoryFlowPage(
+fun FlowStepPage(
     canGoBack: Boolean,
     onBackClicked: () -> Unit,
     iconResourceId: Int?,
@@ -92,8 +92,8 @@ fun UserStoryFlowPage(
 
 @PreviewsDayNight
 @Composable
-internal fun UserStoryFlowPagePreview() = ElementPreview {
-    UserStoryFlowPage(
+internal fun FlowStepPagePreview() = ElementPreview {
+    FlowStepPage(
         canGoBack = true,
         onBackClicked = {},
         title = "Title",

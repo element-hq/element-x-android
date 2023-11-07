@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
-import io.element.android.libraries.designsystem.atomic.pages.UserStoryFlowPage
+import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -48,7 +48,7 @@ fun SecureBackupEnterRecoveryKeyView(
         onErrorDismiss = { state.eventSink(SecureBackupEnterRecoveryKeyEvents.ClearDialog) },
     )
 
-    UserStoryFlowPage(
+    FlowStepPage(
         modifier = modifier,
         canGoBack = true,
         onBackClicked = onBackClicked,

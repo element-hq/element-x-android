@@ -29,7 +29,7 @@ import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
 import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
-import io.element.android.libraries.designsystem.atomic.pages.UserStoryFlowPage
+import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -46,7 +46,7 @@ fun SecureBackupSetupView(
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    UserStoryFlowPage(
+    FlowStepPage(
         modifier = modifier,
         canGoBack = state.canGoBack(),
         onBackClicked = onBackClicked,

@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.atomic.pages.UserStoryFlowPage
+import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -54,7 +54,7 @@ fun SecureBackupDisableView(
             onDone()
         }
     }
-    UserStoryFlowPage(
+    FlowStepPage(
         modifier = modifier,
         canGoBack = true,
         onBackClicked = onBackClicked,

@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.atomic.pages.UserStoryFlowPage
+import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -57,7 +57,7 @@ fun LogoutView(
 ) {
     val eventSink = state.eventSink
 
-    UserStoryFlowPage(
+    FlowStepPage(
         canGoBack = true,
         onBackClicked = onBackClicked,
         title = title(state),
