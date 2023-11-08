@@ -113,7 +113,7 @@ class DefaultFtueStateTests {
         steps.add(state.getNextStep(steps.lastOrNull()))
         permissionStateProvider.setPermissionGranted()
 
-        // Fourth step, notifications opt in
+        // Fourth step, entering PIN code
         steps.add(state.getNextStep(steps.lastOrNull()))
         lockScreenService.setIsPinSetup(true)
 
