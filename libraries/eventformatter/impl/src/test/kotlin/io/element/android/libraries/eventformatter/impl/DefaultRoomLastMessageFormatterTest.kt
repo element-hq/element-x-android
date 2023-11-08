@@ -113,7 +113,7 @@ class DefaultRoomLastMessageFormatterTest {
     @Test
     @Config(qualifiers = "en")
     fun `Unable to decrypt content`() {
-        val expected = "Decryption error"
+        val expected = "Waiting for this message"
         val senderName = "Someone"
         sequenceOf(false, true).forEach { isDm ->
             val message = createRoomEvent(false, senderName, UnableToDecryptContent(UnableToDecryptContent.Data.Unknown))

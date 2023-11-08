@@ -81,7 +81,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 content.body
             }
             is UnableToDecryptContent -> {
-                val message = sp.getString(CommonStrings.common_decryption_error)
+                val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
                 if (!isDmRoom) {
                     prefix(message, senderDisplayName)
                 } else {
