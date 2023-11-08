@@ -34,7 +34,7 @@ sealed class TimelineItemAction(
     data object Reply : TimelineItemAction(CommonStrings.action_reply, CommonDrawables.ic_september_reply)
     data object ReplyInThread : TimelineItemAction(CommonStrings.action_reply_in_thread, CommonDrawables.ic_september_reply)
     data object Edit : TimelineItemAction(CommonStrings.action_edit, CommonDrawables.ic_september_edit_outline)
-    data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, CommonDrawables.ic_september_view_source)
+    data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, CommonDrawables.ic_developer_options)
     data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, CommonDrawables.ic_compound_chat_problem, destructive = true)
     data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CommonDrawables.ic_poll_end)
 }

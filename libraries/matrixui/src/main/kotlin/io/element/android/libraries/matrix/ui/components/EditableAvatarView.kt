@@ -26,8 +26,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddAPhoto
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -40,6 +38,7 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun EditableAvatarView(
@@ -87,7 +86,7 @@ fun EditableAvatarView(
             ) {
                 Icon(
                     modifier = Modifier.size(16.dp),
-                    imageVector = Icons.Outlined.AddAPhoto,
+                    resourceId = CommonDrawables.ic_edit,
                     contentDescription = "",
                     tint = MaterialTheme.colorScheme.onPrimary,
                 )

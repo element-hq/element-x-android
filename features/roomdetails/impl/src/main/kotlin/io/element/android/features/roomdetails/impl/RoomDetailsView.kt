@@ -32,7 +32,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -57,6 +56,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -66,6 +66,9 @@ import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -324,10 +327,10 @@ private fun NotificationSection(
         stringResource(R.string.screen_room_details_notification_mode_custom)
     }
     PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_notification_title),
-            subtitle = subtitle,
-            iconResourceId = CommonDrawables.ic_compound_notifications,
+        ListItem(
+            headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
+            supportingContent = { Text(text = subtitle) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_notifications)),
             onClick = openRoomNotificationSettings,
         )
     }
@@ -340,10 +343,10 @@ private fun MembersSection(
     modifier: Modifier = Modifier,
 ) {
     PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(CommonStrings.common_people),
-            icon = Icons.Outlined.Person,
-            currentValue = memberCount.toString(),
+        ListItem(
+            headlineContent = { Text(stringResource(CommonStrings.common_people)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user)),
+            trailingContent = ListItemContent.Text(memberCount.toString()),
             onClick = openRoomMemberList,
         )
     }
@@ -355,9 +358,9 @@ private fun InviteSection(
     modifier: Modifier = Modifier,
 ) {
     PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_invite_people_title),
-            iconResourceId = CommonDrawables.ic_compound_user_add,
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user_add)),
             onClick = invitePeople,
         )
     }
@@ -366,10 +369,10 @@ private fun InviteSection(
 @Composable
 private fun SecuritySection(modifier: Modifier = Modifier) {
     PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title), modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_encryption_enabled_title),
-            subtitle = stringResource(R.string.screen_room_details_encryption_enabled_subtitle),
-            iconResourceId = CommonDrawables.ic_compound_lock,
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_details_encryption_enabled_title)) },
+            supportingContent = { Text(stringResource(R.string.screen_room_details_encryption_enabled_subtitle)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_encryption_enabled)),
         )
     }
 }
@@ -377,10 +380,10 @@ private fun SecuritySection(modifier: Modifier = Modifier) {
 @Composable
 private fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_leave_room_title),
-            iconResourceId = CommonDrawables.ic_compound_leave,
-            tintColor = MaterialTheme.colorScheme.error,
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_details_leave_room_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_leave)),
+            style = ListItemStyle.Destructive,
             onClick = onLeaveRoom,
         )
     }

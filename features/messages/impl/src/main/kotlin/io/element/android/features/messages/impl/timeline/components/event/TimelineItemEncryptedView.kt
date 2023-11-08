@@ -35,7 +35,7 @@ fun TimelineItemEncryptedView(
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_waiting_for_decryption_key),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
-        iconResourceId = CommonDrawables.ic_september_decryption_error,
+        iconResourceId = CommonDrawables.ic_waiting_to_decrypt,
         extraPadding = extraPadding,
         modifier = modifier
     )

@@ -140,7 +140,7 @@ private fun CreateRoomActionButtonsList(
 ) {
     Column(modifier = modifier) {
         CreateRoomActionButton(
-            iconRes = CommonDrawables.ic_groups,
+            iconRes = CommonDrawables.ic_compound_plus,
             text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onNewRoomClicked,
         )

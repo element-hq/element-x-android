@@ -38,10 +38,21 @@ import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
-internal class IconChunkPreviewProvider : PreviewParameterProvider<IconChunk> {
+internal class CompoundIconListPreviewProvider : PreviewParameterProvider<IconChunk> {
     override val values: Sequence<IconChunk>
         get() {
             val chunks = iconsCompound.chunked(36)
+            return chunks.mapIndexed { index, chunk ->
+                IconChunk(index = index+1, total =  chunks.size, icons = chunk.toPersistentList())
+            }
+                .asSequence()
+        }
+}
+
+internal class OtherIconListPreviewProvider : PreviewParameterProvider<IconChunk> {
+    override val values: Sequence<IconChunk>
+        get() {
+            val chunks = iconsOther.chunked(36)
             return chunks.mapIndexed { index, chunk ->
                 IconChunk(index = index+1, total =  chunks.size, icons = chunk.toPersistentList())
             }
@@ -57,7 +68,7 @@ internal data class IconChunk(
 
 @PreviewsDayNight
 @Composable
-internal fun IconsCompoundPreview(@PreviewParameter(IconChunkPreviewProvider::class) chunk: IconChunk) = ElementPreview {
+internal fun IconsCompoundPreview(@PreviewParameter(CompoundIconListPreviewProvider::class) chunk: IconChunk) = ElementPreview {
     IconsPreview(
         title = "R.drawable.ic_compound_* ${chunk.index}/${chunk.total}",
         iconsList = chunk.icons,
@@ -81,10 +92,10 @@ internal fun IconsSeptemberPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun IconsOtherPreview() = ElementPreview {
+internal fun IconsOtherPreview(@PreviewParameter(OtherIconListPreviewProvider::class) iconChunk: IconChunk) = ElementPreview {
     IconsPreview(
-        title = "R.drawable.ic_*",
-        iconsList = iconsOther.toPersistentList(),
+        title = "R.drawable.ic_*  ${iconChunk.index}/${iconChunk.total}",
+        iconsList = iconChunk.icons,
         iconNameTransform = { name ->
             name.removePrefix("ic_")
                 .replace("_", " ")

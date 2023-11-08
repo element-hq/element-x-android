@@ -99,21 +99,15 @@ internal val iconsCompound = listOf(
 internal val iconsSeptember = listOf(
     R.drawable.ic_september_add_reaction,
     R.drawable.ic_september_attachment,
-    R.drawable.ic_september_compose_button,
     R.drawable.ic_september_copy,
-    R.drawable.ic_september_decryption_error,
     R.drawable.ic_september_edit_outline,
     R.drawable.ic_september_edit_solid_16,
     R.drawable.ic_september_forward,
-    R.drawable.ic_september_location,
-    R.drawable.ic_september_photo_camera,
-    R.drawable.ic_september_photo_video_library,
     R.drawable.ic_september_reply,
     R.drawable.ic_september_send,
     R.drawable.ic_september_take_photo_camera,
     R.drawable.ic_september_text_formatting,
     R.drawable.ic_september_video_call,
-    R.drawable.ic_september_view_source,
 )
 
 // This list and all the drawable it contains should be removed at some point.
@@ -135,4 +129,13 @@ internal val iconsOther = listOf(
     R.drawable.ic_thread_decoration,
     R.drawable.ic_underline,
     R.drawable.ic_sign_out,
+    R.drawable.ic_edit,
+    R.drawable.ic_encryption_enabled,
+    R.drawable.ic_image,
+    R.drawable.ic_location_navigator,
+    R.drawable.ic_location_navigator_centered,
+    R.drawable.ic_new_message,
+    R.drawable.ic_user,
+    R.drawable.ic_user_add,
+    R.drawable.ic_waiting_to_decrypt,
 )
