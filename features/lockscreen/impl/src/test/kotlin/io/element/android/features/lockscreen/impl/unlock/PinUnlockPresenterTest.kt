@@ -148,6 +148,7 @@ class PinUnlockPresenterTest {
             biometricUnlockManager = biometricUnlockManager,
             matrixClient = FakeMatrixClient(),
             coroutineScope = scope,
+            pinUnlockHelper = PinUnlockHelper(biometricUnlockManager, pinCodeManager),
         )
     }
 }
