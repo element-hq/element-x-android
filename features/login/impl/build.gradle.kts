@@ -19,7 +19,7 @@ plugins {
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
     id("kotlin-parcelize")
-    kotlin("plugin.serialization") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.20"
 }
 
 android {
