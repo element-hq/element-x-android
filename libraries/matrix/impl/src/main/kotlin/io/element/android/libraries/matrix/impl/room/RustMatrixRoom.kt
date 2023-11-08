@@ -86,6 +86,7 @@ import java.io.File
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
     override val sessionId: SessionId,
+    isKeyBackupEnabled: Boolean,
     private val roomListItem: RoomListItem,
     private val innerRoom: Room,
     private val roomNotificationSettingsService: RustNotificationSettingsService,
@@ -126,6 +127,7 @@ class RustMatrixRoom(
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
     override val timeline = RustMatrixTimeline(
+        isKeyBackupEnabled = isKeyBackupEnabled,
         matrixRoom = this,
         innerRoom = innerRoom,
         roomCoroutineScope = roomCoroutineScope,
