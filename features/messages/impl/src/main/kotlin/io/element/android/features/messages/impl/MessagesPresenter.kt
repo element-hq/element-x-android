@@ -311,7 +311,7 @@ class MessagesPresenter @AssistedInject constructor(
         val textContent = messageSummaryFormatter.format(targetEvent)
         val attachmentThumbnailInfo = when (targetEvent.content) {
             is TimelineItemImageContent -> AttachmentThumbnailInfo(
-                thumbnailSource = targetEvent.content.thumbnailSource,
+                thumbnailSource = targetEvent.content.thumbnailSource ?: targetEvent.content.mediaSource,
                 textContent = targetEvent.content.body,
                 type = AttachmentThumbnailType.Image,
                 blurHash = targetEvent.content.blurhash,
