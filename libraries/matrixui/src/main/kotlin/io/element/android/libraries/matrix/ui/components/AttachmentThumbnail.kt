@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GraphicEq
+import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.VideoCameraBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -57,12 +58,26 @@ fun AttachmentThumbnail(
             contentScale = ContentScale.Crop,
             modifier = modifier,
         )
+    } else if (info.blurHash != null) {
+        BlurHashAsyncImage(
+            model = null,
+            blurHash = info.blurHash,
+            contentDescription = info.textContent,
+            contentScale = ContentScale.Crop,
+            modifier = modifier,
+        )
     } else {
         Box(
             modifier = modifier.background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {
             when (info.type) {
+                AttachmentThumbnailType.Image -> {
+                    Icon(
+                        imageVector = Icons.Outlined.Image,
+                        contentDescription = info.textContent,
+                    )
+                }
                 AttachmentThumbnailType.Video -> {
                     Icon(
                         imageVector = Icons.Outlined.VideoCameraBack,
@@ -93,7 +108,6 @@ fun AttachmentThumbnail(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                else -> Unit
             }
         }
     }
