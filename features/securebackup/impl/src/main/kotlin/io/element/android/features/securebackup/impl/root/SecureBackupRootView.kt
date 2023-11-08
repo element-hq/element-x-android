@@ -70,6 +70,7 @@ fun SecureBackupRootView(
 
         // Disable / Enable backup
         when (state.backupState) {
+            BackupState.WAITING_FOR_SYNC,
             BackupState.UNKNOWN -> Unit
             BackupState.DISABLED -> {
                 PreferenceText(
@@ -97,6 +98,7 @@ fun SecureBackupRootView(
 
         // Setup recovery
         when (state.recoveryState) {
+            RecoveryState.WAITING_FOR_SYNC -> Unit
             RecoveryState.UNKNOWN,
             RecoveryState.DISABLED -> {
                 PreferenceText(
