@@ -16,12 +16,10 @@
 
 package io.element.android.libraries.designsystem.components.list
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
@@ -85,9 +83,8 @@ sealed interface ListItemContent {
     /**
      * Default Icon content for [ListItem]. Sets the Icon component to a predefined size.
      * @param iconSource The icon to display, using [IconSource.getPainter].
-     * @param showBadge Whether to show a badge over the icon or not.
      */
-    data class Icon(val iconSource: IconSource, val showBadge: Boolean = false) : ListItemContent
+    data class Icon(val iconSource: IconSource) : ListItemContent
 
     /**
      * Default Text content for [ListItem]. Sets the Text component to a max size and clips overflow.
@@ -122,24 +119,11 @@ sealed interface ListItemContent {
                 enabled = enabled
             )
             is Icon -> {
-                val iconComponent = @Composable {
-                    IconComponent(
-                        modifier = Modifier.size(maxCompactSize),
-                        painter = iconSource.getPainter(),
-                        contentDescription = iconSource.contentDescription
-                    )
-                }
-                if (showBadge) {
-                    Box {
-                        iconComponent()
-                        RedIndicatorAtom(
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                        )
-                    }
-                } else {
-                    iconComponent()
-                }
+                IconComponent(
+                    modifier = Modifier.size(maxCompactSize),
+                    painter = iconSource.getPainter(),
+                    contentDescription = iconSource.contentDescription
+                )
             }
             is Text -> TextComponent(modifier = Modifier.widthIn(max = 128.dp), text = text, maxLines = 1, overflow = TextOverflow.Ellipsis)
             is Badge -> RedIndicatorAtom()
