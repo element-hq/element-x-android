@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Checkbox as CheckboxComponent
@@ -94,6 +95,9 @@ sealed interface ListItemContent {
     /** Displays any custom content. */
     data class Custom(val content: @Composable () -> Unit) : ListItemContent
 
+    /** Displays a badge. */
+    data object Badge : ListItemContent
+
     @Composable
     fun View() {
         when (this) {
@@ -114,12 +118,15 @@ sealed interface ListItemContent {
                 onClick = onClick,
                 enabled = enabled
             )
-            is Icon -> IconComponent(
-                modifier = Modifier.size(maxCompactSize),
-                painter = iconSource.getPainter(),
-                contentDescription = iconSource.contentDescription
-            )
+            is Icon -> {
+                IconComponent(
+                    modifier = Modifier.size(maxCompactSize),
+                    painter = iconSource.getPainter(),
+                    contentDescription = iconSource.contentDescription
+                )
+            }
             is Text -> TextComponent(modifier = Modifier.widthIn(max = 128.dp), text = text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            is Badge -> RedIndicatorAtom()
             is Custom -> content()
         }
     }

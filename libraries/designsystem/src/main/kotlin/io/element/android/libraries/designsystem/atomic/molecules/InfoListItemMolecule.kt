@@ -78,25 +78,25 @@ internal fun InfoListItemMoleculePreview() {
         ) {
             InfoListItemMolecule(
                 message = { Text("A single item") },
-                icon = { Icon(resourceId = CommonDrawables.ic_compound_info, contentDescription = null) },
+                icon = { Icon(resourceId = CommonDrawables.ic_compound_info_solid, contentDescription = null) },
                 position = InfoListItemPosition.Single,
                 backgroundColor = color,
             )
             InfoListItemMolecule(
                 message = { Text("A top item") },
-                icon = { Icon(resourceId = CommonDrawables.ic_compound_info, contentDescription = null) },
+                icon = { Icon(resourceId = CommonDrawables.ic_compound_info_solid, contentDescription = null) },
                 position = InfoListItemPosition.Top,
                 backgroundColor = color,
             )
             InfoListItemMolecule(
                 message = { Text("A middle item") },
-                icon = { Icon(resourceId = CommonDrawables.ic_compound_info, contentDescription = null) },
+                icon = { Icon(resourceId = CommonDrawables.ic_compound_info_solid, contentDescription = null) },
                 position = InfoListItemPosition.Middle,
                 backgroundColor = color,
             )
             InfoListItemMolecule(
                 message = { Text("A bottom item") },
-                icon = { Icon(resourceId = CommonDrawables.ic_compound_info, contentDescription = null) },
+                icon = { Icon(resourceId = CommonDrawables.ic_compound_info_solid, contentDescription = null) },
                 position = InfoListItemPosition.Bottom,
                 backgroundColor = color,
             )

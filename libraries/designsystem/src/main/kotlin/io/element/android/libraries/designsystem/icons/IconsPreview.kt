@@ -27,33 +27,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
-@PreviewsDayNight
-@Composable
-internal fun IconsCompoundPart1Preview() = ElementPreview {
-    IconsPreview(
-        title = "R.drawable.ic_compound_* 1 / 2",
-        iconsList = iconsCompound.take(36).toPersistentList(),
-        iconNameTransform = { name ->
-            name.removePrefix("ic_compound_")
-                .replace("_", " ")
-        })
+internal class IconChunkPreviewProvider : PreviewParameterProvider<IconChunk> {
+    override val values: Sequence<IconChunk>
+        get() {
+            val chunks = iconsCompound.chunked(36)
+            return chunks.mapIndexed { index, chunk ->
+                IconChunk(index = index+1, total =  chunks.size, icons = chunk.toPersistentList())
+            }
+                .asSequence()
+        }
 }
+
+internal data class IconChunk(
+    val index: Int,
+    val total: Int,
+    val icons: ImmutableList<Int>,
+)
 
 @PreviewsDayNight
 @Composable
-internal fun IconsCompoundPart2Preview() = ElementPreview {
+internal fun IconsCompoundPreview(@PreviewParameter(IconChunkPreviewProvider::class) chunk: IconChunk) = ElementPreview {
     IconsPreview(
-        title = "R.drawable.ic_compound_* 2 / 2",
-        iconsList = iconsCompound.drop(36).toPersistentList(),
+        title = "R.drawable.ic_compound_* ${chunk.index}/${chunk.total}",
+        iconsList = chunk.icons,
         iconNameTransform = { name ->
             name.removePrefix("ic_compound_")
                 .replace("_", " ")

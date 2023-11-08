@@ -28,6 +28,7 @@ internal val iconsCompound = listOf(
     R.drawable.ic_compound_chat_problem,
     R.drawable.ic_compound_check,
     R.drawable.ic_compound_check_circle,
+    R.drawable.ic_compound_check_circle_solid,
     R.drawable.ic_compound_chevron_down,
     R.drawable.ic_compound_chevron_left,
     R.drawable.ic_compound_chevron_right,
@@ -48,6 +49,7 @@ internal val iconsCompound = listOf(
     R.drawable.ic_compound_filter,
     R.drawable.ic_compound_grid_view,
     R.drawable.ic_compound_info,
+    R.drawable.ic_compound_info_solid,
     R.drawable.ic_compound_leave,
     R.drawable.ic_compound_link,
     R.drawable.ic_compound_lock,
@@ -79,6 +81,7 @@ internal val iconsCompound = listOf(
     R.drawable.ic_compound_spotlight_view,
     R.drawable.ic_compound_threads,
     R.drawable.ic_compound_threads_solid,
+    R.drawable.ic_compound_user,
     R.drawable.ic_compound_user_add,
     R.drawable.ic_compound_user_add_solid,
     R.drawable.ic_compound_user_profile,
@@ -116,7 +119,8 @@ internal val iconsSeptember = listOf(
 // This list and all the drawable it contains should be removed at some point.
 // All the icons should be defined in Compound.
 internal val iconsOther = listOf(
-    R.drawable.ic_developer_mode,
+    R.drawable.ic_developer_options,
+    R.drawable.ic_devices,
     R.drawable.ic_groups,
     R.drawable.ic_indent_decrease,
     R.drawable.ic_indent_increase,
@@ -130,4 +134,5 @@ internal val iconsOther = listOf(
     R.drawable.ic_strikethrough,
     R.drawable.ic_thread_decoration,
     R.drawable.ic_underline,
+    R.drawable.ic_sign_out,
 )

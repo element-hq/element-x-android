@@ -185,7 +185,7 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        resourceId = CommonDrawables.ic_compound_info,
+                        resourceId = CommonDrawables.ic_compound_info_solid,
                         contentDescription = null,
                         tint = ElementTheme.colors.iconSecondary,
                         modifier = Modifier
