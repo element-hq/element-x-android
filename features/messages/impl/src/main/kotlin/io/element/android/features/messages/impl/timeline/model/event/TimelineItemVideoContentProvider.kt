@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.model.event
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 
 open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineItemVideoContent> {
     override val values: Sequence<TimelineItemVideoContent>
@@ -32,7 +33,7 @@ open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineI
 fun aTimelineItemVideoContent() = TimelineItemVideoContent(
     body = "Video.mp4",
     thumbnailSource = null,
-    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+    blurHash = A_BLUR_HASH,
     aspectRatio = 0.5f,
     duration = 100,
     videoSource = MediaSource(""),

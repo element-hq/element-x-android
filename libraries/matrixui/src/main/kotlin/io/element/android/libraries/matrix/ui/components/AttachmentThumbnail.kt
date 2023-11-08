@@ -19,7 +19,8 @@ package io.element.android.libraries.matrix.ui.components
 import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Image
@@ -28,11 +29,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
-import io.element.android.libraries.designsystem.components.PinIcon
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -104,8 +110,9 @@ fun AttachmentThumbnail(
                     )
                 }
                 AttachmentThumbnailType.Location -> {
-                    PinIcon(
-                        modifier = Modifier.fillMaxSize()
+                    Icon(
+                        resourceId = R.drawable.ic_september_location,
+                        contentDescription = info.textContent,
                     )
                 }
             }
@@ -125,3 +132,14 @@ data class AttachmentThumbnailInfo(
     val textContent: String? = null,
     val blurHash: String? = null,
 ) : Parcelable
+
+@PreviewsDayNight
+@Composable
+internal fun AttachmentThumbnailPreview(@PreviewParameter(AttachmentThumbnailInfoProvider::class) data: AttachmentThumbnailInfo) = ElementPreview {
+    AttachmentThumbnail(
+        data,
+        modifier = Modifier
+            .size(36.dp)
+            .clip(RoundedCornerShape(4.dp))
+    )
+}

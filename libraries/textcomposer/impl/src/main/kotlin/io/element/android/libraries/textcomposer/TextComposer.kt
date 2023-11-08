@@ -58,6 +58,7 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -720,7 +721,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                     thumbnailSource = MediaSource("https://domain.com/image.jpg"),
                     textContent = "image.jpg",
                     type = AttachmentThumbnailType.Image,
-                    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+                    blurHash = A_BLUR_HASH,
                 ),
                 defaultContent = "image.jpg"
             ),
@@ -741,7 +742,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                     thumbnailSource = MediaSource("https://domain.com/video.mp4"),
                     textContent = "video.mp4",
                     type = AttachmentThumbnailType.Video,
-                    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+                    blurHash = A_BLUR_HASH,
                 ),
                 defaultContent = "video.mp4"
             ),
