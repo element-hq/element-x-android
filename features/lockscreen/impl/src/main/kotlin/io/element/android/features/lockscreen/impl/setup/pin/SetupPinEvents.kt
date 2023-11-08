@@ -17,6 +17,6 @@
 package io.element.android.features.lockscreen.impl.setup.pin
 
 sealed interface SetupPinEvents {
-    data class OnPinEntryChanged(val entryAsText: String) : SetupPinEvents
+    data class OnPinEntryChanged(val entryAsText: String, val fromConfirmationStep: Boolean) : SetupPinEvents
     data object ClearFailure : SetupPinEvents
 }

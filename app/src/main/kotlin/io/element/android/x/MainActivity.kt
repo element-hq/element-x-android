@@ -32,6 +32,7 @@ import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
+import io.element.android.features.lockscreen.api.handleSecureFlag
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
@@ -53,6 +54,7 @@ class MainActivity : NodeActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         appBindings = bindings()
+        appBindings.lockScreenService().handleSecureFlag(this)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             MainContent(appBindings)

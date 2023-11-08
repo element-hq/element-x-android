@@ -35,8 +35,12 @@ import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -113,14 +117,23 @@ class DefaultLockScreenService @Inject constructor(
         }
     }
 
-    override suspend fun isSetupRequired(): Boolean {
-        return lockScreenConfig.isPinMandatory
-            && featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)
-            && !pinCodeManager.isPinCodeAvailable()
+    override fun isPinSetup(): Flow<Boolean> {
+        return combine(
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.PinUnlock),
+            pinCodeManager.hasPinCode()
+        ) { isEnabled, hasPinCode ->
+            isEnabled && hasPinCode
+        }
+    }
+
+    override fun isSetupRequired(): Flow<Boolean> {
+        return isPinSetup().map { isPinSetup ->
+            !isPinSetup && lockScreenConfig.isPinMandatory
+        }
     }
 
     private fun CoroutineScope.lockIfNeeded(gracePeriod: Duration = Duration.ZERO) = launch {
-        if (featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock) && pinCodeManager.isPinCodeAvailable()) {
+        if (isPinSetup().first()) {
             delay(gracePeriod)
             _lockScreenState.value = LockScreenLockState.Locked
         }

@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import timber.log.Timber
 import java.security.InvalidKeyException
@@ -86,7 +87,12 @@ class DefaultBiometricUnlock(
         val callback = AuthenticationCallback(callbacks, deferredAuthenticationResult)
         val prompt = BiometricPrompt(activity, executor, callback)
         prompt.authenticate(promptInfo, cryptoObject)
-        return deferredAuthenticationResult.await()
+        return try {
+            deferredAuthenticationResult.await()
+        } catch (cancellation: CancellationException) {
+            prompt.cancelAuthentication()
+            BiometricUnlock.AuthenticationResult.Failure(cancellation)
+        }
     }
 
     @Throws(KeyPermanentlyInvalidatedException::class)
@@ -110,7 +116,6 @@ private class AuthenticationCallback(
     override fun onAuthenticationFailed() {
         super.onAuthenticationFailed()
         callbacks.forEach { it.onBiometricUnlockFailed(null) }
-        deferredAuthenticationResult.complete(BiometricUnlock.AuthenticationResult.Failure(null))
     }
 
     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {

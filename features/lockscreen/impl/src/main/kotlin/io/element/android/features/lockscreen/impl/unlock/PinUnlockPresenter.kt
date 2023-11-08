@@ -43,6 +43,7 @@ class PinUnlockPresenter @Inject constructor(
     private val biometricUnlockManager: BiometricUnlockManager,
     private val matrixClient: MatrixClient,
     private val coroutineScope: CoroutineScope,
+    private val pinUnlockHelper: PinUnlockHelper,
 ) : Presenter<PinUnlockState> {
 
     @Composable
@@ -66,9 +67,10 @@ class PinUnlockPresenter @Inject constructor(
         var biometricUnlockResult by remember {
             mutableStateOf<BiometricUnlock.AuthenticationResult?>(null)
         }
-
+        val isUnlocked = remember {
+            mutableStateOf(false)
+        }
         val biometricUnlock = biometricUnlockManager.rememberBiometricUnlock()
-
         LaunchedEffect(Unit) {
             suspend {
                 val pinCodeSize = pinCodeManager.getPinCodeSize()
@@ -93,6 +95,9 @@ class PinUnlockPresenter @Inject constructor(
             if (remainingAttemptsNumber == 0) {
                 showSignOutPrompt = true
             }
+        }
+        pinUnlockHelper.OnUnlockEffect {
+            isUnlocked.value = true
         }
 
         fun handleEvents(event: PinUnlockEvents) {
@@ -129,6 +134,7 @@ class PinUnlockPresenter @Inject constructor(
             signOutAction = signOutAction.value,
             showBiometricUnlock = biometricUnlock.isActive,
             biometricUnlockResult = biometricUnlockResult,
+            isUnlocked = isUnlocked.value,
             eventSink = ::handleEvents
         )
     }

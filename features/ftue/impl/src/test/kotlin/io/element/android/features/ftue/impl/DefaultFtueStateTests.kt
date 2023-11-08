@@ -57,6 +57,7 @@ class DefaultFtueStateTests {
         val analyticsService = FakeAnalyticsService()
         val migrationScreenStore = InMemoryMigrationScreenStore()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = true)
+        val lockScreenService = FakeLockScreenService()
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
 
         val state = createState(
@@ -64,13 +65,15 @@ class DefaultFtueStateTests {
             welcomeState = welcomeState,
             analyticsService = analyticsService,
             migrationScreenStore = migrationScreenStore,
-            permissionStateProvider = permissionStateProvider
+            permissionStateProvider = permissionStateProvider,
+            lockScreenService = lockScreenService,
         )
 
         welcomeState.setWelcomeScreenShown()
         analyticsService.setDidAskUserConsent()
         migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
         permissionStateProvider.setPermissionGranted()
+        lockScreenService.setIsPinSetup(true)
         state.updateState()
 
         assertThat(state.shouldDisplayFlow.value).isFalse()
@@ -85,6 +88,7 @@ class DefaultFtueStateTests {
         val analyticsService = FakeAnalyticsService()
         val migrationScreenStore = InMemoryMigrationScreenStore()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
+        val lockScreenService = FakeLockScreenService()
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
 
         val state = createState(
@@ -92,7 +96,8 @@ class DefaultFtueStateTests {
             welcomeState = welcomeState,
             analyticsService = analyticsService,
             migrationScreenStore = migrationScreenStore,
-            permissionStateProvider = permissionStateProvider
+            permissionStateProvider = permissionStateProvider,
+            lockScreenService = lockScreenService,
         )
         val steps = mutableListOf<FtueStep?>()
 
@@ -108,7 +113,11 @@ class DefaultFtueStateTests {
         steps.add(state.getNextStep(steps.lastOrNull()))
         permissionStateProvider.setPermissionGranted()
 
-        // Fourth step, analytics opt in
+        // Fourth step, entering PIN code
+        steps.add(state.getNextStep(steps.lastOrNull()))
+        lockScreenService.setIsPinSetup(true)
+
+        // Fifth step, analytics opt in
         steps.add(state.getNextStep(steps.lastOrNull()))
         analyticsService.setDidAskUserConsent()
 
@@ -119,6 +128,7 @@ class DefaultFtueStateTests {
             FtueStep.MigrationScreen,
             FtueStep.WelcomeScreen,
             FtueStep.NotificationsOptIn,
+            FtueStep.LockscreenSetup,
             FtueStep.AnalyticsOptIn,
             null, // Final state
         )
@@ -133,18 +143,20 @@ class DefaultFtueStateTests {
         val analyticsService = FakeAnalyticsService()
         val migrationScreenStore = InMemoryMigrationScreenStore()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
-
+        val lockScreenService = FakeLockScreenService()
         val state = createState(
             coroutineScope = coroutineScope,
             analyticsService = analyticsService,
             migrationScreenStore = migrationScreenStore,
             permissionStateProvider = permissionStateProvider,
+            lockScreenService = lockScreenService,
         )
 
-        // Skip first 3 steps
+        // Skip first 4 steps
         migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
         state.setWelcomeScreenShown()
         permissionStateProvider.setPermissionGranted()
+        lockScreenService.setIsPinSetup(true)
 
         assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
 
@@ -160,18 +172,21 @@ class DefaultFtueStateTests {
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val analyticsService = FakeAnalyticsService()
         val migrationScreenStore = InMemoryMigrationScreenStore()
+        val lockScreenService = FakeLockScreenService()
 
         val state = createState(
             sdkIntVersion = Build.VERSION_CODES.M,
             coroutineScope = coroutineScope,
             analyticsService = analyticsService,
             migrationScreenStore = migrationScreenStore,
+            lockScreenService = lockScreenService,
         )
 
         migrationScreenStore.setMigrationScreenShown(A_SESSION_ID)
         assertThat(state.getNextStep()).isEqualTo(FtueStep.WelcomeScreen)
-
         state.setWelcomeScreenShown()
+        lockScreenService.setIsPinSetup(true)
+
         assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
 
         analyticsService.setDidAskUserConsent()

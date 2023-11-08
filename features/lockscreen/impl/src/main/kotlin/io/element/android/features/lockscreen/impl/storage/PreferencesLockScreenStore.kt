@@ -85,10 +85,10 @@ class PreferencesLockScreenStore @Inject constructor(
         }
     }
 
-    override suspend fun hasPinCode(): Boolean {
+    override fun hasPinCode(): Flow<Boolean> {
         return context.dataStore.data.map { preferences ->
             preferences[pinCodeKey] != null
-        }.first()
+        }
     }
 
     override fun isBiometricUnlockAllowed(): Flow<Boolean> {

@@ -17,10 +17,12 @@
 package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -35,15 +37,30 @@ class PinUnlockNode @AssistedInject constructor(
     private val presenter: PinUnlockPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    interface Callback : Plugin {
+        fun onUnlock()
+    }
+
     data class Inputs(
         val isInAppUnlock: Boolean
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
 
+    private fun onUnlock() {
+        plugins<Callback>().forEach {
+            it.onUnlock()
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        LaunchedEffect(state.isUnlocked) {
+            if (state.isUnlocked) {
+                onUnlock()
+            }
+        }
         PinUnlockView(
             state = state,
             isInAppUnlock = inputs.isInAppUnlock,

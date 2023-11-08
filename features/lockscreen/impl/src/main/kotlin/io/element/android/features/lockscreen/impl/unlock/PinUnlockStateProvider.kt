@@ -41,6 +41,7 @@ fun aPinUnlockState(
     showSignOutPrompt: Boolean = false,
     showBiometricUnlock: Boolean = true,
     biometricUnlockResult: BiometricUnlock.AuthenticationResult? = null,
+    isUnlocked: Boolean = false,
     signOutAction: Async<String?> = Async.Uninitialized,
 ) = PinUnlockState(
     pinEntry = Async.Success(pinEntry),
@@ -50,5 +51,6 @@ fun aPinUnlockState(
     showBiometricUnlock = showBiometricUnlock,
     signOutAction = signOutAction,
     biometricUnlockResult = biometricUnlockResult,
+    isUnlocked = isUnlocked,
     eventSink = {}
 )

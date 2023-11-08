@@ -24,7 +24,12 @@ private const val DEFAULT_REMAINING_ATTEMPTS = 3
 
 class InMemoryLockScreenStore : LockScreenStore {
 
+    private val hasPinCode = MutableStateFlow(false)
     private var pinCode: String? = null
+        set(value) {
+            field = value
+            hasPinCode.value = value != null
+        }
     private var remainingAttempts: Int = DEFAULT_REMAINING_ATTEMPTS
     private var isBiometricUnlockAllowed = MutableStateFlow(false)
 
@@ -52,8 +57,8 @@ class InMemoryLockScreenStore : LockScreenStore {
         pinCode = null
     }
 
-    override suspend fun hasPinCode(): Boolean {
-        return pinCode != null
+    override fun hasPinCode(): Flow<Boolean> {
+        return hasPinCode
     }
 
     override fun isBiometricUnlockAllowed(): Flow<Boolean> {
