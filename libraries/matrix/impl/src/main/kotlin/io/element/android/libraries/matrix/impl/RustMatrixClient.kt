@@ -72,6 +72,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
@@ -200,6 +201,7 @@ class RustMatrixClient constructor(
         cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
             RustMatrixRoom(
                 sessionId = sessionId,
+                isKeyBackupEnabled = client.encryption().backupState() == BackupState.ENABLED,
                 roomListItem = roomListItem,
                 innerRoom = fullRoom,
                 roomNotificationSettingsService = notificationSettingsService,
