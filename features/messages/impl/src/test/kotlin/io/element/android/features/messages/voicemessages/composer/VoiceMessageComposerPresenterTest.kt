@@ -195,6 +195,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
+            skipItems(1)
             val finalState = awaitItem().also {
                 assertThat(it.voiceMessageState).isEqualTo(aPlayingState())
             }
@@ -214,6 +215,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Pause))
+            skipItems(1)
             val finalState = awaitItem().also {
                 assertThat(it.voiceMessageState).isEqualTo(aPausedState())
             }
@@ -251,6 +253,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvents.DeleteVoiceMessage)
+            skipItems(1)
             awaitItem().apply {
                 assertThat(voiceMessageState).isEqualTo(aPausedState())
             }
@@ -322,6 +325,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
             awaitItem().eventSink(VoiceMessageComposerEvents.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
+            skipItems(1)
             assertThat(awaitItem().voiceMessageState).isEqualTo(aPlayingState().toSendingState())
 
             val finalState = awaitItem()

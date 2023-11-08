@@ -120,10 +120,12 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 VoiceMessagePlayerEvent.Play ->
                     when (val recording = recorderState) {
                         is VoiceRecorderState.Finished ->
-                            player.play(
-                                mediaPath = recording.file.path,
-                                mimeType = recording.mimeType,
-                            )
+                            localCoroutineScope.launch {
+                                player.play(
+                                    mediaPath = recording.file.path,
+                                    mimeType = recording.mimeType,
+                                )
+                            }
                         else -> Timber.e("Voice message player event received but no file to play")
                     }
                 VoiceMessagePlayerEvent.Pause -> {
