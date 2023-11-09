@@ -25,10 +25,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddComment
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,8 +37,8 @@ import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSiz
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -105,7 +101,7 @@ fun WelcomeView(
 private fun listItems() = persistentListOf(
     InfoListItem(
         message = stringResource(R.string.screen_welcome_bullet_2),
-        iconVector = Icons.Outlined.Lock,
+        iconId = CommonDrawables.ic_lock_outline,
     ),
     InfoListItem(
         message = stringResource(R.string.screen_welcome_bullet_3),
