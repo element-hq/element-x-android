@@ -122,7 +122,12 @@ class RustMatrixClient constructor(
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
     private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
-    private val encryptionService = RustEncryptionService(client, dispatchers).apply { start() }
+    private val encryptionService = RustEncryptionService(
+        client = client,
+        syncService = rustSyncService,
+        sessionCoroutineScope = sessionCoroutineScope,
+        dispatchers = dispatchers,
+    ).apply { start() }
 
     private val isLoggingOut = AtomicBoolean(false)
 
