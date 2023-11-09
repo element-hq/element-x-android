@@ -29,6 +29,7 @@ appId: ${APP_ID}
 - tapOn:
     text: "Screen lock"
 - assertVisible: "Choose PIN"
+- hideKeyboard
 - back
 
 - tapOn:
