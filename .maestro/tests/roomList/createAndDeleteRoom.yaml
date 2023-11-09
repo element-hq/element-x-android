@@ -29,5 +29,6 @@ appId: ${APP_ID}
 - tapOn: "People"
 # assert there's 1 member and 2 invitees
 - tapOn: "Back"
+- scroll
 - tapOn: "Leave room"
 - tapOn: "Leave"
