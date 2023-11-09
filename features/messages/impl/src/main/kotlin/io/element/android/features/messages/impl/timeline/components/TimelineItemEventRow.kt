@@ -374,7 +374,9 @@ private fun MessageEventBubbleContent(
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
     eventSink: (TimelineEvents) -> Unit,
-    @SuppressLint("ModifierParameter") bubbleModifier: Modifier = Modifier, // need to rename this modifier to distinguish it from the following ones
+    @SuppressLint("ModifierParameter")
+    @Suppress("ModifierNaming")
+    bubbleModifier: Modifier = Modifier, // need to rename this modifier to prevent linter false positives
 ) {
 
     // Long clicks are not not automatically propagated from a `clickable`
@@ -593,7 +595,7 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
     val messageContent = inReplyTo.content as? MessageContent ?: return null
     return when (val type = messageContent.type) {
         is ImageMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource,
+            thumbnailSource = type.info?.thumbnailSource ?: type.source,
             textContent = messageContent.body,
             type = AttachmentThumbnailType.Image,
             blurHash = type.info?.blurhash,

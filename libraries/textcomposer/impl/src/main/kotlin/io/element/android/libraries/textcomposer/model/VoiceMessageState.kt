@@ -16,21 +16,25 @@
 
 package io.element.android.libraries.textcomposer.model
 
+import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
 
-sealed class VoiceMessageState {
-    data object Idle: VoiceMessageState()
+@Immutable
+sealed interface VoiceMessageState {
+    data object Idle: VoiceMessageState
 
     data class Preview(
         val isSending: Boolean,
         val isPlaying: Boolean,
+        val showCursor: Boolean,
         val playbackProgress: Float,
+        val time: Duration,
         val waveform: ImmutableList<Float>,
-    ): VoiceMessageState()
+    ): VoiceMessageState
 
     data class Recording(
         val duration: Duration,
         val levels: ImmutableList<Float>,
-    ): VoiceMessageState()
+    ): VoiceMessageState
 }

@@ -24,7 +24,6 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.media.toFile
 import java.io.File
 
 /**
@@ -83,28 +82,29 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
         ): DefaultVoiceMessageMediaRepo
     }
 
-    override suspend fun getMediaFile(): Result<File> = if (!isInCache()) {
-        matrixMediaLoader.downloadMediaFile(
+    override suspend fun getMediaFile(): Result<File> = when {
+        cachedFile == null -> Result.failure(IllegalStateException("Invalid mxcUri."))
+        cachedFile.exists() -> Result.success(cachedFile)
+        else -> matrixMediaLoader.downloadMediaFile(
             source = mediaSource,
             mimeType = mimeType,
             body = body,
+            useCache = false,
         ).mapCatching {
-            val dest = cachedFilePath.apply { parentFile?.mkdirs() }
-            // TODO By not closing the MediaFile we're leaking the rust file handle here.
-            // Not that big of a deal but better to avoid it someday.
-            if (it.toFile().renameTo(dest)) {
-                dest
-            } else {
-                error("Failed to move file to cache.")
+            it.use { mediaFile ->
+                val dest = cachedFile.apply { parentFile?.mkdirs() }
+                if (mediaFile.persist(dest.path)) {
+                    dest
+                } else {
+                    error("Failed to move file to cache.")
+                }
             }
         }
-    } else {
-        Result.success(cachedFilePath)
     }
 
-    private val cachedFilePath: File = File("${cacheDir.path}/$CACHE_VOICE_SUBDIR/${mxcUri2FilePath(mediaSource.url)}")
-
-    private fun isInCache(): Boolean = cachedFilePath.exists()
+    private val cachedFile: File? = mxcUri2FilePath(mediaSource.url)?.let {
+        File("${cacheDir.path}/$CACHE_VOICE_SUBDIR/$it")
+    }
 }
 
 /**
@@ -123,12 +123,9 @@ private val mxcRegex = Regex("""^mxc:\/\/([^\/]+)\/([^\/]+)$""")
  * Sanitizes an mxcUri to be used as a relative file path.
  *
  * @param mxcUri the Matrix Content (mxc://) URI of the voice message.
- * @return the relative file path as "<server-name>/<media-id>".
- * @throws IllegalStateException if the mxcUri is invalid.
+ * @return the relative file path as "<server-name>/<media-id>" or null if the mxcUri is invalid.
  */
-private fun mxcUri2FilePath(mxcUri: String): String = checkNotNull(mxcRegex.matchEntire(mxcUri)) {
-    "mxcUri2FilePath: Invalid mxcUri: $mxcUri"
-}.let { match ->
+private fun mxcUri2FilePath(mxcUri: String): String? = mxcRegex.matchEntire(mxcUri)?.let { match ->
     buildString {
         append(match.groupValues[1])
         append("/")

@@ -19,11 +19,11 @@ package io.element.android.libraries.voicerecorder.api
 import java.io.File
 import kotlin.time.Duration
 
-sealed class VoiceRecorderState {
+sealed interface VoiceRecorderState {
     /**
      * The recorder is idle and not recording.
      */
-    data object Idle : VoiceRecorderState()
+    data object Idle : VoiceRecorderState
 
     /**
      * The recorder is currently recording.
@@ -31,7 +31,7 @@ sealed class VoiceRecorderState {
      * @property elapsedTime The elapsed time since the recording started.
      * @property levels The current audio levels of the recording as a fraction of 1.
      */
-    data class Recording(val elapsedTime: Duration, val levels: List<Float>) : VoiceRecorderState()
+    data class Recording(val elapsedTime: Duration, val levels: List<Float>) : VoiceRecorderState
 
     /**
      * The recorder has finished recording.
@@ -39,10 +39,12 @@ sealed class VoiceRecorderState {
      * @property file The recorded file.
      * @property mimeType The mime type of the file.
      * @property waveform The waveform of the recording.
+     * @property duration The total time spent recording.
      */
     data class Finished(
         val file: File,
         val mimeType: String,
         val waveform: List<Float>,
-    ) : VoiceRecorderState()
+        val duration: Duration,
+    ) : VoiceRecorderState
 }

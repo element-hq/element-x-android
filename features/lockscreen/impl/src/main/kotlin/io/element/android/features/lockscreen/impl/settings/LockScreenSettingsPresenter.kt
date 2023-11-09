@@ -17,11 +17,10 @@
 package io.element.android.features.lockscreen.impl.settings
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.appconfig.LockScreenConfig
@@ -43,22 +42,14 @@ class LockScreenSettingsPresenter @Inject constructor(
 
     @Composable
     override fun present(): LockScreenSettingsState {
-        var triggerComputation by remember {
-            mutableIntStateOf(0)
-        }
-        var showRemovePinOption by remember {
-            mutableStateOf(false)
-        }
-        var showToggleBiometric by remember {
-            mutableStateOf(false)
+        val showRemovePinOption by produceState(initialValue = false) {
+            pinCodeManager.hasPinCode().collect { hasPinCode ->
+                value = !lockScreenConfig.isPinMandatory && hasPinCode
+            }
         }
         val isBiometricEnabled by lockScreenStore.isBiometricUnlockAllowed().collectAsState(initial = false)
         var showRemovePinConfirmation by remember {
             mutableStateOf(false)
-        }
-        LaunchedEffect(triggerComputation) {
-            showRemovePinOption = !lockScreenConfig.isPinMandatory && pinCodeManager.isPinCodeAvailable()
-            showToggleBiometric = biometricUnlockManager.isDeviceSecured
         }
 
         fun handleEvents(event: LockScreenSettingsEvents) {
@@ -69,7 +60,6 @@ class LockScreenSettingsPresenter @Inject constructor(
                         if (showRemovePinConfirmation) {
                             showRemovePinConfirmation = false
                             pinCodeManager.deletePinCode()
-                            triggerComputation++
                         }
                     }
                 }
@@ -86,7 +76,7 @@ class LockScreenSettingsPresenter @Inject constructor(
             showRemovePinOption = showRemovePinOption,
             isBiometricEnabled = isBiometricEnabled,
             showRemovePinConfirmation = showRemovePinConfirmation,
-            showToggleBiometric = showToggleBiometric,
+            showToggleBiometric = biometricUnlockManager.isDeviceSecured,
             eventSink = ::handleEvents
         )
     }

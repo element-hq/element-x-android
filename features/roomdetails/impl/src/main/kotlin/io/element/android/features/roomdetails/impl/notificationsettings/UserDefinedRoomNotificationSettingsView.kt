@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -32,9 +31,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orTrue
-import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -43,6 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun UserDefinedRoomNotificationSettingsView(
@@ -86,30 +85,19 @@ fun UserDefinedRoomNotificationSettingsView(
                 }
             )
 
-            when (state.setNotificationSettingAction) {
-                is Async.Loading -> {
-                    ProgressDialog()
-                }
-                is Async.Failure -> {
-                    ShowChangeNotificationSettingError(state, RoomNotificationSettingsEvents.ClearSetNotificationError)
-                }
-                else -> Unit
-            }
+            AsyncView(
+                async = state.setNotificationSettingAction,
+                onSuccess = {},
+                errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+                onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearSetNotificationError) },
+            )
 
-            when (state.restoreDefaultAction) {
-                is Async.Loading -> {
-                    ProgressDialog()
-                }
-                is Async.Failure -> {
-                    ShowChangeNotificationSettingError(state, RoomNotificationSettingsEvents.ClearRestoreDefaultError)
-                }
-                is Async.Success -> {
-                    LaunchedEffect(state.restoreDefaultAction) {
-                        onBackPressed()
-                    }
-                }
-                else -> Unit
-            }
+            AsyncView(
+                async = state.restoreDefaultAction,
+                onSuccess = { onBackPressed() },
+                errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+                onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearRestoreDefaultError) },
+            )
         }
     }
 }

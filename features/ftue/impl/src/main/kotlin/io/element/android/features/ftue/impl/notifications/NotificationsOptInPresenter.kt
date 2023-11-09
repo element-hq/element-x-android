@@ -34,7 +34,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class NotificationsOptInPresenter @AssistedInject constructor(
-    private val permissionsPresenterFactory: PermissionsPresenter.Factory,
+    permissionsPresenterFactory: PermissionsPresenter.Factory,
     @Assisted private val callback: NotificationsOptInNode.Callback,
     private val appCoroutineScope: CoroutineScope,
     private val permissionStateProvider: PermissionStateProvider,
@@ -46,14 +46,13 @@ class NotificationsOptInPresenter @AssistedInject constructor(
         fun create(callback: NotificationsOptInNode.Callback): NotificationsOptInPresenter
     }
 
-    private val postNotificationPermissionsPresenter by lazy {
+    private val postNotificationPermissionsPresenter: PermissionsPresenter =
         // Ask for POST_NOTIFICATION PERMISSION on Android 13+
         if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             permissionsPresenterFactory.create(Manifest.permission.POST_NOTIFICATIONS)
         } else {
             NoopPermissionsPresenter()
         }
-    }
 
     @Composable
     override fun present(): NotificationsOptInState {

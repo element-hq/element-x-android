@@ -27,6 +27,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
@@ -40,14 +42,16 @@ import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @SingleIn(RoomScope::class)
 class VoiceMessageComposerPresenter @Inject constructor(
@@ -56,6 +60,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val mediaSender: MediaSender,
     private val player: VoiceMessageComposerPlayer,
+    private val messageComposerContext: MessageComposerContext,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<VoiceMessageComposerState> {
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)
@@ -68,8 +73,8 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         val permissionState = permissionsPresenter.present()
         var isSending by remember { mutableStateOf(false) }
-        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotPlaying)
-        val isPlaying by remember(playerState.isPlaying) { derivedStateOf { playerState.isPlaying } }
+        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotLoaded)
+        val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
         val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
 
         val onLifecycleEvent = { event: Lifecycle.Event ->
@@ -115,10 +120,12 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 VoiceMessagePlayerEvent.Play ->
                     when (val recording = recorderState) {
                         is VoiceRecorderState.Finished ->
-                            player.play(
-                                mediaPath = recording.file.path,
-                                mimeType = recording.mimeType,
-                            )
+                            localCoroutineScope.launch {
+                                player.play(
+                                    mediaPath = recording.file.path,
+                                    mimeType = recording.mimeType,
+                                )
+                            }
                         else -> Timber.e("Voice message player event received but no file to play")
                     }
                 VoiceMessagePlayerEvent.Pause -> {
@@ -151,6 +158,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
             }
             isSending = true
             player.pause()
+            analyticsService.captureComposerEvent()
             appCoroutineScope.sendMessage(
                 file = finishedState.file,
                 mimeType = finishedState.mimeType,
@@ -185,8 +193,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 )
                 is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
                     isSending = isSending,
-                    isPlaying = isPlaying,
+                    isPlaying = playerState.isPlaying,
+                    showCursor = playerState.isLoaded && !isSending,
                     playbackProgress = playerState.progress,
+                    time = playerTime,
                     waveform = waveform,
                 )
                 else -> VoiceMessageState.Idle
@@ -236,6 +246,16 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         voiceRecorder.deleteRecording()
     }
+
+    private fun AnalyticsService.captureComposerEvent() =
+        analyticsService.capture(
+            Composer(
+                inThread = messageComposerContext.composerMode.inThread,
+                isEditing = messageComposerContext.composerMode.isEditing,
+                isReply = messageComposerContext.composerMode.isReply,
+                messageType = Composer.MessageType.VoiceMessage,
+            )
+        )
 }
 
 private fun VoiceRecorderState.finishedWaveform(): ImmutableList<Float> =
@@ -243,3 +263,20 @@ private fun VoiceRecorderState.finishedWaveform(): ImmutableList<Float> =
         ?.waveform
         .orEmpty()
         .toImmutableList()
+
+/**
+ * The time to display depending on the player state.
+ *
+ * Either the current position or total duration.
+ */
+private fun displayTime(
+    playerState: VoiceMessageComposerPlayer.State,
+    recording: VoiceRecorderState
+): Duration = when {
+    playerState.isLoaded ->
+        playerState.currentPosition.milliseconds
+    recording is VoiceRecorderState.Finished ->
+        recording.duration
+    else ->
+        0.milliseconds
+}

@@ -45,6 +45,7 @@ interface SimplePlayer {
     interface Listener {
         fun onIsPlayingChanged(isPlaying: Boolean)
         fun onMediaItemTransition(mediaItem: MediaItem?)
+        fun onPlaybackStateChanged(playbackState: Int)
     }
 }
 
@@ -67,6 +68,7 @@ class SimplePlayerImpl(
         p.addListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) = listener.onIsPlayingChanged(isPlaying)
             override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) = listener.onMediaItemTransition(mediaItem)
+            override fun onPlaybackStateChanged(playbackState: Int) = listener.onPlaybackStateChanged(playbackState)
         })
     }
 

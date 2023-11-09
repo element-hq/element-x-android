@@ -42,6 +42,15 @@ class TimelineEncryptedHistoryPostProcessorTest {
     }
 
     @Test
+    fun `given an encrypted room, and key backup enabled, nothing is done`() = runTest {
+        val processor = createPostProcessor(isKeyBackupEnabled = true)
+        val items = listOf(
+            MatrixTimelineItem.Event(0L, anEventTimelineItem())
+        )
+        assertThat(processor.process(items)).isSameInstanceAs(items)
+    }
+
+    @Test
     fun `given a null lastLoginTimestamp, nothing is done`() = runTest {
         val processor = createPostProcessor(lastLoginTimestamp = null)
         val items = listOf(
@@ -108,11 +117,13 @@ class TimelineEncryptedHistoryPostProcessorTest {
     private fun TestScope.createPostProcessor(
         lastLoginTimestamp: Date? = defaultLastLoginTimestamp,
         isRoomEncrypted: Boolean = true,
+        isKeyBackupEnabled: Boolean = false,
         paginationStateFlow: MutableStateFlow<MatrixTimeline.PaginationState> =
             MutableStateFlow(MatrixTimeline.PaginationState(hasMoreToLoadBackwards = true, isBackPaginating = false))
     ) = TimelineEncryptedHistoryPostProcessor(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = isRoomEncrypted,
+        isKeyBackupEnabled = isKeyBackupEnabled,
         paginationStateFlow = paginationStateFlow,
         dispatcher = StandardTestDispatcher(testScheduler)
     )

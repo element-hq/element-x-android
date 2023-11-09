@@ -15,10 +15,10 @@
  */
 
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
     id("kotlin-parcelize")
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.20"
 }
 
 android {
@@ -38,7 +38,6 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(libs.dagger)
     implementation(projects.libraries.core)
-    implementation("net.java.dev.jna:jna:5.13.0@aar")
     implementation(libs.serialization.json)
     api(projects.libraries.sessionStorage.api)
     implementation(libs.coroutines.core)

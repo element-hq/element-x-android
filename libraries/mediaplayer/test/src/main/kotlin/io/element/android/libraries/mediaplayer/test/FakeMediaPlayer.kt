@@ -17,6 +17,7 @@
 package io.element.android.libraries.mediaplayer.test
 
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,19 +32,36 @@ class FakeMediaPlayer : MediaPlayer {
         private const val FAKE_PLAYED_DURATION_MS = 1000L
     }
 
-    private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L, 0L))
+    private val _state = MutableStateFlow(
+        MediaPlayer.State(
+            isReady = false,
+            isPlaying = false,
+            mediaId = null,
+            currentPosition = 0L,
+            duration = 0L
+        )
+    )
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
-    override fun acquireControlAndPlay(uri: String, mediaId: String, mimeType: String) {
+    override suspend fun setMedia(uri: String, mediaId: String, mimeType: String): MediaPlayer.State {
         _state.update {
             it.copy(
-                isPlaying = true,
+                isReady = false,
+                isPlaying = false,
                 mediaId = mediaId,
-                currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
+                currentPosition = 0,
+                duration = null,
+            )
+        }
+        delay(1) // fake delay to simulate prepare() call.
+        _state.update {
+            it.copy(
+                isReady = true,
                 duration = FAKE_TOTAL_DURATION_MS,
             )
         }
+        return _state.value
     }
 
     override fun play() {
@@ -51,7 +69,6 @@ class FakeMediaPlayer : MediaPlayer {
             it.copy(
                 isPlaying = true,
                 currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
-                duration = FAKE_TOTAL_DURATION_MS,
             )
         }
     }

@@ -21,15 +21,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 @Composable
 internal fun textInputRoundedCornerShape(
     composerMode: MessageComposerMode,
 ): RoundedCornerShape {
-    val roundCornerSmall = 20.dp.applyScaleUp()
-    val roundCornerLarge = 21.dp.applyScaleUp()
+    val roundCornerSmall = 20.dp
+    val roundCornerLarge = 21.dp
 
     val roundedCornerSize = if (composerMode is MessageComposerMode.Special) {
         roundCornerSmall

@@ -1,2 +1,2 @@
-Main changes in this version: TODO.
+Main changes in this version: Element Call, voice message.
 Full changelog: https://github.com/vector-im/element-x-android/releases

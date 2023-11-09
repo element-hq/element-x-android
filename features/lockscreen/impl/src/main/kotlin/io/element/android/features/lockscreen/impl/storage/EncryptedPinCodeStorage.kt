@@ -16,6 +16,8 @@
 
 package io.element.android.features.lockscreen.impl.storage
 
+import kotlinx.coroutines.flow.Flow
+
 /**
  * Should be implemented by any class that provides access to the encrypted PIN code.
  * All methods are suspending in case there are async IO operations involved.
@@ -39,5 +41,6 @@ interface EncryptedPinCodeStorage {
     /**
      * Returns whether the PIN code is stored or not.
      */
-    suspend fun hasPinCode(): Boolean
+    fun hasPinCode(): Flow<Boolean>
+
 }

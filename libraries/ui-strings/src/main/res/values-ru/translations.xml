@@ -5,11 +5,13 @@
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
   <string name="a11y_notifications_muted">"Звук отключен"</string>
   <string name="a11y_pause">"Приостановить"</string>
+  <string name="a11y_pin_field">"Поле PIN-кода"</string>
   <string name="a11y_play">"Воспроизвести"</string>
   <string name="a11y_poll">"Опрос"</string>
   <string name="a11y_poll_end">"Опрос завершен"</string>
   <string name="a11y_send_files">"Отправить файлы"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
+  <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
   <string name="a11y_voice_message_record">"Запишите голосовое сообщение. Дважды нажмите и удерживайте, чтобы записать. Отпустите, чтобы закончить запись."</string>
   <string name="action_accept">"Разрешить"</string>
@@ -33,6 +35,7 @@
   <string name="action_edit">"Редактировать"</string>
   <string name="action_enable">"Включить"</string>
   <string name="action_end_poll">"Завершить опрос"</string>
+  <string name="action_enter_pin">"Введите PIN-код"</string>
   <string name="action_forgot_password">"Забыли пароль?"</string>
   <string name="action_forward">"Переслать"</string>
   <string name="action_invite">"Пригласить"</string>
@@ -69,12 +72,15 @@
   <string name="action_share">"Поделиться"</string>
   <string name="action_share_link">"Поделиться ссылкой"</string>
   <string name="action_sign_in_again">"Повторите вход"</string>
+  <string name="action_signout">"Выйти"</string>
+  <string name="action_signout_anyway">"Все равно выйти"</string>
   <string name="action_skip">"Пропустить"</string>
   <string name="action_start">"Начать"</string>
   <string name="action_start_chat">"Начать чат "</string>
   <string name="action_start_verification">"Начать подтверждение"</string>
   <string name="action_static_map_load">"Нажмите, чтобы загрузить карту"</string>
   <string name="action_take_photo">"Сделать фото"</string>
+  <string name="action_try_again">"Повторить попытку"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
   <string name="action_edit_poll">"Редактировать опрос"</string>
@@ -84,6 +90,7 @@
   <string name="common_analytics">"Аналитика"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_bubbles">"Пузыри"</string>
+  <string name="common_chat_backup">"Резервная копия чатов"</string>
   <string name="common_copyright">"Авторское право"</string>
   <string name="common_creating_room">"Создание комнаты…"</string>
   <string name="common_current_user_left_room">"Покинул комнату"</string>
@@ -93,6 +100,7 @@
   <string name="common_editing">"Редактирование"</string>
   <string name="common_emote">"%1$s%2$s"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
+  <string name="common_enter_your_pin">"Введите свой PIN-код"</string>
   <string name="common_error">"Ошибка"</string>
   <string name="common_everyone">"Для всех"</string>
   <string name="common_file">"Файл"</string>
@@ -122,13 +130,16 @@
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
+  <string name="common_recovery_key">"Ключ восстановления"</string>
   <string name="common_refreshing">"Обновление…"</string>
   <string name="common_replying_to">"Отвечает на %1$s"</string>
   <string name="common_report_a_bug">"Сообщить об ошибке"</string>
   <string name="common_report_submitted">"Отчет отправлен"</string>
   <string name="common_rich_text_editor">"Редактор форматированного текста"</string>
+  <string name="common_room">"Комната"</string>
   <string name="common_room_name">"Название комнаты"</string>
   <string name="common_room_name_placeholder">"например, название вашего проекта"</string>
+  <string name="common_screen_lock">"Блокировка экрана"</string>
   <string name="common_search_for_someone">"Поиск человека"</string>
   <string name="common_search_results">"Результаты поиска"</string>
   <string name="common_security">"Безопасность"</string>
@@ -137,6 +148,7 @@
   <string name="common_server_url">"Адрес сервера"</string>
   <string name="common_settings">"Настройки"</string>
   <string name="common_shared_location">"Делится местонахождением"</string>
+  <string name="common_signing_out">"Выход…"</string>
   <string name="common_starting_chat">"Начало чата…"</string>
   <string name="common_sticker">"Стикер"</string>
   <string name="common_success">"Успешно"</string>
@@ -150,6 +162,7 @@
   <string name="common_unable_to_decrypt">"Невозможно расшифровать"</string>
   <string name="common_unable_to_invite_message">"Не удалось отправить приглашения одному или нескольким пользователям."</string>
   <string name="common_unable_to_invite_title">"Не удалось отправить приглашение(я)"</string>
+  <string name="common_unlock">"Разблокировать"</string>
   <string name="common_unmute">"Включить звук"</string>
   <string name="common_unsupported_event">"Неподдерживаемое событие"</string>
   <string name="common_username">"Имя пользователя"</string>
@@ -158,6 +171,7 @@
   <string name="common_video">"Видео"</string>
   <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
+  <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
   <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
@@ -174,8 +188,10 @@
   <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>
   <string name="error_failed_locating_user">"%1$s не удалось получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже."</string>
+  <string name="error_failed_uploading_voice_message">"Не удалось загрузить голосовое сообщение."</string>
   <string name="error_missing_location_auth_android">"У %1$s нет разрешения на доступ к вашему местоположению. Вы можете разрешить доступ в Настройках."</string>
   <string name="error_missing_location_rationale_android">"У %1$s нет разрешения на доступ к вашему местоположению. Разрешите доступ ниже."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s не имеет разрешения на доступ к вашему микрофону. Разрешите доступ к записи голосового сообщения."</string>
   <string name="error_some_messages_have_not_been_sent">"Некоторые сообщения не были отправлены"</string>
   <string name="error_unknown">"Извините, произошла ошибка"</string>
   <string name="invite_friends_rich_title">"🔐️ Присоединяйтесь ко мне в %1$s"</string>
@@ -184,6 +200,11 @@
   <string name="leave_room_alert_private_subtitle">"Вы уверены, что хотите покинуть эту комнату? Эта комната не является публичной, и Вы не сможете присоединиться к ней без приглашения."</string>
   <string name="leave_room_alert_subtitle">"Вы уверены, что хотите покинуть комнату?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"Введена цифра %1$d"</item>
+    <item quantity="few">"Ведено %1$d цифр"</item>
+    <item quantity="many">"Введено много цифр"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d участник"</item>
     <item quantity="few">"%1$d участников"</item>

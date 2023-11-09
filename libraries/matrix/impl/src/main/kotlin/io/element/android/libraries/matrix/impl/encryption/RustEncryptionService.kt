@@ -22,10 +22,16 @@ import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.impl.sync.RustSyncService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackupStateListener
 import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
@@ -41,6 +47,8 @@ import org.matrix.rustcomponents.sdk.SteadyStateException as RustSteadyStateExce
 
 internal class RustEncryptionService(
     client: Client,
+    syncService: RustSyncService,
+    sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
 ) : EncryptionService {
 
@@ -52,20 +60,44 @@ internal class RustEncryptionService(
     private val backupUploadStateMapper = BackupUploadStateMapper()
     private val steadyStateExceptionMapper = SteadyStateExceptionMapper()
 
-    override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(service.backupState().let(backupStateMapper::map))
-    override val recoveryStateStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(service.recoveryState().let(recoveryStateMapper::map))
+    private val backupStateFlow = MutableStateFlow(service.backupState().let(backupStateMapper::map))
+
+    override val backupStateStateFlow = combine(
+        backupStateFlow,
+        syncService.syncState,
+    ) { backupState, syncState ->
+        if (syncState == SyncState.Running) {
+            backupState
+        } else {
+            BackupState.WAITING_FOR_SYNC
+        }
+    }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, BackupState.WAITING_FOR_SYNC)
+
+    private val recoveryStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(service.recoveryState().let(recoveryStateMapper::map))
+
+    override val recoveryStateStateFlow = combine(
+        recoveryStateFlow,
+        syncService.syncState,
+    ) { recoveryState, syncState ->
+        if (syncState == SyncState.Running) {
+            recoveryState
+        } else {
+            RecoveryState.WAITING_FOR_SYNC
+        }
+    }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RecoveryState.WAITING_FOR_SYNC)
+
     override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Unknown)
 
     fun start() {
         service.backupStateListener(object : BackupStateListener {
             override fun onUpdate(status: RustBackupState) {
-                backupStateStateFlow.value = backupStateMapper.map(status)
+                backupStateFlow.value = backupStateMapper.map(status)
             }
         })
 
         service.recoveryStateListener(object : RecoveryStateListener {
             override fun onUpdate(status: RustRecoveryState) {
-                recoveryStateStateFlow.value = recoveryStateMapper.map(status)
+                recoveryStateFlow.value = recoveryStateMapper.map(status)
             }
         })
     }

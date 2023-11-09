@@ -32,7 +32,6 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -44,13 +43,7 @@ class PinUnlockPresenterTest {
 
     @Test
     fun `present - success verify flow`() = runTest {
-        val pinCodeVerified = CompletableDeferred<Unit>()
-        val callback = object : DefaultPinCodeManagerCallback() {
-            override fun onPinCodeCreated() {
-                pinCodeVerified.complete(Unit)
-            }
-        }
-        val presenter = createPinUnlockPresenter(this, callback = callback)
+        val presenter = createPinUnlockPresenter(this)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -58,6 +51,7 @@ class PinUnlockPresenterTest {
                 assertThat(state.pinEntry).isInstanceOf(Async.Uninitialized::class.java)
                 assertThat(state.showWrongPinTitle).isFalse()
                 assertThat(state.showSignOutPrompt).isFalse()
+                assertThat(state.isUnlocked).isFalse()
                 assertThat(state.signOutAction).isInstanceOf(Async.Uninitialized::class.java)
                 assertThat(state.remainingAttempts).isInstanceOf(Async.Uninitialized::class.java)
             }
@@ -77,20 +71,14 @@ class PinUnlockPresenterTest {
             }
             awaitLastSequentialItem().also { state ->
                 state.pinEntry.assertText(completePin)
+                assertThat(state.isUnlocked).isTrue()
             }
-            pinCodeVerified.await()
         }
     }
 
     @Test
     fun `present - failure verify flow`() = runTest {
-        val pinCodeVerified = CompletableDeferred<Unit>()
-        val callback = object : DefaultPinCodeManagerCallback() {
-            override fun onPinCodeCreated() {
-                pinCodeVerified.complete(Unit)
-            }
-        }
-        val presenter = createPinUnlockPresenter(this, callback = callback)
+        val presenter = createPinUnlockPresenter(this)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -160,6 +148,7 @@ class PinUnlockPresenterTest {
             biometricUnlockManager = biometricUnlockManager,
             matrixClient = FakeMatrixClient(),
             coroutineScope = scope,
+            pinUnlockHelper = PinUnlockHelper(biometricUnlockManager, pinCodeManager),
         )
     }
 }

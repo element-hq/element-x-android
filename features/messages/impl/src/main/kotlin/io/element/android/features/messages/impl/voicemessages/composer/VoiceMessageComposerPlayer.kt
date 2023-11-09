@@ -36,13 +36,13 @@ class VoiceMessageComposerPlayer @Inject constructor(
 
     val state: Flow<State> = mediaPlayer.state.map { state ->
         if (lastPlayedMediaPath == null || lastPlayedMediaPath != state.mediaId) {
-            return@map State.NotPlaying
+            return@map State.NotLoaded
         }
 
         State(
             isPlaying = state.isPlaying,
             currentPosition = state.currentPosition,
-            duration = state.duration,
+            duration = state.duration ?: 0L,
         )
     }.distinctUntilChanged()
 
@@ -52,16 +52,17 @@ class VoiceMessageComposerPlayer @Inject constructor(
      * @param mediaPath The path to the media to be played.
      * @param mimeType The mime type of the media file.
      */
-    fun play(mediaPath: String, mimeType: String) {
+    suspend fun play(mediaPath: String, mimeType: String) {
         if (mediaPath == curPlayingMediaId) {
             mediaPlayer.play()
         } else {
             lastPlayedMediaPath = mediaPath
-            mediaPlayer.acquireControlAndPlay(
+            mediaPlayer.setMedia(
                 uri = mediaPath,
                 mediaId = mediaPath,
                 mimeType = mimeType,
             )
+            mediaPlayer.play()
         }
     }
 
@@ -89,17 +90,23 @@ class VoiceMessageComposerPlayer @Inject constructor(
         val duration: Long,
     ) {
         companion object {
-            val NotPlaying = State(
+            val NotLoaded = State(
                 isPlaying = false,
                 currentPosition = 0L,
                 duration = 0L,
             )
         }
 
+        val isLoaded get() = this != NotLoaded
+
         /**
          * The progress of this player between 0 and 1.
          */
         val progress: Float =
-            if (duration <= currentPosition) 0f else currentPosition.toFloat() / duration.toFloat()
+            if (duration == 0L)
+                0f
+            else
+                (currentPosition.toFloat() / duration.toFloat())
+                    .coerceAtMost(1f) // Current position may exceed reported duration
     }
 }

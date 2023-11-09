@@ -260,7 +260,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 AttachmentThumbnail(
                     modifier = imageModifier,
                     info = AttachmentThumbnailInfo(
-                        thumbnailSource = event.content.mediaSource,
+                        thumbnailSource = event.content.thumbnailSource ?: event.content.mediaSource,
                         textContent = textContent,
                         type = AttachmentThumbnailType.Image,
                         blurHash = event.content.blurhash,

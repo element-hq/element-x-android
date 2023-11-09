@@ -74,6 +74,7 @@ class FakeVoiceRecorder(
                 else -> VoiceRecorderState.Finished(
                     file = curRecording!!,
                     mimeType = "audio/ogg",
+                    duration = recordingDuration,
                     waveform = waveform,
                 )
             }

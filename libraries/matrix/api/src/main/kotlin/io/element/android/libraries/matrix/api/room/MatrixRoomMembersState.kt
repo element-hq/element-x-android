@@ -16,6 +16,9 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface MatrixRoomMembersState {
     data object Unknown : MatrixRoomMembersState
     data class Pending(val prevRoomMembers: List<RoomMember>? = null) : MatrixRoomMembersState

@@ -16,8 +16,10 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import androidx.compose.runtime.Immutable
 import org.jsoup.nodes.Document
 
+@Immutable
 sealed interface TimelineItemTextBasedContent : TimelineItemEventContent {
     val body: String
     val htmlDocument: Document?

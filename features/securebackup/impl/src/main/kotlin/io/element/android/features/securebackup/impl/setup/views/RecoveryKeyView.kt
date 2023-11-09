@@ -30,10 +30,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -46,6 +50,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.autofill
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -147,6 +152,7 @@ private fun RecoveryKeyStaticContent(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RecoveryKeyFormContent(
     state: RecoveryKeyViewState,
@@ -155,17 +161,25 @@ private fun RecoveryKeyFormContent(
 ) {
     onChange ?: error("onChange should not be null")
     onSubmit ?: error("onSubmit should not be null")
-    val recoveryKeyVisualTransformation = remember {
-        RecoveryKeyVisualTransformation()
+    val keyHasSpace = state.formattedRecoveryKey.orEmpty().contains(" ")
+    val recoveryKeyVisualTransformation = remember(keyHasSpace) {
+        // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
+        if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
     }
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .autofill(
+                autofillTypes = listOf(AutofillType.Password),
+                onFill = { onChange(it) },
+            ),
         minLines = 2,
         value = state.formattedRecoveryKey.orEmpty(),
         onValueChange = onChange,
         enabled = state.inProgress.not(),
         visualTransformation = recoveryKeyVisualTransformation,
         keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(
@@ -185,7 +199,7 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        resourceId = CommonDrawables.ic_compound_info,
+                        resourceId = CommonDrawables.ic_compound_info_solid,
                         contentDescription = null,
                         tint = ElementTheme.colors.iconSecondary,
                         modifier = Modifier

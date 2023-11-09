@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
@@ -87,6 +86,7 @@ import java.io.File
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
     override val sessionId: SessionId,
+    isKeyBackupEnabled: Boolean,
     private val roomListItem: RoomListItem,
     private val innerRoom: Room,
     private val roomNotificationSettingsService: RustNotificationSettingsService,
@@ -126,22 +126,19 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    private val _timeline by lazy {
-        RustMatrixTimeline(
-            matrixRoom = this,
-            innerRoom = innerRoom,
-            roomCoroutineScope = roomCoroutineScope,
-            dispatcher = roomDispatcher,
-            lastLoginTimestamp = sessionData.loginTimestamp,
-            onNewSyncedEvent = { _syncUpdateFlow.value = systemClock.epochMillis() }
-        )
-    }
+    override val timeline = RustMatrixTimeline(
+        isKeyBackupEnabled = isKeyBackupEnabled,
+        matrixRoom = this,
+        innerRoom = innerRoom,
+        roomCoroutineScope = roomCoroutineScope,
+        dispatcher = roomDispatcher,
+        lastLoginTimestamp = sessionData.loginTimestamp,
+        onNewSyncedEvent = { _syncUpdateFlow.value = systemClock.epochMillis() }
+    )
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState> = _membersStateFlow.asStateFlow()
 
     override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
-
-    override val timeline: MatrixTimeline = _timeline
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 

@@ -51,7 +51,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.applyScaleUp
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -59,6 +58,7 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -85,7 +85,6 @@ import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import uniffi.wysiwyg_composer.MenuAction
 import kotlin.time.Duration.Companion.seconds
 
@@ -136,7 +135,7 @@ fun TextComposer(
         @Composable {
             ComposerOptionsButton(
                 modifier = Modifier
-                    .size(48.dp.applyScaleUp()),
+                    .size(48.dp),
                 onClick = onAddAttachment
             )
         }
@@ -183,7 +182,7 @@ fun TextComposer(
     }
     val uploadVoiceProgress = @Composable {
         CircularProgressIndicator(
-            modifier = Modifier.size(24.dp.applyScaleUp()),
+            modifier = Modifier.size(24.dp),
         )
     }
 
@@ -209,8 +208,10 @@ fun TextComposer(
                 VoiceMessagePreview(
                     isInteractive = !voiceMessageState.isSending,
                     isPlaying = voiceMessageState.isPlaying,
+                    showCursor = voiceMessageState.showCursor,
                     waveform = voiceMessageState.waveform,
                     playbackProgress = voiceMessageState.playbackProgress,
+                    time = voiceMessageState.time,
                     onPlayClick = onPlayVoiceMessageClicked,
                     onPauseClick = onPauseVoiceMessageClicked,
                     onSeek = onSeekVoiceMessage,
@@ -289,7 +290,7 @@ private fun StandardLayout(
                 Box(
                     modifier = Modifier
                         .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
-                        .size(48.dp.applyScaleUp()),
+                        .size(48.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     voiceDeleteButton()
@@ -322,7 +323,7 @@ private fun StandardLayout(
         Box(
             Modifier
                 .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                .size(48.dp.applyScaleUp()),
+                .size(48.dp),
             contentAlignment = Alignment.Center,
         ) {
             endButton()
@@ -393,7 +394,7 @@ private fun TextInput(
             .clip(roundedCorners)
             .border(0.5.dp, borderColor, roundedCorners)
             .background(color = bgColor)
-            .requiredHeightIn(min = 42.dp.applyScaleUp())
+            .requiredHeightIn(min = 42.dp)
             .fillMaxSize(),
     ) {
         if (composerMode is MessageComposerMode.Special) {
@@ -402,12 +403,7 @@ private fun TextInput(
         val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
-                .padding(
-                    top = 4.dp.applyScaleUp(),
-                    bottom = 4.dp.applyScaleUp(),
-                    start = 12.dp.applyScaleUp(),
-                    end = 42.dp.applyScaleUp()
-                )
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 42.dp)
                 .testTag(TestTags.richTextEditor),
             contentAlignment = Alignment.CenterStart,
         ) {
@@ -429,7 +425,7 @@ private fun TextInput(
                 // This prevents it gaining focus and mutating the state.
                 registerStateUpdates = !subcomposing,
                 modifier = Modifier
-                    .padding(top = 6.dp.applyScaleUp(), bottom = 6.dp.applyScaleUp())
+                    .padding(top = 6.dp, bottom = 6.dp)
                     .fillMaxWidth(),
                 style = ElementRichTextEditorStyle.create(
                     hasFocus = state.hasFocus
@@ -481,7 +477,7 @@ private fun EditingModeView(
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
                 .padding(vertical = 8.dp)
-                .size(16.dp.applyScaleUp()),
+                .size(16.dp),
         )
         Text(
             stringResource(CommonStrings.common_editing),
@@ -498,7 +494,7 @@ private fun EditingModeView(
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
                 .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 12.dp)
-                .size(16.dp.applyScaleUp())
+                .size(16.dp)
                 .clickable(
                     enabled = true,
                     onClick = onResetComposerMode,
@@ -561,7 +557,7 @@ private fun ReplyToModeView(
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
                 .padding(end = 4.dp, top = 4.dp, start = 16.dp, bottom = 16.dp)
-                .size(16.dp.applyScaleUp())
+                .size(16.dp)
                 .clickable(
                     enabled = true,
                     onClick = onResetComposerMode,
@@ -725,7 +721,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                     thumbnailSource = MediaSource("https://domain.com/image.jpg"),
                     textContent = "image.jpg",
                     type = AttachmentThumbnailType.Image,
-                    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+                    blurHash = A_BLUR_HASH,
                 ),
                 defaultContent = "image.jpg"
             ),
@@ -746,7 +742,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                     thumbnailSource = MediaSource("https://domain.com/video.mp4"),
                     textContent = "video.mp4",
                     type = AttachmentThumbnailType.Video,
-                    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+                    blurHash = A_BLUR_HASH,
                 ),
                 defaultContent = "video.mp4"
             ),
@@ -816,13 +812,15 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         enableVoiceMessages = true,
     )
     PreviewColumn(items = persistentListOf({
-        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, List(100) { it.toFloat() / 100 }.toPersistentList()))
+        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, createFakeWaveform()))
     }, {
         VoicePreview(
             voiceMessageState = VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = false,
+                showCursor = false,
                 waveform = createFakeWaveform(),
+                time = 0.seconds,
                 playbackProgress = 0.0f
             )
         )
@@ -831,7 +829,9 @@ internal fun TextComposerVoicePreview() = ElementPreview {
             voiceMessageState = VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = true,
+                showCursor = true,
                 waveform = createFakeWaveform(),
+                time = 3.seconds,
                 playbackProgress = 0.2f
             )
         )
@@ -840,7 +840,9 @@ internal fun TextComposerVoicePreview() = ElementPreview {
             voiceMessageState = VoiceMessageState.Preview(
                 isSending = true,
                 isPlaying = false,
+                showCursor = false,
                 waveform = createFakeWaveform(),
+                time = 61.seconds,
                 playbackProgress = 0.0f
             )
         )

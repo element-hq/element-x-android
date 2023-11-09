@@ -16,6 +16,8 @@
 
 package io.element.android.features.lockscreen.impl.pin
 
+import kotlinx.coroutines.flow.Flow
+
 /**
  * This interface is the main interface to manage the pin code.
  * Implementation should take care of encrypting the pin code and storing it.
@@ -55,7 +57,7 @@ interface PinCodeManager {
     /**
      * @return true if a pin code is available.
      */
-    suspend fun isPinCodeAvailable(): Boolean
+    fun hasPinCode(): Flow<Boolean>
 
     /**
      * @return the size of the saved pin code.

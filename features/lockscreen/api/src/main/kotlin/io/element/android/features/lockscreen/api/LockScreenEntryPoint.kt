@@ -31,8 +31,8 @@ interface LockScreenEntryPoint : FeatureEntryPoint {
         fun build(): Node
     }
 
-    interface Callback: Plugin {
-        fun onSetupCompleted()
+    interface Callback : Plugin {
+        fun onSetupDone()
     }
 
     enum class Target {

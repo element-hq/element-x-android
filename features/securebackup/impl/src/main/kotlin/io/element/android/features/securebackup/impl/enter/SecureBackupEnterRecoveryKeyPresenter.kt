@@ -26,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
+import io.element.android.features.securebackup.impl.tools.RecoveryKeyTools
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -36,6 +37,7 @@ import javax.inject.Inject
 
 class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
+    private val recoveryKeyTools: RecoveryKeyTools,
 ) : Presenter<SecureBackupEnterRecoveryKeyState> {
 
     @Composable
@@ -54,7 +56,14 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
                     submitAction.value = Async.Uninitialized
                 }
                 is SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange -> {
-                    recoveryKey = event.recoveryKey.replace("\\s+".toRegex(), "")
+                    val previousRecoveryKey = recoveryKey
+                    recoveryKey = if (previousRecoveryKey.isEmpty() && recoveryKeyTools.isRecoveryKeyFormatValid(event.recoveryKey)) {
+                        // A Recovery key has been entered, remove the spaces for a better rendering
+                        event.recoveryKey.replace("\\s+".toRegex(), "")
+                    } else {
+                        // Keep the recovery key as entered by the user. May contains spaces.
+                        event.recoveryKey
+                    }
                 }
                 SecureBackupEnterRecoveryKeyEvents.Submit -> {
                     // No need to remove the spaces, the SDK will do it.

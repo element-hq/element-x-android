@@ -33,8 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -96,10 +96,12 @@ internal fun PollAnswerView(
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth(),
                 color = if (answerItem.isWinner) ElementTheme.colors.textSuccessPrimary else answerItem.isEnabled.toEnabledColor(),
-                progress = when {
-                    answerItem.isDisclosed -> answerItem.percentage
-                    answerItem.isSelected -> 1f
-                    else -> 0f
+                progress = {
+                    when {
+                        answerItem.isDisclosed -> answerItem.percentage
+                        answerItem.isSelected -> 1f
+                        else -> 0f
+                    }
                 },
                 trackColor = ElementTheme.colors.progressIndicatorTrackColor,
                 strokeCap = StrokeCap.Round,

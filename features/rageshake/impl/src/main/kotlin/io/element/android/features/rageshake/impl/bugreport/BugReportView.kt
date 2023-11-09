@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,16 +38,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferencePage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
@@ -63,13 +61,6 @@ fun BugReportView(
 ) {
     LogCompositions(tag = "Rageshake", msg = "Root")
     val eventSink = state.eventSink
-    if (state.sending is Async.Success) {
-        LaunchedEffect(state.sending) {
-            eventSink(BugReportEvents.ResetAll)
-            onDone()
-        }
-        return
-    }
 
     Box(modifier = modifier) {
         PreferencePage(
@@ -151,6 +142,7 @@ fun BugReportView(
                     text = stringResource(id = CommonStrings.action_send),
                     onClick = { eventSink(BugReportEvents.SendBugReport) },
                     enabled = state.submitEnabled,
+                    showProgress = state.sending.isLoading(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp, bottom = 16.dp)
@@ -158,19 +150,15 @@ fun BugReportView(
             }
         }
 
-        when (state.sending) {
-            is Async.Loading -> {
-                // Indeterminate indicator, to avoid the freeze effect if the connection takes time to initialize.
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-            is Async.Failure -> ErrorDialog(
-                content = state.sending.error.toString(),
-                onDismiss = { state.eventSink(BugReportEvents.ClearError) }
-            )
-            else -> Unit
-        }
+        AsyncView(
+            async = state.sending,
+            showProgressDialog = false,
+            onSuccess = {
+                eventSink(BugReportEvents.ResetAll)
+                onDone()
+            },
+            onErrorDismiss = { eventSink(BugReportEvents.ClearError) },
+        )
     }
 }
 

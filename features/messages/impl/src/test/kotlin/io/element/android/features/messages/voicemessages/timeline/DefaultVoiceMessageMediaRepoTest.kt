@@ -63,7 +63,7 @@ class DefaultVoiceMessageMediaRepoTest {
 
         repo.getMediaFile().let { result ->
             Truth.assertThat(result.isFailure).isTrue()
-            result.exceptionOrNull()?.let { exception ->
+            result.exceptionOrNull()!!.let { exception ->
                 Truth.assertThat(exception).isInstanceOf(RuntimeException::class.java)
             }
         }
@@ -116,16 +116,32 @@ class DefaultVoiceMessageMediaRepoTest {
             }
         }
     }
+
+    @Test
+    fun `invalid mxc uri returns a failure`() = runTest {
+        val repo = createDefaultVoiceMessageMediaRepo(
+            temporaryFolder = temporaryFolder,
+            mxcUri = INVALID_MXC_URI,
+        )
+        repo.getMediaFile().let { result ->
+            Truth.assertThat(result.isFailure).isTrue()
+            result.exceptionOrNull()!!.let { exception ->
+                Truth.assertThat(exception).isInstanceOf(RuntimeException::class.java)
+                Truth.assertThat(exception).hasMessageThat().isEqualTo("Invalid mxcUri.")
+            }
+        }
+    }
 }
 
 private fun createDefaultVoiceMessageMediaRepo(
     temporaryFolder: TemporaryFolder,
     matrixMediaLoader: MatrixMediaLoader = FakeMediaLoader(),
+    mxcUri: String = MXC_URI,
 ) = DefaultVoiceMessageMediaRepo(
     cacheDir = temporaryFolder.root,
     matrixMediaLoader = matrixMediaLoader,
     mediaSource = MediaSource(
-        url = MXC_URI,
+        url = mxcUri,
         json = null
     ),
     mimeType = "audio/ogg",
@@ -133,6 +149,7 @@ private fun createDefaultVoiceMessageMediaRepo(
 )
 
 private const val MXC_URI = "mxc://matrix.org/1234567890abcdefg"
+private const val INVALID_MXC_URI = "notAnMxcUri"
 private val TemporaryFolder.cachedFilePath get() = "${this.root.path}/temp/voice/matrix.org/1234567890abcdefg"
 private fun TemporaryFolder.createCachedFile() = File(cachedFilePath).apply {
     parentFile?.mkdirs()

@@ -36,7 +36,6 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -47,14 +46,12 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledTextField
-import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -174,26 +171,13 @@ fun RoomDetailsEditView(
         onActionSelected = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
 
-    when (state.saveAction) {
-        is Async.Loading -> {
-            ProgressDialog(text = stringResource(R.string.screen_room_details_updating_room))
-        }
-
-        is Async.Failure -> {
-            ErrorDialog(
-                content = stringResource(R.string.screen_room_details_edition_error),
-                onDismiss = { state.eventSink(RoomDetailsEditEvents.CancelSaveChanges) },
-            )
-        }
-
-        is Async.Success -> {
-            LaunchedEffect(state.saveAction) {
-                onRoomEdited()
-            }
-        }
-
-        else -> Unit
-    }
+    AsyncView(
+        async = state.saveAction,
+        progressText = stringResource(R.string.screen_room_details_updating_room),
+        onSuccess = { onRoomEdited() },
+        errorMessage = { stringResource(R.string.screen_room_details_edition_error) },
+        onErrorDismiss = { state.eventSink(RoomDetailsEditEvents.CancelSaveChanges) }
+    )
 
     PermissionsView(
         state = state.cameraPermissionState,

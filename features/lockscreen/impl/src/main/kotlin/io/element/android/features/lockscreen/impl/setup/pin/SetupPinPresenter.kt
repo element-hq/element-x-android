@@ -32,6 +32,11 @@ import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
+/**
+ * Some time for the ui to refresh before showing confirmation step.
+ */
+private const val DELAY_BEFORE_CONFIRMATION_STEP_IN_MILLIS = 100L
+
 class SetupPinPresenter @Inject constructor(
     private val lockScreenConfig: LockScreenConfig,
     private val pinValidator: PinValidator,
@@ -60,8 +65,7 @@ class SetupPinPresenter @Inject constructor(
                         setupPinFailure = pinValidationResult.failure
                     }
                     PinValidator.Result.Valid -> {
-                        // Leave some time for the ui to refresh before showing confirmation
-                        delay(150)
+                        delay(DELAY_BEFORE_CONFIRMATION_STEP_IN_MILLIS)
                         isConfirmationStep = true
                     }
                 }
@@ -81,7 +85,8 @@ class SetupPinPresenter @Inject constructor(
         fun handleEvents(event: SetupPinEvents) {
             when (event) {
                 is SetupPinEvents.OnPinEntryChanged -> {
-                    if (isConfirmationStep) {
+                    // Use the fromConfirmationStep flag from ui to avoid race condition.
+                    if (event.fromConfirmationStep) {
                         confirmPinEntry = confirmPinEntry.fillWith(event.entryAsText)
                     } else {
                         choosePinEntry = choosePinEntry.fillWith(event.entryAsText)

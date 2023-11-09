@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -82,6 +83,7 @@ fun ListSupportingText(
 object ListSupportingTextDefaults {
 
     /** Specifies the padding to use for the supporting text. */
+    @Immutable
     sealed interface Padding {
         /** No padding. */
         data object None : Padding

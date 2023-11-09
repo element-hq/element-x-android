@@ -32,17 +32,17 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun ErrorDialog(
     content: String,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
-    onDismiss: () -> Unit = {},
 ) {
     AlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
         ErrorDialogContent(
             title = title,
             content = content,
             submitText = submitText,
-            onSubmitText = onDismiss,
+            onSubmitClicked = onDismiss,
         )
     }
 }
@@ -50,17 +50,17 @@ fun ErrorDialog(
 @Composable
 private fun ErrorDialogContent(
     content: String,
+    onSubmitClicked: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
-    onSubmitText: () -> Unit = {},
 ) {
     SimpleAlertDialogContent(
         modifier = modifier,
         title = title,
         content = content,
-        cancelText = submitText,
-        onCancelClicked = onSubmitText,
+        submitText = submitText,
+        onSubmitClicked = onSubmitClicked,
     )
 }
 
@@ -76,6 +76,7 @@ internal fun ErrorDialogPreview() {
         DialogPreview {
             ErrorDialogContent(
                 content = "Content",
+                onSubmitClicked = {},
             )
         }
     }

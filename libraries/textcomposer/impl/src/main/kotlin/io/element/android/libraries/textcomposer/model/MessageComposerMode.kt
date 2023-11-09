@@ -17,11 +17,13 @@
 package io.element.android.libraries.textcomposer.model
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import kotlinx.parcelize.Parcelize
 
+@Immutable
 sealed interface MessageComposerMode : Parcelable {
     @Parcelize
     data object Normal: MessageComposerMode

@@ -120,7 +120,7 @@ class DefaultFtueState @Inject constructor(
 
     private fun shouldDisplayLockscreenSetup(): Boolean {
         return runBlocking {
-            lockScreenService.isSetupRequired()
+            lockScreenService.isSetupRequired().first()
         }
     }
 

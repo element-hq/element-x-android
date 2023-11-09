@@ -106,7 +106,8 @@ private fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = M
         FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_subtitle
         FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_subtitle
-        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_subtitle
+        is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_subtitle
+        FlowStep.Ready -> R.string.screen_session_verification_ready_subtitle
     }
 
     IconTitleSubtitleMolecule(

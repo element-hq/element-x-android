@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
+import io.element.android.features.securebackup.impl.tools.RecoveryKeyTools
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -99,5 +100,6 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
         encryptionService: EncryptionService = FakeEncryptionService(),
     ) = SecureBackupEnterRecoveryKeyPresenter(
         encryptionService = encryptionService,
+        recoveryKeyTools = RecoveryKeyTools(),
     )
 }

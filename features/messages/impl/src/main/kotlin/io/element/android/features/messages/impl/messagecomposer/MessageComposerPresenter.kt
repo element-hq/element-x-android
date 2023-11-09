@@ -20,6 +20,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -409,6 +410,7 @@ class MessageComposerPresenter @Inject constructor(
         }
 }
 
+@Immutable
 sealed interface RoomMemberSuggestion {
     data object Room : RoomMemberSuggestion
     data class Member(val roomMember: RoomMember) : RoomMemberSuggestion

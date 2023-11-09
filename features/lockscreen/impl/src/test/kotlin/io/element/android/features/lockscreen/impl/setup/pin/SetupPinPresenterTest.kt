@@ -60,14 +60,14 @@ class SetupPinPresenterTest {
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.setupPinFailure).isNull()
                 assertThat(state.isConfirmationStep).isFalse()
-                state.eventSink(SetupPinEvents.OnPinEntryChanged(halfCompletePin))
+                state.onPinEntryChanged(halfCompletePin)
             }
             awaitItem().also { state ->
                 state.choosePinEntry.assertText(halfCompletePin)
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.setupPinFailure).isNull()
                 assertThat(state.isConfirmationStep).isFalse()
-                state.eventSink(SetupPinEvents.OnPinEntryChanged(blacklistedPin))
+                state.onPinEntryChanged(blacklistedPin)
             }
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertText(blacklistedPin)
@@ -77,7 +77,7 @@ class SetupPinPresenterTest {
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertEmpty()
                 assertThat(state.setupPinFailure).isNull()
-                state.eventSink(SetupPinEvents.OnPinEntryChanged(completePin))
+                state.onPinEntryChanged(completePin)
             }
             consumeItemsUntilPredicate {
                 it.isConfirmationStep
@@ -85,7 +85,7 @@ class SetupPinPresenterTest {
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.isConfirmationStep).isTrue()
-                state.eventSink(SetupPinEvents.OnPinEntryChanged(mismatchedPin))
+                state.onPinEntryChanged(mismatchedPin)
             }
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertText(completePin)
@@ -98,7 +98,7 @@ class SetupPinPresenterTest {
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.isConfirmationStep).isFalse()
                 assertThat(state.setupPinFailure).isNull()
-                state.eventSink(SetupPinEvents.OnPinEntryChanged(completePin))
+                state.onPinEntryChanged(completePin)
             }
             consumeItemsUntilPredicate {
                 it.isConfirmationStep
@@ -106,7 +106,7 @@ class SetupPinPresenterTest {
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertEmpty()
                 assertThat(state.isConfirmationStep).isTrue()
-                state.eventSink(SetupPinEvents.OnPinEntryChanged(completePin))
+                state.onPinEntryChanged(completePin)
             }
             awaitItem().also { state ->
                 state.choosePinEntry.assertText(completePin)
@@ -114,6 +114,10 @@ class SetupPinPresenterTest {
             }
             pinCodeCreated.await()
         }
+    }
+
+    private fun SetupPinState.onPinEntryChanged(pinEntry: String){
+        eventSink(SetupPinEvents.OnPinEntryChanged(pinEntry, isConfirmationStep))
     }
 
     private fun createSetupPinPresenter(

@@ -171,9 +171,11 @@
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
-  <string name="common_waiting_for_decryption_key">"Waiting for decryption key"</string>
+  <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
+  <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
+  <string name="common_verify_device">"Verify device"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Warning"</string>
   <string name="emoji_picker_category_activity">"Activities"</string>
@@ -218,7 +220,6 @@
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"Notify the whole room"</string>
   <string name="screen_analytics_settings_share_data">"Share analytics data"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
@@ -263,7 +264,6 @@ If you proceed, some of your settings may change."</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
-  <string name="screen_room_mentions_at_room_title">"Everyone"</string>
   <string name="screen_analytics_settings_help_us_improve">"Share anonymous usage data to help us identify issues."</string>
   <string name="screen_analytics_settings_read_terms">"You can read all our terms %1$s."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"here"</string>

@@ -58,6 +58,7 @@ import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -71,11 +72,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -119,7 +122,12 @@ class RustMatrixClient constructor(
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
     private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
-    private val encryptionService = RustEncryptionService(client, dispatchers).apply { start() }
+    private val encryptionService = RustEncryptionService(
+        client = client,
+        syncService = rustSyncService,
+        sessionCoroutineScope = sessionCoroutineScope,
+        dispatchers = dispatchers,
+    ).apply { start() }
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -177,8 +185,9 @@ class RustMatrixClient constructor(
 
     private val roomContentForwarder = RoomContentForwarder(innerRoomListService)
 
+    private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(clientDelegate)
+
     init {
-        client.setDelegate(clientDelegate)
         roomListService.state.onEach { state ->
             if (state == RoomListService.State.Running) {
                 setupVerificationControllerIfNeeded()
@@ -197,6 +206,7 @@ class RustMatrixClient constructor(
         cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
             RustMatrixRoom(
                 sessionId = sessionId,
+                isKeyBackupEnabled = client.encryption().backupState() == BackupState.ENABLED,
                 roomListItem = roomListItem,
                 innerRoom = fullRoom,
                 roomNotificationSettingsService = notificationSettingsService,
@@ -328,7 +338,7 @@ class RustMatrixClient constructor(
 
     override fun close() {
         sessionCoroutineScope.cancel()
-        client.setDelegate(null)
+        clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettings.setDelegate(null)
         notificationSettings.destroy()
         verificationService.destroy()

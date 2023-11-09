@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -38,12 +37,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -64,12 +61,6 @@ fun CreateRoomRootView(
     onOpenDM: (RoomId) -> Unit = {},
     onInviteFriendsClicked: () -> Unit = {},
 ) {
-    if (state.startDmAction is Async.Success) {
-        LaunchedEffect(state.startDmAction) {
-            onOpenDM(state.startDmAction.data)
-        }
-    }
-
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
@@ -102,26 +93,19 @@ fun CreateRoomRootView(
         }
     }
 
-    when (state.startDmAction) {
-        is Async.Loading -> {
-            ProgressDialog(text = stringResource(id = CommonStrings.common_starting_chat))
-        }
-
-        is Async.Failure -> {
-            RetryDialog(
-                content = stringResource(id = R.string.screen_start_chat_error_starting_chat),
-                onDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
-                onRetry = {
-                    state.userListState.selectedUsers.firstOrNull()
-                        ?.let { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
-                    // Cancel start DM if there is no more selected user (should not happen)
-                        ?: state.eventSink(CreateRoomRootEvents.CancelStartDM)
-                },
-            )
-        }
-
-        else -> Unit
-    }
+    AsyncView(
+        async = state.startDmAction,
+        progressText = stringResource(CommonStrings.common_starting_chat),
+        onSuccess = { onOpenDM(it) },
+        errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
+        onRetry = {
+            state.userListState.selectedUsers.firstOrNull()
+                ?.let { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
+            // Cancel start DM if there is no more selected user (should not happen)
+                ?: state.eventSink(CreateRoomRootEvents.CancelStartDM)
+        },
+        onErrorDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -30,12 +30,13 @@ class TimelineEncryptedHistoryPostProcessor(
     private val dispatcher: CoroutineDispatcher,
     private val lastLoginTimestamp: Date?,
     private val isRoomEncrypted: Boolean,
+    private val isKeyBackupEnabled: Boolean,
     private val paginationStateFlow: MutableStateFlow<MatrixTimeline.PaginationState>,
 ) {
 
     suspend fun process(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> = withContext(dispatcher) {
         Timber.d("Process on Thread=${Thread.currentThread()}")
-        if (!isRoomEncrypted || lastLoginTimestamp == null) return@withContext items
+        if (!isRoomEncrypted || isKeyBackupEnabled || lastLoginTimestamp == null) return@withContext items
 
         val filteredItems = replaceWithEncryptionHistoryBannerIfNeeded(items)
         // Disable back pagination

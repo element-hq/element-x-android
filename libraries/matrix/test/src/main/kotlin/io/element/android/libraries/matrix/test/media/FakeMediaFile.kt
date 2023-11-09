@@ -17,10 +17,15 @@
 package io.element.android.libraries.matrix.test.media
 
 import io.element.android.libraries.matrix.api.media.MediaFile
+import java.io.File
 
 class FakeMediaFile(private val path: String) : MediaFile {
     override fun path(): String {
         return path
+    }
+
+    override fun persist(path: String): Boolean {
+        return File(path()).renameTo(File(path))
     }
 
     override fun close() = Unit

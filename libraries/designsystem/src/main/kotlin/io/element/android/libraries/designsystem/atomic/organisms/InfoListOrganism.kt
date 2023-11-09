@@ -19,6 +19,7 @@ package io.element.android.libraries.designsystem.atomic.organisms
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItemMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.InfoListItemPosition
@@ -43,6 +45,7 @@ fun InfoListOrganism(
     backgroundColor: Color,
     modifier: Modifier = Modifier,
     iconTint: Color = LocalContentColor.current,
+    iconSize: Dp = 20.dp,
     textStyle: TextStyle = LocalTextStyle.current,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp),
 ) {
@@ -67,9 +70,19 @@ fun InfoListOrganism(
                 },
                 icon = {
                     if (item.iconId != null) {
-                        Icon(resourceId = item.iconId, contentDescription = null, tint = iconTint)
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            resourceId = item.iconId,
+                            contentDescription = null,
+                            tint = iconTint,
+                        )
                     } else if (item.iconVector != null) {
-                        Icon(imageVector = item.iconVector, contentDescription = null, tint = iconTint)
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            imageVector = item.iconVector,
+                            contentDescription = null,
+                            tint = iconTint,
+                        )
                     } else {
                         item.iconComposable()
                     }

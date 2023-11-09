@@ -32,6 +32,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,8 +45,8 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -55,6 +56,7 @@ import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
+@Suppress("ModifierClickableOrder") // This is needed to display the right ripple shape
 fun MessagesReactionButton(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -102,11 +104,12 @@ fun MessagesReactionButton(
     }
 }
 
-sealed class MessagesReactionsButtonContent {
-    data class Text(val text: String) : MessagesReactionsButtonContent()
-    data class Icon(@DrawableRes val resourceId: Int) : MessagesReactionsButtonContent()
+@Immutable
+sealed interface MessagesReactionsButtonContent {
+    data class Text(val text: String) : MessagesReactionsButtonContent
+    data class Icon(@DrawableRes val resourceId: Int) : MessagesReactionsButtonContent
 
-    data class Reaction(val reaction: AggregatedReaction) : MessagesReactionsButtonContent()
+    data class Reaction(val reaction: AggregatedReaction) : MessagesReactionsButtonContent
 
     val isHighlighted get() = this is Reaction && reaction.isHighlighted
 }

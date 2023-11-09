@@ -1,3 +1,20 @@
+Changes in Element X v0.3.1 (2023-11-09)
+========================================
+
+Features ✨
+----------
+ - Chat backup is still under a feature flag, but when enabled, user can enter their recovery key (it's also possible to input a passphrase) to unlock the encrypted room history. ([#1770](https://github.com/vector-im/element-x-android/pull/1770))
+
+Bugfixes 🐛
+----------
+ - Improve confusing text in the 'ready to start verification' screen. ([#879](https://github.com/vector-im/element-x-android/issues/879))
+ - Message composer wasn't resized when selecting a several lines message to reply to, then a single line one. ([#1560](https://github.com/vector-im/element-x-android/issues/1560))
+
+Other changes
+-------------
+ - PIN: Set lock grace period to 0. ([#1732](https://github.com/vector-im/element-x-android/issues/1732))
+
+
 Changes in Element X v0.3.0 (2023-10-31)
 ========================================
 

@@ -27,20 +27,18 @@ import io.element.android.libraries.usersearch.api.UserRepository
 import javax.inject.Inject
 
 class AddPeoplePresenter @Inject constructor(
-    private val userListPresenterFactory: UserListPresenter.Factory,
-    private val userRepository: UserRepository,
-    private val dataStore: CreateRoomDataStore,
+    userListPresenterFactory: UserListPresenter.Factory,
+    userRepository: UserRepository,
+    dataStore: CreateRoomDataStore,
 ) : Presenter<UserListState> {
 
-    private val userListPresenter by lazy {
-        userListPresenterFactory.create(
-            UserListPresenterArgs(
-                selectionMode = SelectionMode.Multiple,
-            ),
-            userRepository,
-            dataStore.selectedUserListDataStore,
-        )
-    }
+    private val userListPresenter = userListPresenterFactory.create(
+        UserListPresenterArgs(
+            selectionMode = SelectionMode.Multiple,
+        ),
+        userRepository,
+        dataStore.selectedUserListDataStore,
+    )
 
     @Composable
     override fun present(): UserListState {

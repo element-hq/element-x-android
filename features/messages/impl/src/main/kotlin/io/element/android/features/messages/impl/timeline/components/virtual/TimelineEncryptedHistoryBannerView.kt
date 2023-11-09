@@ -56,7 +56,7 @@ fun TimelineEncryptedHistoryBannerView(
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
-            resourceId = CommonDrawables.ic_compound_info,
+            resourceId = CommonDrawables.ic_compound_info_solid,
             contentDescription = "Info",
             tint = ElementTheme.colors.iconInfoPrimary
         )
@@ -79,7 +79,7 @@ private fun SessionState.toStringResId(): Int {
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineEncryptedHistoryBannerViewPreview(
+internal fun EncryptedHistoryBannerViewPreview(
     @PreviewParameter(SessionStateProvider::class) sessionState: SessionState,
 ) = ElementPreview {
     TimelineEncryptedHistoryBannerView(sessionState = sessionState)

@@ -57,6 +57,7 @@ private const val INITIAL_MAX_SIZE = 50
 
 class RustMatrixTimeline(
     roomCoroutineScope: CoroutineScope,
+    isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
     private val innerRoom: Room,
     private val dispatcher: CoroutineDispatcher,
@@ -77,6 +78,7 @@ class RustMatrixTimeline(
     private val encryptedHistoryPostProcessor = TimelineEncryptedHistoryPostProcessor(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = matrixRoom.isEncrypted,
+        isKeyBackupEnabled = isKeyBackupEnabled,
         paginationStateFlow = _paginationState,
         dispatcher = dispatcher,
     )

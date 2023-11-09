@@ -34,7 +34,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -42,10 +41,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
@@ -64,21 +63,13 @@ fun ReportMessageView(
 ) {
     val focusManager = LocalFocusManager.current
     val isSending = state.result is Async.Loading
-    when (state.result) {
-        is Async.Success -> {
-            LaunchedEffect(state.result) {
-                onBackClicked()
-            }
-            return
-        }
-        is Async.Failure -> {
-            ErrorDialog(
-                content = stringResource(CommonStrings.error_unknown),
-                onDismiss = { state.eventSink(ReportMessageEvents.ClearError) }
-            )
-        }
-        else -> Unit
-    }
+    AsyncView(
+        async = state.result,
+        showProgressDialog = false,
+        onSuccess = { onBackClicked() },
+        errorMessage = { stringResource(CommonStrings.error_unknown) },
+        onErrorDismiss = { state.eventSink(ReportMessageEvents.ClearError) }
+    )
 
     Scaffold(
         topBar = {
