@@ -42,7 +42,7 @@ class VoiceMessageComposerPlayer @Inject constructor(
         State(
             isPlaying = state.isPlaying,
             currentPosition = state.currentPosition,
-            duration = state.duration,
+            duration = state.duration ?: 0L,
         )
     }.distinctUntilChanged()
 
@@ -52,16 +52,17 @@ class VoiceMessageComposerPlayer @Inject constructor(
      * @param mediaPath The path to the media to be played.
      * @param mimeType The mime type of the media file.
      */
-    fun play(mediaPath: String, mimeType: String) {
+    suspend fun play(mediaPath: String, mimeType: String) {
         if (mediaPath == curPlayingMediaId) {
             mediaPlayer.play()
         } else {
             lastPlayedMediaPath = mediaPath
-            mediaPlayer.acquireControlAndPlay(
+            mediaPlayer.setMedia(
                 uri = mediaPath,
                 mediaId = mediaPath,
                 mimeType = mimeType,
             )
+            mediaPlayer.play()
         }
     }
 

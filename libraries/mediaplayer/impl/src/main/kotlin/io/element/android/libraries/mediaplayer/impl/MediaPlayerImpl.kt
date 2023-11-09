@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.mediaplayer.impl
 
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.squareup.anvil.annotations.ContributesBinding
@@ -24,14 +25,18 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Default implementation of [MediaPlayer] backed by a [SimplePlayer].
@@ -47,7 +52,7 @@ class MediaPlayerImpl @Inject constructor(
             _state.update {
                 it.copy(
                     currentPosition = player.currentPosition,
-                    duration = player.duration.coerceAtLeast(0),
+                    duration = duration,
                     isPlaying = isPlaying,
                 )
             }
@@ -62,8 +67,18 @@ class MediaPlayerImpl @Inject constructor(
             _state.update {
                 it.copy(
                     currentPosition = player.currentPosition,
-                    duration = player.duration.coerceAtLeast(0),
+                    duration = duration,
                     mediaId = mediaItem?.mediaId,
+                )
+            }
+        }
+
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            _state.update {
+                it.copy(
+                    isReady = playbackState == Player.STATE_READY,
+                    currentPosition = player.currentPosition,
+                    duration = duration,
                 )
             }
         }
@@ -76,11 +91,21 @@ class MediaPlayerImpl @Inject constructor(
     private val scope = CoroutineScope(Job() + Dispatchers.Main)
     private var job: Job? = null
 
-    private val _state = MutableStateFlow(MediaPlayer.State(false, null, 0L, 0L))
+    private val _state = MutableStateFlow(
+        MediaPlayer.State(
+            isReady = false,
+            isPlaying = false,
+            mediaId = null,
+            currentPosition = 0L,
+            duration = 0L
+        )
+    )
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
-    override fun acquireControlAndPlay(uri: String, mediaId: String, mimeType: String) {
+    @OptIn(FlowPreview::class)
+    override suspend fun setMedia(uri: String, mediaId: String, mimeType: String): MediaPlayer.State {
+        player.pause() // Must pause here otherwise if the player was playing it would keep on playing the new media item.
         player.clearMediaItems()
         player.setMediaItem(
             MediaItem.Builder()
@@ -90,7 +115,8 @@ class MediaPlayerImpl @Inject constructor(
                 .build()
         )
         player.prepare()
-        player.play()
+        // Will throw TimeoutCancellationException if the player is not ready after 1 second.
+        return state.timeout(1.seconds).first { it.isReady }
     }
 
     override fun play() {
@@ -136,4 +162,9 @@ class MediaPlayerImpl @Inject constructor(
             }
         }
     }
+
+    private val duration: Long?
+        get() = player.duration.let {
+            if (it == C.TIME_UNSET) null else it
+        }
 }

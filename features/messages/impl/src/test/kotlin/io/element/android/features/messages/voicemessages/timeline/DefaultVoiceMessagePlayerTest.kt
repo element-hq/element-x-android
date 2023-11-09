@@ -48,6 +48,11 @@ class DefaultVoiceMessagePlayerTest {
             skipItems(1) // skip initial state.
             Truth.assertThat(player.play().isSuccess).isTrue()
             awaitItem().let {
+                Truth.assertThat(it.isPlaying).isEqualTo(false)
+                Truth.assertThat(it.isMyMedia).isEqualTo(true)
+                Truth.assertThat(it.currentPosition).isEqualTo(0)
+            }
+            awaitItem().let {
                 Truth.assertThat(it.isPlaying).isEqualTo(true)
                 Truth.assertThat(it.isMyMedia).isEqualTo(true)
                 Truth.assertThat(it.currentPosition).isEqualTo(1000)
@@ -85,7 +90,7 @@ class DefaultVoiceMessagePlayerTest {
         player.state.test {
             skipItems(1) // skip initial state.
             Truth.assertThat(player.play().isSuccess).isTrue()
-            skipItems(1) // skip play state
+            skipItems(2) // skip play states
             player.pause()
             awaitItem().let {
                 Truth.assertThat(it.isPlaying).isEqualTo(false)
@@ -101,7 +106,7 @@ class DefaultVoiceMessagePlayerTest {
         player.state.test {
             skipItems(1) // skip initial state.
             Truth.assertThat(player.play().isSuccess).isTrue()
-            skipItems(1) // skip play state
+            skipItems(2) // skip play states
             player.pause()
             skipItems(1)
             player.play()
@@ -119,7 +124,7 @@ class DefaultVoiceMessagePlayerTest {
         player.state.test {
             skipItems(1) // skip initial state.
             Truth.assertThat(player.play().isSuccess).isTrue()
-            skipItems(1) // skip play state
+            skipItems(2) // skip play states
             player.seekTo(2000)
             awaitItem().let {
                 Truth.assertThat(it.isPlaying).isEqualTo(true)
