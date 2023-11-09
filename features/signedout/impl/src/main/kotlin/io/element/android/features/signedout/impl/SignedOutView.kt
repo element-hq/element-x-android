@@ -17,13 +17,11 @@
 package io.element.android.features.signedout.impl
 
 import androidx.activity.compose.BackHandler
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -41,8 +39,8 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
@@ -94,36 +92,22 @@ private fun SignedOutContent(
             items = persistentListOf(
                 InfoListItem(
                     message = stringResource(id = R.string.screen_signed_out_reason_1),
-                    iconComposable = { Icon(R.drawable.ic_lock_outline) },
+                    iconId = CommonDrawables.ic_lock_outline,
                 ),
                 InfoListItem(
                     message = stringResource(id = R.string.screen_signed_out_reason_2),
-                    iconComposable = { Icon(R.drawable.ic_devices) },
+                    iconId = CommonDrawables.ic_devices,
                 ),
                 InfoListItem(
                     message = stringResource(id = R.string.screen_signed_out_reason_3),
-                    iconComposable = { Icon(R.drawable.ic_do_disturb_alt) },
+                    iconId = CommonDrawables.ic_do_disturb_alt,
                 ),
             ),
             textStyle = ElementTheme.typography.fontBodyMdMedium,
-            iconTint = ElementTheme.colors.textPrimary,
+            iconTint = ElementTheme.colors.iconSecondary,
             backgroundColor = ElementTheme.colors.temporaryColorBgSpecial
         )
     }
-}
-
-@Composable
-private fun Icon(
-    @DrawableRes iconResourceId: Int,
-    modifier: Modifier = Modifier,
-) {
-    Icon(
-        modifier = modifier
-            .size(20.dp),
-        resourceId = iconResourceId,
-        contentDescription = null,
-        tint = ElementTheme.colors.iconSecondary,
-    )
 }
 
 @Composable
