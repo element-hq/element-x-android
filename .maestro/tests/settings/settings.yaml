@@ -10,7 +10,7 @@ appId: ${APP_ID}
 - back
 
 - tapOn:
-    text: "Report bug"
+    text: "Report a problem"
 - assertVisible: "Report a bug"
 - back
 
