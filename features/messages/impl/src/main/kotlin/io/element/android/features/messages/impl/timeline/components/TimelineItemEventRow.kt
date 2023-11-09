@@ -595,7 +595,7 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
     val messageContent = inReplyTo.content as? MessageContent ?: return null
     return when (val type = messageContent.type) {
         is ImageMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource,
+            thumbnailSource = type.info?.thumbnailSource ?: type.source,
             textContent = messageContent.body,
             type = AttachmentThumbnailType.Image,
             blurHash = type.info?.blurhash,
