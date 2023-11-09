@@ -10,6 +10,11 @@ appId: ${APP_ID}
 - back
 
 - tapOn:
+    text: "Notifications"
+- assertVisible: "Enable notifications on this device"
+- back
+
+- tapOn:
     text: "Report a problem"
 - assertVisible: "Report a bug"
 - back
@@ -19,6 +24,16 @@ appId: ${APP_ID}
 - assertVisible: "Copyright"
 - assertVisible: "Acceptable use policy"
 - assertVisible: "Privacy policy"
+- back
+
+- tapOn:
+    text: "Screen lock"
+- assertVisible: "Choose PIN"
+- back
+
+- tapOn:
+    text: "Advanced settings"
+- assertVisible: "Rich text editor"
 - back
 
 - tapOn:
