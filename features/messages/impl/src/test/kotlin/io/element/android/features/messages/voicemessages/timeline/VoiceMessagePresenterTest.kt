@@ -114,7 +114,10 @@ class VoiceMessagePresenterTest {
                 Truth.assertThat(it.time).isEqualTo("0:02")
             }
             analyticsService.trackedErrors.first().also {
-                Truth.assertThat(it).isInstanceOf(VoiceMessageException.PlayMessageError::class.java)
+                Truth.assertThat(it).apply {
+                    isInstanceOf(VoiceMessageException.PlayMessageError::class.java)
+                    hasMessageThat().isEqualTo("Error while trying to play voice message")
+                }
             }
         }
     }
@@ -163,6 +166,83 @@ class VoiceMessagePresenterTest {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Disabled)
                 Truth.assertThat(it.progress).isEqualTo(0f)
                 Truth.assertThat(it.time).isEqualTo("1:01")
+            }
+        }
+    }
+
+    @Test
+    fun `seeking downloads and seeks`() = runTest {
+        val presenter = createVoiceMessagePresenter(
+            content = aTimelineItemVoiceContent(durationMs = 10_000),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
+                Truth.assertThat(it.progress).isEqualTo(0f)
+                Truth.assertThat(it.time).isEqualTo("0:10")
+            }
+
+            initialState.eventSink(VoiceMessageEvents.Seek(0.5f))
+
+            awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
+                Truth.assertThat(it.progress).isEqualTo(0f)
+                Truth.assertThat(it.time).isEqualTo("0:10")
+            }
+            awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
+                Truth.assertThat(it.progress).isEqualTo(0f)
+                Truth.assertThat(it.time).isEqualTo("0:00")
+            }
+            awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
+                Truth.assertThat(it.progress).isEqualTo(0.5f)
+                Truth.assertThat(it.time).isEqualTo("0:05")
+            }
+            awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
+                Truth.assertThat(it.progress).isEqualTo(0.5f)
+                Truth.assertThat(it.time).isEqualTo("0:05")
+            }
+        }
+    }
+
+    @Test
+    fun `seeking downloads and fails`() = runTest {
+        val analyticsService = FakeAnalyticsService()
+        val presenter = createVoiceMessagePresenter(
+            voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply { shouldFail = true },
+            analyticsService = analyticsService,
+            content = aTimelineItemVoiceContent(durationMs = 10_000),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
+                Truth.assertThat(it.progress).isEqualTo(0f)
+                Truth.assertThat(it.time).isEqualTo("0:10")
+            }
+
+            initialState.eventSink(VoiceMessageEvents.Seek(0.5f))
+
+            awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
+                Truth.assertThat(it.progress).isEqualTo(0f)
+                Truth.assertThat(it.time).isEqualTo("0:10")
+            }
+            awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Retry)
+                Truth.assertThat(it.progress).isEqualTo(0f)
+                Truth.assertThat(it.time).isEqualTo("0:10")
+            }
+            analyticsService.trackedErrors.first().also {
+                Truth.assertThat(it).apply {
+                    isInstanceOf(VoiceMessageException.PlayMessageError::class.java)
+                    hasMessageThat().isEqualTo("Error while trying to seek voice message")
+                }
             }
         }
     }

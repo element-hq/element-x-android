@@ -119,6 +119,39 @@ class DefaultVoiceMessagePlayerTest {
     }
 
     @Test
+    fun `download and seek to works`() = runTest {
+        val player = createDefaultVoiceMessagePlayer()
+        player.state.test {
+            skipItems(1) // skip initial state.
+            Truth.assertThat(player.seekTo(2000).isSuccess).isTrue()
+            player.seekTo(2000)
+            awaitItem().let {
+                Truth.assertThat(it.isPlaying).isEqualTo(false)
+                Truth.assertThat(it.isMyMedia).isEqualTo(true)
+                Truth.assertThat(it.currentPosition).isEqualTo(0)
+            }
+            awaitItem().let {
+                Truth.assertThat(it.isPlaying).isEqualTo(false)
+                Truth.assertThat(it.isMyMedia).isEqualTo(true)
+                Truth.assertThat(it.currentPosition).isEqualTo(2000)
+            }
+        }
+    }
+
+    @Test
+    fun `download and seek to fails`() = runTest {
+        val player = createDefaultVoiceMessagePlayer(
+            voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply {
+                shouldFail = true
+            },
+        )
+        player.state.test {
+            skipItems(1) // skip initial state.
+            Truth.assertThat(player.seekTo(2000).isFailure).isTrue()
+        }
+    }
+
+    @Test
     fun `seek to works`() = runTest {
         val player = createDefaultVoiceMessagePlayer()
         player.state.test {

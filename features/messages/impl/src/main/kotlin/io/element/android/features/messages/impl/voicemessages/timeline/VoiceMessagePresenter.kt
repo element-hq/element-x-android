@@ -126,7 +126,18 @@ class VoiceMessagePresenter @AssistedInject constructor(
                     }
                 }
                 is VoiceMessageEvents.Seek -> {
-                    player.seekTo((event.percentage * content.duration.toMillis()).toLong())
+                    scope.launch {
+                        play.runUpdatingState(
+                            errorTransform = {
+                                analyticsService.trackError(
+                                    VoiceMessageException.PlayMessageError("Error while trying to seek voice message", it)
+                                )
+                                it
+                            },
+                        ) {
+                            player.seekTo((event.percentage * content.duration.toMillis()).toLong())
+                        }
+                    }
                 }
             }
         }
