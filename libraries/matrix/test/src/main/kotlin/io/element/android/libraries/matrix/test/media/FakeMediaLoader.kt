@@ -42,7 +42,12 @@ class FakeMediaLoader : MatrixMediaLoader {
         }
     }
 
-    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> = simulateLongTask {
+    override suspend fun downloadMediaFile(
+        source: MediaSource,
+        mimeType: String?,
+        body: String?,
+        useCache: Boolean,
+    ): Result<MediaFile> = simulateLongTask {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {

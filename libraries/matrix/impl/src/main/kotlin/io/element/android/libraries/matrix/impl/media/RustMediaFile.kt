@@ -25,6 +25,10 @@ class RustMediaFile(private val inner: MediaFileHandle) : MediaFile {
         return inner.path()
     }
 
+    override fun persist(path: String): Boolean {
+        return inner.persist(path)
+    }
+
     override fun close() {
         inner.close()
     }

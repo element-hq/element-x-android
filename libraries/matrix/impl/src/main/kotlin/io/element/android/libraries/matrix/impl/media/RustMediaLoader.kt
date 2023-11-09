@@ -71,7 +71,12 @@ class RustMediaLoader(
             }
         }
 
-    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> =
+    override suspend fun downloadMediaFile(
+        source: MediaSource,
+        mimeType: String?,
+        body: String?,
+        useCache: Boolean,
+    ): Result<MediaFile> =
         withContext(mediaDispatcher) {
             runCatching {
                 source.toRustMediaSource().use { mediaSource ->
@@ -79,7 +84,7 @@ class RustMediaLoader(
                         mediaSource = mediaSource,
                         body = body,
                         mimeType = mimeType ?: MimeTypes.OctetStream,
-                        useCache = true,
+                        useCache = useCache,
                         tempDir = cacheDirectory.path,
                     )
                     RustMediaFile(mediaFile)
