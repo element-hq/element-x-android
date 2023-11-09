@@ -45,6 +45,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.theme.ElementTheme
@@ -79,14 +80,7 @@ fun WelcomeView(
                     color = ElementTheme.colors.textPrimary,
                     textAlign = TextAlign.Center,
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.screen_welcome_subtitle),
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                    color = ElementTheme.colors.textPrimary,
-                    textAlign = TextAlign.Center,
-                )
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(80.dp))
                 InfoListOrganism(
                     items = listItems(),
                     textStyle = ElementTheme.typography.fontBodyMdMedium,
@@ -110,16 +104,12 @@ fun WelcomeView(
 @Composable
 private fun listItems() = persistentListOf(
     InfoListItem(
-        message = stringResource(R.string.screen_welcome_bullet_1),
-        iconVector = Icons.Outlined.NewReleases,
-    ),
-    InfoListItem(
         message = stringResource(R.string.screen_welcome_bullet_2),
         iconVector = Icons.Outlined.Lock,
     ),
     InfoListItem(
         message = stringResource(R.string.screen_welcome_bullet_3),
-        iconVector = Icons.Outlined.AddComment,
+        iconId = CommonDrawables.ic_compound_chat_problem,
     ),
 )
 
