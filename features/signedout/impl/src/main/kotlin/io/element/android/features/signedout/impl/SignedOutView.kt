@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
@@ -94,15 +95,15 @@ private fun SignedOutContent(
             items = persistentListOf(
                 InfoListItem(
                     message = stringResource(id = R.string.screen_signed_out_reason_1),
-                    iconComposable = { Icon(R.drawable.ic_lock_outline) },
+                    iconComposable = { Icon(CommonDrawables.ic_lock_outline) },
                 ),
                 InfoListItem(
                     message = stringResource(id = R.string.screen_signed_out_reason_2),
-                    iconComposable = { Icon(R.drawable.ic_devices) },
+                    iconComposable = { Icon(CommonDrawables.ic_devices) },
                 ),
                 InfoListItem(
                     message = stringResource(id = R.string.screen_signed_out_reason_3),
-                    iconComposable = { Icon(R.drawable.ic_do_disturb_alt) },
+                    iconComposable = { Icon(CommonDrawables.ic_do_disturb_alt) },
                 ),
             ),
             textStyle = ElementTheme.typography.fontBodyMdMedium,
