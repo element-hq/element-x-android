@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.voicemessages.composer
 
 import android.Manifest
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -69,13 +70,17 @@ class VoiceMessageComposerPresenter @Inject constructor(
     override fun present(): VoiceMessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
         val recorderState by voiceRecorder.state.collectAsState(initial = VoiceRecorderState.Idle)
+        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.Initial)
         val keepScreenOn by remember { derivedStateOf { recorderState is VoiceRecorderState.Recording } }
 
         val permissionState = permissionsPresenter.present()
         var isSending by remember { mutableStateOf(false) }
-        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotLoaded)
-        val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
-        val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
+
+        LaunchedEffect(recorderState) {
+            val recording = recorderState as? VoiceRecorderState.Finished
+                ?: return@LaunchedEffect
+            player.setMedia(recording.file.path)
+        }
 
         val onLifecycleEvent = { event: Lifecycle.Event ->
             when (event) {
@@ -115,27 +120,15 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 }
             }
         }
-        val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
-            when (event) {
-                VoiceMessagePlayerEvent.Play ->
-                    when (val recording = recorderState) {
-                        is VoiceRecorderState.Finished ->
-                            localCoroutineScope.launch {
-                                player.play(
-                                    mediaPath = recording.file.path,
-                                    mimeType = recording.mimeType,
-                                )
-                            }
-                        else -> Timber.e("Voice message player event received but no file to play")
-                    }
-                VoiceMessagePlayerEvent.Pause -> {
-                    player.pause()
-                }
-                is VoiceMessagePlayerEvent.Seek -> {
-                    // TODO implement seeking
+        val onPlayerEvent = { event: VoiceMessagePlayerEvent -> localCoroutineScope.launch {
+            localCoroutineScope.launch {
+                when (event) {
+                    VoiceMessagePlayerEvent.Play -> player.play()
+                    VoiceMessagePlayerEvent.Pause -> player.pause()
+                    is VoiceMessagePlayerEvent.Seek -> player.seek(event.position)
                 }
             }
-        }
+        } }
 
         val onAcceptPermissionsRationale = {
             permissionState.eventSink(PermissionsEvents.OpenSystemSettingAndCloseDialog)
@@ -189,21 +182,39 @@ class VoiceMessageComposerPresenter @Inject constructor(
             voiceMessageState = when (val state = recorderState) {
                 is VoiceRecorderState.Recording -> VoiceMessageState.Recording(
                     duration = state.elapsedTime,
-                    levels = state.levels.toPersistentList()
+                    levels = state.levels.toPersistentList(),
                 )
-                is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
-                    isSending = isSending,
-                    isPlaying = playerState.isPlaying,
-                    showCursor = playerState.isLoaded && !isSending,
-                    playbackProgress = playerState.progress,
-                    time = playerTime,
-                    waveform = waveform,
-                )
+                is VoiceRecorderState.Finished ->
+                    previewState(
+                        playerState = playerState,
+                        recorderState = recorderState,
+                        isSending = isSending
+                    )
                 else -> VoiceMessageState.Idle
             },
             showPermissionRationaleDialog = permissionState.showDialog,
             keepScreenOn = keepScreenOn,
             eventSink = handleEvents,
+        )
+    }
+
+    @Composable
+    private fun previewState(
+        playerState: VoiceMessageComposerPlayer.State,
+        recorderState: VoiceRecorderState,
+        isSending: Boolean,
+    ): VoiceMessageState {
+        val showCursor by remember(playerState.isStopped, isSending) { derivedStateOf { !playerState.isStopped && !isSending }}
+        val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
+        val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
+
+        return VoiceMessageState.Preview(
+            isSending = isSending,
+            isPlaying = playerState.isPlaying,
+            showCursor = showCursor,
+            playbackProgress = playerState.progress,
+            time = playerTime,
+            waveform = waveform,
         )
     }
 
@@ -248,7 +259,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
     }
 
     private fun AnalyticsService.captureComposerEvent() =
-        analyticsService.capture(
+        capture(
             Composer(
                 inThread = messageComposerContext.composerMode.inThread,
                 isEditing = messageComposerContext.composerMode.isEditing,
@@ -273,7 +284,7 @@ private fun displayTime(
     playerState: VoiceMessageComposerPlayer.State,
     recording: VoiceRecorderState
 ): Duration = when {
-    playerState.isLoaded ->
+    !playerState.isStopped ->
         playerState.currentPosition.milliseconds
     recording is VoiceRecorderState.Finished ->
         recording.duration

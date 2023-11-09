@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
 }
 

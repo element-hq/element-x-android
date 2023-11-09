@@ -154,7 +154,7 @@ class DefaultVoiceMessagePlayer(
                 mediaPlayer.setMedia(
                     uri = mediaFile.path,
                     mediaId = eventId.value,
-                    mimeType = "audio/ogg" // Files in the voice cache have no extension so we need to set the mime type manually.
+                    mimeType = "audio/ogg", // Files in the voice cache have no extension so we need to set the mime type manually.
                 )
                 mediaPlayer.play()
             }

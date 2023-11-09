@@ -108,7 +108,7 @@ internal fun VoiceMessagePreview(
             playbackProgress = playbackProgress,
             showCursor = showCursor,
             waveform = waveform,
-            seekEnabled = false, // TODO enable seeking
+            seekEnabled = true,
             onSeek = onSeek,
         )
     }

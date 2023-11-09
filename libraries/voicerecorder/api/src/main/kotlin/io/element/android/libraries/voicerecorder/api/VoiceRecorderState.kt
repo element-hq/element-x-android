@@ -16,9 +16,11 @@
 
 package io.element.android.libraries.voicerecorder.api
 
+import androidx.compose.runtime.Immutable
 import java.io.File
 import kotlin.time.Duration
 
+@Immutable
 sealed interface VoiceRecorderState {
     /**
      * The recorder is idle and not recording.
