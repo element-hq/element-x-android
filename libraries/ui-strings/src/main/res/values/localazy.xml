@@ -13,7 +13,8 @@
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_user_menu">"User menu"</string>
-  <string name="a11y_voice_message_record">"Record voice message. Double tap and hold to record. Release to end recording."</string>
+  <string name="a11y_voice_message_record">"Record voice message. Tap to record."</string>
+  <string name="a11y_voice_message_stop_recording">"Stop recording"</string>
   <string name="action_accept">"Accept"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>

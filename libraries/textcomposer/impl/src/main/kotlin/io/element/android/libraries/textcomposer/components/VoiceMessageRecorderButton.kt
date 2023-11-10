@@ -105,7 +105,7 @@ private fun StopButton(
     Icon(
         modifier = Modifier.size(24.dp),
         resourceId = R.drawable.ic_stop,
-        contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
+        contentDescription = stringResource(CommonStrings.a11y_voice_message_stop_recording),
         tint = ElementTheme.colors.iconOnSolidPrimary,
     )
 }
