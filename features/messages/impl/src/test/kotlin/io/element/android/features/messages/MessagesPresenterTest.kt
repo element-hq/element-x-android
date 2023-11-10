@@ -641,7 +641,7 @@ class MessagesPresenterTest {
             FakeVoiceRecorder(),
             analyticsService,
             mediaSender,
-            player = VoiceMessageComposerPlayer(FakeMediaPlayer()),
+            player = VoiceMessageComposerPlayer(FakeMediaPlayer(), this),
             messageComposerContext = FakeMessageComposerContext(),
             permissionsPresenterFactory,
         )
