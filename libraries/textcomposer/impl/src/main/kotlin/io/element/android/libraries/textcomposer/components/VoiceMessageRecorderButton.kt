@@ -17,8 +17,11 @@
 
 package io.element.android.libraries.textcomposer.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -30,6 +33,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.textcomposer.R
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -46,49 +50,65 @@ internal fun VoiceMessageRecorderButton(
         hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
     }
 
-    val onButtonClick = {
-        performHapticFeedback()
-        onEvent(
-            if (isRecording) {
-                VoiceMessageRecorderEvent.Stop
-            } else {
-                VoiceMessageRecorderEvent.Start
+    if (isRecording) {
+        StopButton(
+            modifier = modifier,
+            onClick = {
+                performHapticFeedback()
+                onEvent(VoiceMessageRecorderEvent.Stop)
             }
         )
-    }
-
-    IconButton(
-        modifier = modifier
-            .size(48.dp),
-        onClick = onButtonClick,
-    ) {
-        if (isRecording) {
-            StopRecordIcon()
-        } else {
-            StartRecordIcon()
-        }
+    } else {
+        StartButton(
+            modifier = modifier,
+            onClick = {
+                performHapticFeedback()
+                onEvent(VoiceMessageRecorderEvent.Start)
+            }
+        )
     }
 }
 
 @Composable
-private fun StartRecordIcon(
+private fun StartButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-) = Icon(
-    modifier = modifier.size(24.dp),
-    resourceId = CommonDrawables.ic_compound_mic_on_outline,
-    contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
-    tint = ElementTheme.colors.iconSecondary,
-)
+) = IconButton(
+    modifier = modifier.size(48.dp),
+    onClick = onClick,
+) {
+    Icon(
+        modifier = Modifier.size(24.dp),
+        resourceId = CommonDrawables.ic_compound_mic_on_outline,
+        contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
+        tint = ElementTheme.colors.iconSecondary,
+    )
+}
 
 @Composable
-private fun StopRecordIcon(
+private fun StopButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-) = Icon(
-    modifier = modifier.size(24.dp),
-    resourceId = CommonDrawables.ic_compound_mic_on_solid,
-    contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
-    tint = ElementTheme.colors.iconSecondary,
-)
+) = IconButton(
+    modifier = modifier
+        .size(48.dp),
+    onClick = onClick,
+) {
+    Box(
+        Modifier
+            .size(36.dp)
+            .background(
+                color = ElementTheme.colors.bgActionPrimaryRest,
+                shape = CircleShape,
+            )
+    )
+    Icon(
+        modifier = Modifier.size(24.dp),
+        resourceId = R.drawable.ic_stop,
+        contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
+        tint = ElementTheme.colors.iconOnSolidPrimary,
+    )
+}
 
 @PreviewsDayNight
 @Composable
