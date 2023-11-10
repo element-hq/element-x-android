@@ -37,7 +37,7 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
@@ -95,10 +95,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
             }
         }
 
-        val onRecordButtonPress = { event: VoiceMessageComposerEvents.RecordButtonEvent ->
+        val onVoiceMessageRecorderEvent = { event: VoiceMessageComposerEvents.RecorderEvent ->
             val permissionGranted = permissionState.permissionGranted
-            when (event.pressEvent) {
-                PressEvent.PressStart -> {
+            when (event.recorderEvent) {
+                VoiceMessageRecorderEvent.Start -> {
                     Timber.v("Voice message record button pressed")
                     when {
                         permissionGranted -> {
@@ -110,13 +110,9 @@ class VoiceMessageComposerPresenter @Inject constructor(
                         }
                     }
                 }
-                PressEvent.LongPressEnd -> {
-                    Timber.v("Voice message record button released")
+                VoiceMessageRecorderEvent.Stop -> {
+                    Timber.v("Voice message stop button pressed")
                     localCoroutineScope.finishRecording()
-                }
-                PressEvent.Tapped -> {
-                    Timber.v("Voice message record button tapped")
-                    localCoroutineScope.cancelRecording()
                 }
             }
         }
@@ -163,7 +159,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         val handleEvents: (VoiceMessageComposerEvents) -> Unit = { event ->
             when (event) {
-                is VoiceMessageComposerEvents.RecordButtonEvent -> onRecordButtonPress(event)
+                is VoiceMessageComposerEvents.RecorderEvent -> onVoiceMessageRecorderEvent(event)
                 is VoiceMessageComposerEvents.PlayerEvent -> onPlayerEvent(event.playerEvent)
                 is VoiceMessageComposerEvents.SendVoiceMessage -> localCoroutineScope.launch {
                     onSendButtonPress()

@@ -16,8 +16,7 @@
 
 package io.element.android.libraries.textcomposer.model
 
-sealed interface PressEvent {
-    data object PressStart: PressEvent
-    data object Tapped: PressEvent
-    data object LongPressEnd: PressEvent
+sealed interface VoiceMessageRecorderEvent {
+    data object Start: VoiceMessageRecorderEvent
+    data object Stop: VoiceMessageRecorderEvent
 }

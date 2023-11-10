@@ -66,7 +66,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
 import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
-import io.element.android.libraries.textcomposer.components.RecordButton
+import io.element.android.libraries.textcomposer.components.VoiceMessageRecorderButton
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButton
@@ -75,7 +75,7 @@ import io.element.android.libraries.textcomposer.components.VoiceMessageRecordin
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
-import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
@@ -103,7 +103,7 @@ fun TextComposer(
     onResetComposerMode: () -> Unit = {},
     onAddAttachment: () -> Unit = {},
     onDismissTextFormatting: () -> Unit = {},
-    onVoiceRecordButtonEvent: (PressEvent) -> Unit = {},
+    onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit = {},
     onVoicePlayerEvent: (VoiceMessagePlayerEvent) -> Unit = {},
     onSendVoiceMessage: () -> Unit = {},
     onDeleteVoiceMessage: () -> Unit = {},
@@ -167,16 +167,15 @@ fun TextComposer(
         )
     }
     val recordVoiceButton = @Composable {
-        RecordButton(
-            onPressStart = { onVoiceRecordButtonEvent(PressEvent.PressStart) },
-            onLongPressEnd = { onVoiceRecordButtonEvent(PressEvent.LongPressEnd) },
-            onTap = { onVoiceRecordButtonEvent(PressEvent.Tapped) },
+        VoiceMessageRecorderButton(
+            isRecording = voiceMessageState is VoiceMessageState.Recording,
+            onEvent = onVoiceRecorderEvent,
         )
     }
     val sendVoiceButton = @Composable {
         SendButton(
             canSendMessage = voiceMessageState is VoiceMessageState.Preview,
-            onClick = { onSendVoiceMessage() },
+            onClick = onSendVoiceMessage,
             composerMode = composerMode,
         )
     }
