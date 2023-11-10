@@ -112,7 +112,7 @@ private fun StopButton(
 
 @PreviewsDayNight
 @Composable
-internal fun RecordButtonPreview() = ElementPreview {
+internal fun VoiceMessageRecorderButtonPreview() = ElementPreview {
     Row {
         VoiceMessageRecorderButton(isRecording = false)
         VoiceMessageRecorderButton(isRecording = true)
