@@ -44,7 +44,7 @@ dependencies {
     api(projects.libraries.matrix.api)
     implementation(libs.dagger)
     implementation(projects.libraries.core)
-    implementation("net.java.dev.jna:jna:5.13.0@aar")
+    implementation(libs.jna)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
 

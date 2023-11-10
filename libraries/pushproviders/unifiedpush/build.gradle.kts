@@ -41,7 +41,7 @@ dependencies {
 
     implementation(projects.libraries.network)
     implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:okhttp")
+    implementation(libs.network.okhttp.okhttp)
     implementation(libs.network.retrofit)
 
     implementation(libs.serialization.json)
