@@ -134,6 +134,21 @@ class VoiceMessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - abort recording`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecorderEvent(VoiceMessageRecorderEvent.Cancel))
+            val finalState = awaitItem()
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
     fun `present - finish recording`() = runTest {
         val presenter = createVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {

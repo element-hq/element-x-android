@@ -114,6 +114,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
                     Timber.v("Voice message stop button pressed")
                     localCoroutineScope.finishRecording()
                 }
+                VoiceMessageRecorderEvent.Cancel -> {
+                    Timber.v("Voice message cancel button tapped")
+                    localCoroutineScope.cancelRecording()
+                }
             }
         }
         val onPlayerEvent = { event: VoiceMessagePlayerEvent -> localCoroutineScope.launch {

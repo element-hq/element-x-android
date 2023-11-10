@@ -222,8 +222,12 @@ fun TextComposer(
     }
 
     val voiceDeleteButton = @Composable {
-        if (voiceMessageState is VoiceMessageState.Preview) {
-            VoiceMessageDeleteButton(enabled = !voiceMessageState.isSending, onClick = onDeleteVoiceMessage)
+        when (voiceMessageState) {
+            is VoiceMessageState.Preview ->
+                VoiceMessageDeleteButton(enabled = !voiceMessageState.isSending, onClick = onDeleteVoiceMessage)
+            is VoiceMessageState.Recording ->
+                VoiceMessageDeleteButton(enabled = true, onClick = { onVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel) })
+            else -> {}
         }
     }
 
@@ -285,7 +289,7 @@ private fun StandardLayout(
         verticalAlignment = Alignment.Bottom,
     ) {
         if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
-            if (voiceMessageState is VoiceMessageState.Preview) {
+            if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                 Box(
                     modifier = Modifier
                         .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
