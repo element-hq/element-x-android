@@ -116,7 +116,7 @@ class MediaPlayerImpl @Inject constructor(
         )
         player.prepare()
         // Will throw TimeoutCancellationException if the player is not ready after 1 second.
-        return state.timeout(1.seconds).first { it.isReady }
+        return state.timeout(1.seconds).first { it.isReady && it.mediaId == mediaId }
     }
 
     override fun play() {
