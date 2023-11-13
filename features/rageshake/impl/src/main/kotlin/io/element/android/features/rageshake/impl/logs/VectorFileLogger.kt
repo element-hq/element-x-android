@@ -37,7 +37,7 @@ import java.util.logging.Logger
  * Will be planted in Timber.
  */
 class VectorFileLogger(
-    context: Context,
+    private val context: Context,
     // private val vectorPreferences: VectorPreferences
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : Timber.Tree() {
@@ -66,7 +66,9 @@ class VectorFileLogger(
     }
 
     private val fileHandler: FileHandler?
-    private val cacheDirectory = File(context.cacheDir, "logs")
+    private val cacheDirectory get() = File(context.cacheDir, "logs").apply {
+        if (!exists()) mkdirs()
+    }
     private var fileNamePrefix = "logs"
 
     private val prioPrefixes = mapOf(
@@ -79,10 +81,6 @@ class VectorFileLogger(
     )
 
     init {
-        if (!cacheDirectory.exists()) {
-            cacheDirectory.mkdirs()
-        }
-
         for (i in 0..15) {
             val file = File(cacheDirectory, "elementLogs.${i}.txt")
             file.safeDelete()

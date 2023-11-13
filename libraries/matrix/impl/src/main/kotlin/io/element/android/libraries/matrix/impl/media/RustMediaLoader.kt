@@ -30,18 +30,17 @@ import java.io.File
 import org.matrix.rustcomponents.sdk.MediaSource as RustMediaSource
 
 class RustMediaLoader(
-    baseCacheDirectory: File,
+    private val baseCacheDirectory: File,
     dispatchers: CoroutineDispatchers,
     private val innerClient: Client,
 ) : MatrixMediaLoader {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val mediaDispatcher = dispatchers.io.limitedParallelism(32)
-    private val cacheDirectory = File(baseCacheDirectory, "temp/media").apply {
-        if (!exists()) {
-            mkdirs()
+    private val cacheDirectory
+        get() = File(baseCacheDirectory, "temp/media").apply {
+            if (!exists()) mkdirs() // Must always ensure that this directory exists because "Clear cache" does not restart an app's process.
         }
-    }
 
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
