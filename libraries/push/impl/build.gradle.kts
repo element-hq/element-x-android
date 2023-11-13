@@ -16,7 +16,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version libs.versions.kotlin
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {

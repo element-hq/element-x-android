@@ -17,7 +17,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version libs.versions.kotlin
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -44,7 +44,7 @@ dependencies {
     api(projects.libraries.matrix.api)
     implementation(libs.dagger)
     implementation(projects.libraries.core)
-    implementation(libs.jna)
+    implementation("net.java.dev.jna:jna:5.13.0@aar")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
 
