@@ -41,6 +41,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             lastMessageTimestamp = latestRoomMessage?.originServerTs,
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
             notificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
+            hasOngoingCall = roomInfo.hasRoomCall,
         )
     }
 }
