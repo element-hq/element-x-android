@@ -33,4 +33,5 @@ data class RoomListRoomSummary constructor(
     val avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
     val isPlaceholder: Boolean = false,
     val notificationMode: RoomNotificationMode? = null,
+    val hasOngoingCall: Boolean = false,
 )

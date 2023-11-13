@@ -35,8 +35,8 @@
   <string name="screen_waitlist_message">"В настоящее время существует высокий спрос на %1$s на %2$s. Вернитесь в приложение через несколько дней и попробуйте снова.
 
 Спасибо за терпение!"</string>
-  <string name="screen_waitlist_title">"Почти готово!"</string>
-  <string name="screen_waitlist_title_success">"Вы зарегистрированы!"</string>
+  <string name="screen_waitlist_title">"Почти готово."</string>
+  <string name="screen_waitlist_title_success">"Вы зарегистрированы."</string>
   <string name="screen_login_subtitle">"Matrix — это открытая сеть для безопасной децентрализованной связи."</string>
   <string name="screen_waitlist_message_success">"Добро пожаловать в %1$s!"</string>
 </resources>

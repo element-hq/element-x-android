@@ -13,7 +13,8 @@
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
-  <string name="a11y_voice_message_record">"Nahrávanie hlasovej správy. Nahrávanie spustíte dvojitým ťuknutím a podržaním. Uvoľnením nahrávanie ukončíte."</string>
+  <string name="a11y_voice_message_record">"Nahrať hlasovú správu."</string>
+  <string name="a11y_voice_message_stop_recording">"Zastaviť nahrávanie"</string>
   <string name="action_accept">"Prijať"</string>
   <string name="action_add_to_timeline">"Pridať na časovú os"</string>
   <string name="action_back">"Späť"</string>
@@ -115,6 +116,7 @@
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_loading">"Načítava sa…"</string>
   <string name="common_message">"Správa"</string>
+  <string name="common_message_actions">"Akcie správy"</string>
   <string name="common_message_layout">"Štýl správ"</string>
   <string name="common_message_removed">"Správa odstránená"</string>
   <string name="common_modern">"Moderné"</string>
@@ -172,8 +174,10 @@
   <string name="common_voice_message">"Hlasová správa"</string>
   <string name="common_waiting">"Čaká sa…"</string>
   <string name="common_waiting_for_decryption_key">"Čaká sa na dešifrovací kľúč"</string>
+  <string name="common_report_a_problem">"Nahlásiť problém"</string>
   <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
   <string name="common_poll_summary">"Anketa: %1$s"</string>
+  <string name="common_verify_device">"Overiť zariadenie"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
   <string name="emoji_picker_category_activity">"Aktivity"</string>

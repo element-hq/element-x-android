@@ -22,6 +22,8 @@
   <string name="screen_recovery_key_change_success">"Kľúč na obnovenie bol zmenený"</string>
   <string name="screen_recovery_key_change_title">"Zmeniť kľúč na obnovenie?"</string>
   <string name="screen_recovery_key_confirm_description">"Zadajte kľúč na obnovenie a potvrďte prístup k zálohe konverzácie."</string>
+  <string name="screen_recovery_key_confirm_error_content">"Skúste prosím znova potvrdiť prístup k vašej zálohe konverzácie."</string>
+  <string name="screen_recovery_key_confirm_error_title">"Nesprávny kľúč na obnovenie"</string>
   <string name="screen_recovery_key_confirm_key_description">"Zadajte 48-znakový kód."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadať…"</string>
   <string name="screen_recovery_key_confirm_success">"Kľúč na obnovu potvrdený"</string>

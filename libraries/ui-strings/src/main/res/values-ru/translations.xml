@@ -13,7 +13,8 @@
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
-  <string name="a11y_voice_message_record">"Запишите голосовое сообщение. Дважды нажмите и удерживайте, чтобы записать. Отпустите, чтобы закончить запись."</string>
+  <string name="a11y_voice_message_record">"Записать голосовое сообщение."</string>
+  <string name="a11y_voice_message_stop_recording">"Остановить запись"</string>
   <string name="action_accept">"Разрешить"</string>
   <string name="action_add_to_timeline">"Добавить в хронологию"</string>
   <string name="action_back">"Назад"</string>
@@ -76,7 +77,7 @@
   <string name="action_signout_anyway">"Все равно выйти"</string>
   <string name="action_skip">"Пропустить"</string>
   <string name="action_start">"Начать"</string>
-  <string name="action_start_chat">"Начать чат "</string>
+  <string name="action_start_chat">"Начать чат"</string>
   <string name="action_start_verification">"Начать подтверждение"</string>
   <string name="action_static_map_load">"Нажмите, чтобы загрузить карту"</string>
   <string name="action_take_photo">"Сделать фото"</string>
@@ -115,6 +116,7 @@
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_loading">"Загрузка…"</string>
   <string name="common_message">"Сообщение"</string>
+  <string name="common_message_actions">"Действия с сообщением"</string>
   <string name="common_message_layout">"Оформление сообщений"</string>
   <string name="common_message_removed">"Сообщение удалено"</string>
   <string name="common_modern">"Современный"</string>
@@ -172,8 +174,10 @@
   <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
   <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
+  <string name="common_report_a_problem">"Сообщить о проблеме"</string>
   <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>
+  <string name="common_verify_device">"Подтверждение устройства"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
   <string name="emoji_picker_category_activity">"Деятельность"</string>
@@ -228,9 +232,7 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Дополнительные параметры"</string>
   <string name="screen_notification_settings_calls_label">"Аудио и видео звонки"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Несоответствие конфигурации"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Мы упростили настройки уведомлений, чтобы упростить поиск опций. 
-
-Некоторые пользовательские настройки, выбранные вами ранее, не отображаются в данном меню, но они все еще активны. 
+  <string name="screen_notification_settings_configuration_mismatch_description">"Мы упростили настройки уведомлений, чтобы упростить поиск опций. Некоторые пользовательские настройки, выбранные вами ранее, не отображаются в данном меню, но они все еще активны. 
 
 Если вы продолжите, некоторые настройки могут быть изменены."</string>
   <string name="screen_notification_settings_direct_chats">"Прямые чаты"</string>
@@ -249,7 +251,7 @@
   <string name="screen_notification_settings_notification_section_title">"Уведомить меня"</string>
   <string name="screen_notification_settings_room_mention_label">"Уведомить меня в @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Чтобы получать уведомления, измените свой %1$s."</string>
-  <string name="screen_notification_settings_system_notifications_action_required_content_link">"Настройки системы"</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"настройки системы"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>
   <string name="screen_notification_settings_title">"Уведомления"</string>
   <string name="screen_report_content_block_user_hint">"Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя"</string>

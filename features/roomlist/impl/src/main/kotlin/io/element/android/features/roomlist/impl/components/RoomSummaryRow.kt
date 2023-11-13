@@ -172,14 +172,22 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
 
     // Unread
     Row(
+        modifier = Modifier.height(16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Video call
+        if (room.hasOngoingCall) {
+            Icon(
+                modifier = Modifier.size(16.dp),
+                resourceId = CommonDrawables.ic_compound_video_call,
+                contentDescription = null,
+                tint = ElementTheme.colors.unreadIndicator,
+            )
+        }
         NotificationIcon(room)
         if (room.hasUnread) {
-            UnreadIndicatorAtom(
-                modifier = Modifier.padding(vertical = 3.dp),
-            )
+            UnreadIndicatorAtom()
         }
     }
 }

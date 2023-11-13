@@ -23,7 +23,7 @@ dependencies {
     implementation(projects.anvilannotations)
     api(libs.anvil.compiler.api)
     implementation(libs.anvil.compiler.utils)
-    implementation("com.squareup:kotlinpoet:1.14.2")
+    implementation(libs.kotlinpoet)
     implementation(libs.dagger)
     compileOnly(libs.google.autoservice.annotations)
     kapt(libs.google.autoservice)
