@@ -30,7 +30,7 @@ sealed class AvatarAction(
 ) {
     data object TakePhoto : AvatarAction(
         titleResId = CommonStrings.action_take_photo,
-        iconResourceId = CommonDrawables.ic_september_take_photo_camera,
+        iconResourceId = CommonDrawables.ic_take_photo_camera,
     )
 
     data object ChoosePhoto : AvatarAction(

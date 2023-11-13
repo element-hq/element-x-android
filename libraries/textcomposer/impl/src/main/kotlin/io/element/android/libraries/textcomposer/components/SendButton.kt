@@ -54,7 +54,7 @@ internal fun SendButton(
     ) {
         val iconId = when (composerMode) {
             is MessageComposerMode.Edit -> CommonDrawables.ic_compound_check
-            else -> CommonDrawables.ic_september_send
+            else -> CommonDrawables.ic_send
         }
         val iconSize = when (composerMode) {
             is MessageComposerMode.Edit -> 24.dp

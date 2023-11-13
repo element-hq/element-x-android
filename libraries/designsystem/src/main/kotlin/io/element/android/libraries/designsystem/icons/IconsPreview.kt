@@ -80,18 +80,6 @@ internal fun IconsCompoundPreview(@PreviewParameter(CompoundIconListPreviewProvi
 
 @PreviewsDayNight
 @Composable
-internal fun IconsSeptemberPreview() = ElementPreview {
-    IconsPreview(
-        title = "R.drawable.ic_september_*",
-        iconsList = iconsSeptember.toPersistentList(),
-        iconNameTransform = { name ->
-            name.removePrefix("ic_september_")
-                .replace("_", " ")
-        })
-}
-
-@PreviewsDayNight
-@Composable
 internal fun IconsOtherPreview(@PreviewParameter(OtherIconListPreviewProvider::class) iconChunk: IconChunk) = ElementPreview {
     IconsPreview(
         title = "R.drawable.ic_*  ${iconChunk.index}/${iconChunk.total}",

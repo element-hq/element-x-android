@@ -370,7 +370,7 @@ private fun EmojiReactionsRow(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                resourceId = CommonDrawables.ic_september_add_reaction,
+                resourceId = CommonDrawables.ic_add_reaction,
                 contentDescription = "Emojis",
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier

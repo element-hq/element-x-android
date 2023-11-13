@@ -114,7 +114,7 @@ private fun RecoveryKeyStaticContent(
                 modifier = Modifier.weight(1f),
             )
             Icon(
-                resourceId = CommonDrawables.ic_september_copy,
+                resourceId = CommonDrawables.ic_copy,
                 contentDescription = stringResource(id = CommonStrings.action_copy),
                 tint = ElementTheme.colors.iconSecondary,
             )
