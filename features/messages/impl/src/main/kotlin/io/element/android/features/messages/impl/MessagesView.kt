@@ -75,6 +75,7 @@ import io.element.android.features.messages.impl.timeline.components.retrysendme
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
@@ -338,6 +339,11 @@ private fun MessagesViewContent(
                     state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissPermissionsRationale)
                 },
                 appName = state.appName
+            )
+        }
+        if (state.enableVoiceMessages && state.voiceMessageComposerState.showSendFailureDialog) {
+            VoiceMessageSendingFailedDialog(
+                onDismiss = { state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissSendFailureDialog) },
             )
         }
 

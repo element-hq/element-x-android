@@ -75,6 +75,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         val permissionState = permissionsPresenter.present()
         var isSending by remember { mutableStateOf(false) }
+        var showSendFailureDialog by remember { mutableStateOf(false) }
 
         LaunchedEffect(recorderState) {
             val recording = recorderState as? VoiceRecorderState.Finished
@@ -138,6 +139,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
             permissionState.eventSink(PermissionsEvents.CloseDialog)
         }
 
+        val onDismissSendFailureDialog = {
+            showSendFailureDialog = false
+        }
+
         val onSendButtonPress = lambda@{
             val finishedState = recorderState as? VoiceRecorderState.Finished
             if (finishedState == null) {
@@ -152,11 +157,16 @@ class VoiceMessageComposerPresenter @Inject constructor(
             isSending = true
             player.pause()
             analyticsService.captureComposerEvent()
-            appCoroutineScope.sendMessage(
-                file = finishedState.file,
-                mimeType = finishedState.mimeType,
-                waveform = finishedState.waveform,
-            ).invokeOnCompletion {
+            appCoroutineScope.launch {
+                val result = sendMessage(
+                    file = finishedState.file,
+                    mimeType = finishedState.mimeType,
+                    waveform = finishedState.waveform,
+                )
+                if (result.isFailure) {
+                    showSendFailureDialog = true
+                }
+            }.invokeOnCompletion {
                 isSending = false
             }
         }
@@ -175,6 +185,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 VoiceMessageComposerEvents.DismissPermissionsRationale -> onDismissPermissionsRationale()
                 VoiceMessageComposerEvents.AcceptPermissionRationale -> onAcceptPermissionsRationale()
                 is VoiceMessageComposerEvents.LifecycleEvent -> onLifecycleEvent(event.event)
+                VoiceMessageComposerEvents.DismissSendFailureDialog -> onDismissSendFailureDialog()
             }
         }
 
@@ -193,6 +204,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 else -> VoiceMessageState.Idle
             },
             showPermissionRationaleDialog = permissionState.showDialog,
+            showSendFailureDialog = showSendFailureDialog,
             keepScreenOn = keepScreenOn,
             eventSink = handleEvents,
         )
@@ -239,11 +251,11 @@ class VoiceMessageComposerPresenter @Inject constructor(
         voiceRecorder.deleteRecording()
     }
 
-    private fun CoroutineScope.sendMessage(
+    private suspend fun sendMessage(
         file: File,
         mimeType: String,
-        waveform: List<Float>
-    ) = launch {
+        waveform: List<Float>,
+    ): Result<Unit> {
         val result = mediaSender.sendVoiceMessage(
             uri = file.toUri(),
             mimeType = mimeType,
@@ -252,10 +264,12 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         if (result.isFailure) {
             Timber.e(result.exceptionOrNull(), "Voice message error")
-            return@launch
+            return result
         }
 
         voiceRecorder.deleteRecording()
+
+        return result
     }
 
     private fun AnalyticsService.captureComposerEvent() =

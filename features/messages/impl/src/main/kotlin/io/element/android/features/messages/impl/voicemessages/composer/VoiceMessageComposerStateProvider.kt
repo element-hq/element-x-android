@@ -32,9 +32,11 @@ internal fun aVoiceMessageComposerState(
     voiceMessageState: VoiceMessageState = VoiceMessageState.Idle,
     keepScreenOn: Boolean = false,
     showPermissionRationaleDialog: Boolean = false,
+    showSendFailureDialog: Boolean = false,
 ) = VoiceMessageComposerState(
     voiceMessageState = voiceMessageState,
     showPermissionRationaleDialog = showPermissionRationaleDialog,
+    showSendFailureDialog = showSendFailureDialog,
     keepScreenOn = keepScreenOn,
     eventSink = {},
 )
