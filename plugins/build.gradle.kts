@@ -27,7 +27,6 @@ dependencies {
     implementation(libs.android.gradle.plugin)
     implementation(libs.kotlin.gradle.plugin)
     implementation(platform(libs.google.firebase.bom))
-    // FIXME: using the bom ^, it should not be necessary to provide the version v...
-    implementation("com.google.firebase:firebase-appdistribution-gradle:4.0.1")
+    implementation(libs.firebase.appdistribution.gradle)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

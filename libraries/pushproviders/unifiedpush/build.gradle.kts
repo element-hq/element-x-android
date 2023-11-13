@@ -16,7 +16,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.9.20"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -41,7 +41,7 @@ dependencies {
 
     implementation(projects.libraries.network)
     implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:okhttp")
+    implementation(libs.network.okhttp.okhttp)
     implementation(libs.network.retrofit)
 
     implementation(libs.serialization.json)
