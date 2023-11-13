@@ -33,7 +33,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.textcomposer.R
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -104,7 +103,7 @@ private fun StopButton(
     )
     Icon(
         modifier = Modifier.size(24.dp),
-        resourceId = R.drawable.ic_stop,
+        resourceId = CommonDrawables.ic_stop,
         contentDescription = stringResource(CommonStrings.a11y_voice_message_stop_recording),
         tint = ElementTheme.colors.iconOnSolidPrimary,
     )
