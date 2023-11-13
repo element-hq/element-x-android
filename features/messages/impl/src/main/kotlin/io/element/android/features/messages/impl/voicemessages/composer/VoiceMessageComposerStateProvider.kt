@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.voicemessages.composer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import kotlinx.collections.immutable.toPersistentList
 import kotlin.time.Duration.Companion.seconds
@@ -39,6 +40,15 @@ internal fun aVoiceMessageComposerState(
     showSendFailureDialog = showSendFailureDialog,
     keepScreenOn = keepScreenOn,
     eventSink = {},
+)
+
+internal fun aVoiceMessagePreviewState() = VoiceMessageState.Preview(
+    isSending = false,
+    isPlaying = false,
+    showCursor = false,
+    playbackProgress = 0f,
+    time = 10.seconds,
+    waveform = createFakeWaveform(),
 )
 
 internal var aWaveformLevels = List(100) { it.toFloat() / 100 }.toPersistentList()

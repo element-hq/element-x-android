@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
+import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessagePreviewState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -68,7 +69,10 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             ),
             aMessagesState().copy(
                 enableVoiceMessages = true,
-                voiceMessageComposerState = aVoiceMessageComposerState(showSendFailureDialog = true),
+                voiceMessageComposerState = aVoiceMessageComposerState(
+                    voiceMessageState = aVoiceMessagePreviewState(),
+                    showSendFailureDialog = true
+                ),
             ),
         )
 }
