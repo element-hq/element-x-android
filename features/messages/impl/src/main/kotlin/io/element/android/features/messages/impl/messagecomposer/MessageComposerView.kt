@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
@@ -30,6 +31,7 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.textcomposer.TextComposer
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
@@ -46,6 +48,7 @@ internal fun MessageComposerView(
     enableVoiceMessages: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val view = LocalView.current
     fun sendMessage(message: Message) {
         state.eventSink(MessageComposerEvents.SendMessage(message))
     }
@@ -59,6 +62,7 @@ internal fun MessageComposerView(
     }
 
     fun onDismissTextFormatting() {
+        view.clearFocus()
         state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = false))
     }
 
@@ -113,6 +117,7 @@ internal fun MessageComposerView(
         onDeleteVoiceMessage = onDeleteVoiceMessage,
         onSuggestionReceived = ::onSuggestionReceived,
         onError = ::onError,
+        currentUserId = state.currentUserId,
     )
 }
 

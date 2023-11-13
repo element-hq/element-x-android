@@ -45,6 +45,7 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
@@ -284,6 +285,20 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.SuggestionReceived -> {
                     suggestionSearchTrigger.value = event.suggestion
                 }
+                is MessageComposerEvents.InsertMention -> {
+                    localCoroutineScope.launch {
+                        when (val mention = event.mention) {
+                            is RoomMemberSuggestion.Room -> {
+                                richTextEditorState.insertAtRoomMentionAtSuggestion()
+                            }
+                            is RoomMemberSuggestion.Member -> {
+                                val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
+                                val link = PermalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
+                                richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -297,6 +312,7 @@ class MessageComposerPresenter @Inject constructor(
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             memberSuggestions = memberSuggestions.toPersistentList(),
+            currentUserId = currentSessionIdHolder.current,
             eventSink = { handleEvents(it) }
         )
     }
