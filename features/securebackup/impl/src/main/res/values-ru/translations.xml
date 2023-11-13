@@ -22,7 +22,9 @@
   <string name="screen_recovery_key_change_success">"Ключ восстановления изменен"</string>
   <string name="screen_recovery_key_change_title">"Изменить ключ восстановления?"</string>
   <string name="screen_recovery_key_confirm_description">"Введите ключ восстановления, чтобы подтвердить доступ к резервной копии чата."</string>
-  <string name="screen_recovery_key_confirm_key_description">"Введите 48-значный код."</string>
+  <string name="screen_recovery_key_confirm_error_content">"Пожалуйста, попробуйте еще раз, чтобы подтвердить доступ к резервной копии чата."</string>
+  <string name="screen_recovery_key_confirm_error_title">"Неверный ключ восстановления"</string>
+  <string name="screen_recovery_key_confirm_key_description">"Введите 48 значный код."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Вход…"</string>
   <string name="screen_recovery_key_confirm_success">"Ключ восстановления подтвержден"</string>
   <string name="screen_recovery_key_confirm_title">"Подтвердите ключ восстановления"</string>

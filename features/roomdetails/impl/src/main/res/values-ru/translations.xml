@@ -29,7 +29,7 @@
   <string name="screen_room_notification_settings_allow_custom_footnote">"Включение этого параметра отменяет настройки по умолчанию"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Уведомить меня в этом чате"</string>
   <string name="screen_room_notification_settings_default_setting_footnote">"Вы можете изменить его в своем %1$s."</string>
-  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"Основные Настройки"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"основные настройки"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Настройка по умолчанию"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Удалить пользовательскую настройку"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"Произошла ошибка при загрузке настроек уведомлений."</string>

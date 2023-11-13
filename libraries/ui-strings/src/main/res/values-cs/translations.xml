@@ -14,6 +14,7 @@
   <string name="a11y_start_call">"Zahájit hovor"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
   <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu. Dvojitě klepněte a podržte pro záznam. Uvolněním ukončíte nahrávání."</string>
+  <string name="a11y_voice_message_stop_recording">"Zastavit nahrávání"</string>
   <string name="action_accept">"Přijmout"</string>
   <string name="action_add_to_timeline">"Přidat na časovou osu"</string>
   <string name="action_back">"Zpět"</string>
@@ -172,6 +173,7 @@
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
+  <string name="common_report_a_problem">"Nahlásit problém"</string>
   <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
   <string name="common_poll_summary">"Hlasování: %1$s"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
