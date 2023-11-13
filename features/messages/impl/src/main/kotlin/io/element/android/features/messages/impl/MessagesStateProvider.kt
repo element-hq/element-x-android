@@ -54,10 +54,6 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 voiceMessageComposerState = aVoiceMessageComposerState(showPermissionRationaleDialog = true),
             ),
             aMessagesState().copy(
-                enableVoiceMessages = true,
-                voiceMessageComposerState = aVoiceMessageComposerState(showSendFailureDialog = true),
-            ),
-            aMessagesState().copy(
                 composerState = aMessageComposerState().copy(
                     attachmentsState = AttachmentsState.Sending.Processing(persistentListOf())
                 ),
@@ -69,7 +65,11 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             ),
             aMessagesState().copy(
                 isCallOngoing = true,
-            )
+            ),
+            aMessagesState().copy(
+                enableVoiceMessages = true,
+                voiceMessageComposerState = aVoiceMessageComposerState(showSendFailureDialog = true),
+            ),
         )
 }
 
