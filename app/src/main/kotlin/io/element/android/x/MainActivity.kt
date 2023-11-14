@@ -67,7 +67,7 @@ class MainActivity : NodeActivity() {
         // Indeed, otherwise we would need to trick Appyx backstack management everywhere.
         // Without this trick, we would get pop operations on the hidden backstack.
         if (appBindings.lockScreenService().isLocked) {
-            //Do not kill the app in this case, just go to background.
+            // Do not kill the app in this case, just go to background.
             moveTaskToBack(false)
         } else {
             @Suppress("DEPRECATION")
