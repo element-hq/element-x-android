@@ -19,6 +19,7 @@ package io.element.android.libraries.voicerecorder.impl
 import android.Manifest
 import androidx.annotation.RequiresPermission
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appconfig.VoiceMessageConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.di.RoomScope
@@ -46,7 +47,6 @@ import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.TimeSource
 
 @SingleIn(RoomScope::class)
@@ -94,7 +94,7 @@ class VoiceRecorderImpl @Inject constructor(
 
                 val elapsedTime = startedAt.elapsedNow()
 
-                if (elapsedTime > 30.minutes) {
+                if (elapsedTime > VoiceMessageConfig.maxVoiceMessageDuration) {
                     Timber.w("Voice message time limit reached")
                     stopRecord(false)
                     return@record

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.R
 import io.element.android.libraries.designsystem.components.LINK_TAG
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -30,7 +31,6 @@ import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithSt
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListSupportingText
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun AnalyticsPreferencesView(
@@ -42,18 +42,18 @@ fun AnalyticsPreferencesView(
     }
 
     val supportingText = stringResource(
-        id = CommonStrings.screen_analytics_settings_help_us_improve,
+        id = R.string.screen_analytics_settings_help_us_improve,
         state.applicationName
     )
     val linkText = buildAnnotatedStringWithStyledPart(
-        CommonStrings.screen_analytics_settings_read_terms,
-        CommonStrings.screen_analytics_settings_read_terms_content_link,
+        R.string.screen_analytics_settings_read_terms,
+        R.string.screen_analytics_settings_read_terms_content_link,
         tagAndLink = LINK_TAG to state.policyUrl,
     )
     Column(modifier) {
         ListItem(
             headlineContent = {
-                Text(stringResource(id = CommonStrings.screen_analytics_settings_share_data))
+                Text(stringResource(id = R.string.screen_analytics_settings_share_data))
             },
             supportingContent = {
                 Text(supportingText)

@@ -12,4 +12,31 @@
   <string name="screen_edit_profile_error_title">"Nelze aktualizovat profil"</string>
   <string name="screen_edit_profile_title">"Upravit profil"</string>
   <string name="screen_edit_profile_updating_details">"Aktualizace profilu…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Další nastavení"</string>
+  <string name="screen_notification_settings_calls_label">"Halsové a video hovory"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Neshoda konfigurace"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Zjednodušili jsme nastavení oznámení, abychom usnadnili hledání možností. 
+
+Některá vlastní nastavení, která jste si vybrali v minulosti, se zde nezobrazují, ale jsou stále aktivní. 
+
+Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
+  <string name="screen_notification_settings_direct_chats">"Přímé zprávy"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Vlastní nastavení pro chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Při aktualizaci nastavení oznámení došlo k chybě."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Všechny zprávy"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"V přímých zprávách mě upozornit na"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Ve skupinových chatech mě upozornit na"</string>
+  <string name="screen_notification_settings_enable_notifications">"Povolit oznámení na tomto zařízení"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurace nebyla opravena, zkuste to prosím znovu."</string>
+  <string name="screen_notification_settings_group_chats">"Skupinové chaty"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Zmínky"</string>
+  <string name="screen_notification_settings_mode_all">"Vše"</string>
+  <string name="screen_notification_settings_mode_mentions">"Zmínky"</string>
+  <string name="screen_notification_settings_notification_section_title">"Upozornit mě na"</string>
+  <string name="screen_notification_settings_room_mention_label">"Upozornit mě na @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Chcete-li dostávat oznámení, změňte prosím svůj %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"systémová nastavení"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Systémová oznámení byla vypnuta"</string>
+  <string name="screen_notification_settings_title">"Oznámení"</string>
 </resources>

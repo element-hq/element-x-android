@@ -136,6 +136,7 @@
   <string name="common_refreshing">"Obnovuje sa…"</string>
   <string name="common_replying_to">"Odpoveď na %1$s"</string>
   <string name="common_report_a_bug">"Nahlásiť chybu"</string>
+  <string name="common_report_a_problem">"Nahlásiť problém"</string>
   <string name="common_report_submitted">"Nahlásenie bolo odoslané"</string>
   <string name="common_rich_text_editor">"Rozšírený textový editor"</string>
   <string name="common_room">"Miestnosť"</string>
@@ -174,20 +175,11 @@
   <string name="common_voice_message">"Hlasová správa"</string>
   <string name="common_waiting">"Čaká sa…"</string>
   <string name="common_waiting_for_decryption_key">"Čaká sa na dešifrovací kľúč"</string>
-  <string name="common_report_a_problem">"Nahlásiť problém"</string>
   <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
   <string name="common_poll_summary">"Anketa: %1$s"</string>
   <string name="common_verify_device">"Overiť zariadenie"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
-  <string name="emoji_picker_category_activity">"Aktivity"</string>
-  <string name="emoji_picker_category_flags">"Vlajky"</string>
-  <string name="emoji_picker_category_foods">"Jedlo a nápoje"</string>
-  <string name="emoji_picker_category_nature">"Zvieratá a príroda"</string>
-  <string name="emoji_picker_category_objects">"Predmety"</string>
-  <string name="emoji_picker_category_people">"Smajlíky a ľudia"</string>
-  <string name="emoji_picker_category_places">"Cestovanie a miesta"</string>
-  <string name="emoji_picker_category_symbols">"Symboly"</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
   <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
@@ -200,9 +192,6 @@
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Ste si istí, že chcete opustiť túto miestnosť? Ste tu jediná osoba. Ak odídete, nikto sa do nej nebude môcť v budúcnosti pripojiť, vrátane vás."</string>
-  <string name="leave_room_alert_private_subtitle">"Ste si istí, že chcete opustiť túto miestnosť? Táto miestnosť nie je verejná a bez pozvania sa do nej nebudete môcť vrátiť."</string>
-  <string name="leave_room_alert_subtitle">"Ste si istí, že chcete opustiť miestnosť?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d zadaná číslica"</item>
@@ -220,43 +209,12 @@
     <item quantity="other">"%d hlasov"</item>
   </plurals>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
-  <string name="report_content_explanation">"Táto správa bude nahlásená správcovi vášho domovského servera. Nebude môcť prečítať žiadne šifrované správy."</string>
-  <string name="report_content_hint">"Dôvod nahlásenia tohto obsahu"</string>
   <string name="room_timeline_beginning_of_room">"Toto je začiatok %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Toto je začiatok tejto konverzácie."</string>
   <string name="room_timeline_read_marker_title">"Nové"</string>
-  <string name="screen_analytics_settings_share_data">"Zdieľať analytické údaje"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
-  <string name="screen_notification_settings_additional_settings_section_title">"Ďalšie nastavenia"</string>
-  <string name="screen_notification_settings_calls_label">"Audio a video hovory"</string>
-  <string name="screen_notification_settings_configuration_mismatch">"Nezhoda konfigurácie"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Zjednodušili sme Nastavenia oznámení, aby ste ľahšie našli možnosti.
-
-Niektoré vlastné nastavenia, ktoré ste si nastavili v minulosti, sa tu nezobrazujú, ale sú stále aktívne.
-
-Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</string>
-  <string name="screen_notification_settings_direct_chats">"Priame konverzácie"</string>
-  <string name="screen_notification_settings_edit_custom_settings_section_title">"Vlastné nastavenie pre konverzácie"</string>
-  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Pri aktualizácii nastavenia oznámenia došlo k chybe."</string>
-  <string name="screen_notification_settings_edit_mode_all_messages">"Všetky správy"</string>
-  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
-  <string name="screen_notification_settings_edit_screen_direct_section_header">"Pri priamych rozhovoroch ma upozorniť na"</string>
-  <string name="screen_notification_settings_edit_screen_group_section_header">"Pri skupinových rozhovoroch ma upozorniť na"</string>
-  <string name="screen_notification_settings_enable_notifications">"Povoliť oznámenia na tomto zariadení"</string>
-  <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurácia nebola opravená, skúste to prosím znova."</string>
-  <string name="screen_notification_settings_group_chats">"Skupinové rozhovory"</string>
-  <string name="screen_notification_settings_mentions_section_title">"Zmienky"</string>
-  <string name="screen_notification_settings_mode_all">"Všetky"</string>
-  <string name="screen_notification_settings_mode_mentions">"Zmienky"</string>
-  <string name="screen_notification_settings_notification_section_title">"Upozorniť ma na"</string>
-  <string name="screen_notification_settings_room_mention_label">"Upozorniť ma na @miestnosť"</string>
-  <string name="screen_notification_settings_system_notifications_action_required">"Ak chcete dostávať oznámenia, zmeňte prosím svoje %1$s."</string>
-  <string name="screen_notification_settings_system_notifications_action_required_content_link">"nastavenia systému"</string>
-  <string name="screen_notification_settings_system_notifications_turned_off">"Systémové oznámenia sú vypnuté"</string>
-  <string name="screen_notification_settings_title">"Oznámenia"</string>
-  <string name="screen_report_content_block_user_hint">"Označte, či chcete skryť všetky aktuálne a budúce správy od tohto používateľa"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>
   <string name="screen_share_my_location_action">"Zdieľať moju polohu"</string>
   <string name="screen_share_open_apple_maps">"Otvoriť v Apple Maps"</string>
@@ -264,14 +222,8 @@ Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</stri
   <string name="screen_share_open_osm_maps">"Otvoriť v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Zdieľajte túto polohu"</string>
   <string name="screen_view_location_title">"Poloha"</string>
-  <string name="settings_rageshake">"Zúrivé potrasenie"</string>
-  <string name="settings_rageshake_detection_threshold">"Prahová hodnota detekcie"</string>
   <string name="settings_version_number">"Verzia: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"sk"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
-  <string name="screen_analytics_settings_help_us_improve">"Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy."</string>
-  <string name="screen_analytics_settings_read_terms">"Môžete si prečítať všetky naše podmienky %1$s."</string>
-  <string name="screen_analytics_settings_read_terms_content_link">"tu"</string>
-  <string name="screen_report_content_block_user">"Zablokovať používateľa"</string>
 </resources>

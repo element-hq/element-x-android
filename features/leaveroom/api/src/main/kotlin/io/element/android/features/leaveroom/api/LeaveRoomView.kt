@@ -48,19 +48,19 @@ private fun LeaveRoomConfirmationDialog(
     when (state.confirmation) {
         is LeaveRoomState.Confirmation.Hidden -> {}
         is LeaveRoomState.Confirmation.PrivateRoom -> LeaveRoomConfirmationDialog(
-            text = CommonStrings.leave_room_alert_private_subtitle,
+            text = R.string.leave_room_alert_private_subtitle,
             roomId = state.confirmation.roomId,
             eventSink = state.eventSink,
         )
 
         is LeaveRoomState.Confirmation.LastUserInRoom -> LeaveRoomConfirmationDialog(
-            text = CommonStrings.leave_room_alert_empty_subtitle,
+            text = R.string.leave_room_alert_empty_subtitle,
             roomId = state.confirmation.roomId,
             eventSink = state.eventSink,
         )
 
         is LeaveRoomState.Confirmation.Generic -> LeaveRoomConfirmationDialog(
-            text = CommonStrings.leave_room_alert_subtitle,
+            text = R.string.leave_room_alert_subtitle,
             roomId = state.confirmation.roomId,
             eventSink = state.eventSink,
         )

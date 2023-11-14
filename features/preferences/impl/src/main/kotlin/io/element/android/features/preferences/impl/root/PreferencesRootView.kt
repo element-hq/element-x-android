@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -116,7 +117,7 @@ fun PreferencesRootView(
         }
         if (state.showNotificationSettings) {
             ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.screen_notification_settings_title)) },
+                headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
                 leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_notifications)),
                 onClick = onOpenNotificationSettings,
             )

@@ -8,4 +8,27 @@
   <string name="screen_edit_profile_error_title">"Profil kann nicht aktualisiert werden"</string>
   <string name="screen_edit_profile_title">"Profil bearbeiten"</string>
   <string name="screen_edit_profile_updating_details">"Profil wird aktualisiert…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Zusätzliche Einstellungen"</string>
+  <string name="screen_notification_settings_calls_label">"Audio- und Videoanrufe"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Konfiguration stimmt nicht überein"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Wir haben die Einstellungen für Benachrichtigungen vereinfacht, damit die Optionen leichter zu finden sind. Einige benutzerdefinierte Einstellungen, die du in der Vergangenheit gewählt hast, werden hier nicht angezeigt, sind aber immer noch aktiv. Wenn du fortfährst, können sich einige deiner Einstellungen ändern."</string>
+  <string name="screen_notification_settings_direct_chats">"Direkte Chats"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Benutzerdefinierte Einstellung pro Chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Beim Aktualisieren der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Alle Nachrichten"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Bei direkten Chats, benachrichtige mich bei"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Bei Gruppenchats benachrichtige mich bei"</string>
+  <string name="screen_notification_settings_enable_notifications">"Benachrichtigungen auf diesem Gerät aktivieren"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Die Konfiguration wurde nicht korrigiert, bitte versuche es erneut."</string>
+  <string name="screen_notification_settings_group_chats">"Gruppenchats"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Erwähnungen"</string>
+  <string name="screen_notification_settings_mode_all">"Alle"</string>
+  <string name="screen_notification_settings_mode_mentions">"Erwähnungen"</string>
+  <string name="screen_notification_settings_notification_section_title">"Benachrichtige mich bei"</string>
+  <string name="screen_notification_settings_room_mention_label">"Benachrichtige mich bei @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Um Benachrichtigungen zu erhalten, ändere bitte deine %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"Systemeinstellungen"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Systembenachrichtigungen deaktiviert"</string>
+  <string name="screen_notification_settings_title">"Benachrichtigungen"</string>
 </resources>

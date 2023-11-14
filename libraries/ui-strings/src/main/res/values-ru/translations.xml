@@ -136,6 +136,7 @@
   <string name="common_refreshing">"Обновление…"</string>
   <string name="common_replying_to">"Отвечает на %1$s"</string>
   <string name="common_report_a_bug">"Сообщить об ошибке"</string>
+  <string name="common_report_a_problem">"Сообщить о проблеме"</string>
   <string name="common_report_submitted">"Отчет отправлен"</string>
   <string name="common_rich_text_editor">"Редактор форматированного текста"</string>
   <string name="common_room">"Комната"</string>
@@ -174,20 +175,11 @@
   <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
   <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
-  <string name="common_report_a_problem">"Сообщить о проблеме"</string>
   <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>
   <string name="common_verify_device">"Подтверждение устройства"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
-  <string name="emoji_picker_category_activity">"Деятельность"</string>
-  <string name="emoji_picker_category_flags">"Флаги"</string>
-  <string name="emoji_picker_category_foods">"Еда и напитки"</string>
-  <string name="emoji_picker_category_nature">"Животные и природа"</string>
-  <string name="emoji_picker_category_objects">"Объекты"</string>
-  <string name="emoji_picker_category_people">"Смайлы и люди"</string>
-  <string name="emoji_picker_category_places">"Путешествия и места"</string>
-  <string name="emoji_picker_category_symbols">"Символы"</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>
   <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>
@@ -200,9 +192,6 @@
   <string name="error_unknown">"Извините, произошла ошибка"</string>
   <string name="invite_friends_rich_title">"🔐️ Присоединяйтесь ко мне в %1$s"</string>
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Вы уверены, что хотите покинуть эту комнату? Вы здесь единственный человек. Если вы уйдете, никто не сможет присоединиться в будущем, включая вас."</string>
-  <string name="leave_room_alert_private_subtitle">"Вы уверены, что хотите покинуть эту комнату? Эта комната не является публичной, и Вы не сможете присоединиться к ней без приглашения."</string>
-  <string name="leave_room_alert_subtitle">"Вы уверены, что хотите покинуть комнату?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Введена цифра %1$d"</item>
@@ -220,41 +209,12 @@
     <item quantity="many">"%d голосов"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake сообщит об ошибке"</string>
-  <string name="report_content_explanation">"Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения."</string>
-  <string name="report_content_hint">"Причина, по которой вы пожаловались на этот контент"</string>
   <string name="room_timeline_beginning_of_room">"Это начало %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Это начало разговора."</string>
   <string name="room_timeline_read_marker_title">"Новый"</string>
-  <string name="screen_analytics_settings_share_data">"Делитесь данными аналитики"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
-  <string name="screen_notification_settings_additional_settings_section_title">"Дополнительные параметры"</string>
-  <string name="screen_notification_settings_calls_label">"Аудио и видео звонки"</string>
-  <string name="screen_notification_settings_configuration_mismatch">"Несоответствие конфигурации"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Мы упростили настройки уведомлений, чтобы упростить поиск опций. Некоторые пользовательские настройки, выбранные вами ранее, не отображаются в данном меню, но они все еще активны. 
-
-Если вы продолжите, некоторые настройки могут быть изменены."</string>
-  <string name="screen_notification_settings_direct_chats">"Прямые чаты"</string>
-  <string name="screen_notification_settings_edit_custom_settings_section_title">"Индивидуальные настройки для каждого чата"</string>
-  <string name="screen_notification_settings_edit_failed_updating_default_mode">"При обновлении настроек уведомления произошла ошибка."</string>
-  <string name="screen_notification_settings_edit_mode_all_messages">"Все сообщения"</string>
-  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
-  <string name="screen_notification_settings_edit_screen_direct_section_header">"Уведомлять меня в личных чатах"</string>
-  <string name="screen_notification_settings_edit_screen_group_section_header">"Уведомлять меня в групповых чатах"</string>
-  <string name="screen_notification_settings_enable_notifications">"Включить уведомления на данном устройстве"</string>
-  <string name="screen_notification_settings_failed_fixing_configuration">"Конфигурация не была исправлена, попробуйте еще раз."</string>
-  <string name="screen_notification_settings_group_chats">"Групповые чаты"</string>
-  <string name="screen_notification_settings_mentions_section_title">"Упоминания"</string>
-  <string name="screen_notification_settings_mode_all">"Все"</string>
-  <string name="screen_notification_settings_mode_mentions">"Упоминания"</string>
-  <string name="screen_notification_settings_notification_section_title">"Уведомить меня"</string>
-  <string name="screen_notification_settings_room_mention_label">"Уведомить меня в @room"</string>
-  <string name="screen_notification_settings_system_notifications_action_required">"Чтобы получать уведомления, измените свой %1$s."</string>
-  <string name="screen_notification_settings_system_notifications_action_required_content_link">"настройки системы"</string>
-  <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>
-  <string name="screen_notification_settings_title">"Уведомления"</string>
-  <string name="screen_report_content_block_user_hint">"Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>
@@ -262,14 +222,8 @@
   <string name="screen_share_open_osm_maps">"Открыть в OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Поделиться этим местоположением"</string>
   <string name="screen_view_location_title">"Местоположение"</string>
-  <string name="settings_rageshake">"Rageshake"</string>
-  <string name="settings_rageshake_detection_threshold">"Порог обнаружения"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
-  <string name="screen_analytics_settings_help_us_improve">"Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы."</string>
-  <string name="screen_analytics_settings_read_terms">"Вы можете ознакомиться со всеми нашими условиями %1$s."</string>
-  <string name="screen_analytics_settings_read_terms_content_link">"здесь"</string>
-  <string name="screen_report_content_block_user">"Заблокировать пользователя"</string>
 </resources>

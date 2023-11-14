@@ -4,6 +4,7 @@
     <item quantity="one">"%1$d Person"</item>
     <item quantity="other">"%1$d Personen"</item>
   </plurals>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Beim Aktualisieren der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>
   <string name="screen_room_details_add_topic_title">"Thema hinzufügen"</string>
   <string name="screen_room_details_already_a_member">"Bereits Mitglied"</string>
   <string name="screen_room_details_already_invited">"Bereits eingeladen"</string>
