@@ -16,15 +16,19 @@
 
 package io.element.android.features.messages.impl.voicemessages.composer
 
-import androidx.compose.runtime.Stable
-import io.element.android.libraries.textcomposer.model.VoiceMessageState
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.ui.strings.CommonStrings
 
-@Stable
-data class VoiceMessageComposerState(
-    val voiceMessageState: VoiceMessageState,
-    val showPermissionRationaleDialog: Boolean,
-    val showSendFailureDialog: Boolean,
-    val keepScreenOn: Boolean,
-    val eventSink: (VoiceMessageComposerEvents) -> Unit,
-)
-
+@Composable
+internal fun VoiceMessageSendingFailedDialog(
+    onDismiss: () -> Unit,
+) {
+    ErrorDialog(
+        title = stringResource(CommonStrings.common_error),
+        content = stringResource(CommonStrings.error_failed_uploading_voice_message),
+        onDismiss = onDismiss,
+        submitText = stringResource(CommonStrings.action_ok),
+    )
+}

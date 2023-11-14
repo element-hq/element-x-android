@@ -438,6 +438,42 @@ class VoiceMessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - send failures are displayed as an error dialog`() = runTest {
+        val presenter = createVoiceMessageComposerPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Let sending fail due to media preprocessing error
+            mediaPreProcessor.givenResult(Result.failure(Exception()))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
+
+            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
+
+            awaitItem().apply {
+                assertThat(voiceMessageState).isEqualTo(aPreviewState().toSendingState())
+                assertThat(showSendFailureDialog).isTrue()
+            }
+
+            awaitItem().apply {
+                assertThat(voiceMessageState).isEqualTo(aPreviewState())
+                assertThat(showSendFailureDialog).isTrue()
+                eventSink(VoiceMessageComposerEvents.DismissSendFailureDialog)
+            }
+
+            val finalState = awaitItem().apply {
+                assertThat(voiceMessageState).isEqualTo(aPreviewState())
+                assertThat(showSendFailureDialog).isFalse()
+            }
+
+
+            assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
     fun `present - send error - missing recording is tracked`() = runTest {
         val presenter = createVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
