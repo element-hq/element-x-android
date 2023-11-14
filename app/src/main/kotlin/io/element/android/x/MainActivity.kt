@@ -70,6 +70,7 @@ class MainActivity : NodeActivity() {
             //Do not kill the app in this case, just go to background.
             moveTaskToBack(false)
         } else {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }
