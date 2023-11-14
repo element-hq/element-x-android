@@ -131,6 +131,12 @@
       ]
     },
     {
+      "name": ":features:analytics:api",
+      "includeRegex": [
+        "screen_analytics_settings_.*"
+      ]
+    },
+    {
       "name": ":features:ftue:impl",
       "includeRegex": [
         "screen_welcome_.*",

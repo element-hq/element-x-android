@@ -136,6 +136,7 @@
   <string name="common_refreshing">"Обновление…"</string>
   <string name="common_replying_to">"Отвечает на %1$s"</string>
   <string name="common_report_a_bug">"Сообщить об ошибке"</string>
+  <string name="common_report_a_problem">"Сообщить о проблеме"</string>
   <string name="common_report_submitted">"Отчет отправлен"</string>
   <string name="common_rich_text_editor">"Редактор форматированного текста"</string>
   <string name="common_room">"Комната"</string>
@@ -174,7 +175,6 @@
   <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
   <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
-  <string name="common_report_a_problem">"Сообщить о проблеме"</string>
   <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>
   <string name="common_verify_device">"Подтверждение устройства"</string>
@@ -225,7 +225,6 @@
   <string name="room_timeline_beginning_of_room">"Это начало %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Это начало разговора."</string>
   <string name="room_timeline_read_marker_title">"Новый"</string>
-  <string name="screen_analytics_settings_share_data">"Делитесь данными аналитики"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
@@ -268,8 +267,5 @@
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
-  <string name="screen_analytics_settings_help_us_improve">"Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы."</string>
-  <string name="screen_analytics_settings_read_terms">"Вы можете ознакомиться со всеми нашими условиями %1$s."</string>
-  <string name="screen_analytics_settings_read_terms_content_link">"здесь"</string>
   <string name="screen_report_content_block_user">"Заблокировать пользователя"</string>
 </resources>

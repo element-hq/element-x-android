@@ -180,7 +180,6 @@
   </plurals>
   <string name="report_content_hint">"檢舉這個內容的原因"</string>
   <string name="room_timeline_read_marker_title">"新訊息"</string>
-  <string name="screen_analytics_settings_share_data">"分享分析數據"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
   <string name="screen_notification_settings_direct_chats">"私訊"</string>
@@ -205,8 +204,5 @@
   <string name="test_language_identifier">"zh-tw"</string>
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
-  <string name="screen_analytics_settings_help_us_improve">"分享匿名的使用數據以協助我們釐清問題。"</string>
-  <string name="screen_analytics_settings_read_terms">"您可以到%1$s閱讀我們的條款。"</string>
-  <string name="screen_analytics_settings_read_terms_content_link">"這裡"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
 </resources>
