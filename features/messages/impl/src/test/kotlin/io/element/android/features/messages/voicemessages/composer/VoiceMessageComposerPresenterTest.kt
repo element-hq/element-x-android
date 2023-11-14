@@ -445,8 +445,8 @@ class VoiceMessageComposerPresenterTest {
         }.test {
             // Let sending fail due to media preprocessing error
             mediaPreProcessor.givenResult(Result.failure(Exception()))
-            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.PressStart))
-            awaitItem().eventSink(VoiceMessageComposerEvents.RecordButtonEvent(PressEvent.LongPressEnd))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            awaitItem().eventSink(VoiceMessageComposerEvents.RecorderEvent(VoiceMessageRecorderEvent.Stop))
             awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
 
             assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
