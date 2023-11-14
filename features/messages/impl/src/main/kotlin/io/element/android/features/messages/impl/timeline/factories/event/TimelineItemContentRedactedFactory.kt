@@ -18,12 +18,29 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TimelineItemContentRedactedFactory @Inject constructor() {
+class TimelineItemContentRedactedFactory @Inject constructor(
+    private val scope: CoroutineScope,
+    private val dispatchers: CoroutineDispatchers,
+    private val mediaPlayer: MediaPlayer,
+) {
 
-    fun create(@Suppress("UNUSED_PARAMETER") content: RedactedContent): TimelineItemEventContent {
+    fun create(
+        @Suppress("UNUSED_PARAMETER") content: RedactedContent,
+        eventId: EventId?
+    ): TimelineItemEventContent {
+        eventId?.value?.let {
+            if (mediaPlayer.state.value.mediaId == it) scope.launch(dispatchers.main) {
+                mediaPlayer.pause()
+            }
+        }
         return TimelineItemRedactedContent
     }
 }

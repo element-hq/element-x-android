@@ -55,7 +55,7 @@ class TimelineItemContentFactory @Inject constructor(
                 messageFactory.create(itemContent, senderDisplayName, eventTimelineItem.eventId)
             }
             is ProfileChangeContent -> profileChangeFactory.create(eventTimelineItem)
-            is RedactedContent -> redactedMessageFactory.create(itemContent)
+            is RedactedContent -> redactedMessageFactory.create(itemContent, eventTimelineItem.eventId)
             is RoomMembershipContent -> roomMembershipFactory.create(eventTimelineItem)
             is StateContent -> stateFactory.create(eventTimelineItem)
             is StickerContent -> stickerFactory.create(itemContent)

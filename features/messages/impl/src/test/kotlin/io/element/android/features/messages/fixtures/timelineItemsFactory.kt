@@ -23,7 +23,6 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentProfileChangeFactory
-import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRedactedFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRoomMembershipFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentStateFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentStickerFactory
@@ -33,6 +32,7 @@ import io.element.android.features.messages.impl.timeline.factories.virtual.Time
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractorWithoutValidation
+import io.element.android.features.messages.timeline.factories.event.aTimelineItemContentRedactedFactory
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
@@ -54,7 +54,7 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                     fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
                     featureFlagService = FakeFeatureFlagService(),
                 ),
-                redactedMessageFactory = TimelineItemContentRedactedFactory(),
+                redactedMessageFactory = aTimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
                 pollFactory = TimelineItemContentPollFactory(matrixClient, FakeFeatureFlagService()),
                 utdFactory = TimelineItemContentUTDFactory(),
