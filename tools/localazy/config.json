@@ -95,6 +95,12 @@
       ]
     },
     {
+      "name": ":features:leaveroom:api",
+      "includeRegex": [
+        "leave_room_alert_.*"
+      ]
+    },
+    {
       "name": ":features:roomlist:impl",
       "includeRegex": [
         "screen_roomlist_.*",

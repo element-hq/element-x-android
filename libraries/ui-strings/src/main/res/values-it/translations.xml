@@ -99,9 +99,6 @@
   <string name="error_some_messages_have_not_been_sent">"Alcuni messaggi non sono stati inviati"</string>
   <string name="error_unknown">"Siamo spiacenti, si è verificato un errore"</string>
   <string name="invite_friends_text">"Ehi, parlami su %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Sei sicuro di voler lasciare questa stanza? Sei l\'unica persona presente. Se esci, nessuno potrà unirsi in futuro, te compreso."</string>
-  <string name="leave_room_alert_private_subtitle">"Sei sicuro di voler lasciare questa stanza? Questa stanza non è pubblica e non potrai rientrare senza un invito."</string>
-  <string name="leave_room_alert_subtitle">"Sei sicuro di voler lasciare la stanza?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membro"</item>

@@ -192,9 +192,6 @@
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Are you sure that you want to leave this room? You\'re the only person here. If you leave, no one will be able to join in the future, including you."</string>
-  <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you won\'t be able to rejoin without an invite."</string>
-  <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d digit entered"</item>

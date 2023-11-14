@@ -147,9 +147,6 @@
   <string name="error_unknown">"Ne pare rău, a apărut o eroare"</string>
   <string name="invite_friends_rich_title">"🔐️ Alăturați-vă mie pe %1$s"</string>
   <string name="invite_friends_text">"Hei, vorbește cu mine pe %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Sunteți sigur că vreți să părăsiți această cameră? Sunteți singura persoană de aici. Dacă o părasiți, nimeni nu se va mai putea alătura în viitor, inclusiv dumneavoastra."</string>
-  <string name="leave_room_alert_private_subtitle">"Sunteți sigur că vrei să părăsiți această cameră? Această cameră nu este publică și nu va veti putea alătura din nou fără o invitație."</string>
-  <string name="leave_room_alert_subtitle">"Sunteți sigur că vreți să părăsiți camera?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membru"</item>

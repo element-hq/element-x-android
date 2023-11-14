@@ -188,9 +188,6 @@
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
   <string name="invite_friends_rich_title">"🔐️ Rejoignez-moi sur %1$s"</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Êtes-vous sûr de vouloir quitter ce salon ? Vous êtes la seule personne ici. Si vous partez, personne ne pourra rejoindre le salon à l’avenir, y compris vous."</string>
-  <string name="leave_room_alert_private_subtitle">"Êtes-vous sûr de vouloir quitter ce salon ? Ce salon n’est pas public et vous ne pourrez pas le rejoindre sans invitation."</string>
-  <string name="leave_room_alert_subtitle">"Êtes-vous sûr de vouloir quitter le salon ?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d chiffre saisi"</item>

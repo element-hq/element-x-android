@@ -165,9 +165,6 @@
   <string name="error_unknown">"Entschuldigung, es ist ein Fehler aufgetreten"</string>
   <string name="invite_friends_rich_title">"🔐️ Begleite mich auf %1$s"</string>
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Bist du sicher, dass du diesen Raum verlassen möchtest? Du bist die einzige Person hier. Wenn du austritst, kann in Zukunft niemand mehr eintreten, auch du nicht."</string>
-  <string name="leave_room_alert_private_subtitle">"Bist du sicher, dass du diesen Raum verlassen möchtest? Dieser Raum ist nicht öffentlich und du kannst ihm ohne Einladung nicht erneut beitreten."</string>
-  <string name="leave_room_alert_subtitle">"Bist du sicher, dass du den Raum verlassen willst?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d Mitglied"</item>

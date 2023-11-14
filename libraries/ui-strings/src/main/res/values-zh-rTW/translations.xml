@@ -160,9 +160,6 @@
   <string name="error_missing_location_rationale_android">"%1$s 沒有權限存取您的位置。請在下方開啟權限。"</string>
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"您確定要離開聊天室嗎？這裡只有您一個人。如果您離開了，包含您在內的所有人都無法再進入此聊天室。"</string>
-  <string name="leave_room_alert_private_subtitle">"您確定要離開聊天室嗎？此聊天室不是公開的，如果沒有收到邀請，您無法重新加入。"</string>
-  <string name="leave_room_alert_subtitle">"您確定要離開聊天室嗎？"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d 位成員"</item>

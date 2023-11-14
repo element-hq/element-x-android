@@ -190,9 +190,6 @@
   <string name="error_unknown">"Omlouváme se, došlo k chybě"</string>
   <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Opravdu chcete opustit tuto místnost? Jste tu jediná osoba. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás."</string>
-  <string name="leave_room_alert_private_subtitle">"Opravdu chcete opustit tuto místnost? Tato místnost není veřejná a bez pozvánky se nebudete moci znovu připojit."</string>
-  <string name="leave_room_alert_subtitle">"Opravdu chcete opustit místnost?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"zadána %1$d číslice"</item>

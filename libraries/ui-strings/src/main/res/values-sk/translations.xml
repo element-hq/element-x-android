@@ -192,9 +192,6 @@
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Ste si istí, že chcete opustiť túto miestnosť? Ste tu jediná osoba. Ak odídete, nikto sa do nej nebude môcť v budúcnosti pripojiť, vrátane vás."</string>
-  <string name="leave_room_alert_private_subtitle">"Ste si istí, že chcete opustiť túto miestnosť? Táto miestnosť nie je verejná a bez pozvania sa do nej nebudete môcť vrátiť."</string>
-  <string name="leave_room_alert_subtitle">"Ste si istí, že chcete opustiť miestnosť?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d zadaná číslica"</item>
