@@ -206,8 +206,6 @@
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
-  <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>

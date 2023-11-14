@@ -175,8 +175,6 @@
     <item quantity="other">"%d Stimmen"</item>
   </plurals>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
-  <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
-  <string name="room_timeline_beginning_of_room_no_name">"Dies ist der Anfang dieses Gesprächs."</string>
   <string name="room_timeline_read_marker_title">"Neu"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>

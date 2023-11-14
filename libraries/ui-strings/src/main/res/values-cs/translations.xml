@@ -13,7 +13,7 @@
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
-  <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu. Dvojitě klepněte a podržte pro záznam. Uvolněním ukončíte nahrávání."</string>
+  <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastavit nahrávání"</string>
   <string name="action_accept">"Přijmout"</string>
   <string name="action_add_to_timeline">"Přidat na časovou osu"</string>
@@ -116,6 +116,7 @@
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_loading">"Načítání…"</string>
   <string name="common_message">"Zpráva"</string>
+  <string name="common_message_actions">"Akce zprávy"</string>
   <string name="common_message_layout">"Rozložení zprávy"</string>
   <string name="common_message_removed">"Zpráva byla odstraněna"</string>
   <string name="common_modern">"Moderní"</string>
@@ -176,6 +177,7 @@
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
   <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
   <string name="common_poll_summary">"Hlasování: %1$s"</string>
+  <string name="common_verify_device">"Ověřit zařízení"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_warning">"Upozornění"</string>
   <string name="error_failed_creating_the_permalink">"Vytvoření trvalého odkazu se nezdařilo"</string>
@@ -207,8 +209,6 @@
     <item quantity="other">"%d hlasů"</item>
   </plurals>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
-  <string name="room_timeline_beginning_of_room">"Toto je začátek %1$s."</string>
-  <string name="room_timeline_beginning_of_room_no_name">"Toto je začátek této konverzace."</string>
   <string name="room_timeline_read_marker_title">"Nové"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>

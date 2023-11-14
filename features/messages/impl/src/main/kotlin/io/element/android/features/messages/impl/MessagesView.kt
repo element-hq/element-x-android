@@ -373,6 +373,7 @@ private fun MessagesViewContent(
                 TimelineView(
                     modifier = Modifier.padding(paddingValues),
                     state = state.timelineState,
+                    roomName = state.roomName.dataOrNull(),
                     onMessageClicked = onMessageClicked,
                     onMessageLongClicked = onMessageLongClicked,
                     onUserDataClicked = onUserDataClicked,
