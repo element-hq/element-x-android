@@ -107,7 +107,8 @@
         "screen_room_details_.*",
         "screen_room_member_list_.*",
         "screen_dm_details_.*",
-        "screen_room_notification_settings_.*"
+        "screen_room_notification_settings_.*",
+        "screen_notification_settings_edit_failed_updating_default_mode"
       ]
     },
     {
@@ -164,7 +165,8 @@
       "includeRegex": [
         "screen_advanced_settings_.*",
         "screen\\.advanced_settings\\..*",
-        "screen_edit_profile_.*"
+        "screen_edit_profile_.*",
+        "screen_notification_settings_.*"
       ]
     },
     {

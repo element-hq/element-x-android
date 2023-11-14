@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_settings_additional_settings_section_title">"Setări adiționale"</string>
+  <string name="screen_notification_settings_calls_label">"Apeluri audio și video"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Nepotrivire de configurație"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Am simplificat Setările pentru notificări pentru a face opțiunile mai ușor de găsit.
+
+Unele setări personalizate pe care le-ați ales în trecut nu sunt afișate aici, dar sunt încă active.
+
+Dacă continuați, unele dintre setările dumneavoastră pot fi modificate."</string>
+  <string name="screen_notification_settings_direct_chats">"Discuții directe"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Setare personalizată per chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"A apărut o eroare în timpul actualizării setărilor pentru notificari."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Toate mesajele"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"În conversațiile directe, anunță-mă pentru"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"În conversațiile de grup, anunțați-mă pentru"</string>
+  <string name="screen_notification_settings_enable_notifications">"Activați notificările pe acest dispozitiv"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Configurația nu a fost corectată, vă rugăm să încercați din nou."</string>
+  <string name="screen_notification_settings_group_chats">"Discuții de grup"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Mențiuni"</string>
+  <string name="screen_notification_settings_mode_all">"Toate"</string>
+  <string name="screen_notification_settings_mode_mentions">"Mențiuni"</string>
+  <string name="screen_notification_settings_notification_section_title">"Anunță-mă pentru"</string>
+  <string name="screen_notification_settings_room_mention_label">"Anunțați-mă pentru @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Pentru a primi notificări, vă rugăm să vă schimbați %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"Setări de sistem"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Notificările de sistem sunt dezactivate"</string>
+  <string name="screen_notification_settings_title">"Notificări"</string>
+</resources>

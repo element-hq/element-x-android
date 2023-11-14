@@ -4,6 +4,7 @@
     <item quantity="one">"%1$d personne"</item>
     <item quantity="other">"%1$d personnes"</item>
   </plurals>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Une erreur s’est produite lors de la mise à jour du paramètre de notification."</string>
   <string name="screen_room_details_add_topic_title">"Ajouter un sujet"</string>
   <string name="screen_room_details_already_a_member">"Déjà membre"</string>
   <string name="screen_room_details_already_invited">"Déjà invité(e)"</string>

@@ -200,14 +200,14 @@ private fun NotificationIcon(room: RoomListRoomSummary) {
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
             Icon(
                 modifier = Modifier.size(16.dp),
-                contentDescription = stringResource(CommonStrings.screen_notification_settings_mode_mentions),
+                contentDescription = null,
                 imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_mention),
                 tint = tint,
             )
         RoomNotificationMode.MUTE ->
             Icon(
                 modifier = Modifier.size(16.dp),
-                contentDescription = stringResource(CommonStrings.common_mute),
+                contentDescription = null,
                 imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_notifications_solid_off),
                 tint = tint,
             )

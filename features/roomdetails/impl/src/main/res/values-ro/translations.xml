@@ -4,6 +4,7 @@
     <item quantity="one">"o persoană"</item>
     <item quantity="other">"%1$d persoane"</item>
   </plurals>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"A apărut o eroare în timpul actualizării setărilor pentru notificari."</string>
   <string name="screen_room_details_add_topic_title">"Adăugare subiect"</string>
   <string name="screen_room_details_already_a_member">"Deja membru"</string>
   <string name="screen_room_details_already_invited">"Deja invitat"</string>

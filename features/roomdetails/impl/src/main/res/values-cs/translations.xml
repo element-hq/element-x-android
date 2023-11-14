@@ -5,6 +5,7 @@
     <item quantity="few">"%1$d osoby"</item>
     <item quantity="other">"%1$d osob"</item>
   </plurals>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Při aktualizaci nastavení oznámení došlo k chybě."</string>
   <string name="screen_room_details_add_topic_title">"Přidat téma"</string>
   <string name="screen_room_details_already_a_member">"Již členem"</string>
   <string name="screen_room_details_already_invited">"Již pozván(a)"</string>
