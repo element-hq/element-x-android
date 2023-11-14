@@ -17,6 +17,7 @@
   <string name="report_content_hint">"Důvod nahlášení tohoto obsahu"</string>
   <string name="room_timeline_beginning_of_room">"Toto je začátek %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Toto je začátek této konverzace."</string>
+  <string name="room_timeline_read_marker_title">"Nové"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Informujte celou místnost"</string>
   <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
   <string name="screen_room_attachment_source_camera">"Fotoaparát"</string>

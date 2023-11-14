@@ -12,6 +12,7 @@
     <item quantity="other">"%1$d 個聊天室變更"</item>
   </plurals>
   <string name="report_content_hint">"檢舉這個內容的原因"</string>
+  <string name="room_timeline_read_marker_title">"新訊息"</string>
   <string name="screen_room_attachment_source_camera">"照相機"</string>
   <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
   <string name="screen_room_attachment_source_camera_video">"錄影"</string>

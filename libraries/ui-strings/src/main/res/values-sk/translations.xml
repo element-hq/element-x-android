@@ -209,7 +209,6 @@
     <item quantity="other">"%d hlasov"</item>
   </plurals>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
-  <string name="room_timeline_read_marker_title">"Nové"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
