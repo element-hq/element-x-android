@@ -228,8 +228,6 @@
   <string name="screen_share_open_osm_maps">"Otvoriť v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Zdieľajte túto polohu"</string>
   <string name="screen_view_location_title">"Poloha"</string>
-  <string name="settings_rageshake">"Zúrivé potrasenie"</string>
-  <string name="settings_rageshake_detection_threshold">"Prahová hodnota detekcie"</string>
   <string name="settings_version_number">"Verzia: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"sk"</string>
   <string name="dialog_title_error">"Chyba"</string>

@@ -221,8 +221,6 @@
   <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partager cet position"</string>
   <string name="screen_view_location_title">"Position"</string>
-  <string name="settings_rageshake">"Rageshake"</string>
-  <string name="settings_rageshake_detection_threshold">"Seuil de détection"</string>
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="test_language_identifier">"Ang."</string>
   <string name="dialog_title_error">"Erreur"</string>

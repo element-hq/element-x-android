@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.rageshake.api.R
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -43,7 +44,7 @@ fun RageshakePreferencesView(
     }
 
     Column(modifier = modifier) {
-        PreferenceCategory(title = stringResource(id = CommonStrings.settings_rageshake)) {
+        PreferenceCategory(title = stringResource(id = R.string.settings_rageshake)) {
             if (state.isSupported) {
                 PreferenceSwitch(
                     title = stringResource(id = CommonStrings.preference_rageshake),
@@ -51,7 +52,7 @@ fun RageshakePreferencesView(
                     onCheckedChange = ::onEnabledChanged
                 )
                 PreferenceSlide(
-                    title = stringResource(id = CommonStrings.settings_rageshake_detection_threshold),
+                    title = stringResource(id = R.string.settings_rageshake_detection_threshold),
                     // summary = stringResource(id = CommonStrings.settings_rageshake_detection_threshold_summary),
                     value = state.sensitivity,
                     enabled = state.isEnabled,

@@ -10,7 +10,8 @@
       "name": ":features:rageshake:api",
       "includeRegex": [
         "crash_detection_.*",
-        "rageshake_detection_.*"
+        "rageshake_detection_.*",
+        "settings_rageshake.*"
       ]
     },
     {

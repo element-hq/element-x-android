@@ -2,4 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crash_detection_dialog_content">"%1$s s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?"</string>
   <string name="rageshake_detection_dialog_content">"Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?"</string>
+  <string name="settings_rageshake">"Rageshake"</string>
+  <string name="settings_rageshake_detection_threshold">"Prag de detecție"</string>
 </resources>

@@ -178,8 +178,6 @@
   <string name="screen_share_open_osm_maps">"Deschideți în OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Distribuiți această locație"</string>
   <string name="screen_view_location_title">"Locație"</string>
-  <string name="settings_rageshake">"Rageshake"</string>
-  <string name="settings_rageshake_detection_threshold">"Prag de detecție"</string>
   <string name="settings_version_number">"Versiunea: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"ro"</string>
   <string name="dialog_title_error">"Eroare"</string>

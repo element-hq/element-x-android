@@ -114,8 +114,6 @@
   <string name="room_timeline_beginning_of_room_no_name">"Questo è l\'inizio della conversazione."</string>
   <string name="room_timeline_read_marker_title">"Nuovo"</string>
   <string name="screen_report_content_block_user_hint">"Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente"</string>
-  <string name="settings_rageshake">"Rageshake"</string>
-  <string name="settings_rageshake_detection_threshold">"Soglia di rilevamento"</string>
   <string name="settings_version_number">"Versione: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"it"</string>
   <string name="dialog_title_error">"Errore"</string>

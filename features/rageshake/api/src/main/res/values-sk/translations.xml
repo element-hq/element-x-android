@@ -2,4 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crash_detection_dialog_content">"%1$s zlyhal pri poslednom použití. Chcete zdieľať správu o páde s našim tímom?"</string>
   <string name="rageshake_detection_dialog_content">"Zdá sa, že zúrivo trasiete telefónom. Chcete otvoriť obrazovku s hlásením chýb?"</string>
+  <string name="settings_rageshake">"Zúrivé potrasenie"</string>
+  <string name="settings_rageshake_detection_threshold">"Prahová hodnota detekcie"</string>
 </resources>
