@@ -27,14 +27,10 @@ import io.element.android.x.initializer.TracingInitializer
 
 class ElementXApplication : Application(), DaggerComponentOwner {
 
-    private lateinit var appComponent: AppComponent
-
-    override val daggerComponent: Any
-        get() = appComponent
+    override val daggerComponent: AppComponent = DaggerAppComponent.factory().create(this)
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.factory().create(applicationContext)
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
             initializeComponent(TracingInitializer::class.java)
