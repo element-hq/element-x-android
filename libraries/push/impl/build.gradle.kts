@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.coil)
 
+    implementation(projects.appconfig)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.designsystem)

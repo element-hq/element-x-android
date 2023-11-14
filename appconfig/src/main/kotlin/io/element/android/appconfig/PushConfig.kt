@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.config
+package io.element.android.appconfig
 
 object PushConfig {
     /**
