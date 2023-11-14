@@ -45,6 +45,12 @@ interface LockScreenService {
 }
 
 /**
+ * Check if the app is currently locked.
+ */
+val LockScreenService.isLocked: Boolean
+    get() = lockState.value == LockScreenLockState.Locked
+
+/**
  * Makes sure the secure flag is set on the activity if the pin is setup.
  * @param activity the activity to set the flag on.
  */

@@ -33,6 +33,7 @@ import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.features.lockscreen.api.handleSecureFlag
+import io.element.android.features.lockscreen.api.isLocked
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
@@ -46,7 +47,6 @@ private val loggerTag = LoggerTag("MainActivity")
 class MainActivity : NodeActivity() {
 
     private lateinit var mainNode: MainNode
-
     private lateinit var appBindings: AppBindings
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +58,19 @@ class MainActivity : NodeActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             MainContent(appBindings)
+        }
+    }
+
+    @Deprecated("")
+    override fun onBackPressed() {
+        // If the app is locked, we need to intercept onBackPressed before it goes to OnBackPressedDispatcher.
+        // Indeed, otherwise we would need to trick Appyx backstack management everywhere.
+        // Without this trick, we would get pop operations on the hidden backstack.
+        if (appBindings.lockScreenService().isLocked) {
+            //Do not kill the app in this case, just go to background.
+            moveTaskToBack(false)
+        } else {
+            super.onBackPressed()
         }
     }
 

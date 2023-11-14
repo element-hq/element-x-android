@@ -362,23 +362,18 @@ class LoggedInFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
             val lockScreenState by lockScreenStateService.lockState.collectAsState()
-            when (lockScreenState) {
-                LockScreenLockState.Unlocked -> {
-                    Children(
-                        navModel = backstack,
-                        modifier = Modifier,
-                        // Animate navigation to settings and to a room
-                        transitionHandler = rememberDefaultTransitionHandler(),
-                    )
-                    val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
-                    if (!isFtueDisplayed) {
-                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
-                    }
-                }
-                LockScreenLockState.Locked -> {
-                    MoveActivityToBackgroundBackHandler()
-                    PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
-                }
+            Children(
+                navModel = backstack,
+                modifier = Modifier,
+                // Animate navigation to settings and to a room
+                transitionHandler = rememberDefaultTransitionHandler(),
+            )
+            val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
+            if (!isFtueDisplayed) {
+                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+            }
+            if (lockScreenState == LockScreenLockState.Locked) {
+                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
             }
         }
     }
