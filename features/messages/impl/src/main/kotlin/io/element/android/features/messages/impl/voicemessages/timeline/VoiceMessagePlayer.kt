@@ -17,10 +17,10 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -75,11 +75,14 @@ interface VoiceMessagePlayer {
     fun pause()
 
     /**
-     * Seek to a specific position.
+     * Seek to a specific position acquiring control of the
+     * underlying [MediaPlayer] if needed.
+     *
+     * Will suspend whilst the media file is being downloaded.
      *
      * @param positionMs The position in milliseconds.
      */
-    fun seekTo(positionMs: Long)
+    suspend fun seekTo(positionMs: Long): Result<Unit>
 
     data class State(
         /**
@@ -145,22 +148,8 @@ class DefaultVoiceMessagePlayer(
         )
     }.distinctUntilChanged()
 
-    override suspend fun play(): Result<Unit> = if (inControl()) {
+    override suspend fun play(): Result<Unit> = acquireControl {
         mediaPlayer.play()
-        Result.success(Unit)
-    } else {
-        if (eventId != null) {
-            repo.getMediaFile().mapCatching { mediaFile ->
-                mediaPlayer.setMedia(
-                    uri = mediaFile.path,
-                    mediaId = eventId.value,
-                    mimeType = "audio/ogg", // Files in the voice cache have no extension so we need to set the mime type manually.
-                )
-                mediaPlayer.play()
-            }
-        } else {
-            Result.failure(IllegalStateException("Cannot play a voice message with no eventId"))
-        }
     }
 
     override fun pause() {
@@ -169,10 +158,8 @@ class DefaultVoiceMessagePlayer(
         }
     }
 
-    override fun seekTo(positionMs: Long) {
-        ifInControl {
-            mediaPlayer.seekTo(positionMs)
-        }
+    override suspend fun seekTo(positionMs: Long): Result<Unit> = acquireControl {
+        mediaPlayer.seekTo(positionMs)
     }
 
     private fun String?.isMyTrack(): Boolean = if (eventId == null) false else this == eventId.value
@@ -182,4 +169,21 @@ class DefaultVoiceMessagePlayer(
     }
 
     private fun inControl(): Boolean = mediaPlayer.state.value.mediaId.isMyTrack()
+
+    private suspend inline fun acquireControl(onReady: (state: MediaPlayer.State) -> Unit): Result<Unit> = if (inControl()) {
+        onReady(mediaPlayer.state.value)
+        Result.success(Unit)
+    } else {
+        if (eventId != null) {
+            repo.getMediaFile().mapCatching { mediaFile ->
+                mediaPlayer.setMedia(
+                    uri = mediaFile.path,
+                    mediaId = eventId.value,
+                    mimeType = "audio/ogg" // Files in the voice cache have no extension so we need to set the mime type manually.
+                ).let(onReady)
+            }
+        } else {
+            Result.failure(IllegalStateException("Cannot acquireControl on a voice message with no eventId"))
+        }
+    }
 }
