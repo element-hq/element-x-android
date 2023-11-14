@@ -135,7 +135,7 @@ fun PreferencesRootView(
         if (state.showLockScreenSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Default.Lock)),
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_lock_outline)),
                 onClick = onOpenLockScreenSettings,
             )
         }
