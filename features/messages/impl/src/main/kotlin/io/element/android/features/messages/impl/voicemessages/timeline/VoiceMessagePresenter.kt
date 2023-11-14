@@ -20,9 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
@@ -33,14 +36,11 @@ import dagger.multibindings.IntoMap
 import io.element.android.features.messages.impl.timeline.di.TimelineItemEventContentKey
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.utils.time.formatShort
 import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 @Module
@@ -77,6 +77,8 @@ class VoiceMessagePresenter @AssistedInject constructor(
 
         val playerState by player.state.collectAsState(VoiceMessagePlayer.State(isPlaying = false, isMyMedia = false, currentPosition = 0L))
         val play = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
+        var anSavedInt by rememberSaveable { mutableIntStateOf(0) }
+        var anInt by remember { mutableIntStateOf(0) }
 
         val button by remember {
             derivedStateOf {
@@ -102,22 +104,8 @@ class VoiceMessagePresenter @AssistedInject constructor(
         fun eventSink(event: VoiceMessageEvents) {
             when (event) {
                 is VoiceMessageEvents.PlayPause -> {
-                    if (playerState.isPlaying) {
-                        player.pause()
-                    } else {
-                        scope.launch {
-                            play.runUpdatingState(
-                                errorTransform = {
-                                    analyticsService.trackError(
-                                        VoiceMessageException.PlayMessageError("Error while trying to play voice message", it)
-                                    )
-                                    it
-                                },
-                            ) {
-                                player.play()
-                            }
-                        }
-                    }
+                    anSavedInt++
+                    anInt++
                 }
                 is VoiceMessageEvents.Seek -> {
                     player.seekTo((event.percentage * content.duration.toMillis()).toLong())
@@ -128,7 +116,7 @@ class VoiceMessagePresenter @AssistedInject constructor(
         return VoiceMessageState(
             button = button,
             progress = progress,
-            time = time,
+            time = "$anSavedInt:$anInt",
             eventSink = { eventSink(it) },
         )
     }
