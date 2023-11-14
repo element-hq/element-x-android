@@ -29,7 +29,11 @@ import kotlinx.coroutines.flow.getAndUpdate
 
 class FakeMatrixTimeline(
     initialTimelineItems: List<MatrixTimelineItem> = emptyList(),
-    initialPaginationState: MatrixTimeline.PaginationState = MatrixTimeline.PaginationState(hasMoreToLoadBackwards = true, isBackPaginating = false)
+    initialPaginationState: MatrixTimeline.PaginationState = MatrixTimeline.PaginationState(
+        hasMoreToLoadBackwards = true,
+        isBackPaginating = false,
+        beginningOfRoomReached = false,
+    )
 ) : MatrixTimeline {
 
     private val _paginationState: MutableStateFlow<MatrixTimeline.PaginationState> = MutableStateFlow(initialPaginationState)

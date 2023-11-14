@@ -22,6 +22,8 @@
   <string name="screen_recovery_key_change_success">"Klíč pro obnovení byl změněn"</string>
   <string name="screen_recovery_key_change_title">"Změnit klíč pro obnovení?"</string>
   <string name="screen_recovery_key_confirm_description">"Zadejte klíč pro obnovení a potvrďte přístup k záloze chatu."</string>
+  <string name="screen_recovery_key_confirm_error_content">"Zkuste prosím znovu potvrdit přístup k záloze chatu."</string>
+  <string name="screen_recovery_key_confirm_error_title">"Nesprávný klíč pro obnovení"</string>
   <string name="screen_recovery_key_confirm_key_description">"Zadejte kód o délce 48 znaků."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadejte…"</string>
   <string name="screen_recovery_key_confirm_success">"Klíč pro obnovení potvrzen"</string>

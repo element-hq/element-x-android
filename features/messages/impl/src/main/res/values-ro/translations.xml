@@ -15,6 +15,8 @@
   </plurals>
   <string name="report_content_explanation">"Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat."</string>
   <string name="report_content_hint">"Motivul raportării acestui conținut"</string>
+  <string name="room_timeline_beginning_of_room">"Acesta este începutul conversației %1$s."</string>
+  <string name="room_timeline_beginning_of_room_no_name">"Acesta este începutul acestei conversații."</string>
   <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
   <string name="screen_room_attachment_source_camera">"Cameră foto"</string>
   <string name="screen_room_attachment_source_camera_photo">"Faceți o fotografie"</string>

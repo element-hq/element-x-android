@@ -45,7 +45,8 @@ class TimelineEncryptedHistoryPostProcessor(
             paginationStateFlow.getAndUpdate {
                 it.copy(
                     isBackPaginating = false,
-                    hasMoreToLoadBackwards = false
+                    hasMoreToLoadBackwards = false,
+                    beginningOfRoomReached = false,
                 )
             }
         }

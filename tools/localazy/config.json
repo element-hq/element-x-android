@@ -121,6 +121,7 @@
     {
       "name": ":features:messages:impl",
       "includeRegex": [
+        "room_timeline_beginning_.*",
         "screen_room_.*",
         "screen\\.room\\..*",
         "screen_dm_details_.*",

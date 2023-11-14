@@ -14,6 +14,8 @@
   </plurals>
   <string name="report_content_explanation">"Este mensaje se notificará al administrador de su homeserver. No podrán leer ningún mensaje cifrado."</string>
   <string name="report_content_hint">"Motivo para denunciar este contenido"</string>
+  <string name="room_timeline_beginning_of_room">"Este es el principio de %1$s."</string>
+  <string name="room_timeline_beginning_of_room_no_name">"Este es el principio de esta conversación."</string>
   <string name="screen_report_content_block_user_hint">"Marque si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
   <string name="screen_report_content_block_user">"Bloquear usuario"</string>
 </resources>

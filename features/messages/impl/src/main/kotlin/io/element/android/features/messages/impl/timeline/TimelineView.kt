@@ -59,6 +59,7 @@ import io.element.android.features.messages.impl.timeline.components.TimelineIte
 import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
+import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
@@ -82,6 +83,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimelineView(
     state: TimelineState,
+    roomName: String?,
     onUserDataClicked: (UserId) -> Unit,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
@@ -146,6 +148,11 @@ fun TimelineView(
                     LaunchedEffect(Unit) {
                         onReachedLoadMore()
                     }
+                }
+            }
+            if (state.paginationState.beginningOfRoomReached) {
+                item(contentType = "BeginningOfRoomReached") {
+                    TimelineItemRoomBeginningView(roomName = roomName)
                 }
             }
         }
@@ -346,6 +353,7 @@ internal fun TimelineViewPreview(
     ) {
         TimelineView(
             state = aTimelineState(timelineItems),
+            roomName = null,
             onMessageClicked = {},
             onTimestampClicked = {},
             onUserDataClicked = {},
