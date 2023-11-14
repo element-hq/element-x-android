@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -101,14 +102,14 @@ fun ReportMessageView(
             OutlinedTextField(
                 value = state.reason,
                 onValueChange = { state.eventSink(ReportMessageEvents.UpdateReason(it)) },
-                placeholder = { Text(stringResource(CommonStrings.report_content_hint)) },
+                placeholder = { Text(stringResource(R.string.report_content_hint)) },
                 enabled = !isSending,
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 90.dp)
             )
             Text(
-                text = stringResource(CommonStrings.report_content_explanation),
+                text = stringResource(R.string.report_content_explanation),
                 style = ElementTheme.typography.fontBodySmRegular,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Start,
@@ -122,11 +123,11 @@ fun ReportMessageView(
             ) {
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
-                        text = stringResource(CommonStrings.screen_report_content_block_user),
+                        text = stringResource(R.string.screen_report_content_block_user),
                         style = ElementTheme.typography.fontBodyLgRegular,
                     )
                     Text(
-                        text = stringResource(CommonStrings.screen_report_content_block_user_hint),
+                        text = stringResource(R.string.screen_report_content_block_user_hint),
                         style = ElementTheme.typography.fontBodyMdRegular,
                         color = MaterialTheme.colorScheme.secondary,
                     )

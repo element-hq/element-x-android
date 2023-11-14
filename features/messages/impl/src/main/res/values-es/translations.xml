@@ -12,4 +12,8 @@
     <item quantity="one">"%1$d cambio en la sala"</item>
     <item quantity="other">"%1$d cambios en la sala"</item>
   </plurals>
+  <string name="report_content_explanation">"Este mensaje se notificará al administrador de su homeserver. No podrán leer ningún mensaje cifrado."</string>
+  <string name="report_content_hint">"Motivo para denunciar este contenido"</string>
+  <string name="screen_report_content_block_user_hint">"Marque si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
+  <string name="screen_report_content_block_user">"Bloquear usuario"</string>
 </resources>

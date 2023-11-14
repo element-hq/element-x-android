@@ -167,7 +167,6 @@
   <plurals name="common_poll_votes_count">
     <item quantity="other">"%d 票"</item>
   </plurals>
-  <string name="report_content_hint">"檢舉這個內容的原因"</string>
   <string name="room_timeline_read_marker_title">"新訊息"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_share_location_title">"分享位置"</string>
@@ -181,5 +180,4 @@
   <string name="test_language_identifier">"zh-tw"</string>
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
-  <string name="screen_report_content_block_user">"封鎖使用者"</string>
 </resources>

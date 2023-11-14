@@ -207,15 +207,12 @@
     <item quantity="other">"%d hlasů"</item>
   </plurals>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
-  <string name="report_content_explanation">"Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy."</string>
-  <string name="report_content_hint">"Důvod nahlášení tohoto obsahu"</string>
   <string name="room_timeline_beginning_of_room">"Toto je začátek %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Toto je začátek této konverzace."</string>
   <string name="room_timeline_read_marker_title">"Nové"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
-  <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>
   <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>
@@ -227,5 +224,4 @@
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
-  <string name="screen_report_content_block_user">"Zablokovat uživatele"</string>
 </resources>
