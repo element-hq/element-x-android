@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Activități"</string>
+  <string name="emoji_picker_category_flags">"Steaguri"</string>
+  <string name="emoji_picker_category_foods">"Mâncare &amp; Băutură"</string>
+  <string name="emoji_picker_category_nature">"Animale și Natură"</string>
+  <string name="emoji_picker_category_objects">"Obiecte"</string>
+  <string name="emoji_picker_category_people">"Fețe zâmbitoare &amp; Oameni"</string>
+  <string name="emoji_picker_category_places">"Călătorii &amp; Locuri"</string>
+  <string name="emoji_picker_category_symbols">"Simboluri"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d schimbare a camerii"</item>
     <item quantity="few">"%1$d schimbări ale camerei"</item>

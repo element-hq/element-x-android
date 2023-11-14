@@ -155,14 +155,6 @@
   <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_warning">"Warnung"</string>
-  <string name="emoji_picker_category_activity">"Aktivitäten"</string>
-  <string name="emoji_picker_category_flags">"Flaggen"</string>
-  <string name="emoji_picker_category_foods">"Essen &amp; Trinken"</string>
-  <string name="emoji_picker_category_nature">"Tiere &amp; Natur"</string>
-  <string name="emoji_picker_category_objects">"Objekte"</string>
-  <string name="emoji_picker_category_people">"Smileys &amp; Menschen"</string>
-  <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
-  <string name="emoji_picker_category_symbols">"Symbole"</string>
   <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>
   <string name="error_failed_loading_map">"%1$s konnte die Karte nicht laden. Bitte versuche es später erneut."</string>
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>

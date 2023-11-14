@@ -152,14 +152,6 @@
   <string name="common_poll_summary">"投票：%1$s"</string>
   <string name="dialog_title_confirmation">"確認"</string>
   <string name="dialog_title_warning">"警告"</string>
-  <string name="emoji_picker_category_activity">"活動"</string>
-  <string name="emoji_picker_category_flags">"旗幟"</string>
-  <string name="emoji_picker_category_foods">"食物與飲料"</string>
-  <string name="emoji_picker_category_nature">"動物與大自然"</string>
-  <string name="emoji_picker_category_objects">"物品"</string>
-  <string name="emoji_picker_category_people">"表情與人物"</string>
-  <string name="emoji_picker_category_places">"旅行與景點"</string>
-  <string name="emoji_picker_category_symbols">"標誌"</string>
   <string name="error_failed_creating_the_permalink">"無法建立永久連結"</string>
   <string name="error_failed_loading_map">"%1$s無法載入地圖。請稍後再試。"</string>
   <string name="error_failed_loading_messages">"無法載入訊息"</string>

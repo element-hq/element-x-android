@@ -94,14 +94,6 @@
   <string name="common_waiting">"Esperando…"</string>
   <string name="dialog_title_confirmation">"Confirmar"</string>
   <string name="dialog_title_warning">"Atención"</string>
-  <string name="emoji_picker_category_activity">"Actividades"</string>
-  <string name="emoji_picker_category_flags">"Banderas"</string>
-  <string name="emoji_picker_category_foods">"Comida y bebida"</string>
-  <string name="emoji_picker_category_nature">"Animales y naturaleza"</string>
-  <string name="emoji_picker_category_objects">"Objetos"</string>
-  <string name="emoji_picker_category_people">"Emojis y personas"</string>
-  <string name="emoji_picker_category_places">"Viajes y lugares"</string>
-  <string name="emoji_picker_category_symbols">"Símbolos"</string>
   <string name="error_failed_creating_the_permalink">"No se pudo crear el enlace permanente"</string>
   <string name="error_failed_loading_messages">"Error al cargar mensajes"</string>
   <string name="error_some_messages_have_not_been_sent">"Algunos mensajes no se han enviado"</string>

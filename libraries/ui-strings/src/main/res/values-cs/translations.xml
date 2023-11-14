@@ -178,14 +178,6 @@
   <string name="common_poll_summary">"Hlasování: %1$s"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_warning">"Upozornění"</string>
-  <string name="emoji_picker_category_activity">"Aktivity"</string>
-  <string name="emoji_picker_category_flags">"Vlajky"</string>
-  <string name="emoji_picker_category_foods">"Jídlo a nápoje"</string>
-  <string name="emoji_picker_category_nature">"Zvířata a příroda"</string>
-  <string name="emoji_picker_category_objects">"Předměty"</string>
-  <string name="emoji_picker_category_people">"Smajlíci a lidé"</string>
-  <string name="emoji_picker_category_places">"Cestování a místa"</string>
-  <string name="emoji_picker_category_symbols">"Symboly"</string>
   <string name="error_failed_creating_the_permalink">"Vytvoření trvalého odkazu se nezdařilo"</string>
   <string name="error_failed_loading_map">"%1$s nemohl načíst mapu. Zkuste to prosím později."</string>
   <string name="error_failed_loading_messages">"Načítání zpráv se nezdařilo"</string>

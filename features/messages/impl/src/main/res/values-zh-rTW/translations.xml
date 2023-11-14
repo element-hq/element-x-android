@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"活動"</string>
+  <string name="emoji_picker_category_flags">"旗幟"</string>
+  <string name="emoji_picker_category_foods">"食物與飲料"</string>
+  <string name="emoji_picker_category_nature">"動物與大自然"</string>
+  <string name="emoji_picker_category_objects">"物品"</string>
+  <string name="emoji_picker_category_people">"表情與人物"</string>
+  <string name="emoji_picker_category_places">"旅行與景點"</string>
+  <string name="emoji_picker_category_symbols">"標誌"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="other">"%1$d 個聊天室變更"</item>
   </plurals>

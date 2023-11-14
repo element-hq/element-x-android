@@ -28,31 +28,29 @@ import androidx.compose.material.icons.outlined.EmojiSymbols
 import androidx.compose.material.icons.outlined.EmojiTransportation
 import androidx.compose.ui.graphics.vector.ImageVector
 import io.element.android.emojibasebindings.EmojibaseCategory
-import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.features.messages.impl.R
 
 @get:StringRes
-val EmojibaseCategory.title: Int get() =
-    when(this){
-        EmojibaseCategory.People -> CommonStrings.emoji_picker_category_people
-        EmojibaseCategory.Nature -> CommonStrings.emoji_picker_category_nature
-        EmojibaseCategory.Foods -> CommonStrings.emoji_picker_category_foods
-        EmojibaseCategory.Activity -> CommonStrings.emoji_picker_category_activity
-        EmojibaseCategory.Places -> CommonStrings.emoji_picker_category_places
-        EmojibaseCategory.Objects -> CommonStrings.emoji_picker_category_objects
-        EmojibaseCategory.Symbols -> CommonStrings.emoji_picker_category_symbols
-        EmojibaseCategory.Flags -> CommonStrings.emoji_picker_category_flags
+val EmojibaseCategory.title: Int
+    get() = when (this) {
+        EmojibaseCategory.People -> R.string.emoji_picker_category_people
+        EmojibaseCategory.Nature -> R.string.emoji_picker_category_nature
+        EmojibaseCategory.Foods -> R.string.emoji_picker_category_foods
+        EmojibaseCategory.Activity -> R.string.emoji_picker_category_activity
+        EmojibaseCategory.Places -> R.string.emoji_picker_category_places
+        EmojibaseCategory.Objects -> R.string.emoji_picker_category_objects
+        EmojibaseCategory.Symbols -> R.string.emoji_picker_category_symbols
+        EmojibaseCategory.Flags -> R.string.emoji_picker_category_flags
     }
 
 val EmojibaseCategory.icon: ImageVector
-    get() =
-        when(this){
-            EmojibaseCategory.People -> Icons.Outlined.EmojiPeople
-            EmojibaseCategory.Nature -> Icons.Outlined.EmojiNature
-            EmojibaseCategory.Foods -> Icons.Outlined.EmojiFoodBeverage
-            EmojibaseCategory.Activity -> Icons.Outlined.EmojiEvents
-            EmojibaseCategory.Places -> Icons.Outlined.EmojiTransportation
-            EmojibaseCategory.Objects -> Icons.Outlined.EmojiObjects
-            EmojibaseCategory.Symbols -> Icons.Outlined.EmojiSymbols
-            EmojibaseCategory.Flags -> Icons.Outlined.EmojiFlags
-        }
-
+    get() = when (this) {
+        EmojibaseCategory.People -> Icons.Outlined.EmojiPeople
+        EmojibaseCategory.Nature -> Icons.Outlined.EmojiNature
+        EmojibaseCategory.Foods -> Icons.Outlined.EmojiFoodBeverage
+        EmojibaseCategory.Activity -> Icons.Outlined.EmojiEvents
+        EmojibaseCategory.Places -> Icons.Outlined.EmojiTransportation
+        EmojibaseCategory.Objects -> Icons.Outlined.EmojiObjects
+        EmojibaseCategory.Symbols -> Icons.Outlined.EmojiSymbols
+        EmojibaseCategory.Flags -> Icons.Outlined.EmojiFlags
+    }

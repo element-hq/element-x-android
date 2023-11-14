@@ -180,14 +180,6 @@
   <string name="common_verify_device">"Подтверждение устройства"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
-  <string name="emoji_picker_category_activity">"Деятельность"</string>
-  <string name="emoji_picker_category_flags">"Флаги"</string>
-  <string name="emoji_picker_category_foods">"Еда и напитки"</string>
-  <string name="emoji_picker_category_nature">"Животные и природа"</string>
-  <string name="emoji_picker_category_objects">"Объекты"</string>
-  <string name="emoji_picker_category_people">"Смайлы и люди"</string>
-  <string name="emoji_picker_category_places">"Путешествия и места"</string>
-  <string name="emoji_picker_category_symbols">"Символы"</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>
   <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>

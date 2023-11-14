@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Aktivity"</string>
+  <string name="emoji_picker_category_flags">"Vlajky"</string>
+  <string name="emoji_picker_category_foods">"Jídlo a nápoje"</string>
+  <string name="emoji_picker_category_nature">"Zvířata a příroda"</string>
+  <string name="emoji_picker_category_objects">"Předměty"</string>
+  <string name="emoji_picker_category_people">"Smajlíci a lidé"</string>
+  <string name="emoji_picker_category_places">"Cestování a místa"</string>
+  <string name="emoji_picker_category_symbols">"Symboly"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d změna místnosti"</item>
     <item quantity="few">"%1$d změny místnosti"</item>

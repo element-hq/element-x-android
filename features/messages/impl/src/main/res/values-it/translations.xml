@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Attività"</string>
+  <string name="emoji_picker_category_flags">"Bandiere"</string>
+  <string name="emoji_picker_category_foods">"Cibi &amp; Bevande"</string>
+  <string name="emoji_picker_category_nature">"Animali &amp; Natura"</string>
+  <string name="emoji_picker_category_objects">"Oggetti"</string>
+  <string name="emoji_picker_category_people">"Faccine &amp; Persone"</string>
+  <string name="emoji_picker_category_places">"Viaggi &amp; Luoghi"</string>
+  <string name="emoji_picker_category_symbols">"Simboli"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d modifica alla stanza"</item>
     <item quantity="other">"%1$d modifiche alla stanza"</item>

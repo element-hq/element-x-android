@@ -116,7 +116,8 @@
         "screen_room_.*",
         "screen\\.room\\..*",
         "screen_dm_details_.*",
-        "room_timeline_state_changes"
+        "room_timeline_state_changes",
+        "emoji_picker_category_.*"
       ],
       "excludeRegex": [
         "screen_room_details_.*",

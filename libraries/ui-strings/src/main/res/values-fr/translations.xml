@@ -176,14 +176,6 @@
   <string name="common_poll_summary">"Sondage : %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Attention"</string>
-  <string name="emoji_picker_category_activity">"Activités"</string>
-  <string name="emoji_picker_category_flags">"Drapeaux"</string>
-  <string name="emoji_picker_category_foods">"Nourriture et boissons"</string>
-  <string name="emoji_picker_category_nature">"Animaux et nature"</string>
-  <string name="emoji_picker_category_objects">"Objets"</string>
-  <string name="emoji_picker_category_people">"Émoticônes et personnes"</string>
-  <string name="emoji_picker_category_places">"Voyages &amp; lieux"</string>
-  <string name="emoji_picker_category_symbols">"Symboles"</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>

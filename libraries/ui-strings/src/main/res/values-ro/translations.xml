@@ -137,14 +137,6 @@
   <string name="common_waiting">"Se aşteaptă…"</string>
   <string name="dialog_title_confirmation">"Confirmare"</string>
   <string name="dialog_title_warning">"Avertisment"</string>
-  <string name="emoji_picker_category_activity">"Activități"</string>
-  <string name="emoji_picker_category_flags">"Steaguri"</string>
-  <string name="emoji_picker_category_foods">"Mâncare &amp; Băutură"</string>
-  <string name="emoji_picker_category_nature">"Animale și Natură"</string>
-  <string name="emoji_picker_category_objects">"Obiecte"</string>
-  <string name="emoji_picker_category_people">"Fețe zâmbitoare &amp; Oameni"</string>
-  <string name="emoji_picker_category_places">"Călătorii &amp; Locuri"</string>
-  <string name="emoji_picker_category_symbols">"Simboluri"</string>
   <string name="error_failed_creating_the_permalink">"Crearea permalink-ului a eșuat"</string>
   <string name="error_failed_loading_map">"%1$s nu a putut încărca harta. Vă rugăm să încercați din nou mai târziu."</string>
   <string name="error_failed_loading_messages">"Încărcarea mesajelor a eșuat"</string>

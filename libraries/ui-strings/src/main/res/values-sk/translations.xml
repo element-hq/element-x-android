@@ -180,14 +180,6 @@
   <string name="common_verify_device">"Overiť zariadenie"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
-  <string name="emoji_picker_category_activity">"Aktivity"</string>
-  <string name="emoji_picker_category_flags">"Vlajky"</string>
-  <string name="emoji_picker_category_foods">"Jedlo a nápoje"</string>
-  <string name="emoji_picker_category_nature">"Zvieratá a príroda"</string>
-  <string name="emoji_picker_category_objects">"Predmety"</string>
-  <string name="emoji_picker_category_people">"Smajlíky a ľudia"</string>
-  <string name="emoji_picker_category_places">"Cestovanie a miesta"</string>
-  <string name="emoji_picker_category_symbols">"Symboly"</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
   <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
