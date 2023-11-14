@@ -32,7 +32,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.TextComposer
 import io.element.android.libraries.textcomposer.model.Message
-import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import kotlinx.coroutines.launch
@@ -77,8 +77,8 @@ internal fun MessageComposerView(
         }
     }
 
-    val onVoiceRecordButtonEvent = { press: PressEvent ->
-        voiceMessageState.eventSink(VoiceMessageComposerEvents.RecordButtonEvent(press))
+    val onVoiceRecorderEvent = { press: VoiceMessageRecorderEvent ->
+        voiceMessageState.eventSink(VoiceMessageComposerEvents.RecorderEvent(press))
     }
 
     val onSendVoiceMessage = {
@@ -107,7 +107,7 @@ internal fun MessageComposerView(
         onDismissTextFormatting = ::onDismissTextFormatting,
         enableTextFormatting = enableTextFormatting,
         enableVoiceMessages = enableVoiceMessages,
-        onVoiceRecordButtonEvent = onVoiceRecordButtonEvent,
+        onVoiceRecorderEvent = onVoiceRecorderEvent,
         onVoicePlayerEvent = onVoicePlayerEvent,
         onSendVoiceMessage = onSendVoiceMessage,
         onDeleteVoiceMessage = onDeleteVoiceMessage,
