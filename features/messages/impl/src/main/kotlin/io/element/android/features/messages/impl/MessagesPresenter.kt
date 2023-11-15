@@ -157,10 +157,10 @@ class MessagesPresenter @AssistedInject constructor(
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
-        var enableInRoomCalls by remember { mutableStateOf(false) }
+        // TODO add min power level to use this feature in the future?
+        val enableInRoomCalls = true
         LaunchedEffect(featureFlagsService) {
             enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
-            enableInRoomCalls = featureFlagsService.isFeatureEnabled(FeatureFlags.InRoomCalls)
         }
 
         fun handleEvents(event: MessagesEvents) {

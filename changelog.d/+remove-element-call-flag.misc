@@ -1,0 +1,4 @@
+Remove Element Call feature flag, it's not always enabled.
+
+- Reverted the EC base URL to `https://call.element.io`.
+- Moved the option to override this URL to developer settings from advanced settings.
