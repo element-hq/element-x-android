@@ -121,11 +121,10 @@
     {
       "name": ":features:messages:impl",
       "includeRegex": [
-        "room_timeline_beginning_.*",
+        "room_timeline_.*",
         "screen_room_.*",
         "screen\\.room\\..*",
         "screen_dm_details_.*",
-        "room_timeline_state_changes",
         "emoji_picker_category_.*",
         ".*report_content_.*"
       ],

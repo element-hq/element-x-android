@@ -105,7 +105,6 @@
     <item quantity="other">"%1$d membri"</item>
   </plurals>
   <string name="preference_rageshake">"Scuoti per segnalare un problema"</string>
-  <string name="room_timeline_read_marker_title">"Nuovo"</string>
   <string name="settings_version_number">"Versione: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"it"</string>
   <string name="dialog_title_error">"Errore"</string>

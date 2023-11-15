@@ -175,7 +175,6 @@
     <item quantity="other">"%d Stimmen"</item>
   </plurals>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
-  <string name="room_timeline_read_marker_title">"Neu"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>
