@@ -66,5 +66,11 @@ enum class FeatureFlags(
         title = "Chat backup",
         description = "Allow access to backup and restore chat history settings",
         defaultValue = false,
-    )
+    ),
+    ReadReceipts(
+        key = "feature.readreceipts",
+        title = "Show read receipts",
+        description = null,
+        defaultValue = false,
+    ),
 }
