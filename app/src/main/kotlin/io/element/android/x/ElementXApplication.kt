@@ -18,7 +18,9 @@ package io.element.android.x
 
 import android.app.Application
 import androidx.startup.AppInitializer
+import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.x.di.AppBindings
 import io.element.android.x.di.AppComponent
 import io.element.android.x.di.DaggerAppComponent
 import io.element.android.x.info.logApplicationInfo
@@ -36,5 +38,6 @@ class ElementXApplication : Application(), DaggerComponentOwner {
             initializeComponent(TracingInitializer::class.java)
         }
         logApplicationInfo()
+        bindings<AppBindings>().cacheCleaner().clearCache()
     }
 }
