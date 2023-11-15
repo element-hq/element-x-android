@@ -17,5 +17,5 @@
 package io.element.android.appconfig
 
 object ElementCallConfig {
-    const val DEFAULT_BASE_URL = "https://call.element.dev"
+    const val DEFAULT_BASE_URL = "https://call.element.io"
 }
