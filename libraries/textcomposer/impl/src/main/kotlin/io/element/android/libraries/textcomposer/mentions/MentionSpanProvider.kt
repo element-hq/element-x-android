@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.textcomposer.mentions
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -33,13 +34,13 @@ import io.element.android.libraries.theme.ElementTheme
 @Stable
 class MentionSpanProvider(
     private val currentSessionId: SessionId,
+    private var currentUserTextColor: Int = 0,
+    private var currentUserBackgroundColor: Int = Color.WHITE,
+    private var otherTextColor: Int = 0,
+    private var otherBackgroundColor: Int = Color.WHITE,
 ) {
 
-    private var currentUserTextColor: Int = 0
-    private var currentUserBackgroundColor: Int = Color.WHITE
-    private var otherTextColor: Int = 0
-    private var otherBackgroundColor: Int = Color.WHITE
-
+    @SuppressLint("ComposableNaming")
     @Composable
     fun setup() {
         currentUserTextColor = ElementTheme.colors.currentUserMentionPillText.toArgb()
@@ -49,9 +50,8 @@ class MentionSpanProvider(
     }
 
     fun getMentionSpanFor(text: String, url: String): MentionSpan {
-        val permalinkData = PermalinkParser.parse(url)
-        return when {
-            permalinkData is PermalinkData.UserLink -> {
+        return when (val permalinkData = PermalinkParser.parse(url)) {
+            is PermalinkData.UserLink -> {
                 val isCurrentUser = permalinkData.userId == currentSessionId.value
                 MentionSpan(
                     backgroundColor = if (isCurrentUser) currentUserBackgroundColor else otherBackgroundColor,

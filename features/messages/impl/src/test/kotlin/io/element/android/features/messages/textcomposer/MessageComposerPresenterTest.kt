@@ -818,6 +818,20 @@ class MessageComposerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - insertMention`() = runTest {
+        val presenter = createPresenter(this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.InsertMention(RoomMemberSuggestion.Member(aRoomMember(userId = A_USER_ID_2))))
+
+            assertThat(awaitItem().richTextEditorState.messageHtml).contains("href=\"${A_USER_ID_2.value}\"")
+        }
+    }
+
     private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0): MessageComposerState {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)
