@@ -196,7 +196,7 @@ internal fun TimelineItemReactionsLayoutPreview() = ElementPreview {
         },
         addMoreButton = {
             MessagesReactionButton(
-                content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_september_add_reaction),
+                content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_add_reaction),
                 onClick = {},
                 onLongClick = {}
             )

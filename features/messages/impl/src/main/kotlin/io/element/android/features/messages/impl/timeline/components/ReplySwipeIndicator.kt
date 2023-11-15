@@ -49,7 +49,7 @@ fun RowScope.ReplySwipeIndicator(
                 alpha = swipeProgress()
             },
         contentDescription = null,
-        resourceId = CommonDrawables.ic_september_reply,
+        resourceId = CommonDrawables.ic_reply,
     )
 }
 

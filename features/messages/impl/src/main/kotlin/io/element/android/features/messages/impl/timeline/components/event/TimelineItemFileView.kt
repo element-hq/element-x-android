@@ -59,7 +59,7 @@ fun TimelineItemFileView(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                resourceId = CommonDrawables.ic_september_attachment,
+                resourceId = CommonDrawables.ic_attachment,
                 contentDescription = "OpenFile",
                 tint = ElementTheme.materialColors.primary,
                 modifier = Modifier

@@ -28,16 +28,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.media.AvatarAction
@@ -98,12 +100,10 @@ private fun AvatarActionBottomSheetContent(
                         color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                     )
                 },
-                leadingContent = {
-                    Icon(
-                        resourceId = action.iconResourceId,
-                        contentDescription = stringResource(action.titleResId),
-                        tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
-                    )
+                leadingContent = ListItemContent.Icon(IconSource.Resource(action.iconResourceId)),
+                style = when {
+                    action.destructive -> ListItemStyle.Destructive
+                    else -> ListItemStyle.Primary
                 }
             )
         }

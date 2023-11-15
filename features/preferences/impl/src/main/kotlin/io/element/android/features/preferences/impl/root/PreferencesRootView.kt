@@ -20,7 +20,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -135,7 +134,7 @@ fun PreferencesRootView(
         if (state.showLockScreenSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Default.Lock)),
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_lock_outline)),
                 onClick = onOpenLockScreenSettings,
             )
         }

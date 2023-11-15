@@ -59,7 +59,7 @@ class KonsistClassNameTest {
                     .substringBefore("<")
                     .removeSuffix("?")
                     .replace(".", "")
-                it.name.endsWith("Provider") && it.name.contains(providedType)
+                it.name.endsWith("Provider") && (it.name.contains("IconList") || it.name.contains(providedType))
             }
     }
 }

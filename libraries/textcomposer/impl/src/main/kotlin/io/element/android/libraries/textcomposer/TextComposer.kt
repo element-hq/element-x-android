@@ -475,7 +475,7 @@ private fun EditingModeView(
             .padding(start = 12.dp)
     ) {
         Icon(
-            resourceId = CommonDrawables.ic_september_edit_solid_16,
+            resourceId = CommonDrawables.ic_edit_solid,
             contentDescription = stringResource(CommonStrings.common_editing),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier

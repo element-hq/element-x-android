@@ -236,7 +236,7 @@ private fun MediaFileView(
             ) {
                 Icon(
                     imageVector = if (isAudio) Icons.Outlined.GraphicEq else null,
-                    resourceId = if (isAudio) null else CommonDrawables.ic_september_attachment,
+                    resourceId = if (isAudio) null else CommonDrawables.ic_attachment,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier
