@@ -154,7 +154,7 @@ fun SendLocationView(
                 },
                 leadingContent = {
                     Icon(
-                        resourceId = CommonDrawables.pin,
+                        resourceId = R.drawable.pin_small,
                         contentDescription = null,
                         tint = Color.Unspecified,
                     )
