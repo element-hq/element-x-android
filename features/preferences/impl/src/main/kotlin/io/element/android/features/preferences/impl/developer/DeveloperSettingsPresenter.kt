@@ -19,12 +19,16 @@ package io.element.android.features.preferences.impl.developer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import io.element.android.appconfig.ElementCallConfig
+import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
@@ -39,6 +43,7 @@ import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.net.URL
 import javax.inject.Inject
 
 class DeveloperSettingsPresenter @Inject constructor(
@@ -46,6 +51,7 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,
     private val rageshakePresenter: RageshakePreferencesPresenter,
+    private val preferencesStore: PreferencesStore,
 ) : Presenter<DeveloperSettingsState> {
 
     @Composable
@@ -64,8 +70,12 @@ class DeveloperSettingsPresenter @Inject constructor(
         val clearCacheAction = remember {
             mutableStateOf<Async<Unit>>(Async.Uninitialized)
         }
+        val customElementCallBaseUrl by preferencesStore
+            .getCustomElementCallBaseUrlFlow()
+            .collectAsState(initial = null)
+
         LaunchedEffect(Unit) {
-            FeatureFlags.values().forEach { feature ->
+            FeatureFlags.entries.forEach { feature ->
                 features[feature.key] = feature
                 enabledFeatures[feature.key] = featureFlagService.isFeatureEnabled(feature)
             }
@@ -86,6 +96,11 @@ class DeveloperSettingsPresenter @Inject constructor(
                     event.isEnabled,
                     triggerClearCache = { handleEvents(DeveloperSettingsEvents.ClearCache) }
                 )
+                is DeveloperSettingsEvents.SetCustomElementCallBaseUrl -> coroutineScope.launch {
+                    // If the URL is either empty or the default one, we want to save 'null' to remove the custom URL
+                    val urlToSave = event.baseUrl.takeIf { !it.isNullOrEmpty() && it != ElementCallConfig.DEFAULT_BASE_URL }
+                    preferencesStore.setCustomElementCallBaseUrl(urlToSave)
+                }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
             }
         }
@@ -95,6 +110,11 @@ class DeveloperSettingsPresenter @Inject constructor(
             cacheSize = cacheSize.value,
             clearCacheAction = clearCacheAction.value,
             rageshakeState = rageshakeState,
+            customElementCallBaseUrlState = CustomElementCallBaseUrlState(
+                baseUrl = customElementCallBaseUrl,
+                defaultUrl = ElementCallConfig.DEFAULT_BASE_URL,
+                validator = ::customElementCallUrlValidator,
+            ),
             eventSink = ::handleEvents
         )
     }
@@ -143,6 +163,15 @@ class DeveloperSettingsPresenter @Inject constructor(
             clearCacheUseCase()
         }.runCatchingUpdatingState(clearCacheAction)
     }
+}
+
+private fun customElementCallUrlValidator(url: String?): Boolean {
+    return runCatching {
+        if (url.isNullOrEmpty()) return@runCatching
+        val parsedUrl = URL(url)
+        if (parsedUrl.protocol !in listOf("http", "https")) error("Incorrect protocol")
+        if (parsedUrl.host.isNullOrBlank()) error("Missing host")
+    }.isSuccess
 }
 
 

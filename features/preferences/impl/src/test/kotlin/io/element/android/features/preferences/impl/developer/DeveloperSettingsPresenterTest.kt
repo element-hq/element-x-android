@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
 import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
@@ -28,7 +29,9 @@ import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataSto
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -40,13 +43,7 @@ class DeveloperSettingsPresenterTest {
 
     @Test
     fun `present - ensures initial state is correct`() = runTest {
-        val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
-        val presenter = DeveloperSettingsPresenter(
-            FakeFeatureFlagService(),
-            FakeComputeCacheSizeUseCase(),
-            FakeClearCacheUseCase(),
-            rageshakePresenter
-        )
+        val presenter = createDeveloperSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -54,6 +51,8 @@ class DeveloperSettingsPresenterTest {
             assertThat(initialState.features).isEmpty()
             assertThat(initialState.clearCacheAction).isEqualTo(Async.Uninitialized)
             assertThat(initialState.cacheSize).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.customElementCallBaseUrlState).isNotNull()
+            assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
             val loadedState = awaitItem()
             assertThat(loadedState.rageshakeState.isEnabled).isFalse()
             assertThat(loadedState.rageshakeState.isSupported).isTrue()
@@ -64,32 +63,20 @@ class DeveloperSettingsPresenterTest {
 
     @Test
     fun `present - ensures feature list is loaded`() = runTest {
-        val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
-        val presenter = DeveloperSettingsPresenter(
-            FakeFeatureFlagService(),
-            FakeComputeCacheSizeUseCase(),
-            FakeClearCacheUseCase(),
-            rageshakePresenter,
-        )
+        val presenter = createDeveloperSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val state = awaitItem()
-            assertThat(state.features).hasSize(FeatureFlags.values().size)
+            assertThat(state.features).hasSize(FeatureFlags.entries.size)
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
     fun `present - ensures state is updated when enabled feature event is triggered`() = runTest {
-        val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
-        val presenter = DeveloperSettingsPresenter(
-            FakeFeatureFlagService(),
-            FakeComputeCacheSizeUseCase(),
-            FakeClearCacheUseCase(),
-            rageshakePresenter,
-        )
+        val presenter = createDeveloperSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -109,12 +96,7 @@ class DeveloperSettingsPresenterTest {
     fun `present - clear cache`() = runTest {
         val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
         val clearCacheUseCase = FakeClearCacheUseCase()
-        val presenter = DeveloperSettingsPresenter(
-            FakeFeatureFlagService(),
-            FakeComputeCacheSizeUseCase(),
-            clearCacheUseCase,
-            rageshakePresenter,
-        )
+        val presenter = createDeveloperSettingsPresenter(clearCacheUseCase = clearCacheUseCase, rageshakePresenter = rageshakePresenter)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -129,5 +111,53 @@ class DeveloperSettingsPresenterTest {
             assertThat(clearCacheUseCase.executeHasBeenCalled).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun `present - custom element call base url`() = runTest {
+        val preferencesStore = InMemoryPreferencesStore()
+        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferencesStore)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
+            initialState.eventSink(DeveloperSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.ahoy"))
+            val updatedItem = awaitItem()
+            assertThat(updatedItem.customElementCallBaseUrlState.baseUrl).isEqualTo("https://call.element.ahoy")
+            assertThat(updatedItem.customElementCallBaseUrlState.defaultUrl).isEqualTo(ElementCallConfig.DEFAULT_BASE_URL)
+        }
+    }
+
+    @Test
+    fun `present - custom element call base url validator needs at least an HTTP scheme and host`() = runTest {
+        val presenter = createDeveloperSettingsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val urlValidator = awaitLastSequentialItem().customElementCallBaseUrlState.validator
+            assertThat(urlValidator("")).isTrue() // We allow empty string to clear the value and use the default one
+            assertThat(urlValidator("test")).isFalse()
+            assertThat(urlValidator("http://")).isFalse()
+            assertThat(urlValidator("geo://test")).isFalse()
+            assertThat(urlValidator("https://call.element.io")).isTrue()
+        }
+    }
+
+    private fun createDeveloperSettingsPresenter(
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
+        clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
+        rageshakePresenter: DefaultRageshakePreferencesPresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore()),
+        preferencesStore: InMemoryPreferencesStore = InMemoryPreferencesStore(),
+    ): DeveloperSettingsPresenter {
+        return DeveloperSettingsPresenter(
+            featureFlagService = featureFlagService,
+            computeCacheSizeUseCase = cacheSizeUseCase,
+            clearCacheUseCase = clearCacheUseCase,
+            rageshakePresenter = rageshakePresenter,
+            preferencesStore = preferencesStore,
+        )
     }
 }

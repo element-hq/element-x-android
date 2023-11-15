@@ -26,6 +26,13 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
         get() = sequenceOf(
             aDeveloperSettingsState(),
             aDeveloperSettingsState().copy(clearCacheAction = Async.Loading()),
+            aDeveloperSettingsState().copy(
+                customElementCallBaseUrlState = CustomElementCallBaseUrlState(
+                    baseUrl = "https://call.element.ahoy",
+                    defaultUrl = "https://call.element.io",
+                    validator = { true }
+                )
+            ),
         )
 }
 
@@ -34,5 +41,6 @@ fun aDeveloperSettingsState() = DeveloperSettingsState(
     rageshakeState = aRageshakePreferencesState(),
     cacheSize = Async.Success("1.2 MB"),
     clearCacheAction = Async.Uninitialized,
+    customElementCallBaseUrlState = CustomElementCallBaseUrlState(baseUrl = null, defaultUrl = "https://call.element.io", validator = { true }),
     eventSink = {}
 )
