@@ -31,11 +31,13 @@ fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     avatarSize: AvatarSize = AvatarSize.UserListItem,
+    trailingContent: @Composable (() -> Unit)? = null,
 ) = UserRow(
     avatarData = matrixUser.getAvatarData(avatarSize),
     name = matrixUser.getBestName(),
     subtext = if (matrixUser.displayName.isNullOrEmpty()) null else matrixUser.userId.value,
     modifier = modifier,
+    trailingContent,
 )
 
 @PreviewsDayNight

@@ -68,8 +68,8 @@ private fun aReadReceiptData(
         id = "$index",
         size = AvatarSize.TimelineReadReceipt
     ),
-    timestamp: Long = 1629780000000L,
+    formattedDate: String = "12:34",
 ) = ReadReceiptData(
     avatarData = avatarData,
-    timestamp = timestamp,
+    formattedDate = formattedDate,
 )

@@ -31,7 +31,7 @@ sealed interface TimelineItemReadReceipts {
 
 data class ReadReceiptData(
     val avatarData: AvatarData,
-    val timestamp: Long
+    val formattedDate: String,
 )
 
 fun TimelineItemReadReceipts.receipts(): ImmutableList<ReadReceiptData> = when (this) {

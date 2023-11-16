@@ -35,6 +35,7 @@ import io.element.android.features.messages.impl.timeline.groups.TimelineItemGro
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractorWithoutValidation
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
+import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -65,6 +66,7 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
             ),
             matrixClient = matrixClient,
+            lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
         ),
         virtualItemFactory = TimelineItemVirtualFactory(
             daySeparatorFactory = TimelineItemDaySeparatorFactory(

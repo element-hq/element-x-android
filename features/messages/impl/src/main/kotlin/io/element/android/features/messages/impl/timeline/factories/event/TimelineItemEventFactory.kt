@@ -25,6 +25,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.libraries.core.bool.orTrue
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -39,6 +40,7 @@ import javax.inject.Inject
 class TimelineItemEventFactory @Inject constructor(
     private val contentFactory: TimelineItemContentFactory,
     private val matrixClient: MatrixClient,
+    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
 ) {
 
     suspend fun create(
@@ -140,11 +142,11 @@ class TimelineItemEventFactory @Inject constructor(
                     ReadReceiptData(
                         avatarData = AvatarData(
                             id = receipt.userId.value,
-                            name = roomMember?.displayName ?: receipt.userId.value,
+                            name = roomMember?.displayName,
                             url = roomMember?.avatarUrl,
                             size = AvatarSize.TimelineReadReceipt,
                         ),
-                        timestamp = receipt.timestamp
+                        formattedDate = lastMessageTimestampFormatter.format(receipt.timestamp)
                     )
                 }
                 .toImmutableList()

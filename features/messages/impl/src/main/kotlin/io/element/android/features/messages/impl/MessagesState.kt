@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.libraries.architecture.Async
@@ -43,6 +44,7 @@ data class MessagesState(
     val customReactionState: CustomReactionState,
     val reactionSummaryState: ReactionSummaryState,
     val retrySendMenuState: RetrySendMenuState,
+    val readReceiptBottomSheetState: ReadReceiptBottomSheetState,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val inviteProgress: Async<Unit>,

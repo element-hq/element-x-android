@@ -70,6 +70,8 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetView
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -212,9 +214,8 @@ fun MessagesView(
                 onReactionClicked = ::onEmojiReactionClicked,
                 onReactionLongClicked = ::onEmojiReactionLongClicked,
                 onMoreReactionsClicked = ::onMoreReactionsClicked,
-                onReadReceiptClick = { // targetEvent ->
-                    // TODO Open bottom sheet with read receipts
-                    // state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ShowReadReceipts, targetEvent))
+                onReadReceiptClick = { event ->
+                    state.readReceiptBottomSheetState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(event))
                 },
                 onSendLocationClicked = onSendLocationClicked,
                 onCreatePollClicked = onCreatePollClicked,
@@ -250,13 +251,9 @@ fun MessagesView(
     )
 
     ReactionSummaryView(state = state.reactionSummaryState)
-    RetrySendMessageMenu(
-        state = state.retrySendMenuState
-    )
-
-    ReinviteDialog(
-        state = state
-    )
+    RetrySendMessageMenu(state = state.retrySendMenuState)
+    ReadReceiptBottomSheetView(state = state.readReceiptBottomSheetState)
+    ReinviteDialog(state = state)
 
     // Since the textfield is now based on an Android view, this is no longer done automatically.
     // We need to hide the keyboard automatically when navigating out of this screen.
@@ -412,7 +409,8 @@ private fun MessagesViewComposerBottomSheetContents(
     if (state.userHasPermissionToSendMessage) {
         Column(modifier = modifier.fillMaxWidth()) {
             MentionSuggestionsPickerView(
-                modifier = Modifier.heightIn(max = 230.dp)
+                modifier = Modifier
+                    .heightIn(max = 230.dp)
                     // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
                     .nestedScroll(object : NestedScrollConnection {
                         override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
