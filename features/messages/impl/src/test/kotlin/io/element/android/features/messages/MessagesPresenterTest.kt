@@ -47,6 +47,7 @@ import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
+import io.element.android.features.messages.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.Async
@@ -653,6 +654,7 @@ class MessagesPresenterTest {
             analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
+            redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         )
         val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)

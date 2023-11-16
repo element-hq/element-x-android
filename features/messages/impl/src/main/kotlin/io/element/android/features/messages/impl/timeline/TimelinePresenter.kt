@@ -32,6 +32,7 @@ import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
+import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
@@ -63,6 +64,7 @@ class TimelinePresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val verificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
+    private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline
@@ -142,6 +144,7 @@ class TimelinePresenter @Inject constructor(
                         paginateBackwards()
                     }
                 }
+                .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)
                 .launchIn(this)
         }
 
